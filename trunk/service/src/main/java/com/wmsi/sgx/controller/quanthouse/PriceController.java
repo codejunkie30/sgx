@@ -17,7 +17,7 @@ import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
 @Controller
 @RequestMapping(value="/{id}", produces="application/json")
-public class LastPriceController {
+public class PriceController {
 
 	@Autowired
 	private QuanthouseService service;
