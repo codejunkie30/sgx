@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.quanthouse.feedos;
 
 import java.text.MessageFormat;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,19 +27,12 @@ public class FeedOSService {
 	private FeedOSSession session;
 	public void setFeedOSSession(FeedOSSession s){session = s;}
 	
-	/**
-	 * Get the last price for the given id within the given market
-	 * @param market - Market ID belongs too
-	 * @param id - Local Market identifier
-	 * @return The last price
-	 * @throws QuanthouseServiceException
-	 */
-	public Double getLastPrice(String market, String id) throws QuanthouseServiceException{
+	public FeedOSData getPriceData(String market, String id) throws QuanthouseServiceException {
 		PolymorphicInstrumentCode instr = getInstrumentCode(market, id);
 		InstrumentQuotationData quot = getSnapshotInstrumentsL1(instr);
-		return quot.getTagByNumber(Constants.TAG_LastPrice).get_float64();
+		return bind(quot);
 	}
-	
+
 	private InstrumentQuotationData getSnapshotInstrumentsL1(PolymorphicInstrumentCode instr) throws QuanthouseServiceException{
 		
 		InstrumentQuotationData snapshot = null;
@@ -84,4 +78,17 @@ public class FeedOSService {
 		return new PolymorphicInstrumentCode(marketId, id);
 	}
 
+	private FeedOSData bind(InstrumentQuotationData quot){
+		FeedOSData data = new FeedOSData();
+		Double lastPrice = quot.getTagByNumber(Constants.TAG_LastPrice).get_float64();
+		Double openPrice = quot.getTagByNumber(Constants.TAG_DailyOpeningPrice).get_float64();
+		Long currentDay = quot.getTagByNumber(Constants.TAG_CurrentBusinessDay).get_timestamp();
+		Long previousDay = quot.getTagByNumber(Constants.TAG_CurrentBusinessDay).get_timestamp();
+		
+		data.setLastPrice(lastPrice);
+		data.setOpenPrice(openPrice);
+		data.setCurrentBusinessDay(new Date(currentDay));
+		data.setPreviousBusinessDay(new Date(previousDay));
+		return data;
+	}
 }
