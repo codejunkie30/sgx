@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<title>Spring Integration Template</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<m	</head>
+	</head>
 
 	<body>
 		<div class="container">
