@@ -1,6 +1,8 @@
 package com.wmsi.sgx.service.quanthouse.feedos;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.feedos.api.core.FeedOSException;
+import com.feedos.api.core.PDU;
 import com.feedos.api.core.PolymorphicInstrumentCode;
 import com.feedos.api.core.Session;
 import com.feedos.api.requests.Constants;
@@ -39,7 +42,7 @@ public class FeedOSService {
 		
 		Session ses = session.open();		
 		SyncRequestSender sender = new SyncRequestSender(ses,0);
-
+		
 		try{
 			PolymorphicInstrumentCode[] instrs = new PolymorphicInstrumentCode[]{instr};
 			InstrumentQuotationData[] data = sender.syncQuotSnapshotInstrumentsL1(instrs, null);
@@ -78,17 +81,38 @@ public class FeedOSService {
 		return new PolymorphicInstrumentCode(marketId, id);
 	}
 
-	private FeedOSData bind(InstrumentQuotationData quot){
+	private FeedOSData bind(InstrumentQuotationData quot) throws QuanthouseServiceException{
 		FeedOSData data = new FeedOSData();
+		
 		Double lastPrice = quot.getTagByNumber(Constants.TAG_LastPrice).get_float64();
 		Double openPrice = quot.getTagByNumber(Constants.TAG_DailyOpeningPrice).get_float64();
+		Double closePrice = quot.getTagByNumber(Constants.TAG_PreviousClosingPrice).get_float64();		
 		Long currentDay = quot.getTagByNumber(Constants.TAG_CurrentBusinessDay).get_timestamp();
-		Long previousDay = quot.getTagByNumber(Constants.TAG_CurrentBusinessDay).get_timestamp();
+		Long previousDay = quot.getTagByNumber(Constants.TAG_PreviousBusinessDay).get_timestamp();
 		
 		data.setLastPrice(lastPrice);
 		data.setOpenPrice(openPrice);
-		data.setCurrentBusinessDay(new Date(currentDay));
-		data.setPreviousBusinessDay(new Date(previousDay));
+		data.setClosePrice(closePrice);
+		data.setCurrentBusinessDay(toIsoDate(currentDay));
+		data.setPreviousBusinessDay(toIsoDate(previousDay));
+		
 		return data;
+	}
+	
+	/**
+	 * Convert feedOS timestamps to ISO Date that Java can read 
+	 */
+	private Date toIsoDate(Long timestamp) throws QuanthouseServiceException{
+		SimpleDateFormat isoDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
+		Date ret = null;
+		
+		try{
+			ret = isoDate.parse(PDU.time2ISOstring(timestamp));
+		}
+		catch(ParseException e){
+			throw new QuanthouseServiceException("Error parsing dates from api", e);			
+		}
+
+		return ret;
 	}
 }

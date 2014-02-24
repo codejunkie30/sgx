@@ -2,8 +2,6 @@ package com.wmsi.sgx.service.quanthouse.feedos;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.feedos.api.core.Credentials;
 import com.feedos.api.core.PDU;
@@ -13,7 +11,6 @@ import com.feedos.api.requests.Constants;
 import com.feedos.api.tools.Verbosity;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
-@Component
 public class FeedOSSession{
 
 	private Logger log = LoggerFactory.getLogger(FeedOSSession.class);
@@ -21,7 +18,6 @@ public class FeedOSSession{
 	private Session session;
 	public Session getSession(){return session;}
 	
-	@Autowired
 	private FeedOSConfig config;
 	public void setFeedOSconfig(FeedOSConfig c){config = c;}
 	
