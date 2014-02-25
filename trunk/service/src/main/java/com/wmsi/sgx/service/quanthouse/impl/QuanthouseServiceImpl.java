@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.quanthouse.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,10 @@ import com.wmsi.sgx.util.MathUtil;
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
 
-	private FeedOSService service;
-	
+	private Logger log = LoggerFactory.getLogger(QuanthouseServiceImpl.class);
+			
 	@Autowired
-	public void setFeedOSService(FeedOSService s){service = s;}
+	private FeedOSService feedOSService;
 	
 	private static final String MARKET_EXTENTION = "_RY";
 
@@ -31,24 +33,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	@Override
 	@Cacheable(value = "price")
 	public Price getPrice(String market, String id) throws QuanthouseServiceException {
-		FeedOSData priceData = service.getPriceData(market, id.concat(MARKET_EXTENTION));
+		FeedOSData priceData = feedOSService.getPriceData(market, id.concat(MARKET_EXTENTION));
 		return bindPriceData(priceData);
 	}	
 	
 	private Price bindPriceData(FeedOSData data){
-		
-		Double lastPrice = data.getLastPrice();
-		Double closePrice = data.getClosePrice();
-		
 		Price p = new Price();
-		p.setLastPrice(lastPrice);		
-		p.setClosePrice(closePrice);
+		p.setLastPrice(data.getLastPrice());		
+		p.setClosePrice(data.getClosePrice());
 		p.setOpenPrice(data.getOpenPrice());
 		p.setCurrentDate(data.getCurrentBusinessDay());
-		p.setPreviousDate(data.getPreviousBusinessDay());
-		p.setPercentChange(MathUtil.percentChange(closePrice, lastPrice, 2));
-		p.setChange(MathUtil.change(closePrice, lastPrice, 3));		
-		
+		p.setPreviousDate(data.getPreviousBusinessDay());		
 		return p;		
 	}
 }

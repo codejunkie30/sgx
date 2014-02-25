@@ -1,8 +1,5 @@
 package com.wmsi.sgx.service.quanthouse.feedos;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class FeedOSConfig{
 	private String sessionName;
 	public String getSessionName(){return sessionName;}
