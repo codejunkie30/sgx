@@ -2,7 +2,6 @@ package com.wmsi.sgx.config;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,7 +17,9 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
 @EnableWebMvc
@@ -34,10 +35,13 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     private MappingJackson2HttpMessageConverter jsonConverter() {
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-    	
+    	mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
+    	mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
     	jackson.setObjectMapper(mapper);
+    	
     	
     	return jackson;
     }

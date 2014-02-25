@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.feedos.api.core.Any;
 import com.feedos.api.core.FeedOSException;
 import com.feedos.api.core.PDU;
 import com.feedos.api.core.PolymorphicInstrumentCode;
@@ -82,32 +83,39 @@ public class FeedOSService {
 	}
 
 	private FeedOSData bind(InstrumentQuotationData quot) throws QuanthouseServiceException{
-		FeedOSData data = new FeedOSData();
 		
-		Double lastPrice = quot.getTagByNumber(Constants.TAG_LastPrice).get_float64();
-		Double openPrice = quot.getTagByNumber(Constants.TAG_DailyOpeningPrice).get_float64();
-		Double closePrice = quot.getTagByNumber(Constants.TAG_PreviousClosingPrice).get_float64();		
-		Long currentDay = quot.getTagByNumber(Constants.TAG_CurrentBusinessDay).get_timestamp();
-		Long previousDay = quot.getTagByNumber(Constants.TAG_PreviousBusinessDay).get_timestamp();
-		
-		data.setLastPrice(lastPrice);
-		data.setOpenPrice(openPrice);
-		data.setClosePrice(closePrice);
-		data.setCurrentBusinessDay(toIsoDate(currentDay));
-		data.setPreviousBusinessDay(toIsoDate(previousDay));
+		FeedOSData data = new FeedOSData();		
+		data.setLastPrice(getDouble(Constants.TAG_LastPrice, quot));
+		data.setOpenPrice(getDouble(Constants.TAG_DailyOpeningPrice, quot));
+		data.setClosePrice(getDouble(Constants.TAG_PreviousClosingPrice, quot));
+		data.setCurrentBusinessDay(toIsoDate(Constants.TAG_CurrentBusinessDay, quot ));
+		data.setPreviousBusinessDay(toIsoDate(Constants.TAG_PreviousBusinessDay, quot ));
 		
 		return data;
+	}
+	
+	private Double getDouble(int tag, InstrumentQuotationData quot){
+		Double ret = null;
+		Any val = quot.getTagByNumber(tag);
+		
+		if(val != null)
+			ret = val.get_float64();
+		
+		return ret;
 	}
 	
 	/**
 	 * Convert feedOS timestamps to ISO Date that Java can read 
 	 */
-	private Date toIsoDate(Long timestamp) throws QuanthouseServiceException{
+	private Date toIsoDate(int tag, InstrumentQuotationData quot) throws QuanthouseServiceException{
 		SimpleDateFormat isoDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
 		Date ret = null;
 		
 		try{
-			ret = isoDate.parse(PDU.time2ISOstring(timestamp));
+			Any val = quot.getTagByNumber(tag);
+			
+			if(val != null)
+				ret = isoDate.parse(PDU.time2ISOstring(val.get_timestamp()));
 		}
 		catch(ParseException e){
 			throw new QuanthouseServiceException("Error parsing dates from api", e);			
