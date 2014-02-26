@@ -11,7 +11,6 @@ import com.wmsi.sgx.service.quanthouse.QuanthouseService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSData;
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSService;
-import com.wmsi.sgx.util.MathUtil;
 
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
