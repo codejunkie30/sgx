@@ -32,7 +32,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         converters.add(jsonConverter());
     }
     
-    private MappingJackson2HttpMessageConverter jsonConverter() {
+    @Bean
+    public MappingJackson2HttpMessageConverter jsonConverter() {
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
     	mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
@@ -56,7 +57,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         r.setDefaultErrorView("errors/error");
         return r;
     }
-    
+
     @Bean
     public ViewResolver getViewResolver(){
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
