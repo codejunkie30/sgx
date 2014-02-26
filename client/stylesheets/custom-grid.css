@@ -1,0 +1,172 @@
+/* Custom SGX Grid */
+
+/* Forces backgrounds to span full width, even if there is horizontal scrolling.
+  Increase this if your layout is wider. Note: IE6 works fine without this fix. */
+ body {
+    min-width: 1012px;
+}
+/* Containers */
+.container_4 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1012px;
+}
+.container_3 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1008px;
+}
+.container_2 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1012px;
+}
+
+/* Grid >> Global */
+.grid_1, .grid_2, .grid_3, .grid_4 {
+    display:inline;
+    float: left;
+    position: relative;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+.push_1, .pull_1, .push_2, .pull_2, .push_3, .pull_3, .push_4, .pull_4 {
+    position:relative;
+}
+/* Grid >> Children (Alpha ~ First, Omega ~ Last) */
+ .alpha {
+    margin-left: 0;
+}
+.omega {
+    margin-right: 0;
+}
+/* Grid >> 4 Columns */
+ .container_4 .grid_1 {
+    width:241px;
+}
+.container_4 .grid_2 {
+    width:494px;
+}
+.container_4 .grid_3 {
+    width:747px;
+}
+.container_4 .grid_4 {
+    width:1000px;
+}
+/* Prefix Extra Space >> 4 Columns */
+.container_4 .prefix_1 {
+    padding-left:253px;
+}
+.container_4 .prefix_2 {
+    padding-left:506px;
+}
+.container_4 .prefix_3 {
+    padding-left:759px;
+}
+/* Suffix Extra Space >> 4 Columns */
+.container_4 .suffix_1 {
+    padding-right:253px;
+}
+.container_4 .suffix_2 {
+    padding-right:506px;
+}
+.container_4 .suffix_3 {
+    padding-right:759px;
+}
+/* Push Space >> 4 Columns */
+.container_4 .push_1 {
+    left:253px;
+}
+.container_4 .push_2 {
+    left:506px;
+}
+.container_4 .push_3 {
+    left:759px;
+}
+/* Pull Space >> 4 Columns */
+.container_4 .pull_1 {
+    left:-253px;
+}
+.container_4 .pull_2 {
+    left:-506px;
+}
+.container_4 .pull_3 {
+    left:-759px;
+}
+
+
+
+
+/* Grid >> 3 Columns
+----------------------------------------------------------------------------------------------------*/
+.container_3 .grid_1 {
+    width:324px;
+}
+.container_3 .grid_2 {
+    width:660px;
+}
+.container_3 .grid_3 {
+    width:996px;
+}
+/* Prefix Extra Space >> 3 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_3 .prefix_1 {
+    padding-left:336px;
+}
+.container_3 .prefix_2 {
+    padding-left:672px;
+}
+/* Suffix Extra Space >> 3 Columns
+----------------------------------------------------------------------------------------------------*/
+.container_3 .suffix_1 {
+    padding-right:336px;
+}
+.container_3 .suffix_2 {
+    padding-right:672px;
+}
+/* Push Space >> 3 Columns
+----------------------------------------------------------------------------------------------------*/
+.container_3 .push_1 {
+    left:336px;
+}
+.container_3 .push_2 {
+    left:672px;
+}
+/* Pull Space >> 3 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_3 .pull_1 {
+    left:-336px;
+}
+.container_3 .pull_2 {
+    left:-672px;
+}
+
+
+/* Grid >> 2 Columns
+----------------------------------------------------------------------------------------------------*/
+.container_2 .grid_1 {
+    width:494px;
+}
+.container_2 .grid_2 {
+    width:1000px;
+}
+/* Prefix Extra Space >> 2 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_2 .prefix_1 {
+    padding-left:506px;
+}
+/* Suffix Extra Space >> 2 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_2 .suffix_1 {
+    padding-right:506px;
+}
+/* Push Space >> 2 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_2 .push_1 {
+    left:506px;
+}
+/* Pull Space >> 2 Columns
+----------------------------------------------------------------------------------------------------*/
+ .container_2 .pull_1 {
+    left:-506px;
+}
