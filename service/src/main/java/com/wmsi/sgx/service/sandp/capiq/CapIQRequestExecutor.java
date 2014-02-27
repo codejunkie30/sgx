@@ -13,10 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 
+/**
+ * Class for handling requests to the Capital IQ API Rest Service
+ * @author Justin Lee
+ */
 public class CapIQRequestExecutor{
 
 	private Logger log = LoggerFactory.getLogger(CapIQRequestExecutor.class);
@@ -48,7 +54,15 @@ public class CapIQRequestExecutor{
 			// Catch any errors transforming the api response. The CapIQ api can be
 			// very inconsistent with it's json structure. Occasionally fields that are strings
 			// on good response are arrays on errors. Since we can't know how 
-			throw new CapIQRequestException("Could not convert response from api", ex);
+			throw new CapIQResponseConversionException("Could not convert response from api", ex);
+		}
+		catch(HttpClientErrorException ex){
+			log.error("CapIQ Api returned client error {}", ex.getMessage());
+			throw new CapIQRequestException("Recieved client error code response from api server", ex);
+		}
+		catch(HttpServerErrorException ex){			
+			log.error("CapIQ Api returned server error {}", ex.getMessage());
+			throw new CapIQRequestException("Recieved server error response from api server", ex);
 		}
 		
 		int statusCode = res.getStatusCode().value();
@@ -57,7 +71,7 @@ public class CapIQRequestExecutor{
 			log.debug("Request returned error status code {}", statusCode);
 			throw new CapIQRequestException("Api returned an error status");
 		}
-		
+		log.debug("Capital IQ api returned successful response code: {}", statusCode);
 		return res.getBody();
 	}
 	
