@@ -11,8 +11,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -23,10 +27,16 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 
 @Configuration
+@PropertySources(value = {
+	@PropertySource("classpath:META-INF/properties/capiq.properties")
+})
 public class HttpConfig{
+	
+	@Autowired
+	public Environment capIQEnv;
 
     @Bean(name="capIqJsonMessageConverter")
     public MappingJackson2HttpMessageConverter capIqJsonConverter() {
@@ -34,8 +44,6 @@ public class HttpConfig{
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     	
-    	mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
     	jackson.setObjectMapper(mapper);
@@ -43,32 +51,35 @@ public class HttpConfig{
     	return jackson;
     }
     
-	@Bean(name = "capIqRestTemplate")
-	public RestTemplate restTemplate() {
-
-		String user = "APIADMIN@WEALTHMSI.COM";
-		String password = "fr3xuhEs";
-		
-		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
+	@Bean(name = "capIqRestTemplate")	
+	public RestTemplate capIqRestTemplate() {
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
 		credsProvider.setCredentials(AuthScope.ANY,
-				new UsernamePasswordCredentials(user, password));
+				new UsernamePasswordCredentials(
+						capIQEnv.getProperty("capiq.api.username"),
+						capIQEnv.getProperty("capiq.api.password")));
 		
 		HttpClient httpClient = HttpClients.custom()
 				.setDefaultCredentialsProvider(credsProvider)
-				.setConnectionManager(connManager)
+				.setConnectionManager(new PoolingHttpClientConnectionManager())
 				.build();
 		
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-		
-		RestTemplate template = new RestTemplate(requestFactory);
+		RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
 
 		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
 		converters.add(new FormHttpMessageConverter());
 		converters.add(capIqJsonConverter());
-
 		template.setMessageConverters(converters);
+		
 		return template;
 	}
-
+	
+	@Bean
+	public CapIQRequestExecutor capIqRequestExecutor(){
+		CapIQRequestExecutor executor = new CapIQRequestExecutor();
+		executor.setRestTemplate(capIqRestTemplate());
+		executor.setUrl(capIQEnv.getProperty("capiq.api.url"));
+		executor.setUserId(capIQEnv.getProperty("capiq.api.username"));
+		return executor;
+	}
 }

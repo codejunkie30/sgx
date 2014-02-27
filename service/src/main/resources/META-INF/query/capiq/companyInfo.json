@@ -1,4 +1,5 @@
-{"inputRequests": [ 
+{
+"inputRequests": [ 
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_MARKETCAP", "properties":{"STARTDATE":"02/19/2014"}},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_YEARHIGH", "properties":{"STARTDATE":"02/19/2014"}},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_YEARLOW", "properties":{"STARTDATE":"02/19/2014"}},
@@ -28,7 +29,6 @@
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_YEARHIGH", "properties":{"STARTDATE":"02/19/2014"}}, 
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_SHARESOUTSTANDING", "properties":{"STARTDATE":"02/19/2014"}},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_SHORT_INTEREST", "properties":{"STARTDATE":"02/19/2014"}},
-{"function":"GDST","identifier":"$id", "mnemonic":"IQ_VOLUME", "properties":{"STARTDATE":"11/10/2013","FREQUENCY":"D"}},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_FLOAT_PERCENT", "properties":{"STARTDATE":"02/19/2014"}},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_COMPANY_NAME"},
 {"function":"GDSP", "identifier":"$id","mnemonic":"IQ_COMPANY_TICKER_NO_EXCH"},
