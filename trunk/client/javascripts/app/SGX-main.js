@@ -1,6 +1,6 @@
 define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs'], function($) {
     jQuery(function($) {
-        console.log('test2');
+        
         $('.tabbed-content').tabs({
             active: 0
         });
