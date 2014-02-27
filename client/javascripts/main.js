@@ -13,7 +13,8 @@
             slider: 'vendor/jquery.ui/ui/jquery.ui.slider',
             tabs: 'vendor/jquery.ui/ui/jquery.ui.tabs',
             highcharts: 'vendor/highcharts/index',
-            highstocks: 'vendor/highstock'
+            highstocks: 'vendor/highstock',
+            socketio: 'vendor/socket.io/lib/socket.io'
         },
         shim: {
             jquery: {
