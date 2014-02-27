@@ -1,21 +1,22 @@
-package com.wmsi.sgx.service.sandp.capiq;
+package com.wmsi.sgx.service.sandp.capiq.impl;
 
-import java.io.IOException;
+import java.util.Date;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 
 @Service
-public class CapIQServiceImpl{
+public class CapIQServiceImpl implements CapIQService{
 
 	private Logger log = LoggerFactory.getLogger(CapIQServiceImpl.class);
 
@@ -23,12 +24,23 @@ public class CapIQServiceImpl{
 	private CapIQRequestExecutor requestExecutor;
 	
 	// TODO Refactor - proof of concept
-	public void getCompanyInfo() throws IOException {
+	@Override
+	public void getCompanyInfo() throws CapIQRequestException {
+		/*
 		String query = null;
-		Resource resource = new ClassPathResource(
-				"META-INF/query/capiq/companyInfo.json");
-		String queryTemplate = FileUtils.readFileToString(resource.getFile());
-		query = queryTemplate.replaceAll("\\$id", "C6L");
+		
+		Resource resource = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
+		String queryTemplate;
+		try{
+			queryTemplate = FileUtils.readFileToString(resource.getFile());
+			query = queryTemplate.replaceAll("\\$id", "C6L");
+		}
+		catch(IOException e1){
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		String query = new CapIQRequest().getRequest("C6L", new Date());
+		
 
 		StopWatch w = new StopWatch();
 		w.start();
