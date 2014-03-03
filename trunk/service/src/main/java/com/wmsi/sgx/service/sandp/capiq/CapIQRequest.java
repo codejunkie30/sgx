@@ -1,24 +1,33 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 public class CapIQRequest{
 
 	//private Logger log = LoggerFactory.getLogger(CapIQServiceImpl.class);
 
-	private Resource template = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
-	
-	public String getRequest(String id, Date date) throws CapIQRequestException{
+	public String parseRequest(Resource template, Map<String, Object> ctx) throws CapIQRequestException{
 		String query = null;
 		
 		try{
 			String queryTemplate = FileUtils.readFileToString(template.getFile());
-			query = queryTemplate.replaceAll("\\$id", id);
+			StringTemplate st = new StringTemplate(queryTemplate);
+			
+			Iterator<Entry<String, Object>> i = ctx.entrySet().iterator();
+			
+			while(i.hasNext()){
+				Entry<String, Object> entry = i.next();
+				st.setAttribute(entry.getKey(), entry.getValue());
+			}
+			
+			query = st.toString();
 		}
 		catch(IOException e){
 			throw new CapIQRequestException("IOError building input request", e);

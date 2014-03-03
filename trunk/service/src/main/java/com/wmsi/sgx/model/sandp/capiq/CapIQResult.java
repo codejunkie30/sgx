@@ -8,9 +8,9 @@ import com.google.common.base.Objects;
 public class CapIQResult{
 
 	@JsonProperty("Headers")
-	private String headers;
-	public String getHeaders(){return headers;}
-	public void setHeaders(String h){headers = h;}
+	private List<String> headers;
+	public List<String> getHeaders(){return headers;}
+	public void setHeaders(List<String> h){headers = h;}
 	
 	@JsonProperty("Rows")
 	private List<CapIQRow> rows;

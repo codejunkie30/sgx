@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
+import com.wmsi.sgx.model.CompanyInfo;
+
 public interface CapIQService{
-	void getCompanyInfo() throws CapIQRequestException;
+	CompanyInfo getCompanyInfo(String id) throws CapIQRequestException;
 }

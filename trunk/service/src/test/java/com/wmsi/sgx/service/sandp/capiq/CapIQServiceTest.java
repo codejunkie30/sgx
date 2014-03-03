@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
@@ -27,8 +28,17 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	public CapIQService capIQService;
 	
-	@Test
-	public void testGetCompanyInfo() throws CapIQRequestException{
-		capIQService.getCompanyInfo();
+	@DataProvider
+	Object[][] testTickers(){
+		
+		return new Object[][]{
+				{"C6L"}, 
+				{"A7S"}
+		};
+	}
+	
+	@Test(dataProvider="testTickers")
+	public void testGetCompanyInfo(String ticker) throws CapIQRequestException{
+		capIQService.getCompanyInfo(ticker);
 	}
 }
