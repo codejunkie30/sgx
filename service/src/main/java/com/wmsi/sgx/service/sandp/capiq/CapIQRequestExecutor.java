@@ -53,7 +53,8 @@ public class CapIQRequestExecutor{
 		catch(HttpMessageNotReadableException ex){
 			// Catch any errors transforming the api response. The CapIQ api can be
 			// very inconsistent with it's json structure. Occasionally fields that are strings
-			// on good response are arrays on errors. Since we can't know how 
+			// on good response are arrays on errors. Since we have no way of knowing which fields
+			// are affected, we'll simply throw an exception as something has already gone wrong.
 			throw new CapIQResponseConversionException("Could not convert response from api", ex);
 		}
 		catch(HttpClientErrorException ex){
@@ -71,15 +72,20 @@ public class CapIQRequestExecutor{
 			log.debug("Request returned error status code {}", statusCode);
 			throw new CapIQRequestException("Api returned an error status");
 		}
+		
 		log.debug("Capital IQ api returned successful response code: {}", statusCode);
+		
 		return res.getBody();
 	}
 	
 	private HttpHeaders buildHeaders(){
-		HttpHeaders headers = new HttpHeaders();		
+		
 		MediaType mediaType = new MediaType("application", "x-www-form-urlencoded", Charset.forName("UTF-8"));		
+		
+		HttpHeaders headers = new HttpHeaders();		
 		headers.setContentType(mediaType);
 		headers.setConnection(HTTP.CONN_KEEP_ALIVE);
+		
 		return headers;
 	}
 	
