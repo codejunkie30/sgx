@@ -82,4 +82,33 @@ public class HttpConfig{
 		executor.setUserId(capIQEnv.getProperty("capiq.api.username"));
 		return executor;
 	}
+	
+    @Bean(name="esJsonConverter")
+    public MappingJackson2HttpMessageConverter esJsonConverter() {
+    	ObjectMapper mapper = new ObjectMapper();
+    	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+    	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    	
+    	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
+    	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
+    	jackson.setObjectMapper(mapper);
+    	
+    	return jackson;
+    }
+    
+	@Bean(name = "esRestTemplate")	
+	public RestTemplate esRestTemplate() {
+		HttpClient httpClient = HttpClients.custom()
+				.setConnectionManager(new PoolingHttpClientConnectionManager())
+				.build();
+		
+		RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+
+		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
+		converters.add(esJsonConverter());		
+		template.setMessageConverters(converters);
+		
+		return template;
+	}
+
 }

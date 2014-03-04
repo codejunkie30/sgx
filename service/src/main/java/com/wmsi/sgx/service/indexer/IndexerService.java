@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
@@ -21,11 +22,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.integration.annotation.Header;
-import org.springframework.integration.annotation.Payload;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-
+@Service
 public class IndexerService{
 
 	private Logger log = LoggerFactory.getLogger(IndexerService.class);
@@ -36,6 +39,7 @@ public class IndexerService{
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
 	@Autowired	
+	@Qualifier("esRestTemplate")
 	private RestTemplate restTemplate;
 	private void setRestTemplate(RestTemplate t){restTemplate = t;}
 	
@@ -63,25 +67,28 @@ public class IndexerService{
 		}		
 	}
 
-	@Transactional
-	public void save(@Header String persistId, @Header String type, @Header String asOfDate, @Payload String json) throws IOException{
-        String indexName = indexNamePrefix + asOfDate;
-        HttpEntity<String> entity = buildEntity(json);
-	    ResponseEntity<String> res = restTemplate.exchange(esUrl + "/"+ indexName + "/" + type + "/" + persistId + "?opt_type=create", HttpMethod.PUT, entity, String.class);        
-	}
-
-	private HttpEntity<String> buildEntity(String json){
+	private <T> HttpEntity<T> buildEntity(T json){
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application", "json", Charset.forName("UTF-8"));
 		headers.setContentType(mediaType);
 		headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
 	
-		return new HttpEntity<String>(json, headers);		
+		return new HttpEntity<T>(json, headers);		
 	}
 	
 	private int postJson(URI uri, String json){
 		HttpEntity<String> entity = buildEntity(json);
-		ResponseEntity<String> res = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);		
+		ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);		
 		return res.getStatusCode().value();		
+	}
+
+	@Transactional
+	public void save(String type, String id, Object companyInfo, String asOfDate) {
+        String indexName = indexNamePrefix + asOfDate;
+        
+        UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/{id}?opt_type=create").build();
+        URI uri = uriComp.expand(indexName, type, id).toUri();
+        
+        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(companyInfo), Object.class);
 	}
 }

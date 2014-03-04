@@ -71,7 +71,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 	@Test(groups={"functional"})
 	public void testRealJsonRequest() throws CapIQRequestException{
 		String goodResponse = 
-			"{\"GDSSDKResponse\":[{\"Headers\": \"IQ_MARKETCAP\",\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";
+			"{\"GDSSDKResponse\":[{\"Headers\": [\"IQ_MARKETCAP\"],\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";
 
 		mockServer.expect(requestTo("/fakeSite"))
 		.andExpect(method(HttpMethod.POST))
@@ -96,7 +96,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 	public void testUnexpectedJsonFormatRequest() throws CapIQRequestException{
 
 		String validButUnexpectedResponse = 
-			"{\"GDSSDKResponse\":[{\"Headers\": [\"IQ_MARKETCAP\"],\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";
+			"{\"GDSSDKResponse\":[{\"Mnemonic\": [\"IQ_MARKETCAP\"],\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";
 
 		mockServer.expect(requestTo("/fakeSite"))
 		.andExpect(method(HttpMethod.POST))

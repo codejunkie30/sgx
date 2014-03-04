@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.wmsi.sgx.controller"})
-@Import(AppConfig.class)
+@Import(value={AppConfig.class, HttpConfig.class})
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
@@ -38,11 +38,10 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
     	mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
     	mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-
+    	
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
     	jackson.setObjectMapper(mapper);
-    	
     	
     	return jackson;
     }

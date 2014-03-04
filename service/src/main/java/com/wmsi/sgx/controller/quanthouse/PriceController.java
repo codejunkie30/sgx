@@ -13,7 +13,7 @@ import com.wmsi.sgx.service.quanthouse.QuanthouseService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
 @RestController
-@RequestMapping(value="/{id}", produces="application/json")
+@RequestMapping(value="/price/{id}", produces="application/json")
 public class PriceController {
 
 	private Logger log = LoggerFactory.getLogger(PriceController.class);
@@ -23,7 +23,7 @@ public class PriceController {
 	
 	private String market = "XSES";
 	
-	@RequestMapping(value = "price", method = RequestMethod.POST )
+	@RequestMapping(method = RequestMethod.POST )
 	public Price getPrice(@PathVariable String id) throws QuanthouseServiceException{
 		return service.getPrice(market, id);
 	}
