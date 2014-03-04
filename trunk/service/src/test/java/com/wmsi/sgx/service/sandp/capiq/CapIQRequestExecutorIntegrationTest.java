@@ -60,7 +60,12 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		assertNotNull(response.getErrorMsg());
 		assertNull(response.getResults());
 	}
-
+	
+	/*
+	 * Fixed in the capIQ api, this used to return and array
+	 * where good responses returned a String causing the json parser to fail
+	 * on error messages. The response always returns an array now and
+	 * this test is no longer valid. 
 	@Test(groups={"functional", "integration"},
 			expectedExceptions={CapIQRequestException.class})	
 	public void testJsonDeserializationResponse() throws CapIQRequestException{
@@ -69,5 +74,6 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		
 		assertNotNull(response);
 		assertNotNull(response.getErrorMsg());
-	}	
+	}
+	*/	
 }

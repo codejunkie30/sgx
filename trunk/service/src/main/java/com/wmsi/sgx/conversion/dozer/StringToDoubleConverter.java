@@ -22,7 +22,4 @@ public class StringToDoubleConverter implements CustomConverter{
 		
 		return null;
 	}
-
-	 
-
 }

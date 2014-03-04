@@ -186,7 +186,7 @@ public class CompanyInfo{
 	
 	public Double getPriceToBookRatio(){
 		
-		if(closePrice == null || yearHigh == null)
+		if(closePrice == null || bvShare == null)
 			return null;
 
 		BigDecimal close = new BigDecimal(closePrice); 
