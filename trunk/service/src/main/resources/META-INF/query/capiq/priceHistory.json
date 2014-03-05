@@ -1,0 +1,5 @@
+{"inputRequests": [ 
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_CLOSEPRICE","properties":{"STARTDATE":"$startDate$","FREQUENCY":"D"}},
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_VOLUME","properties":{"STARTDATE":"$startDate$","FREQUENCY":"D"}}
+]}
+

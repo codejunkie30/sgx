@@ -2,6 +2,7 @@ package com.wmsi.sgx.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
+import com.wmsi.sgx.model.CompanyFinancial;
 import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
@@ -74,11 +77,43 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	};
 	}
 
-	//@Test(dataProvider="tickers")
+	@Test(dataProvider="tickers")
 	public void testCreateIndex(String ticker) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException{
-		//indexerService.createIndex("20140304");
+		indexerService.createIndex("20140304");
 		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker);
 		indexerService.save("company", ticker, companyInfo, "20140304");
+		
+		CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
+		String id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+		
+		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY" );
+		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+		
+		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-1" );
+		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+
+		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-2" );
+		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+
+		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-3" );
+		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+
+		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-4" );
+		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
+		indexerService.save("financial", id, companyFinancial, "20140304");
+
+		List<HistoricalValue> historicalData = capIQService.getHistoricalData(ticker, "02/28/2014");
+		
+		for(HistoricalValue data : historicalData){
+			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save("historical", id, data, "20140304");
+		}
+				
 	}
 	
 }

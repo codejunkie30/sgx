@@ -1,0 +1,21 @@
+{
+    "query" : {
+        "match_all" : {}
+    },
+    "facets" : {
+        "marketCap" : {
+            "histogram" : {
+                "field" : "marketCap",
+                "interval" : 20
+            }
+        }
+        ,
+        "totalRevenue" : {
+            "histogram" : {
+                "field" : "marketCap",
+                "interval" : 1000
+            }
+        }
+        
+    }
+}

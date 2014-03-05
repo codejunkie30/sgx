@@ -1,7 +1,7 @@
 {
 	"settings": 
 	{
-		"number_of_shards": 5,		
+		"number_of_shards": 5,
 		"analysis": 
 		{
 			"analyzer": 
@@ -38,12 +38,11 @@
 		"company": 
 		{
 			"dynamic": false,
-			
 			"_id": 
 			{
-				"path": "tickerCode"				         
+				"path": "tickerCode"
 			},
-						
+
 			"properties": 
 			{
 				"tickerCode": 
@@ -51,13 +50,29 @@
 					"type": "string",
 					"index": "not_analyzed"
 				},
+
 				"marketCap": 
 				{
 					"type": "double"
 				},
+
 				"volume": 
 				{
 					"type": "double"
+				}
+			}
+		},
+
+		"financial": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed",
+					"stored": true
 				}
 			}
 		},
