@@ -243,6 +243,4 @@ public class CompanyInfo{
 				.add("bvShare", bvShare)
 				.toString();
 	}
-	
-
 }
