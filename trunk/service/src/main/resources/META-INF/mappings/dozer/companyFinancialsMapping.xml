@@ -12,19 +12,22 @@
 				<class-a>java.lang.String</class-a>
 				<class-b>java.lang.Double</class-b>
 			</converter>
+			<converter type="com.wmsi.sgx.conversion.dozer.StringToDateConverter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.util.Date</class-b>
+			</converter>
 		</custom-converters>
-
 	</configuration>
 
-
 	<mapping wildcard="false">
+
 		<class-a>java.util.Map</class-a>
 		<class-b>com.wmsi.sgx.model.CompanyFinancial</class-b>
 		<field>
 			<a key="IQ_ABS_PERIOD">this</a>
 			<b>absPeriod</b>
 		</field>
-		<field>
+		<field custom-converter-param="MMM dd yyyy HH:mm">
 			<a key="IQ_PERIODDATE_IS">this</a>
 			<b>periodDate</b>
 		</field>
@@ -192,7 +195,7 @@
 			<a key="IQ_COMMON_EQUITY_1YR_ANN_GROWTH">this</a>
 			<b>commonEquity1YrAnnGrowth</b>
 		</field>
-		
+
 	</mapping>
 
 </mappings>  

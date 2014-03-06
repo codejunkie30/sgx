@@ -16,13 +16,17 @@
 	</logger>
 
 	<logger name="com.wmsi.sgx">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="com.wmsi.sgx.service.quanthouse">
 		<level value="debug" />
 	</logger>
 
+	<logger name="org.apache.http.wire">
+		<level value="info"/>
+	</logger>
+	
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
+import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
@@ -60,14 +62,10 @@ public class CapIQServiceImpl implements CapIQService{
 		Map<String, String> m = capIqResponseToMap(response);
 		
 		try{
-			//DozerBeanMapper mapper = new DozerBeanMapper();
-			//mapper.addMapping(new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream());
-			//CompanyInfo info = mapper.map(m,CompanyInfo.class);
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
 			CompanyInfo info = dozerMapper(in, m, CompanyInfo.class);
 			log.error("Info {}", info);
 			return info;
-
 		}
 		catch(IOException e){
 			// TODO Auto-generated catch block
@@ -113,49 +111,27 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 	
 	@Override
-	public List<HistoricalValue> getHistoricalData(String id, String asOfDate) throws CapIQRequestException{
+	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException{
 		Resource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		Date lastYear = null;
-		
 		try{
-			Date currentDate = df.parse(asOfDate);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(currentDate);
-			cal.add(Calendar.YEAR, -1);
-			lastYear = cal.getTime();
-		Map<String, Object> ctx = new HashMap<String, Object>();
-		ctx.put("id", id);
-		ctx.put("startDate", df.format(lastYear));
+
+			Map<String, Object> ctx = new HashMap<String, Object>();
+			ctx.put("id", id);
+			ctx.put("startDate", getStartDate(asOfDate));
 		
-		CapIQResponse response = executeCapIqRequests(template, ctx);
+			CapIQResponse response = executeCapIqRequests(template, ctx);
 		
-		CapIQResult prices = response.getResults().get(0);
-		CapIQResult volumes = response.getResults().get(1);
-		Map<String, String> price = getHistory(prices);
-		Map<String, String> volume = getHistory(volumes);
-		
-		List<HistoricalValue> vals = new ArrayList<HistoricalValue>();
-		
-		for(Entry<String, String> e : price.entrySet()){
+			CapIQResult prices = response.getResults().get(0);
+			CapIQResult volumes = response.getResults().get(1);
+			List<HistoricalValue> price = getHistory(prices, id);
+			List<HistoricalValue> volume = getHistory(volumes,id);
 			
-			String dt = e.getKey();
-			
-			if(!volume.containsKey(dt)){
-				throw new RuntimeException("Missing dates in volume");
-			}
-			
-			HistoricalValue hist = new HistoricalValue();
-			hist.setTickerCode(id);
-			hist.setDate(df.parse(dt));
-			hist.setPrice(Double.valueOf(e.getValue()));
-			hist.setVolume(Double.valueOf(volume.get(dt)));	
-			vals.add(hist);
-		}
-		
-			System.out.println(vals);
-			return vals;
+			System.out.println(price);
+			List ret = new ArrayList();
+			ret.add(price);
+			ret.add(volume);
+			return ret;
 		}
 		catch(ParseException e){
 			// TODO Auto-generated catch block
@@ -163,19 +139,34 @@ public class CapIQServiceImpl implements CapIQService{
 		}
 		
 		return null;
-		
 	}
 	
-	private Map<String,String> getHistory(CapIQResult res){
-		List<String> headers = res.getHeaders();
-		List<String> rows = res.getRows().get(0).getValues();
+	private String getStartDate(String dt) throws ParseException{
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date currentDate = df.parse(dt);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDate);
+		cal.add(Calendar.YEAR, -5);
+		return df.format(cal.getTime());
+	}
+	
+	private List<HistoricalValue> getHistory(CapIQResult res, String id) throws ParseException{
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		List<HistoricalValue > results = new ArrayList<HistoricalValue >();
+		
+		// TODO sanity check headers for index of Date 
+		for(CapIQRow row : res.getRows()){
+			List<String> values = row.getValues();
 			
-		Map<String, String> results = new HashMap<String, String>();
-			
-		for(int i = 0; i < headers.size(); i++){
-			String date = headers.get(i);
-			String price = rows.get(i);
-			results.put(date, price);				
+			String v = values.get(0);
+			if(NumberUtils.isNumber(v)){
+				
+				HistoricalValue val = new HistoricalValue();
+				val.setTickerCode(id);
+				val.setValue(Double.valueOf(v));
+				val.setDate(df.parse(values.get(1)));
+				results.add(val);
+			}
 		}
 		
 		return results;

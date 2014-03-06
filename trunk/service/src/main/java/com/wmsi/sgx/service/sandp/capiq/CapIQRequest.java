@@ -13,6 +13,7 @@ public class CapIQRequest{
 
 	//private Logger log = LoggerFactory.getLogger(CapIQServiceImpl.class);
 
+	// TODO Refactor into class path string from file yparser
 	public String parseRequest(Resource template, Map<String, Object> ctx) throws CapIQRequestException{
 		String query = null;
 		
