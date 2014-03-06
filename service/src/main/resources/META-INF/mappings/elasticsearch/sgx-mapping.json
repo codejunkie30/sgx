@@ -71,8 +71,53 @@
 				"tickerCode": 
 				{
 					"type": "string",
-					"index": "not_analyzed",
-					"stored": true
+					"index": "not_analyzed"
+				}
+			}
+		},
+
+		"historical": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+
+		"volume": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
 				}
 			}
 		},

@@ -6,10 +6,10 @@ import com.google.common.base.Objects;
 
 public class HistoricalValue{
 
-	private Date date;
+
 	private String tickerCode;
-	private Double price;
-	private Double volume;
+	private Date date;
+	private Double value;
 	
 	public Date getDate() {
 		return date;
@@ -23,26 +23,19 @@ public class HistoricalValue{
 	public void setTickerCode(String tickerCode) {
 		this.tickerCode = tickerCode;
 	}
-	public Double getPrice() {
-		return price;
+	public Double getValue() {
+		return value;
 	}
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-	public Double getVolume() {
-		return volume;
-	}
-	public void setVolume(Double volume) {
-		this.volume = volume;
+	public void setValue(Double value) {
+		this.value = value;
 	}
 	
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
-			.add("date", date)
 			.add("tickerCode", tickerCode)
-			.add("price", price)
-			.add("volume", volume)
+			.add("date", date)
+			.add("value", value)
 			.toString();
 	}
 }

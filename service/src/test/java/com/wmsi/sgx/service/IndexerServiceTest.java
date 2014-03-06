@@ -70,9 +70,9 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	{"D4N"},
 	{"D1R"},
 	{"T8JU"},
-	{"5LY" },
-	{"D2U" },
-	{"EB5" },
+	{"5LY"},
+	{"D2U"},
+	{"EB5"},
 	{"D2V"}
 	};
 	}
@@ -80,6 +80,7 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	@Test(dataProvider="tickers")
 	public void testCreateIndex(String ticker) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException{
 		indexerService.createIndex("20140304");
+
 		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker);
 		indexerService.save("company", ticker, companyInfo, "20140304");
 		
@@ -107,13 +108,21 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, "20140304");
 
-		List<HistoricalValue> historicalData = capIQService.getHistoricalData(ticker, "02/28/2014");
+		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, "02/28/2014");
+		List<HistoricalValue> price = historicalData.get(0);
 		
-		for(HistoricalValue data : historicalData){
+		for(HistoricalValue data : price){
 			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("historical", id, data, "20140304");
 		}
-				
+
+		List<HistoricalValue> volume = historicalData.get(1);
+		
+		for(HistoricalValue data : volume){
+			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save("volume", id, data, "20140304");
+		}
+		
 	}
 	
 }

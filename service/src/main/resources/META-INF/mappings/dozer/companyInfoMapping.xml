@@ -13,10 +13,8 @@
 		<class-a>java.lang.String</class-a>
 		<class-b>java.lang.Double</class-b>
 	</converter>
-	</custom-converters>
-    
+	</custom-converters>    
   </configuration>
-  
   
   <mapping wildcard="false">
     <class-a>java.util.Map</class-a>

@@ -28,6 +28,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class IndexerService{
 
@@ -44,7 +47,6 @@ public class IndexerService{
 	private void setRestTemplate(RestTemplate t){restTemplate = t;}
 	
 	public synchronized void createIndex(@Header String asOfDate) throws IOException, URISyntaxException, IndexerServiceException{
-		
 		String indexName = indexNamePrefix + asOfDate;
 		URI indexUri = new URI(esUrl + "/" + indexName);
 		
@@ -56,10 +58,10 @@ public class IndexerService{
 			return;
 		}
 			
-		File f = indexMappingResource.getFile();
-		String indexMapping = FileUtils.readFileToString(f);
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode readTree = mapper.readTree(indexMappingResource.getFile());
 
-		int statusCode = postJson(indexUri, indexMapping);
+		int statusCode = postJson(indexUri, readTree);
 		
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){			
@@ -67,6 +69,7 @@ public class IndexerService{
 		}		
 	}
 
+	// TODO Refactor to common util
 	private <T> HttpEntity<T> buildEntity(T json){
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application", "json", Charset.forName("UTF-8"));
@@ -76,8 +79,8 @@ public class IndexerService{
 		return new HttpEntity<T>(json, headers);		
 	}
 	
-	private int postJson(URI uri, String json){
-		HttpEntity<String> entity = buildEntity(json);
+	private int postJson(URI uri, Object json){
+		HttpEntity<?> entity = buildEntity(json);
 		ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);		
 		return res.getStatusCode().value();		
 	}
