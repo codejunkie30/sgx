@@ -3,12 +3,10 @@
 
 <head>
     <title>Financials - SGX</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
-
 </head>
 
 <body>
@@ -19,350 +17,409 @@
             </div>
         </div>
         <div class="row">
-            <div class="grid_2">
-                <div id="container" style="width:100%; height:400px;"></div>
+            <div class="grid_3">
+                <div class="page-title">ABC Financial Corp. (ABC)</div>
+                <div class="stock-price">
+                    <div class="main">S$ 10.06 <span class="change">+0.02</span>
+                    </div>
+                    <div class="last-updated">Last Price: <span class="date">22/Jan/2014 <span class="time">13:25 SGT</span></span>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <div class="button back-button">Back to Stock Screener</div>
+                    <ul class="breadcrumb-tree">
+                        <li>Industry Tree:</li>
+                        <li><a href="#">Financials</a> &gt;</li>
+                        <li><a href="#">Banking and Finance</a> &gt;</li>
+                        <li><a href="#">Retail Banks</a> &gt;</li>
+                    </ul>
+                    <div class="right-nav">
+                        <div class="print-button">Print</div>
+                        <div class="button comparable-button">Find comparable companies</div>
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="row">
+            <div class="grid_2">
+                <div id="container" style="width:100%; height:400px;"></div>
+            </div>
+            <div class="grid_1"><div class="back-company-profile">&laquo; Back to Company Profile</div></div>
+        </div>
+        <div class="row">
             <div class="grid_3">
-                <p>In millions SGD, except per-share items.</p>
 
-                <div class="financials-section">
+                <div class="data-point-container">
+                    <div class="table-info">
+                        <div class="table-info-tab">Select two options to chart the data points.</div>
+                        <p>In millions SGD, except per-share items.</p>
+                    </div>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h4>Income Statement</h4>
-                                </th>
-                                <th>FY Jun2010</th>
-                                <th>FY Jun2011</th>
-                                <th>FY Jun2012</th>
-                                <th>FY Jun2013</th>
-                                <th>LTM Ending 31/Dec/2013</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Total Revenue</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Gross Profit</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Net Income</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EBITDA</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EPS (Normalized/Diluted)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Payout-Ratio</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Dividends (per share)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="financials-section">
 
-                </div>
-                <div class="financials-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h4>Income Statement</h4>
+                                    </th>
+                                    <th>FY Jun2010</th>
+                                    <th>FY Jun2011</th>
+                                    <th>FY Jun2012</th>
+                                    <th>FY Jun2013</th>
+                                    <th>LTM Ending 31/Dec/2013</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Total Revenue</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Gross Profit</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Net Income</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EBITDA</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EPS (Normalized/Diluted)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Payout-Ratio</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Dividends (per share)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h4>Balance Sheet</h4>
-                                </th>
-                                <th>FY Jun2010</th>
-                                <th>FY Jun2011</th>
-                                <th>FY Jun2012</th>
-                                <th>FY Jun2013</th>
-                                <th>LTM Ending 31/Dec/2013</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Total Revenue</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Gross Profit</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Net Income</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EBITDA</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EPS (Normalized/Diluted)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Payout-Ratio</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Dividends (per share)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    </div>
+                    <div class="financials-section">
 
-                </div>
-                <div class="financials-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h4>Balance Sheet</h4>
+                                    </th>
+                                    <th>FY Jun2010</th>
+                                    <th>FY Jun2011</th>
+                                    <th>FY Jun2012</th>
+                                    <th>FY Jun2013</th>
+                                    <th>LTM Ending 31/Dec/2013</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Total Revenue</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Gross Profit</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Net Income</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EBITDA</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EPS (Normalized/Diluted)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Payout-Ratio</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Dividends (per share)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h4>Cash Flows</h4>
-                                </th>
-                                <th>FY Jun2010</th>
-                                <th>FY Jun2011</th>
-                                <th>FY Jun2012</th>
-                                <th>FY Jun2013</th>
-                                <th>LTM Ending 31/Dec/2013</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Total Revenue</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Gross Profit</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Net Income</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EBITDA</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">EPS (Normalized/Diluted)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Payout-Ratio</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <div class="trigger">Dividends (per share)</div>
-                                        <input type="checkbox">
-                                    </div>
-                                </td>
-                                <td>9,771.6</td>
-                                <td>12,214.5</td>
-                                <td>12,825.2</td>
-                                <td>14,352.0</td>
-                                <td>15,268.1</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    </div>
+                    <div class="financials-section">
 
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h4>Cash Flows</h4>
+                                    </th>
+                                    <th>FY Jun2010</th>
+                                    <th>FY Jun2011</th>
+                                    <th>FY Jun2012</th>
+                                    <th>FY Jun2013</th>
+                                    <th>LTM Ending 31/Dec/2013</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Total Revenue</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Gross Profit</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Net Income</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EBITDA</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">EPS (Normalized/Diluted)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Payout-Ratio</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <div class="trigger">Dividends (per share)</div>
+                                            <input type="checkbox">
+                                        </div>
+                                    </td>
+                                    <td>9,771.6</td>
+                                    <td>12,214.5</td>
+                                    <td>12,825.2</td>
+                                    <td>14,352.0</td>
+                                    <td>15,268.1</td>
+                                    <td class="unchart">[ UNCHART ]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
                 </div>
             </div>
-<hr>
-<p>Source: S&amp; Capital IQ</p>
+            <hr>
+            <div class="row">
+                <div class="grid_3">
+                    <p class="source">Source: S&amp;P Capital IQ</p>
+                </div>
+            </div>
         </div>
     </div>
 

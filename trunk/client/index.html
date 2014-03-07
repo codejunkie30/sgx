@@ -3,26 +3,68 @@
 
 <head>
     <title>Mimosa</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
-
 </head>
 
 <body>
     <div class="container_3">
         <div class="row">
-            <div class="grid_1">
-                <a href="screener.html">Screener</a>
-            </div>
-            <div class="grid_1">
-                <a href="company-profile.html">Company Profile</a>
-            </div>
-            <div class="grid_1">
-                <a href="financials.html">Financials</a>
-            </div>
+
+            <p>Dev pathing</p>
+            <ul>
+                <li><a href="screener">Screener</a></li>
+                <li><a href="company-profile">Company Profile</a></li>
+                <li><a href="financials">Financials</a></li>
+            </ul>
+            <p>Static pathing</p>
+            <ul>
+                <li><a href="screener.html">Screener</a></li>
+                <li><a href="company-profile.html">Company Profile</a></li>
+                <li><a href="financials.html">Financials</a></li>
+            </ul>
+            <h6>Design Debriefing Notes</h6>
+            <p>All colors need to be 100% opacity, cases where we are not doing full-transparency in ways we cannot replicate in code.</p>
+            <p>What are the border-radius guidelines?</p>
+            <p>What are the minimum and maximum sizes for the scroll bar selection range in the second, bar chart on the Company Profile page</p>
+            <h6>To Dos</h6>
+            <pre>
+                Screener
+                2 error states
+                Make Criteria column a little thinner, remove vertical white cell borders
+                - Clicking x should give prompt
+                close button needs to have transparent background not white
+                open up spacing on the right for the close button
+                TD cells need to be text-align center (Code, Industry, etc)
+                Accordion content is in the Business Requirements Doc
+                Customize Display drop down styling
+                Business Requirements oddball input type for distribution
+
+
+                Company Profile
+                Background bar has vertical lines for segments
+                Industry Tree needs to be pulled left
+                Make modal border thinner to represent what is in the company_profile_financials_DEV.psd mockup modal
+                Consensus Estimates mask for progress has white line
+
+
+                Financials
+                New copy for table headers
+                2 error states
+                [UNCHART] needs to be in it's own column
+                Done - More padding between checkboxes and the row label
+                Source missing
+                Build out Legend
+                Back to Company Profile needs to be added in top right
+                Bump out padding 
+
+
+                Global
+                Decrease module header label margin-bottom
+                Back to stock screener needs its icon
+            </pre>
         </div>
     </div>
 </body>
