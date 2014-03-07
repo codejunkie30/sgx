@@ -6,22 +6,6 @@
 
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-    
-    <!-- DEV CODE TO BE REMOVED ON PRODUCTION -->
-    <!--<script src="socket.io/socket.io.js"></script>
-    <script src="javascripts/reload-client.js"></script>-->
-    <script type="text/javascript">
-         // Sketchy looking function to include a js file in js.
-        function includeJS(incFile) {
-            document.write('<script type="text/javascript" src="' + incFile + '"></scr' + 'ipt>');
-        }
-         // Load TweenMax and Scrollorama on viewports above 47.5em wide
-        if (document.domain == 'localhost') {
-            includeJS('/socket.io/socket.io.js');
-            includeJS('/javascripts/reload-client.js');
-        }
-    </script>
-    <!-- DEV CODE TO BE REMOVED ON PRODUCTION -->
 
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
 
