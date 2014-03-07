@@ -19,17 +19,17 @@ public class ESQueryExecutor{
 	@Qualifier("esRestTemplate")
 	RestTemplate elasticSearchRestTemplate;
 	
-	private String url = "http://localhost:9200/sgx_20140304/company/_search";
+	private String indexUrl = "http://localhost:9200";
 	
 	public ESResponse executeQuery(ESQuery q) throws ElasticSearchException{
 		
 		try{
-			log.debug("Executing query on {}", url);
+			log.debug("Executing query on {}", indexUrl);
 			
 			JsonNode query = q.toJson();
 			
 			log.trace("Query: {}", query);
-			
+			String url = indexUrl.concat(q.getURI().toString());
 			JsonNode res = elasticSearchRestTemplate.postForObject(url, query, JsonNode.class);
 			
 			log.debug("Query returned successfully");

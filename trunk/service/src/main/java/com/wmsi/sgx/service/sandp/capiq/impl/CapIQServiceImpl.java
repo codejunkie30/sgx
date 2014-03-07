@@ -64,7 +64,6 @@ public class CapIQServiceImpl implements CapIQService{
 		try{
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
 			CompanyInfo info = dozerMapper(in, m, CompanyInfo.class);
-			log.error("Info {}", info);
 			return info;
 		}
 		catch(IOException e){
@@ -183,6 +182,10 @@ public class CapIQServiceImpl implements CapIQService{
 		for(CapIQResult res : response.getResults()){
 			String header = res.getMnemonic();
 			String val = res.getRows().get(0).getValues().get(0);
+			
+			if(val != null && val.toLowerCase().startsWith("data unavailable")){
+				continue;
+			}
 			
 			if(m.containsKey(header)){
 				header = header.concat("_prev");

@@ -76,4 +76,31 @@ public class ESResponseTest{
 		assertEquals(hits.size(), 1);
 		assertEquals(hits.get(0).get("test"), "test1");		
 	}
+	
+	private String testSingleAggregation = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]}}}";
+	private String testAggregations = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]},\"totalRev\":{\"buckets\":[{\"key\": 0,\"doc_count\": 1},{\"key\": 15,\"doc_count\": 5}]}}} }";
+	
+	@Test
+	public void testAggregation() throws JsonProcessingException, IOException, ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.readTree(testSingleAggregation));
+		Aggregations aggregations = response.getAggregations();
+		assertNotNull(aggregations);
+		System.out.println(mapper.writeValueAsString(aggregations));
+	}
+
+	@Test
+	public void testAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
+		ESResponse response = new ESResponse();
+		System.out.println(mapper.readTree(testAggregations).toString());
+		response.setResponse(mapper.readTree(testAggregations));
+		Aggregations aggregations = response.getAggregations();
+		assertNotNull(aggregations);
+		assertEquals(aggregations.getAggregations().size(), 2);
+		
+		System.out.println(mapper.writeValueAsString(aggregations));
+	}
+
+	
+
 }

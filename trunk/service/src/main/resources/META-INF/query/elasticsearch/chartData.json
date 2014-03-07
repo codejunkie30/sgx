@@ -1,21 +1,74 @@
 {
-    "query" : {
-        "match_all" : {}
-    },
-    "facets" : {
-        "marketCap" : {
-            "histogram" : {
-                "field" : "marketCap",
-                "interval" : 20
-            }
-        }
-        ,
-        "totalRevenue" : {
-            "histogram" : {
-                "field" : "marketCap",
-                "interval" : 1000
-            }
-        }
-        
-    }
+	"query": 
+	{
+		"match_all": 
+		{
+			
+		}
+	},
+
+	"filter": 
+	{
+		"type": 
+		{
+			"value": "company"
+		}
+	},
+
+	"aggs": 
+	{
+		"marketCap": 
+		{
+			"histogram": 
+			{
+				"field": "marketCap",
+				"interval": 15
+			}
+		},
+
+		"totalRevenue": 
+		{
+			"histogram": 
+			{
+				"field": "totalRevenue",
+				"interval": 15
+			}
+		},
+
+		"peRatio": 
+		{
+			"histogram": 
+			{
+				"field": "peRatio",
+				"interval": 15
+			}
+		},
+
+		"dividendYield": 
+		{
+			"histogram": 
+			{
+				"field": "dividendYield",
+				"interval": 15
+			}
+		},
+
+		"industry": 
+		{
+			"terms": 
+			{
+				"field": "industry"
+			}
+		},
+
+		"industryGroup": 
+		{
+			"terms": 
+			{
+				"field": "industryGroup"
+			}
+		}
+	},
+
+	"_source": "false"
 }
