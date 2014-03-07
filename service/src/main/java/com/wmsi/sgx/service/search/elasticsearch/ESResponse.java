@@ -1,7 +1,9 @@
 package com.wmsi.sgx.service.search.elasticsearch;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,8 +40,32 @@ public class ESResponse{
 			T hit = objectMapper.convertValue(n, clz);
 			ret.add(hit);
 		}
-		
+
 		return ret;		
+	}
+
+	public Aggregations getAggregations() throws ElasticSearchException{
+		
+		if(response == null)
+			throw new ElasticSearchException("Response is null or empty");
+		
+		if(response.path("aggregations").isMissingNode())
+			throw new ElasticSearchException("Response is missing 'hits' field");
+		
+		JsonNode aggregations = response.get("aggregations");
+		
+		List<Aggregation> ret = new ArrayList<Aggregation>();
+		Iterator<Entry<String, JsonNode>> i = aggregations.fields();
+		
+		while(i.hasNext()){
+			Entry<String, JsonNode> field = i.next();
+			Aggregation agg = objectMapper.convertValue(field.getValue(), Aggregation.class);
+			agg.setName(field.getKey());
+			ret.add(agg);
+		}
+		Aggregations aggs = new Aggregations();
+		aggs.setAggregations(ret);
+		return aggs; 
 	}
 
 	@Override
@@ -48,7 +74,5 @@ public class ESResponse{
 			.add("response", response)
 			.toString();
 	}
-	
-	
 
 }

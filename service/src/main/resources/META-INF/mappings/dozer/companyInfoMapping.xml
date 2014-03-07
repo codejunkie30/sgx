@@ -38,8 +38,7 @@
       <field>
         <a key="IQ_CLOSEPRICE_prev">this</a>
         <b>previousClosePrice</b>
-      </field>
-      
+      </field>      
       <field>
         <a key="IQ_YEARHIGH">this</a>
         <b>yearHigh</b>
@@ -115,6 +114,10 @@
       <field>
         <a key="IQ_AVG_BROKER_REC_NO_CIQ">this</a>
         <b>avgBrokerReq</b>
+      </field>
+      <field>
+        <a key="IQ_TARGET_PRICE_NUM">this</a>
+        <b>targetPriceNum</b>
       </field>
       <field>
         <a key="IQ_BV_SHARE">this</a>

@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.search.elasticsearch;
 
+import static org.testng.Assert.*;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,11 +29,11 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 	ESQueryExecutor eSQueryExecutor;
 
 	@Test
-	public void testCreateIndex() throws ElasticSearchException {
-		ESQuery query = new ESQuery();
+	public void testSearch() throws ElasticSearchException {
+		ESQuery query = new SearchQuery();
 		query.setQueryTemplate("{ \"query\":{ \"match_all\":{} } }");
 		ESResponse response = eSQueryExecutor.executeQuery(query);
-		System.out.println(response.toString());
+		assertNotNull(response);
 	}
 	
 }
