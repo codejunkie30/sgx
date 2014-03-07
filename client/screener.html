@@ -3,18 +3,39 @@
 
 <head>
     <title>Screener - SGX</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
-
 </head>
 
 <body>
+    <div id="modal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <div class="close-button"></div>
+                <h4>Search Criteria</h4>
+                <p>You have reached the criteria limit. Please remove criteria before proceeding.</p>
+            </div>
+        </div>
+        <div class="bg"></div>
+    </div>
     <div class="container_3">
-        <div class="grid_3 placeholder-header">
-            <img src="img/placeholder-header.jpg">
+        <div class="grid_3">
+            <div class="page-title">ABC Financial Corp. (ABC)</div>
+        </div>
+        <div class="grid_3 screener-header">
+
+            <div class="description">
+                <div class="intro-headline">Your search for investment opportunity begins here.</div>
+                <p>Whether you seek new companies or established stable performers, we can help you identify the stocks that best fit your investment strategy.</p>
+                <div class="searchbar">
+                    <input type="text" placeholder="Company name or stock code">
+                    <input class="search-submit" type="submit" value="" alt="Search Submit">
+                </div>
+                <div class="button">View All Companies</div>
+            </div>
+
         </div>
     </div>
     <div class="container_3">
@@ -27,7 +48,7 @@
                     <table class="search-criteria">
                         <thead>
                             <tr>
-                                <th width="130">Criteria</th>
+                                <th width="160">Criteria</th>
                                 <th width="40">Min</th>
                                 <th width="310">Distribution</th>
                                 <th width="72">Max</th>
@@ -36,59 +57,82 @@
                         <tbody>
                             <tr>
                                 <td><span class="info">Total Market Cap</div></td>
-                                <td>S$ 990mm</td>
+                                <td class="min">S$ 990mm</td>
                                 <td>
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
                                         <div class="bar"></div>
+                                        <div class="matches">234 matches</div>
                                     </div>
                                 </td>
-                                <td>S$ 3,792mm</td>
+                                <td class="max">S$ 3,792mm</td>
                             </tr>
                             <tr>
                                 <td><span class="info">Total Revenue</span>
                                 </td>
-                                <td>S$ 0mm</td>
+                                <td class="min">S$ 0mm</td>
                                 <td>
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
                                         <div class="bar"></div>
+                                        <div class="matches">234 matches</div>
                                     </div>
                                 </td>
-                                <td>S$ 5,700mm</td>
+                                <td class="max">S$ 5,700mm</td>
                             </tr>
                             <tr>
                                 <td><span class="info">P/E Ratio</span>
                                 </td>
-                                <td>0</td>
+                                <td class="min">0</td>
                                 <td>
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
                                         <div class="bar"></div>
+                                        <div class="matches">234 matches</div>
                                     </div>
                                 </td>
-                                <td>97.57</td>
+                                <td class="max">97.57</td>
                             </tr>
                             <tr>
                                 <td><span class="info">Dividend Yield</span>
                                 </td>
-                                <td>0%</td>
+                                <td class="min">0%</td>
                                 <td>
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
                                         <div class="bar"></div>
+                                        <div class="matches">234 matches</div>
                                     </div>
                                 </td>
-                                <td>100%</td>
+                                <td class="max">100%</td>
                             </tr>
                             <tr>
                                 <td><span class="info">Industry</span>
                                 </td>
-                                <td colspan="2"></td>
+                                <td colspan="2">
+                                    <div class="button-dropdown">
+                                        <div class="trigger">Select Sector &amp; Industry<span class="arrow"></span>
+                                        </div>
+                                        <div class="dropdown">
+                                            <ul>
+                                                <li>Basic Materials</li>
+                                                <li>Conglomerates</li>
+                                                <li>Consumer Goods</li>
+                                                <li>Financial</li>
+                                                <li>Healthcare</li>
+                                                <li>Industrial Goods</li>
+                                                <li>Services</li>
+                                                <li>Technology</li>
+                                                <li>Utilities</li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -180,7 +224,19 @@
                     <div class="button-dropdown">
                         <div class="trigger">Select Sector &amp; Industry<span class="arrow"></span>
                         </div>
-                        <div class="dropdown">Dropdown</div>
+                        <div class="dropdown">
+                            <ul>
+                                <li>Basic Materials</li>
+                                <li>Conglomerates</li>
+                                <li>Consumer Goods</li>
+                                <li>Financial</li>
+                                <li>Healthcare</li>
+                                <li>Industrial Goods</li>
+                                <li>Services</li>
+                                <li>Technology</li>
+                                <li>Utilities</li>
+                            </ul>
+                        </div>
 
                     </div>
                     <div class="button-dropdown">
@@ -312,7 +368,8 @@
         <div class="grid_3">
             <div class="pager">
                 <ul>
-                    <li><a href="#">Previous</a></li>
+                    <li><a href="#">Previous</a>
+                    </li>
                     <li>
                         <a href="#">1</a>
                     </li>
