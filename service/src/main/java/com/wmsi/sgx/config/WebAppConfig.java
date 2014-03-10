@@ -17,7 +17,6 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -35,8 +34,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MappingJackson2HttpMessageConverter jsonConverter() {
     	ObjectMapper mapper = new ObjectMapper();
-    	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-    	mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
+    	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    	//mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
     	mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
     	
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();

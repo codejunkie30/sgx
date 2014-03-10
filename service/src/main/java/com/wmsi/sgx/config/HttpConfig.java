@@ -41,7 +41,7 @@ public class HttpConfig{
     @Bean(name="capIqJsonMessageConverter")
     public MappingJackson2HttpMessageConverter capIqJsonConverter() {
     	ObjectMapper mapper = new ObjectMapper();
-    	mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+    	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     	
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
