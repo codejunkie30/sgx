@@ -1,9 +1,8 @@
 {
-	"query": 
-	{
-		"term": 
-		{
-			"tickerCode": "$id$"
-		}
-	}
+  "query": {
+    "ids": {
+      "type": "company",
+      "values": ["$id$"]
+    }
+  }
 }

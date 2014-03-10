@@ -1,0 +1,17 @@
+{
+	"filter": 
+	{
+		"term": 
+		{
+			"tickerCode": "$id$"
+		}
+	},
+
+	"_source": 
+	[
+		"date",
+		"value"
+	],
+
+	"size": 10000
+}

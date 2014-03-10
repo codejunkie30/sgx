@@ -6,7 +6,7 @@
 
   <configuration>
     <stop-on-errors>true</stop-on-errors>
-    <date-format>MM/dd/yyyy HH:mm</date-format>
+    <date-format>MM-dd-yyyy</date-format>
     <wildcard>true</wildcard>
     <custom-converters>
 	<converter type="com.wmsi.sgx.conversion.dozer.StringToDoubleConverter">
@@ -19,7 +19,7 @@
   <mapping wildcard="false">
     <class-a>java.util.Map</class-a>
     <class-b>com.wmsi.sgx.model.CompanyInfo</class-b>
-      <field>
+      <field >
         <a key="IQ_COMPANY_NAME">this</a>
         <b>companyName</b>
       </field>
@@ -34,10 +34,22 @@
       <field>
         <a key="IQ_CLOSEPRICE">this</a>
         <b>closePrice</b>
+      </field>
+            <field>
+        <a key="IQ_LOWPRICE">this</a>
+        <b>lowPrice</b>
       </field>      
+      <field>
+        <a key="IQ_HIGHPRICE">this</a>
+        <b>highPrice</b>
+      </field>  
       <field>
         <a key="IQ_CLOSEPRICE_prev">this</a>
         <b>previousClosePrice</b>
+      </field>      
+      <field>
+        <a key="IQ_PRICEDATE">this</a>
+        <b>previousCloseDate</b>
       </field>      
       <field>
         <a key="IQ_YEARHIGH">this</a>
@@ -123,6 +135,75 @@
         <a key="IQ_BV_SHARE">this</a>
         <b>bvShare</b>
       </field>
+      <field>
+        <a key="IQ_TEV_EBITDA">this</a>
+        <b>tevData</b>
+      </field>
+      <field>
+        <a key="IQ_FLOAT_PERCENT">this</a>
+        <b>floatPercentage</b>
+      </field>
+      <field>
+        <a key="IQ_SHORT_INTEREST">this</a>
+        <b>sharesSoldShort</b>
+      </field>
+      <field>
+        <a key="IQ_SHARESOUTSTANDING">this</a>
+        <b>sharesOutstanding</b>
+      </field>
+      <field>
+        <a key="IQ_TOTAL_DEBT_EBITDA">this</a>
+        <b>totalDebtEbitda</b>
+      </field>
+      <field>
+        <a key="IQ_CAPEX">this</a>
+        <b>capitalExpenditures</b>
+      </field>
+      <field>
+        <a key="IQ_EBIT">this</a>
+        <b>ebit</b>
+      </field>
+      <field>
+        <a key="IQ_EBITDA">this</a>
+        <b>ebitDa</b>
+      </field>
+      <field>
+        <a key="IQ_TOTAL_ASSETS">this</a>
+        <b>totalAssets</b>
+      </field>
+      <field>
+        <a key="IQ_TEV">this</a>
+        <b>enterpriseValue</b>
+      </field>
+      <field>
+        <a key="IQ_NI">this</a>
+        <b>netIncome</b>
+      </field>
+      <field>
+        <a key="IQ_CASH_ST_INVEST">this</a>
+        <b>cashInvestments</b>
+      </field>
+
+      <field>
+        <a key="IQ_COMPANY_ADDRESS">this</a>
+        <b>companyAddress</b>
+      </field>
+      <field>
+        <a key="IQ_COMPANY_WEBSITE">this</a>
+        <b>companyWebsite</b>
+      </field>
+      <field>
+        <a key="IQ_EMPLOYEES">this</a>
+        <b>employees</b>
+      </field>
+      <field>
+        <a key="IQ_YEAR_FOUNDED">this</a>
+        <b>yearFounded</b>
+      </field>
+      <field>
+        <a date-format="MMM dd yyyy HH:mm" key="IQ_PERIODDATE_IS">this</a>
+        <b>fiscalYearEnd</b>
+      </field>      
   </mapping> 
             
 </mappings>  

@@ -30,26 +30,27 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@DataProvider
 	Object[][] testTickers(){
+		String date = "02/28/2014";
 		
 		return new Object[][]{
-				{"C6L"}, 
-				{"A7S"}
+				{"C6L", date}, 
+				{"A7S", date}
 		};
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetCompanyInfo(String ticker) throws CapIQRequestException{
-		capIQService.getCompanyInfo(ticker);
+	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException{
+		capIQService.getCompanyInfo(ticker, date);
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetCompanyFinancials(String ticker) throws CapIQRequestException{
+	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException{
 		capIQService.getCompanyFinancials(ticker, "LTM");
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetHistoricalData(String ticker) throws CapIQRequestException{
-		capIQService.getHistoricalData(ticker, "02/28/2014");
+	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException{
+		capIQService.getHistoricalData(ticker, date);
 	}
 	
 }

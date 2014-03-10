@@ -76,13 +76,13 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	}
 	
 	
-	@Test(dataProvider="tickers")
+	//@Test(dataProvider="tickers")
 	public void testCreateIndex(String companyId, String ticker, String gvKey) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException{
 
-		String index = "20140307";
+		String index = "20140310";
 		indexerService.createIndex(index);
 
-		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker);
+		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, "03/10/2014");
 		indexerService.save("company", ticker, companyInfo, index);
 		
 		CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
@@ -109,7 +109,7 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
 
-		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, "03/07/2014");
+		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, "03/10/2014");
 		List<HistoricalValue> price = historicalData.get(0);
 		
 		for(HistoricalValue data : price){

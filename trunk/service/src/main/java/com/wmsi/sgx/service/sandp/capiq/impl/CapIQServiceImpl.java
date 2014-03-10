@@ -43,14 +43,21 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	// TODO Refactor - proof of concept
 	@Override
-	public CompanyInfo getCompanyInfo(String id) throws CapIQRequestException {
-	
+	public CompanyInfo getCompanyInfo(String id, String startDate) throws CapIQRequestException {
+		try{
 		Resource template = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
+
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date currentDate = df.parse(startDate);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDate);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		String previous =  df.format(cal.getTime());
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
-		ctx.put("currentDate", "02/28/2014");
-		ctx.put("previousDate", "02/27/2014");
+		ctx.put("currentDate", startDate);
+		ctx.put("previousDate", previous);
 		
 		StopWatch w = new StopWatch();
 		w.start();
@@ -61,12 +68,16 @@ public class CapIQServiceImpl implements CapIQService{
 		log.error("Time taken: {} ", w.getTotalTimeMillis());
 		Map<String, String> m = capIqResponseToMap(response);
 		
-		try{
+		
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
 			CompanyInfo info = dozerMapper(in, m, CompanyInfo.class);
 			return info;
 		}
 		catch(IOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch(ParseException e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

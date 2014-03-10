@@ -31,7 +31,7 @@ public class Price{
 	public void setCurrentDate(Date d){currentDate = d;}	
 
 	public Double getChange(){
-		Double change = null;
+		Double change = 0.0D;
 		
 		if(closePrice != null && lastPrice != null){
 			change = MathUtil.change(closePrice, lastPrice, decimalPlaces);
@@ -41,13 +41,13 @@ public class Price{
 	}
 
 	public Double getPercentChange(){
-		Double change = null;
+		Double percentChange = 0.0D;
 		
 		if(closePrice != null && lastPrice != null){
-			return MathUtil.percentChange(closePrice, lastPrice, decimalPlaces);
+			percentChange = MathUtil.percentChange(closePrice, lastPrice, decimalPlaces);
 		}
 		
-		return change; 		
+		return percentChange; 		
 	}		
 
 }

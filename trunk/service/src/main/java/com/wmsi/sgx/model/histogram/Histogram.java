@@ -2,12 +2,13 @@ package com.wmsi.sgx.model.histogram;
 
 public class Histogram{
 
-	private Long key;
+	private Object key;
 	private Long count;
-	public Long getKey() {
+	
+	public Object getKey() {
 		return key;
 	}
-	public void setKey(Long key) {
+	public void setKey(Object key) {
 		this.key = key;
 	}
 	public Long getCount() {
