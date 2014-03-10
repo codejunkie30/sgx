@@ -12,7 +12,8 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                         },
                         legend: {
                             align: 'right',
-                            enabled: false
+                            enabled: true,
+                            verticalAlign: 'top'
                         },
                         plotOptions: {
                             column: {
@@ -267,7 +268,9 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
                         // debug.log('success');
                         $('#containerRR').highcharts('StockChart', {
-
+                            chart: {
+                                height: 200
+                            },
                             plotOptions: {
                                 pointPadding: 0
                             },
@@ -297,7 +300,7 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             navigatior: {
                                 height: 30
                             },
-                            yAxis: {},
+                            yAxis: {height: 100},
                             series: [{
                                     name: 'Volume',
                                     data: data,

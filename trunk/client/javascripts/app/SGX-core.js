@@ -15,10 +15,12 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
         },
         core: function(flag) {
             debug.info('SGX.Core');
+            SGX.accordion();
             SGX.modal.init();
             SGX.dropdowns();
             SGX.tabs();
             SGX.slider();
+            SGX.tooltip();
         },
         checkboxes: function() {
             $('.checkbox').on('click', function() {
@@ -35,22 +37,27 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
         },
         dropdowns: function() {
             // debug.info('SGX.dropdowns');
-            $('body').on('click', function(e) {
-                // debug.log(e.toElement);
+            $('html').on('click', function(e) {
+                
                 if (!$(e.toElement).parents().hasClass("button-dropdown")) {
-                    $(document).find('.dropdown').removeClass('open');
+                    
+                    $(document).find('.button-dropdown').removeClass('open');
                 }
-                // $(document).find('.dropdown').removeClass('open');
+                
             });
+            
             $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
+                
+                $(document).find('.button-dropdown').removeClass('open');
                 var $this = $(this),
-                    $button = $this.parents('.button-dropdown');
-                $dropdown = $button.find('.dropdown');
 
-                if ($button.hasClass("open")) {
-                    $button.removeClass("open");
+                    $button = $this.parents('.button-dropdown'),
+                    $dropdown = $button.find('.dropdown');
+                
+                if ($this.hasClass("open")) {
+                    $this.removeClass("open");
                 } else {
-                    $button.addClass("open");
+                    $this.addClass("open");
                 }
             });
         },
@@ -137,7 +144,6 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                         // $('.stock-bar-container').append('<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
                         stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
                     }
-
                 }
                 $(this).find('.stock-bar-container').html(stockBarObj.content);
             });
@@ -146,6 +152,37 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
             // debug.info('SGX.tabs');
             $('.tabbed-content').tabs({
                 active: 0
+            });
+        },
+        tooltip: function() {
+            $('.info').on('click', function() {
+                var $this = $(this);
+                $this.append('<div class="tooltip"><div class="tooltip-content">This is the tooltip content</div></div>');
+                var $tooltip = $(this).find('.tooltip'),
+                    height = $tooltip.height();
+                   $tooltip.css({'top': -height});
+                // debug.warn(height);
+                $tooltip.fadeIn();
+            });
+
+            // debug.info('SGX.dropdowns');
+            $('body').on('click', function(e) {
+                // debug.log(e.toElement);
+                if (!$(e.toElement).parents().hasClass("button-dropdown")) {
+                    $(document).find('.dropdown').removeClass('open');
+                }
+                // $(document).find('.dropdown').removeClass('open');
+            });
+            $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
+                var $this = $(this),
+                    $button = $this.parents('.button-dropdown');
+                $dropdown = $button.find('.dropdown');
+
+                if ($button.hasClass("open")) {
+                    $button.removeClass("open");
+                } else {
+                    $button.addClass("open");
+                }
             });
         }
 
