@@ -314,6 +314,26 @@
 .placeholder-header {
   margin-bottom: 30px;
 }
+.blue {
+  color: #1e2171;
+}
+.composite-leadin h4 {
+  width: 66%;
+}
+.composite-leadin p {
+  font-size: 12px;
+  line-height: 16px;
+}
+.composite-leadin a.read-more {
+  background: url("../img/link-green-arrow.jpg") no-repeat 0 0px;
+  display: inline-block;
+  position: absolute;
+  width: 22px;
+  height: 20px;
+}
+td.max {
+  cursor: pointer;
+}
 * {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -829,6 +849,7 @@ h1.title {
 table.search-criteria {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 table.search-criteria thead tr {
   height: 31px;
@@ -837,7 +858,7 @@ table.search-criteria th {
   font: bold 14px/14px Arial, Helvetica, sans-serif;
   color: #000;
   text-align: center;
-  padding: 0 16px;
+  padding: 0 10px;
   border-bottom: 1px dotted #d6d6d6;
 }
 table.search-criteria th:first-child {
@@ -855,7 +876,7 @@ table.search-criteria td:first-child {
   text-align: left;
 }
 table.search-criteria td {
-  padding: 0 16px;
+  padding: 0 10px;
   text-align: center;
   font-weight: bold;
   font-size: 12px;
@@ -864,6 +885,7 @@ table.search-criteria td {
 table.search-criteria td.max {
   background: url("../img/x-button.png") no-repeat 86% center;
   padding-right: 40px;
+  padding-left: 0;
 }
 table.search-criteria .info {
   position: absolute;
