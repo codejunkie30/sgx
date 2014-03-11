@@ -3,6 +3,7 @@ package com.wmsi.sgx.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
@@ -11,8 +12,11 @@ import com.google.common.base.Objects;
 public class CompanyInfo{
 
 	private Double avgBrokerReq;
+
+	private Double avgVolumeM3= 0.0D; // TODO
 	private Double beta5Yr;
-	private Double bvShare;	
+	private String businessDescription;	
+	private Double bvShare;
 	private Double capitalExpenditures;
 	private Double cashInvestments;
 	private Double closePrice;
@@ -24,12 +28,13 @@ public class CompanyInfo{
 	private Double ebitda;
 	private Double ebitdaMargin;
 	private Double employees;
-	private Double enterpriseValue;	
+	private Double enterpriseValue;
 	private Double eps;
 	private Date fiscalYearEnd;
 	private Double floatPercentage;
 	private Double highPrice;
-	private String industry;
+	private List<Holder> holders;
+	private String industry;	
 	private String industryGroup;
 	private Double lowPrice;
 	private Double marketCap;
@@ -50,18 +55,21 @@ public class CompanyInfo{
 	private Double totalRev1YrAnnGrowth;
 	private Double totalRev3YrAnnGrowth;
 	private Double totalRev5YrAnnGrowth;
-	
-    private Double totalRevenue;
-    private Double volume;
-    private Integer yearFounded;
+	private Double totalRevenue;
+	private Double volume;
+	private Integer yearFounded;
 	private Double yearHigh;
-	private Double yearLow;
-	public Double getAvgBrokerReq(){
+	private Double yearLow;	
+    public Double getAvgBrokerReq(){
 		return avgBrokerReq;
 	}
-	public Double getBeta5Yr() {
+    public Double getBeta5Yr() {
 		return beta5Yr;
 	}
+    public String getBusinessDescription() {
+		return businessDescription;
+	}
+    
 	public Double getBvShare() {
 		return bvShare;
 	}
@@ -80,26 +88,24 @@ public class CompanyInfo{
 	public String getCompanyName() {
 		return companyName;
 	}
-    public String getCompanyWebsite() {
+	public String getCompanyWebsite() {
 		return companyWebsite;
 	}
-    public Double getDividendYield() {
+	public Double getDividendYield() {
 		return dividendYield;
 	}
-
-    
 	public Double getEbit() {
 		return ebit;
 	}
 	public Double getEbitda() {
 		return ebitda;
 	}
-	public Double getEbitdaMargin() {
+    public Double getEbitdaMargin() {
 		return ebitdaMargin;
 	}
-	public Double getEmployees() {
+    public Double getEmployees() {
 		return employees;
-	}
+	}    
 	public Double getEnterpriseValue() {
 		return enterpriseValue;
 	}
@@ -115,6 +121,9 @@ public class CompanyInfo{
 	public Double getHighPrice() {
 		return highPrice;
 	}
+	public List<Holder> getHolders() {
+		return holders;
+	}
 	public String getIndustry() {
 		return industry;
 	}
@@ -126,7 +135,7 @@ public class CompanyInfo{
 	}
 	public Double getMarketCap() {
 		return marketCap;
-	}	
+	}
 	public Double getNetIncome() {
 		return netIncome;
 	}
@@ -135,8 +144,7 @@ public class CompanyInfo{
 	}
 	public Double getOpenPrice() {
 		return openPrice;
-	}
-	
+	}	
 	public Double getPeRatio() {
 		return peRatio;
 	}
@@ -145,7 +153,7 @@ public class CompanyInfo{
 	}
 	public Double getPreviousClosePrice() {
 		return previousClosePrice;
-	}
+	}	
 	public Double getPriceToBookRatio(){
 		
 		if(closePrice == null || bvShare == null)
@@ -164,7 +172,6 @@ public class CompanyInfo{
 		BigDecimal high = new BigDecimal(yearHigh);
 		return close.divide(high, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
 	}
-	
 	public Double getPriceVs52WeekLow(){
 		
 		if(closePrice == null || yearLow == null)
@@ -180,6 +187,7 @@ public class CompanyInfo{
 	public Double getSharesSoldShort() {
 		return sharesSoldShort;
 	}
+	
 	public Double getTargetPriceNum() {
 		return targetPriceNum;
 	}
@@ -198,7 +206,6 @@ public class CompanyInfo{
 	public Double getTotalDebtEquity() {
 		return totalDebtEquity;
 	}
-
 	public Double getTotalRev1YrAnnGrowth() {
 		return totalRev1YrAnnGrowth;
 	}
@@ -208,6 +215,7 @@ public class CompanyInfo{
 	public Double getTotalRev5YrAnnGrowth() {
 		return totalRev5YrAnnGrowth;
 	}
+
 	public Double getTotalRevenue() {
 		return totalRevenue;
 	}
@@ -226,8 +234,14 @@ public class CompanyInfo{
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
 	}
+	public void setAvgVolumeM3(Double avgVolumeM3) {
+		this.avgVolumeM3 = avgVolumeM3;
+	}
 	public void setBeta5Yr(Double beta5Yr) {
 		this.beta5Yr = beta5Yr;
+	}
+	public void setBusinessDescription(String businessDescription) {
+		this.businessDescription = businessDescription;
 	}
 	public void setBvShare(Double bvShare) {
 		this.bvShare = bvShare;
@@ -262,10 +276,10 @@ public class CompanyInfo{
 	public void setEbitdaMargin(Double ebitdaMargin) {
 		this.ebitdaMargin = ebitdaMargin;
 	}
-	
 	public void setEmployees(Double employees) {
 		this.employees = employees;
 	}
+	
 	public void setEnterpriseValue(Double enterpriseValue) {
 		this.enterpriseValue = enterpriseValue;
 	}
@@ -275,12 +289,15 @@ public class CompanyInfo{
 	public void setFiscalYearEnd(Date fiscalYearEnd) {
 		this.fiscalYearEnd = fiscalYearEnd;
 	}
-	
 	public void setFloatPercentage(Double floatPercentage) {
 		this.floatPercentage = floatPercentage;
 	}
+	
 	public void setHighPrice(Double highPrice) {
 		this.highPrice = highPrice;
+	}
+	public void setHolders(List<Holder> holders) {
+		this.holders = holders;
 	}
 	public void setIndustry(String industry) {
 		this.industry = industry;
@@ -367,11 +384,13 @@ public class CompanyInfo{
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
 	}
+	
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)
 			.add("beta5Yr", beta5Yr)
+			.add("businessDescription", businessDescription)
 			.add("bvShare", bvShare)
 			.add("capitalExpenditures", capitalExpenditures)
 			.add("cashInvestments", cashInvestments)

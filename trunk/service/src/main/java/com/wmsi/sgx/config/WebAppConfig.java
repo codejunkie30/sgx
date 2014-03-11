@@ -36,7 +36,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     	//mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
-    	mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+    	//mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
     	
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));

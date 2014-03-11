@@ -154,6 +154,12 @@
 				{
 					"type": "string",
 					"index": "not_analyzed"
+				},
+
+				"period": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
 				}
 			}
 		},
@@ -203,6 +209,79 @@
 				}
 			}
 		},
+
+		"holders": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"holder": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"name": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						},
+
+						"shares": 
+						{
+							"type": "long"
+						},
+
+						"percent": 
+						{
+							"type": "double"
+						}
+					}
+				}
+			}
+		},
+		"keyDevs": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"keyDev": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"headline": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						},
+
+						"date": 
+						{
+							"type": "date"
+						},
+
+						"situation": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						}
+					}
+				}
+			}
+		},
+
 
 		"_default_": 
 		{
