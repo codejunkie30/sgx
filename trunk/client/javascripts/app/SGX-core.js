@@ -4,6 +4,12 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
     SGX = {
+        startup: function() {
+            $('td.max').on('click', function() {
+                SGX.modal.open('<p>Are you sure you want to close?</p>');
+            });
+
+        },
         accordion: function() {
             $(".module-accordion").accordion({
                 active: 1,
@@ -21,6 +27,7 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
             SGX.tabs();
             SGX.slider();
             SGX.tooltip();
+            SGX.startup();
         },
         checkboxes: function() {
             $('.checkbox').on('click', function() {
@@ -35,25 +42,38 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                 }
             });
         },
+        data: {
+            get: function(url) {
+                // JSON call will be made here
+                if (typeof(url) !== 'undefined') {
+                    $.ajax({
+                        url: url,
+                        success: function() {
+                            SGX.data.success();
+                        }
+                    });
+                }
+            },
+            success: function() {
+
+            }
+        },
         dropdowns: function() {
             // debug.info('SGX.dropdowns');
             $('html').on('click', function(e) {
-                
                 if (!$(e.toElement).parents().hasClass("button-dropdown")) {
-                    
                     $(document).find('.button-dropdown').removeClass('open');
                 }
-                
             });
-            
+
             $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
-                
+
                 $(document).find('.button-dropdown').removeClass('open');
                 var $this = $(this),
 
                     $button = $this.parents('.button-dropdown'),
                     $dropdown = $button.find('.dropdown');
-                
+
                 if ($this.hasClass("open")) {
                     $this.removeClass("open");
                 } else {
@@ -61,14 +81,36 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                 }
             });
         },
+        error: {
+            init: function(content) {
+                SGX.modal.open(content, 'modal-error');
+            }
+        },
         modal: {
             close: function() {
-                $('#modal').find('.close-button').on('click', function() {
-                    $('#modal').fadeOut();
+                $('#modal').fadeOut(function() {
+                    $(this).html('<div class="modal-container"><div class="modal-content"><p>Modal is empty.</p></div><div class="bg" /></div>');
                 });
+
+            },
+            open: function(content, type) {
+                var $modal = $('#modal');
+                $modal.html('<div class="modal-container"><div class="modal-content" /><div class="bg" /></div>');
+
+                $modal.find('.modal-content').html(content);
+                if (type !== 'undefined') {
+                    $modal.addClass(type);
+                }
+                $modal.fadeIn();
             },
             init: function() {
                 SGX.modal.close();
+                $('#modal').find('.close-button').on('click', function() {
+
+                });
+                $('#modal').on('click', function() {
+                    SGX.modal.close();
+                });
             }
         },
         slider: function() {
@@ -105,9 +147,12 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                         // // debug.log(event.target);
                         // // debug.log(ui);
                         // $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                        var leftPt = $(this).find('.ui-slider-handle').first().position().left,
-                            rightPt = $(this).find('.ui-slider-handle').last().position().left;
+                        var $this = $(this),
+                            leftPt = $this.find('.ui-slider-handle').first().position().left,
+                            rightPt = $this.find('.ui-slider-handle').last().position().left;
 
+
+                        debug.info(rightPt);
 
                         // // debug.log(leftPt);
                         // // debug.log($(event.target).parents('.module-stock-slider').find('.stock-bar').first().css("left"));
@@ -127,6 +172,12 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                                     'background': '#1e2171'
                                 });
                             }
+
+                            // Update max value
+                            $next = $this.parents('td').next('td').html('S$' + Math.floor(rightPt * 100) / 100 + 'mm');
+
+                            // Update min value
+                            $prev = $this.parents('td').prev('td').html('S$' + Math.floor(leftPt * 100) / 100 + 'mm');
                         });
                     }
                 });
@@ -160,7 +211,9 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                 $this.append('<div class="tooltip"><div class="tooltip-content">This is the tooltip content</div></div>');
                 var $tooltip = $(this).find('.tooltip'),
                     height = $tooltip.height();
-                   $tooltip.css({'top': -height});
+                $tooltip.css({
+                    'top': -height
+                });
                 // debug.warn(height);
                 $tooltip.fadeIn();
             });

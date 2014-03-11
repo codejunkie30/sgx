@@ -92,11 +92,11 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                 }
 
 
-                if ($('#containerR').length) {
+                if ($('#area-chart').length) {
                     // debug.log('exists');
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
                         // debug.log('success');
-                        $('#containerR').highcharts('StockChart', {
+                        $('#area-chart').highcharts('StockChart', {
                             chart: {
                                 resetZoomButton: {
                                     relativeTo: 'chart'
@@ -264,10 +264,10 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
 
 
                 }
-                if ($('#containerRR').length) {
+                if ($('#bar-chart').length) {
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
                         // debug.log('success');
-                        $('#containerRR').highcharts('StockChart', {
+                        $('#bar-chart').highcharts('StockChart', {
                             chart: {
                                 height: 200
                             },
