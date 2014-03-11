@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
@@ -22,9 +22,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import com.wmsi.sgx.model.CompanyFinancial;
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
+import com.wmsi.sgx.model.Holder;
+import com.wmsi.sgx.model.Holders;
+import com.wmsi.sgx.model.KeyDev;
+import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
@@ -71,6 +75,8 @@ public class CapIQServiceImpl implements CapIQService{
 		
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
 			CompanyInfo info = dozerMapper(in, m, CompanyInfo.class);
+			
+			//info.setHolders(getHolderDetails(id));
 			return info;
 		}
 		catch(IOException e){
@@ -78,6 +84,10 @@ public class CapIQServiceImpl implements CapIQService{
 			e.printStackTrace();
 		}
 		catch(ParseException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch(Exception e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -95,9 +105,8 @@ public class CapIQServiceImpl implements CapIQService{
 		
 		CapIQResponse response = executeCapIqRequests(template, ctx);
 		
-		Map<String, String> m = capIqResponseToMap(response);
-
 		try{
+			Map<String, String> m = capIqResponseToMap(response);
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyFinancialsMapping.xml").getInputStream();
 			CompanyFinancial financial = dozerMapper(in, m, CompanyFinancial.class);
 			
@@ -113,11 +122,126 @@ public class CapIQServiceImpl implements CapIQService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		catch(Exception e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
-	public void getKeyDevelopments(String id){
+	@Override
+	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws ParseException, CapIQRequestException{
+		List<String> ids = getKeyDevelopmentIds(id, asOfDate);
 		
+		List<KeyDev> ret = new ArrayList<KeyDev>();
+		
+		for(String i : ids){
+			KeyDev d = getKeyDev(i);
+			ret.add(d);
+		}
+		
+		KeyDevs kd = new KeyDevs();
+		kd.setTickerCode(id);
+		kd.setKeyDevs(ret);
+		return kd;
+	}
+
+	private KeyDev getKeyDev(String id) throws CapIQRequestException, ParseException{
+		Resource template = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("id", id);
+		
+		CapIQResponse response = executeCapIqRequests(template, ctx);
+		String err = response.getErrorMsg();
+		if(StringUtils.isNotEmpty(err)){
+			throw new CapIQRequestException("Error response "+ err);
+		}
+		
+		
+		CapIQResult headline = response.getResults().get(0);
+		CapIQResult date = response.getResults().get(1);
+		CapIQResult time = response.getResults().get(2);
+		CapIQResult sit = response.getResults().get(3);
+		
+		KeyDev keyDev = new KeyDev();
+		keyDev.setHeadline(headline.getRows().get(0).getValues().get(1));
+		keyDev.setSituation(sit.getRows().get(0).getValues().get(1));
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		keyDev.setDate(sdf.parse(date.getRows().get(0).getValues().get(1)));
+		return keyDev;
+		
+		
+	}
+	public List<String> getKeyDevelopmentIds(String id, String asOfDate) throws ParseException, CapIQRequestException{
+
+		Resource template = new ClassPathResource("META-INF/query/capiq/keyDevs.json");
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("id", id);
+		ctx.put("startDate", getStartDate(asOfDate));
+	
+		CapIQResponse response = executeCapIqRequests(template, ctx);
+		String err = response.getErrorMsg();
+		if(StringUtils.isNotEmpty(err)){
+			throw new CapIQRequestException("Error response "+ err);
+		}
+		
+		List<String> ids = new ArrayList<String>();
+		for(CapIQResult res : response.getResults()){
+			String error = res.getErrorMsg();
+			if(StringUtils.isNotEmpty(error)){
+				throw new CapIQRequestException("Error field "+ err);
+			}
+			
+			
+			
+			for(CapIQRow r : res.getRows()){
+				String idd = r.getValues().get(0);
+				if(StringUtils.isNotEmpty(idd)){
+					ids.add(idd);
+				}
+			}			
+		}
+		
+		return ids;
+	}
+	
+	public Holders getHolderDetails(String id) throws CapIQRequestException{
+		Resource template = new ClassPathResource("META-INF/query/capiq/holderDetails.json");
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("id", id);
+	
+		CapIQResponse response = executeCapIqRequests(template, ctx);
+		String err = response.getErrorMsg();
+		
+		if(StringUtils.isNotEmpty(err))
+			return null;
+		
+		List<CapIQRow> names = response.getResults().get(0).getRows();
+		List<CapIQRow> shares = response.getResults().get(1).getRows();
+		List<CapIQRow> percent = response.getResults().get(2).getRows();
+		
+		List<Holder> ret = new ArrayList<Holder>();
+		
+		for(int i =0; i < names.size(); i++){
+			Holder h = new Holder();
+			
+			h.setName(names.get(i).getValues().get(0));
+			
+			if(shares.size() > i){
+				h.setShares(Long.valueOf(shares.get(i).getValues().get(0)));
+			}
+
+			if(percent.size() > i){
+				h.setPercent(Double.valueOf(percent.get(i).getValues().get(0)));
+			}
+			ret.add(h);
+		}
+		System.out.println(ret);
+		
+		Holders holders = new Holders();
+		holders.setHolders(ret);
+		holders.setTickerCode(id);
+		return holders;
 	}
 	
 	@Override
@@ -187,11 +311,18 @@ public class CapIQServiceImpl implements CapIQService{
 		return requestExecutor.execute(query);
 	}
 	
-	private Map<String, String> capIqResponseToMap(CapIQResponse response){
+	private Map<String, String> capIqResponseToMap(CapIQResponse response) throws Exception{
 		Map<String, String> m = new HashMap<String, String>();
 		
 		for(CapIQResult res : response.getResults()){
 			String header = res.getMnemonic();
+			String err = res.getErrorMsg();
+			
+			if(StringUtils.isNotEmpty(err)){
+				log.error("Error response {}", err);
+				throw new Exception("Error " + err);				
+			}
+			
 			String val = res.getRows().get(0).getValues().get(0);
 			
 			if(val != null && val.toLowerCase().startsWith("data unavailable")){

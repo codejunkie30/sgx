@@ -22,8 +22,8 @@
 			"histogram": 
 			{
 				"field": "marketCap",
-				"interval": 15,
-				"min_doc_count":0
+				"interval": 1000,
+				"min_doc_count": 2
 			}
 		},
 
@@ -32,7 +32,7 @@
 			"histogram": 
 			{
 				"field": "totalRevenue",
-				"interval": 15
+				"interval": 1000
 			}
 		},
 

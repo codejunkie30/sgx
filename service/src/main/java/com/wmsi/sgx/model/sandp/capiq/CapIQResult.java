@@ -22,6 +22,11 @@ public class CapIQResult{
 	public String getMnemonic(){return mnemonic;}
 	public void setMnemonic(String m){mnemonic = m;}
 	
+	@JsonProperty("Properties")
+	private CapIQProperty properties;	
+	public CapIQProperty getProperties(){return properties;}
+	public void setProperties(CapIQProperty p){properties = p;}
+
 	@JsonProperty(value="ErrMsg")
 	private String errorMsg;
 	public String getErrorMsg(){return errorMsg;}
@@ -48,17 +53,18 @@ public class CapIQResult{
 	public void setFunction(String f){function = f;}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return Objects.toStringHelper(this)
-				.add("headers", headers)
-				.add("errorMsg", errorMsg)
-				.add("function", function)
-				.add("identifier", identifier)
-				.add("mnemonic", mnemonic)
-				.add("numCols", numCols)
-				.add("numRols", numRows)
-				.add("rows", rows)
-				.toString();
+			.add("headers", headers)
+			.add("rows", rows)
+			.add("mnemonic", mnemonic)
+			.add("properties", properties)
+			.add("errorMsg", errorMsg)
+			.add("identifier", identifier)
+			.add("numCols", numCols)
+			.add("numRows", numRows)
+			.add("function", function)
+			.toString();
 	}
 
 }

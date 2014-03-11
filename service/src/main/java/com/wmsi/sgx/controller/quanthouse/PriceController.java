@@ -1,5 +1,8 @@
 package com.wmsi.sgx.controller.quanthouse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,11 @@ public class PriceController {
 	private String market = "XSES";
 	
 	@RequestMapping(method = RequestMethod.POST )
-	public Price getPrice(@RequestBody IdSearch query) throws QuanthouseServiceException{
-		return service.getPrice(market, query.getId());
+	public Map<String, Price> getPrice(@RequestBody IdSearch query) throws QuanthouseServiceException{
+		Price p = service.getPrice(market, query.getId());
+		Map<String, Price> ret = new HashMap<String, Price>();
+		ret.put("price", p);
+		return ret;
 	}
 }
 

@@ -22,7 +22,7 @@
 	<mapping wildcard="false">
 
 		<class-a>java.util.Map</class-a>
-		<class-b>com.wmsi.sgx.model.CompanyFinancial</class-b>
+		<class-b>com.wmsi.sgx.model.financials.CompanyFinancial</class-b>
 		<field>
 			<a key="IQ_ABS_PERIOD">this</a>
 			<b>absPeriod</b>
@@ -41,11 +41,11 @@
 		</field>
 		<field>
 			<a key="IQ_GP">this</a>
-			<b>gp</b>
+			<b>grossProfit</b>
 		</field>
 		<field>
 			<a key="IQ_NI">this</a>
-			<b>ni</b>
+			<b>netIncome</b>
 		</field>
 		<field>
 			<a key="IQ_EBITDA">this</a>
@@ -61,7 +61,7 @@
 		</field>
 		<field>
 			<a key="IQ_DIV_SHARE">this</a>
-			<b>dividendShare</b>
+			<b>dividendsPerShare</b>
 		</field>
 		<field>
 			<a key="IQ_TOTAL_ASSETS">this</a>
@@ -69,19 +69,19 @@
 		</field>
 		<field>
 			<a key="IQ_TOTAL_CA">this</a>
-			<b>totalCA</b>
+			<b>totalCurrentAssets</b>
 		</field>
 		<field>
 			<a key="IQ_NPPE">this</a>
-			<b>nppe</b>
+			<b>netPpe</b>
 		</field>
 		<field>
 			<a key="IQ_TOTAL_CL">this</a>
-			<b>totalCL</b>
+			<b>totalCurrentLiabily</b>
 		</field>
 		<field>
 			<a key="IQ_LT_DEBT">this</a>
-			<b>ltDebt</b>
+			<b>longTermDebt</b>
 		</field>
 		<field>
 			<a key="IQ_TOTAL_LIAB">this</a>
@@ -89,11 +89,11 @@
 		</field>
 		<field>
 			<a key="IQ_RE">this</a>
-			<b>re</b>
+			<b>retainedEarnings</b>
 		</field>
 		<field>
 			<a key="IQ_COMMON">this</a>
-			<b>common</b>
+			<b>commonStock</b>
 		</field>
 		<field>
 			<a key="IQ_TOTAL_EQUITY">this</a>
@@ -105,15 +105,15 @@
 		</field>
 		<field>
 			<a key="IQ_CASH_OPER">this</a>
-			<b>cashOper</b>
+			<b>cashOperations</b>
 		</field>
 		<field>
 			<a key="IQ_CASH_INVEST">this</a>
-			<b>cashInvest</b>
+			<b>cashInvesting</b>
 		</field>
 		<field>
 			<a key="IQ_CASH_FINAN">this</a>
-			<b>cashFinan</b>
+			<b>cashFinancing</b>
 		</field>
 		<field>
 			<a key="IQ_NET_CHANGE">this</a>
@@ -141,7 +141,7 @@
 		</field>
 		<field>
 			<a key="IQ_NI_MARGIN">this</a>
-			<b>niMargin</b>
+			<b>netIncomeMargin</b>
 		</field>
 		<field>
 			<a key="IQ_ASSET_TURNS">this</a>
@@ -157,11 +157,11 @@
 		</field>
 		<field>
 			<a key="IQ_DAYS_INVENTORY_OUT">this</a>
-			<b>daysInventoryOut</b>
+			<b>avgDaysInventory</b>
 		</field>
 		<field>
 			<a key="IQ_DAYS_PAYABLE_OUT">this</a>
-			<b>daysPayableOut</b>
+			<b>avgDaysPayable</b>
 		</field>
 		<field>
 			<a key="IQ_CASH_CONVERSION">this</a>
@@ -169,7 +169,7 @@
 		</field>
 		<field>
 			<a key="IQ_EBITDA_INT">this</a>
-			<b>ebitDaInt</b>
+			<b>ebitdaInterest</b>
 		</field>
 		<field>
 			<a key="IQ_TOTAL_DEBT_EQUITY">this</a>
@@ -185,7 +185,7 @@
 		</field>
 		<field>
 			<a key="IQ_NI_1YR_ANN_GROWTH">this</a>
-			<b>ni1YrAnnGrowth</b>
+			<b>netIncome1YrAnnGrowth</b>
 		</field>
 		<field>
 			<a key="IQ_EPS_1YR_ANN_GROWTH">this</a>

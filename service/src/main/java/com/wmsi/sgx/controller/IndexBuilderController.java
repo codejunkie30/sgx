@@ -1,53 +1,44 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.controller;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
+import com.wmsi.sgx.model.Holders;
+import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader=AnnotationConfigContextLoader.class)
-public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
-
-	@Configuration
-	@ComponentScan(basePackageClasses = {IndexerServiceTest.class})
-	@Import(HttpConfig.class)
-	static class IndexerServiceTestConfig{}
-	
+@RestController
+@RequestMapping(value="doBiu", produces="application/json")
+public class IndexBuilderController{
 
 	@Autowired
-	CapIQService capIQService;
+	private CapIQService capIQService;
 	
-	Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
+	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 	
 	@Autowired
-	IndexerService indexerService;
-	@DataProvider
-	public Object[][] tickers(){
+	private IndexerService indexerService;
+	
+	public String[][] tickers(String size){
 		try{
 			File f = companyIds.getFile();
 			List<String> lines = FileUtils.readLines(f);
@@ -56,7 +47,8 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 			lines.remove(0);
 			
 			// Just use for tests for now.
-			lines = lines.subList(0, 40);
+			if(size != null)
+			lines = lines.subList(0, Integer.valueOf(size));
 			
 			int c = lines.size();
 			String[][] ids = new String[c][3];
@@ -76,15 +68,47 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	}
 	
 	
-	//@Test(dataProvider="tickers")
-	public void testCreateIndex(String companyId, String ticker, String gvKey) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException{
-
-		String index = "20140310";
+	@RequestMapping(method=RequestMethod.POST)
+	public String buildIndex(@RequestBody Map<String, String> bod ) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException{
+		// TEMP TEMP TEMP - Quick and sleezy way to build the index
+		// while deployed until a nightly build is implemented
+		System.out.println(bod);
+		if(!bod.get("pass").equals("Jon1 m1Tch3ll N3v3R L13d"))
+			return "invalid";
+		
+		String index = bod.get("name");
+		String date = bod.get("date");
+		String size = bod.get("size");
 		indexerService.createIndex(index);
 
-		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, "03/10/2014");
+		for(String[] ticker : tickers(size)){
+			if(ticker[1] == null || ticker[1].toLowerCase().equals("null"))
+				continue;
+			
+			index(index, date, ticker[0], ticker[1], ticker[2]);
+		}
+			
+		return "ok";
+	}
+
+	
+	private void index(String index, String date, String companyId, String ticker, String gvKey) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException{
+
+		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, date);
+		if(companyInfo == null)
+			return;
 		indexerService.save("company", ticker, companyInfo, index);
 		
+		Holders h = capIQService.getHolderDetails(ticker);
+		
+		if(h != null)
+			indexerService.save("holders", ticker, h, index);
+
+		KeyDevs kd = capIQService.getKeyDevelopments(ticker, date);
+
+		if(kd != null)
+			indexerService.save("keyDevs", ticker, kd, index);
+
 		CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
 		String id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
@@ -109,7 +133,7 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
 
-		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, "03/10/2014");
+		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, date);
 		List<HistoricalValue> price = historicalData.get(0);
 		
 		for(HistoricalValue data : price){
@@ -125,5 +149,4 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 		}		
 		
 	}
-	
 }

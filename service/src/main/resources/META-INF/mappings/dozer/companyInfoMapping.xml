@@ -48,7 +48,7 @@
         <b>previousClosePrice</b>
       </field>      
       <field>
-        <a key="IQ_PRICEDATE">this</a>
+        <a date-format="YYYY-MM-DD" key="IQ_PRICEDATE">this</a>
         <b>previousCloseDate</b>
       </field>      
       <field>
@@ -203,7 +203,11 @@
       <field>
         <a date-format="MMM dd yyyy HH:mm" key="IQ_PERIODDATE_IS">this</a>
         <b>fiscalYearEnd</b>
-      </field>      
+      </field>
+      <field>
+        <a key="IQ_BUSINESS_DESCRIPTION">this</a>
+        <b>businessDescription</b>
+      </field>
   </mapping> 
             
 </mappings>  
