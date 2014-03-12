@@ -15,7 +15,6 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PE_EXCL_FWD", "properties":{"STARTDATE":"$currentDate$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_DIVIDEND_YIELD", "properties":{"STARTDATE":"$currentDate$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CLOSEPRICE", "properties":{"STARTDATE":"$currentDate$"}},
-{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CLOSEPRICE", "properties":{"STARTDATE":"$previousDate$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BV_SHARE", "properties":{"PERIODTYPE":"IQ_LTM"}},  
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_AVG_BROKER_REC_NO_CIQ"},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TARGET_PRICE_NUM_CIQ"},
