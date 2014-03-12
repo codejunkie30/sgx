@@ -49,34 +49,47 @@ public class CapIQServiceImpl implements CapIQService{
 	@Override
 	public CompanyInfo getCompanyInfo(String id, String startDate) throws CapIQRequestException {
 		try{
-		Resource template = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
-
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		Date currentDate = df.parse(startDate);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(currentDate);
-		cal.add(Calendar.DAY_OF_MONTH, -1);
-		String previous =  df.format(cal.getTime());
-
-		Map<String, Object> ctx = new HashMap<String, Object>();
-		ctx.put("id", id);
-		ctx.put("currentDate", startDate);
-		ctx.put("previousDate", previous);
-		
-		StopWatch w = new StopWatch();
-		w.start();
-		
-		CapIQResponse response = executeCapIqRequests(template, ctx);
-		
-		w.stop();
-		log.error("Time taken: {} ", w.getTotalTimeMillis());
-		Map<String, String> m = capIqResponseToMap(response);
-		
+			Resource template = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
+	
+			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			Date currentDate = df.parse(startDate);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(currentDate);
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+			String previous =  df.format(cal.getTime());
+	
+			Map<String, Object> ctx = new HashMap<String, Object>();
+			ctx.put("id", id);
+			ctx.put("currentDate", startDate);
+			ctx.put("previousDate", previous);
+			
+			StopWatch w = new StopWatch();
+			w.start();
+			
+			CapIQResponse response = executeCapIqRequests(template, ctx);
+			
+			w.stop();
+			log.error("Time taken: {} ", w.getTotalTimeMillis());
+			Map<String, String> m = capIqResponseToMap(response);
 		
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
 			CompanyInfo info = dozerMapper(in, m, CompanyInfo.class);
 			
-			//info.setHolders(getHolderDetails(id));
+			template = new ClassPathResource("META-INF/query/capiq/closePrice.json");
+			Date d = info.getPreviousCloseDate();
+			String pre = df.format(d);
+			ctx = new HashMap<String, Object>();
+			ctx.put("id", id);
+			ctx.put("startDate", pre);
+			
+			CapIQResponse prevResp = executeCapIqRequests(template, ctx);
+			Map<String, String> m2 = capIqResponseToMap(prevResp);
+			in = new ClassPathResource("META-INF/mappings/dozer/companyInfoMapping.xml").getInputStream();
+			CompanyInfo inf = dozerMapper(in, m2, CompanyInfo.class);
+			
+			info.setPreviousClosePrice(inf.getClosePrice());
+			
+
 			return info;
 		}
 		catch(IOException e){
@@ -130,7 +143,7 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 	
 	@Override
-	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws ParseException, CapIQRequestException{
+	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException{
 		List<String> ids = getKeyDevelopmentIds(id, asOfDate);
 		
 		List<KeyDev> ret = new ArrayList<KeyDev>();
@@ -145,8 +158,8 @@ public class CapIQServiceImpl implements CapIQService{
 		kd.setKeyDevs(ret);
 		return kd;
 	}
-
-	private KeyDev getKeyDev(String id) throws CapIQRequestException, ParseException{
+	
+	private KeyDev getKeyDev(String id) throws CapIQRequestException{
 		Resource template = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
@@ -164,20 +177,28 @@ public class CapIQServiceImpl implements CapIQService{
 		CapIQResult sit = response.getResults().get(3);
 		
 		KeyDev keyDev = new KeyDev();
-		keyDev.setHeadline(headline.getRows().get(0).getValues().get(1));
-		keyDev.setSituation(sit.getRows().get(0).getValues().get(1));
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-		keyDev.setDate(sdf.parse(date.getRows().get(0).getValues().get(1)));
+		if(headline.getRows() != null && headline.getRows().size() > 0 && headline.getRows().get(0).getValues() != null){
+			keyDev.setHeadline(headline.getRows().get(0).getValues().get(1));
+			keyDev.setSituation(sit.getRows().get(0).getValues().get(1));
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+			try{
+				keyDev.setDate(sdf.parse(date.getRows().get(0).getValues().get(1)));
+			}
+			catch(ParseException e){
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return keyDev;
 		
 		
 	}
-	public List<String> getKeyDevelopmentIds(String id, String asOfDate) throws ParseException, CapIQRequestException{
+	public List<String> getKeyDevelopmentIds(String id, String asOfDate) throws CapIQRequestException{
 
 		Resource template = new ClassPathResource("META-INF/query/capiq/keyDevs.json");
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
-		ctx.put("startDate", getStartDate(asOfDate));
+		ctx.put("startDate", getStartDate(asOfDate, Calendar.MONTH, -1));
 	
 		CapIQResponse response = executeCapIqRequests(template, ctx);
 		String err = response.getErrorMsg();
@@ -192,8 +213,6 @@ public class CapIQServiceImpl implements CapIQService{
 				throw new CapIQRequestException("Error field "+ err);
 			}
 			
-			
-			
 			for(CapIQRow r : res.getRows()){
 				String idd = r.getValues().get(0);
 				if(StringUtils.isNotEmpty(idd)){
@@ -204,6 +223,24 @@ public class CapIQServiceImpl implements CapIQService{
 		
 		return ids;
 	}
+	
+	private String getStartDate(String dt, int field, int val){
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date currentDate;
+		try{
+			currentDate = df.parse(dt);
+		}
+		catch(ParseException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDate);
+		cal.add(field, val);
+		return df.format(cal.getTime());
+	}
+
 	
 	public Holders getHolderDetails(String id) throws CapIQRequestException{
 		Resource template = new ClassPathResource("META-INF/query/capiq/holderDetails.json");

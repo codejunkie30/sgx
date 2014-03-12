@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
@@ -36,7 +37,9 @@ public class IndexerService{
 
 	private Logger log = LoggerFactory.getLogger(IndexerService.class);
 	
-	private String esUrl = "http://localhost:9200";
+	@Value("${elasticsearch.url}")
+	private String esUrl;
+
 	private String indexNamePrefix = "sgx_";
 	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");

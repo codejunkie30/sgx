@@ -1,6 +1,9 @@
 package com.wmsi.sgx.config;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 
@@ -18,7 +22,13 @@ import com.wmsi.sgx.service.quanthouse.feedos.FeedOSConfig;
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.service" })
 @EnableCaching
-@PropertySources(value = {@PropertySource("classpath:META-INF/properties/application.properties")})
+@PropertySources(value = {
+		// If spring.profiles is set use <profile>.application.properties else defaults to application.properties
+		// Uses -Dconfig.file to override internal settings with external file, must prefix path with file://
+		@PropertySource(value="classpath:META-INF/properties/application.properties"),
+		@PropertySource(value="classpath:META-INF/properties/${spring.profiles.active:dummy}.application.properties"),
+		@PropertySource(value="${config.file:classpath:META-INF/properties/dummy.application.properties}", ignoreResourceNotFound=false)
+	})
 public class AppConfig{
 
 	@Autowired
@@ -48,5 +58,13 @@ public class AppConfig{
 		config.setUser(env.getProperty("quanthouse.api.user"));
 		config.setPassword(env.getProperty("quanthouse.api.password"));
 		return config;
+	}
+	
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
+		PropertySourcesPlaceholderConfigurer ppc = new PropertySourcesPlaceholderConfigurer();
+		ppc.setIgnoreResourceNotFound(true);
+		ppc.setIgnoreUnresolvablePlaceholders(true);
+		return ppc;
 	}
 }

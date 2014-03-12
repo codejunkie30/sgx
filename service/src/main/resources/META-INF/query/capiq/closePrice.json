@@ -1,0 +1,4 @@
+{
+"inputRequests": [ 
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CLOSEPRICE", "properties":{"STARTDATE":"$startDate$"}}
+]}

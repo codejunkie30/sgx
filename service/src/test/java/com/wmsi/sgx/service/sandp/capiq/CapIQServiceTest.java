@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
+import static org.testng.Assert.*;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +15,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
+import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +33,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@DataProvider
 	Object[][] testTickers(){
-		String date = "02/28/2014";
+		String date = "03/10/2014";
 		
 		return new Object[][]{
 				{"C6L", date}, 
@@ -47,10 +50,17 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException{
 		capIQService.getCompanyFinancials(ticker, "LTM");
 	}
-	
+	/*
 	@Test(dataProvider="testTickers")
 	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException{
 		capIQService.getHistoricalData(ticker, date);
 	}
+
+	@Test(dataProvider="testTickers")
+	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException{
+		KeyDevs keyDevs = capIQService.getKeyDevelopments(ticker, date);
+		assertNotNull(keyDevs);		
+		assertNotNull(keyDevs.getKeyDevs());		
+	}*/
 	
 }

@@ -51,7 +51,7 @@ public class StockScreenerController{
 	
 	String indexName = "sgx_test";
 	
-	@RequestMapping("screener")
+	@RequestMapping("search/screener")
 	public ScreenerResponse getChartHistograms() throws CapIQRequestException, ElasticSearchException{
 		
 		ESQuery query = new SearchQuery();
@@ -103,13 +103,22 @@ public class StockScreenerController{
 	@Autowired
 	private ESQueryExecutor esExecutor;
 	
+	@RequestMapping(value="company")
+	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("company", loadCompany(search.getId()));
+		ret.put("holders", loadHolders(search.getId()).getHolders().subList(0,  5));
+		ret.put("keyDevs", loadDevs(search.getId()).getKeyDevs());
+		
+		return ret;
+	}
+	
 	@RequestMapping(value="company/info")
 	public Map<String, CompanyInfo> getCompany(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
 		Map<String, CompanyInfo> ret = new HashMap<String, CompanyInfo>();
 		ret.put("companyInfo", loadCompany(search.getId()));
 		return ret;
 	}
-	
 	
 	
 	private CompanyInfo loadCompany(String id) throws CapIQRequestException, ElasticSearchException{

@@ -39,13 +39,13 @@ public class CapIQResult{
 
 	@JsonProperty(value="NumCols")
 	private String numCols;
-	public String getnumCols(){return numCols;}
-	public void setnumCols(String n){numCols = n;}
+	public String getNumCols(){return numCols;}
+	public void setNumCols(String n){numCols = n;}
 
 	@JsonProperty(value="NumRows")
 	private String numRows;
-	public String getnumRows(){return numRows;}
-	public void setnumRows(String n){numRows = n;}
+	public String getNumRows(){return numRows;}
+	public void setNumRows(String n){numRows = n;}
 
 	@JsonProperty(value="Function")
 	private String function;

@@ -6,8 +6,6 @@
 
   <configuration>
     <stop-on-errors>true</stop-on-errors>
-    <date-format>MM-dd-yyyy</date-format>
-    <wildcard>true</wildcard>
     <custom-converters>
 	<converter type="com.wmsi.sgx.conversion.dozer.StringToDoubleConverter">
 		<class-a>java.lang.String</class-a>
@@ -48,7 +46,7 @@
         <b>previousClosePrice</b>
       </field>      
       <field>
-        <a date-format="YYYY-MM-DD" key="IQ_PRICEDATE">this</a>
+        <a date-format="yyyy-MM-dd" key="IQ_PRICEDATE">this</a>
         <b>previousCloseDate</b>
       </field>      
       <field>
@@ -201,7 +199,7 @@
         <b>yearFounded</b>
       </field>
       <field>
-        <a date-format="MMM dd yyyy HH:mm" key="IQ_PERIODDATE_IS">this</a>
+        <a date-format="MMM dd yyyy hh:mma" key="IQ_PERIODDATE_IS">this</a>
         <b>fiscalYearEnd</b>
       </field>
       <field>

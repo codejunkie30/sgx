@@ -19,5 +19,5 @@ public interface CapIQService{
 
 	Holders getHolderDetails(String ticker) throws CapIQRequestException;
 
-	KeyDevs getKeyDevelopments(String id, String asOfDate) throws ParseException, CapIQRequestException;
+	KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException;
 }
