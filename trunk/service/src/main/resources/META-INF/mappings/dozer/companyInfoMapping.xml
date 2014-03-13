@@ -206,6 +206,10 @@
         <a key="IQ_BUSINESS_DESCRIPTION">this</a>
         <b>businessDescription</b>
       </field>
+      <field>
+        <a key="IQ_GVKEY">this</a>
+        <b>gvKey</b>
+      </field>      
   </mapping> 
             
 </mappings>  

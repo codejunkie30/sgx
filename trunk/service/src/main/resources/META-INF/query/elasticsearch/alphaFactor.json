@@ -1,0 +1,21 @@
+{
+  "query": {
+    "match_all": {}
+  },
+  "filter": {
+    "bool": {
+      "must": [
+        {
+          "type": {
+            "value": "alphaFactor"
+          }
+        },
+        {
+          "prefix": {
+            "id": "$gvkey$"
+          }
+        }
+      ]
+    }
+  }
+}

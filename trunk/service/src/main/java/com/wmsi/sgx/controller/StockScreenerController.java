@@ -29,6 +29,7 @@ import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.model.histogram.CompanyHistogram;
 import com.wmsi.sgx.model.histogram.Histogram;
+import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.model.screener.ScreenerResponse;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchResults;
@@ -203,6 +204,28 @@ public class StockScreenerController{
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		response.setObjectMapper(mapper);
 		return response.getHits(KeyDevs.class).get(0);		
+	}
+
+	@RequestMapping(value="company/alphaFactor")
+	public AlphaFactor getAlphas(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+		CompanyInfo company = loadCompany(search.getId());
+		return loadAlphas(company.getGvKey().substring(3));
+	}
+
+	private AlphaFactor loadAlphas(String id) throws CapIQRequestException, ElasticSearchException{
+		Resource alphaTemplate = new ClassPathResource("META-INF/query/elasticsearch/alphaFactor.json");
+		ESQuery query = new SearchQuery();
+		query.setIndex(indexName);
+		Map m = new HashMap();
+		m.put("id", id);
+		
+		query.setQueryTemplate(parseQuery(alphaTemplate , m));
+		
+		ESResponse response = esExecutor.executeQuery(query);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		response.setObjectMapper(mapper);
+		return response.getHits(AlphaFactor.class).get(0);		
 	}
 
 	@RequestMapping("priceHistory")
