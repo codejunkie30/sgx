@@ -1,5 +1,6 @@
 {
 "inputRequests": [ 
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_GVKEY"},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_MARKETCAP", "properties":{"STARTDATE":"$currentDate$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_YEARHIGH", "properties":{"STARTDATE":"$currentDate$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_YEARLOW", "properties":{"STARTDATE":"$currentDate$"}},

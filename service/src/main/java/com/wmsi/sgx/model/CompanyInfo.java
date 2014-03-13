@@ -32,11 +32,12 @@ public class CompanyInfo{
 	private Double eps;
 	private Date fiscalYearEnd;
 	private Double floatPercentage;
+	private String gvKey;
 	private Double highPrice;
 	private List<Holder> holders;
-	private String industry;	
+	private String industry;
 	private String industryGroup;
-	private Double lowPrice;
+	private Double lowPrice;	
 	private Double marketCap;
 	private Double netIncome;
 	private Double netProfitMargin;
@@ -59,23 +60,23 @@ public class CompanyInfo{
 	private Double volume;
 	private Integer yearFounded;
 	private Double yearHigh;
-	private Double yearLow;	
-    public Double getAvgBrokerReq(){
+	private Double yearLow;
+	public Double getAvgBrokerReq(){
 		return avgBrokerReq;
 	}
-    public Double getBeta5Yr() {
+	public Double getBeta5Yr() {
 		return beta5Yr;
-	}
+	}	
     public String getBusinessDescription() {
 		return businessDescription;
 	}
-    
-	public Double getBvShare() {
+    public Double getBvShare() {
 		return bvShare;
 	}
-	public Double getCapitalExpenditures() {
+    public Double getCapitalExpenditures() {
 		return capitalExpenditures;
 	}
+    
 	public Double getCashInvestments() {
 		return cashInvestments;
 	}
@@ -100,23 +101,26 @@ public class CompanyInfo{
 	public Double getEbitda() {
 		return ebitda;
 	}
-    public Double getEbitdaMargin() {
+	public Double getEbitdaMargin() {
 		return ebitdaMargin;
 	}
-    public Double getEmployees() {
+	public Double getEmployees() {
 		return employees;
-	}    
-	public Double getEnterpriseValue() {
+	}
+    public Double getEnterpriseValue() {
 		return enterpriseValue;
 	}
-	public Double getEps() {
+    public Double getEps() {
 		return eps;
-	}
+	}    
 	public Date getFiscalYearEnd() {
 		return fiscalYearEnd;
 	}
 	public Double getFloatPercentage() {
 		return floatPercentage;
+	}
+	public String getGvKey() {
+		return gvKey;
 	}
 	public Double getHighPrice() {
 		return highPrice;
@@ -144,16 +148,16 @@ public class CompanyInfo{
 	}
 	public Double getOpenPrice() {
 		return openPrice;
-	}	
+	}
 	public Double getPeRatio() {
 		return peRatio;
-	}
+	}	
 	public Date getPreviousCloseDate() {
 		return previousCloseDate;
 	}
 	public Double getPreviousClosePrice() {
 		return previousClosePrice;
-	}	
+	}
 	public Double getPriceToBookRatio(){
 		
 		if(closePrice == null || bvShare == null)
@@ -162,7 +166,7 @@ public class CompanyInfo{
 		BigDecimal close = new BigDecimal(closePrice); 
 		BigDecimal bv = new BigDecimal(bvShare);
 		return close.divide(bv, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
-	}
+	}	
 	public Double getPriceVs52WeekHigh(){
 		
 		if(closePrice == null || yearHigh == null)
@@ -187,10 +191,10 @@ public class CompanyInfo{
 	public Double getSharesSoldShort() {
 		return sharesSoldShort;
 	}
-	
 	public Double getTargetPriceNum() {
 		return targetPriceNum;
 	}
+	
 	public Double getTevData() {
 		return tevData;
 	}
@@ -215,10 +219,10 @@ public class CompanyInfo{
 	public Double getTotalRev5YrAnnGrowth() {
 		return totalRev5YrAnnGrowth;
 	}
-
 	public Double getTotalRevenue() {
 		return totalRevenue;
 	}
+
 	public Double getVolume() {
 		return volume;
 	}
@@ -279,10 +283,10 @@ public class CompanyInfo{
 	public void setEmployees(Double employees) {
 		this.employees = employees;
 	}
-	
 	public void setEnterpriseValue(Double enterpriseValue) {
 		this.enterpriseValue = enterpriseValue;
 	}
+	
 	public void setEps(Double eps) {
 		this.eps = eps;
 	}
@@ -291,6 +295,9 @@ public class CompanyInfo{
 	}
 	public void setFloatPercentage(Double floatPercentage) {
 		this.floatPercentage = floatPercentage;
+	}
+	public void setGvKey(String gvKey) {
+		this.gvKey = gvKey;
 	}
 	
 	public void setHighPrice(Double highPrice) {
@@ -384,11 +391,11 @@ public class CompanyInfo{
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
 	}
-	
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)
+			.add("avgVolumeM3", avgVolumeM3)
 			.add("beta5Yr", beta5Yr)
 			.add("businessDescription", businessDescription)
 			.add("bvShare", bvShare)
@@ -407,7 +414,9 @@ public class CompanyInfo{
 			.add("eps", eps)
 			.add("fiscalYearEnd", fiscalYearEnd)
 			.add("floatPercentage", floatPercentage)
+			.add("gvKey", gvKey)
 			.add("highPrice", highPrice)
+			.add("holders", holders)
 			.add("industry", industry)
 			.add("industryGroup", industryGroup)
 			.add("lowPrice", lowPrice)

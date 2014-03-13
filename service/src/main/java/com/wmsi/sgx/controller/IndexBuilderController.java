@@ -21,8 +21,10 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
+import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
+import com.wmsi.sgx.service.sandp.alpha.AlphaFactorService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 
@@ -32,6 +34,9 @@ public class IndexBuilderController{
 
 	@Autowired
 	private CapIQService capIQService;
+	
+	@Autowired
+	private AlphaFactorService alphaFactorService;
 	
 	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 	
@@ -88,9 +93,18 @@ public class IndexBuilderController{
 			index(index, date, ticker[0], ticker[1], ticker[2]);
 		}
 			
+		buildAlphaFactors(index, date);
 		return "ok";
 	}
 
+	private void buildAlphaFactors(String index, String date) throws IOException{
+		Resource r = new ClassPathResource("data/rank_AFLSG_20140311.txt");
+		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(r.getFile());
+	
+		for(AlphaFactor f : factors){
+			indexerService.save("alphaFactor", f.getId(), f, index);
+		}
+	}
 	
 	private void index(String index, String date, String companyId, String ticker, String gvKey) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException{
 
