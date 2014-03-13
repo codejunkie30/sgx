@@ -2,7 +2,6 @@ package com.wmsi.sgx.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,8 +30,6 @@ import com.wmsi.sgx.model.histogram.CompanyHistogram;
 import com.wmsi.sgx.model.histogram.Histogram;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.model.screener.ScreenerResponse;
-import com.wmsi.sgx.model.search.SearchCompany;
-import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.model.search.input.IdSearch;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.search.elasticsearch.Aggregation;
@@ -42,28 +39,25 @@ import com.wmsi.sgx.service.search.elasticsearch.ESQuery;
 import com.wmsi.sgx.service.search.elasticsearch.ESQueryExecutor;
 import com.wmsi.sgx.service.search.elasticsearch.ESResponse;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.service.search.elasticsearch.SearchQuery;
 
 @RestController
 @RequestMapping(produces="application/json")
 public class StockScreenerController{
 	
-	Resource chartDataTemplate = new ClassPathResource("META-INF/query/elasticsearch/chartData.json");
-	
 	String indexName = "sgx_test";
 	
+	@Autowired
+	private ElasticSearchService elasticSearchService;
+	
 	@RequestMapping("search/screener")
-	public ScreenerResponse getChartHistograms() throws CapIQRequestException, ElasticSearchException{
+	public ScreenerResponse getChartHistograms() throws IOException, ElasticSearchException{
 		
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		query.setQueryTemplate(parseQuery(chartDataTemplate, new HashMap()));
+		Resource chartDataTemplate = new ClassPathResource("META-INF/query/elasticsearch/chartData.json");
+		String queryTemplate = FileUtils.readFileToString(chartDataTemplate.getFile());		
 		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-
+		ESResponse response = elasticSearchService.search(indexName, queryTemplate, new HashMap<String, Object>());
 		Aggregations aggregations = response.getAggregations();
 		
 		List<String> industries = buildIndustries(aggregations, "industry");
@@ -75,37 +69,9 @@ public class StockScreenerController{
 		screener.setHistograms(loadHistograms(aggregations));
 		return screener;
 	}
-
-	Resource template = new ClassPathResource("META-INF/query/elasticsearch/companyInfo.json");
-	
-	public String parseQuery(Resource template, Map<String, Object> ctx) throws CapIQRequestException{
-		String query = null;
-		
-		try{
-			String queryTemplate = FileUtils.readFileToString(template.getFile());
-			StringTemplate st = new StringTemplate(queryTemplate);
-			
-			Iterator<Entry<String, Object>> i = ctx.entrySet().iterator();
-			
-			while(i.hasNext()){
-				Entry<String, Object> entry = i.next();
-				st.setAttribute(entry.getKey(), entry.getValue());
-			}
-			
-			query = st.toString();
-		}
-		catch(IOException e){
-			throw new CapIQRequestException("IOError building input request", e);
-		}
-		
-		return query;
-	}
-
-	@Autowired
-	private ESQueryExecutor esExecutor;
 	
 	@RequestMapping(value="company")
-	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public Map<String, Object> getAll(@RequestBody IdSearch search) throws  ElasticSearchException, IOException{
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("company", loadCompany(search.getId()));
 		ret.put("holders", loadHolders(search.getId()).getHolders().subList(0,  5));
@@ -115,177 +81,83 @@ public class StockScreenerController{
 	}
 	
 	@RequestMapping(value="company/info")
-	public Map<String, CompanyInfo> getCompany(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public Map<String, CompanyInfo> getCompany(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		Map<String, CompanyInfo> ret = new HashMap<String, CompanyInfo>();
 		ret.put("companyInfo", loadCompany(search.getId()));
 		return ret;
 	}
 	
-	
-	private CompanyInfo loadCompany(String id) throws CapIQRequestException, ElasticSearchException{
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		Map m = new HashMap();
-		m.put("id", id);
-		
-		query.setQueryTemplate(parseQuery(template, m));
-		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		return response.getHits(CompanyInfo.class).get(0);
+	private CompanyInfo loadCompany(String id) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/companyInfo.json"));
+		List<CompanyInfo> info = elasticSearchService.search(indexName, template, getParms(id), CompanyInfo.class);
+		return info != null && info.size() > 0 ? info.get(0) : null;
 	}
-
-	Resource financialsTemplate = new ClassPathResource("META-INF/query/elasticsearch/financials.json");
 	
 	@RequestMapping(value="company/financials")
-	public Financials getFinancials(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public Financials getFinancials(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		return loadFinancials(search.getId());
 	}
 
-	private Financials loadFinancials(String id) throws CapIQRequestException, ElasticSearchException{
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		Map m = new HashMap();
-		m.put("id", id);
-		
-		query.setQueryTemplate(parseQuery(financialsTemplate , m));
-		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		List<CompanyFinancial> hits = response.getHits(CompanyFinancial.class);
+	private Financials loadFinancials(String id) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/financials.json"));
+		List<CompanyFinancial> hits = elasticSearchService.search(indexName, template, getParms(id), CompanyFinancial.class);
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;
 	}
 
 	@RequestMapping(value="company/holders")
-	public Holders getHolders(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public Holders getHolders(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		Holders holders = loadHolders(search.getId());
 		holders.setHolders(holders.getHolders().subList(0,  5));
 		return holders;
 	}
 
-	private Holders loadHolders(String id) throws CapIQRequestException, ElasticSearchException{
-		Resource holdersTemplate = new ClassPathResource("META-INF/query/elasticsearch/holders.json");
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		Map m = new HashMap();
-		m.put("id", id);
-		
-		query.setQueryTemplate(parseQuery(holdersTemplate , m));
-		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		return response.getHits(Holders.class).get(0);		
+	private Holders loadHolders(String id) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/holders.json"));
+		List<Holders> hits = elasticSearchService.search(indexName, template, getParms(id), Holders.class);
+		return hits != null && hits.size() > 0 ? hits.get(0) : null;
 	}
 
 	@RequestMapping(value="company/keyDevs")
-	public KeyDevs getDevs(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public KeyDevs getDevs(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		return loadDevs(search.getId());
 	}
 
-	private KeyDevs loadDevs(String id) throws CapIQRequestException, ElasticSearchException{
-		Resource holdersTemplate = new ClassPathResource("META-INF/query/elasticsearch/keyDevs.json");
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		Map m = new HashMap();
-		m.put("id", id);
-		
-		query.setQueryTemplate(parseQuery(holdersTemplate , m));
-		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		return response.getHits(KeyDevs.class).get(0);		
+	private KeyDevs loadDevs(String id) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/keyDevs.json"));
+		List<KeyDevs> hits = elasticSearchService.search(indexName, template, getParms(id), KeyDevs.class);
+		return hits != null && hits.size() > 0 ? hits.get(0) : null;
 	}
 
 	@RequestMapping(value="company/alphaFactor")
-	public AlphaFactor getAlphas(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	public AlphaFactor getAlphas(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		CompanyInfo company = loadCompany(search.getId());
 		return loadAlphas(company.getGvKey().substring(3));
 	}
 
-	private AlphaFactor loadAlphas(String id) throws CapIQRequestException, ElasticSearchException{
-		Resource alphaTemplate = new ClassPathResource("META-INF/query/elasticsearch/alphaFactor.json");
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		Map m = new HashMap();
-		m.put("id", id);
-		
-		query.setQueryTemplate(parseQuery(alphaTemplate , m));
-		
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		return response.getHits(AlphaFactor.class).get(0);		
+	private AlphaFactor loadAlphas(String id) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/alphaFactor.json"));
+		List<AlphaFactor> hits = elasticSearchService.search(indexName, template, getParms(id), AlphaFactor.class);
+		return hits != null && hits.size() > 0 ? hits.get(0) : null;
 	}
 
-	@RequestMapping("priceHistory")
-	public PriceHistory getHistory(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
+	@RequestMapping("company/priceHistory")
+	public PriceHistory getHistory(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
 		PriceHistory ret = new PriceHistory();
 		ret.setPrice(getPriceHistory(search));
 		ret.setVolume(getVolumeHistory(search));
 		return ret;
 	}
 
-	private List<HistoricalValue> getPriceHistory(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
-		Resource histTemplate = new ClassPathResource("META-INF/query/elasticsearch/historical.json");
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		query.setType("price");
-		Map m = new HashMap();
-		m.put("id", search.getId());
-
-		query.setQueryTemplate(parseQuery(histTemplate, m));
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		
-		return response.getHits(HistoricalValue.class);
+	private List<HistoricalValue> getPriceHistory(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/historical.json"));
+		return elasticSearchService.search(indexName, "price", template, getParms(search.getId()), HistoricalValue.class);
 	}
 
-	private List<HistoricalValue> getVolumeHistory(@RequestBody IdSearch search) throws CapIQRequestException, ElasticSearchException{
-		Resource histTemplate = new ClassPathResource("META-INF/query/elasticsearch/historical.json");
-		ESQuery query = new SearchQuery();
-		query.setIndex(indexName);
-		query.setType("volume");
-		Map m = new HashMap();
-		m.put("id", search.getId());
-
-		query.setQueryTemplate(parseQuery(histTemplate, m));
-		ESResponse response = esExecutor.executeQuery(query);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		response.setObjectMapper(mapper);
-		
-		return response.getHits(HistoricalValue.class);
-
-	}
-
-	@RequestMapping("search")
-	public SearchResults search() throws CapIQRequestException, ElasticSearchException{
-		CompanyInfo info = loadCompany("A7S");
-		SearchCompany res = new SearchCompany();
-		res.setCode(info.getTickerCode());
-		res.setCompanyName(info.getCompanyName());
-		res.setDividendYield(info.getDividendYield());
-		res.setMarketCap(info.getMarketCap());
-		res.setIndustry(info.getIndustry());
-		res.setPeRatio(info.getPeRatio());
-		res.setTotalRevenue(info.getTotalRevenue());
-		
-		SearchResults results = new SearchResults();
-		results.setCompanies(Arrays.asList(new SearchCompany[]{res}));
-		return results;
+	private List<HistoricalValue> getVolumeHistory(@RequestBody IdSearch search) throws ElasticSearchException, IOException{
+		String template = getQuery(new ClassPathResource("META-INF/query/elasticsearch/historical.json"));
+		return elasticSearchService.search(indexName, "volume", template, getParms(search.getId()), HistoricalValue.class);
 	}
 	
 	private Aggregation getAggregation(Aggregations aggs, String name){
@@ -340,4 +212,15 @@ public class StockScreenerController{
 
 		return ch;
 	}
+	
+	private String getQuery(Resource template) throws IOException{
+		return FileUtils.readFileToString(template.getFile());
+	}
+	
+	private Map<String, Object> getParms(String id){
+		Map<String, Object> parms = new HashMap<String, Object>();
+		parms.put("id", id);
+		return parms;
+	}
+
 }

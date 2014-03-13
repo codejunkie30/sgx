@@ -47,7 +47,7 @@ public class IndexerService{
 	@Autowired	
 	@Qualifier("esRestTemplate")
 	private RestTemplate restTemplate;
-	private void setRestTemplate(RestTemplate t){restTemplate = t;}
+	public void setRestTemplate(RestTemplate t){restTemplate = t;}
 	
 	public synchronized void createIndex(@Header String asOfDate) throws IOException, URISyntaxException, IndexerServiceException{
 		String indexName = indexNamePrefix + asOfDate;

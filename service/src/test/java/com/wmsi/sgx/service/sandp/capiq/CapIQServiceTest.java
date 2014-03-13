@@ -50,7 +50,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException{
 		capIQService.getCompanyFinancials(ticker, "LTM");
 	}
-	/*
+	
 	@Test(dataProvider="testTickers")
 	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException{
 		capIQService.getHistoricalData(ticker, date);
@@ -61,6 +61,6 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		KeyDevs keyDevs = capIQService.getKeyDevelopments(ticker, date);
 		assertNotNull(keyDevs);		
 		assertNotNull(keyDevs.getKeyDevs());		
-	}*/
+	}
 	
 }
