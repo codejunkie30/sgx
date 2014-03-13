@@ -1,0 +1,36 @@
+{
+	"aggregations": 
+	{
+		"marketCap": 
+		{
+			"buckets": 
+			[
+				{
+					"key": 0,
+					"doc_count": 1
+				},
+
+				{
+					"key": 15,
+					"doc_count": 5
+				}
+			]
+		},
+
+		"totalRev": 
+		{
+			"buckets": 
+			[
+				{
+					"key": 0,
+					"doc_count": 1
+				},
+
+				{
+					"key": 15,
+					"doc_count": 5
+				}
+			]
+		}
+	}
+}

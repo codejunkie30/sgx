@@ -8,10 +8,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ESQuery{
+public abstract class ESQuery{
 
 	public enum EndPoint {
-		SEARCH;
+		SEARCH, SOURCE;
 		@Override public String toString(){return "_".concat(super.toString().toLowerCase());}
 	}
 	
@@ -21,7 +21,6 @@ public class ESQuery{
 
 	private EndPoint endPoint;
 	public EndPoint getEndPoint(){return endPoint;}	
-	public void setEndPoint(EndPoint e){endPoint = e;}
 	
 	private String type;	
 	public String getType(){return type;}
@@ -34,7 +33,7 @@ public class ESQuery{
 	private ObjectMapper objectMapper = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 
-	public URI getURI(){
+	public URI getURI() throws ElasticSearchException{
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 		
 		if(getIndex() != null){
@@ -47,9 +46,9 @@ public class ESQuery{
 		if(getEndPoint() != null)
 			builder.pathSegment(getEndPoint().toString());
 		
-		return builder.build().toUri();
-		
+		return builder.build().toUri();		
 	}
+	
 	public JsonNode toJson() throws ElasticSearchException{
 		JsonNode node = null;
 		

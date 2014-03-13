@@ -4,15 +4,12 @@ import static org.testng.Assert.*;
 
 import org.testng.annotations.Test;
 
-import com.wmsi.sgx.service.search.elasticsearch.ESQuery.EndPoint;
-
-public class ESQueryTest{
+public class SearchQueryTest{
 
 	
 	@Test
-	public void testUriWithType(){
-		ESQuery query = new ESQuery();
-		query.setEndPoint(EndPoint.SEARCH);
+	public void testUriWithType() throws ElasticSearchException{
+		ESQuery query = new SearchQuery();
 		query.setIndex("testIndex");
 		query.setType("mine");
 		
@@ -20,26 +17,23 @@ public class ESQueryTest{
 	}
 	
 	@Test
-	public void testUriNoType(){
-		ESQuery query = new ESQuery();
-		query.setEndPoint(EndPoint.SEARCH);
+	public void testUriNoType() throws ElasticSearchException{
+		ESQuery query = new SearchQuery();
 		query.setIndex("testIndex");
 		
 		assertEquals(query.getURI().toString(), "/testIndex/_search");
 	}
 
 	@Test
-	public void testEndpointOnly(){
-		ESQuery query = new ESQuery();
-		query.setEndPoint(EndPoint.SEARCH);
-		
+	public void testEndpointOnly() throws ElasticSearchException{
+		ESQuery query = new SearchQuery();
 		assertEquals(query.getURI().toString(), "/_search");
 	}
 	
 	@Test
-	public void testSearchQueryInstance(){
+	public void testQueryParsing() throws ElasticSearchException{
 		ESQuery query = new SearchQuery();
-
-		assertEquals(query.getURI().toString(), "/_search");		
+		assertEquals(query.getURI().toString(), "/_search");
 	}
+
 }
