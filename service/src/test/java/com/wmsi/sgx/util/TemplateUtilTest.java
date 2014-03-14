@@ -16,5 +16,11 @@ public class TemplateUtilTest{
 		String bound = TemplateUtil.bind("This is a $f$ test", ctx);
 		assertEquals("This is a template test", bound);		
 	}
-	
+
+	@Test
+	public void testNullParms(){	
+		String bound = TemplateUtil.bind("This is a $f$ test", null);
+		assertEquals("This is a $f$ test", bound);		
+	}
+
 }
