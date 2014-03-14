@@ -10,13 +10,17 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.Resource;
 
 public class TemplateUtil{
-
+	
 	public static String bind(Resource res, Map<String, Object> ctx) throws IOException{
 		String template = FileUtils.readFileToString(res.getFile());		
 		return bind(template, ctx);
 	}
 
 	public static String bind(String template, Map<String, Object> ctx){
+		if(ctx == null || ctx.isEmpty()){
+			return template;
+		}
+		
 		StringTemplate st = new StringTemplate(template);
 		Iterator<Entry<String, Object>> i = ctx.entrySet().iterator();
 		

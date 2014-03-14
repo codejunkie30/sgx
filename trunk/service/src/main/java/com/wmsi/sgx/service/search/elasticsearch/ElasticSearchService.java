@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.search.elasticsearch;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,10 @@ public class ElasticSearchService{
 		return search(index, null, query, parms, clz);
 	}
 
+	public <T> List<T> search(String index, String type, String query, Class<T> clz) throws ElasticSearchException{
+		return search(index, type, query, new HashMap<String,Object>(), clz);
+	}
+	
 	public <T> List<T> search(String index, String type, String query, Map<String, Object> parms, Class<T> clz) throws ElasticSearchException{
 		ESQuery esQuery = getQuery(index, type, query, parms);
 		ESResponse response = query(esQuery);
@@ -36,7 +41,7 @@ public class ElasticSearchService{
 		return query(esQuery);
 	}
 
-	public <T> Object get(String index, String id, Class<T> clz ) throws ElasticSearchException{
+	public <T> T get(String index, String id, Class<T> clz ) throws ElasticSearchException{
 		SourceQuery query = new SourceQuery(id);
 		return esExecutor.executeGet(query, clz);
 	}

@@ -135,7 +135,7 @@
       </field>
       <field>
         <a key="IQ_TEV_EBITDA">this</a>
-        <b>tevData</b>
+        <b>evEbitData</b>
       </field>
       <field>
         <a key="IQ_FLOAT_PERCENT">this</a>
