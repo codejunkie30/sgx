@@ -18,13 +18,13 @@ import com.wmsi.sgx.service.search.SearchServiceException;
 public class SearchController{
 
 	@Autowired
-	private SearchService<SearchCompany> companySearchService;
+	private SearchService companySearchService;
 	
 	@RequestMapping("search")
 	public SearchResults search(@RequestBody SearchRequest req) throws SearchServiceException{
 		
 		String query = buildQuery(req);
-		List<SearchCompany> companies = companySearchService.search(query);
+		List<SearchCompany> companies = companySearchService.search(query, SearchCompany.class);
 		SearchResults results = new SearchResults();
 		results.setCompanies(companies);
 		return results;
