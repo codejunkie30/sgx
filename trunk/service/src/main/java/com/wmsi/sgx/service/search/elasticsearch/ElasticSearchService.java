@@ -41,8 +41,10 @@ public class ElasticSearchService{
 		return query(esQuery);
 	}
 
-	public <T> T get(String index, String id, Class<T> clz ) throws ElasticSearchException{
+	public <T> T get(String index, String type, String id, Class<T> clz ) throws ElasticSearchException{
 		SourceQuery query = new SourceQuery(id);
+		query.setIndex(index);
+		query.setType(type);
 		return esExecutor.executeGet(query, clz);
 	}
 
