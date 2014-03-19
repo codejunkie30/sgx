@@ -11,9 +11,31 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             type: 'column'
                         },
                         legend: {
-                            align: 'right',
                             enabled: true,
-                            verticalAlign: 'top'
+                            borderColor: '',
+                            borderWidth: 0,
+                            text: 'Test',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            backgroundColor: 'white',
+                            symbolPadding: 10,
+                            symbolWidth: 16,
+                            symbolHeight: 16,
+                            symbolRadius: 0,
+                            maxHeight: 200,
+                            padding: 10,
+                            x: 10,
+                            y: 10,
+                            itemMarginTop: 5,
+                            itemMarginBottom: 5,
+                            itemStyle: {
+                                cursor: 'pointer',
+                                color: ['#565b5c', '#1e2070'],
+                                fontSize: '12px',
+                                height: 20
+                            },
+                            width: 210,
+                            lineHeight: 20
                         },
                         plotOptions: {
                             column: {
@@ -33,11 +55,13 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                         series: [{
                             name: 'Total Revenue',
                             data: [10000, 12000, 12000, 14500, 15000],
+                            color: ['#565b5c'],
                             colors: ['#565b5c']
 
                         }, {
                             name: 'Payout Ratio',
                             data: [12000, 13000, 16250, 13800, 13000],
+                            color: ['#1e2070'],
                             colors: ['#1e2070']
                         }],
                         subtitle: {
@@ -217,37 +241,37 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                                         x: Date.UTC(2008, 11, 9),
                                         title: 'B',
                                         text: 'EURUSD: Bearish Trend Change on Tap?',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2008, 12, 6),
                                         title: 'C',
                                         text: 'US Dollar: Is This the Long-Awaited Recovery or a Temporary Bounce?',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2012, 9, 6),
                                         title: 'D',
                                         text: 'Forex: U.S. Non-Farm Payrolls Expand 244K, U.S. Dollar Rally Cut Short By Risk Appetite',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 7, 5),
                                         title: 'E',
                                         text: 'EURUSD: Enter Short on Channel Break',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 6, 4),
                                         title: 'F',
                                         text: 'EURUSD: Rate Decision to End Standstill',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2010, 8, 28),
                                         title: 'G',
                                         text: 'EURUSD: Bulls Clear Path to 1.50 Figure',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2009, 7, 25),
                                         title: 'H',
                                         text: 'Euro Contained by Channel Resistance',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }],
                                     onSeries: 'dataseries',
                                     shape: 'circlepin',
@@ -300,7 +324,9 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             navigatior: {
                                 height: 30
                             },
-                            yAxis: {height: 100},
+                            yAxis: {
+                                height: 100
+                            },
                             series: [{
                                     name: 'Volume',
                                     data: data,
@@ -314,37 +340,37 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                                         x: Date.UTC(2010, 7, 25),
                                         title: 'H',
                                         text: 'Euro Contained by Channel Resistance',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2010, 8, 28),
                                         title: 'G',
                                         text: 'EURUSD: Bulls Clear Path to 1.50 Figure',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 6, 4),
                                         title: 'F',
                                         text: 'EURUSD: Rate Decision to End Standstill',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 7, 5),
                                         title: 'E',
                                         text: 'EURUSD: Enter Short on Channel Break',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2012, 9, 6),
                                         title: 'D',
                                         text: 'Forex: U.S. Non-Farm Payrolls Expand 244K, U.S. Dollar Rally Cut Short By Risk Appetite',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2012, 10, 6),
                                         title: 'C',
                                         text: 'US Dollar: Is This the Long-Awaited Recovery or a Temporary Bounce?',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2012, 11, 9),
                                         title: 'B',
                                         text: 'EURUSD: Bearish Trend Change on Tap?',
-                                        shape: 'url(http://localhost:3000/img/stock-marker.png)'
+                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
                                     }],
                                     onSeries: 'dataseries',
                                     shape: 'circlepin',

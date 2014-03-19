@@ -1,5 +1,5 @@
 // This is the modular wrapper for any page
-define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debug'], function($, SGX) {
+define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 'tabs', 'debug'], function($, SGX) {
 
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
@@ -23,6 +23,8 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
             debug.info('SGX.Core');
             SGX.accordion();
             SGX.modal.init();
+
+            SGX.data.get();
             SGX.dropdowns();
             SGX.tabs();
             SGX.slider();
@@ -44,12 +46,33 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
         },
         data: {
             get: function(url) {
+
+                // Default Data
+                $.ajax({
+                    url: 'javascripts/app/search_result.json',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        for (var companies in data.results) {
+                           var company = data.results[companies];
+                           console.log(company);
+                            for (var i = 0; i < company.length; i++) {
+                                $('.module-results').find('tbody').append('<tr><td>' + company[i].companyName + '</td><td>' + company[i].code + '</td><td>'  + company[i].industry + '</td><td>' + company[i].marketCap + '</td><td>' + company[i].totalRevenue + '</td><td>' + company[i].peRatio + '</td><td>' + company[i].dividendYield + '</div>');
+                            }
+                        }
+                    }
+                });
+
                 // JSON call will be made here
                 if (typeof(url) !== 'undefined') {
                     $.ajax({
                         url: url,
                         success: function() {
                             SGX.data.success();
+                            console.log(data);
+                            for (var i = data.length - 1; i >= 0; i--) {
+                                data[i]
+                            };
                         }
                     });
                 }
@@ -123,7 +146,8 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                     values: [75, 200],
                     create: function(event, ui) {},
                     slide: function(event, ui) {
-                        var leftPt = $(this).find('.ui-slider-handle').first().position().left,
+                        var $this = $(this),
+                            leftPt = $(this).find('.ui-slider-handle').first().position().left,
                             rightPt = $(this).find('.ui-slider-handle').last().position().left;
                         $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
                             // debug.log($(elem).css("left"));
@@ -141,18 +165,25 @@ define(['jquery', 'jquicore', 'jquiwidget', 'accordion', 'slider', 'tabs', 'debu
                                     'background': '#1e2171'
                                 });
                             }
+                            // Update max value
+                            $next = $this.parents('td').next('td').html('S$' + Math.floor(rightPt * 100) / 100 + 'mm');
+
+                            // Update min value
+                            $prev = $this.parents('td').prev('td').html('S$' + Math.floor(leftPt * 100) / 100 + 'mm');
                         });
                     },
                     change: function(event, ui) {
                         // // debug.log(event.target);
                         // // debug.log(ui);
                         // $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                        console.log(event.val);
+                        // $(this).next('.matches').html('')
                         var $this = $(this),
                             leftPt = $this.find('.ui-slider-handle').first().position().left,
                             rightPt = $this.find('.ui-slider-handle').last().position().left;
 
 
-                        debug.info(rightPt);
+                        // debug.info(rightPt);
 
                         // // debug.log(leftPt);
                         // // debug.log($(event.target).parents('.module-stock-slider').find('.stock-bar').first().css("left"));
