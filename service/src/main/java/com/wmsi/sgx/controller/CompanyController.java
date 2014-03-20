@@ -16,9 +16,11 @@ import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.input.IdSearch;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.Search;
 
 @RestController
@@ -30,6 +32,9 @@ public class CompanyController{
 	
 	@Autowired
 	private Search<KeyDevs> keyDevsSearch;
+	
+	@Autowired 
+	private ModelMapper mapper;
 	
 	@RequestMapping(value="company")
 	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException {
@@ -78,5 +83,11 @@ public class CompanyController{
 	@RequestMapping(value="company/alphaFactor")
 	public AlphaFactor getAlphas(@RequestBody IdSearch search) throws CompanyServiceException {		
 		return companyService.loadAlphaFactors(search.getId());
+	}
+
+	@RequestMapping(value="company/relatedCompanies")
+	public List<SearchCompany> getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
+		List<CompanyInfo> companies = companyService.loadRelatedCompanies(search.getId());
+		return mapper.mapList(companies, SearchCompany.class);
 	}
 }

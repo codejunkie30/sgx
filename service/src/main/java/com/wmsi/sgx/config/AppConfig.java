@@ -2,6 +2,7 @@ package com.wmsi.sgx.config;
 
 import javax.annotation.PostConstruct;
 
+import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSConfig;
 
@@ -66,5 +68,17 @@ public class AppConfig{
 		ppc.setIgnoreResourceNotFound(true);
 		ppc.setIgnoreUnresolvablePlaceholders(true);
 		return ppc;
+	}
+	
+	@Bean
+	public DozerBeanMapperFactoryBean dozerMappingBean() throws Exception{
+
+		// TODO Move load all dozer configs here
+		DozerBeanMapperFactoryBean factory = new DozerBeanMapperFactoryBean();
+		factory.setMappingFiles( 
+				new PathMatchingResourcePatternResolver()
+					.getResources("classpath:META-INF/mappings/dozer/domain*.xml"));
+		
+		return factory; 
 	}
 }

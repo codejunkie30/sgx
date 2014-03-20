@@ -93,6 +93,37 @@ public class CompanyServiceImpl implements CompanyService{
 		return hits != null && hits.size() > 0 ? hits.get(0) : null;		
 	}
 	
+	@Autowired
+	private Search<CompanyInfo> relatedCompaniesSearch;
+	
+	@Override
+	public List<CompanyInfo> loadRelatedCompanies(String id) throws CompanyServiceException{
+		
+		CompanyInfo company = getById(id, CompanyInfo.class);
+		
+		List<CompanyInfo> companies = null;
+		
+		if(company != null && company.getMarketCap() != null){
+			
+			Map<String, Object> parms = new HashMap<String, Object>();
+			parms.put("tickerCode", company.getTickerCode());
+			parms.put("industry", company.getIndustry());
+			parms.put("industryGroup", company.getIndustryGroup());
+			parms.put("field", "marketCap");
+			parms.put("fieldValue", company.getMarketCap());
+			parms.put("percent", 0.1);
+			
+			try{
+				companies = companySearchService.search(relatedCompaniesSearch, parms);
+			}
+			catch(SearchServiceException e){
+				throw new CompanyServiceException("Could not load related companies", e);
+			}
+		}
+		
+		return companies;
+	}
+	
 	private <T> List<T> search(Search<T> s, String id) throws CompanyServiceException{
 		try{
 			return companySearchService.search(s, getParms(id));
