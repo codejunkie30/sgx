@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.wmsi.sgx.controller"})
-@Import(value={AppConfig.class, HttpConfig.class})
+@Import(value={AppConfig.class, HttpConfig.class, SearchConfig.class})
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override

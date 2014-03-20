@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 
-public interface AlphaFactorService{
+public interface AlphaFactorIndexerService{
 
 	List<AlphaFactor> loadAlphaFactors(File file);
 }

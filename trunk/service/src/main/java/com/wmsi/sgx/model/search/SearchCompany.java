@@ -5,7 +5,7 @@ import com.google.common.base.Objects;
 
 public class SearchCompany{
 
-	
+	private String tickerCode;
 	private Double marketCap;
 	private Double percentChange;
 	private Double priceVs52WeekLow;
@@ -29,6 +29,15 @@ public class SearchCompany{
 	
 	private String industry;
 	private String industryGroup;
+	
+
+	public String getTickerCode() {
+		return tickerCode;
+	}
+	public void setTickerCode(String tickerCode) {
+		this.tickerCode = tickerCode;
+	}
+	
 	public Double getMarketCap() {
 		return marketCap;
 	}

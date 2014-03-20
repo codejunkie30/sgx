@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.AppConfig;
 import com.wmsi.sgx.config.HttpConfig;
+import com.wmsi.sgx.config.SearchConfig;
 import com.wmsi.sgx.model.CompanyInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,7 +24,7 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 
 	@Configuration
 	@ComponentScan(basePackageClasses = {ESQueryExecutor.class})
-	@Import(value={HttpConfig.class, AppConfig.class})	
+	@Import(value={HttpConfig.class, AppConfig.class, SearchConfig.class})	
 	static class ESQueryExecutorTestConfig{}
 	
 	@Autowired

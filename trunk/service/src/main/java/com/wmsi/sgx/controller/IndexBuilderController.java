@@ -24,7 +24,7 @@ import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
-import com.wmsi.sgx.service.sandp.alpha.AlphaFactorService;
+import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 
@@ -36,7 +36,7 @@ public class IndexBuilderController{
 	private CapIQService capIQService;
 	
 	@Autowired
-	private AlphaFactorService alphaFactorService;
+	private AlphaFactorIndexerService alphaFactorService;
 	
 	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 	
