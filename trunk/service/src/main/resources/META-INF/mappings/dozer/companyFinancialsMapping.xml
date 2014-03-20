@@ -5,7 +5,6 @@
 
 	<configuration>
 		<stop-on-errors>false</stop-on-errors>
-		<date-format>MMM dd yyyy hh:mma</date-format>
 		<custom-converters>
 			<converter type="com.wmsi.sgx.conversion.dozer.StringToDoubleConverter">
 				<class-a>java.lang.String</class-a>

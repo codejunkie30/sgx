@@ -25,4 +25,6 @@ public interface CompanyService{
 
 	AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException;
 
+	List<CompanyInfo> loadRelatedCompanies(String id) throws CompanyServiceException;
+
 }

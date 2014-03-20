@@ -2,11 +2,14 @@ package com.wmsi.sgx.config;
 
 import java.io.IOException;
 
+import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -103,5 +106,16 @@ public class SearchConfig{
 		s.setQuery(r.getFile());		
 		return s;			
 	}
-
+	
+	@Bean
+	public Search<CompanyInfo> relatedCompaniesSearch() throws IOException{
+		Search<CompanyInfo>  s = new Search<CompanyInfo>();
+		s.setIndexName(indexName);
+		s.setType("company");
+		s.setResultClass(CompanyInfo.class);
+		Resource r = new ClassPathResource("META-INF/query/elasticsearch/relatedCompanies.json");
+		s.setQuery(r.getFile());		
+		return s;			
+	}
+	
 }

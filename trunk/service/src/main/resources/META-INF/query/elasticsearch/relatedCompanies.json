@@ -1,0 +1,48 @@
+{
+	"query": 
+	{
+		"bool": 
+		{
+			"must_not": 
+			[
+				{
+					"term": 
+					{
+						"tickerCode": "$tickerCode$"
+					}
+				}
+			],
+
+			"should": 
+			[
+				{
+					"term": 
+					{
+						"industry": "$industry$"
+					}
+				},
+
+				{
+					"term": 
+					{
+						"industryGroup": "$industryGroup$"
+					}
+				}
+			]
+		}
+	},
+
+	"filter": 
+	{
+		"script": 
+		{
+			"script": "!doc[f].isEmpty() && doc[f].value > fv - (fv * pct) && doc[f].value < fv + (fv * pct)",
+			"params": 
+			{
+				"f": "$field$",
+				"fv": $fieldValue$,
+				"pct": $percent$
+			}
+		}
+	}
+}
