@@ -34,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService{
 			throw new CompanyServiceException("Could not load company by id", e);
 		}
 	}
-	
+
 	@Autowired
 	private Search<KeyDevs> keyDevsSearch;
 
@@ -133,6 +133,8 @@ public class CompanyServiceImpl implements CompanyService{
 		}
 	}
 	
+	
+	// TODO move to Util class, preferable one that instantiates a Map and returns a Map for chaining .put
 	private Map<String, Object> getParms(String id){
 		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put("id", id);

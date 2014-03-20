@@ -1,0 +1,16 @@
+{
+	"query": 
+	{
+		"query_string": 
+		{
+			"query": "$search$",
+			"analyzer": "snowball",
+			"fields": 
+			[
+				"companyName"
+			],
+
+			"default_operator": "and"
+		}
+	}
+}
