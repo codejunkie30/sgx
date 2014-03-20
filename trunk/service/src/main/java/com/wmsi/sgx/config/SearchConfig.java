@@ -2,12 +2,10 @@ package com.wmsi.sgx.config;
 
 import java.io.IOException;
 
-import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
@@ -15,6 +13,7 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.search.Search;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.impl.SearchServiceImpl;
@@ -114,6 +113,17 @@ public class SearchConfig{
 		s.setType("company");
 		s.setResultClass(CompanyInfo.class);
 		Resource r = new ClassPathResource("META-INF/query/elasticsearch/relatedCompanies.json");
+		s.setQuery(r.getFile());		
+		return s;			
+	}
+
+	@Bean
+	public Search<SearchCompany> companyNameSearch() throws IOException{
+		Search<SearchCompany>  s = new Search<SearchCompany>();
+		s.setIndexName(indexName);
+		s.setType("company");
+		s.setResultClass(SearchCompany.class);
+		Resource r = new ClassPathResource("META-INF/query/elasticsearch/companySearch.json");
 		s.setQuery(r.getFile());		
 		return s;			
 	}

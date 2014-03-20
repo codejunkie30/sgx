@@ -6,14 +6,14 @@
 		{
 			"analyzer": 
 			{
-				"mstar_text_ngram_analyzer": 
+				"sgx_text_ngram_analyzer": 
 				{
 					"filter": 
 					[
 						"standard",
 						"lowercase",
 						"asciifolding",
-						"mstar_text_ngram_tokenizer"
+						"sgx_text_ngram_tokenizer"
 					],
 
 					"type": "custom",
@@ -23,7 +23,7 @@
 
 			"filter": 
 			{
-				"mstar_text_ngram_tokenizer": 
+				"sgx_text_ngram_tokenizer": 
 				{
 					"type": "edgeNGram",
 					"min_gram": "2",
@@ -49,6 +49,12 @@
 				{
 					"type": "string",
 					"index": "not_analyzed"
+				},
+
+				"companyName": 
+				{
+					"type": "string",
+					"analyzer": "sgx_text_ngram_analyzer"
 				},
 
 				"gvKey": 
