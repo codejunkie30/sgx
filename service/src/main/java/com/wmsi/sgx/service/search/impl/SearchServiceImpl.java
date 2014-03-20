@@ -1,15 +1,10 @@
 package com.wmsi.sgx.service.search.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.wmsi.sgx.model.HistoricalValue;
-import com.wmsi.sgx.model.Holders;
-import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.service.search.Search;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;

@@ -23,12 +23,12 @@ import com.wmsi.sgx.service.search.SearchServiceException;
 public class CompanyServiceImpl implements CompanyService{
 
 	@Autowired
-	private SearchService searchService;
+	private SearchService companySearchService;
 
 	@Override
 	public CompanyInfo getById(String id, Class<CompanyInfo> clz) throws CompanyServiceException {
 		try{
-			return searchService.getById(id, clz);
+			return companySearchService.getById(id, clz);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load company by id", e);
@@ -95,7 +95,7 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	private <T> List<T> search(Search<T> s, String id) throws CompanyServiceException{
 		try{
-			return searchService.search(s, getParms(id));
+			return companySearchService.search(s, getParms(id));
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Error loading company data.", e);

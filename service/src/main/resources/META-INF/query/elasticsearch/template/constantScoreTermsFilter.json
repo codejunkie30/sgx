@@ -1,0 +1,17 @@
+{
+	"query": 
+	{
+		"constant_score": 
+		{
+			"filter": 
+			{
+				"terms": 
+				{
+					
+				}
+			}
+		}
+	},
+
+	"size": 1000
+}

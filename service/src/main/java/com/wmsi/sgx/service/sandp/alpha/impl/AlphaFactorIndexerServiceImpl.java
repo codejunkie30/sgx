@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
-import com.wmsi.sgx.service.sandp.alpha.AlphaFactorService;
+import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 
 @Service
-public class AlphaFactorServiceImpl implements AlphaFactorService{
+public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 
 	public List<AlphaFactor> loadAlphaFactors(File f){
 

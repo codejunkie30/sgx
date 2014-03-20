@@ -1,0 +1,30 @@
+{
+	"query": 
+	{
+		"constant_score": 
+		{
+			"filter": 
+			{
+				"bool": 
+				{
+					"must": 
+					[
+						
+					],
+
+					"should": 
+					[
+						
+					],
+
+					"must_not": 
+					[
+						
+					]
+				}
+			}
+		}
+	},
+
+	"size": 1000
+}

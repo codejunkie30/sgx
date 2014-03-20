@@ -6,12 +6,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.testng.annotations.Test;
 
-import com.wmsi.sgx.service.sandp.alpha.impl.AlphaFactorServiceImpl;
+import com.wmsi.sgx.service.sandp.alpha.impl.AlphaFactorIndexerServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 
 public class AlphaFactorServiceTest{
 
-	AlphaFactorService service = new AlphaFactorServiceImpl();
+	AlphaFactorIndexerService service = new AlphaFactorIndexerServiceImpl();
 	
 	@Test
 	public void testLoadAlphaFactors() throws CapIQRequestException, IOException{
