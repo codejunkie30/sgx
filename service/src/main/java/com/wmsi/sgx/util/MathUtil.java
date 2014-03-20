@@ -34,5 +34,20 @@ public class MathUtil{
 		BigDecimal curr = new BigDecimal(current);
 		BigDecimal prev = new BigDecimal(previous);
 		return curr.subtract(prev).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	/**
+	 * Calculate average for given sum divided by the given total
+	 * @param sum 
+	 * @param total
+	 * @param scale - number of decimal places
+	 * @return average
+	 */
+	public static Double avg(Double sum, Integer total, int scale){
+		BigDecimal s = new BigDecimal(sum);
+		BigDecimal t = new BigDecimal(total);
+		BigDecimal avg = s.divide(t, RoundingMode.HALF_UP);
+		return avg.setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}	
+
 }
