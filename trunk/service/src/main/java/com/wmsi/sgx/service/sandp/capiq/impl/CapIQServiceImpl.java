@@ -36,6 +36,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
+import com.wmsi.sgx.util.MathUtil;
 
 @Service
 public class CapIQServiceImpl implements CapIQService{
@@ -88,7 +89,7 @@ public class CapIQServiceImpl implements CapIQService{
 			CompanyInfo inf = dozerMapper(in, m2, CompanyInfo.class);
 			
 			info.setPreviousClosePrice(inf.getClosePrice());
-			
+			info.setAvgVolumeM3(getThreeMonthAvg(id, startDate));
 
 			return info;
 		}
@@ -108,6 +109,27 @@ public class CapIQServiceImpl implements CapIQService{
 		return null;
 	}
 	
+	public Double getThreeMonthAvg(String id, String startDate) throws CapIQRequestException, ParseException {
+		
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date currentDate = df.parse(startDate);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDate);
+		cal.add(Calendar.DAY_OF_MONTH, -91);
+		String threeMonthsAgo =  df.format(cal.getTime());
+
+		List<List<HistoricalValue>> historicalData = loadHistoricaData(id, threeMonthsAgo );
+		List<HistoricalValue> volume = historicalData.get(1);
+		
+		Double sum = 0.0;
+		
+		for(HistoricalValue v : volume)
+			sum += v.getValue();
+			
+		
+		return MathUtil.avg(sum, volume.size(), 4);
+	}
+
 	@Override
 	public CompanyFinancial getCompanyFinancials(String id, String period) throws CapIQRequestException {
 		Resource template = new ClassPathResource("META-INF/query/capiq/companyFinancials.json");
@@ -283,13 +305,24 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException{
+		try{
+			String sDate = getStartDate(asOfDate);
+			return loadHistoricaData(id, sDate);
+		}
+		catch(ParseException e){
+			throw new CapIQRequestException(e.getMessage(), e);
+		}
+	}
+	
+	public List<List<HistoricalValue>> loadHistoricaData(String id, String startDate) throws CapIQRequestException{
+
 		Resource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 
 		try{
 
 			Map<String, Object> ctx = new HashMap<String, Object>();
 			ctx.put("id", id);
-			ctx.put("startDate", getStartDate(asOfDate));
+			ctx.put("startDate", startDate);
 		
 			CapIQResponse response = executeCapIqRequests(template, ctx);
 		
