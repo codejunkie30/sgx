@@ -28,5 +28,31 @@ public class CustomSerializer extends JsonSerializer<Object>{
 			jgen.writeEndObject();
 			jgen.writeEndObject();
 		}
+		else if(value instanceof TermsQuery){
+			TermsQuery q = (TermsQuery) value;
+			jgen.writeStartObject();
+			jgen.writeObjectFieldStart("terms");
+			jgen.writeObjectField("field", q.getField());
+			jgen.writeEndObject();
+			jgen.writeEndObject();
+		}
+		else if(value instanceof HistogramQuery){
+			HistogramQuery q = (HistogramQuery) value;
+			jgen.writeStartObject();
+			jgen.writeObjectFieldStart("histogram");
+			jgen.writeObjectField("field", q.getField());
+			jgen.writeObjectField("script", q.getScript());
+			jgen.writeObjectField("interval", q.getInterval());
+			jgen.writeEndObject();
+			jgen.writeEndObject();
+		}
+		else if(value instanceof StatsQuery){
+			StatsQuery q = (StatsQuery) value;
+			jgen.writeStartObject();
+			jgen.writeObjectFieldStart("stats");
+			jgen.writeObjectField("field", q.getField());
+			jgen.writeEndObject();
+			jgen.writeEndObject();
+		}
 	}
 }
