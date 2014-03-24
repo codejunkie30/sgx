@@ -1,6 +1,9 @@
 package com.wmsi.sgx.model.search;
 
-public abstract class AbstractQuery implements Query{
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = CustomSerializer.class)
+public class StatsQuery extends AbstractQuery{
 
 	private String field;
 
@@ -11,5 +14,4 @@ public abstract class AbstractQuery implements Query{
 	public void setField(String field) {
 		this.field = field;
 	}
-
 }

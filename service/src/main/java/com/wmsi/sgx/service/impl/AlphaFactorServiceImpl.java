@@ -1,9 +1,7 @@
 package com.wmsi.sgx.service.impl;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -15,11 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
-import com.wmsi.sgx.model.search.Criteria;
-import com.wmsi.sgx.model.search.Query;
-import com.wmsi.sgx.model.search.Range;
-import com.wmsi.sgx.model.search.RangeQuery;
-import com.wmsi.sgx.model.search.TermQuery;
 import com.wmsi.sgx.service.AlphaFactorService;
 import com.wmsi.sgx.service.AlphaFactorServiceException;
 import com.wmsi.sgx.service.search.SearchService;

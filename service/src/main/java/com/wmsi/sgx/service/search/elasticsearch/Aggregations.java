@@ -2,9 +2,10 @@ package com.wmsi.sgx.service.search.elasticsearch;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Objects;
 
-
+@JsonDeserialize(using=AggregationsDeserializer.class)
 public class Aggregations{
 	
 	private List<Aggregation> aggregations;

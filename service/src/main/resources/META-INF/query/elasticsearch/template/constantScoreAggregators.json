@@ -1,0 +1,23 @@
+{
+	"query": 
+	{
+		"constant_score": 
+		{
+			"filter": 
+			{
+				"match_all": 
+				{
+					
+				}
+			}
+		}
+	},
+
+	"aggregations": 
+	{
+		
+	},
+
+	"_source": "false",
+	"size": 2000
+}

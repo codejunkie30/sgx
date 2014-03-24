@@ -77,30 +77,84 @@ public class ESResponseTest{
 		assertEquals(hits.get(0).get("test"), "test1");		
 	}
 	
-	private String testSingleAggregation = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]}}}";
-	private String testAggregations = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]},\"totalRev\":{\"buckets\":[{\"key\": 0,\"doc_count\": 1},{\"key\": 15,\"doc_count\": 5}]}}} }";
+	private String testSingleBucketAggregation = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]}}}";
+	private String testMultipleBucketAggregations = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]},\"totalRev\":{\"buckets\":[{\"key\": 0,\"doc_count\": 1},{\"key\": 15,\"doc_count\": 5}]}}} }";
 	
 	@Test
-	public void testAggregation() throws JsonProcessingException, IOException, ElasticSearchException{
+	public void testBucketAggregation() throws JsonProcessingException, IOException, ElasticSearchException{
 		ESResponse response = new ESResponse();
-		response.setResponse(mapper.readTree(testSingleAggregation));
+		response.setResponse(mapper.readTree(testSingleBucketAggregation));
 		Aggregations aggregations = response.getAggregations();
 		assertNotNull(aggregations);
-		System.out.println(mapper.writeValueAsString(aggregations));
+		assertEquals(aggregations.getAggregations().size(), 1);
+		assertEquals(aggregations.getAggregations().get(0).getName(), "marketCap");
 	}
 
 	@Test
-	public void testAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
+	public void testMultipleBucketAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
 		ESResponse response = new ESResponse();
-		System.out.println(mapper.readTree(testAggregations).toString());
-		response.setResponse(mapper.readTree(testAggregations));
+		response.setResponse(mapper.readTree(testMultipleBucketAggregations));
 		Aggregations aggregations = response.getAggregations();
 		assertNotNull(aggregations);
 		assertEquals(aggregations.getAggregations().size(), 2);
+		assertEquals(aggregations.getAggregations().get(0).getName(), "marketCap");
+		assertEquals(aggregations.getAggregations().get(1).getName(), "totalRev");
+		assertEquals(aggregations.getAggregations().get(0).getClass(), BucketAggregation.class);
 		
-		System.out.println(mapper.writeValueAsString(aggregations));
+		BucketAggregation ba = (BucketAggregation)aggregations.getAggregations().get(0);
+		BucketAggregation ba2 = (BucketAggregation)aggregations.getAggregations().get(1);
+		assertEquals(ba.getBuckets().size(), 2);
+		assertEquals(ba.getBuckets().get(0).getKey(), 0);
+		assertEquals(ba.getBuckets().get(0).getCount().longValue(), 1);
+		
+		assertEquals(ba2.getBuckets().size(), 2);
+		assertEquals(ba.getBuckets().get(1).getKey(), 15);
+		assertEquals(ba.getBuckets().get(1).getCount().longValue(), 5);
+	}
+	
+	private String testSingleStatsAggregation = "{\"aggregations\":{\"marketCap\":{\"count\":68,\"min\":5.244449,\"max\": 2523.873173,\"avg\":1160.7159981323528,\"sum\":78928.68787299999}}}";
+		
+	@Test
+	public void testStatsAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.readTree(testSingleStatsAggregation));
+		Aggregations aggregations = response.getAggregations();
+		assertNotNull(aggregations);
+		assertEquals(aggregations.getAggregations().size(), 1);
+		assertEquals(aggregations.getAggregations().get(0).getName(), "marketCap");
+		assertEquals(aggregations.getAggregations().get(0).getClass(), StatAggregation.class);
+		
+		StatAggregation agg = (StatAggregation) aggregations.getAggregations().get(0);
+		assertEquals(agg.getCount().intValue(), 68);
+		assertEquals(agg.getMin(), 5.244449);
+		assertEquals(agg.getMax(), 2523.873173);
+		assertEquals(agg.getAvg(), 1160.7159981323528);
+		assertEquals(agg.getSum(), 78928.68787299999);
 	}
 
+	private String testDefaultAggregation = "{\"aggregations\":{\"marketCap\":{\"UnknownType\": 689}}}";
 	
-
+	@Test
+	public void testDefaultTypeAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.readTree(testDefaultAggregation));
+		Aggregations aggregations = response.getAggregations();
+		assertNotNull(aggregations);
+		assertEquals(aggregations.getAggregations().get(0).getClass(), DefaultAggregation.class);
+		DefaultAggregation agg = (DefaultAggregation) aggregations.getAggregations().get(0);
+		assertEquals(agg.getValue(), "{\"UnknownType\":689}");
+	}
+	
+	private String testMixedAggregation = "{\"aggregations\":{\"marketCap\":{\"count\": 68,\"min\": 5.244449,\"max\": 2523.873173,\"avg\": 1160.7159981323528,	\"sum\": 78928.68787299999},\"marketCap_bucket\":{\"buckets\":[{\"key\": 0,\"doc_count\": 1},{\"key\": 15,\"doc_count\": 5}]}}}";
+	
+	@Test
+	public void testMixedAggregations() throws JsonProcessingException, IOException, ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.readTree(testMixedAggregation));
+		Aggregations aggregations = response.getAggregations();
+		assertNotNull(aggregations);
+		assertEquals(aggregations.getAggregations().get(0).getClass(), StatAggregation.class);
+		assertEquals(aggregations.getAggregations().get(1).getClass(), BucketAggregation.class);
+	}
 }
+	
