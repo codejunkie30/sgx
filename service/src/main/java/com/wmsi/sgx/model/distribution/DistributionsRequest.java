@@ -1,8 +1,8 @@
-package com.wmsi.sgx.model.chart;
+package com.wmsi.sgx.model.distribution;
 
 import java.util.List;
 
-public class ChartDataRequest{
+public class DistributionsRequest{
 
 	private List<String> fields;
 

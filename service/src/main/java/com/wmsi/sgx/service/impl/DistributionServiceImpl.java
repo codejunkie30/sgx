@@ -15,14 +15,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.wmsi.sgx.model.distribution.Distributions;
 import com.wmsi.sgx.model.search.HistogramQuery;
 import com.wmsi.sgx.model.search.Query;
 import com.wmsi.sgx.model.search.StatsQuery;
 import com.wmsi.sgx.model.search.TermsQuery;
 import com.wmsi.sgx.service.ServiceException;
+import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.elasticsearch.Aggregation;
 import com.wmsi.sgx.service.search.elasticsearch.Aggregations;
 import com.wmsi.sgx.service.search.elasticsearch.Bucket;
@@ -35,10 +36,10 @@ import com.wmsi.sgx.service.search.elasticsearch.StatAggregation;
 @Service
 public class DistributionServiceImpl implements DistributionService{
 
-	private ObjectMapper mapper;
+	private ObjectMapper objectMapper;
 
 	@Autowired
-	public void setMapper(ObjectMapper m){mapper = m;}
+	public void setMapper(ObjectMapper m){objectMapper = m;}
 	
 	@Autowired
 	private ElasticSearchService elasticSearchService;
@@ -48,11 +49,15 @@ public class DistributionServiceImpl implements DistributionService{
 	private String indexName;
 
 	
+	@Autowired 
+	private ModelMapper mapper;
+
 	@Override
-	public Aggregations getAggregations(List<String> fields) throws ServiceException {
+	public Distributions getAggregations(List<String> fields) throws ServiceException {
 		
 		Map<String, Integer> intervals = getHistogramIntervals(fields);
-		return getAggregations(fields, intervals, 1000);
+		Aggregations aggs = getAggregations(fields, intervals, 1000);
+		return (Distributions) mapper.map(aggs, Distributions.class);
 	}
 	
 	private Map<String, Integer> getHistogramIntervals(List<String> fields) throws ServiceException{
@@ -166,14 +171,14 @@ public class DistributionServiceImpl implements DistributionService{
 
 		Resource template = new ClassPathResource("META-INF/query/elasticsearch/template/constantScoreAggregators.json");
 		
-		ObjectNode oj = (ObjectNode) mapper.readTree(template.getFile());
+		ObjectNode oj = (ObjectNode) objectMapper.readTree(template.getFile());
 		ObjectNode aggs = (ObjectNode) oj.get("aggregations");
 
 		for(Query query: criteria){
 			aggs.putPOJO(query.getField(), query);
 		}
 
-		return mapper.writeValueAsString(oj);
+		return objectMapper.writeValueAsString(oj);
 
 	}
 	
