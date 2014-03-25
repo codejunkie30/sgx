@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.util.TemplateUtil;
 
-@Service
+
 public class ElasticSearchService{
 
 	@Autowired

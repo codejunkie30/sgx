@@ -3,7 +3,10 @@ package com.wmsi.sgx.model.search;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -15,6 +18,9 @@ import com.google.common.base.Objects;
 
 public class SearchRequest{
 
+	@Valid
+	@NotNull
+	@Size(min = 1, max = 5, message="Invalid criteria size")
 	private List<Criteria> criteria;
 	
 	public List<Criteria> getCriteria() {

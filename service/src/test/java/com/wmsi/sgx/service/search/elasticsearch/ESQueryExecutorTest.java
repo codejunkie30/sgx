@@ -28,13 +28,13 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 	static class ESQueryExecutorTestConfig{}
 	
 	@Autowired
-	ESQueryExecutor eSQueryExecutor;
+	ESQueryExecutor esExecutor;
 
 	@Test(groups={"functional", "integration"})
 	public void testSearch() throws ElasticSearchException {
 		SearchQuery query = new SearchQuery();
 		query.setQueryTemplate("{ \"query\":{ \"match_all\":{} } }");
-		ESResponse response = eSQueryExecutor.executeQuery(query);
+		ESResponse response = esExecutor.executeQuery(query);
 		assertNotNull(response);
 	}
 
@@ -44,7 +44,7 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 		query.setIndex("sgx_test");
 		query.setType("company");
 		
-		CompanyInfo response = eSQueryExecutor.executeGet(query, CompanyInfo.class);
+		CompanyInfo response = esExecutor.executeGet(query, CompanyInfo.class);
 		assertNotNull(response);
 		assertEquals(response.getClass(), CompanyInfo.class);
 		assertEquals(response.getTickerCode(), "A7S");
