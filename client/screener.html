@@ -3,7 +3,7 @@
 
 <head>
     <title>Screener - SGX</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
@@ -11,7 +11,10 @@
 
 <body>
     <div id="loading">
-        <div class="loading-text">Loading</div>
+        <div class="loading-text">
+            <img src="img/ajax-loader.gif" />
+        </div>
+
     </div>
     <div id="modal">
         <div class="modal-container">
@@ -65,10 +68,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><span class="info">Total Market Cap</div></td>
-                                <td class="min">S$ 990mm</td>
+                            <tr class="criteria" data-name="Total Market Cap" data-min="80" data-max="100" data-label-type="dollar">
                                 <td>
+                                    <span class="info">Total Market Cap</span>
+                                </td>
+                                <td class="min">S$ 990mm</td>
+                                <td class="criteria-slider">
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
@@ -78,8 +83,9 @@
                                 </td>
                                 <td class="max">S$ 3,792mm</td>
                             </tr>
-                            <tr>
-                                <td><span class="info">Total Revenue</span>
+                            <tr class="criteria" data-name="Total Revenue" data-min="80" data-max="100" data-label-type="dollar">
+                                <td>
+                                    <span class="info">Total Revenue</span>
                                 </td>
                                 <td class="min">S$ 0mm</td>
                                 <td>
@@ -92,11 +98,12 @@
                                 </td>
                                 <td class="max">S$ 5,700mm</td>
                             </tr>
-                            <tr>
-                                <td><span class="info">P/E Ratio</span>
+                            <tr class="criteria" data-name="PE Ratio" data-min="80" data-max="100" data-label-type="dollar">
+                                <td>
+                                    <span class="info">P/E Ratio</span>
                                 </td>
                                 <td class="min">0</td>
-                                <td>
+                                <td class="criteria-slider">
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
@@ -106,11 +113,12 @@
                                 </td>
                                 <td class="max">97.57</td>
                             </tr>
-                            <tr>
-                                <td><span class="info">Dividend Yield</span>
+                            <tr class="criteria" data-name="Dividend Yield" data-min="0" data-max="100" data-label-type="percent">
+                                <td>
+                                    <span class="info">Dividend Yield</span>
                                 </td>
                                 <td class="min">0%</td>
-                                <td>
+                                <td class="criteria-slider">
                                     <div class="module-stock-slider">
                                         <div class="slider-bar"></div>
                                         <div class="stock-bar-container"></div>
@@ -120,12 +128,14 @@
                                 </td>
                                 <td class="max">100%</td>
                             </tr>
-                            <tr>
-                                <td><span class="info">Industry</span>
+                            <tr class="criteria">
+                                <td>
+                                    <span class="info">Industry</span>
                                 </td>
                                 <td colspan="2">
                                     <div class="button-dropdown">
-                                        <div class="trigger">Select Sector &amp; Industry<span class="arrow"></span>
+                                        <div class="trigger">Select Sector &amp; Industry
+                                            <span class="arrow"></span>
                                         </div>
                                         <div class="dropdown">
                                             <ul>
@@ -151,7 +161,7 @@
 
             </div>
             <div class="grid_1">
-                <div class="module edit">
+                <div class="module editSearchB">
                     <div class="title">
                         <div class="label">Edit Search Criteria</div>
                         <div class="button">Reset</div>
@@ -160,29 +170,36 @@
                         <h3>Market Data</h3>
                         <div class="panel">
 
-                            <div class="checkbox">
+                            <div class="checkbox checked" data-name="Total Market Cap" data-min="80" data-max="100" data-label-type="dollar">
                                 <div class="trigger">Total Market Cap</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">Total Market Cap</div>
+                                <div class="trigger">% Change over date range up to 1 year</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">Total Market Cap</div>
+                                <div class="trigger">Current Stock Price vs 52 week high</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">Total Market Cap</div>
+                                <div class="trigger">Current Stock Price vs 52 week low</div>
                                 <input type="checkbox">
                             </div>
-
+                            <div class="checkbox">
+                                <div class="trigger">5-Year Beta</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">Volume</div>
+                                <input type="checkbox">
+                            </div>
                         </div>
 
                         <h3>Financials</h3>
 
                         <div class="panel">
-                            <div class="checkbox">
+                            <div class="checkbox checked" data-name="Total Revenue" data-min="80" data-max="100" data-label-type="dollar">
                                 <div class="trigger">Total Revenue</div>
                                 <input type="checkbox">
                             </div>
@@ -217,7 +234,24 @@
                         </div>
 
                         <h3>Valuation</h3>
-                        <div class="panel"></div>
+                        <div class="panel">
+                            <div class="checkbox checked" data-name="PE Ratio" data-min="80" data-max="100" data-label-type="dollar">
+                                <div class="trigger">P/E Ratio</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox checked" data-name="Dividend Yield" data-min="80" data-max="100" data-label-type="dollar">
+                                <div class="trigger">Dividend Yield</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">P/BV</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">Consensus Recommendation</div>
+                                <input type="checkbox">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -230,9 +264,10 @@
                     <div class="label">Results</div>
                 </div>
                 <div class="toolbar">
-                    <div class="results">72 total matches</div>
+                    <div class="results"></div>
                     <div class="button-dropdown">
-                        <div class="trigger">Select Sector &amp; Industry<span class="arrow"></span>
+                        <div class="trigger">Select Sector &amp; Industry
+                            <span class="arrow"></span>
                         </div>
                         <div class="dropdown">
                             <ul>
@@ -250,7 +285,8 @@
 
                     </div>
                     <div class="button-dropdown button-customize-display">
-                        <div class="trigger">Customize Display<span class="arrow"></span>
+                        <div class="trigger">Customize Display
+                            <span class="arrow"></span>
                         </div>
                         <div class="dropdown dropdown-padding">
                             <p>Select up to four.</p>
@@ -325,8 +361,8 @@
                                 <div class="trigger">Consensus Recommendation</div>
                                 <input type="checkbox">
                             </div>
-                            
-                            
+
+
                         </div>
 
                     </div>
@@ -345,92 +381,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>E25</td>
-                            <td>Communications Equipment</td>
-                            <td>-</td>
-                            <td>44.5</td>
-                            <td>0.979</td>
-                            <td>0.01</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
+                            <td class="placeholder" colspan="7">No search results</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="grid_3">
-            <div class="pager">
-                <ul>
+                <ul class="pager">
                     <li><a href="#">Previous</a>
                     </li>
                     <li>
@@ -450,6 +405,10 @@
                     </li>
                 </ul>
             </div>
+
+        </div>
+        <div class="grid_3">
+
         </div>
     </div>
 </body>
