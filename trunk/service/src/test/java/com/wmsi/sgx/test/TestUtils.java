@@ -7,6 +7,8 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 
 public class TestUtils{
@@ -31,5 +33,10 @@ public class TestUtils{
 
 		return cacheManager;
 
+	}
+	
+	public static String objectToJson(Object obj) throws JsonProcessingException, IllegalArgumentException{
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(mapper.valueToTree(obj));		
 	}
 }

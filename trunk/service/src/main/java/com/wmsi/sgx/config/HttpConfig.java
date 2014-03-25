@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.search.elasticsearch.ESQueryExecutor;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 
 @Configuration
 @PropertySources(value = {
@@ -83,6 +85,16 @@ public class HttpConfig{
 		return executor;
 	}
 
+	@Bean 
+	public ElasticSearchService elasticSearchService(){
+		return new ElasticSearchService();
+	}
+
+	@Bean
+	public ESQueryExecutor esExecutor(){
+		return new ESQueryExecutor();
+	}
+	
 	@Bean(name="esObjectMapper")
 	public ObjectMapper esObjectMapper(){
     	ObjectMapper mapper = new ObjectMapper();

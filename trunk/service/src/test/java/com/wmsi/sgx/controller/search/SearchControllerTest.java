@@ -1,0 +1,187 @@
+package com.wmsi.sgx.controller.search;
+
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Arrays;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.wmsi.sgx.model.search.CompanySearchRequest;
+import com.wmsi.sgx.model.search.CompanySearchRequestBuilder;
+import com.wmsi.sgx.model.search.Criteria;
+import com.wmsi.sgx.model.search.CriteriaBuilder;
+import com.wmsi.sgx.model.search.SearchCompany;
+import com.wmsi.sgx.model.search.SearchCompanyBuilder;
+import com.wmsi.sgx.model.search.SearchRequest;
+import com.wmsi.sgx.model.search.SearchRequestBuilder;
+import com.wmsi.sgx.service.search.Search;
+import com.wmsi.sgx.service.search.SearchService;
+import com.wmsi.sgx.test.TestUtils;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader=AnnotationConfigContextLoader.class)
+@SuppressWarnings(value={"unchecked", "rawtypes"})
+public class SearchControllerTest extends AbstractTestNGSpringContextTests{
+
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@Autowired
+	private SearchService companySearchService;
+
+	@Test	
+	public void testGetNotAllowed() throws Exception{		
+		mockMvc.perform(get("/search/name")
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isMethodNotAllowed());
+		
+		mockMvc.perform(get("/search")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+	}
+	
+	@Test
+	public void testSearch() throws Exception{
+		SearchCompany company = new SearchCompanyBuilder()
+		.withCompanyName("Fab chem China Limited")
+		.withBeta5Yr(0.182D)
+		.withDividendYield(5.7851D)
+		.build();
+		
+		SearchRequest req = new SearchRequestBuilder()
+			.withAddedCriteriaElement(
+					new CriteriaBuilder()
+					.withField("marketCap")
+					.withTo(5000D)
+					.withFrom(5D)
+					.build())
+				.build();
+		
+		when(companySearchService.search(any(String.class), any(Class.class)))
+			.thenReturn(Arrays.asList(company));
+
+		mockMvc.perform(post("/search")
+				.content(TestUtils.objectToJson(req))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.companies", Matchers.hasSize(1)))
+			.andExpect(jsonPath("$.companies[0].companyName", Matchers.is("Fab chem China Limited")))
+			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
+			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
+		
+		 verify(companySearchService, times(1)).search(any(String.class), any(Class.class));
+	     verifyNoMoreInteractions(companySearchService);
+	}
+	
+	@Test
+	public void testCompanySearchByName() throws Exception{
+		
+		CompanySearchRequest request = new CompanySearchRequestBuilder()
+			.withCompanyName("China")
+			.build();
+		
+		SearchCompany company = new SearchCompanyBuilder()
+			.withCompanyName("Fab chem China Limited")
+			.withBeta5Yr(0.182D)
+			.withDividendYield(5.7851D)
+			.build();
+		
+		when(companySearchService.search(any(Search.class), any(Map.class)))
+			.thenReturn(Arrays.asList(company));
+		
+		mockMvc.perform(post("/search/name")
+				.content(TestUtils.objectToJson(request))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.companies", Matchers.hasSize(1)))
+			.andExpect(jsonPath("$.companies[0].companyName", Matchers.is("Fab chem China Limited")))
+			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
+			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
+		
+		 verify(companySearchService, times(1)).search(any(Search.class), any(Map.class));
+	     verifyNoMoreInteractions(companySearchService);
+	}
+
+	@Test(dataProvider="invalidSearchCriteria")
+	public void testSearch_FailValidation(String json) throws Exception{
+		mockMvc.perform(post("/search")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test(dataProvider="invalidSearchString")
+	public void testSearchCompany_FailValidation(String json) throws Exception{
+		mockMvc.perform(post("/search/name")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Configuration
+	@ComponentScan(basePackageClasses = {SearchController.class})
+	static class SearchControllerTestConfig{
+
+		@Autowired
+		SearchController searchController;
+
+		@Bean
+		public SearchService companySearchService(){
+			return mock(SearchService.class);
+		}
+
+		@Bean		
+		public Search companySearch(){
+			return mock(Search.class);
+		}
+
+		@Bean
+		public MockMvc mockMvc(){			
+			return MockMvcBuilders.standaloneSetup(searchController).build();
+		}
+	}
+
+	@DataProvider
+	public Object[][] invalidSearchString(){
+		return new String[][]{
+			{""},
+			{"{}"},
+			{"{\"wrongName\":\"Text\"}"},
+			{"{\"companyName\":\"<script>alert('foo');</script>\"}"},
+			{"{\"companyName\":\"<img src=\"img.jpg\"/>\"}"},
+			{"{\"companyName\":\"" + StringUtils.rightPad("longString", 130, '*') + "\"}"}
+		};
+	}	
+
+	@DataProvider
+	public Object[][] invalidSearchCriteria(){
+		return new String[][]{
+			{""},
+			{"{}"},
+			{"{\"criteria\":[ {\"field\":\"wrongName\",\"to\":500,\"from\":15} ]}"}
+		};
+	}	
+
+}
