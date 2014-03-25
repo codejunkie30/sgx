@@ -5,13 +5,13 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
     // Instead of console.log() use Paul Irish's debug.log()
     SGX = {
         startup: function() {
-            
+
             $('#loading').delay(250).fadeOut();
 
         },
         accordion: function() {
             $(".module-accordion").accordion({
-                active: 1,
+                active: 0,
                 animated: 'easeOutExpo',
                 autoHeight: false,
                 collapsible: true,
@@ -28,9 +28,9 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             SGX.data.get();
             SGX.dropdowns();
             SGX.tabs();
-            SGX.slider.init();
+            SGX.slider.startup();
             SGX.tooltip.start();
-            
+
 
             // Initial Search Criteria components
             SGX.search.init();
@@ -72,39 +72,83 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
         },
         data: {
             get: function(url) {
-
                 // Default Data
                 $.ajax({
                     url: 'javascripts/app/search_result.json',
                     dataType: 'json',
                     success: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         for (var companies in data.results) {
                             var company = data.results[companies];
-                            // console.log(company);
+                            console.log(company);
+                            $('.module-results').find('tbody').remove();
+                            $('.module-results').find('table').append('<div class="tempholder" />');
                             for (var i = 0; i < company.length; i++) {
-                                $('.module-results').find('tbody').append('<tr><td>' + company[i].companyName + '</td><td>' + company[i].code + '</td><td>' + company[i].industry + '</td><td>' + company[i].marketCap + '</td><td>' + company[i].totalRevenue + '</td><td>' + company[i].peRatio + '</td><td>' + company[i].dividendYield + '</div>');
+                                // console.log(i);
+                                // $('.module-results').find('td.placeholder').parents('tr').remove();
+
+                                $('.module-results').find('.tempholder').append('<tr><td>' + company[i].companyName + '</td><td>' + company[i].code + '</td><td>' + company[i].industry + '</td><td>' + company[i].marketCap + '</td><td>' + company[i].totalRevenue + '</td><td>' + company[i].peRatio + '</td><td>' + company[i].dividendYield + '</td></tr>');
                             }
                         }
+                        $('.module-results').find('.pager').html('');
+                        var resultsLength = $('.module-results').find('tr').length - 1,
+                            resultsRows = $('.module-results').find('.tempholder tr');
+
+
+                        // Update results
+                        $('.module-results').find('.results').html(resultsLength + ' total matches');
+
+
+                        for (var i = 0, y = 1; i < resultsRows.length; i += 10, y++) {
+                            if (y == 1) {
+                                resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" class="active" />');
+                            } else {
+                                resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" />');
+                            }
+                            // Add to pager
+                            $('.module-results').find('.pager').append('<li><a href="#">' + y + '</a></li>');
+                        }
+                        var $pager = $('.module-results').find('.pager');
+                        $pager.prepend('<li><a class="prev" href="#">Prev</a></li>');
+                        $pager.append('<li><a class="next" href="#">Next</a></li>');
+
+                        // Pager click handler
+                        $pager.find('a').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this),
+                                target = $this.parent().index() - 1;
+
+                            if (!$this.hasClass("prev") && !$this.hasClass("next")) {
+                                // console.log(target);
+                                $('.module-results').find('tbody:not(:eq(' + target + '))').removeClass("active");
+                                $('.module-results').find('tbody:eq(' + target + ')').addClass("active");
+                            } else if ($this.hasClass("next")) {
+                                if ($('.module-results').find('tbody.active').next('tbody').length > 0) {
+                                    // console.log('next');
+                                    $('.module-results').find('tbody.active').next('tbody').addClass("active");
+                                    $('.module-results').find('tbody.active').first().removeClass("active");
+                                } else {
+                                    $('.module-results').find('tbody').removeClass("active");
+                                    $('.module-results').find('tbody').first().addClass("active");
+                                }
+
+                            } else if ($this.hasClass("prev")) {
+                                if ($('.module-results').find('tbody.active').prev('tbody').length > 0) {
+                                    // console.log('prev');
+                                    $('.module-results').find('tbody.active').prev('tbody').addClass("active");
+                                    $('.module-results').find('tbody.active').last().removeClass("active");
+                                } else {
+                                    $('.module-results').find('tbody').removeClass("active");
+                                    $('.module-results').find('tbody').last().addClass("active");
+                                }
+                            }
+                            console.log($('.module-results').find('tbody.active').index());
+                        })
+
+                        $('.module-results').find('tbody').unwrap();
+
                     }
                 });
-
-                // JSON call will be made here
-                if (typeof(url) !== 'undefined') {
-                    $.ajax({
-                        url: url,
-                        success: function() {
-                            SGX.data.success();
-                            console.log(data);
-                            for (var i = data.length - 1; i >= 0; i--) {
-                                data[i]
-                            };
-                        }
-                    });
-                }
-            },
-            success: function() {
-
             }
         },
         dropdowns: function() {
@@ -133,24 +177,28 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
         },
         form: {
             checkbox: {
-                check: function() {
-
+                check: function(target) {
+                    $(target).addClass('checked');
+                    $(target).find('input[type="checkbox"]').attr("checked", "checked");
+                },
+                uncheck: function(target) {
+                    $(target).removeClass('checked');
+                    $(target).find('input[type="checkbox"]').removeAttr("checked");
                 },
                 init: function() {
+
+                    // If checkboxes need functionality other than default trigger, remove the trigger-sgx class from them and create custom functionality
                     // debug.info('SGX.form.checkbox.init');
-                    $('.checkbox').find('.trigger').on('click', function() {
+                    $('.checkbox').find('.trigger').on('click', '.trigger-sgx', function() {
                         var $this = $(this),
                             $checkbox = $this.parents('.checkbox'),
                             $input = $checkbox.find('input[type="checkbox"]'),
                             checkboxChecked = $checkbox.hasClass("checked");
                         if (checkboxChecked) {
-                            $this.parents('.checkbox').removeClass('checked');
-                            $input.removeAttr("checked");
+                            SGX.form.checkbox.uncheck($checkbox);
                         } else {
-                            $this.parents('.checkbox').addClass('checked');
-                            $input.attr("checked", "checked");
+                            SGX.form.checkbox.check($checkbox);
                         }
-
                     });
                 }
             },
@@ -171,28 +219,26 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                 var $modal = $('#modal'),
                     content = modalSettings.content,
                     type = modalSettings.type;
+
                 $modal.html('<div class="modal-container"><div class="modal-content" /><div class="bg" /></div>');
                 var $modalContent = $modal.find('.modal-content');
 
                 if (typeof(content) !== 'undefined') {
+
                     $modal.find('.modal-content').html(content);
+
                 }
 
                 if ((typeof(type) !== 'undefined') && (type == 'prompt')) {
-
-
-
 
                     // If prompt modal, we need to add buttons for confirming the user's action
                     debug.info('Prompt');
                     $modal.addClass(type);
                     $modalContent.append('<button class="confirm">Confirm</button><button class="cancel">Cancel</button>').end();
-                    console.log(modalSettings.target);
+                    // console.log(modalSettings.target);
                     modalSettings.confirm({
                         target: modalSettings.target
                     });
-
-
 
                 } else if (typeof(type) !== 'undefined') {
                     // Catch all to help with debugging
@@ -200,17 +246,41 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                 }
                 $modal.fadeIn();
             },
-            init: function() {
+            init: function(modalSettings) {
                 SGX.modal.close();
                 $('#modal').find('.close-button').on('click', function() {
 
                 });
-                $('#modal').on('click', function() {
+                $('#modal').on('click', function(modalSettings) {
                     SGX.modal.close();
                 });
             }
         },
         search: {
+            addCriteria: function(target, config) {
+                // console.log(target);
+                // console.log(config);
+                var count = $('.search-criteria').find('.criteria').length,
+                    max = config.max,
+                    min = config.min;
+
+                console.log('addCriteria');
+
+                // Set values for min max depending on the type
+                if ((typeof(config.type) != 'undefined') && (config.type == 'dollar')) {
+                    max = 'S$' + max + 'mm';
+                    min = 'S$' + min + 'mm';
+                } else if ((typeof(config.type) != 'undefined') && (config.type == 'percent')) {
+                    max = max + '%';
+                    min = min + '%';
+                }
+                // If there are less than 5 criteria at the moment, the user can add another search criteria
+                $('.search-criteria').find('tbody').append('<tr class="criteria" style="display:none;" data-type="' + config.type + '" data-name="' + config.name + '"><td>' + config.name + '</td><td>' + min + '</td><td class="criteria-slider">Slider</td><td>' + max + '</td></tr>');
+                var sliderTarget = $('.search-criteria').find('tr.criteria').last().find('.criteria-slider');
+                SGX.slider.init(sliderTarget, config);
+                $('.search-criteria').find('tr.criteria').last().fadeIn();
+                // console.log(count);
+            },
             removeCriteria: function(target) {
                 // This is a placeholder function in case other functionality needs to be piggy-backed onto the removal of Search Criteria
                 // console.log('remove Criteria');
@@ -221,6 +291,62 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
 
             },
             init: function() {
+
+
+                $('.editSearchB').find('.trigger').on('click', function(e) {
+                    // console.log('add trigger');
+
+                    var $this = $(this),
+                        $checkbox = $this.parents('.checkbox'),
+                        $input = $checkbox.find('input[type="checkbox"]'),
+                        checkboxChecked = $checkbox.hasClass("checked");
+
+                    var settings = {
+                        name: $checkbox.attr('data-name'),
+                        type: $checkbox.attr('data-label-type'),
+                        min: $checkbox.attr('data-min'),
+                        max: $checkbox.attr('data-max')
+                    };
+
+
+                    var count = $('.search-criteria').find('.criteria').length;
+                    if (count < 5) {
+                        if (checkboxChecked) {
+                            SGX.form.checkbox.uncheck($checkbox);
+                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
+                            console.log($target);
+                            SGX.search.removeCriteria($target);
+                            console.log('should be uncheck');
+                        } else {
+                            SGX.form.checkbox.check($checkbox);
+                            SGX.search.addCriteria($(this), settings);
+                        }
+
+                    } else {
+                        // There are 5 criteria at the moment, prompt user to remove a criteria
+                        if (checkboxChecked) {
+                            // User is trying to remove criteria using checkbox
+                            SGX.form.checkbox.uncheck($checkbox);
+                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
+                            console.log($target);
+                            SGX.search.removeCriteria($target);
+                            console.log('should be uncheck');
+                        } else {
+                            console.log('count is more than 5');
+                            SGX.modal.open({
+                                content: 'Please remove a search criteria'
+                            });
+                        }
+
+
+                    }
+
+
+
+
+
+                });
+
                 $('td.max').on('click', function(e) {
                     e.stopPropagation();
                     var $target = $(this).parents('tr'),
@@ -249,13 +375,58 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             }
         },
         slider: {
-            init: function() {
+            init: function(container, settings) {
+                $(container).html('<div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches">234 matches</div></div>');
+
+                console.log(settings);
+                $(container).find('.slider-bar').slider({
+                    range: true,
+                    min: parseFloat(settings.min, 10),
+                    max: parseFloat(settings.max, 10),
+                    values: [settings.min, settings.max],
+                    create: function(event, ui) {},
+                    slide: SGX.slider.slide,
+                    change: SGX.slider.change
+                });
+                var $this = $(container).find('.module-stock-slider');
+                console.log($this);
+                var leftPt = $this.find('.ui-slider-handle').first().position().left,
+                    rightPt = $this.find('.ui-slider-handle').last().position().left;
+                var stockBarObj = {
+                    content: ''
+                };
+                for (var i = 0; i < 49; i++) {
+                    if (((6 * i) < leftPt) || ((6 * i) > rightPt)) {
+                        // $('.stock-bar-container').append('<div class="stock-bar" style="background: #b0b2cd; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
+                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #b0b2cd; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
+                    } else {
+                        // $('.stock-bar-container').append('<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
+                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
+                    }
+                }
+                $(container).find('.stock-bar-container').html(stockBarObj.content);
+            },
+            startup: function() {
                 $('.module-stock-slider').each(function(idx) {
+                    var max = $(this).parents('tr').attr('data-max'),
+                        min = $(this).parents('tr').attr('data-min');
+                    if (typeof(min) != 'undefined') {
+                        console.log(min);
+                        min;
+                    } else {
+                        min = 0;
+                    }
+                    if (typeof(max) != 'undefined') {
+                        console.log(max);
+                        max;
+                    } else {
+                        max = 300;
+                    }
                     $('.slider-bar').slider({
                         range: true,
-                        min: 0,
-                        max: 300,
-                        values: [75, 200],
+                        min: parseFloat(min, 10),
+                        max: parseFloat(max, 10),
+                        values: [min, max],
                         create: function(event, ui) {},
                         slide: SGX.slider.slide,
                         change: SGX.slider.change
@@ -279,28 +450,16 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                 });
             },
             change: function(event, ui) {
-                // // debug.log(event.target);
-                // // debug.log(ui);
-                // $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                // console.log(event.val);
-                // $(this).next('.matches').html('')
-                var $this = $(this),
-                    leftPt = $this.find('.ui-slider-handle').first().position().left,
-                    rightPt = $this.find('.ui-slider-handle').last().position().left;
-
-
-                // debug.info(rightPt);
-
-                // // debug.log(leftPt);
-                // // debug.log($(event.target).parents('.module-stock-slider').find('.stock-bar').first().css("left"));
+                var leftPt = $(this).find('.ui-slider-handle').first().position().left,
+                    rightPt = $(this).find('.ui-slider-handle').last().position().left;
+                    // $(event.target).css({'background':'red'});
+                    console.log(event);
+                    console.log($(ui.handle).index());
                 $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
-                    // // debug.log($(elem).css("left"));
-                    // // debug.log(leftPt);
-                    var elemLeft = $(elem).css("left").replace("px", "");
+                    var elemLeft = $(elem).css("left").replace("px", ""),
+                        dataType = $(this).parents('tr').attr('data-label-type');
 
                     if ((elemLeft < leftPt) || (elemLeft > rightPt)) {
-                        // // debug.log(idx);
-                        // // debug.log(elem);
                         $(elem).css({
                             'background': '#b0b2cd'
                         });
@@ -309,23 +468,37 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                             'background': '#1e2171'
                         });
                     }
+                    if (ui.value == ui.values[0]) {
+                        // Min
+                        // console.log('min');
+                        if (dataType == 'dollar') {
+                            $(this).parents('td').prev('td').html('S$' + ui.value + 'mm');
+                        } else if (dataType == 'percent') {
+                            $(this).parents('td').prev('td').html(ui.value + '%');
+                        }
 
-                    // Update max value
-                    $next = $this.parents('td').next('td').html('S$' + Math.floor(rightPt * 100) / 100 + 'mm');
-
-                    // Update min value
-                    $prev = $this.parents('td').prev('td').html('S$' + Math.floor(leftPt * 100) / 100 + 'mm');
+                    } else {
+                        // Max
+                        // console.log('max');
+                        // $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
+                        if (dataType == 'dollar') {
+                            $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
+                        } else if (dataType == 'percent') {
+                            $(this).parents('td').next('td').html(ui.value + '%');
+                        }
+                    }
                 });
             },
             slide: function(event, ui) {
-                var $this = $(this),
-                    leftPt = $(this).find('.ui-slider-handle').first().position().left,
+                var leftPt = $(this).find('.ui-slider-handle').first().position().left,
                     rightPt = $(this).find('.ui-slider-handle').last().position().left;
                 $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
                     // debug.log($(elem).css("left"));
                     // debug.log(leftPt);
-                    var elemLeft = $(elem).css("left").replace("px", "");
+                    var elemLeft = $(elem).css("left").replace("px", ""),
+                        dataType = $(this).parents('tr').attr('data-label-type');
 
+                    // console.log(dataType);
                     if ((elemLeft < leftPt) || (elemLeft > rightPt)) {
                         // debug.log(idx);
                         // debug.log(elem);
@@ -337,11 +510,25 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                             'background': '#1e2171'
                         });
                     }
-                    // Update max value
-                    $next = $this.parents('td').next('td').html('S$' + Math.floor(rightPt * 100) / 100 + 'mm');
+                    if (ui.value == ui.values[0]) {
+                        // Min
+                        // console.log('min');
+                        if (dataType == 'dollar') {
+                            $(this).parents('td').prev('td').html('S$' + ui.value + 'mm');
+                        } else if (dataType == 'percent') {
+                            $(this).parents('td').prev('td').html(ui.value + '%');
+                        }
 
-                    // Update min value
-                    $prev = $this.parents('td').prev('td').html('S$' + Math.floor(leftPt * 100) / 100 + 'mm');
+                    } else {
+                        // Max
+                        // console.log('max');
+                        // $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
+                        if (dataType == 'dollar') {
+                            $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
+                        } else if (dataType == 'percent') {
+                            $(this).parents('td').next('td').html(ui.value + '%');
+                        }
+                    }
                 });
             }
 
@@ -349,7 +536,11 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
         tabs: function() {
             // debug.info('SGX.tabs');
             $('.tabbed-content').tabs({
-                active: 0
+                active: 0,
+                show: {
+                    effect: "blind",
+                    duration: 800
+                }
             });
         },
         tooltip: {
@@ -363,8 +554,8 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             open: function(modalSettings) {},
             start: function() {
                 debug.info('SGX.tooltip.start');
-                $('.info').on('click', function() {
-                    console.log('info click');
+                $('.info').on('mouseenter', function() {
+                    console.log('info mouseenter');
 
                     var $this = $(this);
 

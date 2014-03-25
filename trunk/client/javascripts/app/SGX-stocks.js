@@ -5,8 +5,8 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
         stocks: {
             init: function() {
                 debug.log('SGX.Stocks');
-                if ($('#container').length) {
-                    $('#container').highcharts({
+                if ($('#large-bar-chart').length) {
+                    $('#large-bar-chart').highcharts({
                         chart: {
                             type: 'column'
                         },
@@ -14,9 +14,8 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             enabled: true,
                             borderColor: '',
                             borderWidth: 0,
-                            text: 'Test',
                             align: 'right',
-                            verticalAlign: 'top',
+                            verticalAlign: 'bottom',
                             backgroundColor: 'white',
                             symbolPadding: 10,
                             symbolWidth: 16,
@@ -27,7 +26,7 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             x: 10,
                             y: 10,
                             itemMarginTop: 5,
-                            itemMarginBottom: 5,
+                            itemMarginBottom: 35,
                             itemStyle: {
                                 cursor: 'pointer',
                                 color: ['#565b5c', '#1e2070'],
@@ -121,6 +120,18 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
                         // debug.log('success');
                         $('#area-chart').highcharts('StockChart', {
+                            colors: [
+                                '#363473',
+                                '#363473',
+                                '#8bbc21',
+                                '#910000',
+                                '#1aadce',
+                                '#492970',
+                                '#f28f43',
+                                '#77a1e5',
+                                '#c42525',
+                                '#a6c96a'
+                            ],
                             chart: {
                                 resetZoomButton: {
                                     relativeTo: 'chart'
@@ -227,7 +238,10 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                             scrollbar: {
                                 enabled: false
                             },
-                            yAxis: {},
+                            yAxis: {
+                                gridLineWidth: 2,
+                                range: 90
+                            },
                             series: [{
                                     name: 'Price',
                                     data: data,
@@ -292,6 +306,18 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
                         // debug.log('success');
                         $('#bar-chart').highcharts('StockChart', {
+                            colors: [
+                                '#b5cf34',
+                                '#363473',
+                                '#8bbc21',
+                                '#910000',
+                                '#1aadce',
+                                '#492970',
+                                '#f28f43',
+                                '#77a1e5',
+                                '#c42525',
+                                '#a6c96a'
+                            ],
                             chart: {
                                 height: 200
                             },

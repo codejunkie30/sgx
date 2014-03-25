@@ -12,72 +12,105 @@
 <body>
     <div class="container_3">
         <div class="row">
+            <div class="grid_3">
 
-            <p>Dev pathing</p>
-            <ul>
-                <li><a href="screener">Screener</a>
-                </li>
-                <li><a href="company-profile">Company Profile</a>
-                </li>
-                <li><a href="financials">Financials</a>
-                </li>
-                <li><a href="alpha-factor">Alpha Factor</a>
-                </li>
-                <li><a href="search-results">Search Results</a>
-                </li>
-                <li><a href="print">Print View</a>
-                </li>
-            </ul>
-            <p>Static pathing</p>
-            <ul>
-                <li><a href="screener.html">Screener</a>
-                </li>
-                <li><a href="company-profile.html">Company Profile</a>
-                </li>
-                <li><a href="financials.html">Financials</a>
-                </li>
-                <li><a href="alpha-factor.html">Alpha Factor</a>
-                </li>
-                <li><a href="search-results.html">Search Results</a>
-                </li>
-                <li><a href="print.html">Not done yet - print view</a>
-                </li>
-            </ul>
-            <h6>Design Debriefing Notes</h6>
-            <p>All colors need to be 100% opacity, cases where we are not doing full-transparency in ways we cannot replicate in code.</p>
-            <p>What are the border-radius guidelines?</p>
-            <p>What are the minimum and maximum sizes for the scroll bar selection range in the second, bar chart on the Company Profile page</p>
-            <h4>To Dos</h4>
-            Screener
+                <p>Dev pathing</p>
+                <ul>
+                    <li><a href="screener">Screener</a>
+                    </li>
+                    <li><a href="company-profile">Company Profile</a>
+                    </li>
+                    <li><a href="financials">Financials</a>
+                    </li>
+                    <li><a href="alpha-factor">Alpha Factor</a>
+                    </li>
+                    <li><a href="search-results">Search Results</a>
+                    </li>
+                    <li><a href="print">Print View</a>
+                    </li>
+                </ul>
+                <p>Static pathing</p>
+                <ul>
+                    <li><a href="screener.html">Screener</a>
+                    </li>
+                    <li><a href="company-profile.html">Company Profile</a>
+                    </li>
+                    <li><a href="financials.html">Financials</a>
+                    </li>
+                    <li><a href="alpha-factor.html">Alpha Factor</a>
+                    </li>
+                    <li><a href="search-results.html">Search Results</a>
+                    </li>
+                    <li><a href="print.html">Not done yet - print view</a>
+                    </li>
+                </ul>
+                <h2>Questions</h2>
+                <ol>
+                    <li>Where does Industry Search Criteria go? It shows as default, but is there a way for the user to add it back once it's removed?</li>
+                </ol>
+                <h4>All pages</h4>
+                <ul>
+                    <li>Bottom of page: link to View disclaimer and open it in a new browser window</li>
+                    <li>Done - Decrease module header label margin-bottom</li>
+                    <li>Done - Back to stock screener needs its icon</li>
+                    <li>2 error states</li>
+                </ul>
 
-            <ul>
-                <li>Accordion content is in the Business Requirements Doc</li>
-                <li>Customize Display drop down styling</li>
-                <li>Business Requirements oddball input type for distribution</li>
-                <li>2 error states</li>
-            </ul>
-            <h4>Toggle Company Financials modal</h4>
-            <h4>Toggle Terms &amp; Conditions modal</h4>
-            <h4>Company Profile</h4>
-            <ul>
-                <li>Background bar has vertical lines for segments</li>
-                <li>Industry Tree needs to be pulled left</li>
-                <li>Make modal border thinner to represent what is in the company_profile_financials_DEV.psd mockup modal</li>
-                <li>Consensus Estimates mask for progress has white line</li>
-            </ul>
+                <h4>Screener:</h4>
+                <ul>
+                    <li>Need to add % change over date range to criteria. % and date range required. Error condition that dates must be within 1 year. Show number of matches when entered.</li>
+                    <li>Industry – selecting Utilities will return all matches for Utilities and sub-industries of Utilities. The industry dropdown in the search results will only show industries/sub-industries associated with the search (Utilities). Show number of matches when included in the search.</li>
+                    <li>Almost done - Business Requirements oddball input type for distribution</li>
+                    <li>Content - Comparable companies – needs to link to a page with the correct heading.</li>
+                    <li>Content - Industry tree – needs to link to a page with the correct heading.</li>
+                    <li>&hellip;</li>
+                    <li>Done - Dynamic add search criteria to the “Edit search criteria box”.</li>
+                    <li>Done - Add error message if more than 5 search criteria are selected.</li>
+                    <li>Done - Results Pagination</li>
+                    <li>Done - Remove some of the extra padding between the criteria and the start of the results.</li>
+                    <li>Done - Accordion content is in the Business Requirements Doc</li>
+                    <li>Done - Customize Display drop down styling</li>
+                </ul>
 
-            <h4>Financials</h4>
-            <ul>
-                <li>2 error states</li>
-                <li>Build out Legend</li>
-            </ul>
+                <h4>Company profile:</h4>
+                <ul>
+                    <li>When the chart icon is clicked – the icon will change and the article title will be highlighted.</li>
+                    <li>Chart date range – add a gray background to the selected timeframe.</li>
+                    <li>Add Hooks for content in tab rows</li>
+                    
+                    <li>Content - Link the alpha factors to a page that lists companies with the same factor.</li>
+                    <li>Get time increments to the aligned to the left</li>
+                    <li>&hellip;</li>
+                    <li>Done - Finalize HighStock chart colors</li>
+                    <li>Done - Add content for the other three tabs on that page – need to pull in the data for those.</li>
+                    <li>Done - Background bar has vertical lines for segments</li>
+                    <li>Done - Industry Tree needs to be pulled left</li>
+                    <li>Done - Make modal border thinner to represent what is in the company_profile_financials_DEV.psd mockup modal</li>
+                    <li>Done - Consensus Estimates mask for progress has white line</li>
+                </ul>
 
+                <h4>Financials:</h4>
+                <ul>
+                    <li>Remove unchart option when it’s not being charted.</li>
+                    <li>Done - Financials data should be in a scrollable area.</li>
+                    <li>Done - There are 5 sections of financials – only showing 3 now.</li>
+                    <li>Change the chart legend so it’ sonly listed once with the category it is in in []. Vertically align at bottom.</li>
+                    <li>Done - “Select two options to chart” – add 10 pixels of white space under that.</li>
+                    <li>In Progress - 2 error states</li>
+                    <li>In Progress - Build out Legend</li>
+                    <li>&hellip;</li>
+                </ul>
 
-            <h4>Global</h4>
-            <ul>
-                <li>Decrease module header label margin-bottom</li>
-                <li>Back to stock screener needs its icon</li>
-            </ul>
+                <h4>Print report: still to do</h4>
+                <h6>Design Debriefing Notes</h6>
+                <p>All colors need to be 100% opacity, cases where we are not doing full-transparency in ways we cannot replicate in code.</p>
+                <p>What are the border-radius guidelines?</p>
+                <p>What are the minimum and maximum sizes for the scroll bar selection range in the second, bar chart on the Company Profile page</p>
+
+                <h4>Toggle Company Financials modal</h4>
+                <h4>Toggle Terms &amp; Conditions modal</h4>
+                <h4>Company Profile</h4>
+            </div>
         </div>
     </div>
 </body>

@@ -1,24 +1,93 @@
 {
     "results": {
-        "companies": [
-            {
-                "companyName": "Singapore Airlines Ltd.",
-                "code": "C6L",
-                "industry": "Airlines",
-                "marketCap": 12031.992878,
-                "totalRevenue": 15282.3,
-                "peRatio": 19.548585992072425,
-                "dividendYield": 2.6418
-            },
-            {
-                "companyName": "First Resources Ltd.",
-                "code": "EB5",
-                "industry": "Food Products",
-                "marketCap": 3500.801261,
-                "totalRevenue": 626.498,
-                "peRatio": 11.821560405564359,
-                "dividendYield": 2.0361
-            }
-        ]
+        "companies": [{
+            "companyName": "Singapore Airlines Ltd.",
+            "code": "C6L",
+            "industry": "Airlines",
+            "marketCap": 12031.992878,
+            "totalRevenue": 15282.3,
+            "peRatio": 19.548585992072425,
+            "dividendYield": 2.6418
+        }, {
+            "companyName": "First Resources Ltd. 2",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 3",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 4",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 5",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 6",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 7",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 8",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 9",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 10",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }, {
+            "companyName": "First Resources Ltd. 11",
+            "code": "EB5",
+            "industry": "Food Products",
+            "marketCap": 3500.801261,
+            "totalRevenue": 626.498,
+            "peRatio": 11.821560405564359,
+            "dividendYield": 2.0361
+        }]
     }
 }

@@ -339,9 +339,10 @@ td.max {
 }
 html {
   height: 101%;
+  padding: 0 0 120px;
 }
 body {
-  padding: 0 0 60px;
+  padding: 0 0 120px;
   margin: 0px;
 }
 h1,
@@ -425,9 +426,13 @@ h1.title {
   position: absolute;
   margin-left: 3px;
 }
+#area-chart {
+  width: 660px;
+  min-height: 400px;
+}
 .module {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 .module .content {
   padding: 14px;
@@ -620,7 +625,7 @@ h1.title {
   padding-bottom: 20px;
 }
 .progress-estimate .theme-three-bubble-progress {
-  background: url("../img/progress-2-step.jpg") no-repeat;
+  background: url("../img/progress-3-step-1.jpg") no-repeat;
   -webkit-background-size: 292px auto;
   -moz-background-size: 292px auto;
   background-size: 292px auto;
@@ -634,16 +639,17 @@ h1.title {
 .progress-estimate .theme-three-bubble-progress li.last {
   text-align: right;
 }
-.progress-estimate .progress {
-  width: 292.8px;
-  background: #6d2579;
-  height: 21px;
-  z-index: 1;
-  position: absolute;
-  top: 0;
+.progress-estimate .theme-three-bubble-progress.progress-2 {
+  background: url("../img/progress-3-step-2.jpg") no-repeat;
+  -webkit-background-size: 292px auto;
+  -moz-background-size: 292px auto;
+  background-size: 292px auto;
 }
-.progress-estimate .progress.prog-60 {
-  width: 175.68px;
+.progress-estimate .theme-three-bubble-progress.progress-3 {
+  background: url("../img/progress-3-step-3.jpg") no-repeat;
+  -webkit-background-size: 292px auto;
+  -moz-background-size: 292px auto;
+  background-size: 292px auto;
 }
 .progress-estimate li {
   list-style: none;
@@ -752,7 +758,7 @@ h1.title {
   width: 100%;
 }
 .tabbed-content .panel {
-  padding: 0px;
+  padding: 0 0 54px;
   margin: 22px 0 0;
   border: 1px solid #ccc;
 }
@@ -776,8 +782,11 @@ h1.title {
 }
 .tabbed-content .view-more {
   margin-top: 16px;
-  margin-left: 426px;
   margin-bottom: 16px;
+  text-align: right;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
 }
 .module-accordion {
   border-bottom: 1px solid #ccc;
@@ -945,6 +954,7 @@ table.search-criteria .info {
   height: 30px;
   position: absolute;
   right: -33px;
+  top: 0px;
 }
 > .button-dropdown:hover .trigger {
   background: url("../img/sprite-dropdown.png") no-repeat 0 -59px;
@@ -1030,6 +1040,12 @@ table.search-criteria .info {
 .module-results a {
   color: #1e217c;
 }
+.module-results tbody {
+  display: none;
+}
+.module-results tbody.active {
+  display: table-row-group;
+}
 .module-stock-slider {
   width: 305px;
   position: relative;
@@ -1070,7 +1086,7 @@ table.search-criteria .info {
   top: 50%;
   margin-top: -3px;
   height: 6px;
-  width: 305px;
+  width: 300px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   z-index: 20;
@@ -1113,6 +1129,7 @@ table.search-criteria .info {
   width: 11px;
   height: 18px;
   margin-top: -6px;
+  margin-left: -4px;
   outline: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -1138,7 +1155,10 @@ table.search-criteria .info {
 }
 .pager {
   display: inline-block;
-  float: right;
+  margin: 10px 0;
+  padding: 0;
+  position: relative;
+  right: 0px;
 }
 .pager ul {
   margin: 0;
@@ -1385,6 +1405,11 @@ table.search-criteria .info {
 .data-point-container {
   border: 1px solid #ccc;
   padding: 20px;
+}
+.data-point-container .financials-viewport {
+  height: 400px;
+  overflow-y: scroll;
+  margin-top: 10px;
 }
 .table-info {
   position: absolute;
