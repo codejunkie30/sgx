@@ -54,5 +54,18 @@ public class CustomSerializer extends JsonSerializer<Object>{
 			jgen.writeEndObject();
 			jgen.writeEndObject();
 		}
+		else if(value instanceof ScriptFilter){
+			ScriptFilter s = (ScriptFilter) value;
+			jgen.writeStartObject();
+			jgen.writeObjectFieldStart("script");
+			jgen.writeObjectField("script", s.getScript());
+			jgen.writeObjectFieldStart("params");
+			for(Param p : s.getParams()){
+				jgen.writeObjectField(p.getName(), p.getValue());
+			}
+			jgen.writeEndObject();
+			jgen.writeEndObject();
+			jgen.writeEndObject();
+		}		
 	}
 }

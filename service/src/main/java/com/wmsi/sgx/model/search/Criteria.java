@@ -14,8 +14,8 @@ public class Criteria{
 	private String field;
 	
 	private String value;
-	private Double to;
-	private Double from;
+	private Object to;
+	private Object from;
 
 	public String getField() {
 		return field;
@@ -33,19 +33,19 @@ public class Criteria{
 		this.value = value;
 	}
 
-	public Double getTo() {
+	public Object getTo() {
 		return to;
 	}
 
-	public void setTo(Double to) {
+	public void setTo(Object to) {
 		this.to = to;
 	}
 
-	public Double getFrom() {
+	public Object getFrom() {
 		return from;
 	}
 
-	public void setFrom(Double from) {
+	public void setFrom(Object from) {
 		this.from = from;
 	}
 

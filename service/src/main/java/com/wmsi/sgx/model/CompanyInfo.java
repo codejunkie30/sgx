@@ -61,6 +61,16 @@ public class CompanyInfo{
 	private Double yearHigh;
 	private Double yearLow;
 	
+	private List<HistoricalValue> priceHistory;
+	
+	public List<HistoricalValue> getPriceHistory() {
+		return priceHistory;
+	}
+
+	public void setPriceHistory(List<HistoricalValue> priceHistory) {
+		this.priceHistory = priceHistory;
+	}
+
 	public Double getPriceToBookRatio(){
 		
 		if(closePrice == null || bvShare == null)

@@ -90,6 +90,8 @@ public class CapIQServiceImpl implements CapIQService{
 			
 			info.setPreviousClosePrice(inf.getClosePrice());
 			info.setAvgVolumeM3(getThreeMonthAvg(id, startDate));
+			info.setPriceHistory(getLastYear(id, startDate));
+			
 
 			return info;
 		}
@@ -128,6 +130,19 @@ public class CapIQServiceImpl implements CapIQService{
 			
 		
 		return MathUtil.avg(sum, volume.size(), 4);
+	}
+
+	public List<HistoricalValue> getLastYear(String id, String startDate) throws CapIQRequestException, ParseException {
+		
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date currentDate = df.parse(startDate);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDate);
+		cal.add(Calendar.YEAR, -1);
+		String yearAgo =  df.format(cal.getTime());
+
+		List<List<HistoricalValue>> historicalData = loadHistoricaData(id, yearAgo );
+		return historicalData.get(0);
 	}
 
 	@Override

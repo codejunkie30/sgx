@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wmsi.sgx.model.search.CompanySearchRequest;
 import com.wmsi.sgx.model.search.CompanySearchRequestBuilder;
 import com.wmsi.sgx.model.search.Criteria;
@@ -123,7 +124,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 		 verify(companySearchService, times(1)).search(any(Search.class), any(Map.class));
 	     verifyNoMoreInteractions(companySearchService);
 	}
-
+	
 	@Test(dataProvider="invalidSearchCriteria")
 	public void testSearch_FailValidation(String json) throws Exception{
 		mockMvc.perform(post("/search")
@@ -176,12 +177,37 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	}	
 
 	@DataProvider
-	public Object[][] invalidSearchCriteria(){
+	public Object[][] invalidSearchCriteria() throws JsonProcessingException, IllegalArgumentException{
+		
+		CriteriaBuilder b =
+				new CriteriaBuilder()
+				.withField("doesntMatter");
+		
+		SearchRequestBuilder tooMuchCriteria = new SearchRequestBuilder();
+		
+		for(int i = 0; i < 6; i++){
+			tooMuchCriteria.withAddedCriteriaElement(b.build());
+		}
+		
 		return new String[][]{
 			{""},
 			{"{}"},
-			{"{\"criteria\":[ {\"field\":\"wrongName\",\"to\":500,\"from\":15} ]}"}
+			{"{\"criteria\":[ {\"field\":\"wrongName\",\"to\":500,\"from\":15} ]}"},
+			{TestUtils.objectToJson(requestWithCriteria(6))}
 		};
 	}	
 
+	private SearchRequest requestWithCriteria(Integer size){
+		CriteriaBuilder b =
+				new CriteriaBuilder()
+				.withField("doesntMatter");
+		
+		SearchRequestBuilder req = new SearchRequestBuilder();
+		
+		for(int i = 0; i < size; i++){
+			req.withAddedCriteriaElement(b.build());
+		}
+		
+		return req.build();
+	}
 }
