@@ -43,6 +43,17 @@ public class ESResponse{
 		return ret;		
 	}
 
+	public List<JsonNode> getFields() throws ElasticSearchException{
+		
+		if(response == null)
+			throw new ElasticSearchException("Response is null or empty");
+		
+		if(response.path("hits").path("hits").isMissingNode())
+			throw new ElasticSearchException("Response is missing 'hits' field");
+			
+		return response.get("hits").get("hits").findValues("fields");		
+	}
+
 	public Aggregations getAggregations() throws ElasticSearchException{
 		
 		if(response == null)

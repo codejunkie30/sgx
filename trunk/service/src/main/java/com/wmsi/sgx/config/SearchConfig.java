@@ -2,6 +2,7 @@ package com.wmsi.sgx.config;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -21,8 +22,8 @@ import com.wmsi.sgx.service.search.impl.SearchServiceImpl;
 @Configuration
 public class SearchConfig{
 	
-	//TODO Move to properties
-	private String indexName = "sgx_test";
+	@Value("${elasticsearch.index.name}")
+	private String indexName;
 	
 	@Bean
 	public SearchService companySearchService(){

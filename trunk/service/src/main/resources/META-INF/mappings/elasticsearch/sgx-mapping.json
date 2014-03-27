@@ -153,6 +153,23 @@
 				"priceToBookRatio": 
 				{
 					"type": "double"
+				},
+
+				"priceHistory": 
+				{
+					"type": "nested",
+					"properties": 
+					{
+						"value": 
+						{
+							"type": "double"
+						},
+
+						"date": 
+						{
+							"type": "date"
+						}
+					}
 				}
 			}
 		},
