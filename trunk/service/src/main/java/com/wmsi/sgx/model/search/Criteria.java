@@ -1,7 +1,5 @@
 package com.wmsi.sgx.model.search;
 
-import javax.validation.Valid;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.google.common.base.Objects;

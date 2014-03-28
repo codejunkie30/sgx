@@ -1,12 +1,20 @@
 package com.wmsi.sgx.service.search.elasticsearch;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.search.SearchCompany;
 
 public class ESResponse{
 
@@ -24,6 +32,7 @@ public class ESResponse{
 	private ObjectMapper objectMapper  = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 	
+	/*
 	public <T> List<T> getHits(Class<T> clz) throws ElasticSearchException{
 	
 		if(response == null)
@@ -39,11 +48,11 @@ public class ESResponse{
 			T hit = objectMapper.convertValue(n, clz);
 			ret.add(hit);
 		}
-
+		
 		return ret;		
-	}
+	}*/
 
-	public List<JsonNode> getFields() throws ElasticSearchException{
+	public <T> List<T> getHits(Class<T> clz) throws ElasticSearchException{
 		
 		if(response == null)
 			throw new ElasticSearchException("Response is null or empty");
@@ -51,9 +60,69 @@ public class ESResponse{
 		if(response.path("hits").path("hits").isMissingNode())
 			throw new ElasticSearchException("Response is missing 'hits' field");
 			
-		return response.get("hits").get("hits").findValues("fields");		
+		List<T> ret = new ArrayList<T>();
+		JsonNode hitsNode = response.get("hits").get("hits");
+		
+		if(!hitsNode.isArray()){
+			return Arrays.asList(parseHitNode(hitsNode, clz));
+		}
+		
+		for(JsonNode n : (ArrayNode)hitsNode){
+			T hit = parseHitNode(n, clz);
+			ret.add(hit);
+		}
+		
+		return ret;		
+	}
+	
+	private <T> T parseHitNode(JsonNode n, Class<T> clz) throws ElasticSearchException{
+		JsonNode srcNode = n.path("_source");
+		T hit = objectMapper.convertValue(srcNode, clz);
+		
+		if(!n.path("fields").isMissingNode()){
+			JsonNode fields = flattenFieldValues(n.path("fields"));
+			hit = mergeObjects(hit, fields);
+		}
+		
+		return hit;
 	}
 
+	private <T> T mergeObjects(T obj, JsonNode fields) throws ElasticSearchException{
+		try{
+			ObjectReader updater = objectMapper.readerForUpdating(obj);
+			return updater.readValue(fields);
+		}
+		
+		catch(IOException e){
+			throw new ElasticSearchException("IOException merging objects", e);
+		}
+	}
+	
+	/**
+	 * Flatten fields node into object values. Elasticsearch fields are always
+	 * array, even when they're a leaf node. This method will flatten single
+	 * values into Objects for binding to Java objects. 
+	 */
+	private JsonNode flattenFieldValues(JsonNode fieldNode){
+		
+		Iterator<Entry<String, JsonNode>> fields = fieldNode.fields();
+		ObjectNode node = objectMapper.createObjectNode();
+		
+		while(fields.hasNext()){
+			Entry<String, JsonNode> field = fields.next();
+			JsonNode value = null;
+			
+			if(field.getValue().size() > 1)
+				value = field.getValue();
+			else
+				value = field.getValue().get(0);
+			
+			node.put(field.getKey(), value);
+		}
+	
+		return node;
+	}
+	
 	public Aggregations getAggregations() throws ElasticSearchException{
 		
 		if(response == null)
