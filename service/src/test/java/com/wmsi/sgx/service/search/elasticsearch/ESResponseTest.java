@@ -68,18 +68,22 @@ public class ESResponseTest{
 	}
 
 	@Test
-	public void testFields() throws ElasticSearchException, JsonProcessingException, IOException{
+	public void testHitsWithFields() throws ElasticSearchException, JsonProcessingException, IOException{
 		ESResponse response = new ESResponse();
 		response.setResponse(mapper.readTree(
 				"{\"hits\":"
 				+ "{\"hits\":["
 				+ "{\"_source\":{\"test\":\"test1\"},\"fields\":{\"percentChange\":[-0.011999999997], \"beta5Yr\":[1.826588992]}},"
 				+ "{\"_source\":{\"test2\":\"test2\"}}]}}"));
-		List hits = response.getFields();
+		
+		List<Map> hits = response.getHits(Map.class);
+		System.out.println(hits);
 		assertNotNull(hits);
 		assertEquals(hits.size(), 2);
-		//assertEquals(hits.get(0).get("test"), "test1");
-		//assertEquals(hits.get(1).get("test2"), "test2");
+		assertEquals(hits.get(0).get("test"), "test1");
+		assertEquals(hits.get(1).get("test2"), "test2");
+		assertEquals(hits.get(0).get("percentChange"), -0.011999999997);
+		assertEquals(hits.get(0).get("beta5Yr"), 1.826588992);
 	}
 
 	@Test

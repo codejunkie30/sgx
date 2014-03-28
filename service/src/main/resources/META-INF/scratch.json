@@ -1,36 +1,56 @@
 {
-	"aggregations": 
+	"query": 
 	{
-		"marketCap": 
+		"match_all": 
 		{
-			"buckets": 
-			[
-				{
-					"key": 0,
-					"doc_count": 1
-				},
-
-				{
-					"key": 15,
-					"doc_count": 5
-				}
-			]
-		},
-
-		"totalRev": 
-		{
-			"buckets": 
-			[
-				{
-					"key": 0,
-					"doc_count": 1
-				},
-
-				{
-					"key": 15,
-					"doc_count": 5
-				}
-			]
+			
 		}
-	}
+	},
+
+	"script_fields": 
+	{
+		"percentChange": 
+		{
+			"script": "v1 = ($ in _source.priceHistory if $.date == d1); v2 = ($ in _source.priceHistory if $.date == d2); return v2.size() > 0 && v1.size() > 0 ? v2[0].value - v1[0].value",
+			"params": 
+			{
+				"d1": 1363752000000,
+				"d2": 1377489600000,
+				"p": 0.01
+			}
+		}
+	},
+
+	"filter": 
+	{
+		"script": 
+		{
+			"script": "v1 = ($ in _source.priceHistory if $.date == from); v2 = ($ in _source.priceHistory if $.date == to); return v2.size() > 0 && v1.size() > 0 ? abs(floor((v2[0].value - v1[0].value) * 100)) == value : false",
+			"params": 
+			{
+				"to": "1377489600000",
+				"from": "1363752000000",
+				"value": "2"
+			}
+		}
+	},
+
+    "aggregations": {
+        "name" : {
+            "terms" : {
+                			"script": "v1 = ($ in _source.priceHistory if $.date == d1); v2 = ($ in _source.priceHistory if $.date == d2); return v2.size() > 0 && v1.size() > 0 ? v2[0].value - v1[0].value",
+			"params": 
+			{
+				"d1": 1363752000000,
+				"d2": 1377489600000,
+				"p": 0.01
+			}
+
+            }
+        }
+    },
+	"fields": 
+	[
+		"_source"
+	]
 }

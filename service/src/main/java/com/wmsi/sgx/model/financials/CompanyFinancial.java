@@ -2,7 +2,6 @@ package com.wmsi.sgx.model.financials;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
 
 public class CompanyFinancial{

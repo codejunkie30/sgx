@@ -1,13 +1,18 @@
 package com.wmsi.sgx.model.search;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -16,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
+import com.wmsi.sgx.util.TemplateUtil;
 
 public class SearchRequest{
 
@@ -36,7 +42,9 @@ public class SearchRequest{
 	public String buildQuery(){
 		ObjectMapper m = new ObjectMapper();
 		Resource template = new ClassPathResource("META-INF/query/elasticsearch/template/constantScoreBooleanFilter.json");
-
+		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		
 		try{
 			ObjectNode oj = (ObjectNode) m.readTree(template.getFile());
 			
@@ -50,15 +58,16 @@ public class SearchRequest{
 					filter.setField(c.getField());
 					
 					List<Param> parms = new ArrayList<Param>();
-					
+					Long toDt = fmt.parse(c.getTo().toString()).getTime();
+					Long fromDt = fmt.parse(c.getFrom().toString()).getTime();
 					Param p = new Param();
 					p.setName("to");
-					p.setValue(c.getTo());
+					p.setValue(toDt);
 					parms.add(p);
 
 					p = new Param();
 					p.setName("from");
-					p.setValue(c.getFrom());
+					p.setValue(fromDt);
 					parms.add(p);
 					
 					p = new Param();
@@ -66,10 +75,21 @@ public class SearchRequest{
 					p.setValue(c.getValue());
 					parms.add(p);
 
-					filter.setScript("v1 = ($ in _source.priceHistory if $.date == from); v2 = ($ in _source.priceHistory if $.date == to); return v2.size() > 0 && v1.size() > 0 ? abs(floor((v2[0].value - v1[0].value) * 100)) == value : false");
+					filter.setScript("v1 = ($ in _source.priceHistory if $.date == from); v2 = ($ in _source.priceHistory if $.date == to); return v2.size() > 0 && v1.size() > 0 ? floor(abs((v2[0].value - v1[0].value) * 100)) == value : false");
 					filter.setParams(parms);
 					
 					oj.putPOJO("filter", filter);	
+					
+					
+					Resource r = new ClassPathResource("META-INF/query/elasticsearch/template/scriptFieldPercentChange.json");
+					String pctChangeScriptField = FileUtils.readFileToString(r.getFile());
+					
+					
+					Map<String, Object> pctMap = new HashMap<String, Object>();
+					pctMap.put("to", toDt);
+					pctMap.put("from", fromDt);
+					String scriptFields = TemplateUtil.bind(pctChangeScriptField, pctMap);
+					oj.put("script_fields", m.readTree(scriptFields));
 					continue;
 				}
 
@@ -94,6 +114,10 @@ public class SearchRequest{
 			e.printStackTrace();
 		}
 		catch(IOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch(ParseException e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
