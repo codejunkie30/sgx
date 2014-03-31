@@ -18,6 +18,23 @@
            ]
        },
        {
+           "field": "totalRevenue",
+           "buckets": [
+               {
+                   "key": "0",
+                   "count": 82
+               },
+               {
+                   "key": "6",
+                   "count": 15
+               },
+               {
+                   "key": "12",
+                   "count": 20
+               }
+           ]
+       },
+       {
            "field": "industry",
            "buckets": [
                {

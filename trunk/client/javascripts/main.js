@@ -13,8 +13,10 @@
             highstock: 'vendor/highstock/highstock',
             socketio: 'vendor/socket.io/lib/socket.io',
             debug: 'vendor/ba-debug.min',
-            underscore: 'vendor/underscore/underscore'
+            underscore: 'vendor/underscore/underscore',
+            
         },
+        waitSeconds: 1,
         shim: {
             "debug": {
                 exports: 'debug'

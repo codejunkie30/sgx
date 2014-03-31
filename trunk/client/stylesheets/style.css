@@ -314,6 +314,9 @@
 .placeholder-header {
   margin-bottom: 30px;
 }
+html {
+  margin-bottom: 200px;
+}
 .blue {
   color: #1e2171;
 }
@@ -572,7 +575,7 @@ h1.title {
 }
 .module .toolbar .results {
   display: inline-block;
-  width: 400px;
+  width: 240px;
   color: #565a5c;
   font: normal 14px/39px Arial, Helvetica, sans-serif;
   text-indent: 10px;
@@ -883,6 +886,9 @@ table.search-criteria tr {
 table.search-criteria tr:nth-child(2n+2) {
   background-color: #f3f3f3;
 }
+table.search-criteria tr.criteria .dropdown {
+  width: 347px;
+}
 table.search-criteria td:first-child {
   color: #1e2171;
   text-align: left;
@@ -908,7 +914,7 @@ table.search-criteria .info {
   padding-top: 7px;
 }
 .button-dropdown {
-  width: 172px;
+  min-width: 172px;
   margin-right: 30px;
   display: inline-block;
   position: relative;
@@ -923,11 +929,14 @@ table.search-criteria .info {
   height: auto;
   position: absolute;
 }
+.button-dropdown li {
+  cursor: pointer;
+}
 .button-dropdown.button-customize-display {
   margin-left: 90px;
-  position: relative;
-  left: 20px;
-  top: -1px;
+  position: absolute;
+  right: 6px;
+  top: 36px;
 }
 .button-dropdown.button-customize-display .dropdown {
   width: 244px !important;
@@ -967,8 +976,8 @@ table.search-criteria .info {
   display: none;
   background: #f3f3f3;
   border: 1px solid #bfbfbf;
-  -webkit-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  border-radius: 0 6px 6px 6px;
   width: 197px;
   padding: 0;
   top: 20px;
@@ -1001,6 +1010,12 @@ table.search-criteria .info {
 .button-dropdown .dropdown .trigger {
   font-size: 10px;
   font-weight: bold;
+}
+.secondary-search-dropdown .trigger {
+  min-width: 141px;
+}
+.secondary-search-dropdown .dropdown {
+  width: 337px;
 }
 .module-results {
   margin-bottom: 10px;
@@ -1035,6 +1050,9 @@ table.search-criteria .info {
   text-align: center;
 }
 .module-results td:first-child {
+  text-align: left;
+}
+.module-results td.industry {
   text-align: left;
 }
 .module-results a {
@@ -1145,7 +1163,7 @@ table.search-criteria .info {
   position: absolute;
   background: #1e2171;
   display: block;
-  width: 4px;
+  width: auto;
   margin-right: 1px;
   height: 16px;
   bottom: 50%;

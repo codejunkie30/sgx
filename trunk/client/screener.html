@@ -67,8 +67,8 @@
                                 <th width="72">Max</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="criteria" data-name="Total Market Cap" data-min="80" data-max="100" data-label-type="dollar">
+                        <tbody><!-- 
+                            <tr class="criteria" data-min="80" data-max="100" data-type="dollar" data-name="marketCap">
                                 <td>
                                     <span class="info">Total Market Cap</span>
                                 </td>
@@ -83,7 +83,7 @@
                                 </td>
                                 <td class="max">S$ 3,792mm</td>
                             </tr>
-                            <tr class="criteria" data-name="Total Revenue" data-min="80" data-max="100" data-label-type="dollar">
+                            <tr class="criteria" data-min="80" data-max="100" data-type="dollar" data-name="totalRevenue">
                                 <td>
                                     <span class="info">Total Revenue</span>
                                 </td>
@@ -98,7 +98,7 @@
                                 </td>
                                 <td class="max">S$ 5,700mm</td>
                             </tr>
-                            <tr class="criteria" data-name="PERatio" data-min="80" data-max="100" data-label-type="dollar">
+                            <tr class="criteria" data-min="80" data-max="100" data-type="dollar" data-name="peRatio">
                                 <td>
                                     <span class="info">P/E Ratio</span>
                                 </td>
@@ -113,7 +113,7 @@
                                 </td>
                                 <td class="max">97.57</td>
                             </tr>
-                            <tr class="criteria" data-name="Dividend Yield" data-min="0" data-max="100" data-label-type="percent">
+                            <tr class="criteria" data-min="0" data-max="100" data-type="percent" data-name="dividendYield">
                                 <td>
                                     <span class="info">Dividend Yield</span>
                                 </td>
@@ -128,7 +128,7 @@
                                 </td>
                                 <td class="max">100%</td>
                             </tr>
-                            <tr class="criteria" data-name="Industry">
+                            <tr class="criteria" data-name="industry">
                                 <td>
                                     <span class="info">Industry</span>
                                 </td>
@@ -150,14 +150,13 @@
                                                 <li>Utilities</li>
                                             </ul>
                                         </div>
-
                                     </div>
                                 </td>
                                 <td class="max"></td>
-                            </tr>
-                            <tr><td colspan="4"><a href="#" class="search-submit">Search Submit</a></td></tr>
+                            </tr> -->
                         </tbody>
                     </table>
+                    <a href="#" class="search-submit">Search Submit</a>
                 </div>
 
             </div>
@@ -165,33 +164,32 @@
                 <div class="module editSearchB">
                     <div class="title">
                         <div class="label">Edit Search Criteria</div>
-                        <div class="button">Reset</div>
+                        <div class="button button-reset">Reset</div>
                     </div>
                     <div class="module-accordion">
                         <h3>Market Data</h3>
                         <div class="panel">
-
-                            <div class="checkbox checked" data-name="Total Market Cap" data-min="80" data-max="100" data-label-type="dollar">
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="dollar" data-name="marketCap">
                                 <div class="trigger">Total Market Cap</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="percentChange">
                                 <div class="trigger">% Change over date range up to 1 year</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceVs52WeekHigh">
                                 <div class="trigger">Current Stock Price vs 52 week high</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceVs52WeekLow">
                                 <div class="trigger">Current Stock Price vs 52 week low</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="beta5Yr">
                                 <div class="trigger">5-Year Beta</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="volume">
                                 <div class="trigger">Volume</div>
                                 <input type="checkbox">
                             </div>
@@ -200,35 +198,35 @@
                         <h3>Financials</h3>
 
                         <div class="panel">
-                            <div class="checkbox checked" data-name="Total Revenue" data-min="80" data-max="100" data-label-type="dollar">
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="dollar" data-name="totalRevenue">
                                 <div class="trigger">Total Revenue</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="ebitdaMargin">
                                 <div class="trigger">EBITDA Margin</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="netProfitMargin">
                                 <div class="trigger">Net Profit Margin</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="earningsPerShare">
                                 <div class="trigger">Earnings Per Share</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalDebtEquity">
                                 <div class="trigger">Debt/Equity Ratio</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev1YrAnnGrowth">
                                 <div class="trigger">1-year Revenue Growth</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev3YrAnnGrowth">
                                 <div class="trigger">3-year Revenue Growth</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev5YrAnnGrowth">
                                 <div class="trigger">5-year Revenue Growth</div>
                                 <input type="checkbox">
                             </div>
@@ -236,30 +234,30 @@
 
                         <h3>Valuation</h3>
                         <div class="panel">
-                            <div class="checkbox checked" data-name="PERatio" data-min="80" data-max="100" data-label-type="dollar">
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="dollar" data-name="peRatio">
                                 <div class="trigger">P/E Ratio</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox checked" data-name="Dividend Yield" data-min="80" data-max="100" data-label-type="dollar">
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="dollar" data-name="dividendYield">
                                 <div class="trigger">Dividend Yield</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceToBookRatio">
                                 <div class="trigger">P/BV</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="ConsensusRecommendation">
                                 <div class="trigger">Consensus Recommendation</div>
                                 <input type="checkbox">
                             </div>
                         </div>
                         <h3>Industry</h3>
                         <div class="panel">
-                            <div class="checkbox checked" data-name="Industry" data-min="80" data-max="100" data-label-type="industry">
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="industry">
                                 <div class="trigger">Industry</div>
                                 <input type="checkbox">
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -273,22 +271,22 @@
                     <div class="label">Results</div>
                 </div>
                 <div class="toolbar">
-                    <div class="results"></div>
-                    <div class="button-dropdown">
-                        <div class="trigger">Select Sector &amp; Industry
+                    <div class="results">0 results</div>
+                    <div class="button-dropdown secondary-search-dropdown">
+                        <div class="trigger">All Industries
                             <span class="arrow"></span>
                         </div>
                         <div class="dropdown">
                             <ul>
-                                <li>Basic Materials</li>
-                                <li>Conglomerates</li>
-                                <li>Consumer Goods</li>
-                                <li>Financial</li>
-                                <li>Healthcare</li>
-                                <li>Industrial Goods</li>
-                                <li>Services</li>
-                                <li>Technology</li>
-                                <li>Utilities</li>
+                                <li data-filter="basicmaterials">Basic Materials</li>
+                                <li data-filter="conglomerates">Conglomerates</li>
+                                <li data-filter="consumergoods">Consumer Goods</li>
+                                <li data-filter="financial">Financial</li>
+                                <li data-filter="healthcare">Healthcare</li>
+                                <li data-filter="industrialgoods">Industrial Goods</li>
+                                <li data-filter="services">Services</li>
+                                <li data-filter="technology">Technology</li>
+                                <li data-filter="utilities">Utilities</li>
                             </ul>
                         </div>
 
@@ -300,74 +298,79 @@
                         <div class="dropdown dropdown-padding">
                             <p>Select up to four.</p>
                             <h4>Market Data</h4>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="marketCap">
                                 <div class="trigger">Total Market Cap</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
-                                <div class="trigger">Percentage Change</div>
+                            <div class="checkbox" data-result-point="marketCap">
+                                <div class="trigger">Percentage Change - Not in object</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
-                                <div class="trigger">Current Stock Prive vs. 52 week high/low</div>
+                            <div class="checkbox" data-result-point="priceVs52WeekHigh">
+                                <div class="trigger">Current Stock Prive vs. 52 week high</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
-                                <div class="trigger">5-Year Beta</div>
+                            <div class="checkbox" data-result-point="priceVs52WeekLow">
+                                <div class="trigger">Current Stock Prive vs. 52 week low</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            
+                            <div class="checkbox" data-result-point="marketCap">
+                                <div class="trigger">5-Year Beta - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="volume">
                                 <div class="trigger">Volume</div>
                                 <input type="checkbox">
                             </div>
                             <h4>Financials</h4>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="totalRevenue">
                                 <div class="trigger">Total Revenue</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="ebitdaMargin">
                                 <div class="trigger">EBITDA Margin</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="netProfitMargin">
                                 <div class="trigger">Net Profit Margin</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="eps">
                                 <div class="trigger">Earnings Per Share</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="totalDebtEquity">
                                 <div class="trigger">Debt/Equity Ratio</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="totalRev1YrAnnGrowth">
                                 <div class="trigger">1-year Revenue Growth</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">3-year Revenue Growth</div>
+                                <div class="trigger">3-year Revenue Growth - Not in object</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">5-year Revenue Growth</div>
+                                <div class="trigger">5-year Revenue Growth - Not in object</div>
                                 <input type="checkbox">
                             </div>
                             <h4>Valuation</h4>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="peRatio">
                                 <div class="trigger">P/E</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="dividendYield">
                                 <div class="trigger">Dividend Yield</div>
                                 <input type="checkbox">
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox" data-result-point="priceToBookRatio">
                                 <div class="trigger">P/BV</div>
                                 <input type="checkbox">
                             </div>
                             <div class="checkbox">
-                                <div class="trigger">Consensus Recommendation</div>
+                                <div class="trigger">Consensus Recommendation - Not in object</div>
                                 <input type="checkbox">
                             </div>
 
@@ -376,26 +379,28 @@
 
                     </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="296">Company Name</th>
-                            <th>Code</th>
-                            <th>Industry</th>
-                            <th>Market Cap</th>
-                            <th>Revenue</th>
-                            <th>P/E Ratio</th>
-                            <th>Div Yield</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="placeholder" colspan="7">No search results</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="296">Company Name</th>
+                                <th>Code</th>
+                                <th>Industry</th>
+                                <th>Market Cap</th>
+                                <th>Revenue</th>
+                                <th>P/E Ratio</th>
+                                <th>Div Yield</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="placeholder" colspan="7">No search results</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <ul class="pager">
-                    <li><a href="#">Previous</a>
+                    <!-- <li><a href="#">Previous</a>
                     </li>
                     <li>
                         <a href="#">1</a>
@@ -411,7 +416,7 @@
                     </li>
                     <li>
                         <a href="#">Next</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 

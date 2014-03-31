@@ -1,5 +1,6 @@
 define(['jquery', 'highstock', 'debug'], function($, StockChart) {
 
+    debug.info(SGX);
     var SGX = SGX || {};
     var stocks = {
         stocks: {
@@ -418,4 +419,6 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
     };
     _.extend(SGX, stocks);
     SGX.stocks.init();
+    
+    debug.info(SGX);
 });
