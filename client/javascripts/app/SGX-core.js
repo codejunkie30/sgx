@@ -1,13 +1,10 @@
 // This is the modular wrapper for any page
 define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 'tabs', 'debug'], function($, SGX) {
-
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
     SGX = {
         startup: function() {
-
             $('#loading').delay(250).fadeOut();
-
         },
         accordion: function() {
             $(".module-accordion").accordion({
@@ -25,10 +22,10 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             SGX.accordion();
             SGX.modal.init();
 
-            SGX.data.get();
+            // SGX.data.get();
 
             // Initialize custom dropdowns
-            SGX.dropdowns();
+            SGX.dropdowns.init();
 
             // Initialize jquery tabs
             SGX.tabs();
@@ -41,12 +38,6 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
 
             // Initialize form components
             SGX.form.init();
-
-            // Do default Screener search and assign event handlers
-            $('.search-submit').on('click', function(e) {
-                e.preventDefault();
-                SGX.search.sendSearch();
-            });
         },
         checkboxes: function() {
             $('.checkbox').on('click', function() {
@@ -60,8 +51,6 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                     $this.addClass("checked");
                 }
             });
-
-
         },
         closeAll: function() {
             // Close tooltips and dropdowns on body click
@@ -69,127 +58,61 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                 if (!$(e.toElement).parents().hasClass("button-dropdown")) {
                     $(document).find('.button-dropdown').removeClass('open');
                 }
-
                 // If isn't info button, hide tooltips
                 if (!$(e.toElement).hasClass("info")) {
-
                     SGX.tooltip.close();
                 }
-
-
-
             });
         },
-        data: {
-            get: function(url) {
-                // Default Data
-                $.ajax({
-                    url: 'javascripts/app/search_result.json',
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        for (var companies in data.results) {
-                            var company = data.results[companies];
-                            console.log(company);
-                            $('.module-results').find('tbody').remove();
-                            $('.module-results').find('table').append('<div class="tempholder" />');
-                            for (var i = 0; i < company.length; i++) {
-                                // console.log(i);
-                                // $('.module-results').find('td.placeholder').parents('tr').remove();
+        dropdowns: {
+            close: function(target) {
+                // $(target)
+                $(document).find('.button-dropdown').removeClass('open');
+                $(document).find('.trigger').removeClass('open');
+            },
+            init: function() {
+                $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
+                    console.log('todo cleanup');
+                    $(document).find('.button-dropdown').removeClass('open');
+                    var $this = $(this),
 
-                                $('.module-results').find('.tempholder').append('<tr><td>' + company[i].companyName + '</td><td>' + company[i].code + '</td><td>' + company[i].industry + '</td><td>' + company[i].marketCap + '</td><td>' + company[i].totalRevenue + '</td><td>' + company[i].peRatio + '</td><td>' + company[i].dividendYield + '</td></tr>');
-                            }
-                        }
-                        $('.module-results').find('.pager').html('');
-                        var resultsLength = $('.module-results').find('tr').length - 1,
-                            resultsRows = $('.module-results').find('.tempholder tr');
+                        $button = $this.parents('.button-dropdown'),
+                        $dropdown = $button.find('.dropdown');
 
+                    if ($this.hasClass("open")) {
+                        $this.removeClass("open");
+                    } else {
+                        $this.addClass("open");
+                    }
+                });
 
-                        // Update results
-                        $('.module-results').find('.results').html(resultsLength + ' total matches');
+                $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
+                    var $button = $(this).parents('.button-dropdown'),
+                        $dropdown = $button.find('.dropdown');
 
+                    if ($button.hasClass("open")) {
+                        $button.removeClass("open");
+                    } else {
+                        $button.addClass("open");
+                    }
+                });
+                $('.button-dropdown').find('li').on('click', function() {
+                    console.log('click');
+                    var text = $(this).text();
+                    $(this).parents('.button-dropdown').find('.trigger').html(text + '<span class="arrow"></span>');
+                    $(document).find('.button-dropdown').removeClass('open');
+                    var $this = $(this),
 
-                        for (var i = 0, y = 1; i < resultsRows.length; i += 10, y++) {
-                            if (y == 1) {
-                                resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" class="active" />');
-                            } else {
-                                resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" />');
-                            }
-                            // Add to pager
-                            $('.module-results').find('.pager').append('<li><a href="#">' + y + '</a></li>');
-                        }
-                        var $pager = $('.module-results').find('.pager');
-                        $pager.prepend('<li><a class="prev" href="#">Prev</a></li>');
-                        $pager.append('<li><a class="next" href="#">Next</a></li>');
+                        $button = $this.parents('.button-dropdown'),
+                        $dropdown = $button.find('.dropdown');
 
-                        // Pager click handler
-                        $pager.find('a').on('click', function(e) {
-                            e.preventDefault();
-                            var $this = $(this),
-                                target = $this.parent().index() - 1;
-
-                            if (!$this.hasClass("prev") && !$this.hasClass("next")) {
-                                // console.log(target);
-                                $('.module-results').find('tbody:not(:eq(' + target + '))').removeClass("active");
-                                $('.module-results').find('tbody:eq(' + target + ')').addClass("active");
-                            } else if ($this.hasClass("next")) {
-                                if ($('.module-results').find('tbody.active').next('tbody').length > 0) {
-                                    // console.log('next');
-                                    $('.module-results').find('tbody.active').next('tbody').addClass("active");
-                                    $('.module-results').find('tbody.active').first().removeClass("active");
-                                } else {
-                                    $('.module-results').find('tbody').removeClass("active");
-                                    $('.module-results').find('tbody').first().addClass("active");
-                                }
-
-                            } else if ($this.hasClass("prev")) {
-                                if ($('.module-results').find('tbody.active').prev('tbody').length > 0) {
-                                    // console.log('prev');
-                                    $('.module-results').find('tbody.active').prev('tbody').addClass("active");
-                                    $('.module-results').find('tbody.active').last().removeClass("active");
-                                } else {
-                                    $('.module-results').find('tbody').removeClass("active");
-                                    $('.module-results').find('tbody').last().addClass("active");
-                                }
-                            }
-                            console.log($('.module-results').find('tbody.active').index());
-                        })
-
-                        $('.module-results').find('tbody').unwrap();
-
+                    if ($this.hasClass("open")) {
+                        $this.removeClass("open");
+                    } else {
+                        $this.addClass("open");
                     }
                 });
             }
-        },
-        dropdowns: function() {
-            // debug.info('SGX.dropdowns');
-
-
-            $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
-
-                $(document).find('.button-dropdown').removeClass('open');
-                var $this = $(this),
-
-                    $button = $this.parents('.button-dropdown'),
-                    $dropdown = $button.find('.dropdown');
-
-                if ($this.hasClass("open")) {
-                    $this.removeClass("open");
-                } else {
-                    $this.addClass("open");
-                }
-            });
-
-            $('.button-dropdown').find('> .trigger:not(.open)').on('click', function() {
-                var $button = $(this).parents('.button-dropdown'),
-                    $dropdown = $button.find('.dropdown');
-
-                if ($button.hasClass("open")) {
-                    $button.removeClass("open");
-                } else {
-                    $button.addClass("open");
-                }
-            });
         },
         error: {
             init: function(content) {
@@ -197,15 +120,7 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             }
         },
         financials: {
-            addCriteria: function() {
-
-            },
-            removeCriteria: function() {
-
-            },
             chart: function(settings) {
-                console.log(settings);
-
                 if ($('#large-bar-chart').length) {
                     $('#large-bar-chart').highcharts({
                         chart: {
@@ -408,11 +323,8 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
 
                 $modal.html('<div class="modal-container"><div class="modal-content" /><div class="bg" /></div>');
                 var $modalContent = $modal.find('.modal-content');
-
                 if (typeof(content) !== 'undefined') {
-
                     $modal.find('.modal-content').html(content);
-
                 }
 
                 if ((typeof(type) !== 'undefined') && (type == 'prompt')) {
@@ -442,46 +354,272 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                 });
             }
         },
-        search: {
-            addCriteria: function(target, config) {
-                // console.log(target);
-                // console.log(config);
-                var count = $('.search-criteria').find('.criteria').length,
-                    max = config.max,
-                    min = config.min;
-
-                // console.log('addCriteria');
-
-                // Set values for min max depending on the type
-                if ((typeof(config.type) != 'undefined') && (config.type == 'dollar')) {
-                    max = 'S$' + max + 'mm';
-                    min = 'S$' + min + 'mm';
-                } else if ((typeof(config.type) != 'undefined') && (config.type == 'percent')) {
-                    max = max + '%';
-                    min = min + '%';
+        pagination: {
+            reset: function() {
+                console.log('pagination reset');
+                var $pager = $('.module-results').find('.pager');
+                $pager.empty();
+                var resultsRows = $('.module-results').find('tr.result');
+                if (resultsRows.parents('tbody').length) {
+                    resultsRows.unwrap();
                 }
-                // If there are less than 5 criteria at the moment, the user can add another search criteria
-                if ((typeof(config.type) != 'undefined') && (config.type != 'industry')) {
-                    $('.search-criteria').find('tbody').append('<tr class="criteria" style="display:none;" data-type="' + config.type + '" data-name="' + config.name + '"><td>' + config.name + '</td><td>' + min + '</td><td class="criteria-slider">Slider</td><td class="max">' + max + '</td></tr>');
-                    var sliderTarget = $('.search-criteria').find('tr.criteria').last().find('.criteria-slider');
-                    SGX.slider.init(sliderTarget, config);
 
-                } else if ((typeof(config.type) != 'undefined') && (config.type == 'industry')) {
-                    // It is the Industry Criteria, so add it accordingly
-                    $('.search-criteria').find('tbody').append('<tr class="criteria" data-name="Industry"><td><span class="info">Industry</span></td><td colspan="2"><div class="button-dropdown"><div class="trigger">Select Sector &amp; Industry<span class="arrow"></span></div><div class="dropdown"><ul><li>Basic Materials</li><li>Conglomerates</li><li>Consumer Goods</li><li>Financial</li><li>Healthcare</li><li>Industrial Goods</li><li>Services</li><li>Technology</li><li>Utilities</li></ul></div></div></td><td class="max"></td></tr>');
-                    SGX.dropdowns();
+                for (var i = 0, y = 1; i < resultsRows.length; i += 10, y++) {
+                    if (y == 1) {
+                        resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" class="active" />');
+                    } else {
+                        resultsRows.slice(i, i + 10).wrapAll('<tbody data-panel-count="' + y + '" />');
+                    }
+                    // Add to pager
+                    $('.module-results').find('.pager').append('<li><a href="#">' + y + '</a></li>');
                 }
-                $('.search-criteria').find('tr.criteria').last().fadeIn();
-                SGX.search.register.removeClickHandler();
-                // console.log(count);
+                if ($pager.find('li').length > 1) {
+                    $pager.prepend('<li><a class="prev" href="#">Prev</a></li>');
+                    $pager.append('<li><a class="next" href="#">Next</a></li>');
+                }
+                SGX.pagination.registerClickHandlers();
             },
-            removeCriteria: function(target) {
-                // This is a placeholder function in case other functionality needs to be piggy-backed onto the removal of Search Criteria
-                // console.log('remove Criteria');
+            registerClickHandlers: function() {
+                // Pager click handler
+                var $pager = $('.module-results').find('.pager');
+                $pager.find('a').on('click', function(e) {
+                    e.preventDefault();
+                    var $this = $(this),
+                        target = $this.parent().index() - 1;
 
-                $(target).fadeOut(function() {
-                    $(target).remove();
+                    if (!$this.hasClass("prev") && !$this.hasClass("next")) {
+                        // console.log(target);
+                        $('.module-results').find('tbody:not(:eq(' + target + '))').removeClass("active");
+                        $('.module-results').find('tbody:eq(' + target + ')').addClass("active");
+                    } else if ($this.hasClass("next")) {
+                        if ($('.module-results').find('tbody.active').next('tbody').length > 0) {
+                            // console.log('next');
+                            $('.module-results').find('tbody.active').next('tbody').addClass("active");
+                            $('.module-results').find('tbody.active').first().removeClass("active");
+                        } else {
+                            $('.module-results').find('tbody').removeClass("active");
+                            $('.module-results').find('tbody').first().addClass("active");
+                        }
+
+                    } else if ($this.hasClass("prev")) {
+                        if ($('.module-results').find('tbody.active').prev('tbody').length > 0) {
+                            // console.log('prev');
+                            $('.module-results').find('tbody.active').prev('tbody').addClass("active");
+                            $('.module-results').find('tbody.active').last().removeClass("active");
+                        } else {
+                            $('.module-results').find('tbody').removeClass("active");
+                            $('.module-results').find('tbody').last().addClass("active");
+                        }
+                    }
+                    console.log($('.module-results').find('tbody.active').index());
                 });
+            },
+        },
+        search: {
+            criteriaObject: {},
+            resultsObject: {},
+            resultsDOM: '',
+            init: function() {
+                var data = {
+                    "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industry"]
+                };
+                // Default load
+                SGX.search.addCriteria(data);
+
+                $('.button-reset').on('click', function() {
+                    $('.search-criteria').find('tr.criteria').each(function() {
+                        SGX.search.removeCriteria($(this));
+                    });
+
+                });
+                $('.editSearchB').find('.trigger').on('click', function(e) {
+                    // console.log('add trigger');
+                    var $checkbox = $(this).parents('.checkbox'),
+                        $input = $checkbox.find('input[type="checkbox"]'),
+                        checkboxChecked = $checkbox.hasClass("checked");
+                    var settings = {
+                        name: $checkbox.data('name'),
+                        type: $checkbox.data('type'),
+                        min: $checkbox.data('min'),
+                        max: $checkbox.data('max'),
+                        servername: $checkbox.data('name')
+                    };
+                    var count = $('.search-criteria').find('.criteria').length;
+                    if (count < 5) {
+                        if (checkboxChecked) {
+                            SGX.form.checkbox.uncheck($checkbox);
+                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
+                            SGX.search.removeCriteria($target);
+                        } else {
+                            // Checkbox is not checked and less than 5, so add Criteria
+                            SGX.form.checkbox.check($checkbox);
+                            var field = $checkbox.attr('data-name').toString();
+                            SGX.search.addCriteria({
+                                "fields": [field]
+                            });
+                        }
+                    } else {
+                        // There are 5 criteria at the moment, prompt user to remove a criteria
+                        if (checkboxChecked) {
+                            // User is trying to remove criteria using checkbox
+                            SGX.form.checkbox.uncheck($checkbox);
+                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
+                            SGX.search.removeCriteria($target);
+                        } else {
+
+                            SGX.modal.open({
+                                content: 'Please remove a search criteria'
+                            });
+                        }
+                    }
+                });
+                $('.search-submit').on('click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        "criteria": [
+                            /*{
+                            "field": "marketCap",
+                            "from": "5.0",
+                            "to": "2500.0"
+                        }, {
+                            "field": "percentChange",
+                            "from": "2013-04-01",
+                            "to": "2014-03-12",
+                            "value": 2
+                        }*/
+                        ]
+                    };
+                    var criteria = $('table.search-criteria').find('tr.criteria');
+
+                    $('table.search-criteria').find('tr.criteria').each(function(idx) {
+                        console.log(idx);
+                        if ($(this).data('name') != 'industry') {
+                            data.criteria.push({
+                                "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-name'),
+                                "from": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-min'),
+                                "to": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-max')
+                            });
+                        } else if ($(this).data('name') == 'industry') {
+                            console.log('todo');
+                            if ($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').length) {
+                                data.criteria.push({
+                                    "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').data('name'),
+                                    "value": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').text()
+                                });
+                            }
+
+                        }
+                    });
+                    console.log('\n\n\n');
+                    console.log(data);
+                    console.log('\n\n\n');
+                    $.ajax({
+                        url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/search',
+                        type: 'POST',
+                        dataType: 'jsonp',
+                        jsonpCallback: 'jsonp',
+                        data: {
+                            'json': JSON.stringify(data)
+                        },
+                        contentType: 'application/json; charset=UTF-8',
+                        success: function(data) {
+                            console.log(data);
+                            if (data.companies.length != 0) {
+                                SGX.search.removeResults();
+                                SGX.search.addResults(data);
+                                // SGX.search.pagination.reset()
+                            } else {
+
+                            }
+                        }
+                    })
+                });
+                $('.button-customize-display').find('.trigger').on('click', function() {
+                    // SGX.form.checkbox.check()
+                    var checked = $(this).parents('.checkbox').hasClass("checked");
+                    if (checked === true) {
+                        // debug.log('checked');
+                        $(this).parents('.checkbox').removeClass("checked");
+                    } else {
+                        // debug.log('not checked');
+                        $(this).parents('.checkbox').addClass("checked");
+                    }
+                    console.log(SGX.search.resultsObject);
+                });
+            }, // end it
+            addCriteria: function(data, settings) {
+                if (typeof(data) == 'undefined') {
+                    var data = {
+                        "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industry"]
+                    };
+                }
+                $.ajax({
+                    url: "http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/search/distributions",
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    jsonpCallback: 'jsonp',
+                    data: {
+                        'json': JSON.stringify(data)
+                    },
+                    contentType: 'application/json; charset=UTF-8',
+                    success: function(data) {
+                        console.log(data.distributions);
+                        for (var i = data.distributions.length - 1; i >= 0; i--) {
+                            console.log(data.distributions[i]);
+                            var $relCheckbox = $('.editSearchB').find('.checkbox[data-name="' + data.distributions[i].field + '"]'),
+                                friendlyName = $relCheckbox.find('.trigger').text(),
+                                type = $relCheckbox.data('type'),
+                                matches = data.distributions[i].buckets.length + ' matches',
+                                min = data.distributions[i].buckets[0].key,
+                                max = data.distributions[i].buckets[data.distributions[i].buckets.length - 1].key;
+
+                            if (data.distributions[i].field != 'industry') {
+                                if (!$('tr.criteria[data-name="' + data.distributions[i].field + '"]').length) {
+                                    $('table.search-criteria').find('tbody').append('<tr class="criteria" style="display:none;" data-name="' + data.distributions[i].field + '" data-type="' + type + '" data-max="' + max + '" data-min="' + min + '"><td>' + friendlyName + '</td><td>S$' + min + 'mm</td><td class="criteria-slider"><div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches"></div></div></td><td class="max">S$' + max + 'mm</td></tr>');
+                                } else {
+                                    if ((typeof(type) != 'undefined') && (type == 'dollar')) {
+                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.min').html('S$' + min + 'mm');
+                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.max').html('S$' + max + 'mm');
+                                    } else if ((typeof(type) != 'undefined') && (type == 'percent')) {
+                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.min').html(min + '%');
+                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.max').html(max + '%');
+                                    }
+                                    $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('.matches').html(matches);
+                                }
+                                var sliderSettings = {
+                                    min: parseFloat(min, 10),
+                                    max: parseFloat(max, 10)
+                                }
+                                SGX.slider.init($('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.criteria-slider'), sliderSettings);
+                            } else if (data.distributions[i].field == 'industry') {
+                                console.log('industry');
+                                console.log(data.distributions[i].buckets);
+                                if (!$('tr.criteria[data-name="' + data.distributions[i].field + '"]').length) {
+                                    $('table.search-criteria').find('tbody').append('<tr class="criteria" data-name="' + data.distributions[i].field + '" data-type="' + data.distributions[i].field + '"><td>Industry</td><td colspan="2"><div class="button-dropdown"><div class="trigger">Select Sector &amp; Industry<span class="arrow"></span></div><div class="dropdown"><ul></ul></div></div></td><td class="max"></td></tr>');
+                                    for (var b = data.distributions[i].buckets.length - 1; b >= 0; b--) {
+                                        // console.log(data.distributions[i].buckets[b]);
+
+                                        // console.log(industryRow);
+                                        // $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('test');
+                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + data.distributions[i].buckets[b].key + '</li>')
+                                    };
+                                } else {
+                                    console.log('else');
+
+                                }
+                                SGX.dropdowns.init();
+
+                            }
+                        };
+                        $('.search-criteria').find('tr.criteria').fadeIn();
+                        SGX.search.register.removeClickHandler();
+                    }, // end success
+                    error: function(data, status, er) {
+                        console.log(data);
+                    }
+                }); //end ajax
+
+
             },
             register: {
                 removeClickHandler: function() {
@@ -497,12 +635,9 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                             confirm: function(options) {
 
                                 var target = options.target;
-                                console.log(target);
-                                console.log(criteraName);
                                 // target.css({'background': 'red'});
                                 $('button.confirm').on('click', target, function(e) {
-                                    console.log('confirm');
-                                    console.log(target);
+
                                     SGX.search.removeCriteria(target);
                                     criteraName = $.trim(criteraName);
                                     // .css({'background':'red'});
@@ -516,201 +651,170 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                     });
                 }
             },
-            sendSearch: function() {
-
-                // Iterate through search criteria and create a request for server
-                $('.search-criteria').find('tr').each(function() {
-                    console.log('search');
+            removeCriteria: function(target) {
+                // This is a placeholder function in case other functionality needs to be piggy-backed onto the removal of Search Criteria
+                // console.log('remove Criteria');
+                // console.log();
+                $(target).fadeOut(function() {
+                    $(target).remove();
+                    SGX.form.checkbox.uncheck($('.editSearchB').find('.checkbox[data-name="' + $(target).data('name') + '"]'));
                 });
+            },
+            addResults: function(data) {
+                $('.module-results').find('.results').html(data.companies.length + ' results')
 
-                $.ajax({
-                    url: 'javascripts/app/data-distributions.json',
-                    success: function(data) {
-                        SGX.search.parseSearchResponse(data);
+                // Clear results DOM store
+                SGX.search.resultsDOM = '';
+                SGX.search.resultsObject = data.companies;
+                // console.log(data.companies);
+                for (var i = data.companies.length - 1; i >= 0; i--) {
+
+                    if (typeof(data.companies[i].dividendYield) == 'undefined') {
+                        data.companies[i].dividendYield = '-'
                     }
-                })
-            },
-            parseSearchResponse: function(data) {
-                console.log('parse Search response');
-                console.log(data);
-            },
-            init: function() {
-                $('.reset').on('click', function() {
+                    var trimIndustry = data.companies[i].industry.replace(/ /g, '').replace(',', '').toLowerCase().toString();
 
-                });
-                $('.editSearchB').find('.trigger').on('click', function(e) {
-                    // console.log('add trigger');
-                    var $this = $(this),
-                        $checkbox = $this.parents('.checkbox'),
-                        $input = $checkbox.find('input[type="checkbox"]'),
-                        checkboxChecked = $checkbox.hasClass("checked");
-                    var settings = {
-                        name: $checkbox.attr('data-name'),
-                        type: $checkbox.attr('data-label-type'),
-                        min: $checkbox.attr('data-min'),
-                        max: $checkbox.attr('data-max')
-                    };
-                    var count = $('.search-criteria').find('.criteria').length;
-                    if (count < 5) {
-                        if (checkboxChecked) {
-                            SGX.form.checkbox.uncheck($checkbox);
-                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
-                            console.log($target);
-                            SGX.search.removeCriteria($target);
-                            console.log('should be uncheck');
-                        } else {
-                            SGX.form.checkbox.check($checkbox);
-                            SGX.search.addCriteria($(this), settings);
-                        }
+                    var result = '<tr class="result" data-industry="' + trimIndustry + '"><td>' + data.companies[i].companyName + '</td><td>' + data.companies[i].tickerCode + '</td><td class="industry">' + data.companies[i].industry + '</td><td>' + data.companies[i].marketCap + '</td><td>' + data.companies[i].totalRevenue + '</td><td>' + data.companies[i].priceToBookRatio + '</td><td>' + data.companies[i].dividendYield + '</td></tr>';
+                    if ($('.module-results').find('tbody').length) {
+                        $('.module-results').find('tbody').append(result);
                     } else {
-                        // There are 5 criteria at the moment, prompt user to remove a criteria
-                        if (checkboxChecked) {
-                            // User is trying to remove criteria using checkbox
-                            SGX.form.checkbox.uncheck($checkbox);
-                            var $target = $('tr.criteria[data-name="' + $checkbox.attr('data-name') + '"]');
-                            console.log($target);
-                            SGX.search.removeCriteria($target);
-                            console.log('should be uncheck');
-                        } else {
-                            console.log('count is more than 5');
-                            SGX.modal.open({
-                                content: 'Please remove a search criteria'
-                            });
-                        }
+                        $('.module-results').find('table').append('<tbody>' + result + '</tbody>');
                     }
-                });
-                SGX.search.register.removeClickHandler();
+
+
+
+                    // Add results to cache
+                    SGX.search.resultsDOM = SGX.search.resultsDOM + result;
+                };
+                SGX.search.industryDropdown.populate(data);
+                SGX.pagination.reset();
+
+            },
+            removeResults: function() {
+                $('.module-results').find('tbody').remove();
+            },
+            resetResults: function() {
+                $('.module-results').find('tbody').remove().end().find('thead').after(SGX.search.resultsDOM);
+                // console.log(SGX.search.resultsDOM);
+            },
+            industryDropdown: {
+                populate: function(data) {
+                    var resultIndustries = [];
+                    $('.secondary-search-dropdown').find('ul').empty().append('<li data-industry="all-industries">All Industries</li>');
+                    for (var i = data.companies.length - 1; i >= 0; i--) {
+                        var industry = data.companies[i].industry,
+                            trimIndustry = data.companies[i].industry.replace(/ /g, '').replace(',', '').toLowerCase().toString();
+
+                        if ($.inArray(trimIndustry, resultIndustries) == -1) {
+                            resultIndustries.push(trimIndustry);
+                            $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
+                        }
+                    };
+                    SGX.search.industryDropdown.click();
+                },
+                click: function() {
+                    $('.secondary-search-dropdown').find('li').on('click', function() {
+                        // Filter Results
+                        var industry = $(this).data('industry'),
+                            text = $(this).text();
+
+
+                        if ((typeof(industry) !== 'undefined') && (industry != 'all-industries')) {
+                            console.log(industry);
+                            SGX.search.resetResults();
+                            $(this).parents('.button-dropdown').find('.trigger').html(text + '<span class="arrow"></span>');
+                            SGX.dropdowns.close();
+                            SGX.dropdowns.init();
+                            $('.module-results').find('tr.result:not([data-industry="' + industry + '"])').remove();
+                            $('.module-results').find('tr.result[data-industry="' + industry + '"]').show();
+                            SGX.pagination.reset();
+                        } else {
+                            console.log('pagination all');
+                            SGX.search.resetResults();
+                            $(this).parents('.button-dropdown').find('.trigger').html('All Industries <span class="arrow"></span>');
+                            SGX.dropdowns.close();
+                            SGX.dropdowns.init();
+                            SGX.pagination.reset();
+                        }
+                    });
+                    $('.button-customize-display').on('click', function() {
+                        console.log(SGX.search.resultsObject);
+                    });
+                }
             }
         },
         slider: {
             init: function(container, settings) {
-                $(container).html('<div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches">0 matches</div></div>');
+                console.log('sliderinit');
+                // $(container).html('<div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches">' + settings.matches + '</div></div>');
 
+
+                $(container).html('<div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches"></div></div>');
+                // console.log(container);
+                if (settings.min < 0) {
+                    settings.min = 0;
+                }
                 // console.log(settings);
-
                 $(container).find('.slider-bar').slider({
                     range: true,
                     min: parseFloat(settings.min, 10),
                     max: parseFloat(settings.max, 10),
                     values: [settings.min, settings.max],
-                    create: function(event, ui) {},
-                    slide: SGX.slider.slide,
-                    change: SGX.slider.change
+                    slide: SGX.slider.slide
                 });
-                var $this = $(container).find('.module-stock-slider');
-                console.log($this);
-                var leftPt = $this.find('.ui-slider-handle').first().position().left,
-                    rightPt = $this.find('.ui-slider-handle').last().position().left;
-                var stockBarObj = {
-                    content: ''
-                };
-                for (var i = 0; i < 49; i++) {
-                    if (((6 * i) < leftPt) || ((6 * i) > rightPt)) {
-                        // $('.stock-bar-container').append('<div class="stock-bar" style="background: #b0b2cd; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
-                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: ##1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
-                    } else {
-                        // $('.stock-bar-container').append('<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
-                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
-                    }
-                }
-                $(container).find('.stock-bar-container').html(stockBarObj.content);
-            },
-            startup: function() {
-                $('.module-stock-slider').each(function(idx) {
-                    var max = $(this).parents('tr').attr('data-max'),
-                        min = $(this).parents('tr').attr('data-min');
-                    if (typeof(min) != 'undefined') {
-                        // console.log(min);
-                        min;
-                    } else {
-                        min = 0;
-                    }
-                    if (typeof(max) != 'undefined') {
-                        // console.log(max);
-                        max;
-                    } else {
-                        max = 300;
-                    }
-                    $('.slider-bar').slider({
-                        range: true,
-                        min: parseFloat(min, 10),
-                        max: parseFloat(max, 10),
-                        values: [min, max],
-                        create: function(event, ui) {},
-                        slide: SGX.slider.slide,
-                        change: SGX.slider.change
-                    });
-                    var leftPt = $(this).find('.ui-slider-handle').first().position().left,
-                        rightPt = $(this).find('.ui-slider-handle').last().position().left;
-                    var stockBarObj = {
-                        idx: idx,
+                /*
+                var $this = $(container).find('.module-stock-slider'),
+                    leftPt = $this.find('.ui-slider-handle').first().position().left,
+                    rightPt = $this.find('.ui-slider-handle').last().position().left,
+                    stockBarObj = {
                         content: ''
                     };
-                    for (var i = 0; i < 49; i++) {
-                        if (((6 * i) < leftPt) || ((6 * i) > rightPt)) {
-                            // $('.stock-bar-container').append('<div class="stock-bar" style="background: #b0b2cd; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
-                            stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #b0b2cd; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
-                        } else {
-                            // $('.stock-bar-container').append('<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />');
-                            stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;left:' + 2 * i + '%;" />';
-                        }
+                var barWidth = 300 / SGX.search.criteriaObject[settings.servername].distributions[0].buckets.length;
+                console.log(barWidth);
+                for (var i = 0; i < SGX.search.criteriaObject[settings.servername].distributions[0].buckets.length; i++) {
+
+
+                    if ((i < leftPt) || (i > rightPt)) {
+                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: ##1e2171; height:' + Math.floor(100 * Math.random()) + '%;width:' + barWidth + 'px;left:' + (i + 1) + 'px;" />';
+                    } else {
+                        stockBarObj.content = stockBarObj.content + '<div class="stock-bar" style="background: #1e2171; height:' + Math.floor(100 * Math.random()) + '%;width:' + barWidth + 'px;left:' + (i + 1) + 'px;" />';
                     }
-                    $(this).find('.stock-bar-container').html(stockBarObj.content);
-                });
+                }
+                $(container).find('.stock-bar-container').html(stockBarObj.content);*/
             },
-            change: function(event, ui) {
-                var leftPt = $(this).find('.ui-slider-handle').first().position().left,
-                    rightPt = $(this).find('.ui-slider-handle').last().position().left;
-                // $(event.target).css({'background':'red'});
-                // console.log(event);
-                // console.log($(ui.handle).index());
-                $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
-                    var elemLeft = $(elem).css("left").replace("px", ""),
-                        dataType = $(this).parents('tr').attr('data-label-type');
+            startup: function() {
 
-                    if ((elemLeft < leftPt) || (elemLeft > rightPt)) {
-                        $(elem).css({
-                            'background': '#b0b2cd'
-                        });
-                    } else {
-                        $(elem).css({
-                            'background': '#1e2171'
-                        });
-                    }
-                    if (ui.value == ui.values[0]) {
-                        // Min
-                        // console.log('min');
-                        if (dataType == 'dollar') {
-                            $(this).parents('td').prev('td').html('S$' + ui.value + 'mm');
-                        } else if (dataType == 'percent') {
-                            $(this).parents('td').prev('td').html(ui.value + '%');
-                        }
-
-                    } else {
-                        // Max
-                        // console.log('max');
-                        // $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
-                        if (dataType == 'dollar') {
-                            $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
-                        } else if (dataType == 'percent') {
-                            $(this).parents('td').next('td').html(ui.value + '%');
-                        }
-                    }
-                });
             },
             slide: function(event, ui) {
                 var leftPt = $(this).find('.ui-slider-handle').first().position().left,
-                    rightPt = $(this).find('.ui-slider-handle').last().position().left;
-                $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
-                    // debug.log($(elem).css("left"));
-                    // debug.log(leftPt);
-                    var elemLeft = $(elem).css("left").replace("px", ""),
-                        dataType = $(this).parents('tr').attr('data-label-type');
+                    rightPt = $(this).find('.ui-slider-handle').last().position().left,
+                    dataType = $(this).parents('tr').data('type');
 
-                    // console.log(dataType);
+                if (ui.value == ui.values[0]) {
+
+                    if (dataType == 'dollar') {
+                        $(this).parents('td').prev('td').html('S$' + ui.value + 'mm');
+                    } else if (dataType == 'percent') {
+                        $(this).parents('td').prev('td').html(ui.value + '%');
+                    }
+                    $(this).parents('tr.criteria').attr({
+                        'data-min': ui.value
+                    });
+                } else {
+                    if (dataType == 'dollar') {
+                        $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
+                    } else if (dataType == 'percent') {
+                        $(this).parents('td').next('td').html(ui.value + '%');
+                    }
+                    $(this).parents('tr.criteria').attr({
+                        'data-max': ui.value
+                    });
+                }
+                console.log('todo');
+                /*
+                $(event.target).parents('.module-stock-slider').find('.stock-bar').filter(function(idx, elem) {
+                    var elemLeft = $(elem).css("left").replace("px", "");
                     if ((elemLeft < leftPt) || (elemLeft > rightPt)) {
-                        // debug.log(idx);
-                        // debug.log(elem);
                         $(elem).css({
                             'background': '#b0b2cd'
                         });
@@ -719,26 +823,8 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                             'background': '#1e2171'
                         });
                     }
-                    if (ui.value == ui.values[0]) {
-                        // Min
-                        // console.log('min');
-                        if (dataType == 'dollar') {
-                            $(this).parents('td').prev('td').html('S$' + ui.value + 'mm');
-                        } else if (dataType == 'percent') {
-                            $(this).parents('td').prev('td').html(ui.value + '%');
-                        }
 
-                    } else {
-                        // Max
-                        // console.log('max');
-                        // $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
-                        if (dataType == 'dollar') {
-                            $(this).parents('td').next('td').html('S$' + ui.value + 'mm');
-                        } else if (dataType == 'percent') {
-                            $(this).parents('td').next('td').html(ui.value + '%');
-                        }
-                    }
-                });
+                });*/
             }
 
         },
@@ -764,7 +850,7 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
             start: function() {
                 debug.info('SGX.tooltip.start');
                 $('.info').on('mouseenter', function() {
-                    console.log('info mouseenter');
+                    // console.log('info mouseenter');
 
                     var $this = $(this);
 
@@ -780,37 +866,12 @@ define(['jquery', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 
                         });
                         // debug.warn(height);
                         $tooltip.fadeIn();
-
-
-
                     } else {
                         SGX.tooltip.close();
                     }
-
-
-                    /*$('body').on('click', function(e) {
-                        SGX.tooltip.close();
-                    });*/
                 });
-
-
-                // debug.info('SGX.dropdowns');
-
-
-
             }
-
         }
-
     };
     SGX.core();
-
-
-
-
-
-
-
-
-
 });
