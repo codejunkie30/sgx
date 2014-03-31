@@ -256,37 +256,37 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                                         x: Date.UTC(2008, 11, 9),
                                         title: 'B',
                                         text: 'EURUSD: Bearish Trend Change on Tap?',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2008, 12, 6),
                                         title: 'C',
                                         text: 'US Dollar: Is This the Long-Awaited Recovery or a Temporary Bounce?',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2012, 9, 6),
                                         title: 'D',
                                         text: 'Forex: U.S. Non-Farm Payrolls Expand 244K, U.S. Dollar Rally Cut Short By Risk Appetite',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 7, 5),
                                         title: 'E',
                                         text: 'EURUSD: Enter Short on Channel Break',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2011, 6, 4),
                                         title: 'F',
                                         text: 'EURUSD: Rate Decision to End Standstill',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2010, 8, 28),
                                         title: 'G',
                                         text: 'EURUSD: Bulls Clear Path to 1.50 Figure',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2009, 7, 25),
                                         title: 'H',
                                         text: 'Euro Contained by Channel Resistance',
-                                        shape: 'url(http://localhost:5000/img/stock-marker.png)'
+                                        shape: 'url(../../img/stock-marker.png)'
                                     }],
                                     onSeries: 'dataseries',
                                     shape: 'circlepin',
