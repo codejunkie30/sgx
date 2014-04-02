@@ -9,14 +9,17 @@
     <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
 </head>
 
-<body>
+<body class="company-profile-page">
     <div class="container_3">
         <div class="row clearfix">
             <div class="grid_3">
                 <img src="img/placeholder-header.jpg">
+                
             </div>
         </div>
     </div>
+
+
     <div class="container_3">
         <div class="row">
             <div class="grid_3">
@@ -120,6 +123,7 @@
         </div>
         <div class="row">
             <div class="grid_2">
+                <a href="#" class="test-company">Test Company</a>
                 <div class="module tabbed-content">
                     <ul class="tab-nav">
                         <li>
@@ -141,39 +145,52 @@
                                 <tbody>
                                     <tr>
                                         <td width="25%">Open Price</td>
-                                        <td width="25%">-</td>
-                                        <td width="25%">Average 3-month Volume</td>
-                                        <td width="25%">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>High/Low</td>
-                                        <td>-</td>
-                                        <td>Shares Outstanding</td>
-                                        <td>-</td>
+                                        <td width="25%" class="openPrice">-</td>
+                                        <td width="25%">Day High/Low</td>
+                                        <td width="25%" class="">-</td>
+                                        <!-- <td width="25%">Average 3-month Volume</td>
+                                        <td width="25%" class="avgVolumeM3">-</td> -->
                                     </tr>
                                     <tr>
                                         <td>Volume</td>
-                                        <td>-</td>
+                                        <td class="volume">-</td>
+                                        <td>Previous Close</td>
+                                        <td class="previousClosePrice">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Previous Close Date</td>
+                                        <td class="previousCloseDate">-</td>
+                                        <td>52 Week High/Low</td>
+                                        <td class="custom">yearHigh / yearLow ?</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>5-Year Beta</td>
+                                        <td class="beta5Yr">-</td>
+                                        <td>Shares Outstanding</td>
+                                        <td class="sharesOutstanding"></td>
+
+                                        <!-- <td>High/Low</td>
+                                        <td class="">-</td>
+                                        -</td> -->
+                                    </tr>
+                                    <tr>
+                                        <td>Shares Sold Short</td>
+                                        <td class=""></td>
+                                        <td>Diluted Normalized EPS</td>
+                                        <td class=""></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Average 3-month Volume</td>
+                                        <td class="avgVolumeM3"></td>
+                                        <td>Total Market Cap</td>
+                                        <td class="marketCap"></td>
+                                    </tr>
+                                    <tr>
                                         <td>Float %</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Open Price</td>
-                                        <td>-</td>
-                                        <td>Average 3-month Volume</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Open Price</td>
-                                        <td>-</td>
-                                        <td>Average 3-month Volume</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Open Price</td>
-                                        <td>-</td>
-                                        <td>Average 3-month Volume</td>
-                                        <td>-</td>
+                                        <td class="">-</td>
                                     </tr>
                                     </tobdy>
                             </table>
@@ -183,16 +200,16 @@
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
-                                        <td>Price/Book Value</td>
-                                        <td>-</td>
-                                        <td>P/E Ratio</td>
-                                        <td>-</td>
+                                        <td width="25%">Price/Book Value</td>
+                                        <td width="25%" class="priceToBookRatio">-</td>
+                                        <td width="25%">P/E Ratio</td>
+                                        <td width="25%" class="peRatio">-</td>
                                     </tr>
                                     <tr>
                                         <td>Dividend Yield</td>
-                                        <td>-</td>
+                                        <td class="dividendYield">-</td>
                                         <td>EV/EBITDA</td>
-                                        <td>-</td>
+                                        <td class="evEbitData">-</td>
                                     </tr>
                                     </tobdy>
                             </table>
@@ -202,34 +219,34 @@
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
-                                        <td>Debt/EBITDA</td>
-                                        <td>-</td>
-                                        <td>Cap Ex</td>
-                                        <td>-</td>
+                                        <td width="25%">Debt/EBITDA</td>
+                                        <td width="25%" class="">-</td>
+                                        <td width="25%">Cap Ex</td>
+                                        <td width="25%" class="capitalExpenditures">-</td>
                                     </tr>
                                     <tr>
                                         <td>Total Debt</td>
-                                        <td>-</td>
+                                        <td class="">-</td>
                                         <td>EBIT</td>
-                                        <td>-</td>
+                                        <td class="ebit">-</td>
                                     </tr>
                                     <tr>
                                         <td>Enterprise Value</td>
-                                        <td>-</td>
+                                        <td class="enterpriseValue">-</td>
                                         <td>Total Revenue</td>
-                                        <td>-</td>
+                                        <td class="totalRevenue">-</td>
                                     </tr>
                                     <tr>
                                         <td>Total Assets</td>
-                                        <td>-</td>
+                                        <td class="totalAssets">-</td>
                                         <td>Net Income</td>
-                                        <td>-</td>
+                                        <td class="netIncome">-</td>
                                     </tr>
                                     <tr>
                                         <td>Cash &amp; ST Investments</td>
-                                        <td>-</td>
+                                        <td class="cashInvestments">-</td>
                                         <td>EBITDA</td>
-                                        <td>-</td>
+                                        <td class="ebitda">-</td>
                                     </tr>
                                     </tobdy>
                             </table>
@@ -239,14 +256,14 @@
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
-                                        <td>Top 5 owners by shares held</td>
-                                        <td>-</td>
-                                        <td>number of shared held</td>
-                                        <td>-</td>
+                                        <td width="25%">Top 5 owners by shares held</td>
+                                        <td width="25%" class="topHolders">-</td>
+                                        <td width="25%">number of shared held</td>
+                                        <td width="25%" class="numberSharesHeld">-</td>
                                     </tr>
                                     <tr>
                                         <td>% of common stock</td>
-                                        <td>-</td>
+                                        <td class="percentCommonStock">-</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
