@@ -97,10 +97,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 });
             },
             getTest: function(url, id) {
+                console.log('getTest');
                 // http://ec2-54-82-16-73.compute-1.amazonaws.com/company
                 $.ajax({
                     url: url,
-                    type: 'GET',
+                    type: 'POST',
                     dataType: 'jsonp',
                     jsonpCallback: 'jsonp',
                     data: {
@@ -312,7 +313,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
 
                 // This is working
-                SGX.companyProfile.getChart("A7S");
+                // SGX.companyProfile.getChart("A7S");
 
                 // SGX.companyProfile.getNews("G07");
 
@@ -328,6 +329,18 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 // SGX.companyProfile.getTest(companyFinancials, "G07");
                 // SGX.companyProfile.getTest(searchScreener, "G07");
                 // SGX.companyProfile.getTest(alphaFactor, "G07");
+
+                // Alpha factor structure
+                /*{
+              "analystExpectations": int,
+                "capitalEfficiency": int,
+                "earningsQuality": int,
+                "historicalGrowth": int,
+                "priceMomentum": int,
+                "size": int,
+                "valuation": int,
+                "volatility": int
+}*/
 
                 /*var id = {
                     "id": "G07"
@@ -457,7 +470,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             SGX.tabs();
             SGX.slider.startup();
             SGX.tooltip.start();
-            SGX.financials.init();
+            if ($('.financials-page').length) {
+                SGX.financials.init();
+            }
 
             // Initial Search Criteria components
             SGX.search.init();
@@ -568,7 +583,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     };
 
 
-                    var count = $('.search-criteria').find('.criteria').length;
+                    /*var count = $('.search-criteria').find('.criteria').length;
                     if (count < 5) {
                         if (checkboxChecked) {
                             SGX.form.checkbox.uncheck($checkbox);
@@ -595,7 +610,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                 content: 'Please remove a search criteria'
                             });
                         }
-                    }
+                    }*/
                 });
             }
         },
@@ -642,7 +657,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             open: function(modalSettings) {
                 var $modal = $('#modal'),
                     content = modalSettings.content,
-                    type = modalSettings.type;
+                    type = modalSettings.type,
+                    target = modalSettings.target;
 
                 $modal.html('<div class="modal-container"><div class="modal-content" /><div class="modal-close"></div><div class="bg" /></div>');
                 var $modalContent = $modal.find('.modal-content');
@@ -658,7 +674,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     $modalContent.append('<div class="button confirm">Confirm</div><div class="button cancel">Cancel</div>').end();
                     // console.log(modalSettings.target);
                     modalSettings.confirm({
-                        target: modalSettings.target
+                        target: target
                     });
 
                 } else if (typeof(type) !== 'undefined') {
@@ -875,6 +891,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
             }, // end it
             addCriteria: function(data, settings) {
+
                 if (typeof(data) == 'undefined') {
                     var data = {
                         "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industry"]
@@ -919,21 +936,37 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                 }
                                 SGX.slider.init($('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.criteria-slider'), sliderSettings);
                             } else if (data.distributions[i].field == 'industry') {
+
                                 // console.log('industry');
-                                // console.log(data.distributions[i].buckets);
+                                // console.log(data.distributions[i]);
+                                console.log(data.distributions[i].buckets);
+                                var industriesArry = [];
+
                                 if (!$('tr.criteria[data-name="' + data.distributions[i].field + '"]').length) {
                                     $('table.search-criteria').find('tbody').append('<tr class="criteria" data-name="' + data.distributions[i].field + '" data-type="' + data.distributions[i].field + '"><td>Industry</td><td colspan="2"><div class="button-dropdown"><div class="trigger">Select Sector &amp; Industry<span class="arrow"></span></div><div class="dropdown"><ul></ul></div></div></td><td class="max"></td></tr>');
-                                    for (var b = data.distributions[i].buckets.length - 1; b >= 0; b--) {
+                                    for (var b = 0; b < data.distributions[i].buckets.length; b++) {
                                         // console.log(data.distributions[i].buckets[b]);
-
+                                        var industryString = {
+                                            key: data.distributions[i].buckets[b].key
+                                        };
+                                        industriesArry.push(industryString);
                                         // console.log(industryRow);
                                         // $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('test');
-                                        $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + data.distributions[i].buckets[b].key + '</li>')
+
                                     };
                                 } else {
                                     console.log('else');
-
                                 }
+
+                                var sortedIndustries = _.sortBy(industriesArry, function(obj) {
+                                    return obj.key;
+                                });
+
+                                console.log(sortedIndustries);
+                                for (var indus = 0; indus < sortedIndustries.length; indus++) {
+                                    $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + sortedIndustries[indus].key + '</li>');
+                                }
+
                                 SGX.dropdowns.init();
 
                             }
@@ -963,8 +996,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                                 var target = options.target;
                                 // target.css({'background': 'red'});
-                                $('button.confirm').on('click', target, function(e) {
-
+                                $('.button.confirm').on('click', target, function(e) {
+                                    console.log(target);
                                     SGX.search.removeCriteria(target);
                                     criteraName = $.trim(criteraName);
                                     // .css({'background':'red'});
@@ -1029,14 +1062,27 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     var resultIndustries = [];
                     $('.secondary-search-dropdown').find('ul').empty().append('<li data-industry="all-industries">All Industries</li>');
                     for (var i = data.companies.length - 1; i >= 0; i--) {
-                        var industry = data.companies[i].industry,
-                            trimIndustry = data.companies[i].industry.replace(/ /g, '').replace(',', '').toLowerCase().toString();
-
-                        if ($.inArray(trimIndustry, resultIndustries) == -1) {
-                            resultIndustries.push(trimIndustry);
-                            $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
+                        var industry = data.companies[i].industry;
+                            
+                            // console.log(industry);
+                        if ($.inArray(industry, resultIndustries) == -1) {
+                            resultIndustries.push(industry);
+                            // $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
                         }
                     };
+                    // console.log(resultIndustries);
+                    var sortedIndustries = _.sortBy(resultIndustries, function(obj) {
+                        return obj[0];
+                    });
+
+                    // console.log(sortedIndustries);
+                    for (var indus = 0; indus < sortedIndustries.length; indus++) {
+
+                        var trimIndustry = sortedIndustries[indus].replace(/ /g, '').replace(',', '').toLowerCase().toString();
+                        $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + sortedIndustries[indus] + '</li>');
+
+                        // $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + sortedIndustries[indus].key + '</li>');
+                    }
                     SGX.search.industryDropdown.click();
                 },
                 click: function() {
