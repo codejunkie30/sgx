@@ -263,19 +263,9 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                                         text: 'US Dollar: Is This the Long-Awaited Recovery or a Temporary Bounce?',
                                         shape: 'url(../../img/stock-marker.png)'
                                     }, {
-                                        x: Date.UTC(2012, 9, 6),
-                                        title: 'D',
-                                        text: 'Forex: U.S. Non-Farm Payrolls Expand 244K, U.S. Dollar Rally Cut Short By Risk Appetite',
-                                        shape: 'url(../../img/stock-marker.png)'
-                                    }, {
-                                        x: Date.UTC(2011, 7, 5),
-                                        title: 'E',
-                                        text: 'EURUSD: Enter Short on Channel Break',
-                                        shape: 'url(../../img/stock-marker.png)'
-                                    }, {
-                                        x: Date.UTC(2011, 6, 4),
-                                        title: 'F',
-                                        text: 'EURUSD: Rate Decision to End Standstill',
+                                        x: Date.UTC(2009, 7, 25),
+                                        title: 'H',
+                                        text: 'Euro Contained by Channel Resistance',
                                         shape: 'url(../../img/stock-marker.png)'
                                     }, {
                                         x: Date.UTC(2010, 8, 28),
@@ -283,9 +273,19 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
                                         text: 'EURUSD: Bulls Clear Path to 1.50 Figure',
                                         shape: 'url(../../img/stock-marker.png)'
                                     }, {
-                                        x: Date.UTC(2009, 7, 25),
-                                        title: 'H',
-                                        text: 'Euro Contained by Channel Resistance',
+                                        x: Date.UTC(2011, 6, 4),
+                                        title: 'F',
+                                        text: 'EURUSD: Rate Decision to End Standstill',
+                                        shape: 'url(../../img/stock-marker.png)'
+                                    }, {
+                                        x: Date.UTC(2011, 7, 5),
+                                        title: 'E',
+                                        text: 'EURUSD: Enter Short on Channel Break',
+                                        shape: 'url(../../img/stock-marker.png)'
+                                    }, {
+                                        x: Date.UTC(2012, 9, 6),
+                                        title: 'D',
+                                        text: 'Forex: U.S. Non-Farm Payrolls Expand 244K, U.S. Dollar Rally Cut Short By Risk Appetite',
                                         shape: 'url(../../img/stock-marker.png)'
                                     }],
                                     onSeries: 'dataseries',
@@ -418,7 +418,7 @@ define(['jquery', 'highstock', 'debug'], function($, StockChart) {
         }
     };
     _.extend(SGX, stocks);
-    SGX.stocks.init();
-    
-    debug.info(SGX);
+   // / SGX.stocks.init();
+
+
 });

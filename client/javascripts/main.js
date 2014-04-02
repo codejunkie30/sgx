@@ -50,7 +50,7 @@
                 "exports": "_"
             }
         }
-    }, ['jquery', 'app/SGX-core', 'app/SGX-stocks','app/SGX-dev'], function($, SGX) {
+    }, ['app/SGX-core', 'app/SGX-stocks','app/SGX-dev'], function($, SGX, _) {
 
     });
 

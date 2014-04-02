@@ -3,7 +3,7 @@ define(['jquery', 'underscore', 'debug'], function($, _, debug, jQuery) {
     var dev = {
         dev: {
             init: function() {
-                debug.log('SGX.Dev - jQuery v' + $.fn.jquery);
+                // debug.log('SGX.Dev - jQuery v' + $.fn.jquery);
                 // This is for reloading the page on the fly when a build file changes without needing a refresh.
                 function includeJS(incFile) {
                     $('head').prepend('<script type="text/javascript" src="' + incFile + '"></scr' + 'ipt>');

@@ -606,6 +606,10 @@ h1.title {
 .stock-events li a {
   font: bold 12px/12px Arial, Helvetica, sans-serif;
   color: #1e2171;
+  text-decoration: none;
+}
+.stock-events li a:hover {
+  text-decoration: underline;
 }
 .progress-estimate {
   padding: 0 0 10px;
@@ -775,8 +779,8 @@ h1.title {
   background: #e9eaeb;
 }
 .tabbed-content .panel tr td {
-  text-indent: 10px;
-  line-height: 34px;
+  padding: 10px;
+  line-height: 14px;
   font-size: 12px;
 }
 .tabbed-content .panel tr td:nth-child(2n+1) {
@@ -1594,6 +1598,48 @@ td .info {
   width: 100%;
   display: none;
 }
+#modal .button {
+  color: #838383;
+  display: inline-block;
+  height: 18px;
+  line-height: 22px;
+  padding: 0 6px;
+  border: 1px solid #a6a6a6;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#cfcfcf), to(#e1e1e1));
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#cfcfcf), to(#e1e1e1));
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#cfcfcf), to(#e1e1e1));
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#cfcfcf), to(#e1e1e1));
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#cfcfcf), to(#e1e1e1));
+  background-image: -webkit--webkit-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -webkit--moz-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -webkit--o-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -webkit--ms-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -webkit-linear-gradient(to top, #cfcfcf, #e1e1e1);
+  background-image: -moz--webkit-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -moz--moz-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -moz--o-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -moz--ms-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -moz-linear-gradient(to top, #cfcfcf, #e1e1e1);
+  background-image: -o--webkit-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -o--moz-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -o--o-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -o--ms-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -o-linear-gradient(to top, #cfcfcf, #e1e1e1);
+  background-image: -webkit-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -moz-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -o-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: -ms-linear-gradient(bottom, #cfcfcf, #e1e1e1);
+  background-image: linear-gradient(to top, #cfcfcf, #e1e1e1);
+  -webkit-box-shadow: 0 1px 1px #f0f0f0 inset;
+  box-shadow: 0 1px 1px #f0f0f0 inset;
+}
 #modal .modal-content {
   background: #fff;
   -webkit-border-radius: 10px;
@@ -1606,6 +1652,14 @@ td .info {
 #modal .modal-content h4 {
   margin: 0;
 }
+#modal .modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: url("../img/modal-close.jpg") no-repeat;
+  height: 18px;
+  width: 18px;
+}
 .modal-container {
   top: 30%;
   position: fixed;
@@ -1613,7 +1667,7 @@ td .info {
   margin-left: -278px;
   width: 550px;
   background: rgba(0,0,0,0.17);
-  border: 7px solid transparent;
+  border: 6px solid transparent;
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
