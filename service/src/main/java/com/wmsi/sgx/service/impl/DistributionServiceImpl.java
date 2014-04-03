@@ -75,8 +75,6 @@ public class DistributionServiceImpl implements DistributionService{
 		return intervals;
 	}
 	
-	private static final Integer MAX_BUCKETS = 100;
-	
 	private Integer calculateInterval(StatAggregation stat){
 		double total = stat.getMax() - stat.getMin();
 		double sqrt = Math.sqrt(stat.getCount());

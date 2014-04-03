@@ -2,8 +2,8 @@ package com.wmsi.sgx.service.search;
 
 import java.util.List;
 
-public interface SearchService{
+public interface SearchService<S>{
 
-	<T> List<T> search(String query, Class<T> clz) throws SearchServiceException;	
 	<T> T getById(String id, Class<T> clz) throws SearchServiceException;
+	<T> List<T> search(S q, Class<T> clz) throws SearchServiceException;	
 }

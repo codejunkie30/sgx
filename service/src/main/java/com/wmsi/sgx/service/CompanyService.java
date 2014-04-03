@@ -8,7 +8,6 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
-import com.wmsi.sgx.model.search.input.IdSearch;
 
 public interface CompanyService{
 
@@ -22,10 +21,10 @@ public interface CompanyService{
 
 	List<CompanyInfo> loadRelatedCompanies(String id) throws CompanyServiceException;
 
-	List<HistoricalValue> loadVolumeHistory(IdSearch search) throws CompanyServiceException;
+	List<HistoricalValue> loadVolumeHistory(String search) throws CompanyServiceException;
 
-	List<HistoricalValue> loadPriceHistory(IdSearch search) throws CompanyServiceException;
+	List<HistoricalValue> loadPriceHistory(String search) throws CompanyServiceException;
 
-	List<CompanyFinancial> loadFinancials(IdSearch id) throws CompanyServiceException;
+	List<CompanyFinancial> loadFinancials(String id) throws CompanyServiceException;
 
 }

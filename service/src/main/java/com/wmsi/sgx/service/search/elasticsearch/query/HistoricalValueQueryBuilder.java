@@ -4,16 +4,14 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.wmsi.sgx.model.search.input.IdSearch;
-
-public class HistoricalValueQueryBuilder extends AbstractQueryBuilder<IdSearch>{
+public class HistoricalValueQueryBuilder extends AbstractQueryBuilder<String>{
 
 	@Override
-	public SearchSourceBuilder getBuilder(IdSearch id) {
+	public SearchSourceBuilder getBuilder(String id) {
 		
 		return 	new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(
-				FilterBuilders.termFilter("tickerCode",  id.getId())))
+				FilterBuilders.termFilter("tickerCode",  id)))
 				.fetchSource(
 					new String[]{"date", "value"}, 
 					null)
