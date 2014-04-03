@@ -16,6 +16,45 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             });
         },
         companyProfile: {
+            getAlphaFactor: function(value, type) {
+                if ((typeof(value) != 'undefined') && (typeof(type) != 'undefined')) {
+                    var requestValue = 0;
+                    if (value == 'per-80') {
+                        requestValue = 4;
+                    } else if (value == 'per-60') {
+                        requestValue = 3;
+                    } else if (value == 'per-40') {
+                        requestValue = 2;
+                    } else if (value == 'per-20') {
+                        requestValue = 1;
+                    }
+                    console.log(value);
+
+                    var request = {};
+                    request[type] = requestValue;
+                    console.log(request);
+
+                    $.ajax({
+                        url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/search/alphaFactors',
+                        type: 'GET',
+                        dataType: 'jsonp',
+                        jsonpCallback: 'jsonp',
+                        data: {
+                            'json': JSON.stringify(request)
+                        },
+                        contentType: 'application/json; charset=UTF-8',
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        error: function(data, status, er) {
+                            console.log(data);
+                        }
+                    });
+                } else {
+                    // Value and type are not defined
+                }
+
+            },
             getChart: function(id) {
                 console.log(id);
                 // SGX.companyProfile.getHolders('G07');
@@ -92,7 +131,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         SGX.stocks.areaGraph(sortedPriceArry);
                         SGX.stocks.volGraph(sortedVolArry);
                         // SGX.stocks.areaGraph(newArry);
-                        // SGX.companyProfile.getHolders(id);
+                        SGX.companyProfile.getHolders(id);
                     }
                 });
             },
@@ -123,10 +162,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                             console.info(data.status + url + '\n\n');
                         }
                     },
-                    complete: function(data) {
-                        console.log('complete');
-                        // console.log(data);
-                    },
                     success: function(data) {
                         // console.log('getTest w/ ID: A7S');
                         // console.log(data);
@@ -137,6 +172,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             getHolders: function(id) {
                 console.log(id);
                 $.ajax({
+                    async: false,
                     url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/holders',
                     type: 'GET',
                     dataType: 'jsonp',
@@ -200,7 +236,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                         //////////////////
 
-
+                        console.log(typeof(id));
                         SGX.companyProfile.getInfo(id);
 
                     }
@@ -208,23 +244,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             },
             getInfo: function(id) {
 
-                // console.log(id);
-                function getInfoSuccess(data, id) {
+                console.log('getInfo ' + id);
 
-                    $.each(data.companyInfo, function(index, value) {
-                        // console.log(index);
-                        if ($('.' + index).length) {
-                            $('.' + index).html(value);
-                        } else {
-                            // console.log('could not find ' + index);
-                        }
-
-                    });
-                    console.log(id);
-                    SGX.companyProfile.getNews(id);
-                    // $('.open-price')
-                };
                 $.ajax({
+                    async: false,
                     url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/info',
                     type: 'GET',
                     dataType: 'jsonp',
@@ -239,26 +262,28 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         console.error('getInfo error');
                     },
                     success: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         // console.log(id);
                         $.each(data.companyInfo, function(index, value) {
                             // console.log(index);
                             if ($('.' + index).length) {
                                 $('.' + index).html(value);
                             } else {
-                                // console.log('could not find ' + index);
+                                console.log('could not find ' + index);
                             }
 
                         });
                         console.log(id);
-                        // SGX.companyProfile.getHolders(id);
                         SGX.companyProfile.getNews(id);
                     }
                 });
+
+
             },
             getNews: function(id) {
                 // console.log(id);
                 $.ajax({
+                    async: false,
                     url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/keyDevs',
                     type: 'GET',
                     dataType: 'jsonp',
@@ -313,22 +338,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
 
                 // This is working
-                // SGX.companyProfile.getChart("A7S");
+                SGX.companyProfile.getChart("A7S");
+
 
                 // SGX.companyProfile.getNews("G07");
-
-                // SGX.companyProfile.getHolders("A7S");
-
-                // SGX.companyProfile.getTest(companyInfo, "G07");
-
-                // SGX.companyProfile.getTest(companyHolders, "G07");
-                // SGX.companyProfile.getTest(keyDevelopments, "G07");
-                // SGX.companyProfile.getTest(company, "G07");
-                // SGX.companyProfile.getTest(priceVolume, "G07");
-
-                // SGX.companyProfile.getTest(companyFinancials, "G07");
-                // SGX.companyProfile.getTest(searchScreener, "G07");
-                // SGX.companyProfile.getTest(alphaFactor, "G07");
+                // SGX.companyProfile.getAlphaFactor();
 
                 // Alpha factor structure
                 /*{
@@ -485,6 +499,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             if ($('.company-profile-page').length) {
                 SGX.companyProfile.startup();
             }
+
+            $('.alpha-factors').find('.slider').on('click', function() {
+                var value = $(this).find('.bar-progress').attr("class"),
+                    value = value.replace("bar-progress ", ""),
+                    type = $(this).data('factor-type');
+
+                SGX.companyProfile.getAlphaFactor(value, type);
+            });
         },
         checkboxes: function() {
             $('.checkbox').on('click', function() {
@@ -760,7 +782,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             resultsDOM: '',
             init: function() {
                 var data = {
-                    "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industry"]
+                    "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industryGroup"]
                 };
                 // Default load
                 if ($('.search-criteria').length) {
@@ -832,13 +854,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                         $('table.search-criteria').find('tr.criteria').each(function(idx) {
                             console.log(idx);
-                            if ($(this).data('name') != 'industry') {
+                            if ($(this).data('name') != 'industryGroup') {
                                 data.criteria.push({
                                     "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-name'),
                                     "from": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-min'),
                                     "to": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-max')
                                 });
-                            } else if ($(this).data('name') == 'industry') {
+                            } else if ($(this).data('name') == 'industryGroup') {
                                 console.log('todo');
                                 if ($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').length) {
                                     data.criteria.push({
@@ -894,7 +916,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                 if (typeof(data) == 'undefined') {
                     var data = {
-                        "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industry"]
+                        "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industryGroup"]
                     };
                 }
                 $.ajax({
@@ -907,7 +929,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     },
                     contentType: 'application/json; charset=UTF-8',
                     success: function(data) {
-                        // console.log(data.distributions);
+                        console.log(data.distributions);
                         for (var i = data.distributions.length - 1; i >= 0; i--) {
                             // console.log(data.distributions[i]);
                             var $relCheckbox = $('.editSearchB').find('.checkbox[data-name="' + data.distributions[i].field + '"]'),
@@ -1063,8 +1085,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     $('.secondary-search-dropdown').find('ul').empty().append('<li data-industry="all-industries">All Industries</li>');
                     for (var i = data.companies.length - 1; i >= 0; i--) {
                         var industry = data.companies[i].industry;
-                            
-                            // console.log(industry);
+
+                        // console.log(industry);
                         if ($.inArray(industry, resultIndustries) == -1) {
                             resultIndustries.push(industry);
                             // $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
@@ -1203,6 +1225,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         },
         stocks: {
             areaGraph: function(dataNew) {
+                console.log('areaGraph');
                 if ($('#area-chart').length) {
                     // debug.log('exists');
                     $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
