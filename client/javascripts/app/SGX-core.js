@@ -127,7 +127,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         console.log(volArry);
 
 
-                        // SGX.stocks.init();
+
                         SGX.stocks.areaGraph(sortedPriceArry);
                         SGX.stocks.volGraph(sortedVolArry);
                         // SGX.stocks.areaGraph(newArry);
@@ -494,7 +494,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             // Initialize form components
             SGX.form.init();
 
-            SGX.stocks.init();
+            // SGX.stocks.init();
             // Get Company Profile Info
             if ($('.company-profile-page').length) {
                 SGX.companyProfile.startup();
@@ -1228,143 +1228,141 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 console.log('areaGraph');
                 if ($('#area-chart').length) {
                     // debug.log('exists');
-                    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
-                        // debug.log('success');
-                        if (typeof(dataNew) != 'undefined') {
-                            data = dataNew;
-                        }
+                    if (typeof(dataNew) != 'undefined') {
+                        data = dataNew;
+                    }
 
-                        $('#area-chart').highcharts('StockChart', {
-                            colors: [
-                                '#363473',
-                                '#363473',
-                                '#8bbc21',
-                                '#910000',
-                                '#1aadce',
-                                '#492970',
-                                '#f28f43',
-                                '#77a1e5',
-                                '#c42525',
-                                '#a6c96a'
-                            ],
-                            chart: {
-                                resetZoomButton: {
-                                    relativeTo: 'chart'
-                                }
-                            },
-                            xAxis: {
-                                gridLineWidth: 0,
-                                range: 6 * 30 * 24 * 3600 * 1000
-                            },
+                    $('#area-chart').highcharts('StockChart', {
+                        colors: [
+                            '#363473',
+                            '#363473',
+                            '#8bbc21',
+                            '#910000',
+                            '#1aadce',
+                            '#492970',
+                            '#f28f43',
+                            '#77a1e5',
+                            '#c42525',
+                            '#a6c96a'
+                        ],
+                        chart: {
+                            resetZoomButton: {
+                                relativeTo: 'chart'
+                            }
+                        },
+                        xAxis: {
+                            gridLineWidth: 0,
+                            range: 6 * 30 * 24 * 3600 * 1000
+                        },
 
-                            rangeSelector: {
-                                buttonSpacing: 2,
-                                buttonTheme: { // styles for the buttons
-                                    fill: '#fff',
-                                    stroke: '#babbbd',
-                                    'stroke-width': 1,
-                                    style: {
-                                        color: '#1e2171',
-                                        fontWeight: 'bold',
+                        rangeSelector: {
+                            buttonSpacing: 2,
+                            buttonTheme: { // styles for the buttons
+                                fill: '#fff',
+                                stroke: '#babbbd',
+                                'stroke-width': 1,
+                                style: {
+                                    color: '#1e2171',
+                                    fontWeight: 'bold',
+                                },
+                                states: {
+                                    hover: {
+                                        fill: '#fff',
+                                        style: {
+                                            color: '#1e2171'
+                                        }
                                     },
-                                    states: {
-                                        hover: {
-                                            fill: '#fff',
-                                            style: {
-                                                color: '#1e2171'
-                                            }
-                                        },
-                                        select: {
-                                            fill: '#fff',
-                                            style: {
-                                                color: '#1e2171'
-                                            }
+                                    select: {
+                                        fill: '#fff',
+                                        style: {
+                                            color: '#1e2171'
                                         }
                                     }
-                                },
-                                buttons: [{
-                                    type: 'day',
-                                    count: 1,
-                                    text: '1d'
-                                }, {
-                                    type: 'day',
-                                    count: 5,
-                                    text: '5d'
-                                }, {
-                                    type: 'month',
-                                    count: 1,
-                                    text: '1m'
-                                }, {
-                                    type: 'month',
-                                    count: 3,
-                                    text: '3m'
-                                }, {
-                                    type: 'month',
-                                    count: 6,
-                                    text: '6m'
-                                }, {
-                                    type: 'year',
-                                    count: 1,
-                                    text: '1y'
-                                }, {
-                                    type: 'year',
-                                    count: 3,
-                                    text: '3y'
-                                }, {
-                                    type: 'year',
-                                    count: 5,
-                                    text: '5y'
-                                }, {
-                                    type: 'all',
-                                    text: 'All'
-                                }],
-                                inputBoxBorderColor: 'transparent',
-                                inputBoxWidth: 100,
-                                inputBoxHeight: 18,
-                                inputStyle: {
-                                    color: 'transparent',
-                                    fontWeight: 'bold'
-                                },
-                                labelStyle: {
-                                    color: 'transparent',
-                                    fontWeight: 'bold'
-                                },
-                                selected: 8
-                            },
-
-                            title: {
-                                text: 'Price',
-                                style: {
-                                    color: '#2e2e2e',
-                                    'font-size': '16px'
                                 }
                             },
+                            buttons: [{
+                                type: 'day',
+                                count: 1,
+                                text: '1d'
+                            }, {
+                                type: 'day',
+                                count: 5,
+                                text: '5d'
+                            }, {
+                                type: 'month',
+                                count: 1,
+                                text: '1m'
+                            }, {
+                                type: 'month',
+                                count: 3,
+                                text: '3m'
+                            }, {
+                                type: 'month',
+                                count: 6,
+                                text: '6m'
+                            }, {
+                                type: 'year',
+                                count: 1,
+                                text: '1y'
+                            }, {
+                                type: 'year',
+                                count: 3,
+                                text: '3y'
+                            }, {
+                                type: 'year',
+                                count: 5,
+                                text: '5y'
+                            }, {
+                                type: 'all',
+                                text: 'All'
+                            }],
+                            inputBoxBorderColor: 'transparent',
+                            inputBoxWidth: 100,
+                            inputBoxHeight: 18,
+                            inputStyle: {
+                                color: 'transparent',
+                                fontWeight: 'bold'
+                            },
+                            labelStyle: {
+                                color: 'transparent',
+                                fontWeight: 'bold'
+                            },
+                            selected: 8
+                        },
 
-                            tooltip: {
-                                enabled: false,
-                                style: {
-                                    width: '200px'
-                                },
-                                valueDecimals: 4
+                        title: {
+                            text: 'Price',
+                            style: {
+                                color: '#2e2e2e',
+                                'font-size': '16px'
+                            }
+                        },
+
+                        tooltip: {
+                            enabled: false,
+                            style: {
+                                width: '200px'
                             },
-                            navigator: {
-                                enabled: false
+                            valueDecimals: 4
+                        },
+                        navigator: {
+                            enabled: false
+                        },
+                        scrollbar: {
+                            enabled: false
+                        },
+                        yAxis: {
+                            gridLineWidth: 2,
+                            range: 90
+                        },
+                        series: [{
+                                name: 'Price',
+                                data: data,
+                                id: 'dataseries',
+                                type: 'area'
                             },
-                            scrollbar: {
-                                enabled: false
-                            },
-                            yAxis: {
-                                gridLineWidth: 2,
-                                range: 90
-                            },
-                            series: [{
-                                    name: 'Price',
-                                    data: data,
-                                    id: 'dataseries',
-                                    type: 'area'
-                                },
-                                // the event marker flags
-                                /*{
+                            // the event marker flags
+                            /*{
                                     type: 'flags',
                                     data: [{
                                         x: Date.UTC(2008, 11, 9),
@@ -1410,9 +1408,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                         color: 'black',
                                     },
                                 }*/
-                            ]
-                        });
-
+                        ]
                     });
 
 
@@ -1424,9 +1420,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         data = dataNew;
                     }
 
-                    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function(data) {
-                        // debug.log('success');
-                        $('#bar-chart').highcharts('StockChart', {
+                    $('#bar-chart').highcharts('StockChart', {
                             colors: [
                                 '#b5cf34',
                                 '#363473',
@@ -1531,8 +1525,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                 }*/
                             ]
                         });
-
-                    });
                 }
             },
             init: function() {
