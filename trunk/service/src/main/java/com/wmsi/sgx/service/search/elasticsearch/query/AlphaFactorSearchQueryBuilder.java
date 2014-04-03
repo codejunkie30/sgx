@@ -37,6 +37,4 @@ public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder<AlphaFac
 		}
 		return boolFilter;
 	}
-
-
 }

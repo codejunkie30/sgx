@@ -62,7 +62,7 @@ public class CompanyController{
 	
 	@RequestMapping(value="company/financials")
 	public Financials getFinancials(@RequestBody IdSearch search) throws CompanyServiceException {		
-		List<CompanyFinancial> hits = companyService.loadFinancials(search);
+		List<CompanyFinancial> hits = companyService.loadFinancials(search.getId());
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;
@@ -71,8 +71,8 @@ public class CompanyController{
 	@RequestMapping("company/priceHistory")
 	public PriceHistory getHistory(@RequestBody IdSearch search) throws CompanyServiceException {
 		PriceHistory ret = new PriceHistory();
-		ret.setPrice(companyService.loadPriceHistory(search));
-		ret.setVolume(companyService.loadVolumeHistory(search));
+		ret.setPrice(companyService.loadPriceHistory(search.getId()));
+		ret.setVolume(companyService.loadVolumeHistory(search.getId()));
 		return ret;
 	}
 
