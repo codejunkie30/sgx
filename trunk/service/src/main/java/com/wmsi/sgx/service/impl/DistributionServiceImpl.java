@@ -9,19 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wmsi.sgx.model.distribution.Distributions;
-import com.wmsi.sgx.model.search.HistogramQuery;
-import com.wmsi.sgx.model.search.Query;
-import com.wmsi.sgx.model.search.StatsQuery;
-import com.wmsi.sgx.model.search.TermsQuery;
+import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.elasticsearch.Aggregation;
@@ -36,27 +33,23 @@ import com.wmsi.sgx.service.search.elasticsearch.StatAggregation;
 @Service
 public class DistributionServiceImpl implements DistributionService{
 
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	public void setMapper(ObjectMapper m){objectMapper = m;}
-	
 	@Autowired
 	private ElasticSearchService elasticSearchService;
 	
 	// TODO Externalize
 	@Value("${elasticsearch.index.name}")
 	private String indexName;
-
 	
 	@Autowired 
 	private ModelMapper mapper;
 
+	private static final int SCALE = 1000;
+	
 	@Override
 	public Distributions getAggregations(List<String> fields) throws ServiceException {
 		
 		Map<String, Integer> intervals = getHistogramIntervals(fields);
-		Aggregations aggs = getAggregations(fields, intervals, 1000);
+		Aggregations aggs = getAggregations(fields, intervals);
 		return (Distributions) mapper.map(aggs, Distributions.class);
 	}
 	
@@ -82,18 +75,24 @@ public class DistributionServiceImpl implements DistributionService{
 		return intervals;
 	}
 	
+	private static final Integer MAX_BUCKETS = 100;
+	
 	private Integer calculateInterval(StatAggregation stat){
 		double total = stat.getMax() - stat.getMin();
 		double sqrt = Math.sqrt(stat.getCount());
-		return new BigDecimal(total / sqrt).setScale(0, RoundingMode.HALF_EVEN).intValue();		
+		int interval = new BigDecimal(total / sqrt).setScale(0, RoundingMode.HALF_EVEN).intValue();	
+		
+		interval = Math.round((interval + 5)/ 10) * 10;
+		
+		return interval * SCALE;		
 	}
-	
 
-	private Aggregations getAggregations(List<String> fields, Map<String, Integer> invervals, int scale) throws ServiceException {
+	private Aggregations getAggregations(List<String> fields, Map<String, Integer> invervals) throws ServiceException {
 		try{
-			String query = buildQuery(fields, invervals, scale);
+			String query = buildQuery(fields, invervals);
+			System.out.println(query);
 			Aggregations aggregations = loadAggregations(query);
-			return normalizeAggregations(aggregations, scale);
+			return normalizeAggregations(aggregations);
 		}
 		catch(IOException e){
 			throw new ServiceException("Error creating query for stats aggregation", e);
@@ -106,7 +105,7 @@ public class DistributionServiceImpl implements DistributionService{
 	 * histogram values. This method divides the resulting bucket keys by the given scale
 	 * so the results can represent the true values. 
 	 */
-	private Aggregations normalizeAggregations(Aggregations aggregations, int scale){
+	private Aggregations normalizeAggregations(Aggregations aggregations){
 
 		for(Aggregation agg : aggregations.getAggregations()){
 			
@@ -120,7 +119,7 @@ public class DistributionServiceImpl implements DistributionService{
 						Long l = Long.valueOf(b.getKey().toString());
 					
 						if(l > 0){
-							b.setKey( l / scale);
+							b.setKey( l / SCALE);
 						}
 					}
 				}
@@ -128,7 +127,6 @@ public class DistributionServiceImpl implements DistributionService{
 		}
 		
 		return aggregations;
-
 	}
 	
 	private Aggregations getStatsAggregations(List<String> fields) throws ServiceException {
@@ -143,7 +141,7 @@ public class DistributionServiceImpl implements DistributionService{
 
 	public Aggregations loadAggregations(String query) throws ServiceException {
 		
-		try{
+		try{			
 			ESResponse stats = elasticSearchService.search(indexName, query, new HashMap<String, Object>());
 			return stats.getAggregations();
 		}
@@ -152,65 +150,57 @@ public class DistributionServiceImpl implements DistributionService{
 		}
 	}
 
+	private SearchSourceBuilder getBaseQuery(){
+		SearchSourceBuilder query = new SearchSourceBuilder()
+		.query(
+			QueryBuilders.constantScoreQuery(
+				FilterBuilders.matchAllFilter())
+			);
+	
+		query.fetchSource(false);
+		query.size(2000);
+		return query;
+	}
 	
 	// TODO Externalize
 	private String getStatsQuery(List<String> fields) throws IOException {
 
-		List<Query> criteria = new ArrayList<Query>();
+		SearchSourceBuilder query = getBaseQuery();
 		
 		for(String field : fields){
-			StatsQuery query = new StatsQuery();
-			query.setField(field);
-			criteria.add(query);				
+			query.aggregation(
+				AggregationBuilders.stats(field)
+				.field(field)				
+			);
 		}
 
-		return buildQuery(criteria);
+		return query.toString();
 	}
-	
-	private String buildQuery(List<Query> criteria) throws IOException{
 
-		Resource template = new ClassPathResource("META-INF/query/elasticsearch/template/constantScoreAggregators.json");
+	private String buildQuery(List<String> fields, Map<String, Integer> ranges) throws IOException{
+		SearchSourceBuilder query = getBaseQuery();
 		
-		ObjectNode oj = (ObjectNode) objectMapper.readTree(template.getFile());
-		ObjectNode aggs = (ObjectNode) oj.get("aggregations");
-
-		for(Query query: criteria){
-			aggs.putPOJO(query.getField(), query);
-		}
-
-		return objectMapper.writeValueAsString(oj);
-
-	}
-	
-	private String buildQuery(List<String> fields, Map<String, Integer> ranges, int scale) throws IOException{
-		List<Query> criteria = new ArrayList<Query>();
-
 		for(String field : fields){
-			Query q = null;
-			
-			
 			// TODO Externalize
 			if(field.equals("industry") || field.equals("industryGroup")){
-				TermsQuery query = new TermsQuery();
-				query.setField(field);
-				q = query;
+				query.aggregation(
+					AggregationBuilders.terms(field)
+					.field(field)
+					.size(2000)
+				);
 			}
 			else{
-				HistogramQuery query = new HistogramQuery();
-				query.setField(field);
+				long interval = ranges.get(field);
 				
-				int interval = ranges.get(field);	
-		
-				query.setInterval(interval);
-				query.setScale(scale);
-				q = query;
+				query.aggregation(
+						AggregationBuilders.histogram(field)
+						.field(field)
+						.interval(interval)
+						.script("_value * ".concat(String.valueOf(SCALE)))						
+					);
 			}
-				
-			criteria.add(q);
 		}
 			
-		return buildQuery(criteria);
+		return query.toString();
 	}
-	
-
 }

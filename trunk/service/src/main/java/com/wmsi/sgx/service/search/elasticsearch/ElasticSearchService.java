@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.util.TemplateUtil;
@@ -27,8 +27,14 @@ public class ElasticSearchService{
 	}
 
 	public <T> List<T> search(String index, String type, String query, Class<T> clz) throws ElasticSearchException{
-		return search(index, type, query, new HashMap<String,Object>(), clz);
+		return search(index, type, query, new HashMap<String,Object>(), clz);		
 	}
+	
+	/*
+	public <T> List<T> search(SearchSourceBuilder queryBuilder, Class<T> clz) throws ElasticSearchException{
+		ESResponseWrapper res = esExecutor.nativeSearch(queryBuilder);
+		return res.getHits(clz);
+	}*/
 	
 	public <T> List<T> search(String index, String type, String query, Map<String, Object> parms, Class<T> clz) throws ElasticSearchException{
 		ESQuery esQuery = getQuery(index, type, query, parms);

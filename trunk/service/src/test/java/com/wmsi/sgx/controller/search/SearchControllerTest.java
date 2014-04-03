@@ -5,9 +5,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.runner.RunWith;
@@ -16,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -29,26 +25,25 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wmsi.sgx.model.search.CompanySearchRequest;
 import com.wmsi.sgx.model.search.CompanySearchRequestBuilder;
-import com.wmsi.sgx.model.search.Criteria;
 import com.wmsi.sgx.model.search.CriteriaBuilder;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchCompanyBuilder;
 import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchRequestBuilder;
-import com.wmsi.sgx.service.search.Search;
-import com.wmsi.sgx.service.search.SearchService;
+import com.wmsi.sgx.model.search.SearchResultsBuilder;
+import com.wmsi.sgx.service.impl.CompanySearchServiceImpl;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.test.TestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class)
-@SuppressWarnings(value={"unchecked", "rawtypes"})
 public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
-	private SearchService companySearchService;
+	private CompanySearchServiceImpl companySearchService;
 
 	@Test	
 	public void testGetNotAllowed() throws Exception{		
@@ -78,8 +73,13 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 					.build())
 				.build();
 		
-		when(companySearchService.search(any(String.class), any(Class.class)))
-			.thenReturn(Arrays.asList(company));
+		when(companySearchService
+				.search(
+						any(SearchRequest.class)))
+				.thenReturn(
+						SearchResultsBuilder.searchResults()
+						.withAddedCompany(company)
+						.build());
 
 		mockMvc.perform(post("/search")
 				.content(TestUtils.objectToJson(req))
@@ -91,7 +91,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
 			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
 		
-		 verify(companySearchService, times(1)).search(any(String.class), any(Class.class));
+		 verify(companySearchService, times(1)).search(any(SearchRequest.class));
 	     verifyNoMoreInteractions(companySearchService);
 	}
 	
@@ -108,8 +108,12 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 			.withDividendYield(5.7851D)
 			.build();
 		
-		when(companySearchService.search(any(Search.class), any(Map.class)))
-			.thenReturn(Arrays.asList(company));
+		when(companySearchService.searchCompaniesByName(
+					any(CompanySearchRequest.class)))
+				.thenReturn(
+					SearchResultsBuilder.searchResults()
+					.withAddedCompany(company)
+					.build());
 		
 		mockMvc.perform(post("/search/name")
 				.content(TestUtils.objectToJson(request))
@@ -121,7 +125,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
 			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
 		
-		 verify(companySearchService, times(1)).search(any(Search.class), any(Map.class));
+		 verify(companySearchService, times(1)).searchCompaniesByName(any(CompanySearchRequest.class));
 	     verifyNoMoreInteractions(companySearchService);
 	}
 	
@@ -149,14 +153,15 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 		SearchController searchController;
 
 		@Bean
-		public SearchService companySearchService(){
-			return mock(SearchService.class);
+		public CompanySearchServiceImpl companySearchService(){
+			return mock(CompanySearchServiceImpl.class);
 		}
 
+		/*
 		@Bean		
-		public Search companySearch(){
-			return mock(Search.class);
-		}
+		public ElasticSearchService elasticSearchservice(){
+			return mock(ElasticSearchService.class);
+		}*/
 
 		@Bean
 		public MockMvc mockMvc(){			

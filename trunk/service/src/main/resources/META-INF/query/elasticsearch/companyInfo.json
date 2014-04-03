@@ -1,8 +1,0 @@
-{
-  "query": {
-    "ids": {
-      "type": "company",
-      "values": ["$id$"]
-    }
-  }
-}

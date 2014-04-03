@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 
 public class SearchCompany{
 
+	private Double avgBrokerReq;
 	private Double beta5Yr;
 	private String companyName;
 	private Double dividendYield;
@@ -26,6 +27,14 @@ public class SearchCompany{
 	private Double totalRev5YrAnnGrowth;
 	private Double totalRevenue;
 	private Double volume;
+
+	public Double getAvgBrokerReq() {
+		return avgBrokerReq;
+	}
+
+	public void setAvgBrokerReq(Double avgBrokerReq) {
+		this.avgBrokerReq = avgBrokerReq;
+	}
 
 	public Double getBeta5Yr() {
 		return beta5Yr;
@@ -205,16 +214,30 @@ public class SearchCompany{
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("tickerCode", tickerCode).add("companyName", companyName)
-				.add("marketCap", marketCap).add("percentChange", percentChange)
-				.add("priceVs52WeekLow", priceVs52WeekLow).add("priceVs52WeekHigh", priceVs52WeekHigh)
-				.add("volume", volume).add("beta5Yr", beta5Yr).add("totalRevenue", totalRevenue)
-				.add("ebitdaMargin", ebitdaMargin).add("netProfitMargin", netProfitMargin).add("eps", eps)
-				.add("totalDebtEquity", totalDebtEquity).add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-				.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth).add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-				.add("peRatio", peRatio).add("dividendYield", dividendYield).add("priceToBookRatio", priceToBookRatio)
-				.add("targetPriceNum", targetPriceNum).add("industry", industry).add("industryGroup", industryGroup)
-				.toString();
+		return Objects.toStringHelper(this)
+			.add("avgBrokerReq", avgBrokerReq)
+			.add("beta5Yr", beta5Yr)
+			.add("companyName", companyName)
+			.add("dividendYield", dividendYield)
+			.add("ebitdaMargin", ebitdaMargin)
+			.add("eps", eps)
+			.add("industry", industry)
+			.add("industryGroup", industryGroup)
+			.add("marketCap", marketCap)
+			.add("netProfitMargin", netProfitMargin)
+			.add("peRatio", peRatio)
+			.add("percentChange", percentChange)
+			.add("priceToBookRatio", priceToBookRatio)
+			.add("priceVs52WeekHigh", priceVs52WeekHigh)
+			.add("priceVs52WeekLow", priceVs52WeekLow)
+			.add("targetPriceNum", targetPriceNum)
+			.add("tickerCode", tickerCode)
+			.add("totalDebtEquity", totalDebtEquity)
+			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
+			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
+			.add("totalRevenue", totalRevenue)
+			.add("volume", volume)
+			.toString();
 	}
-
 }
