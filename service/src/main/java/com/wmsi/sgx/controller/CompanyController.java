@@ -21,7 +21,6 @@ import com.wmsi.sgx.model.search.input.IdSearch;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
-import com.wmsi.sgx.service.search.Search;
 
 @RestController
 @RequestMapping(produces="application/json")
@@ -29,9 +28,6 @@ public class CompanyController{
 
 	@Autowired
 	private CompanyService companyService;
-	
-	@Autowired
-	private Search<KeyDevs> keyDevsSearch;
 	
 	@Autowired 
 	private ModelMapper mapper;
@@ -66,7 +62,7 @@ public class CompanyController{
 	
 	@RequestMapping(value="company/financials")
 	public Financials getFinancials(@RequestBody IdSearch search) throws CompanyServiceException {		
-		List<CompanyFinancial> hits = companyService.loadFinancials(search.getId());
+		List<CompanyFinancial> hits = companyService.loadFinancials(search);
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;
@@ -75,8 +71,8 @@ public class CompanyController{
 	@RequestMapping("company/priceHistory")
 	public PriceHistory getHistory(@RequestBody IdSearch search) throws CompanyServiceException {
 		PriceHistory ret = new PriceHistory();
-		ret.setPrice(companyService.loadPriceHistory(search.getId()));
-		ret.setVolume(companyService.loadVolumeHistory(search.getId()));
+		ret.setPrice(companyService.loadPriceHistory(search));
+		ret.setVolume(companyService.loadVolumeHistory(search));
 		return ret;
 	}
 

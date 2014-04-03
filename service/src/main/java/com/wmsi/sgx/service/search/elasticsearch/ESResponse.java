@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
-import com.wmsi.sgx.model.search.SearchCompany;
 
 public class ESResponse{
 
@@ -32,26 +31,6 @@ public class ESResponse{
 	private ObjectMapper objectMapper  = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 	
-	/*
-	public <T> List<T> getHits(Class<T> clz) throws ElasticSearchException{
-	
-		if(response == null)
-			throw new ElasticSearchException("Response is null or empty");
-		
-		if(response.path("hits").path("hits").isMissingNode())
-			throw new ElasticSearchException("Response is missing 'hits' field");
-			
-		List<T> ret = new ArrayList<T>();
-		List<JsonNode> hits = response.get("hits").get("hits").findValues("_source");
-		
-		for(JsonNode n : hits){
-			T hit = objectMapper.convertValue(n, clz);
-			ret.add(hit);
-		}
-		
-		return ret;		
-	}*/
-
 	public <T> List<T> getHits(Class<T> clz) throws ElasticSearchException{
 		
 		if(response == null)

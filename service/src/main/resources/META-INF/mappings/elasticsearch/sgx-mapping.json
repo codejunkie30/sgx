@@ -63,6 +63,11 @@
 					"index": "not_analyzed"
 				},
 
+				"avgBrokerReq": 
+				{
+					"type": "double"
+				},
+				
 				"marketCap": 
 				{
 					"type": "double"

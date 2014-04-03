@@ -126,8 +126,12 @@
         <b>avgBrokerReq</b>
       </field>
       <field>
-        <a key="IQ_TARGET_PRICE_NUM">this</a>
+        <a key="IQ_TARGET_PRICE_NUM_CIQ">this</a>
         <b>targetPriceNum</b>
+      </field>
+      <field>
+        <a key="IQ_PRICE_TARGET_CIQ">this</a>
+        <b>targetPrice</b>
       </field>
       <field>
         <a key="IQ_BV_SHARE">this</a>

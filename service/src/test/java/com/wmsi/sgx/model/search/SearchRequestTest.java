@@ -39,14 +39,8 @@ public class SearchRequestTest{
 		l.add(id);
 		
 		req.setCriteria(l);
-		String query = req.buildQuery();
 		
-		assertNotNull(query);
 		
-		ObjectMapper m = new ObjectMapper();
-		JsonNode must = (JsonNode) m.readTree(query).findValue("must");
-		assertTrue(must.isArray());		
-		assertEquals(((ArrayNode)must).size(), 3);
 		
 	}
 }

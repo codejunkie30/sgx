@@ -29,8 +29,16 @@ public class PriceController {
 	private String market = "XSES";
 	
 	@RequestMapping(method = RequestMethod.POST )
-	public Map<String, Price> getPrice(@RequestBody IdSearch query) throws QuanthouseServiceException{
-		Price p = service.getPrice(market, query.getId());
+	public Map<String, Price> getPrice(@RequestBody IdSearch query) {
+		Price p = new Price();
+		
+		try{
+			p = service.getPrice(market, query.getId());
+		}
+		catch(QuanthouseServiceException e){
+			log.error("Failed to get intra day price from QuanthouseService", e);
+		}
+		
 		Map<String, Price> ret = new HashMap<String, Price>();
 		ret.put("price", p);
 		return ret;

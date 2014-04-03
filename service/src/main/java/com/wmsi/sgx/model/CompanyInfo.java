@@ -13,9 +13,9 @@ public class CompanyInfo{
 
 	private Double avgBrokerReq;
 
-	private Double avgVolumeM3= 0.0D; // TODO
+	private Double avgVolumeM3;
 	private Double beta5Yr;
-	private String businessDescription;	
+	private String businessDescription;
 	private Double bvShare;
 	private Double capitalExpenditures;
 	private Double cashInvestments;
@@ -36,7 +36,7 @@ public class CompanyInfo{
 	private String gvKey;
 	private Double highPrice;
 	private String industry;
-	private String industryGroup;	
+	private String industryGroup;
 	private Double lowPrice;
 	private Double marketCap;
 	private Double netIncome;
@@ -48,6 +48,7 @@ public class CompanyInfo{
 	private Double sharesOutstanding;
 	private Double sharesSoldShort;
 	private Double targetPriceNum;
+	private Double targetPrice;
 	private String tickerCode;
 	private Double totalAssets;
 	private Double totalDebtEbitda;
@@ -60,9 +61,9 @@ public class CompanyInfo{
 	private Integer yearFounded;
 	private Double yearHigh;
 	private Double yearLow;
-	
+
 	private List<HistoricalValue> priceHistory;
-	
+
 	public List<HistoricalValue> getPriceHistory() {
 		return priceHistory;
 	}
@@ -71,32 +72,32 @@ public class CompanyInfo{
 		this.priceHistory = priceHistory;
 	}
 
-	public Double getPriceToBookRatio(){
-		
+	public Double getPriceToBookRatio() {
+
 		if(closePrice == null || bvShare == null)
 			return null;
 
-		BigDecimal close = new BigDecimal(closePrice); 
+		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal bv = new BigDecimal(bvShare);
 		return close.divide(bv, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
 	}
-	
-	public Double getPriceVs52WeekHigh(){
-		
+
+	public Double getPriceVs52WeekHigh() {
+
 		if(closePrice == null || yearHigh == null)
 			return null;
 
-		BigDecimal close = new BigDecimal(closePrice); 
+		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal high = new BigDecimal(yearHigh);
 		return close.divide(high, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
 	}
-	
-	public Double getPriceVs52WeekLow(){
-		
+
+	public Double getPriceVs52WeekLow() {
+
 		if(closePrice == null || yearLow == null)
 			return null;
-		
-		BigDecimal close = new BigDecimal(closePrice); 
+
+		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal low = new BigDecimal(yearLow);
 		return close.divide(low, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
 	}
@@ -104,291 +105,395 @@ public class CompanyInfo{
 	public Double getAvgBrokerReq() {
 		return avgBrokerReq;
 	}
+
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
 	}
+
 	public Double getAvgVolumeM3() {
 		return avgVolumeM3;
 	}
+
 	public void setAvgVolumeM3(Double avgVolumeM3) {
 		this.avgVolumeM3 = avgVolumeM3;
 	}
+
 	public Double getBeta5Yr() {
 		return beta5Yr;
 	}
+
 	public void setBeta5Yr(Double beta5Yr) {
 		this.beta5Yr = beta5Yr;
 	}
+
 	public String getBusinessDescription() {
 		return businessDescription;
 	}
+
 	public void setBusinessDescription(String businessDescription) {
 		this.businessDescription = businessDescription;
 	}
+
 	public Double getBvShare() {
 		return bvShare;
 	}
+
 	public void setBvShare(Double bvShare) {
 		this.bvShare = bvShare;
 	}
+
 	public Double getCapitalExpenditures() {
 		return capitalExpenditures;
 	}
+
 	public void setCapitalExpenditures(Double capitalExpenditures) {
 		this.capitalExpenditures = capitalExpenditures;
 	}
+
 	public Double getCashInvestments() {
 		return cashInvestments;
 	}
+
 	public void setCashInvestments(Double cashInvestments) {
 		this.cashInvestments = cashInvestments;
 	}
+
 	public Double getClosePrice() {
 		return closePrice;
 	}
+
 	public void setClosePrice(Double closePrice) {
 		this.closePrice = closePrice;
 	}
+
 	public String getCompanyAddress() {
 		return companyAddress;
 	}
+
 	public void setCompanyAddress(String companyAddress) {
 		this.companyAddress = companyAddress;
 	}
+
 	public String getCompanyName() {
 		return companyName;
 	}
+
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+
 	public String getCompanyWebsite() {
 		return companyWebsite;
 	}
+
 	public void setCompanyWebsite(String companyWebsite) {
 		this.companyWebsite = companyWebsite;
 	}
+
 	public Double getDividendYield() {
 		return dividendYield;
 	}
+
 	public void setDividendYield(Double dividendYield) {
 		this.dividendYield = dividendYield;
 	}
+
 	public Double getEbit() {
 		return ebit;
 	}
+
 	public void setEbit(Double ebit) {
 		this.ebit = ebit;
 	}
+
 	public Double getEbitda() {
 		return ebitda;
 	}
+
 	public void setEbitda(Double ebitda) {
 		this.ebitda = ebitda;
 	}
+
 	public Double getEbitdaMargin() {
 		return ebitdaMargin;
 	}
+
 	public void setEbitdaMargin(Double ebitdaMargin) {
 		this.ebitdaMargin = ebitdaMargin;
 	}
+
 	public Double getEmployees() {
 		return employees;
 	}
+
 	public void setEmployees(Double employees) {
 		this.employees = employees;
 	}
+
 	public Double getEnterpriseValue() {
 		return enterpriseValue;
 	}
+
 	public void setEnterpriseValue(Double enterpriseValue) {
 		this.enterpriseValue = enterpriseValue;
 	}
+
 	public Double getEps() {
 		return eps;
 	}
+
 	public void setEps(Double eps) {
 		this.eps = eps;
 	}
+
 	public Double getEvEbitData() {
 		return evEbitData;
 	}
+
 	public void setEvEbitData(Double evEbitData) {
 		this.evEbitData = evEbitData;
 	}
+
 	public Date getFiscalYearEnd() {
 		return fiscalYearEnd;
 	}
+
 	public void setFiscalYearEnd(Date fiscalYearEnd) {
 		this.fiscalYearEnd = fiscalYearEnd;
 	}
+
 	public Double getFloatPercentage() {
 		return floatPercentage;
 	}
+
 	public void setFloatPercentage(Double floatPercentage) {
 		this.floatPercentage = floatPercentage;
 	}
+
 	public String getGvKey() {
 		return gvKey;
 	}
+
 	public void setGvKey(String gvKey) {
 		this.gvKey = gvKey;
 	}
+
 	public Double getHighPrice() {
 		return highPrice;
 	}
+
 	public void setHighPrice(Double highPrice) {
 		this.highPrice = highPrice;
 	}
+
 	public String getIndustry() {
 		return industry;
 	}
+
 	public void setIndustry(String industry) {
 		this.industry = industry;
 	}
+
 	public String getIndustryGroup() {
 		return industryGroup;
 	}
+
 	public void setIndustryGroup(String industryGroup) {
 		this.industryGroup = industryGroup;
 	}
+
 	public Double getLowPrice() {
 		return lowPrice;
 	}
+
 	public void setLowPrice(Double lowPrice) {
 		this.lowPrice = lowPrice;
 	}
+
 	public Double getMarketCap() {
 		return marketCap;
 	}
+
 	public void setMarketCap(Double marketCap) {
 		this.marketCap = marketCap;
 	}
+
 	public Double getNetIncome() {
 		return netIncome;
 	}
+
 	public void setNetIncome(Double netIncome) {
 		this.netIncome = netIncome;
 	}
+
 	public Double getNetProfitMargin() {
 		return netProfitMargin;
 	}
+
 	public void setNetProfitMargin(Double netProfitMargin) {
 		this.netProfitMargin = netProfitMargin;
 	}
+
 	public Double getOpenPrice() {
 		return openPrice;
 	}
+
 	public void setOpenPrice(Double openPrice) {
 		this.openPrice = openPrice;
 	}
+
 	public Double getPeRatio() {
 		return peRatio;
 	}
+
 	public void setPeRatio(Double peRatio) {
 		this.peRatio = peRatio;
 	}
+
 	public Date getPreviousCloseDate() {
 		return previousCloseDate;
 	}
+
 	public void setPreviousCloseDate(Date previousCloseDate) {
 		this.previousCloseDate = previousCloseDate;
 	}
+
 	public Double getPreviousClosePrice() {
 		return previousClosePrice;
 	}
+
 	public void setPreviousClosePrice(Double previousClosePrice) {
 		this.previousClosePrice = previousClosePrice;
 	}
+
 	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
+
 	public void setSharesOutstanding(Double sharesOutstanding) {
 		this.sharesOutstanding = sharesOutstanding;
 	}
+
 	public Double getSharesSoldShort() {
 		return sharesSoldShort;
 	}
+
 	public void setSharesSoldShort(Double sharesSoldShort) {
 		this.sharesSoldShort = sharesSoldShort;
 	}
+
 	public Double getTargetPriceNum() {
 		return targetPriceNum;
 	}
+
 	public void setTargetPriceNum(Double targetPriceNum) {
 		this.targetPriceNum = targetPriceNum;
 	}
+
+	public Double getTargetPrice() {
+		return targetPrice;
+	}
+
+	public void setTargetPrice(Double targetPrice) {
+		this.targetPrice = targetPrice;
+	}
+
 	public String getTickerCode() {
 		return tickerCode;
 	}
+
 	public void setTickerCode(String tickerCode) {
 		this.tickerCode = tickerCode;
 	}
+
 	public Double getTotalAssets() {
 		return totalAssets;
 	}
+
 	public void setTotalAssets(Double totalAssets) {
 		this.totalAssets = totalAssets;
 	}
+
 	public Double getTotalDebtEbitda() {
 		return totalDebtEbitda;
 	}
+
 	public void setTotalDebtEbitda(Double totalDebtEbitda) {
 		this.totalDebtEbitda = totalDebtEbitda;
 	}
+
 	public Double getTotalDebtEquity() {
 		return totalDebtEquity;
 	}
+
 	public void setTotalDebtEquity(Double totalDebtEquity) {
 		this.totalDebtEquity = totalDebtEquity;
 	}
+
 	public Double getTotalRev1YrAnnGrowth() {
 		return totalRev1YrAnnGrowth;
 	}
+
 	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
 		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
 	}
+
 	public Double getTotalRev3YrAnnGrowth() {
 		return totalRev3YrAnnGrowth;
 	}
+
 	public void setTotalRev3YrAnnGrowth(Double totalRev3YrAnnGrowth) {
 		this.totalRev3YrAnnGrowth = totalRev3YrAnnGrowth;
 	}
+
 	public Double getTotalRev5YrAnnGrowth() {
 		return totalRev5YrAnnGrowth;
 	}
+
 	public void setTotalRev5YrAnnGrowth(Double totalRev5YrAnnGrowth) {
 		this.totalRev5YrAnnGrowth = totalRev5YrAnnGrowth;
 	}
+
 	public Double getTotalRevenue() {
 		return totalRevenue;
 	}
+
 	public void setTotalRevenue(Double totalRevenue) {
 		this.totalRevenue = totalRevenue;
 	}
+
 	public Double getVolume() {
 		return volume;
 	}
+
 	public void setVolume(Double volume) {
 		this.volume = volume;
 	}
+
 	public Integer getYearFounded() {
 		return yearFounded;
 	}
+
 	public void setYearFounded(Integer yearFounded) {
 		this.yearFounded = yearFounded;
 	}
+
 	public Double getYearHigh() {
 		return yearHigh;
 	}
+
 	public void setYearHigh(Double yearHigh) {
 		this.yearHigh = yearHigh;
 	}
+
 	public Double getYearLow() {
 		return yearLow;
 	}
+
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
 	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
@@ -428,6 +533,7 @@ public class CompanyInfo{
 			.add("sharesOutstanding", sharesOutstanding)
 			.add("sharesSoldShort", sharesSoldShort)
 			.add("targetPriceNum", targetPriceNum)
+			.add("targetPrice", targetPrice)
 			.add("tickerCode", tickerCode)
 			.add("totalAssets", totalAssets)
 			.add("totalDebtEbitda", totalDebtEbitda)
@@ -440,6 +546,9 @@ public class CompanyInfo{
 			.add("yearFounded", yearFounded)
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
+			.add("priceHistory", priceHistory)
 			.toString();
 	}
+
+	
 }

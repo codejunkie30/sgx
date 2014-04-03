@@ -1,24 +1,18 @@
 package com.wmsi.sgx.controller.search;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.search.CompanySearchRequest;
-import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
-import com.wmsi.sgx.service.search.Search;
-import com.wmsi.sgx.service.search.SearchService;
+import com.wmsi.sgx.service.CompanySearchService;
+import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
 @RestController()
@@ -26,31 +20,16 @@ import com.wmsi.sgx.service.search.SearchServiceException;
 public class SearchController{
 
 	@Autowired
-	private SearchService companySearchService;
+	private CompanySearchService companySearchService;
 	
 	@RequestMapping("search")
-	public SearchResults search(@Valid @RequestBody SearchRequest req) throws SearchServiceException{
-		String query = req.buildQuery();
-		List<SearchCompany> companies = companySearchService.search(query, SearchCompany.class);
-		SearchResults results = new SearchResults();
-		results.setCompanies(companies);
-		return results;
+	public SearchResults search(@Valid @RequestBody SearchRequest req) throws ServiceException{
+		return companySearchService.search(req);
 	}	
-
-	@Autowired
-	private Search<SearchCompany> companyNameSearch;
-
+	
 	@RequestMapping("search/name")
 	public SearchResults searchCompaniesByName(@Valid @RequestBody CompanySearchRequest req) throws SearchServiceException{		
-		
-		// TODO Extend HashMap, BindParms(k,v) with put(k,v)->return this
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("search", req.getCompanyName());		
-		
-		List<SearchCompany> companies= companySearchService.search(companyNameSearch, m);
-		SearchResults results = new SearchResults();
-		results.setCompanies(companies);
-		return results;
+		return companySearchService.searchCompaniesByName(req);
 	}
 
 }

@@ -1,9 +1,8 @@
-package com.wmsi.sgx.service.impl;
+package com.wmsi.sgx.service;
 
 import java.util.List;
 
 import com.wmsi.sgx.model.distribution.Distributions;
-import com.wmsi.sgx.service.ServiceException;
 
 public interface DistributionService{
 
