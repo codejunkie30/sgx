@@ -131,7 +131,205 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         SGX.stocks.areaGraph(sortedPriceArry);
                         SGX.stocks.volGraph(sortedVolArry);
                         // SGX.stocks.areaGraph(newArry);
-                        SGX.companyProfile.getHolders(id);
+                        // SGX.companyProfile.getHolders(id);
+                        SGX.companyProfile.getCompany(id);
+                    }
+                });
+            },
+            getCompany: function(id) {
+                // http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company
+
+
+                $.ajax({
+                    url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    jsonpCallback: 'jsonp',
+                    data: {
+                        'json': JSON.stringify({
+                            "id": id
+                        })
+                    },
+                    contentType: 'application/json; charset=UTF-8',
+                    error: function(data) {
+
+                        if (data.status == 500) {
+                            // Server side error
+                            console.warn('500 error');
+                        } else if (data.status == 404) {
+                            // Not found
+                            console.warn('404 error');
+                        } else {
+                            // console.info('\n\n' + 'services error');
+                            console.info(data.status + url + '\n\n');
+                        }
+                    },
+                    success: function(data) {
+                        console.log('getCompany w/ ID: ' + id);
+                        console.log(data);
+
+                        // News
+                        if ((typeof(data) != 'undefined') && (typeof(data.keyDevs) != 'undefined')) {
+
+                            $('.stock-events').find('ul').empty();
+                            for (var i = 0; i < data.keyDevs.length; i++) {
+                                var letter = parseFloat(i + 1, 10);
+                                // console.log(letter)
+                                // console.log(toLetters(letter));
+                                $('.stock-events').find('ul').append('<li><div class="icon">' + toLetters(letter) + '</div><a href="#">' + data.keyDevs[i].headline + '</a></li>');
+                            };
+
+                            function toLetters(num) {
+                                "use strict";
+                                var mod = num % 26,
+                                    pow = num / 26 | 0,
+                                    out = mod ? String.fromCharCode(64 + mod) : (--pow, 'Z');
+                                return pow ? toLetters(pow) + out : out;
+                            }
+                        }
+                        // Company Info
+                        $.each(data.company.companyInfo, function(index, value) {
+                            // console.log(index);
+                            if ($('.' + index).length) {
+                                if (!index == 'companyWebsite') {
+                                    $('.' + index).html(value);
+                                } else if (index == 'companyName') {
+                                    if ((value.length > 37) && (value.length < 54)) {
+                                        $('.' + index).css({
+                                            'font-size': '28px'
+                                        });
+                                    } else if (value > 54) {
+                                        $('.' + index).css({
+                                            'font-size': '20px'
+                                        });
+                                    }
+                                    $('.' + index).css({
+                                        'opacity': 0
+                                    });
+                                    $('.' + index).text(value);
+                                    $('.' + index).animate({
+                                        'opacity': 1
+                                    }, 500, function() {
+                                        // $('.' + index).removeAttr("style");
+                                    });
+                                } else if (index == 'companyWebsite') {
+                                    $('.' + index).attr({
+                                        'href': 'http://' + value,
+                                        'alt': value
+                                    });
+                                } else if (index == 'fiscalYearEnd') {
+                                    var monthNames = ["January", "February", "March", "April", "May", "June",
+                                        "July", "August", "September", "October", "November", "December"
+                                    ];
+
+
+                                    var d = new Date(value);
+                                    var year = d.getUTCFullYear(),
+                                        month = monthNames[d.getMonth()],
+                                        day = d.getUTCDay();
+                                    $('.' + index).html(day + ' ' + month + ' ' + year);
+
+                                } else {
+                                    $('.' + index).css({
+                                        'opacity': 0
+                                    });
+                                    $('.' + index).html(value);
+                                    $('.' + index).animate({
+                                        'opacity': 1
+                                    }, 500, function() {
+                                        // $('.' + index).removeAttr("style");
+                                    });
+                                }
+
+                            } else {
+                                console.log('could not find ' + index);
+                            }
+
+                        });
+
+                        // Holders
+                        var holders = '';
+
+                        $('body').find('.topHolders').empty();
+                        for (var i = 0; i < data.holders.holders.length; i++) {
+                            console.log(i);
+                            if (i == 1) {
+                                holders = data.holders.holders[i].name.toString();
+                            } else {
+                                holders = holders + ', ' + data.holders.holders[i].name.toString();
+                            }
+                        }
+                        $('body').find('.topHolders').append(holders);
+
+                        //////////////////
+
+                        $('body').find('.numberSharesHeld').empty();
+                        for (var i = 0; i < data.holders.holders.length; i++) {
+                            if (i == 1) {
+                                holders = data.holders.holders[i].shares.toString();
+                            } else {
+                                holders = holders + ', ' + data.holders.holders[i].shares.toString();
+                            }
+                        }
+                        $('body').find('.numberSharesHeld').append(holders);
+
+                        //////////////////
+
+                        $('body').find('.percentCommonStock').empty();
+                        for (var i = 0; i < data.holders.holders.length; i++) {
+                            if (i == 1) {
+                                holders = data.holders.holders[i].percent.toString();
+                            } else {
+                                holders = holders + ', ' + data.holders.holders[i].percent.toString();
+                            }
+                        }
+                        $('body').find('.percentCommonStock').append(holders);
+
+                        //////////////////
+
+                        SGX.companyProfile.getPrice(id);
+                    }
+                });
+            },
+            getPrice: function(id) {
+                $.ajax({
+                    url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/price',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    jsonpCallback: 'jsonp',
+                    data: {
+                        'json': JSON.stringify({
+                            "id": id
+                        })
+                    },
+                    contentType: 'application/json; charset=UTF-8',
+                    error: function(data) {
+
+                        if (data.status == 500) {
+                            // Server side error
+                            console.warn('500 error');
+                        } else if (data.status == 404) {
+                            // Not found
+                            console.warn('404 error');
+                        } else {
+                            // console.info('\n\n' + 'services error');
+                            console.info(data.status + '\n\n');
+                        }
+                    },
+                    success: function(data) {
+                        console.log('getPrice');
+                        console.log(data);
+
+                        var change = data.price.change,
+                            price = data.price.lastPrice,
+                            date = new Date(data.price.currentDate),
+                            year = date.getUTCFullYear(),
+                            monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "OCt", "Nov", "Dec"],
+                            month = monthNames[date.getMonth()],
+                            day = date.getUTCDay(),
+                            dateFormatted = day + '/' + month + '/' + year;
+
+                        console.log(change + ' ' + price + ' ' + dateFormatted);
                     }
                 });
             },
@@ -169,159 +367,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     }
                 });
             },
-            getHolders: function(id) {
-                console.log(id);
-                $.ajax({
-                    async: false,
-                    url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/holders',
-                    type: 'GET',
-                    dataType: 'jsonp',
-                    jsonpCallback: 'jsonp',
-                    data: {
-                        "json": JSON.stringify({
-                            "id": id
-                        })
-                    },
-                    contentType: 'application/json; charset=UTF-8',
-                    error: function(data) {
-                        if (data.status == 500) {
-                            // Server side error
-                            console.warn('500 error');
-                        } else if (data.status == 404) {
-                            // Not found
-                            console.warn('404 error');
-                        } else {
-                            console.info('\n\n' + 'services error');
-                            console.info(data.status + '\n\n');
-                        }
-                    },
-                    success: function(data) {
-                        console.info('holders success');
-                        console.log(data);
-                        var holders = '';
-
-                        $('body').find('.topHolders').empty();
-                        for (var i = 0; i < data.holders.length; i++) {
-                            if (i == 1) {
-                                holders = data.holders[i].name.toString();
-                            } else {
-                                holders = holders + ', ' + data.holders[i].name.toString();
-                            }
-                        }
-                        $('body').find('.topHolders').append(holders);
-
-                        //////////////////
-
-                        $('body').find('.numberSharesHeld').empty();
-                        for (var i = 0; i < data.holders.length; i++) {
-                            if (i == 1) {
-                                holders = data.holders[i].shares.toString();
-                            } else {
-                                holders = holders + ', ' + data.holders[i].shares.toString();
-                            }
-                        }
-                        $('body').find('.numberSharesHeld').append(holders);
-
-                        //////////////////
-
-                        $('body').find('.percentCommonStock').empty();
-                        for (var i = 0; i < data.holders.length; i++) {
-                            if (i == 1) {
-                                holders = data.holders[i].percent.toString();
-                            } else {
-                                holders = holders + ', ' + data.holders[i].percent.toString();
-                            }
-                        }
-                        $('body').find('.percentCommonStock').append(holders);
-
-                        //////////////////
-
-                        console.log(typeof(id));
-                        SGX.companyProfile.getInfo(id);
-
-                    }
-                });
-            },
-            getInfo: function(id) {
-
-                console.log('getInfo ' + id);
-
-                $.ajax({
-                    async: false,
-                    url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/info',
-                    type: 'GET',
-                    dataType: 'jsonp',
-                    jsonpCallback: 'jsonp',
-                    data: {
-                        'json': JSON.stringify({
-                            "id": id
-                        })
-                    },
-                    contentType: 'application/json; charset=UTF-8',
-                    error: function(data) {
-                        console.error('getInfo error');
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        // console.log(id);
-                        $.each(data.companyInfo, function(index, value) {
-                            // console.log(index);
-                            if ($('.' + index).length) {
-                                $('.' + index).html(value);
-                            } else {
-                                console.log('could not find ' + index);
-                            }
-
-                        });
-                        console.log(id);
-                        SGX.companyProfile.getNews(id);
-                    }
-                });
-
-
-            },
-            getNews: function(id) {
-                // console.log(id);
-                $.ajax({
-                    async: false,
-                    url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/keyDevs',
-                    type: 'GET',
-                    dataType: 'jsonp',
-                    jsonpCallback: 'jsonp',
-                    data: {
-                        'json': JSON.stringify({
-                            "id": id
-                        })
-                    },
-                    contentType: 'application/json; charset=UTF-8',
-                    error: function(data) {
-                        console.log('error');
-                    },
-                    success: function(data) {
-                        console.log('key developments w/ ID: ' + id);
-                        console.log(data);
-                        if ((typeof(data) != 'undefined') && (typeof(data.keyDevs) != 'undefined')) {
-
-                            $('.stock-events').find('ul').empty();
-                            for (var i = 0; i < data.keyDevs.length; i++) {
-                                var letter = parseFloat(i + 1, 10);
-                                // console.log(letter)
-                                // console.log(toLetters(letter));
-                                $('.stock-events').find('ul').append('<li><div class="icon">' + toLetters(letter) + '</div><a href="#">' + data.keyDevs[i].headline + '</a></li>');
-                            };
-
-                            function toLetters(num) {
-                                "use strict";
-                                var mod = num % 26,
-                                    pow = num / 26 | 0,
-                                    out = mod ? String.fromCharCode(64 + mod) : (--pow, 'Z');
-                                return pow ? toLetters(pow) + out : out;
-                            }
-                        }
-                    }
-                });
-            },
-            startup: function() {
+            startup: function(id) {
 
                 var intraDayPrice = 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/price',
                     companyInfo = 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company/info',
@@ -338,7 +384,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
 
                 // This is working
-                SGX.companyProfile.getChart("A7S");
+                if (typeof(id) != 'undefined') {
+                    SGX.companyProfile.getChart(id);
+                } else {
+                    SGX.companyProfile.getChart("A7S");
+                }
 
 
                 // SGX.companyProfile.getNews("G07");
@@ -468,14 +518,50 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
             }
         },
+        routing: function() {
+            /*
+            N9LU - This one should make avgbrokerReq and targetPriceNum show up for the number of company employees and Capital Consensus Estimates
+            S30
+            */
+            /*if() {
+
+            }*/
+            debug.info('SGX.routing');
+
+            $('a').on('click', function(e) {
+                // alert('test');
+                e.preventDefault();
+                var companyTickerID = $(this).data("company-code"),
+                    url = $(this).attr('href');
+
+                console.log(companyTickerID);
+
+                var storageObject = {
+                    id: companyTickerID
+                };
+                localStorage.setItem('SGXclient', JSON.stringify(storageObject));
+                console.log('storageObject: ', storageObject);
+
+                window.location = url;
+            });
+
+            // Put the object into storage
+            // localStorage.setItem('SGXclient', JSON.stringify(storageObject));
+
+            // Retrieve the object from storage
+            // var storageObject = localStorage.getItem('storageObject');
+
+
+        },
         core: function(flag) {
+
+            SGX.routing();
+
             SGX.startup();
             debug.info('SGX.Core');
             SGX.closeAll();
             SGX.accordion();
             SGX.modal.init();
-
-            // SGX.data.get();
 
             // Initialize custom dropdowns
             SGX.dropdowns.init();
@@ -484,9 +570,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             SGX.tabs();
             SGX.slider.startup();
             SGX.tooltip.start();
-            if ($('.financials-page').length) {
-                SGX.financials.init();
-            }
+            
 
             // Initial Search Criteria components
             SGX.search.init();
@@ -496,8 +580,18 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
             // SGX.stocks.init();
             // Get Company Profile Info
-            if ($('.company-profile-page').length) {
-                SGX.companyProfile.startup();
+            if ($('.company-tearsheet-page').length) {
+                console.log('company-tearsheet');
+                var storageObject = JSON.parse(localStorage.getItem('SGXclient'));
+                // console.log(JSON.stringify);
+                console.warn(storageObject.id);
+                if (typeof(storageObject.id) !== 'undefined') {
+                    // console.log(storageObject.id);
+                    SGX.companyProfile.startup(storageObject.id);
+                }
+            }
+            if ($('.financials-page').length) {
+                SGX.financials.init();
             }
 
             $('.alpha-factors').find('.slider').on('click', function() {
@@ -507,6 +601,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                 SGX.companyProfile.getAlphaFactor(value, type);
             });
+
+
         },
         checkboxes: function() {
             $('.checkbox').on('click', function() {
@@ -566,10 +662,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     }
                 });
                 $('.button-dropdown').find('li').on('click', function() {
-                    console.log('click');
+                    console.log('dropdown click');
                     var text = $(this).text();
                     $(this).parents('.button-dropdown').find('.trigger').html(text + '<span class="arrow"></span>');
                     $(document).find('.button-dropdown').removeClass('open');
+                    $(this).siblings().removeAttr('class');
                     var $this = $(this),
 
                         $button = $this.parents('.button-dropdown'),
@@ -780,6 +877,64 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             criteriaObject: {},
             resultsObject: {},
             resultsDOM: '',
+            industryDropdown: {
+                populate: function(data) {
+                    var resultIndustries = [];
+                    $('.secondary-search-dropdown').find('ul').empty().append('<li data-industry="all-industries">All Industries</li>');
+                    for (var i = data.companies.length - 1; i >= 0; i--) {
+                        var industry = data.companies[i].industry;
+
+                        // console.log(industry);
+                        if ($.inArray(industry, resultIndustries) == -1) {
+                            resultIndustries.push(industry);
+                            // $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
+                        }
+                    };
+                    // console.log(resultIndustries);
+                    var sortedIndustries = _.sortBy(resultIndustries, function(obj) {
+                        return obj[0];
+                    });
+
+                    // console.log(sortedIndustries);
+                    for (var indus = 0; indus < sortedIndustries.length; indus++) {
+
+                        var trimIndustry = sortedIndustries[indus].replace(/ /g, '').replace(',', '').toLowerCase().toString();
+                        $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + sortedIndustries[indus] + '</li>');
+
+                        // $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + sortedIndustries[indus].key + '</li>');
+                    }
+                    SGX.search.industryDropdown.click();
+                },
+                click: function() {
+                    $('.secondary-search-dropdown').find('li').on('click', function() {
+                        // Filter Results
+                        var industry = $(this).data('industry'),
+                            text = $(this).text();
+
+
+                        if ((typeof(industry) !== 'undefined') && (industry != 'all-industries')) {
+                            console.log(industry);
+                            SGX.search.resetResults();
+                            $(this).parents('.button-dropdown').find('.trigger').html(text + '<span class="arrow"></span>');
+                            SGX.dropdowns.close();
+                            SGX.dropdowns.init();
+                            $('.module-results').find('tr.result:not([data-industry="' + industry + '"])').remove();
+                            $('.module-results').find('tr.result[data-industry="' + industry + '"]').show();
+                            SGX.pagination.reset();
+                        } else {
+                            console.log('pagination all');
+                            SGX.search.resetResults();
+                            $(this).parents('.button-dropdown').find('.trigger').html('All Industries <span class="arrow"></span>');
+                            SGX.dropdowns.close();
+                            SGX.dropdowns.init();
+                            SGX.pagination.reset();
+                        }
+                    });
+                    $('.button-customize-display').on('click', function() {
+                        console.log(SGX.search.resultsObject);
+                    });
+                }
+            },
             init: function() {
                 var data = {
                     "fields": ["marketCap", "totalRevenue", "peRatio", "dividendYield", "industryGroup"]
@@ -834,67 +989,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                             }
                         }
                     });
-                    $('.search-submit').on('click', function(e) {
-                        e.preventDefault();
-                        var data = {
-                            "criteria": [
-                                /*{
-                            "field": "marketCap",
-                            "from": "5.0",
-                            "to": "2500.0"
-                        }, {
-                            "field": "percentChange",
-                            "from": "2013-04-01",
-                            "to": "2014-03-12",
-                            "value": 2
-                        }*/
-                            ]
-                        };
-                        var criteria = $('table.search-criteria').find('tr.criteria');
 
-                        $('table.search-criteria').find('tr.criteria').each(function(idx) {
-                            console.log(idx);
-                            if ($(this).data('name') != 'industryGroup') {
-                                data.criteria.push({
-                                    "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-name'),
-                                    "from": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-min'),
-                                    "to": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-max')
-                                });
-                            } else if ($(this).data('name') == 'industryGroup') {
-                                console.log('todo');
-                                if ($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').length) {
-                                    data.criteria.push({
-                                        "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').data('name'),
-                                        "value": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').text()
-                                    });
-                                }
-
-                            }
-                        });
-                        console.log('\n\n\n');
-                        console.log(data);
-                        console.log('\n\n\n');
-                        $.ajax({
-                            url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/search',
-                            type: 'POST',
-                            dataType: 'jsonp',
-                            jsonpCallback: 'jsonp',
-                            data: {
-                                'json': JSON.stringify(data)
-                            },
-                            contentType: 'application/json; charset=UTF-8',
-                            success: function(data) {
-                                console.log(data);
-                                if (data.companies.length != 0) {
-                                    SGX.search.removeResults();
-                                    SGX.search.addResults(data);
-                                    // SGX.search.pagination.reset()
-                                } else {
-
-                                }
-                            }
-                        });
-                    });
                     $('.button-customize-display').find('.trigger').on('click', function() {
                         // SGX.form.checkbox.check()
                         var checked = $(this).parents('.checkbox').hasClass("checked");
@@ -909,6 +1004,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     });
                 }
 
+                // Register Submit form handler for Search
+                SGX.search.submitClick();
 
 
             }, // end it
@@ -939,7 +1036,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                 min = data.distributions[i].buckets[0].key,
                                 max = data.distributions[i].buckets[data.distributions[i].buckets.length - 1].key;
 
-                            if (data.distributions[i].field != 'industry') {
+                            if (data.distributions[i].field != 'industryGroup') {
                                 if (!$('tr.criteria[data-name="' + data.distributions[i].field + '"]').length) {
                                     $('table.search-criteria').find('tbody').append('<tr class="criteria" style="display:none;" data-name="' + data.distributions[i].field + '" data-type="' + type + '" data-max="' + max + '" data-min="' + min + '"><td>' + friendlyName + '</td><td>S$' + min + 'mm</td><td class="criteria-slider"><div class="module-stock-slider"><div class="slider-bar"></div><div class="stock-bar-container"></div><div class="bar"></div><div class="matches"></div></div></td><td class="max">S$' + max + 'mm</td></tr>');
                                 } else {
@@ -957,7 +1054,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                     max: parseFloat(max, 10)
                                 }
                                 SGX.slider.init($('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('td.criteria-slider'), sliderSettings);
-                            } else if (data.distributions[i].field == 'industry') {
+                            } else if (data.distributions[i].field == 'industryGroup') {
 
                                 // console.log('industry');
                                 // console.log(data.distributions[i]);
@@ -985,6 +1082,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                 });
 
                                 console.log(sortedIndustries);
+                                $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>All Industries</li>');
                                 for (var indus = 0; indus < sortedIndustries.length; indus++) {
                                     $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + sortedIndustries[indus].key + '</li>');
                                 }
@@ -1056,7 +1154,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     }
                     var trimIndustry = data.companies[i].industry.replace(/ /g, '').replace(',', '').toLowerCase().toString();
 
-                    var result = '<tr class="result" data-industry="' + trimIndustry + '"><td>' + data.companies[i].companyName + '</td><td>' + data.companies[i].tickerCode + '</td><td class="industry">' + data.companies[i].industry + '</td><td>' + data.companies[i].marketCap + '</td><td>' + data.companies[i].totalRevenue + '</td><td>' + data.companies[i].priceToBookRatio + '</td><td>' + data.companies[i].dividendYield + '</td></tr>';
+                    var result = '<tr class="result" data-industry="' + trimIndustry + '" data-company-code="' + data.companies[i].tickerCode + '"><td><a href="company-tearsheet" data-company-code="' + data.companies[i].tickerCode + '"> ' + data.companies[i].companyName + '</td><td>' + data.companies[i].tickerCode + '</td><td class="industry">' + data.companies[i].industry + '</td><td>' + data.companies[i].marketCap + '</td><td>' + data.companies[i].totalRevenue + '</td><td>' + data.companies[i].priceToBookRatio + '</td><td>' + data.companies[i].dividendYield + '</td></tr>';
                     if ($('.module-results').find('tbody').length) {
                         $('.module-results').find('tbody').append(result);
                     } else {
@@ -1070,6 +1168,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 };
                 SGX.search.industryDropdown.populate(data);
                 SGX.pagination.reset();
+                SGX.routing();
 
             },
             removeResults: function() {
@@ -1079,63 +1178,70 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 $('.module-results').find('tbody').remove().end().find('thead').after(SGX.search.resultsDOM);
                 // console.log(SGX.search.resultsDOM);
             },
-            industryDropdown: {
-                populate: function(data) {
-                    var resultIndustries = [];
-                    $('.secondary-search-dropdown').find('ul').empty().append('<li data-industry="all-industries">All Industries</li>');
-                    for (var i = data.companies.length - 1; i >= 0; i--) {
-                        var industry = data.companies[i].industry;
-
-                        // console.log(industry);
-                        if ($.inArray(industry, resultIndustries) == -1) {
-                            resultIndustries.push(industry);
-                            // $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + data.companies[i].industry + '</li>');
-                        }
+            submitClick: function() {
+                $('.search-submit').on('click', function(e) {
+                    e.preventDefault();
+                    var data = {
+                        "criteria": [
+                            /*{
+                            "field": "marketCap",
+                            "from": "5.0",
+                            "to": "2500.0"
+                        }, {
+                            "field": "percentChange",
+                            "from": "2013-04-01",
+                            "to": "2014-03-12",
+                            "value": 2
+                        }*/
+                        ]
                     };
-                    // console.log(resultIndustries);
-                    var sortedIndustries = _.sortBy(resultIndustries, function(obj) {
-                        return obj[0];
-                    });
+                    var criteria = $('table.search-criteria').find('tr.criteria');
 
-                    // console.log(sortedIndustries);
-                    for (var indus = 0; indus < sortedIndustries.length; indus++) {
+                    $('table.search-criteria').find('tr.criteria').each(function(idx) {
+                        console.log(idx);
+                        if ($(this).data('name') != 'industryGroup') {
+                            data.criteria.push({
+                                "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-name'),
+                                "from": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-min'),
+                                "to": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').attr('data-max')
+                            });
+                        } else if ($(this).data('name') == 'industryGroup') {
+                            console.log('todo');
+                            if (($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').length) && ($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').index() != 0)) {
+                                console.log();
+                                console.log($('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').text());
+                                data.criteria.push({
+                                    "field": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').data('name'),
+                                    "value": $('table.search-criteria').find('tr.criteria:eq(' + idx + ')').find('li.open').text()
+                                });
+                            }
 
-                        var trimIndustry = sortedIndustries[indus].replace(/ /g, '').replace(',', '').toLowerCase().toString();
-                        $('.secondary-search-dropdown').find('ul').append('<li data-industry="' + trimIndustry + '">' + sortedIndustries[indus] + '</li>');
-
-                        // $('tr.criteria[data-name="' + data.distributions[i].field + '"]').find('ul').append('<li>' + sortedIndustries[indus].key + '</li>');
-                    }
-                    SGX.search.industryDropdown.click();
-                },
-                click: function() {
-                    $('.secondary-search-dropdown').find('li').on('click', function() {
-                        // Filter Results
-                        var industry = $(this).data('industry'),
-                            text = $(this).text();
-
-
-                        if ((typeof(industry) !== 'undefined') && (industry != 'all-industries')) {
-                            console.log(industry);
-                            SGX.search.resetResults();
-                            $(this).parents('.button-dropdown').find('.trigger').html(text + '<span class="arrow"></span>');
-                            SGX.dropdowns.close();
-                            SGX.dropdowns.init();
-                            $('.module-results').find('tr.result:not([data-industry="' + industry + '"])').remove();
-                            $('.module-results').find('tr.result[data-industry="' + industry + '"]').show();
-                            SGX.pagination.reset();
-                        } else {
-                            console.log('pagination all');
-                            SGX.search.resetResults();
-                            $(this).parents('.button-dropdown').find('.trigger').html('All Industries <span class="arrow"></span>');
-                            SGX.dropdowns.close();
-                            SGX.dropdowns.init();
-                            SGX.pagination.reset();
                         }
                     });
-                    $('.button-customize-display').on('click', function() {
-                        console.log(SGX.search.resultsObject);
+                    console.log('\n\n\n');
+                    console.log(data);
+                    console.log('\n\n\n');
+                    $.ajax({
+                        url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/search',
+                        type: 'POST',
+                        dataType: 'jsonp',
+                        jsonpCallback: 'jsonp',
+                        data: {
+                            'json': JSON.stringify(data)
+                        },
+                        contentType: 'application/json; charset=UTF-8',
+                        success: function(data) {
+                            console.log(data);
+                            if (data.companies.length != 0) {
+                                SGX.search.removeResults();
+                                SGX.search.addResults(data);
+                                // SGX.search.pagination.reset()
+                            } else {
+
+                            }
+                        }
                     });
-                }
+                });
             }
         },
         slider: {
@@ -1421,61 +1527,61 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     }
 
                     $('#bar-chart').highcharts('StockChart', {
-                            colors: [
-                                '#b5cf34',
-                                '#363473',
-                                '#8bbc21',
-                                '#910000',
-                                '#1aadce',
-                                '#492970',
-                                '#f28f43',
-                                '#77a1e5',
-                                '#c42525',
-                                '#a6c96a'
-                            ],
-                            chart: {
-                                height: 200
-                            },
-                            plotOptions: {
-                                pointPadding: 0
-                            },
-                            rangeSelector: {
-                                selected: 5,
-                                enabled: false
-                            },
+                        colors: [
+                            '#b5cf34',
+                            '#363473',
+                            '#8bbc21',
+                            '#910000',
+                            '#1aadce',
+                            '#492970',
+                            '#f28f43',
+                            '#77a1e5',
+                            '#c42525',
+                            '#a6c96a'
+                        ],
+                        chart: {
+                            height: 200
+                        },
+                        plotOptions: {
+                            pointPadding: 0
+                        },
+                        rangeSelector: {
+                            selected: 5,
+                            enabled: false
+                        },
 
-                            title: {
-                                text: 'Volume',
-                                style: {
-                                    color: '#2e2e2e',
-                                    'font-size': '16px'
-                                }
-                            },
+                        title: {
+                            text: 'Volume',
+                            style: {
+                                color: '#2e2e2e',
+                                'font-size': '16px'
+                            }
+                        },
 
-                            tooltip: {
-                                enabled: false,
-                                style: {
-                                    width: '200px'
-                                },
-                                valueDecimals: 4
+                        tooltip: {
+                            enabled: false,
+                            style: {
+                                width: '200px'
                             },
-                            xAxis: {
-                                gridLineWidth: 0
+                            valueDecimals: 4
+                        },
+                        xAxis: {
+                            gridLineWidth: 0
+                        },
+                        navigatior: {
+                            height: 30
+                        },
+                        yAxis: {
+                            height: 100
+                        },
+                        series: [{
+                                name: 'Volume',
+                                data: data,
+                                id: 'dataseries',
+                                type: 'column'
                             },
-                            navigatior: {
-                                height: 30
-                            },
-                            yAxis: {
-                                height: 100
-                            },
-                            series: [{
-                                    name: 'Volume',
-                                    data: data,
-                                    id: 'dataseries',
-                                    type: 'column'
-                                },
-                                // the event marker flags
-                                /*{
+                            // the event marker flags
+                            /*{
                                     type: 'flags',
                                     data: [{
                                         x: Date.UTC(2010, 7, 25),
@@ -1523,8 +1629,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                         'vertical-align': 'top'
                                     },
                                 }*/
-                            ]
-                        });
+                        ]
+                    });
                 }
             },
             init: function() {
