@@ -357,6 +357,8 @@ h1.title {
   font: bold 36px Arial, Helvetica, sans-serif;
   color: #1e2171;
   margin: 20px 0 10px;
+  width: 100%;
+  height: 42px;
 }
 .hero {
   height: 555px;
@@ -1296,6 +1298,10 @@ table.search-criteria .info {
   padding: 0 10px;
   color: #fff;
 }
+.button a {
+  color: #fff;
+  text-decoration: none;
+}
 .breadcrumb {
   background: #f2f2f2;
   height: 25px;
@@ -1363,6 +1369,10 @@ table.search-criteria .info {
   margin: 0;
   padding-left: 32px !important;
   background: #1e2171 url("../img/back-button.jpg") no-repeat 8px 4px !important;
+}
+.back-button a {
+  color: #fff;
+  text-decoration: none;
 }
 .comparable-button {
   display: inline;
