@@ -49,7 +49,28 @@ public class Criteria{
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("field", field).add("value", value).add("to", to).add("from", from)
-				.toString();
+		return Objects.toStringHelper(this)
+			.add("field", field)
+			.add("value", value)
+			.add("to", to)
+			.add("from", from)
+			.toString();
+	}
+
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(field, value, to, from);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Criteria) {
+			Criteria that = (Criteria) object;
+			return Objects.equal(this.field, that.field)
+				&& Objects.equal(this.value, that.value)
+				&& Objects.equal(this.to, that.to)
+				&& Objects.equal(this.from, that.from);
+		}
+		return false;
 	}
 }

@@ -29,4 +29,18 @@ public class SearchRequest{
 			.add("criteria", criteria)
 			.toString();
 	}
+
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(criteria);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof SearchRequest) {
+			SearchRequest that = (SearchRequest) object;
+			return Objects.equal(this.criteria, that.criteria);
+		}
+		return false;
+	}
 }

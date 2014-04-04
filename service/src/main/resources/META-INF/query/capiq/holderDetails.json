@@ -1,5 +1,5 @@
 {"inputRequests": [
-{"function":"GDSHE", "identifier":"C6L","mnemonic":"IQ_HOLDER_NAME"},
-{"function":"GDSHE", "identifier":"C6L","mnemonic":"IQ_HOLDER_SHARES"},
-{"function":"GDSHE", "identifier":"C6L","mnemonic":"IQ_HOLDER_PERCENT"}
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_NAME"},
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_SHARES"},
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_PERCENT"}
 ]}

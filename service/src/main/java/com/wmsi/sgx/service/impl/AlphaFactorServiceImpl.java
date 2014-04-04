@@ -3,6 +3,7 @@ package com.wmsi.sgx.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
@@ -22,6 +23,7 @@ public class AlphaFactorServiceImpl implements AlphaFactorService{
 	private SearchService<List<AlphaFactor>> alphaFactorService;
 
 	@Override
+	@Cacheable(value="alphaFactorSearch")
 	public <T> List<T> search(AlphaFactorSearchRequest search, Class<T> clz) throws AlphaFactorServiceException {
 		try{
 			List<AlphaFactor> alphas = alphaFactorSearchService.search(search, AlphaFactor.class);

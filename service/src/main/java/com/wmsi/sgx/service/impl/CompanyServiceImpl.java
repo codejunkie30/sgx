@@ -3,9 +3,10 @@ package com.wmsi.sgx.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -20,12 +21,13 @@ import com.wmsi.sgx.service.search.SearchServiceException;
 public class CompanyServiceImpl implements CompanyService{
 
 	@Autowired
-	private SearchService<CompanyInfo> companySearchService;
+	private SearchService<Company> companySearchService;
 
 	@Override
-	public CompanyInfo getById(String id, Class<CompanyInfo> clz) throws CompanyServiceException {
+	@Cacheable(value = "company")
+	public Company getById(String id) throws CompanyServiceException {
 		try{
-			return companySearchService.getById(id, clz);
+			return companySearchService.getById(id, Company.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load company by id", e);
@@ -36,6 +38,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> keyDevsSearch;
 	
 	@Override
+	@Cacheable(value = "keyDevs")
 	public KeyDevs loadKeyDevs(String id) throws CompanyServiceException {
 		try{
 			return keyDevsSearch.getById(id, KeyDevs.class);
@@ -49,6 +52,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> holdersSearch;
 
 	@Override
+	@Cacheable(value = "holders")
 	public Holders loadHolders(String id) throws CompanyServiceException {
 		try{
 			return holdersSearch.getById(id, Holders.class);
@@ -62,6 +66,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> financialSearch;
 	
 	@Override
+	@Cacheable(value = "financials")
 	public List<CompanyFinancial> loadFinancials(String id) throws CompanyServiceException {
 		try{
 			return financialSearch.search(id, CompanyFinancial.class);
@@ -75,6 +80,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> priceHistorySearch;
 
 	@Override
+	@Cacheable(value = "priceHistory")
 	public List<HistoricalValue> loadPriceHistory(String id) throws CompanyServiceException {
 		try{
 			return priceHistorySearch.search(id, HistoricalValue.class);
@@ -88,6 +94,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> volumeHistorySearch;
 
 	@Override
+	@Cacheable(value = "volumeHistory")
 	public List<HistoricalValue> loadVolumeHistory(String id) throws CompanyServiceException {
 		try{
 			return priceHistorySearch.search(id, HistoricalValue.class);
@@ -101,10 +108,11 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService<String> alphaFactorIdSearch;
 	
 	@Override
+	@Cacheable(value = "alphaFactor")
 	public AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException {
 
 		List<AlphaFactor> hits = null;
-		CompanyInfo info = getById(id, CompanyInfo.class);
+		Company info = getById(id);
 
 		if(info != null){
 			String gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
@@ -121,14 +129,15 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<CompanyInfo> relatedCompaniesSearch;
+	private SearchService<Company> relatedCompaniesSearch;
 
 	@Override
-	public List<CompanyInfo> loadRelatedCompanies(String id) throws CompanyServiceException{
+	@Cacheable(value = "relatedCompanies")
+	public List<Company> loadRelatedCompanies(String id) throws CompanyServiceException{
 
 		try{
-			CompanyInfo company = getById(id, CompanyInfo.class);
-			return relatedCompaniesSearch.search(company, CompanyInfo.class);
+			Company company = getById(id);
+			return relatedCompaniesSearch.search(company, Company.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load related companies", e);

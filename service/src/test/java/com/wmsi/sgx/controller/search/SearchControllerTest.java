@@ -98,7 +98,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	public void testCompanySearchByName() throws Exception{
 		
 		CompanySearchRequest request = new CompanySearchRequestBuilder()
-			.withCompanyName("China")
+			.withSearch("China")
 			.build();
 		
 		SearchCompany company = new SearchCompanyBuilder()

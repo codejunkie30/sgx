@@ -33,8 +33,8 @@ class CompanySearchRequestBuilderBase<GeneratorT extends CompanySearchRequestBui
 	}
 
 	@SuppressWarnings("unchecked")
-	public GeneratorT withCompanyName(String aValue) {
-		instance.setCompanyName(aValue);
+	public GeneratorT withSearch(String aValue) {
+		instance.setSearch(aValue);
 
 		return (GeneratorT) this;
 	}

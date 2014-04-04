@@ -43,7 +43,7 @@ public class ESQueryExecutor{
 			
 			JsonNode query = q.toJson();
 			
-			log.trace("Query: {}", query);
+			log.error("Query: {}", query);
 			
 			String url = indexUrl.concat(q.getURI().toString());
 			
