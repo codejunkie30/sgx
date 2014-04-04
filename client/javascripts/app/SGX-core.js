@@ -385,6 +385,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                 // This is working
                 if (typeof(id) != 'undefined') {
+                    console.log(id);
                     SGX.companyProfile.getChart(id);
                 } else {
                     SGX.companyProfile.getChart("A7S");
@@ -518,6 +519,33 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
             }
         },
+        addToLocal: function(storageObject) {
+            console.log('addToLocal');
+            console.log(storageObject);
+
+            var localObj = JSON.parse(localStorage.getItem('SGXclient'));
+            console.warn('localObj');
+            console.log(localObj);
+
+            console.log(typeof(localObj))
+
+            var localStorageTemp = {};
+            // typeof(localObj) != "undefined"
+            if (localObj != null) {
+                console.log('add to undefined');
+                localStorageTemp = JSON.parse(localStorage.getItem('SGXclient'));
+            }
+            console.warn('storageObject');
+            console.log(storageObject);
+
+            console.warn('localStorageTemp');
+            console.log(localStorageTemp);
+
+
+            _.extend(localStorageTemp, storageObject);
+
+            localStorage.setItem('SGXclient', JSON.stringify(localStorageTemp));
+        },
         routing: function() {
             /*
             N9LU - This one should make avgbrokerReq and targetPriceNum show up for the number of company employees and Capital Consensus Estimates
@@ -526,7 +554,19 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             /*if() {
 
             }*/
+
+
+
             debug.info('SGX.routing');
+
+            var localObj = JSON.parse(localStorage.getItem('SGXclient'));
+            console.log(localObj);
+
+
+            if ((typeof(localObj) != 'undefined') && (typeof(localObj.resultsObject) != 'undefined')) {
+                console.log('not undefined');
+            }
+
 
             $('a').on('click', function(e) {
                 // alert('test');
@@ -536,23 +576,41 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
 
                 console.log(companyTickerID);
+                console.error(url.indexOf("html"));
 
-                var storageObject = {
-                    id: companyTickerID
-                };
-                localStorage.setItem('SGXclient', JSON.stringify(storageObject));
-                console.log('storageObject: ', storageObject);
-                console.log(window.location);
-                if(url.indexOf("html") != -1) {
-                    console.log(window.location)
-                } else {
-                    console.log('no html');
-                    console.log(window.location + '.html');
-                    url = url + '.html';
-                    console.log(url);
-                    window.location = url;
+                if (typeof(companyTickerID) != 'undefined') {
+                    console.log('company ticket not undefined');
+                    var storageObject = {
+                        id: companyTickerID
+                    };
                 }
-                // window.location = url;
+
+                var localObj = JSON.parse(localStorage.getItem('SGXclient'));
+                var localStorageTemp = {};
+
+
+                if ((url.indexOf("html") == -1) && (window.location.hostname !== "localhost")) {
+                    console.warn('not local env, and url does not have html extension');
+                    console.log(url);
+                    url = url + '.html';
+                    // window.location = url;
+
+
+                } else if ((url !== "#") && (window.location.hostname == "localhost")) {
+                    console.info('localhost routing');
+                    
+
+                }
+                if (typeof(localObj) != 'undefined') {
+                    localStorageTemp = localObj;
+                }
+                _.extend(localStorageTemp, storageObject);
+
+                console.error(localStorageTemp);
+
+                localStorage.setItem('SGXclient', JSON.stringify(localStorageTemp));
+                window.location = url;
+
             });
 
             // Put the object into storage
@@ -580,7 +638,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             SGX.tabs();
             SGX.slider.startup();
             SGX.tooltip.start();
-            
+
 
             // Initial Search Criteria components
             SGX.search.init();
@@ -589,14 +647,38 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             SGX.form.init();
 
             // SGX.stocks.init();
+            if ($('.screener-page').length) {
+                var localObj = JSON.parse(localStorage.getItem('SGXclient'));
+                if ((typeof(localObj) != 'undefined') && (typeof(localObj.resultsObject) != null)) {
+                    SGX.search.removeResults();
+                    SGX.search.addResults(localObj.resultsObject);
+                }
+
+            }
+
             // Get Company Profile Info
             if ($('.company-tearsheet-page').length) {
                 console.log('company-tearsheet');
                 var storageObject = JSON.parse(localStorage.getItem('SGXclient'));
                 // console.log(JSON.stringify);
                 console.warn(storageObject.id);
-                if (typeof(storageObject.id) !== 'undefined') {
-                    // console.log(storageObject.id);
+
+                function getUrlVars() {
+                    var vars = {};
+                    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+                        vars[key] = value;
+                    });
+                    return vars;
+                }
+
+                if (typeof(getUrlVars()["id"]) != 'undefined') {
+                    // console.log(getUrlVars()["id"]);
+                    var id = getUrlVars()["id"].toString();
+                    console.error(id);
+                    console.error(storageObject.id);
+                    SGX.companyProfile.startup(id);
+                } else if (typeof(storageObject.id) !== 'undefined') {
+                    console.log(storageObject.id);
                     SGX.companyProfile.startup(storageObject.id);
                 }
             }
@@ -951,6 +1033,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 };
                 // Default load
                 if ($('.search-criteria').length) {
+                    console.log(data);
                     SGX.search.addCriteria(data);
                     $('.button-reset').on('click', function() {
                         $('.search-criteria').find('tr.criteria').each(function() {
@@ -1151,8 +1234,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 });
             },
             addResults: function(data) {
+                console.log(data);
                 $('.module-results').find('.results').html(data.companies.length + ' results')
 
+                console.log(data);
                 // Clear results DOM store
                 SGX.search.resultsDOM = '';
                 SGX.search.resultsObject = data.companies;
@@ -1176,6 +1261,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     // Add results to cache
                     SGX.search.resultsDOM = SGX.search.resultsDOM + result;
                 };
+
                 SGX.search.industryDropdown.populate(data);
                 SGX.pagination.reset();
                 SGX.routing();
@@ -1241,10 +1327,15 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         },
                         contentType: 'application/json; charset=UTF-8',
                         success: function(data) {
-                            console.log(data);
+                            // console.log(data);
                             if (data.companies.length != 0) {
                                 SGX.search.removeResults();
                                 SGX.search.addResults(data);
+                                SGX.addToLocal({
+                                    "resultsObject": {
+                                        companies: SGX.search.resultsObject
+                                    }
+                                });
                                 // SGX.search.pagination.reset()
                             } else {
 
