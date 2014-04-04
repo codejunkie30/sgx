@@ -534,6 +534,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 var companyTickerID = $(this).data("company-code"),
                     url = $(this).attr('href');
 
+
                 console.log(companyTickerID);
 
                 var storageObject = {
@@ -541,8 +542,17 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 };
                 localStorage.setItem('SGXclient', JSON.stringify(storageObject));
                 console.log('storageObject: ', storageObject);
-
-                window.location = url;
+                console.log(window.location);
+                if(url.indexOf("html") != -1) {
+                    console.log(window.location)
+                } else {
+                    console.log('no html');
+                    console.log(window.location + '.html');
+                    url = url + '.html';
+                    console.log(url);
+                    window.location = url;
+                }
+                // window.location = url;
             });
 
             // Put the object into storage
