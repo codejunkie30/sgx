@@ -47,8 +47,22 @@
 			{
 				"tickerCode": 
 				{
-					"type": "string",
-					"index": "not_analyzed"
+					"type": "multi_field",
+					"path": "just_name",
+					"fields": 
+					{
+						"tickerCode": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						},
+
+						"tickerSearch": 
+						{
+							"type": "string",
+							"analyzer": "sgx_text_ngram_analyzer"
+						}
+					}
 				},
 
 				"companyName": 
@@ -67,7 +81,7 @@
 				{
 					"type": "double"
 				},
-				
+
 				"marketCap": 
 				{
 					"type": "double"

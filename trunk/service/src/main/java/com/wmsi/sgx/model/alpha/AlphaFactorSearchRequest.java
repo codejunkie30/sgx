@@ -79,9 +79,38 @@ public class AlphaFactorSearchRequest{
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("analystExpectations", analystExpectations)
-				.add("capitalEfficiency", capitalEfficiency).add("earningsQuality", earningsQuality)
-				.add("historicalGrowth", historicalGrowth).add("priceMomentum", priceMomentum).add("size", size)
-				.add("valuation", valuation).add("volatility", volatility).toString();
+		return Objects.toStringHelper(this)
+			.add("analystExpectations", analystExpectations)
+			.add("capitalEfficiency", capitalEfficiency)
+			.add("earningsQuality", earningsQuality)
+			.add("historicalGrowth", historicalGrowth)
+			.add("priceMomentum", priceMomentum)
+			.add("size", size)
+			.add("valuation", valuation)
+			.add("volatility", volatility)
+			.toString();
 	}
+
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(analystExpectations, capitalEfficiency, earningsQuality, historicalGrowth, priceMomentum, size, valuation, volatility);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof AlphaFactorSearchRequest) {
+			AlphaFactorSearchRequest that = (AlphaFactorSearchRequest) object;
+			return Objects.equal(this.analystExpectations, that.analystExpectations)
+				&& Objects.equal(this.capitalEfficiency, that.capitalEfficiency)
+				&& Objects.equal(this.earningsQuality, that.earningsQuality)
+				&& Objects.equal(this.historicalGrowth, that.historicalGrowth)
+				&& Objects.equal(this.priceMomentum, that.priceMomentum)
+				&& Objects.equal(this.size, that.size)
+				&& Objects.equal(this.valuation, that.valuation)
+				&& Objects.equal(this.volatility, that.volatility);
+		}
+		return false;
+	}
+
+	
 }

@@ -4,12 +4,12 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 
-public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<CompanyInfo>{
+public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<Company>{
 
 	@Override
-	public SearchSourceBuilder getBuilder(CompanyInfo company) {
+	public SearchSourceBuilder getBuilder(Company company) {
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.boolQuery()
 					.mustNot(QueryBuilders.termQuery("tickerCode", company.getTickerCode()))

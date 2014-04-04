@@ -11,6 +11,6 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder<String>{
 			.query(QueryBuilders.queryString(text)
 			.analyzer("snowball")
 			.field("companyName")
-			.field("tickerCode"));
+			.field("tickerSearch"));
 	}
 }

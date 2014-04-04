@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
@@ -42,9 +42,9 @@ public class CompanyController{
 	}
 	
 	@RequestMapping(value="company/info")
-	public Map<String, CompanyInfo> getCompany(@RequestBody IdSearch search) throws CompanyServiceException{
-		Map<String, CompanyInfo> ret = new HashMap<String, CompanyInfo>();
-		ret.put("companyInfo", companyService.getById(search.getId(), CompanyInfo.class));
+	public Map<String, Company> getCompany(@RequestBody IdSearch search) throws CompanyServiceException{
+		Map<String, Company> ret = new HashMap<String, Company>();
+		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;
 	}
 	
@@ -56,7 +56,7 @@ public class CompanyController{
 	@RequestMapping(value="company/holders")
 	public Holders getHolders(@RequestBody IdSearch search) throws CompanyServiceException {
 		Holders holders = companyService.loadHolders(search.getId());
-		holders.setHolders(holders.getHolders().subList(0,  5));
+		holders.setHolders(holders.getHolders().subList(0,  5)); // Only return first 5 holders
 		return holders;
 	}
 	
@@ -83,7 +83,7 @@ public class CompanyController{
 
 	@RequestMapping(value="company/relatedCompanies")
 	public List<SearchCompany> getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
-		List<CompanyInfo> companies = companyService.loadRelatedCompanies(search.getId());
+		List<Company> companies = companyService.loadRelatedCompanies(search.getId());
 		return mapper.mapList(companies, SearchCompany.class);
 	}
 }

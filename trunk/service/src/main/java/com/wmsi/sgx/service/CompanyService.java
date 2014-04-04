@@ -2,7 +2,7 @@ package com.wmsi.sgx.service;
 
 import java.util.List;
 
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -15,11 +15,11 @@ public interface CompanyService{
 
 	Holders loadHolders(String id) throws CompanyServiceException;
 
-	CompanyInfo getById(String id, Class<CompanyInfo> class1) throws CompanyServiceException;
+	Company getById(String id) throws CompanyServiceException;
 
 	AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException;
 
-	List<CompanyInfo> loadRelatedCompanies(String id) throws CompanyServiceException;
+	List<Company> loadRelatedCompanies(String id) throws CompanyServiceException;
 
 	List<HistoricalValue> loadVolumeHistory(String search) throws CompanyServiceException;
 

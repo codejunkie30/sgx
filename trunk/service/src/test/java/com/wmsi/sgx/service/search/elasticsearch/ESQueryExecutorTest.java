@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 import com.wmsi.sgx.config.AppConfig;
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.config.SearchConfig;
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class)
@@ -44,9 +44,9 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 		query.setIndex("sgx_test");
 		query.setType("company");
 		
-		CompanyInfo response = esExecutor.executeGet(query, CompanyInfo.class);
+		Company response = esExecutor.executeGet(query, Company.class);
 		assertNotNull(response);
-		assertEquals(response.getClass(), CompanyInfo.class);
+		assertEquals(response.getClass(), Company.class);
 		assertEquals(response.getTickerCode(), "A7S");
 	}
 

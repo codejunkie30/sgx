@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
@@ -28,8 +29,8 @@ public class SearchConfig{
 	private String indexName;
 	
 	@Bean
-	public SearchService<CompanyInfo> companySearchService(){
-		SearchServiceImpl<CompanyInfo> serv = new SearchServiceImpl<CompanyInfo>();
+	public SearchService<Company> companySearchService(){
+		SearchServiceImpl<Company> serv = new SearchServiceImpl<Company>();
 		serv.setIndexName(indexName);
 		serv.setType("company");
 		return serv;
@@ -72,8 +73,8 @@ public class SearchConfig{
 	}
 	
 	@Bean 
-	public SearchService<CompanyInfo> relatedCompaniesSearch(){
-		SearchServiceImpl<CompanyInfo> serv = new SearchServiceImpl<CompanyInfo>();
+	public SearchService<Company> relatedCompaniesSearch(){
+		SearchServiceImpl<Company> serv = new SearchServiceImpl<Company>();
 		serv.setIndexName(indexName);
 		serv.setType("company");
 		serv.setQueryBuilder(new RelatedCompaniesQueryBuilder());

@@ -3,6 +3,7 @@ package com.wmsi.sgx.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.search.CompanySearchRequest;
@@ -22,6 +23,7 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 	private SearchService<List<Criteria>> companyScreenerSearchService;
 	
 	@Override
+	@Cacheable("search")
 	public SearchResults search(SearchRequest req) throws ServiceException {
 
 		try{
@@ -40,9 +42,10 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 	private SearchService<String> companyTextSearchService;
 	
 	@Override
+	@Cacheable("search")
 	public SearchResults searchCompaniesByName(CompanySearchRequest req) throws SearchServiceException{		
 
-		List<SearchCompany> companies = companyTextSearchService.search(req.getCompanyName(), SearchCompany.class);
+		List<SearchCompany> companies = companyTextSearchService.search(req.getSearch(), SearchCompany.class);
 
 		SearchResults results = new SearchResults();
 		results.setCompanies(companies);
