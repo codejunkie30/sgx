@@ -9,13 +9,16 @@ import org.springframework.context.annotation.Configuration;
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.search.Criteria;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorSearchQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.CompanyQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.TextSearchQueryBuilder;
 import com.wmsi.sgx.service.search.impl.SearchServiceImpl;
 
 @Configuration
@@ -29,10 +32,27 @@ public class SearchConfig{
 		SearchServiceImpl<CompanyInfo> serv = new SearchServiceImpl<CompanyInfo>();
 		serv.setIndexName(indexName);
 		serv.setType("company");
-
 		return serv;
 	}
-	
+
+	@Bean
+	public SearchService<List<Criteria>> companyScreenerSearchService(){
+		SearchServiceImpl<List<Criteria>> serv = new SearchServiceImpl<List<Criteria>>();
+		serv.setIndexName(indexName);
+		serv.setType("company");
+		serv.setQueryBuilder(new CompanyQueryBuilder());
+		return serv;
+	}
+
+	@Bean
+	public SearchService<String> companyTextSearchService(){
+		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
+		serv.setIndexName(indexName);
+		serv.setType("company");
+		serv.setQueryBuilder(new TextSearchQueryBuilder());
+		return serv;
+	}
+
 	@Bean
 	public SearchService<List<AlphaFactor>> alphaFactorService(){
 		SearchServiceImpl<List<AlphaFactor>> serv = new SearchServiceImpl<List<AlphaFactor>>();

@@ -32,7 +32,6 @@ import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchRequestBuilder;
 import com.wmsi.sgx.model.search.SearchResultsBuilder;
 import com.wmsi.sgx.service.impl.CompanySearchServiceImpl;
-import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.test.TestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -156,12 +155,6 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 		public CompanySearchServiceImpl companySearchService(){
 			return mock(CompanySearchServiceImpl.class);
 		}
-
-		/*
-		@Bean		
-		public ElasticSearchService elasticSearchservice(){
-			return mock(ElasticSearchService.class);
-		}*/
 
 		@Bean
 		public MockMvc mockMvc(){			

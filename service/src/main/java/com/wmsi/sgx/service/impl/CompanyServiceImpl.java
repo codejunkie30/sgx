@@ -15,16 +15,12 @@ import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
-import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
 
 	@Autowired
 	private SearchService<CompanyInfo> companySearchService;
-
-	@Autowired
-	private ElasticSearchService elasticSearchService;
 
 	@Override
 	public CompanyInfo getById(String id, Class<CompanyInfo> clz) throws CompanyServiceException {
