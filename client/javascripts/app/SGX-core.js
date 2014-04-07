@@ -138,7 +138,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             },
             getCompany: function(id) {
                 // http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company
-
+                // mil, percent
 
                 $.ajax({
                     url: 'http://ec2-54-82-16-73.compute-1.amazonaws.com/sgx/company',
@@ -228,6 +228,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                                         month = monthNames[d.getMonth()],
                                         day = d.getUTCDay();
                                     $('.' + index).html(day + ' ' + month + ' ' + year);
+
+                                } else if (index == 'fiscalYearEnd') {
 
                                 } else {
                                     $('.' + index).css({
