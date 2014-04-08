@@ -1,11 +1,10 @@
 package com.wmsi.sgx.service;
 
-import java.util.List;
-
 import com.wmsi.sgx.model.distribution.Distributions;
+import com.wmsi.sgx.model.distribution.DistributionsRequest;
 
 public interface DistributionService{
 
-	Distributions getAggregations(List<String> fields) throws ServiceException;
+	Distributions getAggregations(DistributionsRequest req) throws ServiceException;
 
 }

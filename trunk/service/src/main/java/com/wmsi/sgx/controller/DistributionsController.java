@@ -1,5 +1,7 @@
 package com.wmsi.sgx.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ public class DistributionsController{
 	private DistributionService distributionService;
 
 	@RequestMapping(value="search/distributions", method = RequestMethod.POST)
-	public Distributions postChartHistograms(@RequestBody DistributionsRequest req) throws ServiceException{		
-		return distributionService.getAggregations(req.getFields());
+	public Distributions postChartHistograms(@Valid @RequestBody DistributionsRequest req) throws ServiceException{		
+		return distributionService.getAggregations(req);
 	}	
 }

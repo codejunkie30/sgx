@@ -65,31 +65,20 @@
 					}
 				},
 
-				"companyName": 
-				{
-					"type": "string",
-					"analyzer": "sgx_text_ngram_analyzer"
-				},
-
-				"gvKey": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
-
 				"avgBrokerReq": 
 				{
 					"type": "double"
 				},
 
-				"marketCap": 
+				"beta5Yr": 
 				{
 					"type": "double"
 				},
 
-				"volume": 
+				"companyName": 
 				{
-					"type": "double"
+					"type": "string",
+					"analyzer": "sgx_text_ngram_analyzer"
 				},
 
 				"dividendYield": 
@@ -97,14 +86,20 @@
 					"type": "double"
 				},
 
-				"peRatio": 
+				"ebitdaMargin": 
 				{
 					"type": "double"
 				},
 
-				"totalRevenue": 
+				"eps": 
 				{
 					"type": "double"
+				},
+
+				"gvKey": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
 				},
 
 				"industry": 
@@ -119,6 +114,26 @@
 					"index": "not_analyzed"
 				},
 
+				"marketCap": 
+				{
+					"type": "double"
+				},
+
+				"netProfitMargin": 
+				{
+					"type": "double"
+				},
+
+				"peRatio": 
+				{
+					"type": "double"
+				},
+
+				"priceToBookRatio": 
+				{
+					"type": "double"
+				},
+
 				"priceVs52WeekHigh": 
 				{
 					"type": "double"
@@ -129,22 +144,24 @@
 					"type": "double"
 				},
 
-				"ebitdaMargin": 
+				"priceHistory": 
 				{
-					"type": "double"
+					"type": "nested",
+					"properties": 
+					{
+						"value": 
+						{
+							"type": "double"
+						},
+
+						"date": 
+						{
+							"type": "date"
+						}
+					}
 				},
 
-				"netProfitMargin": 
-				{
-					"type": "double"
-				},
-
-				"beta5Yr": 
-				{
-					"type": "double"
-				},
-
-				"eps": 
+				"targetPriceNum": 
 				{
 					"type": "double"
 				},
@@ -169,26 +186,14 @@
 					"type": "double"
 				},
 
-				"priceToBookRatio": 
+				"totalRevenue": 
 				{
 					"type": "double"
 				},
 
-				"priceHistory": 
+				"volume": 
 				{
-					"type": "nested",
-					"properties": 
-					{
-						"value": 
-						{
-							"type": "double"
-						},
-
-						"date": 
-						{
-							"type": "date"
-						}
-					}
+					"type": "double"
 				}
 			}
 		},

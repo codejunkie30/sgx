@@ -12,7 +12,9 @@ public class Criteria{
 	private String field;
 	
 	private String value;
+	
 	private Object to;
+	
 	private Object from;
 
 	public String getField() {

@@ -296,21 +296,26 @@ public class CapIQServiceImpl implements CapIQService{
 		
 		List<Holder> ret = new ArrayList<Holder>();
 		
+		
 		for(int i =0; i < names.size(); i++){
 			Holder h = new Holder();
 			
 			h.setName(names.get(i).getValues().get(0));
-			
-			if(shares.size() > i){
-				h.setShares(Long.valueOf(shares.get(i).getValues().get(0)));
+		
+			try{
+				if(shares.size() > i){
+					h.setShares(Long.valueOf(shares.get(i).getValues().get(0)));
+				}
+	
+				if(percent.size() > i){
+					h.setPercent(Double.valueOf(percent.get(i).getValues().get(0)));
+				}
+				ret.add(h);
 			}
-
-			if(percent.size() > i){
-				h.setPercent(Double.valueOf(percent.get(i).getValues().get(0)));
+			catch(Exception e){
+				continue;
 			}
-			ret.add(h);
 		}
-		System.out.println(ret);
 		
 		Holders holders = new Holders();
 		holders.setHolders(ret);
