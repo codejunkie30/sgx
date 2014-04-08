@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.distribution.Distributions;
+import com.wmsi.sgx.model.distribution.DistributionsRequest;
 import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
@@ -46,21 +48,22 @@ public class DistributionServiceImpl implements DistributionService{
 	private static final int SCALE = 1000;
 	
 	@Override
-	public Distributions getAggregations(List<String> fields) throws ServiceException {
+	public Distributions getAggregations(DistributionsRequest req) throws ServiceException {
 		
+		List<DistributionRequestField> fields = req.getFields();
 		Map<String, Integer> intervals = getHistogramIntervals(fields);
 		Aggregations aggs = getAggregations(fields, intervals);
 		return (Distributions) mapper.map(aggs, Distributions.class);
 	}
 	
-	private Map<String, Integer> getHistogramIntervals(List<String> fields) throws ServiceException{
+	private Map<String, Integer> getHistogramIntervals(List<DistributionRequestField> fields) throws ServiceException{
 
 		// TEMP - Do this externally
 		List<String> rangeFields = new ArrayList<String>();
 		
-		for(String s : fields){
-			if(!s.equals("industry") && !s.equals("industryGroup"))
-				rangeFields.add(s);
+		for(DistributionRequestField req : fields){
+			if(!req.getField().equals("industry") && !req.getField().equals("industryGroup"))
+				rangeFields.add(req.getField());
 		}
 		/// TEMP
 		
@@ -85,7 +88,7 @@ public class DistributionServiceImpl implements DistributionService{
 		return interval * SCALE;		
 	}
 
-	private Aggregations getAggregations(List<String> fields, Map<String, Integer> invervals) throws ServiceException {
+	private Aggregations getAggregations(List<DistributionRequestField> fields, Map<String, Integer> invervals) throws ServiceException {
 		try{
 			String query = buildQuery(fields, invervals);
 			System.out.println(query);
@@ -130,6 +133,7 @@ public class DistributionServiceImpl implements DistributionService{
 	private Aggregations getStatsAggregations(List<String> fields) throws ServiceException {
 		try{
 			String query = getStatsQuery(fields);
+			System.out.println(query);
 			return loadAggregations(query);
 		}
 		catch(IOException e){
@@ -175,10 +179,13 @@ public class DistributionServiceImpl implements DistributionService{
 		return query.toString();
 	}
 
-	private String buildQuery(List<String> fields, Map<String, Integer> ranges) throws IOException{
+	private String buildQuery(List<DistributionRequestField> fields, Map<String, Integer> ranges) throws IOException{
 		SearchSourceBuilder query = getBaseQuery();
 		
-		for(String field : fields){
+		for(DistributionRequestField req : fields){
+			
+			String field = req.getField();
+			
 			// TODO Externalize
 			if(field.equals("industry") || field.equals("industryGroup")){
 				query.aggregation(
