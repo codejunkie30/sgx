@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<configuration>
+		<stop-on-errors>false</stop-on-errors>
+		<custom-converters>
+			<converter type="com.wmsi.sgx.conversion.dozer.StringToDoubleConverter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.lang.Double</class-b>
+			</converter>
+			<converter type="com.wmsi.sgx.conversion.dozer.StringToDateConverter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.util.Date</class-b>
+			</converter>
+		</custom-converters>
+	</configuration>
+
+	<mapping wildcard="false">
+
+		<class-a>java.util.Map</class-a>
+		<class-b>com.wmsi.sgx.model.financials.CompanyFinancial</class-b>
+		<field>
+			<a key="IQ_ABS_PERIOD">this</a>
+			<b>absPeriod</b>
+		</field>
+		<field custom-converter-param="MMM dd yyyy hh:mma">
+			<a key="IQ_PERIODDATE_IS">this</a>
+			<b>periodDate</b>
+		</field>
+		<field>
+			<a key="IQ_FILING_CURRENCY">this</a>
+			<b>filingCurrency</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_REV">this</a>
+			<b>totalRevenue</b>
+		</field>
+		<field>
+			<a key="IQ_GP">this</a>
+			<b>grossProfit</b>
+		</field>
+		<field>
+			<a key="IQ_NI">this</a>
+			<b>netIncome</b>
+		</field>
+		<field>
+			<a key="IQ_EBITDA">this</a>
+			<b>ebitda</b>
+		</field>
+		<field>
+			<a key="IQ_DILUT_EPS_NORM">this</a>
+			<b>eps</b>
+		</field>
+		<field>
+			<a key="IQ_PAYOUT_RATIO">this</a>
+			<b>payoutRatio</b>
+		</field>
+		<field>
+			<a key="IQ_DIV_SHARE">this</a>
+			<b>dividendsPerShare</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_ASSETS">this</a>
+			<b>totalAssets</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_CA">this</a>
+			<b>totalCurrentAssets</b>
+		</field>
+		<field>
+			<a key="IQ_NPPE">this</a>
+			<b>netPpe</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_CL">this</a>
+			<b>totalCurrentLiabily</b>
+		</field>
+		<field>
+			<a key="IQ_LT_DEBT">this</a>
+			<b>longTermDebt</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_LIAB">this</a>
+			<b>totalLiability</b>
+		</field>
+		<field>
+			<a key="IQ_RE">this</a>
+			<b>retainedEarnings</b>
+		</field>
+		<field>
+			<a key="IQ_COMMON">this</a>
+			<b>commonStock</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_EQUITY">this</a>
+			<b>totalEquity</b>
+		</field>
+		<field>
+			<a key="IQ_MINORITY_INTEREST">this</a>
+			<b>minorityInterest</b>
+		</field>
+		<field>
+			<a key="IQ_CASH_OPER">this</a>
+			<b>cashOperations</b>
+		</field>
+		<field>
+			<a key="IQ_CASH_INVEST">this</a>
+			<b>cashInvesting</b>
+		</field>
+		<field>
+			<a key="IQ_CASH_FINAN">this</a>
+			<b>cashFinancing</b>
+		</field>
+		<field>
+			<a key="IQ_NET_CHANGE">this</a>
+			<b>netChange</b>
+		</field>
+		<field>
+			<a key="IQ_RETURN_ASSETS">this</a>
+			<b>returnAssets</b>
+		</field>
+		<field>
+			<a key="IQ_RETURN_CAPITAL">this</a>
+			<b>returnCapital</b>
+		</field>
+		<field>
+			<a key="IQ_RETURN_EQUITY">this</a>
+			<b>returnEquity</b>
+		</field>
+		<field>
+			<a key="IQ_GROSS_MARGIN">this</a>
+			<b>grossMargin</b>
+		</field>
+		<field>
+			<a key="IQ_EBITDA_MARGIN">this</a>
+			<b>ebitdaMargin</b>
+		</field>
+		<field>
+			<a key="IQ_NI_MARGIN">this</a>
+			<b>netIncomeMargin</b>
+		</field>
+		<field>
+			<a key="IQ_ASSET_TURNS">this</a>
+			<b>assetTurns</b>
+		</field>
+		<field>
+			<a key="IQ_CURRENT_RATIO">this</a>
+			<b>currentRatio</b>
+		</field>
+		<field>
+			<a key="IQ_QUICK_RATIO">this</a>
+			<b>quickRatio</b>
+		</field>
+		<field>
+			<a key="IQ_DAYS_INVENTORY_OUT">this</a>
+			<b>avgDaysInventory</b>
+		</field>
+		<field>
+			<a key="IQ_DAYS_PAYABLE_OUT">this</a>
+			<b>avgDaysPayable</b>
+		</field>
+		<field>
+			<a key="IQ_CASH_CONVERSION">this</a>
+			<b>cashConversion</b>
+		</field>
+		<field>
+			<a key="IQ_EBITDA_INT">this</a>
+			<b>ebitdaInterest</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_DEBT_EQUITY">this</a>
+			<b>totalDebtEquity</b>
+		</field>
+		<field>
+			<a key="IQ_TOTAL_REV_1YR_ANN_GROWTH">this</a>
+			<b>totalRevenue1YrAnnGrowth</b>
+		</field>
+		<field>
+			<a key="IQ_EBITDA_1YR_ANN_GROWTH">this</a>
+			<b>ebitda1YrAnnGrowth</b>
+		</field>
+		<field>
+			<a key="IQ_NI_1YR_ANN_GROWTH">this</a>
+			<b>netIncome1YrAnnGrowth</b>
+		</field>
+		<field>
+			<a key="IQ_EPS_1YR_ANN_GROWTH">this</a>
+			<b>eps1YrAnnGrowth</b>
+		</field>
+		<field>
+			<a key="IQ_COMMON_EQUITY_1YR_ANN_GROWTH">this</a>
+			<b>commonEquity1YrAnnGrowth</b>
+		</field>
+
+	</mapping>
+
+</mappings>  
+        

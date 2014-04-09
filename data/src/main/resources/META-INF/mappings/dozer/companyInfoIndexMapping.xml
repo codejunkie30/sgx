@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+  <configuration>
+    <stop-on-errors>true</stop-on-errors>
+    <date-format>MM-dd-yyyy</date-format>
+    <wildcard>true</wildcard>
+    <custom-converters>
+	<converter type="com.wmsi.sgx.conversion.dozer.StringToDoubleConverter">
+		<class-a>java.lang.String</class-a>
+		<class-b>java.lang.Double</class-b>
+	</converter>
+	</custom-converters>    
+  </configuration>
+  
+  <mapping wildcard="false">
+    <class-a>com.wmsi.sgx.model.sandp.capiq.CapIQResponse</class-a>
+    <class-b>com.wmsi.sgx.model.CompanyInfo</class-b>
+      <field>
+        <a>results[0].rows[0].values</a>
+        <b>marketCap</b>
+      </field>
+       <field>
+        <a>results[1].rows[0].values</a>
+        <b>yearHigh</b>
+      </field> 
+       <field>
+        <a>results[2].rows[0].values</a>
+        <b>yearLow</b>
+      </field>     
+      <field>
+        <a>results[3].rows[0].values</a>
+        <b>beta5Yr</b>
+      </field>      
+  </mapping> 
+            
+</mappings>  
+        
