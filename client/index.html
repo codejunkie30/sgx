@@ -2,119 +2,410 @@
 <html>
 
 <head>
-    <title>Mimosa</title>
+    <title>Screener - SGX</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-    <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+    
 </head>
 
-<body>
+<body class="screener-page">
+
+    <div id="loading">
+        <div class="loading-text">
+            <img src="img/ajax-loader.gif" />
+        </div>
+    </div>
+    
+    <div id="modal">
+    
+    	<div class="modal-container">
+    		<div class="modal-content">
+    			<div class="copy"></div>
+    			<div class="button confirm prompt-display">Confirm</div><div class="button cancel prompt-display">Cancel</div><div class="button cancel alert-display">Close</div>
+    		</div>
+   			<div class="modal-close"></div>
+    		<div class="bg" /></div>
+    	</div>
+    	
+    </div>
+    
+    <div id="tooltip-template">
+    
+		<div class="tooltip tooltip-active">
+			<div class="tooltip-content"></div>
+			<div class="tooltip-arrow"></div>
+		</div>
+    
+    </div>
+    
     <div class="container_3">
-        <div class="row">
+        <div class="row clearfix">
             <div class="grid_3">
-
-                <p>Dev pathing</p>
-                <ul>
-                    <li><a href="screener">Screener</a>
-                    </li>
-                    <li><a href="company-tearsheet">Company Tearsheet</a>
-                    </li>
-                    <li><a href="financials">Financials</a>
-                    </li>
-                    <li><a href="alpha-factor">Alpha Factor</a>
-                    </li>
-                    <li><a href="search-results">Search Results</a>
-                    </li>
-                    <li><a href="print">Print View</a>
-                    </li>
-                </ul>
-                <p>Static pathing</p>
-                <ul>
-                    <li><a href="screener.html">Screener</a>
-                    </li>
-                    <li><a href="company-tearsheet.html">Company Profile</a>
-                    </li>
-                    <li><a href="financials.html">Financials</a>
-                    </li>
-                    <li><a href="alpha-factor.html">Alpha Factor</a>
-                    </li>
-                    <li><a href="search-results.html">Search Results</a>
-                    </li>
-                    <li><a href="print.html">Not done yet - print view</a>
-                    </li>
-                </ul>
-                <h2>Questions</h2>
-                <ol>
-                    
-                </ol>
-                <h4>All pages</h4>
-                <ul>
-
-                    <li>Bottom of page: link to View disclaimer and open it in a new browser window</li>
-                    <li>Done - Decrease module header label margin-bottom</li>
-                    <li>Done - Back to stock screener needs its icon</li>
-                    <li>2 error states</li>
-                </ul>
-
-                <h4>Screener:</h4>
-                <ul>
-                    <li>Need to add % change over date range to criteria. % and date range required. Error condition that dates must be within 1 year. Show number of matches when entered.</li>
-                    <li>In Progress - Industry – selecting Utilities will return all matches for Utilities and sub-industries of Utilities. The industry dropdown in the search results will only show industries/sub-industries associated with the search (Utilities). Show number of matches when included in the search.</li>
-                    <li>Done - Business Requirements oddball input type for distribution</li>
-                    <li>Content - Comparable companies – needs to link to a page with the correct heading.</li>
-                    <li>Content - Industry tree – needs to link to a page with the correct heading.</li>
-                    <li>&hellip;</li>
-                    <li>Done - Where does Industry Search Criteria go? It shows as default, but is there a way for the user to add it back once it's removed?</li>
-                    <li>Done - Dynamic add search criteria to the “Edit search criteria box”.</li>
-                    <li>Done - Add error message if more than 5 search criteria are selected.</li>
-                    <li>Done - Results Pagination</li>
-                    <li>Done - Remove some of the extra padding between the criteria and the start of the results.</li>
-                    <li>Done - Accordion content is in the Business Requirements Doc</li>
-                    <li>Done - Customize Display drop down styling</li>
-                </ul>
-
-                <h4>Company profile:</h4>
-                <ul>
-                    <li>In Progress - When the chart icon is clicked – the icon will change and the article title will be highlighted.</li>
-                    <li>In Progress - Chart date range – add a gray background to the selected timeframe.</li>
-                    <li>Add Hooks for content in tab rows</li>
-                    
-                    <li>Content - Link the alpha factors to a page that lists companies with the same factor.</li>
-                    <li>Get time increments to the aligned to the left</li>
-                    <li>&hellip;</li>
-                    <li>Done - Finalize HighStock chart colors</li>
-                    <li>Done - Add content for the other three tabs on that page – need to pull in the data for those.</li>
-                    <li>Done - Background bar has vertical lines for segments</li>
-                    <li>Done - Industry Tree needs to be pulled left</li>
-                    <li>Done - Make modal border thinner to represent what is in the company_profile_financials_DEV.psd mockup modal</li>
-                    <li>Done - Consensus Estimates mask for progress has white line</li>
-                </ul>
-
-                <h4>Financials:</h4>
-                <ul>
-                    <li>Done - Remove unchart option when it’s not being charted.</li>
-                    <li>Done - Financials data should be in a scrollable area.</li>
-                    <li>Done - There are 5 sections of financials – only showing 3 now.</li>
-                    <li>In Progress - Change the chart legend so it’s only listed once with the category it is in in []. Vertically align at bottom.</li>
-                    <li>Done - “Select two options to chart” – add 10 pixels of white space under that.</li>
-                    <li>In Progress - 2 error states</li>
-                    <li>In Progress - Build out Legend</li>
-                    <li>&hellip;</li>
-                </ul>
-
-                <h4>Print report: still to do</h4>
-                <h6>Design Debriefing Notes</h6>
-                <p>All colors need to be 100% opacity, cases where we are not doing full-transparency in ways we cannot replicate in code.</p>
-                <p>What are the border-radius guidelines?</p>
-                <p>What are the minimum and maximum sizes for the scroll bar selection range in the second, bar chart on the Company Profile page</p>
-
-                <h4>Toggle Company Financials modal</h4>
-                <h4>Toggle Terms &amp; Conditions modal</h4>
-                <h4>Company Profile</h4>
+                <img src="img/placeholder-header.jpg">
             </div>
         </div>
     </div>
+    
+    <div class="container_3">
+        <div class="grid_3">
+            <div class="page-title"><!-- ABC Financial Corp. (ABC) --></div>
+        </div>
+        <div class="grid_3 screener-header">
+
+            <div class="description">
+                <div class="intro-headline">Your search for investment opportunity begins here.</div>
+                <p>Whether you seek new companies or established stable performers, we can help you identify the stocks that best fit your investment strategy.</p>
+                <div class="searchbar">
+                    <input type="text" placeholder="Company name or stock code">
+                    <div class="search-submit" class="button" value="" alt="Search Submit"></div>
+                </div>
+                <div class="button">View All Companies</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container_3">
+        <div class="row">
+            <div class="grid_2">
+                <div class="module edit">
+                    <div class="title">
+                        <div class="label">Search Criteria</div>
+                    </div>
+                    <table class="search-criteria">
+                        <thead>
+                            <tr>
+                                <th width="82">Criteria</th>
+                                <th width="46">Min</th>
+                                <th width="250">Distribution</th>
+                                <th width="52">Max</th>
+                                <th width="16"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    
+                    <!-- BEGIN: templates for criteria -->
+                    <table class="template" id="criteria-templates">
+                    
+						<tr class="criteria" data-template="number">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+                             <td class="min"></td>
+                             <td class="criteria-slider">
+                                 <div class="module-stock-slider">
+                                     <div class="slider-bar"></div>
+                                     <div class="stock-bar-container"></div>
+                                     <div class="bar"></div>
+                                     <div class="matches"></div>
+                                 </div>
+                             </td>
+                             <td class="max"></td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+                         </tr>
+                         
+						<tr class="criteria" data-template="select">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+							<td class="min">&nbsp;</td>
+							<td>
+								<div class="button-dropdown">
+									<div class="trigger"><span class="copy"></span>
+										<span class="arrow"></span>
+									</div>
+									<div class="dropdown">
+										<ul></ul>
+									</div>
+								</div>
+							</td>
+							<td class="max">&nbsp;</td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+						</tr>
+                    
+                    </table>
+                    <!-- END: templates for criteria -->
+
+                </div>
+
+            </div>
+            <div class="grid_1">
+                <div class="module editSearchB">
+                    <div class="title">
+                        <div class="label">Edit Search Criteria</div>
+                        <div class="button button-reset">Reset</div>
+                    </div>
+                    
+                    <div class="module-accordion">
+                        <h3>Market Data</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-min="80" data-max="100" data-type="dollar" data-name="marketCap">
+                                <div class="trigger">Total Market Cap</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="percentChange">
+                                <div class="trigger">% Change over date range up to 1 year</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceVs52WeekHigh">
+                                <div class="trigger">Current Stock Price vs 52 week high</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceVs52WeekLow">
+                                <div class="trigger">Current Stock Price vs 52 week low</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="beta5Yr">
+                                <div class="trigger">5-Year Beta</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="volume">
+                                <div class="trigger">Volume</div>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+
+                        <h3>Financials</h3>
+
+                        <div class="panel">
+                            <div class="checkbox checked default" data-min="80" data-max="100" data-type="dollar" data-name="totalRevenue">
+                                <div class="trigger">Total Revenue</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="ebitdaMargin">
+                                <div class="trigger">EBITDA Margin</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="netProfitMargin">
+                                <div class="trigger">Net Profit Margin</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="eps">
+                                <div class="trigger">Earnings Per Share</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalDebtEquity">
+                                <div class="trigger">Debt/Equity Ratio</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev1YrAnnGrowth">
+                                <div class="trigger">1-year Revenue Growth</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev3YrAnnGrowth">
+                                <div class="trigger">3-year Revenue Growth</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="totalRev5YrAnnGrowth">
+                                <div class="trigger">5-year Revenue Growth</div>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+
+                        <h3>Valuation</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-min="80" data-max="100" data-type="dollar" data-name="peRatio">
+                                <div class="trigger">P/E Ratio</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox checked" data-min="80" data-max="100" data-type="dollar" data-name="dividendYield">
+                                <div class="trigger">Dividend Yield</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="priceToBookRatio">
+                                <div class="trigger">P/BV</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-min="80" data-max="100" data-type="dollar" data-name="avgBrokerReq">
+                                <div class="trigger">Consensus Recommendation</div>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        
+                        <h3>Industry</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-min="80" data-max="100" data-name="industryGroup" data-template="select" data-label="Select Sector & Industry">
+                                <div class="trigger">Industry</div>
+                                <input type="checkbox">
+                            </div>
+                            <!-- 
+                            <div class="percent-chooser" data-name="">
+                                <input type="text">
+                            </div>
+                            <div class="date-chooser" data-name="">
+                                <input type="text">
+                                <input type="text">
+                            </div>
+                             -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container_3">
+        <div class="grid_3">
+            <div class="module module-results">
+                <div class="title">
+                    <div class="label">Results</div>
+                </div>
+                <div class="toolbar">
+                    <div class="results">0 results</div>
+                    <div class="button-dropdown secondary-search-dropdown">
+                        <div class="trigger">All Industries
+                            <span class="arrow"></span>
+                        </div>
+                        <div class="dropdown">
+                            <ul>
+                                <li data-filter="basicmaterials">Basic Materials</li>
+                                <li data-filter="conglomerates">Conglomerates</li>
+                                <li data-filter="consumergoods">Consumer Goods</li>
+                                <li data-filter="financial">Financial</li>
+                                <li data-filter="healthcare">Healthcare</li>
+                                <li data-filter="industrialgoods">Industrial Goods</li>
+                                <li data-filter="services">Services</li>
+                                <li data-filter="technology">Technology</li>
+                                <li data-filter="utilities">Utilities</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="button-dropdown button-customize-display">
+                        <div class="trigger">Customize Display
+                            <span class="arrow"></span>
+                        </div>
+                        <div class="dropdown dropdown-padding">
+                            <p>Select up to four.</p>
+                            <h4>Market Data</h4>
+                            <div class="checkbox" data-result-point="marketCap">
+                                <div class="trigger">Total Market Cap</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="marketCap">
+                                <div class="trigger">Percentage Change - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="priceVs52WeekHigh">
+                                <div class="trigger">Current Stock Prive vs. 52 week high</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="priceVs52WeekLow">
+                                <div class="trigger">Current Stock Prive vs. 52 week low</div>
+                                <input type="checkbox">
+                            </div>
+                            
+                            <div class="checkbox" data-result-point="marketCap">
+                                <div class="trigger">5-Year Beta - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="volume">
+                                <div class="trigger">Volume</div>
+                                <input type="checkbox">
+                            </div>
+                            <h4>Financials</h4>
+                            <div class="checkbox" data-result-point="totalRevenue">
+                                <div class="trigger">Total Revenue</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="ebitdaMargin">
+                                <div class="trigger">EBITDA Margin</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="netProfitMargin">
+                                <div class="trigger">Net Profit Margin</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="eps">
+                                <div class="trigger">Earnings Per Share</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="totalDebtEquity">
+                                <div class="trigger">Debt/Equity Ratio</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="totalRev1YrAnnGrowth">
+                                <div class="trigger">1-year Revenue Growth</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">3-year Revenue Growth - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">5-year Revenue Growth - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+                            <h4>Valuation</h4>
+                            <div class="checkbox" data-result-point="peRatio">
+                                <div class="trigger">P/E</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="dividendYield">
+                                <div class="trigger">Dividend Yield</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox" data-result-point="priceToBookRatio">
+                                <div class="trigger">P/BV</div>
+                                <input type="checkbox">
+                            </div>
+                            <div class="checkbox">
+                                <div class="trigger">Consensus Recommendation - Not in object</div>
+                                <input type="checkbox">
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="296">Company Name</th>
+                                <th>Code</th>
+                                <th>Industry</th>
+                                <th>Market Cap</th>
+                                <th>Revenue</th>
+                                <th>P/E Ratio</th>
+                                <th>Div Yield</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="placeholder" colspan="7">No search results</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="pager">
+                    <!-- <li><a href="#">Previous</a>
+                    </li>
+                    <li>
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">&hellip;</a>
+                    </li>
+                    <li>
+                        <a href="#">8</a>
+                    </li>
+                    <li>
+                        <a href="#">Next</a>
+                    </li> -->
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    
 </body>
 
 </html>

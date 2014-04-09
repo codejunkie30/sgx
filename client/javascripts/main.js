@@ -11,10 +11,8 @@
             slider: 'vendor/jquery.ui/ui/jquery.ui.slider',
             tabs: 'vendor/jquery.ui/ui/jquery.ui.tabs',
             highstock: 'vendor/highstock/highstock',
-            socketio: 'vendor/socket.io/lib/socket.io',
             debug: 'vendor/ba-debug.min',
-            underscore: 'vendor/underscore/underscore',
-            
+            underscore: 'vendor/underscore/underscore'
         },
         waitSeconds: 1,
         shim: {
@@ -50,7 +48,7 @@
                 "exports": "_"
             }
         }
-    }, ['app/SGX-core', 'app/SGX-stocks','app/SGX-dev'], function($, SGX, _) {
+    }, [ 'app/SGX-base', 'app/SGX-glossary' ], function($, SGX, _) {
 
     });
 
