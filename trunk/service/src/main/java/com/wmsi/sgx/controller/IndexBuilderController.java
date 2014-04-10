@@ -56,7 +56,7 @@ public class IndexBuilderController{
 			lines = lines.subList(0, Integer.valueOf(size));
 			
 			int c = lines.size();
-			String[][] ids = new String[c][3];
+			String[][] ids = new String[c][2];
 			
 			for(int i =0; i < c; i++){
 				ids[i] = lines.get(i).split("\t");
@@ -90,7 +90,7 @@ public class IndexBuilderController{
 			if(ticker[1] == null || ticker[1].toLowerCase().equals("null"))
 				continue;
 			
-			index(index, date, ticker[0], ticker[1], ticker[2]);
+			index(index, date, ticker[0], ticker[1]);
 		}
 			
 		buildAlphaFactors(index, date);
@@ -106,7 +106,7 @@ public class IndexBuilderController{
 		}
 	}
 	
-	private void index(String index, String date, String companyId, String ticker, String gvKey) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException{
+	private void index(String index, String date, String companyId, String ticker) throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException{
 
 		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, date);
 		if(companyInfo == null)
@@ -118,15 +118,21 @@ public class IndexBuilderController{
 		if(h != null)
 			indexerService.save("holders", ticker, h, index);
 
+		/*
 		KeyDevs kd = capIQService.getKeyDevelopments(ticker, date);
 
 		if(kd != null)
 			indexerService.save("keyDevs", ticker, kd, index);
-
-		CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
-		String id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
-		indexerService.save("financial", id, companyFinancial, index);
+		*/
+		//CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
+		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker);
+		for(CompanyFinancial c : cfs){
+			String id = c.getTickerCode().concat(c.getAbsPeriod());
+			indexerService.save("financial", id, c, index);
+		}
 		
+		
+		/*
 		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY" );
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
@@ -146,19 +152,19 @@ public class IndexBuilderController{
 		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-4" );
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
-
+	*/
 		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, date);
 		List<HistoricalValue> price = historicalData.get(0);
 		
 		for(HistoricalValue data : price){
-			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
 
 		List<HistoricalValue> volume = historicalData.get(1);
 		
 		for(HistoricalValue data : volume){
-			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}		
 		

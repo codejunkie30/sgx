@@ -84,7 +84,7 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 
 		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, "03/10/2014");
 		indexerService.save("company", ticker, companyInfo, index);
-		
+		/*
 		CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
 		String id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
@@ -108,19 +108,19 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 		companyFinancial = capIQService.getCompanyFinancials(ticker, "FY-4" );
 		id = companyFinancial.getTickerCode().concat(companyFinancial.getPeriod());
 		indexerService.save("financial", id, companyFinancial, index);
-
+*/
 		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, "03/10/2014");
 		List<HistoricalValue> price = historicalData.get(0);
 		
 		for(HistoricalValue data : price){
-			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
 
 		List<HistoricalValue> volume = historicalData.get(1);
 		
 		for(HistoricalValue data : volume){
-			id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}		
 		
