@@ -17,7 +17,7 @@ import com.wmsi.sgx.config.HttpConfig;
 public class AlphaFactorServiceTest  extends AbstractTestNGSpringContextTests{
 
 	@Autowired
-	AlphaFactorIndexerService service;
+	private AlphaFactorIndexerService service;
 	
 	@Test
 	public void testGetLatestFile() throws AlphaFactorServiceException, IOException{
