@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -112,7 +114,6 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 	
 	public Double getThreeMonthAvg(String id, String startDate) throws CapIQRequestException, ParseException {
-		
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		Date currentDate = df.parse(startDate);
 		Calendar cal = Calendar.getInstance();
@@ -145,24 +146,27 @@ public class CapIQServiceImpl implements CapIQService{
 		return historicalData.get(0);
 	}
 
+	/*
 	@Override
 	public CompanyFinancial getCompanyFinancials(String id, String period) throws CapIQRequestException {
 		Resource template = new ClassPathResource("META-INF/query/capiq/companyFinancials.json");
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
-		ctx.put("period", period);
+		//ctx.put("period", period);
 		
 		CapIQResponse response = executeCapIqRequests(template, ctx);
 		
 		try{
 			Map<String, String> m = capIqResponseToMap(response);
+			Map<String, Map<String, String>> km = capIqResponseToKeyedMap(response);
+			m = km.entrySet().iterator().next().getValue();
+			
 			InputStream in = new ClassPathResource("META-INF/mappings/dozer/companyFinancialsMapping.xml").getInputStream();
 			CompanyFinancial financial = dozerMapper(in, m, CompanyFinancial.class);
 			
 			if(financial != null){
-				financial.setTickerCode(id);
-				financial.setPeriod(period);
+				financial.setTickerCode(id);				
 			}
 			
 			return financial;
@@ -178,7 +182,52 @@ public class CapIQServiceImpl implements CapIQService{
 		}
 		return null;
 	}
+*/
+	@Override
+	public List<CompanyFinancial> getCompanyFinancials(String id ) throws CapIQRequestException {
+		Resource template = new ClassPathResource("META-INF/query/capiq/companyFinancials.json");
+
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("id", id);
+		
+		CapIQResponse response = executeCapIqRequests(template, ctx);
+		List<CompanyFinancial> ret = new ArrayList<CompanyFinancial>();
+		
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		
+		try{
+			mapper.addMapping(new ClassPathResource("META-INF/mappings/dozer/companyFinancialsMapping.xml").getInputStream());
+
+			Map<String, Map<String, String>> km = capIqResponseToKeyedMap(response);
+			
+			Iterator<Entry<String, Map<String, String>>> i = km.entrySet().iterator();
+			
+			while(i.hasNext()){
+				Entry<String, Map<String, String>> entry = i.next();
+				CompanyFinancial financial = mapper.map(entry.getValue(), CompanyFinancial.class);
+			
+				// AbsPeriod should never be null if there's data
+				if(financial != null && financial.getAbsPeriod() != null){
+					financial.setTickerCode(id);
+					ret.add(financial);
+				}	
+			}
+			
+			return ret;
+
+		}
+		catch(IOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch(Exception e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
+
 	@Override
 	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException{
 		List<String> ids = getKeyDevelopmentIds(id, asOfDate);
@@ -205,12 +254,10 @@ public class CapIQServiceImpl implements CapIQService{
 		String err = response.getErrorMsg();
 		if(StringUtils.isNotEmpty(err)){
 			throw new CapIQRequestException("Error response "+ err);
-		}
-		
+		}		
 		
 		CapIQResult headline = response.getResults().get(0);
 		CapIQResult date = response.getResults().get(1);
-		CapIQResult time = response.getResults().get(2);
 		CapIQResult sit = response.getResults().get(3);
 		
 		KeyDev keyDev = new KeyDev();
@@ -399,6 +446,48 @@ public class CapIQServiceImpl implements CapIQService{
 	private CapIQResponse executeCapIqRequests(Resource template, Map<String, Object> ctx) throws CapIQRequestException{
 		String query = new CapIQRequest().parseRequest(template, ctx);
 		return requestExecutor.execute(query);
+	}
+
+	private Map<String, Map<String, String>> capIqResponseToKeyedMap(CapIQResponse response) throws Exception{
+		Map<String, Map<String, String>> keyedMap = new HashMap<String, Map<String, String>>();
+		
+		for(CapIQResult res : response.getResults()){
+			String id = res.getIdentifier();
+			String period = res.getProperties().getPeriodType();
+			String key = id.concat(period);
+			
+			Map<String, String> m = null;
+			
+			if(keyedMap.containsKey(key))
+				m = keyedMap.get(key);
+			else{
+				m = new HashMap<String, String>();
+				keyedMap.put(key,  m);
+			}
+
+			String header = res.getMnemonic();
+			String err = res.getErrorMsg();
+			
+			if(StringUtils.isNotEmpty(err)){
+				log.error("Error response {}", err);
+				throw new Exception("Error " + err);				
+			}
+			
+			String val = res.getRows().get(0).getValues().get(0);
+			
+			if(val != null && val.toLowerCase().startsWith("data unavailable")){
+				continue;
+			}
+			
+			if(m.containsKey(header)){
+				System.out.println("Duplicate mnenonic found " + header);
+				header = header.concat("_prev");
+			}
+			
+			m.put(header, val);
+		}
+		
+		return keyedMap;		
 	}
 	
 	private Map<String, String> capIqResponseToMap(CapIQResponse response) throws Exception{

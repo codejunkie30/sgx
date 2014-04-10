@@ -11,11 +11,11 @@ import com.wmsi.sgx.model.financials.CompanyFinancial;
 public interface CapIQService{
 	List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException;
 
-	CompanyFinancial getCompanyFinancials(String id, String period) throws CapIQRequestException;
-
 	CompanyInfo getCompanyInfo(String id, String startDate) throws CapIQRequestException;
 
 	Holders getHolderDetails(String ticker) throws CapIQRequestException;
 
 	KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException;
+
+	List<CompanyFinancial> getCompanyFinancials(String id) throws CapIQRequestException;
 }
