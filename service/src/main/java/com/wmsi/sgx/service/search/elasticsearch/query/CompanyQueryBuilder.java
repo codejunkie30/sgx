@@ -31,17 +31,22 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 			SCRIPT_SELECT_FRAGMENT +
 			"return prices.size() > 0 ? prices[prices.size()-1] - prices[0]";
 	
+	private static final int MAX_RESULTS = 2000;
+	
 	@Override
 	public SearchSourceBuilder getBuilder(List<Criteria> criteria) {
 
-		BoolFilterBuilder boolFilter = FilterBuilders.boolFilter();
+		// Match all if no criteria
+		if(criteria == null || criteria.size() <= 0)
+			return new SearchSourceBuilder().query(QueryBuilders.matchAllQuery()).size(MAX_RESULTS);
 		
+		BoolFilterBuilder boolFilter = FilterBuilders.boolFilter();		
 		SearchSourceBuilder builder = new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(
 				boolFilter
 				.cache(true)
 				))
-		.size(2000);
+		.size(MAX_RESULTS);
 		
 		for(Criteria c : criteria){
 			
