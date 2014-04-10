@@ -66,6 +66,10 @@ public class DistributionServiceImpl implements DistributionService{
 				rangeFields.add(req.getField());
 		}
 		/// TEMP
+
+		// No need for the stats query if there are no numeric fields
+		if(rangeFields.size() <= 0)
+			return null;
 		
 		Aggregations stats = getStatsAggregations(rangeFields);		
 		Map<String, Integer> intervals = new HashMap<String, Integer>();
@@ -91,7 +95,6 @@ public class DistributionServiceImpl implements DistributionService{
 	private Aggregations getAggregations(List<DistributionRequestField> fields, Map<String, Integer> invervals) throws ServiceException {
 		try{
 			String query = buildQuery(fields, invervals);
-			System.out.println(query);
 			Aggregations aggregations = loadAggregations(query);
 			return normalizeAggregations(aggregations);
 		}
@@ -133,7 +136,6 @@ public class DistributionServiceImpl implements DistributionService{
 	private Aggregations getStatsAggregations(List<String> fields) throws ServiceException {
 		try{
 			String query = getStatsQuery(fields);
-			System.out.println(query);
 			return loadAggregations(query);
 		}
 		catch(IOException e){
@@ -194,7 +196,7 @@ public class DistributionServiceImpl implements DistributionService{
 					.size(2000)
 				);
 			}
-			else{
+			else if(ranges != null && ranges.size() > 0){
 				long interval = ranges.get(field);
 				
 				query.aggregation(
