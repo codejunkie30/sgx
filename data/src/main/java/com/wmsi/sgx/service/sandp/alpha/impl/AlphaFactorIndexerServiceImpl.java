@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.sandp.alpha.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,13 +10,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 import org.springframework.stereotype.Service;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
@@ -66,41 +69,46 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 	@Override
 	public List<AlphaFactor> loadAlphaFactors(File f) throws AlphaFactorServiceException {
 
-		List<AlphaFactor> ret = new ArrayList<AlphaFactor>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+		CSVReader reader = null;		
+		List<AlphaFactor> ret = new ArrayList<AlphaFactor>();
+		
 		try{
-			List<String> lines = FileUtils.readLines(f);
+			reader = new CSVReader(new FileReader(f), '\t');
+			reader.readNext(); // skip header
 			
-			for(String line : lines.subList(1, lines.size())){
-
-				String[] tokens = line.split("\t");
-
-				if(tokens.length < 47)
-					continue;
+			String[] record = null;
+			
+			 while((record = reader.readNext()) != null){
 
 				AlphaFactor af = new AlphaFactor();
-				af.setId(tokens[3]);
-				af.setDate(sdf.parse(tokens[0]));
-				af.setPriceMomentum(NumberUtils.toInt(tokens[40]));
-				af.setHistoricalGrowth(NumberUtils.toInt(tokens[41]));
-				af.setCapitalEfficiency(NumberUtils.toInt(tokens[42]));
-				af.setValuation(NumberUtils.toInt(tokens[43]));
-				af.setEarningsQuality(NumberUtils.toInt(tokens[44]));
-				af.setSize(NumberUtils.toInt(tokens[45]));
-				af.setVolatility(NumberUtils.toInt(tokens[46]));
-
-				if(tokens.length > 47)
-					af.setAnalystExpectations(NumberUtils.toInt(tokens[47]));
+				af.setId(record[3]);
+				af.setDate(sdf.parse(record[0]));
+				af.setPriceMomentum(toInt(record[40]));
+				af.setHistoricalGrowth(toInt(record[41]));
+				af.setCapitalEfficiency(toInt(record[42]));
+				af.setValuation(toInt(record[43]));
+				af.setEarningsQuality(toInt(record[44]));
+				af.setSize(toInt(record[45]));
+				af.setVolatility(toInt(record[46]));
+				af.setAnalystExpectations(toInt(record[47]));
 
 				ret.add(af);
 			}
 		}
 		catch(IOException | ParseException e){
-			throw new AlphaFactorServiceException("Could not parse alpah factors file", e);
+			throw new AlphaFactorServiceException("Could not parse alpha factors file", e);
+		}
+		finally{
+			IOUtils.closeQuietly(reader);				
 		}
 
 		return ret;
+	}
+	
+	private int toInt(String str){
+		return NumberUtils.toInt(str);
 	}
 
 }
