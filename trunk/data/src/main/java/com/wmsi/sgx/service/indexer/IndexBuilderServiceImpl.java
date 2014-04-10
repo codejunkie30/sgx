@@ -7,18 +7,16 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
-import org.springframework.integration.ftp.session.FtpSession;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.CompanyInfo;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
+import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.CompanyFinancial;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
@@ -72,17 +70,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	
 	@Override
 	public String buildIndex() throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException, AlphaFactorServiceException{
-		// TEMP TEMP TEMP - Quick and sleezy way to build the index
-		// while deployed until a nightly build is implemented
-		/*
-		System.out.println(bod);
-		if(!bod.get("pass").equals("Jon1 m1Tch3ll N3v3R L13d"))
-			return "invalid";
-		
-		String index = bod.get("name");
-		String date = bod.get("date");
-		String size = bod.get("size");
-		*/
 		String index = "test";
 		String date = "03/10/2014";
 		String size = "15";
@@ -103,9 +90,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	private DefaultFtpSessionFactory ftpSessionFactory;
 	
 	private void buildAlphaFactors(String index, String date) throws IOException, AlphaFactorServiceException{
-		System.out.println(ftpSessionFactory.getSession().list("/"));
 		
-		//Resource r = new ClassPathResource("data/rank_AFLSG_20140311.txt");
 		File file = alphaFactorService.getLatestFile();
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 	
@@ -126,12 +111,11 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(h != null)
 			indexerService.save("holders", ticker, h, index);
 
-		/*
 		KeyDevs kd = capIQService.getKeyDevelopments(ticker, date);
 
 		if(kd != null)
 			indexerService.save("keyDevs", ticker, kd, index);
-		*/
+		
 		//CompanyFinancial companyFinancial = capIQService.getCompanyFinancials(ticker, "LTM" );
 		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker);
 		for(CompanyFinancial c : cfs){
