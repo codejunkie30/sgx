@@ -22,16 +22,15 @@
 		service-interface="com.wmsi.sgx.service.indexer.IndexBuilderService">	
 	</int:gateway>
 
-<!-- 	<int:inbound-channel-adapter id="alphaChannelAdapter" 
-		channel="indexRequestChannel" 
+ 	<int:service-activator id="alphaFactorIndexer" 
+		input-channel="indexRequestChannel" 
 		ref="indexBuilderServiceImpl"
-		method="buildAlphaFactors"/>
-	
- -->
+		method="buildAlphaFactors"/> 
+ 
  	<int:splitter id="tickerSplitter" 
 		input-channel="indexRequestChannel"
 		output-channel="indexTicker"
-		ref="indexBuilderService"
+		ref="indexBuilderServiceImpl"
 		method="getTickers"/>
 		
 	<int:channel id="indexTicker" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">

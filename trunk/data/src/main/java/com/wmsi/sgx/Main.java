@@ -66,7 +66,6 @@ public final class Main {
 
 		final Scanner scanner = new Scanner(System.in);
 
-		final IndexBuilderService indexer = (IndexBuilderService) context.getBean("indexBuilderServiceImpl");
 		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
 		
 		if (LOGGER.isInfoEnabled()) {
@@ -91,7 +90,6 @@ public final class Main {
 				Date now = new Date();
 				job.setDate(now);
 				job.setIndexName("test");
-
 				
 				chan.send(MessageBuilder
 					.withPayload(job)	
