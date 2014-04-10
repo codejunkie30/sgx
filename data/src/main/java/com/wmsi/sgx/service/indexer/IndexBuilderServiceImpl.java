@@ -100,7 +100,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	private DefaultFtpSessionFactory ftpSessionFactory;
 
 	@Override
-	public void buildAlphaFactors(@Payload CompanyInputRecord input) throws IOException, AlphaFactorServiceException {
+	public void buildAlphaFactors() throws IOException, AlphaFactorServiceException {
 		String index = "test";
 		
 		File file = alphaFactorService.getLatestFile();

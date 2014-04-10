@@ -12,6 +12,6 @@ public interface IndexBuilderService{
 
 	List<CompanyInputRecord> getTickers() throws IndexerServiceException;
 
-	void buildAlphaFactors(CompanyInputRecord input) throws IOException, AlphaFactorServiceException;
+	void buildAlphaFactors() throws IOException, AlphaFactorServiceException;
 
 }
