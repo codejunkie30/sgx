@@ -34,11 +34,10 @@ public class AppConfig{
 	@Bean
 	public DozerBeanMapperFactoryBean dozerMappingBean() throws Exception{
 
-		// TODO Move load all dozer configs here
 		DozerBeanMapperFactoryBean factory = new DozerBeanMapperFactoryBean();
 		factory.setMappingFiles( 
 				new PathMatchingResourcePatternResolver()
-					.getResources("classpath:META-INF/mappings/dozer/domain*.xml"));
+					.getResources("classpath:META-INF/mappings/dozer/*.xml"));
 		
 		return factory; 
 	}

@@ -15,21 +15,17 @@
  */
 package com.wmsi.sgx;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.integration.MessageChannel;
+import org.springframework.integration.support.MessageBuilder;
 
-import com.wmsi.sgx.model.CompanyInfo;
-import com.wmsi.sgx.service.StringConversionService;
+import com.wmsi.sgx.model.integration.DataLoadJob;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
-import com.wmsi.sgx.service.indexer.IndexerServiceException;
-import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 
 
 /**
@@ -70,9 +66,9 @@ public final class Main {
 
 		final Scanner scanner = new Scanner(System.in);
 
-		final StringConversionService service = context.getBean(StringConversionService.class);
 		final IndexBuilderService indexer = (IndexBuilderService) context.getBean("indexBuilderServiceImpl");
-
+		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
+		
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("\n========================================================="
 					  + "\n                                                         "
@@ -82,7 +78,7 @@ public final class Main {
 		}
 
 		System.out.print("Please enter a string and press <enter>: ");
-
+		chan.send(MessageBuilder.withPayload("Test").build());
 		while (true) {
 
 			final String input = scanner.nextLine();
@@ -91,25 +87,17 @@ public final class Main {
 				break;
 			}
 			else if("index".equals(input.trim())){
-				try{
-					String info = indexer.buildIndex();
-					System.out.println(info);
-				}
-				catch(IOException | URISyntaxException | IndexerServiceException | CapIQRequestException
-						| ParseException | AlphaFactorServiceException e){
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}				
+				DataLoadJob job = new DataLoadJob();
+				Date now = new Date();
+				job.setDate(now);
+				job.setIndexName("test");
 
-			try {
-
-				System.out.println("Converted to upper-case: " + service.convertToUpperCase(input));
 				
-
-			} catch (Exception e) {
-				LOGGER.error("An exception was caught: " + e);
-			}
+				chan.send(MessageBuilder
+					.withPayload(job)	
+					.build()
+				);					
+			}				
 
 			System.out.print("Please enter a string and press <enter>:");
 

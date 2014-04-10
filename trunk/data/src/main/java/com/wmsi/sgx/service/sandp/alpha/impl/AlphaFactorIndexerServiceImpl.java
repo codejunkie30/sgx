@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 
 	private static final String ALPHA_FILE_PREFIX = "rank_";
 
-	// TODO externalize
-	private static final String tmpDir = "/mnt/feed/work/";
+	@Value("${loader.workdir}")
+	private String tmpDir;
 
 	@Override
 	public File getLatestFile() throws AlphaFactorServiceException {
@@ -53,6 +54,10 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			// Sort by name, which includes date, get latest file
 			Collections.sort(names);
 			String fileName = names.get(names.size() - 1);
+			
+			if(tmpDir == null){				
+				tmpDir = System.getProperty("java.io.tmpDir");
+			}
 			
 			// Transfer
 			File ret = new File(tmpDir + fileName);

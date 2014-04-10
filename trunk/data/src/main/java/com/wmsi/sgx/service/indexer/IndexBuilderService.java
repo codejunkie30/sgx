@@ -1,15 +1,17 @@
 package com.wmsi.sgx.service.indexer;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
+import java.util.List;
 
+import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 
 public interface IndexBuilderService{
 
-	String buildIndex() throws IOException, URISyntaxException, IndexerServiceException, CapIQRequestException,
-			ParseException, AlphaFactorServiceException;
+	void index(CompanyInputRecord input) throws IndexerServiceException;
+
+	List<CompanyInputRecord> getTickers() throws IndexerServiceException;
+
+	void buildAlphaFactors(CompanyInputRecord input) throws IOException, AlphaFactorServiceException;
 
 }

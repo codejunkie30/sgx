@@ -3,61 +3,45 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp-3.0.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!-- See also:
-		http://static.springsource.org/spring-integration/reference/htmlsingle/#gateway-proxy
-		http://www.eaipatterns.com/MessagingGateway.html -->
-	<int:gateway id="gateway"
-		default-request-timeout="5000"
-		default-reply-timeout="5000"
-		default-request-channel="requestChannel"
-		default-reply-channel="replyChannel"
-		service-interface="com.wmsi.sgx.service.StringConversionService">
-		<int:method name="convertToUpperCase"/>
-	</int:gateway>
-
-	<!-- See also:
-		http://static.springsource.org/spring-integration/reference/htmlsingle/#service-activator
-		http://www.eaipatterns.com/MessagingAdapter.html -->
-	<int:service-activator id="serviceActivator"
-		input-channel="requestChannel" output-channel="replyChannel"
-		expression="payload.toLowerCase()"/>
-
-	<int:channel id="replyChannel"/>
-	<int:channel id="requestChannel"/>
-
+	<task:executor id="indexerTaskExecutor" pool-size="5" queue-capacity="100" rejection-policy="CALLER_RUNS"/>
+	
+	<int:publish-subscribe-channel id="indexRequestChannel"/>
+	<int:channel id="indexReplyChannel"/>
 
 	<int:gateway id="indexGateway"
 		default-request-timeout="5000"
 		default-reply-timeout="5000"
 		default-request-channel="indexRequestChannel"
 		default-reply-channel="indexReplyChannel"
-		service-interface="com.wmsi.sgx.service.indexer.IndexBuilderService">
-		<int:method name="index"/>
+		service-interface="com.wmsi.sgx.service.indexer.IndexBuilderService">	
 	</int:gateway>
 
-	<!-- See also:
-		http://static.springsource.org/spring-integration/reference/htmlsingle/#service-activator
-		http://www.eaipatterns.com/MessagingAdapter.html -->
-	<int:service-activator id="serviceActivator"
-		input-channel="indexRequestChannel" output-channel="indexReplyChannel" ref="indexBuilderServiceImpl"/>
-
-	<int:channel id="indexRequestChannel"/>
-	<int:channel id="indexReplyChannel"/>
+<!-- 	<int:inbound-channel-adapter id="alphaChannelAdapter" 
+		channel="indexRequestChannel" 
+		ref="indexBuilderServiceImpl"
+		method="buildAlphaFactors"/>
 	
+ -->
+ 	<int:splitter id="tickerSplitter" 
+		input-channel="indexRequestChannel"
+		output-channel="indexTicker"
+		ref="indexBuilderService"
+		method="getTickers"/>
+		
+	<int:channel id="indexTicker" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">
+		<int:dispatcher task-executor="indexerTaskExecutor"/>
+	</int:channel>
 	
-	<bean id="ftpClientFactory"
-    class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
-    <property name="host" value="localhost"/>
-    <property name="port" value="22"/>
-    <property name="username" value="kermit"/>
-    <property name="password" value="frog"/>
-    <property name="clientMode" value="0"/>
-    <property name="fileType" value="2"/>
-    <property name="bufferSize" value="100000"/>
-</bean>
+	<int:service-activator id="indexBuilder"
+		input-channel="indexTicker"
+		ref="indexBuilderServiceImpl" 
+		method="index"/>
 
+	
 </beans>
