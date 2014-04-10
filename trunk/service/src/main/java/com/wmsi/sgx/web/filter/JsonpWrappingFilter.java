@@ -24,18 +24,17 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 	private static final Logger log = LoggerFactory.getLogger(JsonpWrappingFilter.class);
 
 	private static final String JSON_PARAM_NAME = "json";
-	private static final String JSONP_CALLBACK_NAME = "jsonp";
+	private static final String JSONP_CALLBACK_PARAM = "callback";
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-	
 		
 		log.debug("Jsonp Wrapper Filter invoked");
 		
 		Map<String, String[]> parms = request.getParameterMap();
 
-		if(request.getMethod() == "GET" && parms.containsKey(JSON_PARAM_NAME) ){
+		if(request.getMethod() == "GET" && parms.containsKey(JSON_PARAM_NAME) && parms.containsKey(JSONP_CALLBACK_PARAM)){
 		
 			log.debug("Converting jsonp GET request to POST with body");
 
@@ -47,10 +46,12 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
 			filterChain.doFilter(postRequestWrapper, wrapper);
 			
+			String callback = parms.get(JSONP_CALLBACK_PARAM)[0];
+			
 			// Wrap json with jsonp callback
 			OutputStream out = response.getOutputStream();
 			
-			out.write((JSONP_CALLBACK_NAME + "(").getBytes());
+			out.write((callback + "(").getBytes());
 			out.write(wrapper.getData());
 			out.write(");".getBytes());
 
