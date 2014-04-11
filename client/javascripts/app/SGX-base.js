@@ -7,6 +7,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
     		
     		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
+    		resultSize: 25,
+    		
     		screener: {
 
         		init: function() {
@@ -41,9 +43,41 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         				
         			});
         			
+        			$(".editSearchB .button-reset").click(function(e) {
+        				SGX.screener.criteriaChange.reset();
+        			});
+        			
+
+        			$(".screener-header .search-submit").click(function(e) {
+        				SGX.screener.criteriaChange.reset(function() {
+        					SGX.screener.search.nameSearch($(".searchbar input").val());
+        				});
+        			});
+
+        			
+        			$(".screener-header .button.all-companies").click(function(e) {
+        				SGX.screener.criteriaChange.reset(function() {  
+        				    $('html, body').animate({
+        				        scrollTop: $(".module-results").offset().top
+        				    }, 150);        					
+        				});
+        			});
+        			
+        			
+        			
+
         			SGX.screener.initCriteria();
+        			
+        		},
+        		
+        		finalize: function(data) {
+
+        			SGX.screener.drawInitialCriteria(data);
+                	SGX.dropdowns.init(".search-criteria", SGX.screener.search.criteriaSearch);
+                	SGX.tooltip.init("body");
         			SGX.accordion();
         			SGX.hideLoading();
+        			SGX.screener.search.criteriaSearch();
         			
         		},
         		
@@ -54,7 +88,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	var data = { "fields" : [] };
                 	$.each(allFields, function(idx, field) { if (field.selected) data.fields.push(field.id); });
                 	
-                	SGX.screener.criteriaChange.getDistributions(data, SGX.screener.drawInitialCriteria);
+                	SGX.screener.criteriaChange.getDistributions(data, SGX.screener.finalize);
                 	
                 },
 
@@ -70,35 +104,38 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 
                 populateField: function(field, el) {
             		field.id = $(el).attr("data-name");
-            		field.format = $(el).attr("data-type");
+            		field.format = $(el).attr("data-type") === "undefined" ? "string" : $(el).attr("data-type");
             		field.name = $(".trigger", el).text();
             		field.selected = $(el).hasClass("checked");
             		field.template =  typeof $(el).attr("data-template") !== "undefined" ? $(el).attr("data-template") : "number";
             		field.label = typeof $(el).attr("data-label") !== "undefined" ? $(el).attr("data-label") : "";
             		field.order = parseInt($(el).attr("data-order"));
+            		field.isDefault = $(el).hasClass("default");
+            		field.shortName = $(el).attr("data-short-name");
             		return field;
                 },
                 
                 drawInitialCriteria: function(data) {
                 	$(".search-criteria tbody").children().remove();
-                	
-                	data.distributions.sort(function(a, b) {
-                		var a = parseInt($(".editSearchB [data-name='" + a.field + "']").attr("data-order"));
-                		var b = parseInt($(".editSearchB [data-name='" + b.field + "']").attr("data-order"));
-                    	if (a < b) return -1;
-                    	if (a > b) return 1;
-                    	return 0;
-                	});
-                	
                 	SGX.screener.drawCriteria(data);
-                	
-                	SGX.tooltip.init("body");
-                	
                 },
                 
                 drawCriteria: function(data) {
+
+                	if (data.distributions.length > 1) {
+                    	data.distributions.sort(function(a, b) {
+                    		var a = parseInt($(".editSearchB [data-name='" + a.field + "']").attr("data-order"));
+                    		var b = parseInt($(".editSearchB [data-name='" + b.field + "']").attr("data-order"));
+                        	if (a < b) return -1;
+                        	if (a > b) return 1;
+                        	return 0;
+                    	});
+                	}
+                	
                 	
                 	$.each(data.distributions, function(idx, distribution) {
+                		
+                		if ($(".search-criteria [data-name='" + distribution.field + "']").length > 0) return;
 
                 		// populate with label, other info from HTML
                 		var el = $(".editSearchB [data-name='" + distribution.field + "']");
@@ -137,6 +174,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		
                 	});
                 	
+                	SGX.formatValues(".search-criteria");
+                	
                 },
                 
                 drawCriteriaSelect: function(distribution) {
@@ -146,7 +185,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
 
                 	$(template).data(distribution);
                 	$(".button-dropdown", template).attr("data-label", distribution.label);
-                	$(".info", template).text(distribution.name);
+                	$(".info", template).text(distribution.shortName);
                 	$(".trigger .copy", template).text(distribution.label);
                 	
                 	$.each(distribution.buckets, function(idx, bucket) {
@@ -154,9 +193,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	});
                 	
                 	$(".search-criteria tbody").append(template);
-
-                	SGX.dropdowns.init();
-
+                	
                     return template;
                 	
                 },
@@ -171,14 +208,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	
                 	$(template).data(distribution);
                 	$(template).attr("data-name", distribution.id).attr("data-min", distribution.min).attr("data-max", distribution.max);
-                	$(".info", template).text(distribution.name)
-                	$(".min", template).text(distribution.min);
-                	$(".max", template).text(distribution.max);
+                	$(".info", template).text(distribution.shortName)
+                	$(".min", template).text(distribution.min).attr("data-format", distribution.format);
+                	$(".max", template).text(distribution.max).attr("data-format", distribution.format);;
                 	$(".matches", template).text(matches);
                 	
                 	$(".search-criteria tbody").append(template);
-                	
-                	
+
                     SGX.screener.criteriaSlider.init($('td.criteria-slider', template));
                     
                     return template;
@@ -213,7 +249,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                             max: parseFloat(distribution.max, 10),
                             values: [ distribution.min, distribution.max ],
                             slide: SGX.screener.criteriaSlider.slide,
-                            step: (distribution.max / 50 > 0 ? 50 : 1)
+                            stop: SGX.screener.search.criteriaSearch,
+                            step: 1
                         });
                         
                         /**
@@ -254,12 +291,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		$.each(data.distributions, function(idx, distribution) {
                 			SGX.screener.criteriaChange.checkCriteriaItem($(".editSearchB [data-name='" + distribution.field + "']"));
                 		});
+                		SGX.screener.search.criteriaSearch();
                 		SGX.hideLoading();
                 	},
                 	
                 	removeCriteria: function(target, finished) {
                 		SGX.screener.criteriaChange.uncheckCriteriaItem(target);
                         $(target).remove();
+                        SGX.screener.search.criteriaSearch();
                         if (typeof finished !== "undefined") finished();
                 	},
                 	
@@ -287,12 +326,308 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                             content: '<h4>Search Criteria <span>(select up to 5)</h4><p>You have reached the criteria limit. Please remove criteria before proceeding.</p>',
                             type: 'alert'
                         });
+                	},
+                	
+                	reset: function(finished) {
+                		
+                    	$(".search-criteria tbody").children().remove();
+                        
+                    	// load up all fields for distributions
+                    	var allFields = SGX.screener.getAllCriteria();
+                    	var data = { "fields" : [] };
+                    	$.each(allFields, function(idx, field) { 
+                    		if (field.isDefault) data.fields.push(field.id); 
+                    	});
+                    	
+                    	SGX.showLoading();
+                    	
+                    	SGX.screener.criteriaChange.getDistributions(data, function(data) { 
+                    		SGX.screener.drawCriteria(data); 
+                    		SGX.hideLoading(); 
+                    		if (finished) finished(data);
+                    	});
+                		
                 	}
                 	
-                }
+                },
                 
-    		},
-    		
+                search: {
+                	
+                	nameSearch: function(val) {
+                		var endpoint = "/sgx/search/name";
+                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { search: val }, SGX.screener.search.renderResults, SGX.screener.search.fail);
+                	},
+                
+                	criteriaSearch: function() {
+                		
+                		var endpoint = "/sgx/search";
+                		var params = [];
+                		
+                		$(".search-criteria .criteria").each(function(idx, el) {
+                			
+                			var name = $(this).attr("data-name");
+                			
+                			param = { field: name };
+                			
+                			// handle slider criteria
+                			if ($(".slider-bar", this).length > 0) {
+                				var sliderVals = $(".slider-bar", this).slider("values");
+                				param.from = sliderVals[0];
+                				param.to = sliderVals[1];
+                			}
+                			// dropdown
+                			else if ($(".button-dropdown", this).length > 0) {
+                				var dd = $(".button-dropdown", this);
+                				var copy = $(".trigger .copy").text();
+                				if (dd.attr("data-label") == copy) return;
+                				param.value = copy;
+                			}
+                			
+                			params.push(param);
+                			
+                			
+                		});
+                		
+                		var qs = {};
+                		qs.criteria = params;
+                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, qs, SGX.screener.search.renderResults, SGX.screener.search.fail);
+                		
+                	},
+                
+                	fail: function(xhr, ajaxOptions, thrownErr) {
+                		debug.log(xhr);
+                		debug.log(ajaxOptions);
+                		debug.log(thrownErr);
+                	},
+                	
+                	renderResults: function(data) {
+
+                		if (data.companies.length == 0) {
+                    		$(".no-results-display").show();
+                    		$(".results-display").hide();
+                		}
+                		else {
+                    		$(".results-display").show();
+                    		$(".no-results-display").hide();
+                		}
+
+                		$(".module-results .results").text(data.companies.length + " results");
+                		$(".module-results tbody").children().remove();
+                		
+                		// all other fields
+            			var fields = SGX.screener.search.getAllColumns();
+            			var defaultDisplay = SGX.screener.search.getDisplayColumns();
+            			var sort = "companyName";
+            			var direction = "asc";
+
+            			// add headers (if hasn't happened already)
+            			if ($(".module-results thead th").length == 0) {
+            				
+                    		var header = $(".module-results thead");
+                    		$("<th data-name='companyName' data-sort='string'><span>Company Name</span></th>").addClass("sort").addClass("asc").addClass("companyName").appendTo(header);
+                    		
+                    		$.each(fields, function(idx, field) {
+                    			
+                    			var th = $("<th />").attr("data-name", field.field).addClass(field.field).appendTo(header);
+                    			$("<span />").text(field.shortName).appendTo(th);
+                    			if (!defaultDisplay.hasOwnProperty(field.field)) th.addClass('hidden');
+                    			
+                    		});
+
+                    		$(".module-results thead th").click(function(e) {
+                    			
+                				var table = $(".module-results table");
+                				$("th", table).removeClass("sort");
+
+                				var sort = $(this).hasClass("asc") ? "asc" : "desc";
+                				
+                				$("th", table).removeClass("desc").removeClass("asc");
+                				
+                				if (sort == "desc") sort = "asc";
+                				else sort = "desc";
+                				
+                				$(this).addClass("sort").addClass(sort);
+
+                        		SGX.screener.search.displayRows($(this).attr("data-name"), sort);
+                                
+                			});
+
+            			}
+            			else {
+            				sort = $("th.sort").attr("data-name");
+            				direction = $("th.sort").hasClass("desc") ? "desc" : "asc";
+            			}
+            			
+                		$.each(data.companies, function(idx, company) {
+                			
+                			var tr = $("<tr />").addClass("result").data(company);
+                			var cLink = $("<a href='company-tearsheet.html?code=" + company.tickerCode +"'>" + company.companyName + "</a>");
+
+                			// company name
+                			$("<td />").append(cLink).addClass("companyName").appendTo(tr).attr("data-value", company.companyName.toLowerCase()).attr('data-name', 'companyName');
+                			
+                			$.each(fields, function(fIdx, field) {
+                				var val = company.hasOwnProperty(field.field) ? company[field.field] : "-";
+                				var td = $("<td />").text(val).appendTo(tr).attr("data-value", val).attr("data-name", field.sortType == "string" ? field.field.toLowerCase() : field.field).attr("data-sort", field.sortType).addClass(field.field);
+                				if (field.format != "string") $(td).attr("data-format", "number").addClass("formattable");
+                				if (!defaultDisplay.hasOwnProperty(field.field)) td.addClass('hidden');
+                			});
+                			
+                			$(".module-results tbody").append(tr);
+                			
+                		});
+                		
+                		
+                		SGX.formatValues($(".module-results tbody"));
+                		SGX.screener.search.displayRows(sort, direction);
+
+                	},
+                	
+                	getAllColumns: function() {
+                		var ret = [ { field: "tickerCode", label: "Code", shortName: "Code", format: "string" }, { field: "industry", label: "Industry", shortName: "Industry", format: "string" } ];
+            			$(".editSearchB .checkbox[data-display='true']").each(function(idx, el) { 
+            				var dataSort = $(el).attr("data-sort");
+            				if (typeof dataSort === "undefined") dataSort = "number";
+            				var dataFmt = $(el).attr("data-type");
+            				if (typeof dataFmt === "undefined") dataFmt = "string";
+            				ret.push({ field: $(el).attr("data-name"), label: $(".trigger", el).text(), sortType: dataSort, shortName: $(el).attr("data-short-name"), format: dataFmt }); 
+            			});
+                		return ret;
+                	},
+                	
+                	getDisplayColumns: function() {
+                		
+                		var ret = {};
+                		
+                		ret["companyName"] = true;
+                		ret["tickerCode"] = true;
+                		ret["industry"] = true;
+                		
+                		// todo make dynamic
+                		ret["marketCap"] = true;
+                		ret["totalRevenue"] = true;
+                		ret["peRatio"] = true;
+                		ret["dividendYield"] = true;
+                		
+                		return ret;
+                	},
+                	
+                    displayRows: function(sort, direction) {
+                    	
+                    	var paging = $('.module-results .pager');
+                        paging.empty();
+                        
+                        var resultRows = $('.module-results tr.result');
+                        var page = SGX.screener.search.sortRows($(resultRows).closest("table"), sort, direction);
+                        
+                        if (resultRows.length > 0) {
+                        	
+                        	// page navigation
+                        	for (var i=1; i<page; i++) {
+                        		var navItem = $('<li><a class="page" href="#">' + i + '</a></li>');
+                        		paging.append(navItem);
+                        	}                        	
+
+                        	// prev/next
+                            if (page > 1) {
+                            	paging.prepend('<li><a class="prev" href="#">Prev</a></li>');
+                            	paging.append('<li><a class="next" href="#">Next</a></li>');
+                            }
+                            
+                            SGX.screener.search.displayPage(1);
+                            
+                        }
+                    },
+                    
+                    sortRows: function(table, sort, direction) {
+                    	
+                    	var rows = $("tbody tr", table);
+                    	
+                    	if (rows <= 1) return;
+                    	
+                    	if (typeof direction === "undefined") direction = "asc";
+                    	var sortType = $(table).find("th[data-name='" + sort + "']").attr("data-sort");
+
+                    	// sort
+                    	rows.sort(function(a, b) {
+                    		
+                    		var a1 = $("[data-name='" + sort + "']", "asc" == direction ? a : b).attr("data-value");
+                    		var b1 = $("[data-name='" + sort + "']", "asc" == direction ? b : a).attr("data-value");
+
+                    		if ("number" == sortType) {
+                    			a1 = parseFloat(a1);
+                    			b1 = parseFloat(b1);
+                    		}
+                    		
+                    		return a1.localeCompare(b1);
+                    		
+                    	});
+                    	
+                    	// break into pages
+                    	var i, j, page = 1;
+                    	for (i=0, j=rows.length; i<j; i+=SGX.resultSize) {
+                    		var tmp = rows.slice(i,i+SGX.resultSize);
+                    		if (tmp.length == 0) continue;
+                    		$(tmp).attr("data-page", page);
+                    		page++;
+                    	}
+
+                    	// reappend in order
+                    	$(table).children('tbody').append(rows);
+
+                    	return page;
+                    },
+                    
+                    displayPage: function(page) {
+
+                    	// display the results
+                    	$(".module-results .table-wrapper tbody tr").hide();
+                    	$(".module-results .table-wrapper tbody").show();
+                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").removeClass("even");
+                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']:even").addClass("even");
+                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show();
+                    	
+                    	// handle the navigation
+                    	var paging = $('.module-results .pager');
+                    	$("a", paging).removeClass("inactive").unbind("click");
+                    	
+                    	// previous
+                    	SGX.screener.search.pageButton($("a.prev", paging), page - 1 == 0 ? 1 : page - 1, page);
+                    	
+                    	// pages
+                    	var lastPg = 1;
+                    	$("a.page", paging).each(function(idx, el) {
+                    		var pg = parseInt($(el).text());
+                    		lastPg = pg;
+                    		SGX.screener.search.pageButton($(el), pg, page);
+                    	});
+                    	
+                    	// next
+                    	SGX.screener.search.pageButton($("a.next", paging), lastPg == page ? page : page + 1, page);                    		
+                    	
+                    },
+                    
+               		pageButton: function(el, page, cur) {
+            			$(el).attr('data-page', page);
+            			
+            			if (cur == page) {
+            				$(el).addClass("inactive");
+            			}
+            			
+            			$(el).click(function(e) {
+                			e.preventDefault();
+                			e.stopPropagation();
+                			if (cur == page) return;
+                			SGX.screener.search.displayPage(page);
+                		    $('html, body').animate({ scrollTop: $(".module-results").offset().top }, 1);
+            			});
+            			
+            		}
+            		
+                }
+
+                
+    		},   		
             
     		hideLoading: function() {
     			$('#loading').delay(250).fadeOut();
@@ -318,7 +653,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     url: endpoint,
                     type: 'GET',
                     dataType: 'jsonp',
-                    jsonpCallback: 'jsonp',
                     data: { 'json': JSON.stringify(data) },
                     contentType: 'application/json; charset=UTF-8',           	
                     success: typeof successFN !== "undefined" ? successFN : SGX.genericAjaxSuccess,
@@ -352,9 +686,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 },
                 
                 
-                init: function() {
+                init: function(selector, finished) {
                 	
-                	$('.button-dropdown').click(function(e) {
+                	$('.button-dropdown', selector).click(function(e) {
 
                 		var isOpen = $(this).hasClass("open");
 
@@ -367,7 +701,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		
                 	});
                 	
-                    $('.button-dropdown li').click(function(e) {
+                    $('.button-dropdown li', selector).click(function(e) {
                     	
                     	e.preventDefault();
                     	e.stopPropagation()
@@ -380,13 +714,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
                     			$(dd).find(".copy").text($(e.target).text());
                     			$(e.target).remove();
+                    			if (typeof finished !== "undefined") finished();
                     		});
                     	}
                     	
-                    	
-                    	
                     	$(dd).find(".copy").text(text);
+                    	
+                    	if (typeof finished !== "undefined") finished();
+                    	
                     	dd.click();
+                    	
                     });
 
                 }
@@ -462,6 +799,41 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 close: function(filter) {
                 	$(".tooltip.current").remove();
                 }
+            },
+            
+            formatValues: function(selector) {
+            	
+            	$(".formattable", selector).not("[formatted]").each(function(idx, el) {
+            		
+            		var fmt = $(el).attr("data-format");
+            		var val = $(el).text();
+            		
+            		if (fmt == "millions") {
+            			var tmp = parseInt(val) + "";
+            			val = parseFloat(val).toFixed(3);
+            			if (tmp.length >= 10) val = (val / 1000000000).toFixed(1).replace(/\.0$/, '') + 'b';
+            			else if (tmp.length >= 7) val = (val / 1000000).toFixed(1).replace(/\.0$/, '') + 'mm';
+            			else if (tmp.length >= 4) val = (val / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+            			val = "S$" + val;
+            		}
+            		else if (fmt == "number" && val.indexOf(".") != -1) {
+            			val = parseFloat(val).toFixed(3);
+            		}
+            		else if (fmt == "number") {
+            			// do nothing
+            		}
+            		else if (fmt == "percent") {
+            			val = val + "%";
+            		}
+            		else {
+            			console.log(fmt);
+            		}
+            		
+            		// we formatted it
+            		$(el).attr("formatted", "true").text(val);
+            		
+            	});
+            	
             }
     		
     };
