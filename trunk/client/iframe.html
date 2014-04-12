@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IFRAME - SGX</title>
+    <link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>		
+    <script type="text/javascript" src="javascripts/vendor/jquery/jquery.js"></script>		
+    <script type="text/javascript">
+    
+    	$(document).ready(function() {
+    		var companyURL = "http://localhost/index.html#" + encodeURIComponent(document.location.href);
+    		$("#company-info").attr("src", companyURL);
+    	});
+    
+	    // get height from remote content
+	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://localhost' );
+	    
+	    // resize the iframe based on response from remote iframe
+	    var _spInitialized = 0;
+	    function resizeFrame(rHeight) {
+	    	
+	        // page objects   
+			var cFrame = $("#company-info");
+	        var height = 600;
+	        var scrolling = "yes";
+	        try{
+				height = parseInt(rHeight);
+				scrolling = "no";
+	        }
+	        catch(err){}
+	        
+	        // set the resized size
+	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
+
+			// scroll to top		        
+			if (_spInitialized != 0) $('html, body').animate({ scrollTop: $("#company-info").offset().top}, 0);
+			else _spInitialized = 1;
+	    	
+		}
+	    
+    </script>
+    
+    <style>
+    
+    	body {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	
+    	.container {
+			margin-left: auto;
+			margin-right: auto;
+			width: 1008px;
+    	}
+    	
+    	.footer {
+    		background-color: #CCC;
+    		height: 80px;
+    	}
+    	
+    	.footer p {
+    		padding: 30px;
+    		font-family: Arial;
+    	}
+    
+    </style>
+    
+</head>
+
+<body>
+
+<div class="container">
+	<img src="img/placeholder-header.jpg" alt="SGX HEADER " />
+</div>
+
+<div class="container">
+	<iframe id="company-info" style="overflow: hidden;" allowTransparency="true" frameborder="0" width="1008" height="1"></iframe>
+</div>
+
+<div class="container footer">
+<p>FOOTER GOES HERE</p>
+</div>
+
+
+</body>
+</html>

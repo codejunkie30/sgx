@@ -9,6 +9,18 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
     		
     		resultSize: 25,
     		
+    		displayColumns: {
+    			companyName: true,
+    			tickerCode: true,
+    			industry: true,
+    			marketCap: true,
+    			totalRevenue: true,
+    			peRatio: true,
+    			dividendYield: true
+    		},
+    		
+            parentURL: decodeURIComponent(document.location.hash.replace(/^#/, '')),
+    		
     		screener: {
 
         		init: function() {
@@ -47,25 +59,19 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         				SGX.screener.criteriaChange.reset();
         			});
         			
+        			$(".searchbar input").keypress(function(e) {
+        				if (e.which == 13) SGX.screener.criteriaChange.reset(function() { SGX.screener.search.nameSearch($(".searchbar input").val()); });
+        			});
 
         			$(".screener-header .search-submit").click(function(e) {
-        				SGX.screener.criteriaChange.reset(function() {
-        					SGX.screener.search.nameSearch($(".searchbar input").val());
-        				});
+        				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.nameSearch($(".searchbar input").val()); });
         			});
 
         			
         			$(".screener-header .button.all-companies").click(function(e) {
-        				SGX.screener.criteriaChange.reset(function() {  
-        				    $('html, body').animate({
-        				        scrollTop: $(".module-results").offset().top
-        				    }, 150);        					
-        				});
+        				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
         			});
         			
-        			
-        			
-
         			SGX.screener.initCriteria();
         			
         		},
@@ -73,12 +79,19 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         		finalize: function(data) {
 
         			SGX.screener.drawInitialCriteria(data);
+        			
                 	SGX.dropdowns.init(".search-criteria", SGX.screener.search.criteriaSearch);
+                	
                 	SGX.tooltip.init("body");
         			SGX.accordion();
-        			SGX.hideLoading();
+        			
         			SGX.screener.search.criteriaSearch();
         			
+        			$(".button-customize-display").click(function() { SGX.screener.search.customizeResults(); });
+        			
+        			SGX.hideLoading();
+
+        			        			
         		},
         		
                 initCriteria: function() {
@@ -355,9 +368,19 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	
                 	nameSearch: function(val) {
                 		var endpoint = "/sgx/search/name";
-                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { search: val }, SGX.screener.search.renderResults, SGX.screener.search.fail);
+                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { search: val }, SGX.screener.search.scrollSearch, SGX.screener.search.fail);
                 	},
                 
+                	showAll: function() {
+                		var endpoint = "/sgx/search/";
+                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { criteria: [] }, SGX.screener.search.scrollSearch, SGX.screener.search.fail);
+                	},
+                	
+                	scrollSearch: function(data) {
+                		SGX.screener.search.renderResults(data);
+                		$('.screener-page').animate({ scrollTop: $(".module-results").position().top }, 150);
+                	},
+
                 	criteriaSearch: function() {
                 		
                 		var endpoint = "/sgx/search";
@@ -402,6 +425,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	
                 	renderResults: function(data) {
 
+                		
+                		// reset name input
+                		$(".searchbar input").val("");
+                		
                 		if (data.companies.length == 0) {
                     		$(".no-results-display").show();
                     		$(".results-display").hide();
@@ -495,21 +522,24 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		return ret;
                 	},
                 	
+                	
                 	getDisplayColumns: function() {
+                		return SGX.displayColumns;
+                	},
+                	
+                	setDisplayColumns: function(columns) {
                 		
-                		var ret = {};
+                		SGX.displayColumns = columns;
+                		SGX.displayColumns["companyName"] = true;
+                		SGX.displayColumns["tickerCode"] = true;
+                		SGX.displayColumns["industry"] = true;
                 		
-                		ret["companyName"] = true;
-                		ret["tickerCode"] = true;
-                		ret["industry"] = true;
+            			$(".module-results th, .module-results td").hide();
+                		$(".module-results th, .module-results td").each(function() {
+                			if (SGX.displayColumns.hasOwnProperty($(this).attr("data-name"))) $(this).show();
+                		});
                 		
-                		// todo make dynamic
-                		ret["marketCap"] = true;
-                		ret["totalRevenue"] = true;
-                		ret["peRatio"] = true;
-                		ret["dividendYield"] = true;
-                		
-                		return ret;
+                        SGX.screener.search.displayPage(1);
                 	},
                 	
                     displayRows: function(sort, direction) {
@@ -537,6 +567,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                             SGX.screener.search.displayPage(1);
                             
                         }
+                        
                     },
                     
                     sortRows: function(table, sort, direction) {
@@ -579,13 +610,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     },
                     
                     displayPage: function(page) {
-
+                    	
                     	// display the results
                     	$(".module-results .table-wrapper tbody tr").hide();
                     	$(".module-results .table-wrapper tbody").show();
                     	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").removeClass("even");
                     	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']:even").addClass("even");
-                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show();
+                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show(400, function() {
+                    	});
                     	
                     	// handle the navigation
                     	var paging = $('.module-results .pager');
@@ -603,8 +635,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     	});
                     	
                     	// next
-                    	SGX.screener.search.pageButton($("a.next", paging), lastPg == page ? page : page + 1, page);                    		
+                    	SGX.screener.search.pageButton($("a.next", paging), lastPg == page ? page : page + 1, page);
                     	
+                    	XD.postMessage($(document).height(), decodeURIComponent(document.location.hash.replace(/^#/, '')), parent);
+
                     },
                     
                		pageButton: function(el, page, cur) {
@@ -619,12 +653,63 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 			e.stopPropagation();
                 			if (cur == page) return;
                 			SGX.screener.search.displayPage(page);
-                		    $('html, body').animate({ scrollTop: $(".module-results").offset().top }, 1);
             			});
             			
+            		},
+            		
+            		customizeResults: function() {
+
+            			var currentCols = SGX.screener.search.getDisplayColumns();
+            			var container = $("<div />");
+            			var table = $("<table />").addClass("customize-display-table").appendTo(container);
+            			$("<tr />").append($("<td colspan='2' />").html("<h3>Customize Results Display</h3>")).appendTo(table);
+            			
+            			var tr = $("<tr />").appendTo(table), column, header = 0;
+            			
+            			$(".module-accordion").children().each(function(idx, el) {
+            				
+            				if ($(el).is("h3")) {
+        						if ($(this).attr("data-display") != "true") return;
+            					if (header%2 == 0) column = $("<td />").appendTo(tr);
+            					$("<div class='heading' />").text($(el).text()).appendTo(column);
+            					header++;
+            					return;
+            				}
+            					
+        					$(".checkbox", el).each(function() { 
+        						if ($(this).attr("data-display") != "true") return;
+    							var chk = $(this).clone();
+    							$(chk).removeClass("checked");
+    							if (currentCols.hasOwnProperty($(chk).attr("data-name"))) $(chk).addClass("checked");
+    							$(chk).appendTo(column);
+        					});
+
+            			});
+
+                        SGX.modal.open({
+                            content: $(container).html(),
+                            type: 'prompt',
+                            confirm: function(settings) {
+                            	var dcs = {};
+                            	$("#modal .checkbox.checked").each(function() { dcs[$(this).attr("data-name")] = true; });
+                            	SGX.screener.search.setDisplayColumns(dcs);
+                            	SGX.modal.close();
+                            },
+                            postLoad: function(settings) {
+                            	$("#modal .checkbox").click(function(e) {
+        							if ($(this).is(".checked")) { $(this).removeClass("checked"); return; }
+                            		if ($(this).closest("table").find(".checked").length >= 4) { alert("Please remove a column before adidng a new one."); return; }
+                            		$(this).addClass("checked");
+                            	});
+                            }
+                            
+                        });
+
             		}
             		
                 }
+                
+                
 
                 
     		},   		
@@ -749,6 +834,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		})
                 	}
                 	
+                	if (settings.hasOwnProperty("postLoad")) {
+                		settings.postLoad(settings);
+                	}
                 	
                 	$("#modal").fadeIn(100);
 

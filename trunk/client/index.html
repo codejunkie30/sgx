@@ -3,11 +3,10 @@
 
 <head>
     <title>Screener - SGX</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>
     <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
-    
 </head>
 
 <body class="screener-page">
@@ -116,6 +115,27 @@
 							<td class="max">&nbsp;</td>
                             <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
 						</tr>
+
+						<tr class="criteria" data-template="change">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+							<td class="min">&nbsp;</td>
+							<td>
+								<div class="button-dropdown">
+									<div class="trigger"><span class="copy"></span>
+										<span class="arrow"></span>
+									</div>
+									<div class="dropdown">
+										<ul></ul>
+									</div>
+								</div>
+							</td>
+							<td class="max">&nbsp;</td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+						</tr>
+
                     
                     </table>
                     <!-- END: templates for criteria -->
@@ -132,7 +152,7 @@
                     
                     <div class="module-accordion">
                     
-                        <h3>Market Data</h3>
+                        <h3 data-display="true">Market Data</h3>
                         <div class="panel">
                             <div class="checkbox checked default" data-type="millions" data-name="marketCap" data-display="true" data-short-name="Mtk. Cap.">
                                 <div class="trigger">Total Market Cap</div>
@@ -160,8 +180,7 @@
                             </div>
                         </div>
 
-                        <h3>Financials</h3>
-
+                        <h3 data-display="true">Financials</h3>
                         <div class="panel">
                             <div class="checkbox checked default" data-type="millions" data-name="totalRevenue"  data-display="true" data-short-name="Tot. Rev.">
                                 <div class="trigger">Total Revenue</div>
@@ -197,7 +216,7 @@
                             </div>
                         </div>
 
-                        <h3>Valuation</h3>
+                        <h3 data-display="true">Valuation</h3>
                         <div class="panel">
                             <div class="checkbox checked default" data-type="number" data-name="peRatio"  data-display="true" data-short-name="P/E">
                                 <div class="trigger">P/E Ratio</div>
@@ -217,7 +236,7 @@
                             </div>
                         </div>
                         
-                        <h3>Industry</h3>
+                        <h3 data-display="false">Industry</h3>
                         <div class="panel">
                             <div class="checkbox checked default" data-name="industryGroup" data-template="select" data-label="Select Sector & Industry"  data-display="false" data-sort="string" data-short-name="Industry">
                                 <div class="trigger">Industry</div>
@@ -301,7 +320,7 @@
 	<div class="container_3 no-results-display hidden">
 		No companies matched your search.
 	</div>
-    
+
 </body>
 
 </html>
