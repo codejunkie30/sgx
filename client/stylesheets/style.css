@@ -4,6 +4,8 @@
   Increase this if your layout is wider. Note: IE6 works fine without this fix. */
  body {
     min-width: 1012px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .template, .hidden {
@@ -327,9 +329,7 @@
 .placeholder-header {
   margin-bottom: 30px;
 }
-html {
-  margin-bottom: 200px;
-}
+
 .blue {
   color: #1e2171;
 }
@@ -349,14 +349,6 @@ html {
 }
 * {
   font-family: Arial, Helvetica, sans-serif;
-}
-html {
-  height: 101%;
-  padding: 0 0 120px;
-}
-body {
-  padding: 0 0 120px;
-  margin: 0px;
 }
 h1,
 h1.title {
@@ -959,18 +951,7 @@ table.search-criteria .remove {
   cursor: pointer;
   font-size: 10px;
 }
-.button-dropdown.button-customize-display {
-  margin-left: 90px;
-  position: absolute;
-  right: 6px;
-  top: 36px;
-}
-.button-dropdown.button-customize-display .dropdown {
-  width: 244px !important;
-}
-.button-dropdown.button-customize-display .trigger {
-  width: 206px !important;
-}
+
 .button-dropdown > .trigger {
   font: bold 10px Arial, Helvetica, sans-serif;
   color: #121444;
@@ -1047,6 +1028,8 @@ table.search-criteria .remove {
 
 .button-customize-display {
 	margin-right: 16px !important;
+	width: 200px;
+	text-align: center;
 }
 
 .toolbar .column {
@@ -1743,7 +1726,7 @@ td .info {
 }
 
 .modal-container {
-  top: 30%;
+  top: 20%;
   position: fixed;
   left: 50%;
   margin-left: -278px;
@@ -1803,4 +1786,29 @@ td.unchart a {
   height: 30px;
   top: 50%;
   margin-top: -15px;
+}
+
+.customize-display-table {
+	width: 110%;
+	margin-bottom: 20px;
+}
+
+.customize-display-table td {
+	width: 50%;
+	vertical-align: top;
+}
+
+.customize-display-table td .checkbox {
+	margin-left: 10px;
+	font-weight: normal !important;
+	z-index: 1000;
+}
+
+.customize-display-table td .checkbox .trigger {
+	font-weight: normal !important;
+}
+
+.customize-display-table .heading {
+	font-weight: bold;
+	margin: 8px 0;
 }
