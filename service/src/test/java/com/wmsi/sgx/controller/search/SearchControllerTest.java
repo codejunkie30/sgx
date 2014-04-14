@@ -23,6 +23,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.wmsi.sgx.controller.SearchController;
 import com.wmsi.sgx.model.search.CompanySearchRequest;
 import com.wmsi.sgx.model.search.CompanySearchRequestBuilder;
 import com.wmsi.sgx.model.search.CriteriaBuilder;

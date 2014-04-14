@@ -1,4 +1,4 @@
-package com.wmsi.sgx.controller.quanthouse;
+package com.wmsi.sgx.controller;
 
 import java.util.HashMap;
 import java.util.Map;

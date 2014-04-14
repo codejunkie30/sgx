@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.sandp.AlphaFactor;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.search.SearchService;

@@ -1,4 +1,4 @@
-package com.wmsi.sgx.model.sandp;
+package com.wmsi.sgx.model;
 
 import java.util.Date;
 import com.google.common.base.Objects;

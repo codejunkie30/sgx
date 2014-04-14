@@ -7,7 +7,7 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import com.wmsi.sgx.model.sandp.AlphaFactor;
+import com.wmsi.sgx.model.AlphaFactor;
 
 public class AlphaFactorQueryBuilder extends AbstractQueryBuilder<List<AlphaFactor>>{
 
