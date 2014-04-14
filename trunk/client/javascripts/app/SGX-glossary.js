@@ -79,6 +79,38 @@ var GLOSSARY =
 		{
 			id: "industryGroup",
 			definition: "GICS Industry Classification, is a method for grouping companies into sectors (first level) and industries (second level). It creates a common framework for company analysis and portfolio policy. Industry denotes a company's predominant business activity."
+		},
+		{
+			id: "priceMomentum",
+			definition: "Price Momentum generally is an appraisal of how quickly a share’s price is moving in a particular direction. To develop a complete picture of momentum, the indicator looks at nine-month, one-month, and five-day price momentum statistics. It also weighs the one-year to one-month price momentum ratio and one-month price high to one-month price low ratio."
+		},
+		{
+			id: "analystExpectations",
+			definition: "Analyst Expectations for a company reflect the average assessments of the professional analysts who follow that company. Specific performance indicators for this factor include expected long-term earnings growth, analyst earnings estimate diffusion (the proportion of analysts changing their opinions), number of one-year earnings per share revisions, and standardized unexpected earnings (a measure of the market's surprise about announcements)."
+		},
+		{
+			id: "historicalGrowth",
+			definition: "Historical Growth is generally looked on as a potential indicator of future growth. The specific indicators in this factor are one-year change in asset-adjusted free cash flow, one-year change in asset-adjusted operating cash flow, one-year change in sales turnover, sustainable growth rate, and one-year change in earnings per share. "
+		},
+		{
+			id: "valuation",
+			definition: "Valuation is the measurement of a company’s worth. Five ratios are used in this factor: book value to share price, free cash flow to share price, EBITDA (earnings before interest, taxes, depreciation, and amortization) to enterprise value (net worth), sales to enterprise value, and earnings to share price."
+		},
+		{
+			id: "capitalEfficiency",
+			definition: "Capital Efficiency gauges how well a company uses its capital to generate returns for shareholders. Detailed indicators that help determine overall efficiency include return on equity, cash flow return on invested capital, long-term debt-to-equity ratio, capital acquisition ratio, and one-year change in shares outstanding. "
+		},
+		{
+			id: "earningsQuality",
+			definition: "Earnings Quality combines indications of operational efficiency, financial consistency, and accounting quality. The specific indicators of earnings quality include the company's cash conversion cycle, its net profit margin, its working capital accruals, its accrual ratio for cash flows, and its net income stability. "
+		},
+		{
+			id: "Size",
+			definition: "Size is measured here by market capitalization (log market cap) and by annual revenue (log sales cap). "
+		},
+		{
+			id: "volatility",
+			definition: "Volatility is a measure of market price variability that is widely used as a measure of stock-specific risk. Indicators include one-year realized price volatility (long-term volatility) and one-month realized price volatility (short-term). Also considered are comparative statistics: five-year beta and the three-month coefficient of variation. "
 		}
 		
 ];
