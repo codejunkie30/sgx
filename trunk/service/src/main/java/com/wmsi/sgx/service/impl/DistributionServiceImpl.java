@@ -15,6 +15,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
@@ -48,6 +49,7 @@ public class DistributionServiceImpl implements DistributionService{
 	private static final int SCALE = 1000;
 	
 	@Override
+	@Cacheable("distributions")
 	public Distributions getAggregations(DistributionsRequest req) throws ServiceException {
 		
 		List<DistributionRequestField> fields = req.getFields();
@@ -85,12 +87,18 @@ public class DistributionServiceImpl implements DistributionService{
 	private Integer calculateInterval(StatAggregation stat){
 		double total = stat.getMax() - stat.getMin();
 		double sqrt = Math.sqrt(stat.getCount());
-		int interval = new BigDecimal(total / sqrt).setScale(0, RoundingMode.HALF_EVEN).intValue();	
-		
+		double interval = new BigDecimal(total / sqrt).doubleValue(); 
+
+		// Scale value to remove decimals
+		interval *= SCALE;
+
+		// Round up to closest multiple of 10 for more uniform buckets
 		interval = Math.round((interval + 5)/ 10) * 10;
-		
-		return interval * SCALE;		
+
+		// round to integer
+		return new BigDecimal(interval).setScale(0, RoundingMode.HALF_EVEN).intValue();
 	}
+	
 
 	private Aggregations getAggregations(List<DistributionRequestField> fields, Map<String, Integer> invervals) throws ServiceException {
 		try{
