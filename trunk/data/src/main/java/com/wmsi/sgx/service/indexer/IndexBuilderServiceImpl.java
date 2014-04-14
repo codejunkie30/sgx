@@ -1,13 +1,10 @@
 package com.wmsi.sgx.service.indexer;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -16,7 +13,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
-import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 import org.springframework.stereotype.Service;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -48,21 +44,22 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	private IndexerService indexerService;
 
 	@Override
-	public List<CompanyInputRecord> getTickers() throws IndexerServiceException {
+	public List<CompanyInputRecord> getTickers(@Header String indexName) throws IndexerServiceException {
 
-		CSVReader reader = null;
-
+		System.out.println(indexName);
+		CSVReader csvReader = null;
+		InputStreamReader reader = null;
+		
 		try{
-			File f = companyIds.getFile();
-
+			reader = new InputStreamReader(companyIds.getInputStream());
 			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
 
-			reader = new CSVReader(new FileReader(f), '\t');
-			reader.readNext(); // skip header
+			csvReader = new CSVReader(reader, '\t');
+			csvReader.readNext(); // skip header
 
 			String[] record = null;
 
-			while((record = reader.readNext()) != null){
+			while((record = csvReader.readNext()) != null){
 				
 				CompanyInputRecord r = new CompanyInputRecord();
 				r.setId(record[0]);
@@ -77,28 +74,33 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			throw new IndexerServiceException("Error parsing ticker input file", e);
 		}
 		finally{
+			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
 		}
 	}
 
 	@Override
-	public void index(@Payload CompanyInputRecord input) throws IndexerServiceException {
-		String index = "test";
+	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException {
+		
+		
 		String date = "03/10/2014";
 		
 		try{
-			indexerService.createIndex(index);
-			index(index, date, input.getTicker());
+			indexerService.createIndex(indexName);
+			index(indexName, date, input.getTicker());
+			return input;
 		}
-		catch(IOException | URISyntaxException | IndexerServiceException | CapIQRequestException | ParseException e){
+		catch(IOException | IndexerServiceException | CapIQRequestException | ParseException e){
 			throw new IndexerServiceException("Failed to index ticker " + input.getTicker(), e);
 		}		
+		
 	}
 
-
-	@Autowired
-	private DefaultFtpSessionFactory ftpSessionFactory;
-
+	@Override
+	public void createAlias(@Header String indexName) throws IndexerServiceException{
+		indexerService.createIndexAlias(indexName);
+	}
+	
 	@Override
 	public void buildAlphaFactors() throws IOException, AlphaFactorServiceException {
 		String index = "test";
@@ -112,7 +114,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	private void index(String index, String date, String ticker) throws IOException,
-			URISyntaxException, IndexerServiceException, CapIQRequestException, ParseException {
+			IndexerServiceException, CapIQRequestException, ParseException {
 
 		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, date);
 
