@@ -8,10 +8,12 @@ import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 
 public interface IndexBuilderService{
 
-	void index(CompanyInputRecord input) throws IndexerServiceException;
-
-	List<CompanyInputRecord> getTickers() throws IndexerServiceException;
-
 	void buildAlphaFactors() throws IOException, AlphaFactorServiceException;
+
+	List<CompanyInputRecord> getTickers(String indexName) throws IndexerServiceException;
+
+	CompanyInputRecord index(String indexName, CompanyInputRecord input) throws IndexerServiceException;
+
+	void createAlias(String indexName) throws IndexerServiceException;
 
 }

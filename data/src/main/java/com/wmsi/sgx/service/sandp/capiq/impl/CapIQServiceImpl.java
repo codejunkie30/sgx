@@ -62,7 +62,6 @@ public class CapIQServiceImpl implements CapIQService{
 	public CompanyInfo getCompanyInfo(String id, String startDate) throws CapIQRequestException {
 		try{
 			Resource template = new ClassPathResource("META-INF/query/capiq/companyInfo.json");
-
 			String previousDate = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -1);
 
 			Map<String, Object> ctx = new HashMap<String, Object>();

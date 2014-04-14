@@ -27,8 +27,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class IndexerService{
@@ -47,9 +51,9 @@ public class IndexerService{
 	private RestTemplate restTemplate;
 	public void setRestTemplate(RestTemplate t){restTemplate = t;}
 	
-	public synchronized void createIndex(@Header String asOfDate) throws IOException, URISyntaxException, IndexerServiceException{
+	public synchronized void createIndex(@Header String asOfDate) throws IOException, IndexerServiceException{
 		String indexName = indexNamePrefix + asOfDate;
-		URI indexUri = new URI(esUrl + "/" + indexName);
+		URI indexUri = buildUri("/" + indexName);
 		
 		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(indexUri, HttpMethod.HEAD).execute();
 		boolean indexExists = headResponse.getStatusCode() == HttpStatus.OK;
@@ -60,7 +64,7 @@ public class IndexerService{
 		}
 			
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode readTree = mapper.readTree(indexMappingResource.getFile());
+		JsonNode readTree = mapper.readTree(indexMappingResource.getInputStream());
 
 		int statusCode = postJson(indexUri, readTree);
 		
@@ -69,14 +73,65 @@ public class IndexerService{
 			throw new IndexerServiceException("Create index request returned " + statusCode + " http response code. Could not create index");
 		}		
 	}
+	
+	public synchronized void createIndexAlias(@Header String indexName) throws IndexerServiceException {
+		
+		URI indexUri = buildUri("/_aliases");
+		JsonNode alias = buildAliasJson( indexNamePrefix + indexName);
+		
+		log.debug("Updating index aliases {}", alias);
+			
+		int statusCode = postJson(indexUri, alias);
+			
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Create alaias request returned " + statusCode + " http response code. Could not create alias.");
+		}		
+	}
+	
+	private URI buildUri(String path) throws IndexerServiceException{
+		try{
+			return new URI(esUrl + path);
+		}
+		catch(URISyntaxException e){
+			throw new IndexerServiceException("Invalid uri syntax for alaias request.", e);
+		}
+	}
+	
+	private JsonNode buildAliasJson(String indexName){
+		ObjectMapper mapper = new ObjectMapper();
+		
+		ObjectNode removeAlias = mapper.createObjectNode();
+		ObjectNode remove = mapper.createObjectNode();
+		
+		removeAlias.put("index", "sgx_*");
+		removeAlias.put("alias", "sgx");
+		remove.put("remove",  removeAlias);
+		
+		ObjectNode addAlias = mapper.createObjectNode();
+		ObjectNode add = mapper.createObjectNode(); 
 
-	// TODO Refactor to common util
+		addAlias.put("index", indexName);
+		addAlias.put("alias", "sgx");
+		add.put("add", addAlias);
+		
+		ArrayNode actions = mapper.createArrayNode();
+		actions.add(remove);
+		actions.add(add);
+		
+		ObjectNode alias = mapper.createObjectNode();
+		alias.put("actions",  actions);
+
+		return alias;
+	}
+
+
 	private <T> HttpEntity<T> buildEntity(T json){
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType("application", "json", Charset.forName("UTF-8"));
+		Charset utf8 = Charset.forName("UTF-8");
+		MediaType mediaType = new MediaType("application", "json", utf8);
 		headers.setContentType(mediaType);
-		headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
-	
+		headers.setAcceptCharset(Collections.singletonList(utf8));
 		return new HttpEntity<T>(json, headers);		
 	}
 	
@@ -93,6 +148,6 @@ public class IndexerService{
         UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/{id}?opt_type=create").build();
         URI uri = uriComp.expand(indexName, type, id).toUri();
         
-        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(companyInfo), Object.class);
+        restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(companyInfo), Object.class);
 	}
 }
