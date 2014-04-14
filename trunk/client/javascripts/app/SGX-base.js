@@ -750,12 +750,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             					return;
             				}
             					
+            				console.log(currentCols);
+            				
         					$(".checkbox", el).each(function() { 
+
         						if ($(this).attr("data-display") != "true") return;
+
+                				// some fields can only display if it's being searched on
+                				if (typeof $(this).attr("data-search-required") !== "undefined" && $(this).attr("data-search-required") == "true") {
+                					if ($(".search-criteria [data-name='" + $(this).attr("data-name") + "']").length == 0) return;
+                				}
+        						
     							var chk = $(this).clone();
     							$(chk).removeClass("checked");
     							if (currentCols.hasOwnProperty($(chk).attr("data-name"))) $(chk).addClass("checked");
     							$(chk).appendTo(column);
+    							
         					});
 
             			});
@@ -764,6 +774,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             content: $(container).html(),
                             type: 'prompt',
                             confirm: function(settings) {
+                            	console.log("Here");
                             	var dcs = {};
                             	$("#modal .checkbox.checked").each(function() { dcs[$(this).attr("data-name")] = true; });
                             	SGX.screener.search.setDisplayColumns(dcs);
@@ -923,13 +934,15 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	$(modal).addClass(settings.type);
                 	$(".modal-content .copy", modal).html(settings.content);
                 	$(".close, .cancel, .modal-close", modal).click(function(e) { SGX.modal.close(); });
-                	
+
+                	// clean up
+                	var confirm = $(".confirm", modal);
+            		confirm.removeData();
+            		confirm.unbind();
+
                 	if (settings.type == "prompt") {
-                		var confirm = $(".confirm", modal);
                 		confirm.data(settings);
-                		$(".confirm", modal).click(function(e) {
-                			settings.confirm($(this).data());
-                		})
+                		$(confirm).click(function(e) { settings.confirm($(this).data()); });
                 	}
                 	
                 	if (settings.hasOwnProperty("postLoad")) {
