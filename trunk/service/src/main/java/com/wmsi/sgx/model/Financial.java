@@ -1,4 +1,4 @@
-package com.wmsi.sgx.model.financials;
+package com.wmsi.sgx.model;
 
 import java.util.Date;
 

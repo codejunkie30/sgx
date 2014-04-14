@@ -1,4 +1,4 @@
-package com.wmsi.sgx.controller.search;
+package com.wmsi.sgx.controller;
 
 import javax.validation.Valid;
 

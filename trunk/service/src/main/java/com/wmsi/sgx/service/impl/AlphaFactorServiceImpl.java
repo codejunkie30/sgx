@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.wmsi.sgx.model.sandp.AlphaFactor;
+import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 import com.wmsi.sgx.service.AlphaFactorService;
 import com.wmsi.sgx.service.AlphaFactorServiceException;

@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.financials.Financials;
-import com.wmsi.sgx.model.sandp.AlphaFactor;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.CompanyService;
