@@ -586,6 +586,7 @@ h1.title {
 .stock-events {
   padding: 0px;
   margin: 10px 0 25px;
+  display: none;
 }
 .stock-events ul {
   margin: 0px 0;
@@ -623,11 +624,21 @@ h1.title {
 .progress-estimate {
   padding: 0 0 10px;
 }
+
+.progress-estimate .has-estimate {
+	display: none;
+}
+
+.progress-estimate .no-estimate {
+	display: none;
+}
+
 .progress-estimate span {
-  font: bold 12px/12px Arial, Helvetica, sans-serif;
+  font: bold 12px Arial, Helvetica, sans-serif;
   color: gray5;
   text-transform: uppercase;
 }
+
 .progress-estimate ul.progress-mask {
   margin: 0;
   padding: 0;
@@ -640,6 +651,14 @@ h1.title {
   display: block;
   padding-bottom: 20px;
 }
+
+.progress-estimate .theme-three-bubble-progress li.sell {
+  text-align: left;
+}
+.progress-estimate .theme-three-bubble-progress li.buy {
+  text-align: right;
+}
+
 .progress-estimate .theme-three-bubble-progress {
   background: url("../img/progress-3-step-1.jpg") no-repeat;
   -webkit-background-size: 292px auto;
@@ -649,12 +668,7 @@ h1.title {
   position: relative;
   z-index: 2;
 }
-.progress-estimate .theme-three-bubble-progress li:first-child {
-  text-align: left;
-}
-.progress-estimate .theme-three-bubble-progress li.last {
-  text-align: right;
-}
+
 .progress-estimate .theme-three-bubble-progress.progress-2 {
   background: url("../img/progress-3-step-2.jpg") no-repeat;
   -webkit-background-size: 292px auto;
@@ -1771,6 +1785,11 @@ td .info {
   display: inline-block;
   width: 45%;
 }
+
+.alpha-factors .slider-label img {
+	cursor: pointer;
+}
+
 td.unchart a {
   text-decoration: none;
 }

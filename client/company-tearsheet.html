@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="breadcrumb">
-                    <div class="button back-button"><a href="index.html">Back to Stock Screener</a>
+                    <div class="button back-button"><a href="index.html" class="screener-link">Back to Stock Screener</a>
                     </div>
                     <ul class="breadcrumb-tree">
                         <li>Industry Tree:</li>
@@ -91,8 +91,7 @@
                                         <td width="25%" class="property" data-name="openPrice">-</td>
                                         <td width="25%">Day High/Low</td>
                                         <td width="25%">
-                                            <span class="property" data-name="highPrice">-</span>/
-                                            <span class="property" data-name="lowPrice">-</span>
+                                            <span class="property" data-name="highPrice">-</span>/<span class="property" data-name="lowPrice">-</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -106,8 +105,7 @@
                                         <td class="property" data-name="previousCloseDate">-</td>
                                         <td>52 Week High/Low</td>
                                         <td class="custom">
-                                            <span class="property" data-name="yearHigh">-</span>/
-                                            <span class="property" data-name="yearLow">-</span>
+                                            <span class="property" data-name="yearHigh">-</span>/<span class="property" data-name="yearLow">-</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -118,9 +116,9 @@
                                     </tr>
                                     <tr>
                                         <td>Shares Sold Short</td>
-                                        <td class="property" data-name="">NEED</td>
+                                        <td class="property" data-name="sharesSoldShort">-</td>
                                         <td>Diluted Normalized EPS</td>
-                                        <td class="property" data-name="">NEED</td>
+                                        <td class="property" data-name="eps">-</td>
 
                                     </tr>
                                     <tr>
@@ -131,11 +129,10 @@
                                     </tr>
                                     <tr>
                                         <td>Float %</td>
-                                        <td class="property" data-name="" data-unit="percent">NEED</td>
+                                        <td class="property" data-name="floatPercentage" data-unit="percent">-</td>
                                     </tr>
                                     </tbody>
                             </table>
-                            <div class="button view-more">View recent financial statement data</div>
                         </div>
                         <div id="panel2" class="panel">
                             <table cellspacing="0">
@@ -154,20 +151,19 @@
                                     </tr>
                                     </tbody>
                             </table>
-                            <div class="button view-more">View recent valuation data</div>
                         </div>
                         <div id="panel3" class="panel">
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
                                         <td width="25%">Debt/EBITDA</td>
-                                        <td width="25%" class="property" data-name="">NEED</td>
+                                        <td width="25%" class="property" data-name="totalDebtEbitda">-</td>
                                         <td width="25%">Cap Ex</td>
                                         <td width="25%" class="property" data-name="capitalExpenditures">-</td>
                                     </tr>
                                     <tr>
                                         <td>Total Debt</td>
-                                        <td class="property" data-name="">NEED</td>
+                                        <td class="property" data-name="totalDebtEquity">-</td>
                                         <td>EBIT</td>
                                         <td class="property" data-name="ebit" data-unit="mil">-</td>
                                     </tr>
@@ -191,7 +187,6 @@
                                     </tr>
                                     </tbody>
                             </table>
-                            <div class="button view-more">View recent financial data</div>
                         </div>
                         <div id="panel4" class="panel">
                             <table cellspacing="0">
@@ -212,10 +207,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="button view-more">View recent ownership data</div>
                         </div>
                     </div>
+                    
                 </div>
+
+                <div class="module">
+                    <div class="button view-financials">View recent financial statement data</div>
+                </div>
+
                 <div class="module">
                     <div class="title">
                         <div class="label">Company Description</div>
@@ -257,25 +257,30 @@
                         <div class="label">S&amp;P Capital IQ Consensus Estimates
                         </div>
                     </div>
-                    <p class="centered">Consensus Recommendation</p>
-                    <div class="bar-container">
-                        <ul class="progress-mask theme-three-bubble-progress progress-1">
-                            <li>
-                                <span href="">Sell</span>
-                            </li>
-                            <li>
-                                <span href="">Hold</span>
-                            </li>
-                            <li class="last">
-                                <span href="">Buy</span>
-                            </li>
-                        </ul>
+                    <div class="has-estimate">
+                    	<p class="centered">Consensus Recommendation</p>
+	                    <div class="bar-container">
+	                        <ul class="progress-mask theme-three-bubble-progress">
+	                            <li class="sell">
+	                                <span href="">Sell</span>
+	                            </li>
+	                            <li class="hold">
+	                                <span href="">Hold</span>
+	                            </li>
+	                            <li class="buy">
+	                                <span href="">Buy</span>
+	                            </li>
+	                        </ul>
+	                    </div>
+	                    <hr>
+	                    <p class="centered">
+	                        Consensus Target Price
+	                    </p>
+	                    <div class="price">$22.10</div>
                     </div>
-                    <hr>
-                    <p class="centered">
-                        Consensus Target Price
-                    </p>
-                    <div class="price">$22.10</div>
+                    <div class="no-estimate">
+                    	No estimate provided - NEED COPY
+                    </div>
                 </div>
                 <div class="module dark-module alpha-factors">
                     <div class="title">
@@ -283,85 +288,97 @@
                     </div>
                     <p class="left">Select a scale to display a list of companies with a matching composite.</p>
                     <hr>
-                    <div class="slider" data-factor-type="valuation">
-                        <div class="slider-label">Valuation
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="valuation">
+                        <div class="slider-label">
+                        	Valuation 
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-80"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="analystExpectations">
-                        <div class="slider-label">Analyst Expectations
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="analystExpectations">
+                        <div class="slider-label">
+                        	Analyst Expectations
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-60"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="capitalEfficiency">
-                        <div class="slider-label">Capital Efficiency
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="capitalEfficiency">
+                        <div class="slider-label">
+                        	Capital Efficiency
+							<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-40"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="priceMomentum">
-                        <div class="slider-label">Price Momentum
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="priceMomentum">
+                        <div class="slider-label">
+                        	Price Momentum
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="earningsQuality">
-                        <div class="slider-label">Earnings Quality
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="earningsQuality">
+                        <div class="slider-label">
+                        	Earnings Quality
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="volatility">
-                        <div class="slider-label">Volatility
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="volatility">
+                        <div class="slider-label">
+                        	Volatility
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
-                            <div class="slider-left-label">High</div>
+                            <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
-                            <div class="slider-right-label">Low</div>
+                            <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="size">
-                        <div class="slider-label">Size
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="size">
+                        <div class="slider-label">
+                        	Size
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
-                            <div class="slider-left-label">Small</div>
+                            <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
-                            <div class="slider-right-label">Large</div>
+                            <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider" data-factor-type="historicalGrowth">
+                    <div class="slider" data-name="historicalGrowth">
                         <div class="slider-label">Growth
                             <div alt="Info" class="info">Info</div>
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
@@ -369,16 +386,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="grid_2">
 
-            </div>
-            <div class="grid_1">
-
-            </div>
-        </div>
     </div>
-    <!-- This is where the Footer iframe goes-->
+
 </body>
 
 </html>

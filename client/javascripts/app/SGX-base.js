@@ -21,7 +21,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     			dividendYield: true
     		},
     		
+    		screenerPage: "index.html",
+    		
+    		companyPage: "company-tearsheet.html",
+    		
+    		financialsPage: "financials.html",
+    		
             parentURL: decodeURIComponent(document.location.hash.replace(/^#/, '')),
+            
+            getPage: function(page) {
+            	if (typeof document.location.hash === "undefined" || document.location.hash == "") return page;
+            	return page + "#" + parentUrl;
+            },
+            
+            getCompanyPage: function(code) {
+            	return SGX.getPage(SGX.companyPage + "?code=" + code)
+            },
     		
     		screener: {
 
@@ -559,9 +574,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
                 		$.each(data.companies, function(idx, company) {
                 			
-                			var xdHash = typeof location.hash === "undefined" ? "" : location.hash;
                 			var tr = $("<tr />").addClass("result").data(company);
-                			var cLink = $("<a href='company-tearsheet.html?code=" + company.tickerCode + xdHash + "'>" + company.companyName + "</a>");
+                			var cLink = $("<a href='" + SGX.getCompanyPage(company.tickerCode) + "'>" + company.companyName + "</a>");
 
                 			// company name
                 			$("<td />").append(cLink).addClass("companyName").appendTo(tr).attr("data-value", company.companyName.toLowerCase()).attr('data-name', 'companyName');
@@ -750,8 +764,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             					return;
             				}
             					
-            				console.log(currentCols);
-            				
         					$(".checkbox", el).each(function() { 
 
         						if ($(this).attr("data-display") != "true") return;
@@ -774,7 +786,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             content: $(container).html(),
                             type: 'prompt',
                             confirm: function(settings) {
-                            	console.log("Here");
                             	var dcs = {};
                             	$("#modal .checkbox.checked").each(function() { dcs[$(this).attr("data-name")] = true; });
                             	SGX.screener.search.setDisplayColumns(dcs);
@@ -1037,7 +1048,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             init: function() {
             	var page = location.pathname;
-            	if (page.indexOf("company-tearsheet") != -1) SGX.company.init();
+            	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
             	else SGX.screener.init();
             },
             
@@ -1073,7 +1084,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	getCompany: function(code) {
             		var endpoint = SGX.fqdn + "/sgx/company";
             		var params = { id: code };
-            		SGX.handleAjaxRequest(endpoint, params, SGX.company.loaded);
+            		SGX.handleAjaxRequest(endpoint, params, SGX.company.loaded, SGX.company.failed);
+            	},
+            	
+            	failed: function() {
+            		window.location = SGX.getPage(SGX.screenerPage);
             	},
             	
             	loaded: function(data) {
@@ -1097,8 +1112,24 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			var li = $("<li />").append(a);
                 		$(".company-tearsheet-page .breadcrumb-tree").append(li);
             		});
+
+            		// screener
+            		$(".screener-link").attr("href", SGX.getPage(SGX.screenerPage));
             		
-            		// news
+            		// financials
+            		$(".view-financials").click(function(e) { window.location = SGX.getPage(SGX.financialsPage); });
+            		
+            		SGX.company.initNews(data);
+            		SGX.company.initHolders(data);
+            		SGX.company.initConsensus(data);
+            		SGX.company.initAlphaFactors(data);
+            		
+            		SGX.tooltip.init("body");
+            		
+            	},
+            	
+            	initNews: function(data) {
+
             		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0) {
             			
             			$.each(data.keyDevs, function(idx, keyDev) {
@@ -1115,10 +1146,61 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				
             			});
             			
+            			$(".stock-events").show();
+            			
             		}
-            		else {
-            			$(".stock-events").hide();
+
+            	},
+            	
+            	initAlphaFactors: function(data) {
+            		
+            		if (!data.hasOwnProperty("alphaFactors")) {
+            			$(".alpha-factors").hide();
+            			return;
             		}
+            		
+            		var factors = data.alphaFactors;
+            		
+            		console.log(factors);
+            		
+            		$(".alpha-factors .slider").each(function(idx, el) {
+            			
+            			var name = $(this).attr("data-name");
+            			
+            			// no data
+            			if (!factors.hasOwnProperty(name)) {
+            				$(this).hide();
+            				return;
+            			}
+            			
+            			console.log(name + ":" + "per-" + (factors[name]*20))
+            			
+            			$(".bar-progress", this).addClass("per-" + (factors[name]*20));
+            			
+            			// set up glossary terms
+            			$(".glossary-item", this).attr("glossary-key", name);
+            			
+            		});
+            		
+            		
+            	},
+            	
+            	initConsensus: function(data) {
+            		
+            		var company = data.company.companyInfo;
+            		
+            		// no estimate to display
+            		if (!company.hasOwnProperty("targetPriceNum")  || company.targetPriceNum < 3) {
+            			$(".progress-estimate .no-estimate").show();
+            			return;
+            		}
+            		
+            		$(".progress-estimate .price").text(company.targetPrice);
+            		$(".progress-estimate .has-estimate").show();
+            		
+            	},
+            	
+            	initHolders: function(data) {
             		
             		// holders
             		if (data.hasOwnProperty("holders") && data.holders.hasOwnProperty("holders") && data.holders.holders.length > 0) {
@@ -1137,8 +1219,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             		}
             		
-
+            		
             	}
+            	
             	
             },
             
