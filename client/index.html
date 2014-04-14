@@ -121,18 +121,9 @@
 								<span class="info"></span>
 								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
 							</td>
-							<td class="min">&nbsp;</td>
-							<td>
-								<div class="button-dropdown">
-									<div class="trigger"><span class="copy"></span>
-										<span class="arrow"></span>
-									</div>
-									<div class="dropdown">
-										<ul></ul>
-									</div>
-								</div>
+							<td colspan="3">
+								<span class="percent-value"></span>% from <span class="start-date"></span> to <span class="end-date"></span>
 							</td>
-							<td class="max">&nbsp;</td>
                             <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
 						</tr>
 
@@ -319,6 +310,38 @@
     
 	<div class="container_3 no-results-display hidden">
 		No companies matched your search.
+	</div>
+	
+	<div class="template change-picker">
+	
+		<div class="percentChange-container">
+
+			<h4>Percent Change <span>(up to one year)</span></h4>
+			
+			<div>
+			
+				<span class="column">
+					<strong>Start:</strong>
+					<div class="date start" min-date="-1y" max-date="-2d" default-date="-1y"></div>
+				</span>
+			
+				<span class="column">
+					<strong>End:</strong>
+					<div class="date end" min-date="-1y + 1d" max-date="-1d" default-date="-1d"></div>
+				</span>
+
+			</div>
+			
+			<div>
+				<strong>Percent Change:</strong>
+				<div>
+					<input type="text" name="value" value="1" />%
+				</div>
+			</div>
+		
+		
+		</div>
+
 	</div>
 
 </body>
