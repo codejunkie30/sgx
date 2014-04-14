@@ -2,30 +2,42 @@
 <html>
 
 <head>
-    <title>Company Profile - SGX</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Screener - SGX</title>
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="shortcut icon" href="img/sgxPortal.ico">
-    <script src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
 </head>
 
+
 <body class="company-tearsheet-page">
-    <div class="container_3">
-        <div class="row clearfix">
-            <div class="grid_3">
-                <img src="img/placeholder-header.jpg">
 
-            </div>
-        </div>
+    <div id="modal">
+    
+    	<div class="modal-container">
+    		<div class="modal-content">
+    			<div class="copy"></div>
+    			<div class="button confirm prompt-display">Confirm</div><div class="button cancel prompt-display">Cancel</div><div class="button cancel alert-display">Close</div>
+    		</div>
+   			<div class="modal-close"></div>
+    		<div class="bg" /></div>
+    	</div>
+    	
     </div>
-
+    
+    <div id="tooltip-template">
+    
+		<div class="tooltip tooltip-active">
+			<div class="tooltip-content"></div>
+			<div class="tooltip-arrow"></div>
+		</div>
+    
+    </div>
 
     <div class="container_3">
         <div class="row">
             <div class="grid_3">
-                <div class="page-title companyName">
-                    <!-- ABC Financial Corp. (ABC) -->
-                </div>
+                <div class="page-title property" data-name="companyName"></div>
                 <div class="stock-price">
                     <div class="main">
                         <!-- S$ 10.06 -->--.--
@@ -38,14 +50,10 @@
                     </div>
                 </div>
                 <div class="breadcrumb">
-                    <div class="button back-button"><a href="screener">Back to Stock Screener</a>
+                    <div class="button back-button"><a href="index.html">Back to Stock Screener</a>
                     </div>
                     <ul class="breadcrumb-tree">
                         <li>Industry Tree:</li>
-                        <li><a href="#">Financials</a> &gt;</li>
-                        <li><a href="#">Banking and Finance</a> &gt;</li>
-                        <li><a href="#">Retail Banks</a>
-                        </li>
                     </ul>
                     <div class="right-nav">
                         <div class="print-button">Print</div>
@@ -80,60 +88,52 @@
                                 <tbody>
                                     <tr>
                                         <td width="25%">Open Price</td>
-                                        <td width="25%" class="openPrice">-</td>
+                                        <td width="25%" class="property" data-name="openPrice">-</td>
                                         <td width="25%">Day High/Low</td>
-                                        <td width="25%" class="">
-                                            <span class="highPrice">-</span>/
-                                            <span class="lowPrice">-</span>
+                                        <td width="25%">
+                                            <span class="property" data-name="highPrice">-</span>/
+                                            <span class="property" data-name="lowPrice">-</span>
                                         </td>
-                                        <!-- <td width="25%">Average 3-month Volume</td>
-                                        <td width="25%" class="avgVolumeM3">-</td> -->
                                     </tr>
                                     <tr>
                                         <td>Volume</td>
-                                        <td class="volume" data-unit="mil">-</td>
+                                        <td class="property" data-name="volume" data-unit="mil">-</td>
                                         <td>Previous Close</td>
-                                        <td class="previousClosePrice">-</td>
+                                        <td class="property" data-name="previousClosePrice">-</td>
                                     </tr>
                                     <tr>
                                         <td>Previous Close Date</td>
-                                        <td class="previousCloseDate">-</td>
+                                        <td class="property" data-name="previousCloseDate">-</td>
                                         <td>52 Week High/Low</td>
                                         <td class="custom">
-                                            <span class="yearHigh">-</span>/
-                                            <span class="yearLow">-</span>
+                                            <span class="property" data-name="yearHigh">-</span>/
+                                            <span class="property" data-name="yearLow">-</span>
                                         </td>
-
-
                                     </tr>
                                     <tr>
                                         <td>5-Year Beta</td>
-                                        <td class="beta5Yr">-</td>
+                                        <td class="property" data-name="beta5Yr">-</td>
                                         <td>Shares Outstanding</td>
-                                        <td class="sharesOutstanding"></td>
-
-                                        <!-- <td>High/Low</td>
-                                        <td class="">-</td>
-                                        -</td> -->
+                                        <td class="property" data-name="sharesOutstanding"></td>
                                     </tr>
                                     <tr>
                                         <td>Shares Sold Short</td>
-                                        <td class="">-</td>
+                                        <td class="property" data-name="">NEED</td>
                                         <td>Diluted Normalized EPS</td>
-                                        <td class="">-</td>
+                                        <td class="property" data-name="">NEED</td>
 
                                     </tr>
                                     <tr>
                                         <td>Average 3-month Volume</td>
-                                        <td class="avgVolumeM3"></td>
+                                        <td class="property" data-name="avgVolumeM3"></td>
                                         <td>Total Market Cap</td>
-                                        <td class="marketCap"></td>
+                                        <td class="property" data-name="marketCap"></td>
                                     </tr>
                                     <tr>
                                         <td>Float %</td>
-                                        <td class="" data-unit="percent">-</td>
+                                        <td class="property" data-name="" data-unit="percent">NEED</td>
                                     </tr>
-                                    </tobdy>
+                                    </tbody>
                             </table>
                             <div class="button view-more">View recent financial statement data</div>
                         </div>
@@ -142,17 +142,17 @@
                                 <tbody>
                                     <tr>
                                         <td width="25%">Price/Book Value</td>
-                                        <td width="25%" class="priceToBookRatio">-</td>
+                                        <td width="25%" class="property" data-name="priceToBookRatio">-</td>
                                         <td width="25%">P/E Ratio</td>
-                                        <td width="25%" class="peRatio">-</td>
+                                        <td width="25%" class="property" data-name="peRatio">-</td>
                                     </tr>
                                     <tr>
                                         <td>Dividend Yield</td>
-                                        <td class="dividendYield" data-unit="percent">-</td>
+                                        <td class="property" data-name="dividendYield" data-unit="percent">-</td>
                                         <td>EV/EBITDA</td>
-                                        <td class="evEbitData">-</td>
+                                        <td class="property" data-name="evEbitData">-</td>
                                     </tr>
-                                    </tobdy>
+                                    </tbody>
                             </table>
                             <div class="button view-more">View recent valuation data</div>
                         </div>
@@ -161,54 +161,56 @@
                                 <tbody>
                                     <tr>
                                         <td width="25%">Debt/EBITDA</td>
-                                        <td width="25%" class="">-</td>
+                                        <td width="25%" class="property" data-name="">NEED</td>
                                         <td width="25%">Cap Ex</td>
-                                        <td width="25%" class="capitalExpenditures">-</td>
+                                        <td width="25%" class="property" data-name="capitalExpenditures">-</td>
                                     </tr>
                                     <tr>
                                         <td>Total Debt</td>
-                                        <td class="">-</td>
+                                        <td class="property" data-name="">NEED</td>
                                         <td>EBIT</td>
-                                        <td class="ebit" data-unit="mil">-</td>
+                                        <td class="property" data-name="ebit" data-unit="mil">-</td>
                                     </tr>
                                     <tr>
                                         <td>Enterprise Value</td>
-                                        <td class="enterpriseValue">-</td>
+                                        <td class="property" data-name="enterpriseValue">-</td>
                                         <td>Total Revenue</td>
-                                        <td class="totalRevenue" data-unit="mil">-</td>
+                                        <td class="property" data-name="totalRevenue" data-unit="mil">-</td>
                                     </tr>
                                     <tr>
                                         <td>Total Assets</td>
-                                        <td class="totalAssets" data-unit="mil">-</td>
+                                        <td class="property" data-name="totalAssets" data-unit="mil">-</td>
                                         <td>Net Income</td>
-                                        <td class="netIncome">-</td>
+                                        <td class="property" data-name="netIncome">-</td>
                                     </tr>
                                     <tr>
                                         <td>Cash &amp; ST Investments</td>
-                                        <td class="cashInvestments">-</td>
+                                        <td class="property" data-name="cashInvestments">-</td>
                                         <td>EBITDA</td>
-                                        <td class="ebitda" data-unit="mil">-</td>
+                                        <td class="property" data-name="ebitda" data-unit="mil">-</td>
                                     </tr>
-                                    </tobdy>
+                                    </tbody>
                             </table>
                             <div class="button view-more">View recent financial data</div>
                         </div>
                         <div id="panel4" class="panel">
                             <table cellspacing="0">
-                                <tbody>
+                                <thead>
                                     <tr>
-                                        <td width="25%">Top 5 owners by shares held</td>
-                                        <td width="25%" class="topHolders">-</td>
-                                        <td width="25%">Number of shared held</td>
-                                        <td width="25%" class="numberSharesHeld">-</td>
+                                        <td width="50%">Top 5 owners by shares held</td>
+                                        <td width="50%">Number of shared held</td>
                                     </tr>
+                                </thead>
+                                <tbody class="owners">
+                                	<tr>
+                                		<td>-</td>
+                                		<td>-</td>
+                                	</tr>
                                     <tr>
-                                        <td>% of common stock</td>
-                                        <td class="percentCommonStock">-</td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="right">% of common stock</td>
+                                        <td class="property" data-name="percentCommonStock">-</td>
                                     </tr>
-                                    </tobdy>
+                                </tbody>
                             </table>
                             <div class="button view-more">View recent ownership data</div>
                         </div>
@@ -218,12 +220,7 @@
                     <div class="title">
                         <div class="label">Company Description</div>
                     </div>
-                    <div class="content businessDescription">
-                        <!-- <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                        </p>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                        </p> -->
-                    </div>
+                    <div class="property" data-name="businessDescription"></div>
                 </div>
                 <div class="module dark-module module-info">
                     <div class="title">
@@ -232,33 +229,18 @@
                     <div class="content">
                         <div class="col-1">
                             <h5>Contact</h5>
-                            <div class="companyAddress">
-                                <!-- ABC Financial Corp.
-                                <br>123 ABC Highway
-                                <br>Singapore 819829
-                                <br>Singapore (65)
-                                <br>64989700 -->
-                            </div>
-                            <a href="#" target="_blank" alt="" class="link companyName companyWebsite">
-                                <!-- www.abcfin.com -->
-                            </a>
+                            <div class="property" data-name="companyAddress"></div>
+                            <a href="#" target="_blank" alt="" class="link property" data-name="companyWebsite"><span class="property" data-name="companyName"></span></a>
                         </div>
                         <div class="col-2">
                             <h5># of Employees</h5>
-                            <div>
-                                <!-- 2,356 -->
-                            </div>
-                            <br>
+                            <div class="property" data-name="employees">-</div>
                             <h5>Current Fiscal Year End</h5>
-                            <div class="fiscalYearEnd">
-                                <!-- 31 December 2014 -->
-                            </div>
+                            <div class="property" data-name="fiscalYearEnd">-</div>
                         </div>
                         <div class="col-3">
                             <h5>Year Founded</h5>
-                            <div class="yearFounded">
-                                <!-- 1966 -->
-                            </div>
+                            <div class="property" data-name="yearFounded">-</div>
                         </div>
                     </div>
                 </div>
@@ -268,38 +250,7 @@
                     <div class="title">
                         <div class="label">News</div>
                     </div>
-                    <ul>
-                        <li>
-                            <div class="icon">A</div><a>ABC Financial A Shares SG $1.03 Dividend...</a>
-                        </li>
-                        <li>
-                            <div class="icon">B</div><a>ABC Financial 2008 FY EPS Up 17% Over 2007 </a>
-                        </li>
-                        <li>
-                            <div class="icon">C</div><a>ABC Financial and XYZ Medical announce strategic partnership</a>
-                        </li>
-                        <li>
-                            <div class="icon">D</div><a>ABC Financial A Shares SG $1.37 Dividend...</a>
-                        </li>
-                        <li>
-                            <div class="icon">E</div><a>ABC Financial Upgraded to "Consider" by Wall Street Weekly</a>
-                        </li>
-                        <li>
-                            <div class="icon">F</div><a>ABC Financial A Shares SG $1.77 Dividend...</a>
-                        </li>
-                        <li>
-                            <div class="icon">G</div><a>ABC Financial Profit Margins Jumps to 11% In Early 2012</a>
-                        </li>
-                        <li>
-                            <div class="icon">H</div><a>ABC Financial See Spike In Volume After Announcing Dividend Increase</a>
-                        </li>
-                        <li>
-                            <div class="icon">I</div><a>ABC Financial A Shares SG $1.99 Dividend...</a>
-                        </li>
-                        <li>
-                            <div class="icon">J</div><a>ABC Financial Market Cap Lead to...</a>
-                        </li>
-                    </ul>
+                    <ul></ul>
                 </div>
                 <div class="module dark-module progress-estimate">
                     <div class="title">

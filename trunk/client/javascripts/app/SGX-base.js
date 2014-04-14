@@ -9,6 +9,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		
     		resultSize: 25,
     		
+    		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
+    		
     		displayColumns: {
     			companyName: true,
     			tickerCode: true,
@@ -557,8 +559,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
                 		$.each(data.companies, function(idx, company) {
                 			
+                			var xdHash = typeof location.hash === "undefined" ? "" : location.hash;
                 			var tr = $("<tr />").addClass("result").data(company);
-                			var cLink = $("<a href='company-tearsheet.html?code=" + company.tickerCode +"'>" + company.companyName + "</a>");
+                			var cLink = $("<a href='company-tearsheet.html?code=" + company.tickerCode + xdHash + "'>" + company.companyName + "</a>");
 
                 			// company name
                 			$("<td />").append(cLink).addClass("companyName").appendTo(tr).attr("data-value", company.companyName.toLowerCase()).attr('data-name', 'companyName');
@@ -1017,11 +1020,120 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             	});
             	
-            }
+            },
+            
+            init: function() {
+            	var page = location.pathname;
+            	if (page.indexOf("company-tearsheet") != -1) SGX.company.init();
+            	else SGX.screener.init();
+            },
+            
+
+            getParameterByName: function(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            },
+            
+            tabs: function() {
+                // debug.info('SGX.tabs');
+                $('.tabbed-content').tabs({
+                    active: 0,
+                    show: {
+                        effect: "blind",
+                        duration: 800
+                    }
+                });
+            },
+            
+            company: {
+            	
+            	init: function() {
+            		
+            		var code = SGX.getParameterByName("code");
+            		var company = SGX.company.getCompany(code);
+            		SGX.tabs();
+            		
+            	},
+            	
+            	getCompany: function(code) {
+            		var endpoint = SGX.fqdn + "/sgx/company";
+            		var params = { id: code };
+            		SGX.handleAjaxRequest(endpoint, params, SGX.company.loaded);
+            	},
+            	
+            	loaded: function(data) {
+
+            		// simple properties
+            		$(".company-tearsheet-page .property").each(function(idx, el) {
+            			var name = $(el).attr("data-name");
+            			if (typeof name === "undefined" || !data.company.companyInfo.hasOwnProperty(name)) return;
+            			
+            			if ($(el).is("a")) $(el).attr("href", data.company.companyInfo[name])
+            			else $(el).text(data.company.companyInfo[name]);
+            			
+            		});
+            		
+            		// industry tree
+            		var tree = [];
+            		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
+            		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
+            		$.each(tree, function(idx, item) {
+            			var a = $("<a href='broken.html?action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
+            			var li = $("<li />").append(a);
+                		$(".company-tearsheet-page .breadcrumb-tree").append(li);
+            		});
+            		
+            		// news
+            		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0) {
+            			
+            			$.each(data.keyDevs, function(idx, keyDev) {
+
+            				var letter = SGX.letters.substring(idx, idx+1);
+            				var icon = $("<div />").addClass("icon").text(letter); 
+            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation);
+            				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
+            				
+            				$(link).click(function(e) {
+            					var copy = "<h4>" + $(this).text() + "</h4><div class='news'>" + $(this).attr("data-content") + "</div>";
+                                SGX.modal.open({ content: copy, type: 'alert' });
+            				});
+            				
+            			});
+            			
+            		}
+            		else {
+            			$(".stock-events").hide();
+            		}
+            		
+            		// holders
+            		if (data.hasOwnProperty("holders") && data.holders.hasOwnProperty("holders") && data.holders.holders.length > 0) {
+            			
+            			$(".panel .owners tr:first").hide();
+            			var percent = 0;
+            			
+             			$.each(data.holders.holders, function(idx, owner) {
+            				var tr = $("<tr />").prependTo(".panel .owners");
+            				$("<td />").text(owner.name).addClass("property").appendTo(tr);
+            				$("<td />").text(owner.shares).addClass("property").appendTo(tr);
+            				percent += owner.percent;
+            			});
+             			
+             			$("[data-name='percentCommonStock']").text(percent);
+            			
+            		}
+            		
+
+            	}
+            	
+            },
+            
+            
     		
     };
     
     
-    SGX.screener.init();
+    SGX.init();
 
 });
