@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
+import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.AlphaFactorService;

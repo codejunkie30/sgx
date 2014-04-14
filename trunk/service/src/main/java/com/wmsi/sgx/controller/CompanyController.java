@@ -14,11 +14,11 @@ import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
-import com.wmsi.sgx.model.financials.CompanyFinancial;
+import com.wmsi.sgx.model.financials.Financial;
 import com.wmsi.sgx.model.financials.Financials;
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.sandp.AlphaFactor;
+import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
-import com.wmsi.sgx.model.search.input.IdSearch;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
@@ -64,7 +64,7 @@ public class CompanyController{
 	
 	@RequestMapping(value="company/financials")
 	public Financials getFinancials(@RequestBody IdSearch search) throws CompanyServiceException {		
-		List<CompanyFinancial> hits = companyService.loadFinancials(search.getId());
+		List<Financial> hits = companyService.loadFinancials(search.getId());
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;

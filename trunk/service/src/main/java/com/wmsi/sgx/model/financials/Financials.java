@@ -10,13 +10,13 @@ public class Financials{
 
 	
 	@JsonUnwrapped
-	private List<CompanyFinancial> financials;
+	private List<Financial> financials;
 
-	public List<CompanyFinancial> getFinancials() {
+	public List<Financial> getFinancials() {
 		return financials;
 	}
 
-	public void setFinancials(List<CompanyFinancial> financials) {
+	public void setFinancials(List<Financial> financials) {
 		this.financials = financials;
 	}
 }

@@ -6,7 +6,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.util.StringUtils;
 
-import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
+import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 
 public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder<AlphaFactorSearchRequest>{
 

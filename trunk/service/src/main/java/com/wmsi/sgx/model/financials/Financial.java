@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 
-public class CompanyFinancial{
+public class Financial{
 
 	private String absPeriod;
 	private Double assetTurns;

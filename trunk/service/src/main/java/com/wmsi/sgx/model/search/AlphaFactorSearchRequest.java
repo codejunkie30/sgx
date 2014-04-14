@@ -1,4 +1,4 @@
-package com.wmsi.sgx.model.alpha;
+package com.wmsi.sgx.model.search;
 
 import com.google.common.base.Objects;
 
