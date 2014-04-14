@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
 @EnableWebMvc
@@ -42,7 +43,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    	
+    	mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
     	jackson.setObjectMapper(mapper);
