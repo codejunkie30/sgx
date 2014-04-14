@@ -605,14 +605,21 @@ h1.title {
   left: 0;
   top: 2px;
 }
-.stock-events li a {
+.stock-events li span {
   font: bold 12px/12px Arial, Helvetica, sans-serif;
   color: #1e2171;
   text-decoration: none;
+  cursor: pointer;
 }
-.stock-events li a:hover {
+
+.stock-events li span:hover {
   text-decoration: underline;
 }
+
+.news {
+	margin-bottom: 10px;
+}
+
 .progress-estimate {
   padding: 0 0 10px;
 }
@@ -777,18 +784,18 @@ h1.title {
 .tabbed-content .panel tr {
   min-height: 34px;
 }
-.tabbed-content .panel tr:nth-child(2n+2) {
-  background: #e9eaeb;
-}
+
 .tabbed-content .panel tr td {
   padding: 10px;
   line-height: 14px;
   font-size: 12px;
-}
-.tabbed-content .panel tr td:nth-child(2n+1) {
   font-weight: bold;
-  font-size: 12px;
 }
+
+.tabbed-content .panel .property {
+	font-weight: normal;
+}
+
 .tabbed-content .view-more {
   margin-top: 16px;
   margin-bottom: 16px;
