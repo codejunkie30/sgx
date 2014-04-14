@@ -27,7 +27,7 @@ public class PriceController {
 	
 	private String market = "XSES";
 	
-	@RequestMapping(method = RequestMethod.POST )
+	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(@RequestBody IdSearch query) {
 		Price p = new Price();
 		
