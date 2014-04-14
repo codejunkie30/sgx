@@ -2,7 +2,7 @@ package com.wmsi.sgx.service;
 
 import java.util.List;
 
-import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
+import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 
 public interface AlphaFactorService{
 

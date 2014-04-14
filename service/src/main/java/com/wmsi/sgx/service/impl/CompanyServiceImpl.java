@@ -10,8 +10,8 @@ import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.CompanyFinancial;
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.financials.Financial;
+import com.wmsi.sgx.model.sandp.AlphaFactor;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.search.SearchService;
@@ -67,9 +67,9 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	@Override
 	@Cacheable(value = "financials")
-	public List<CompanyFinancial> loadFinancials(String id) throws CompanyServiceException {
+	public List<Financial> loadFinancials(String id) throws CompanyServiceException {
 		try{
-			return financialSearch.search(id, CompanyFinancial.class);
+			return financialSearch.search(id, Financial.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading price history", e);

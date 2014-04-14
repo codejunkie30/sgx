@@ -6,8 +6,8 @@ import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.CompanyFinancial;
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.financials.Financial;
+import com.wmsi.sgx.model.sandp.AlphaFactor;
 
 public interface CompanyService{
 
@@ -25,6 +25,6 @@ public interface CompanyService{
 
 	List<HistoricalValue> loadPriceHistory(String search) throws CompanyServiceException;
 
-	List<CompanyFinancial> loadFinancials(String id) throws CompanyServiceException;
+	List<Financial> loadFinancials(String id) throws CompanyServiceException;
 
 }

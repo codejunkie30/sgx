@@ -1,4 +1,4 @@
-package com.wmsi.sgx.model.search.input;
+package com.wmsi.sgx.model.search;
 
 public class IdSearch{
 

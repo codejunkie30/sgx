@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.CompanyInfo;
-import com.wmsi.sgx.model.alpha.AlphaFactorSearchRequest;
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.sandp.AlphaFactor;
+import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 import com.wmsi.sgx.model.search.Criteria;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;

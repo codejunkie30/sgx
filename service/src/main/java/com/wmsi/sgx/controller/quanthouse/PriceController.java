@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.Price;
-import com.wmsi.sgx.model.search.input.IdSearch;
+import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.service.quanthouse.QuanthouseService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
