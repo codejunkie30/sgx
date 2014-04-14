@@ -8,6 +8,7 @@
             jquiwidget: 'vendor/jquery.ui/ui/jquery.ui.widget',
             jquimouse: 'vendor/jquery.ui/ui/jquery.ui.mouse',
             accordion: 'vendor/jquery.ui/ui/jquery.ui.accordion',
+            jquidatepicker: 'vendor/jquery.ui/ui/jquery.ui.datepicker',
             slider: 'vendor/jquery.ui/ui/jquery.ui.slider',
             tabs: 'vendor/jquery.ui/ui/jquery.ui.tabs',
             highstock: 'vendor/highstock/highstock',
@@ -29,6 +30,9 @@
                 deps: ['jquery', 'jquicore']
             },
             "jquimouse": {
+                deps: ['jquery', 'jquicore', 'jquiwidget']
+            },
+            "jquidatepicker": {
                 deps: ['jquery', 'jquicore', 'jquiwidget']
             },
             "accordion": {

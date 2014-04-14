@@ -1,5 +1,5 @@
 // This is the modular wrapper for any page
-define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordion', 'slider', 'tabs', 'debug'], function($, _, SGX) {
+define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug'], function($, _, SGX) {
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
 	
@@ -30,6 +30,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         				$(this).attr("data-order", idx);
         				$(this).click(function(e) {
         					
+        					var mainEl = $(this)
+        					
         					// remove this field
         					if ($(this).hasClass("checked")) {
         						var target = $(".search-criteria [data-name='" + $(this).attr("data-name") + "']");
@@ -44,10 +46,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                     			return;
                     		} 
                     		
-                    		// otherwise we're good
-                    		SGX.showLoading();
-        					
         					// add in the field
+                    		SGX.showLoading();
         					var data = { "fields" : [ $(this).attr("data-name") ] };
         					SGX.screener.criteriaChange.getDistributions(data, SGX.screener.criteriaChange.addCriteria);
         					
@@ -88,7 +88,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
         			SGX.screener.search.criteriaSearch();
         			
         			$(".button-customize-display").click(function() { SGX.screener.search.customizeResults(); });
-        			
+
         			SGX.hideLoading();
 
         			        			
@@ -120,7 +120,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             		field.format = $(el).attr("data-type") === "undefined" ? "string" : $(el).attr("data-type");
             		field.name = $(".trigger", el).text();
             		field.selected = $(el).hasClass("checked");
-            		field.template =  typeof $(el).attr("data-template") !== "undefined" ? $(el).attr("data-template") : "number";
+            		if (!field.hasOwnProperty("template")) field.template = typeof $(el).attr("data-template") !== "undefined" ? $(el).attr("data-template") : "number";
             		field.label = typeof $(el).attr("data-label") !== "undefined" ? $(el).attr("data-label") : "";
             		field.order = parseInt($(el).attr("data-order"));
             		field.isDefault = $(el).hasClass("default");
@@ -135,6 +135,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 
                 drawCriteria: function(data) {
 
+                	var runsearch = false;
+                	
                 	if (data.distributions.length > 1) {
                     	data.distributions.sort(function(a, b) {
                     		var a = parseInt($(".editSearchB [data-name='" + a.field + "']").attr("data-order"));
@@ -144,7 +146,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                         	return 0;
                     	});
                 	}
-                	
                 	
                 	$.each(data.distributions, function(idx, distribution) {
                 		
@@ -158,8 +159,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 		
                 		// draw the appropriate input
                 		if (distribution.template == "select") template = SGX.screener.drawCriteriaSelect(distribution);
+                		else if (distribution.template == "change") {
+                			template = SGX.screener.drawCriteriaChange(distribution);
+                			runsearch = false;
+                		}
                 		else template = SGX.screener.drawCriteriaSlider(distribution);
-
+                		
                     	$(".label .glossary-item", template).attr("glossary-key", distribution.id);
                     	$(template).attr("data-name", distribution.id);
 
@@ -189,6 +194,46 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	
                 	SGX.formatValues(".search-criteria");
                 	
+                	return runsearch;                	
+                },
+                
+                drawCriteriaChange: function(distribution) {
+                	
+                	SGX.hideLoading();
+
+                	var template = $("#criteria-templates [data-template='change']").clone(true);
+
+            		// handle % change
+        			var html = $(".change-picker").html();
+                    SGX.modal.open({
+                        content: html,
+                        type: 'prompt',
+                        postLoad: function(options) {
+                        	SGX.dateranges.init($("#modal .date"));
+                        },
+                        cancel: function(options) {
+                        	SGX.screener.search.criteriaSearch();
+                        },
+                        confirm: function(options) {
+                        	
+                        	distribution.label = distribution.shortName;
+                        	$(template).data(distribution);
+                        	$(".info", template).text(distribution.label);
+
+                        	$(".percent-value", template).text($("#modal input").val());
+                        	$(".start-date", template).text($.datepicker.formatDate("yy-mm-dd", $("#modal .start").datepicker( "getDate" )));
+                        	$(".end-date", template).text($.datepicker.formatDate("yy-mm-dd", $("#modal .end").datepicker( "getDate" )));
+                        	
+                        	$(".search-criteria tbody").append(template);
+                    		SGX.modal.close(); 
+                    		
+                			SGX.screener.search.criteriaSearch();
+                    		
+                        }
+                        
+                    });
+                	
+                	return template;
                 },
                 
                 drawCriteriaSelect: function(distribution) {
@@ -212,7 +257,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 },
                 
                 drawCriteriaSlider: function(distribution) {
-                    
+                	
                 	distribution.min = distribution.buckets[0].key;
                 	distribution.max = distribution.buckets[distribution.buckets.length - 1].key;
                 	var matches = SGX.screener.getDistributionMatches(distribution, distribution.min, distribution.max) + ' matches';
@@ -300,11 +345,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 criteriaChange: {
 
                 	addCriteria: function(data) {
-                		SGX.screener.drawCriteria(data);
+                		var run = SGX.screener.drawCriteria(data);
                 		$.each(data.distributions, function(idx, distribution) {
                 			SGX.screener.criteriaChange.checkCriteriaItem($(".editSearchB [data-name='" + distribution.field + "']"));
                 		});
-                		SGX.screener.search.criteriaSearch();
+                		if (run) SGX.screener.search.criteriaSearch();
                 		SGX.hideLoading();
                 	},
                 	
@@ -330,8 +375,27 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 	},
                 	
                 	getDistributions: function(data, finished) {
+                		var tmpF = finished;
                 		var endpoint = SGX.fqdn + "/sgx/search/distributions";
-                    	SGX.handleAjaxRequest(endpoint, data, finished, undefined);
+                		var hasPercentChange = _.findWhere(data.fields, "percentChange" );
+                		if (typeof hasPercentChange !== "undefined") data.fields = _.without(data.fields, hasPercentChange);
+                		
+                		// change the function
+                		if (hasPercentChange) {
+                			tmpF = function(data) { 
+                				data.distributions.push({ "field": "percentChange", buckets: [], template: "change" }); 
+                				finished(data); 
+                			};
+                		}
+                		
+                		// do something else
+                		if (data.fields.length == 0) { 
+                			data = { distributions: [] }; 
+                			tmpF(data);
+                			return;
+                		}
+                		
+                    	SGX.handleAjaxRequest(endpoint, data, tmpF, undefined);
                 	},
                 	
                 	maxCriteriaMsg: function() {
@@ -390,6 +454,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 			
                 			var name = $(this).attr("data-name");
                 			
+                			$(this).attr("data-template")
+                			
                 			param = { field: name };
                 			
                 			// handle slider criteria
@@ -405,9 +471,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 				if (dd.attr("data-label") == copy) return;
                 				param.value = copy;
                 			}
+                			else if ($(this).attr("data-template") == "change") {
+                				param.value = $(".percent-value", this).text();
+                				param.from = $(".start-date", this).text();
+                				param.to = $(".end-date", this).text();
+                			}
                 			
                 			params.push(param);
-                			
                 			
                 		});
                 		
@@ -652,6 +722,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
                 			e.preventDefault();
                 			e.stopPropagation();
                 			if (cur == page) return;
+                			$('.screener-page').animate({ scrollTop: $(".module-results").position().top }, 150);
                 			SGX.screener.search.displayPage(page);
             			});
             			
@@ -715,11 +786,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
     		},   		
             
     		hideLoading: function() {
-    			$('#loading').delay(250).fadeOut();
+    			$('#loading').hide();
     		},
     		
     		showLoading: function() {
-    			$('#loading').delay(250).fadeIn();
+    			$('#loading').show();
     		},
 
     		accordion: function() {
@@ -756,6 +827,29 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             	debug.log(status);
             	debug.log(data);
             	debug.log(er);
+            },
+            
+            dateranges: {
+            	
+            	init: function(selector) {
+            		
+            		$(selector).each(function(idx, el) {
+            			
+                    	$(this).datepicker({
+                    		minDate: 0,
+                    		numberOfMonths: 1,
+                    		minDate: $(this).attr("min-date"),
+                    		maxDate: $(this).attr("max-date"),
+                    		defaultDate: $(this).attr("default-date")
+                    	});
+            			
+            		});
+
+
+            	}
+            	
+
+            	
             },
             
             dropdowns: {
@@ -815,8 +909,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'accordio
             },
             
             modal: {
-                close: function() {
-                	$("#modal").fadeOut(100, function() { $(this).removeAttr("class"); });
+                close: function(settings) {
+            		var settings = $(".confirm", modal).data();
+                	$("#modal").fadeOut(100, function() { $(this).removeAttr("class"); if (settings.hasOwnProperty("cancel")) { settings.cancel(); } });
                 },
                 
                 open: function(settings) {

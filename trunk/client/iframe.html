@@ -17,7 +17,6 @@
 	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://localhost' );
 	    
 	    // resize the iframe based on response from remote iframe
-	    var _spInitialized = 0;
 	    function resizeFrame(rHeight) {
 	    	
 	        // page objects   
@@ -32,10 +31,6 @@
 	        
 	        // set the resized size
 	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
-
-			// scroll to top		        
-			if (_spInitialized != 0) $('html, body').animate({ scrollTop: $("#company-info").offset().top}, 0);
-			else _spInitialized = 1;
 	    	
 		}
 	    
@@ -75,7 +70,7 @@
 </div>
 
 <div class="container">
-	<iframe id="company-info" style="overflow: hidden;" allowTransparency="true" frameborder="0" width="1008" height="1"></iframe>
+	<iframe id="company-info" style="overflow: hidden; padding: 0px; margin:0px;" allowTransparency="true" frameborder="0" width="1008" height="1"></iframe>
 </div>
 
 <div class="container footer">
