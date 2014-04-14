@@ -3,7 +3,7 @@
     require({
         urlArgs: "b=" + ((new Date()).getTime()),
         paths: {
-            jquery: 'vendor/jquery-legacy/jquery',
+            jquery: 'vendor/jquery-modern/jquery',
             jquicore: 'vendor/jquery.ui/ui/jquery.ui.core',
             jquiwidget: 'vendor/jquery.ui/ui/jquery.ui.widget',
             jquimouse: 'vendor/jquery.ui/ui/jquery.ui.mouse',
@@ -15,7 +15,7 @@
             debug: 'vendor/ba-debug.min',
             underscore: 'vendor/underscore/underscore'
         },
-        waitSeconds: 1,
+        waitSeconds: 5,
         shim: {
             "debug": {
                 exports: 'debug'
