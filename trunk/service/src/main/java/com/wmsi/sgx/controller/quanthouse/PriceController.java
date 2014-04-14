@@ -17,7 +17,7 @@ import com.wmsi.sgx.service.quanthouse.QuanthouseService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
 @RestController
-@RequestMapping(value="/price", produces="application/json")
+@RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class PriceController {
 
 	private Logger log = LoggerFactory.getLogger(PriceController.class);

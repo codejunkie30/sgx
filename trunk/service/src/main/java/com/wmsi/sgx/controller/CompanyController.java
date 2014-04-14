@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.Company;
@@ -23,7 +24,7 @@ import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 
 @RestController
-@RequestMapping(produces="application/json")
+@RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class CompanyController{
 
 	@Autowired

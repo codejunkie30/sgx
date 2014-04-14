@@ -14,7 +14,7 @@ import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 
 @RestController
-@RequestMapping(produces="application/json")
+@RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class DistributionsController{
 	
 	@Autowired 
