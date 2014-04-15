@@ -1540,6 +1540,18 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             		});
             		
+            		$(".checkbox").click(function(e) {
+            			
+            			if ($(this).hasClass("checked")) {
+            				SGX.financials.removeSeries(this);
+            				return;
+            			}
+            			
+        				SGX.financials.addSeries(this);
+            			
+            		});
+
+            		
             		SGX.formatValues("body");            		
             		
             	},
@@ -1562,7 +1574,96 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		return financials;
             		
+            	},
+            	
+            	addSeries: function(el) {
+            		
+        			$(el).addClass("checked");
+        			$(".unchart", el).text("[ UNCHART ]").click(function() {
+        				alert("TODO");
+        			});
+        			
+        			// get the series data
+        			var seriesData = [];
+        			$(el).closest("td").siblings("[data-value]").each(function() {
+        				seriesData.push(parseFloat($(this).attr("data-value"))); 
+        			})
+
+        			// need to initialize
+        			if ($(".chart-row").is(":hidden")) {
+        				SGX.financials.initChart(el, seriesData);
+        				return;
+        			}
+        			
+        			
+        			
+        			// otherwise need to manipulate a bit
+        			var chart = $('#large-bar-chart').highcharts();
+        			
+        			chart.addAxis({
+				    	id: $(".trigger", el).attr("data-name"),
+				    	title: {
+				    		text: $(".trigger", el).text()
+				    	},
+				    	opposite: true
+        			});
+        			
+        			chart.addSeries({
+	                    name: $(".trigger", el).text(),
+	                    data: seriesData,
+	                    yAxis: $(".trigger", el).attr("data-name")
+        			});
+        			
+            		
+            	},
+            	
+            	initChart: function(el, seriesData) {
+            		
+        			var categories = [];
+            		$(".financials-viewport thead:first th").not(".title").each(function() { categories.push($(this).text()); });
+
+            		$(".chart-row").show();
+            		
+            		$('#large-bar-chart').highcharts({
+            			
+            			colors: [ '#565b5c', '#1e2070' ], 
+            			
+            			chart: {
+            				type: 'column'
+            			},
+            			legend: {
+            				enabled: false
+            			},
+            			title: undefined,
+            			credits: {
+            	            enabled: false
+            	        },
+            			yAxis: [
+            			    {
+            					title: {
+            						text: $(".trigger", el).text()
+            					}
+            				}
+            			],
+            			series: [
+            			    {
+            			    	id: $(".trigger", el).attr("data-name"),
+                                name: $(".trigger", el).text(),
+                                data: seriesData
+                            }
+                        ],
+                        xAxis: {
+                            gridLineColor: 'none',
+                            categories: categories,
+                            plotBands: {
+                                color: '#e2e2e2',
+                                from: 0
+                            }
+                        }
+            		});
+            			
             	}
+            	
             }
             
     };
