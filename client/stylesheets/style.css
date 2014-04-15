@@ -505,6 +505,7 @@ h1, h1.title {
 
 .progress-estimate {
   padding: 0 0 10px;
+  display: none;
 }
 
 .progress-estimate .has-estimate {
@@ -1283,6 +1284,7 @@ table.search-criteria .remove {
   position: absolute;
   right: 0px;
   z-index: 10;
+  text-decoration: none;
 }
 .legend-note {
   position: absolute;
@@ -1678,6 +1680,10 @@ td .info {
 .alpha-factor .slider {
   display: inline-block;
   width: 45%;
+}
+
+.alpha-factors {
+	display: none;
 }
 
 .alpha-factors .slider-label img {

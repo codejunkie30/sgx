@@ -1149,6 +1149,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		// financials
             		$(".view-financials").click(function(e) { window.location = SGX.getFinancialsPage(data.company.companyInfo.tickerCode); });
             		
+            		// company profile
+            		$(".back-company-profile").attr("href", SGX.getCompanyPage(data.company.companyInfo.tickerCode));
+            		
             		// init pricing
             		var endpoint = SGX.fqdn + "/sgx/price";
             		var params = { id: data.company.companyInfo.tickerCode };
@@ -1248,6 +1251,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		var company = data.company.companyInfo;
             		
+            		$(".progress-estimate").show();
+            		
             		// no estimate to display
             		if (!company.hasOwnProperty("targetPriceNum")  || company.targetPriceNum < 3) {
             			$(".progress-estimate .no-estimate").show();
@@ -1284,8 +1289,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	
             	initStockCharts: function(data, newsData) {
             		
-            		var priceData = SGX.toHighCharts(data.price);
-            		var volumeData = SGX.toHighCharts(data.volume);
+            		var priceData = SGX.company.toHighCharts(data.price);
+            		var volumeData = SGX.company.toHighCharts(data.volume);
             		
             		Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
             		
