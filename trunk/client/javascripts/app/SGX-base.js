@@ -1058,9 +1058,15 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var fmt = $(el).attr("data-format");
             		var val = $(el).text();
             		
-            		if (val == "") return;
+            		if (val == "" || val == "-") return;
             		
-            		if (fmt == "millions") {
+            		if (fmt == "simple-number") {
+            		    var parts = val.split(".");
+            		    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            		    val = parts.join(".");
+            		    if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
+            		}
+            		else if (fmt == "millions") {
             			var tmp = parseInt(val) + "";
             			val = parseFloat(val).toFixed(3);
             			if (tmp.length >= 10) val = (val / 1000000000).toFixed(1).replace(/\.0$/, '') + 'b';
@@ -1107,7 +1113,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
             
             tabs: function() {
-                // debug.info('SGX.tabs');
                 $('.tabbed-content').tabs({
                     active: 0,
                     show: {
@@ -1142,8 +1147,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var newsData = SGX.company.initNews(data);
 
             		// init charts
-            		endpoint = SGX.fqdn + "/sgx/company/priceHistory";
-            		params = { id: data.company.companyInfo.tickerCode };
+            		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
+            		var params = { id: data.company.companyInfo.tickerCode };
             		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
             		
             		// all other sections
@@ -1486,18 +1491,78 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	
             	init: function() {
             		var code = SGX.getParameterByName("code");
-            		var company = SGX.company.getCompany(code, SGX.financials.loaded);
+            		var company = SGX.company.getCompany(code, SGX.financials.loadedCompany);
             	},
             	
-            	loaded: function(data) {
+            	loadedCompany: function(data) {
 
             		SGX.company.initSimple(data);
             		
-            		SGX.tooltip.init("body");
-            		SGX.formatValues("body");
-            		SGX.tabs();
+            		$(".financials-viewport tbody").each(function() { $("tr:even", this).addClass("even"); }); 
+
+            		var endpoint = SGX.fqdn + "/sgx/company/financials";
+            		var params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, SGX.financials.loadedFinancials);
             		
-            	}            	
+            	},
+            	
+            	loadedFinancials: function(data) {
+            		
+            		if (!data.hasOwnProperty("financials")  || data.financials.length == 0) return;
+            		
+            		var financials = SGX.financials.cleanFinancials(data.financials); 
+            		
+            		// headings
+            		$(".financials-viewport thead").each(function() {
+            			
+            			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
+            				$(this).text(financials[idx].absPeriod);
+            				$(".currency").text(financials[idx].filingCurrency);
+            			});
+            			
+            		});
+            		
+            		// loop through the td's
+            		$(".financials-viewport td").has(".trigger").each(function(idx, el) {
+            			
+            			var name = $(".trigger", el).attr("data-name");
+
+            			if (typeof name === "undefined") {
+            				console.log($(".trigger", el).text());
+            				return;
+            			}
+            			
+            			// now get the siblings
+            			$(el).siblings().not(".unchart").each(function(idx, td) {
+            				var cur = financials[idx];
+            				if (cur.hasOwnProperty(name)) $(td).text(cur[name]).attr("data-value", cur[name]).addClass("formattable").attr("data-format", "simple-number");
+            			});
+            			
+            		});
+            		
+            		SGX.formatValues("body");            		
+            		
+            	},
+            	
+            	cleanFinancials: function(financials) {
+
+            		// let's make sure they're sorted
+                	financials.sort(function(a, b) {
+                		var a = parseInt(a.absPeriod.replace("FY", "").replace("LTM", ""));
+                		var b = parseInt(b.absPeriod.replace("FY", "").replace("LTM", ""));
+                    	if (a < b) return -1;
+                    	if (a > b) return 1;
+                    	return 0;
+                	});          		
+
+            		// we need to decide whether to use the latest year end
+            		// or quarter data
+            		var isQ4 = financials[financials.length - 1].absPeriod.indexOf("LTM4") != -1;
+            		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
+            		
+            		return financials;
+            		
+            	}
             }
             
     };

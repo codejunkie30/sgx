@@ -1213,9 +1213,6 @@ table.search-criteria .remove {
   margin-top: 10px;
   width: 100%;
 }
-.financials-section tr:nth-child(2n+2) {
-  background-color: #e8e8e8;
-}
 .financials-section thead tr {
   background: none;
   height: 10px;
@@ -1223,12 +1220,12 @@ table.search-criteria .remove {
 .financials-section th {
   color: #000;
   border: none;
-  padding: 0 !important;
+  padding: 20px 0 0 0 !important;
   margin: 0;
   font: bold 14px/12px Arial, Helvetica, sans-serif;
   text-align: center;
 }
-.financials-section th:first-child {
+.financials-section th.title {
   text-align: left;
 }
 .financials-section td {
@@ -1415,15 +1412,19 @@ table.search-criteria .remove {
   color: #fff;
   text-align: center;
 }
-.table-info p {
+.table-info p, .table-info span {
   font: normal 11px Arial, Helvetica, sans-serif;
+  color: #000;
+}
+
+.table-info p {
   margin: 0 !important;
   position: absolute;
   right: 50px;
   top: 7px;
-  color: #000;
   text-align: right;
 }
+
 .source {
   font-size: 11px;
 }
