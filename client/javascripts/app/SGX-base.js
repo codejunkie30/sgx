@@ -1058,6 +1058,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             init: function() {
             	var page = location.pathname;
             	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
+            	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
             	else SGX.screener.init();
             },
             
@@ -1083,17 +1084,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             company: {
             	
             	init: function() {
-            		
             		var code = SGX.getParameterByName("code");
-            		var company = SGX.company.getCompany(code);
-            		SGX.tabs();
-            		
+            		var company = SGX.company.getCompany(code, SGX.company.loaded);
             	},
             	
-            	getCompany: function(code) {
+            	getCompany: function(code, loadedFN) {
             		var endpoint = SGX.fqdn + "/sgx/company";
             		var params = { id: code };
-            		SGX.handleAjaxRequest(endpoint, params, SGX.company.loaded, SGX.company.failed);
+            		SGX.handleAjaxRequest(endpoint, params, loadedFN, SGX.company.failed);
             	},
             	
             	failed: function() {
@@ -1101,37 +1099,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	},
             	
             	loaded: function(data) {
-
-            		// simple properties
-            		$(".company-tearsheet-page .property").each(function(idx, el) {
-            			var name = $(el).attr("data-name");
-            			if (typeof name === "undefined" || !data.company.companyInfo.hasOwnProperty(name)) return;
-            			
-            			if ($(el).is("a")) $(el).attr("href", data.company.companyInfo[name])
-            			else $(el).text(data.company.companyInfo[name]);
-            			
-            		});
             		
-            		// industry tree
-            		var tree = [];
-            		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
-            		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
-            		$.each(tree, function(idx, item) {
-            			var a = $("<a href='broken.html?action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
-            			var li = $("<li />").append(a);
-                		$(".company-tearsheet-page .breadcrumb-tree").append(li);
-            		});
-
-            		// screener
-            		$(".screener-link").attr("href", SGX.getPage(SGX.screenerPage));
-            		
-            		// financials
-            		$(".view-financials").click(function(e) { window.location = SGX.getFinancialsPage(data.company.companyInfo.tickerCode); });
-            		
-            		// init pricing
-            		var endpoint = SGX.fqdn + "/sgx/price";
-            		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, SGX.company.initPrice);
+            		SGX.company.initSimple(data);
 
             		// news
             		var newsData = SGX.company.initNews(data);
@@ -1148,12 +1117,46 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		SGX.tooltip.init("body");
             		SGX.formatValues("body");
+            		SGX.tabs();
+            		
+            	},
+            	
+            	initSimple: function(data) {
+            		
+            		// simple properties
+            		$(".property").each(function(idx, el) {
+            			var name = $(el).attr("data-name");
+            			if (typeof name === "undefined" || !data.company.companyInfo.hasOwnProperty(name)) return;
+            			
+            			if ($(el).is("a")) $(el).attr("href", data.company.companyInfo[name])
+            			else $(el).text(data.company.companyInfo[name]);
+            			
+            		});
+            		
+            		// industry tree
+            		var tree = [];
+            		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
+            		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
+            		$.each(tree, function(idx, item) {
+            			var a = $("<a href='broken.html?action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
+            			var li = $("<li />").append(a);
+                		$(".breadcrumb-tree").append(li);
+            		});
+
+            		// screener
+            		$(".screener-link").attr("href", SGX.getPage(SGX.screenerPage));
+            		
+            		// financials
+            		$(".view-financials").click(function(e) { window.location = SGX.getFinancialsPage(data.company.companyInfo.tickerCode); });
+            		
+            		// init pricing
+            		var endpoint = SGX.fqdn + "/sgx/price";
+            		var params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, SGX.company.initPrice);
             		
             	},
             	
             	initPrice: function(data) {
-            		
-            		console.log(data);
             		
             		var date = Date.fromISO(data.price.currentDate);
             		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
@@ -1423,19 +1426,37 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         
                     });
             		
-            	}
+            	},
+            	
+                toHighCharts: function(data) {
+                	var ret = [];
+                	$.each(data, function(idx, row) {
+                		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
+                	});
+                	return ret;
+                }
             	
             	
             },
             
-            toHighCharts: function(data) {
-            	var ret = [];
-            	$.each(data, function(idx, row) {
-            		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
-            	});
-            	return ret;
+            financials: {
+            	
+            	init: function() {
+            		var code = SGX.getParameterByName("code");
+            		var company = SGX.company.getCompany(code, SGX.financials.loaded);
+            	},
+            	
+            	loaded: function(data) {
+
+            		SGX.company.initSimple(data);
+            		
+            		SGX.tooltip.init("body");
+            		SGX.formatValues("body");
+            		SGX.tabs();
+            		
+            	}            	
             }
-    		
+            
     };
     
     SGX.init();    
