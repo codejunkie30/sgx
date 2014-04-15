@@ -27,11 +27,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		
     		financialsPage: "financials.html",
     		
-            parentURL: decodeURIComponent(document.location.hash.replace(/^#/, '')),
+            parentURL: null,
             
+            pageHeight: $(document).height(),
+
             getPage: function(page) {
-            	if (typeof document.location.hash === "undefined" || document.location.hash == "") return page;
-            	return page + "#" + parentUrl;
+            	var parentURL = SGX.getParentURL();
+            	if (parentURL == null) return page;
+            	return page + "#" + SGX.getParentURL();
+            },
+            
+            getParentURL: function() {
+            	if (SGX.parentURL != null) return SGX.parentURL;
+            	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
+                	SGX.parentURL = document.location.hash.replace(/^#/, '');
+            	}
+            	return SGX.parentURL;
             },
             
             getCompanyPage: function(code) {
@@ -40,6 +51,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             getFinancialsPage: function(code) {
             	return SGX.getPage(SGX.financialsPage + "?code=" + code)
+            },
+            
+            resizeIframe: function(height) {
+            	var fn = function() {
+            		SGX.pageHeight = height;
+            		XD.postMessage(height, SGX.getParentURL(), parent); 
+            	};
+            	setTimeout(fn, 10);
             },
     		
     		screener: {
@@ -598,6 +617,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		
                 		SGX.formatValues($(".module-results tbody"));
                 		SGX.screener.search.displayRows(sort, direction);
+                		
+                		return;
 
                 	},
                 	
@@ -727,8 +748,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	
                     	// next
                     	SGX.screener.search.pageButton($("a.next", paging), lastPg == page ? page : page + 1, page);
-                    	
-                    	XD.postMessage($(document).height(), decodeURIComponent(document.location.hash.replace(/^#/, '')), parent);
+
+                    	// resize call
+                    	//SGX.resizeIframe();
 
                     },
                     
@@ -842,8 +864,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     contentType: 'application/json; charset=UTF-8',           	
                     success: typeof successFN !== "undefined" ? successFN : SGX.genericAjaxSuccess,
                     error: typeof errorFN !== "undefined" ? errorFN : SGX.genericAjaxError,
+                    complete: function() {
+                    	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
+            	            var curHeight = SGX.getTrueContentHeight();
+            	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+                    	}
+                    }
             	});
             	
+            },
+            
+            getTrueContentHeight: function() {
+	            var curHeight = 0;
+        		$(".container_3:visible:last").each(function(idx) {
+        			curHeight += ($(this).prop("scrollHeight")); 
+        		});
+        		return curHeight + 50;
             },
             
             genericAjaxSuccess: function(data) {
@@ -1118,6 +1154,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		SGX.tooltip.init("body");
             		SGX.formatValues("body");
             		SGX.tabs();
+            		
+            		//SGX.resizeIframe();
             		
             	},
             	
