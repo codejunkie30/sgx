@@ -52,7 +52,7 @@
                 "exports": "_"
             }
         }
-    }, [ 'app/SGX-base', 'app/SGX-glossary' ], function($, SGX, _) {
+    }, [ 'app/SGX-base', 'app/SGX-glossary', 'app/utils' ], function($, SGX, _) {
 
     });
 

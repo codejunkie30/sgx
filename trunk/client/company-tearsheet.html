@@ -20,7 +20,7 @@
     			<div class="button confirm prompt-display">Confirm</div><div class="button cancel prompt-display">Cancel</div><div class="button cancel alert-display">Close</div>
     		</div>
    			<div class="modal-close"></div>
-    		<div class="bg" /></div>
+    		<div class="bg"></div>
     	</div>
     	
     </div>
@@ -40,12 +40,13 @@
                 <div class="page-title property" data-name="companyName"></div>
                 <div class="stock-price">
                     <div class="main">
-                        <!-- S$ 10.06 -->--.--
-                        <span class="change">+0.02</span>
+                    	S$ <span class="lastPrice">--</span>
+                        <span class="change">--</span>
                     </div>
                     <div class="last-updated">Last Price:
-                        <span class="date">22/Jan/2014
-                            <span class="time">13:25 SGT</span>
+                        <span class="date">
+							<span class="day">--</span>
+                            <span class="time">--</span>
                         </span>
                     </div>
                 </div>
@@ -65,8 +66,11 @@
         </div>
         <div class="row">
             <div class="grid_2">
-                <div id="area-chart"></div>
-                <div id="bar-chart"></div>
+            
+            	<div class="module dark-module">
+                	<div id="area-chart">Loading price and volume history</div>
+            	</div>
+                
                 <div class="module tabbed-content">
                     <ul class="tab-nav">
                         <li>
@@ -102,7 +106,7 @@
                                     </tr>
                                     <tr>
                                         <td>Previous Close Date</td>
-                                        <td class="property" data-name="previousCloseDate">-</td>
+                                        <td class="property formattable" data-name="previousCloseDate" data-format="date">-</td>
                                         <td>52 Week High/Low</td>
                                         <td class="custom">
                                             <span class="property" data-name="yearHigh">-</span>/<span class="property" data-name="yearLow">-</span>
@@ -236,11 +240,11 @@
                             <h5># of Employees</h5>
                             <div class="property" data-name="employees">-</div>
                             <h5>Current Fiscal Year End</h5>
-                            <div class="property" data-name="fiscalYearEnd">-</div>
+                            <div class="property formattable" data-name="fiscalYearEnd" data-format="date">-</div>
                         </div>
                         <div class="col-3">
                             <h5>Year Founded</h5>
-                            <div class="property" data-name="yearFounded">-</div>
+                            <div class="property formattable" data-name="yearFounded" data-format="date">-</div>
                         </div>
                     </div>
                 </div>
@@ -354,10 +358,10 @@
                         	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
+                            <div class="slider-left-label">High</div>
                             <div class="bar-progress"></div>
                             <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
+                            <div class="slider-right-label">Low</div>
                         </div>
                     </div>
                     <div class="slider" data-name="size">
@@ -366,15 +370,16 @@
                         	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
+                            <div class="slider-left-label">Small</div>
                             <div class="bar-progress"></div>
                             <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
+                            <div class="slider-right-label">Large</div>
                         </div>
                     </div>
                     <div class="slider" data-name="historicalGrowth">
-                        <div class="slider-label">Growth
-                            <div alt="Info" class="info">Info</div>
+                        <div class="slider-label">
+                        	Growth
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>

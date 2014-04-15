@@ -1,5 +1,5 @@
 // This is the modular wrapper for any page
-define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug'], function($, _, SGX) {
+define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock'], function($, _, SGX) {
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
 	
@@ -1018,6 +1018,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var fmt = $(el).attr("data-format");
             		var val = $(el).text();
             		
+            		if (val == "") return;
+            		
             		if (fmt == "millions") {
             			var tmp = parseInt(val) + "";
             			val = parseFloat(val).toFixed(3);
@@ -1034,6 +1036,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		}
             		else if (fmt == "percent") {
             			val = val + "%";
+            		}
+            		else if (fmt == "date") {
+            			val = $.datepicker.formatDate("dd/M/yy", Date.fromISO(val));
             		}
             		else {
             			console.log(fmt);
@@ -1119,37 +1124,86 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		// financials
             		$(".view-financials").click(function(e) { window.location = SGX.getPage(SGX.financialsPage); });
             		
-            		SGX.company.initNews(data);
+            		// init pricing
+            		var endpoint = SGX.fqdn + "/sgx/price";
+            		var params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, SGX.company.initPrice);
+
+            		// news
+            		var newsData = SGX.company.initNews(data);
+
+            		// init charts
+            		endpoint = SGX.fqdn + "/sgx/company/priceHistory";
+            		params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
+            		
+            		// all other sections
             		SGX.company.initHolders(data);
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
             		
             		SGX.tooltip.init("body");
+            		SGX.formatValues("body");
             		
+            	},
+            	
+            	initPrice: function(data) {
+            		
+            		var date = Date.fromISO(data.price.currentDate);
+            		
+            		$(".stock-price .change").text(data.price.change);
+            		$(".stock-price .lastPrice").text(data.price.lastPrice);
+            		$(".stock-price .lastPrice").text(data.price.lastPrice);
+            		$(".stock-price .last-updated .day").text($.datepicker.formatDate( "dd/M/yy", date));
+            		$(".stock-price .last-updated .time").text(date.getHours() + ":" + String("00" + date.getMinutes()).slice(-2) + " SGT");
+            		
+            		$(".stock-price").show();
+
             	},
             	
             	initNews: function(data) {
 
+        			var ret = [];
+
             		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0) {
+            			
+            			data.keyDevs.sort(function(a, b) {
+                    		a = a.date, b = b.date
+                        	if (a < b) return -1;
+                        	if (a > b) return 1;
+                        	return 0;            				
+            			});
             			
             			$.each(data.keyDevs, function(idx, keyDev) {
 
+            				// sidebar display
             				var letter = SGX.letters.substring(idx, idx+1);
+            				var nId = 'keyDev-' + letter;
             				var icon = $("<div />").addClass("icon").text(letter); 
-            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation);
+            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId);
             				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
-            				
             				$(link).click(function(e) {
             					var copy = "<h4>" + $(this).text() + "</h4><div class='news'>" + $(this).attr("data-content") + "</div>";
                                 SGX.modal.open({ content: copy, type: 'alert' });
             				});
             				
+            				// for chart
+            				var chartData = {
+            					x: Date.fromISO(keyDev.date),
+            					title: letter,
+            					text: keyDev.headline,
+            					shape: 'url(../../img/stock-marker.png)',
+            					id: nId
+            				};
+            				ret.push(chartData);
+            				
             			});
             			
             			$(".stock-events").show();
-            			
+
             		}
 
+            		return ret;
             	},
             	
             	initAlphaFactors: function(data) {
@@ -1161,8 +1215,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		var factors = data.alphaFactors;
             		
-            		console.log(factors);
-            		
             		$(".alpha-factors .slider").each(function(idx, el) {
             			
             			var name = $(this).attr("data-name");
@@ -1172,8 +1224,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				$(this).hide();
             				return;
             			}
-            			
-            			console.log(name + ":" + "per-" + (factors[name]*20))
             			
             			$(".bar-progress", this).addClass("per-" + (factors[name]*20));
             			
@@ -1220,16 +1270,167 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		}
             		
             		
+            	},
+            	
+            	initStockCharts: function(data, newsData) {
+            		
+            		var priceData = SGX.toHighCharts(data.price);
+            		var volumeData = SGX.toHighCharts(data.volume);
+            		
+            		Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
+            		
+                    $('#area-chart').highcharts('StockChart', {
+                    	
+                        colors: [ '#363473', '#BFCE00' ],
+                        
+                        chart: {
+                        	backgroundColor: 'transparent'
+                        },
+                        
+            		    rangeSelector: {
+            				inputEnabled: false,
+            		        selected: 3,
+                            buttons: [{
+                                type: 'day',
+                                count: 1,
+                                text: '1d'
+                            }, {
+                                type: 'day',
+                                count: 5,
+                                text: '5d'
+                            }, {
+                                type: 'month',
+                                count: 1,
+                                text: '1m'
+                            }, {
+                                type: 'month',
+                                count: 3,
+                                text: '3m'
+                            }, {
+                                type: 'month',
+                                count: 6,
+                                text: '6m'
+                            }, {
+                                type: 'year',
+                                count: 1,
+                                text: '1y'
+                            }, {
+                                type: 'year',
+                                count: 3,
+                                text: '3y'
+                            }, {
+                                type: 'year',
+                                count: 5,
+                                text: '5y'
+                            }, {
+                                type: 'all',
+                                text: 'All'
+                            }]            		        
+            		    },
+            		    
+            			credits: {
+            	            enabled: false
+            	        },
+            	        
+            	        tooltip: {
+            	        	enabled: false
+            	        },
+
+                        yAxis: [
+                            {
+	            		        title: undefined,
+	            		        height: 170,
+	            		        lineWidth: 2,
+	            		        animation: false
+                            },
+                            {
+	            		        title: undefined,
+                		        top: 250,
+                		        height: 60,
+                		        offset: 0,
+                		        lineWidth: 2,
+	            		        animation: false
+                            }
+                        ],
+                        
+                        series: [
+                            {
+                            	data: priceData,
+                            	type: 'area',
+                            	id: 'priceData'
+                            },
+                            {
+                            	data: volumeData,
+                            	type: 'column',
+            		        	yAxis: 1
+                            },
+                            
+                            {
+                            	type: 'flags',
+                                data: newsData,
+                                onSeries: 'priceData',
+                                shape: 'circlepin',
+                                y: -24,
+                                width: 16,
+                                style: { 
+                                	color: 'black',
+                                	cursor: 'pointer'
+                                },
+                                events: {
+                                	click: function(e) {
+                                		$(".stock-events [data-name='" + e.point.id + "']").click();
+                                	},
+                                },
+
+                            }
+
+                                 
+                        ],
+                        
+                        title: undefined,
+                        
+                        labels: {
+                        	items: [
+                        	    {
+                                	html: "Price",
+                                	style: {
+                                    	top: '-22px',
+                                    	left: '360px'
+                                	}
+                        	    },
+                        	    {
+                                	html: "Volume",
+                                	style: {
+                                    	top: '190px',
+                                    	left: '290px'
+                                	}
+                        	    }
+                        	],
+            	        	style: {
+            	        		color: "#666",
+            	        		fontSize: "12pt",
+            	        		fontWeight: "bold"
+            	        	}
+                        }
+
+                        
+                    });
+            		
             	}
             	
             	
             },
             
-            
+            toHighCharts: function(data) {
+            	var ret = [];
+            	$.each(data, function(idx, row) {
+            		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
+            	});
+            	return ret;
+            }
     		
     };
     
-    
-    SGX.init();
+    SGX.init();    
 
 });
