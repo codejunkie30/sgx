@@ -10,32 +10,50 @@
 </head>
 
 <body class="financials-page">
+
+    <div id="modal">
+    
+    	<div class="modal-container">
+    		<div class="modal-content">
+    			<div class="copy"></div>
+    			<div class="button confirm prompt-display">Confirm</div><div class="button cancel prompt-display">Cancel</div><div class="button cancel alert-display">Close</div>
+    		</div>
+   			<div class="modal-close"></div>
+    		<div class="bg"></div>
+    	</div>
+    	
+    </div>
+    
+    <div id="tooltip-template">
+    
+		<div class="tooltip tooltip-active">
+			<div class="tooltip-content"></div>
+			<div class="tooltip-arrow"></div>
+		</div>
+    
+    </div>
+
     <div class="container_3">
-        <div class="row clearfix">
-            <div class="grid_3">
-                <img src="img/placeholder-header.jpg">
-            </div>
-        </div>
         <div class="row">
             <div class="grid_3">
-                <div class="page-title">ABC Financial Corp. (ABC)</div>
+                <div class="page-title property" data-name="companyName"></div>
                 <div class="stock-price">
-                    <div class="main">S$ 10.06
-                        <span class="change">+0.02</span>
+                    <div class="main">
+                    	S$ <span class="lastPrice">--</span>
+                        <span class="change">--</span>
                     </div>
                     <div class="last-updated">Last Price:
-                        <span class="date">22/Jan/2014
-                            <span class="time">13:25 SGT</span>
+                        <span class="date">
+							<span class="day">--</span>
+                            <span class="time">--</span>
                         </span>
                     </div>
                 </div>
                 <div class="breadcrumb">
-                    <div class="button back-button">Back to Stock Screener</div>
+                    <div class="button back-button"><a href="index.html" class="screener-link">Back to Stock Screener</a>
+                    </div>
                     <ul class="breadcrumb-tree">
                         <li>Industry Tree:</li>
-                        <li><a href="#">Financials</a> &gt;</li>
-                        <li><a href="#">Banking and Finance</a> &gt;</li>
-                        <li><a href="#">Retail Banks</a> &gt;</li>
                     </ul>
                     <div class="right-nav">
                         <div class="print-button">Print</div>
@@ -45,6 +63,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="grid_3">
                 <a class="back-company-profile">&laquo; Back to Company Profile</a>
