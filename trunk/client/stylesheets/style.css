@@ -2,10 +2,15 @@
 
 /* Forces backgrounds to span full width, even if there is horizontal scrolling.
   Increase this if your layout is wider. Note: IE6 works fine without this fix. */
- body {
+body {
     min-width: 1012px;
     padding: 0px;
     margin: 0px;
+}
+
+body * {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
 }
 
 .template, .hidden {
@@ -20,24 +25,29 @@
 	text-align: right;
 }
 
-/* Containers */
-.container_4 {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1012px;
+h1, h1.title {
+  margin: 20px 0 0;
+  font-weight: bold;
+  font-size: 35px;
+  line-height: 42px;
 }
+.page-title {
+  font-weight: bold;
+  font-size: 36px;
+  color: #1e2171;
+  margin: 20px 0 10px;
+  width: 100%;
+  height: 42px;
+}
+
+/* Containers */
+
 .container_3 {
   margin-left: auto;
   margin-right: auto;
   width: 1008px;
 }
-.container_2 {
-  margin-left: auto;
-  margin-right: auto;
-  width: 1012px;
-}
 
-/* Grid >> Global */
 .grid_1, .grid_2, .grid_3, .grid_4 {
     display:inline;
     float: left;
@@ -45,75 +55,7 @@
     margin-left: 6px;
     margin-right: 6px;
 }
-.push_1, .pull_1, .push_2, .pull_2, .push_3, .pull_3, .push_4, .pull_4 {
-    position:relative;
-}
-/* Grid >> Children (Alpha ~ First, Omega ~ Last) */
- .alpha {
-    margin-left: 0;
-}
-.omega {
-    margin-right: 0;
-}
-/* Grid >> 4 Columns */
- .container_4 .grid_1 {
-    width:241px;
-}
-.container_4 .grid_2 {
-    width:494px;
-}
-.container_4 .grid_3 {
-    width:747px;
-}
-.container_4 .grid_4 {
-    width:1000px;
-}
-/* Prefix Extra Space >> 4 Columns */
-.container_4 .prefix_1 {
-    padding-left:253px;
-}
-.container_4 .prefix_2 {
-    padding-left:506px;
-}
-.container_4 .prefix_3 {
-    padding-left:759px;
-}
-/* Suffix Extra Space >> 4 Columns */
-.container_4 .suffix_1 {
-    padding-right:253px;
-}
-.container_4 .suffix_2 {
-    padding-right:506px;
-}
-.container_4 .suffix_3 {
-    padding-right:759px;
-}
-/* Push Space >> 4 Columns */
-.container_4 .push_1 {
-    left:253px;
-}
-.container_4 .push_2 {
-    left:506px;
-}
-.container_4 .push_3 {
-    left:759px;
-}
-/* Pull Space >> 4 Columns */
-.container_4 .pull_1 {
-    left:-253px;
-}
-.container_4 .pull_2 {
-    left:-506px;
-}
-.container_4 .pull_3 {
-    left:-759px;
-}
 
-
-
-
-/* Grid >> 3 Columns
-----------------------------------------------------------------------------------------------------*/
 .container_3 .grid_1 {
     width:324px;
 }
@@ -123,68 +65,7 @@
 .container_3 .grid_3 {
     width:996px;
 }
-/* Prefix Extra Space >> 3 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_3 .prefix_1 {
-    padding-left:336px;
-}
-.container_3 .prefix_2 {
-    padding-left:672px;
-}
-/* Suffix Extra Space >> 3 Columns
-----------------------------------------------------------------------------------------------------*/
-.container_3 .suffix_1 {
-    padding-right:336px;
-}
-.container_3 .suffix_2 {
-    padding-right:672px;
-}
-/* Push Space >> 3 Columns
-----------------------------------------------------------------------------------------------------*/
-.container_3 .push_1 {
-    left:336px;
-}
-.container_3 .push_2 {
-    left:672px;
-}
-/* Pull Space >> 3 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_3 .pull_1 {
-    left:-336px;
-}
-.container_3 .pull_2 {
-    left:-672px;
-}
 
-
-/* Grid >> 2 Columns
-----------------------------------------------------------------------------------------------------*/
-.container_2 .grid_1 {
-    width:494px;
-}
-.container_2 .grid_2 {
-    width:1000px;
-}
-/* Prefix Extra Space >> 2 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_2 .prefix_1 {
-    padding-left:506px;
-}
-/* Suffix Extra Space >> 2 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_2 .suffix_1 {
-    padding-right:506px;
-}
-/* Push Space >> 2 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_2 .push_1 {
-    left:506px;
-}
-/* Pull Space >> 2 Columns
-----------------------------------------------------------------------------------------------------*/
- .container_2 .pull_1 {
-    left:-506px;
-}
 /*!
  * jQuery UI Tabs @VERSION
  * http://jqueryui.com
@@ -325,10 +206,6 @@
   -ms-user-select: none;
   user-select: none;
 }
-/* To Delete after Dev */
-.placeholder-header {
-  margin-bottom: 30px;
-}
 
 .blue {
   color: #1e2171;
@@ -347,21 +224,8 @@
   width: 22px;
   height: 20px;
 }
-* {
-  font-family: Arial, Helvetica, sans-serif;
-}
-h1,
-h1.title {
-  margin: 20px 0 0;
-  font: bold 35px/42px Arial, Helvetica, sans-serif;
-}
-.page-title {
-  font: bold 36px Arial, Helvetica, sans-serif;
-  color: #1e2171;
-  margin: 20px 0 10px;
-  width: 100%;
-  height: 42px;
-}
+
+
 .hero {
   height: 555px;
 }
@@ -383,7 +247,9 @@ h1.title {
   position: relative;
   display: inline-block;
   padding-right: 24px;
-  font: bold 13px/16px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
 }
 .slider .bar-progress {
   position: absolute;
@@ -419,7 +285,9 @@ h1.title {
 .slider .slider-right-label {
   display: inline-block;
   color: gray5;
-  font: bold 10px/10px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 10px;
   text-transform: uppercase;
   width: 54px;
   vertical-align: top;
@@ -463,6 +331,7 @@ h1.title {
 }
 .module.dark-module {
   background: #f2f2f2;
+  padding-bottom: 8px;
 }
 .module .title {
   background-color: #dcdcdc;
@@ -491,11 +360,13 @@ h1.title {
   background-image: -o-linear-gradient(bottom, #dcdcdc, #fff);
   background-image: -ms-linear-gradient(bottom, #dcdcdc, #fff);
   background-image: linear-gradient(to top, #dcdcdc, #fff);
-  height: 22px;
+  height: 25px;
 }
 .module .title .label {
   padding-left: 10px;
-  font: bold 16px/26px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 26px;
   color: #1e2171;
   display: inline;
 }
@@ -551,34 +422,36 @@ h1.title {
 }
 .module h5 {
   color: #000;
-  font: bold 14px/18px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 18px;
   margin: 0;
 }
+
 .module p {
-  font: normal 14px/18px Arial, Helvetica, sans-serif;
   color: #000;
 }
+
 .module p.centered {
   margin: 10px;
   font-weight: bold;
-  font-size: 12px;
   text-align: center;
 }
 .module p.left {
   margin: 10px;
   font-weight: bold;
-  font-size: 12px;
   text-align: left;
 }
 .module a.link {
-  font: bold 16px/18px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 18px;
   color: #1e2171;
   text-decoration: none;
   margin-top: 10px;
   display: block;
 }
 .module .toolbar {
-  margin-top: 9px;
   height: 39px;
   background-color: #f3f3f3;
   border: none;
@@ -587,7 +460,8 @@ h1.title {
 }
 .module .toolbar .results {
   color: #565a5c;
-  font: normal 14px/39px Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 39px;
   text-indent: 10px;
   font-style: italic;
 }
@@ -615,7 +489,7 @@ h1.title {
   top: 2px;
 }
 .stock-events li span {
-  font: bold 12px/12px Arial, Helvetica, sans-serif;
+  font-weight: bold;
   color: #1e2171;
   text-decoration: none;
   cursor: pointer;
@@ -642,7 +516,8 @@ h1.title {
 }
 
 .progress-estimate span {
-  font: bold 12px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
   color: gray5;
   text-transform: uppercase;
 }
@@ -701,9 +576,12 @@ h1.title {
   text-align: center;
 }
 .progress-estimate .price {
-  font: bold 18px/22px Arial, Helvetica, sans-serif;
-  text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 22px;
+	text-align: center;
 }
+
 .module-info .col-1,
 .module-info .col-2,
 .module-info .col-3 {
@@ -796,7 +674,7 @@ h1.title {
   width: 100%;
 }
 .tabbed-content .panel {
-  padding: 0 0 54px;
+  padding: 5px 0;
   margin: 22px 0 0;
   border: 1px solid #ccc;
 }
@@ -981,20 +859,25 @@ table.search-criteria .remove {
   font-size: 10px;
 }
 
-.button-dropdown > .trigger {
-  font: bold 10px Arial, Helvetica, sans-serif;
-  color: #121444;
-  padding-left: 12px;
-  padding-right: 20px;
-  margin-top: 0px;
-  display: inline-block;
-  height: 30px;
-  line-height: 30px;
-  position: relative;
-  z-index: 2;
-  background: url("../img/sprite-dropdown.png") no-repeat;
+.button-dropdown .trigger {
+	color: #121444;
+	padding-left: 12px;
+	padding-right: 20px;
+	margin-top: 0px;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	position: relative;
+	z-index: 2;
+	background: url("../img/sprite-dropdown.png") no-repeat;
 }
-.button-dropdown > .trigger .arrow {
+
+.button-dropdown .trigger .copy {
+	font-weight: bold;
+	font-size: 10px !important;
+}
+
+.button-dropdown .trigger .arrow {
   background: url("../img/sprite-dropdown.png") no-repeat right -29px;
   width: 33px;
   height: 30px;
@@ -1020,7 +903,8 @@ table.search-criteria .remove {
   top: 20px;
   left: 1px;
   z-index: 1;
-  font: bold 12px Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
 }
 .button-dropdown .dropdown.dropdown-padding {
   padding: 10px;
@@ -1081,7 +965,7 @@ table.search-criteria .remove {
   border-right: 1px solid #ccc;
 }
 
-.module-results tr.even {
+.even {
   background-color: #e8e8e8;
 }
 
@@ -1848,6 +1732,23 @@ td.unchart a {
 	margin: 8px 0;
 }
 
+.percentChange-container {
+	margin-bottom: 10px;
+}
+
+.percentChange-container div, .percentChange-container p {
+	font-size: 11px;
+	margin-top:10px;
+}
+
+.percentChange-container .column {
+	margin-right: 20px;
+}
+
+.percentChange-container input {
+	width: 80px;
+}
+
 /*!
  * jQuery UI Datepicker @VERSION
  * http://jqueryui.com
@@ -1995,7 +1896,6 @@ td.unchart a {
 	width: 100%;
 	font-size: 0;
 }
-
 /* RTL support */
 .ui-datepicker-rtl {
 	direction: rtl;
@@ -2030,21 +1930,4 @@ td.unchart a {
 .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header {
 	border-right-width: 0;
 	border-left-width: 1px;
-}
-
-.percentChange-container {
-	margin-bottom: 10px;
-}
-
-.percentChange-container div, .percentChange-container p {
-	font-size: 11px;
-	margin-top:10px;
-}
-
-.percentChange-container .column {
-	margin-right: 20px;
-}
-
-.percentChange-container input {
-	width: 80px;
 }
