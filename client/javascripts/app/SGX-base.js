@@ -1260,6 +1260,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
              			$.each(data.holders.holders, function(idx, owner) {
             				var tr = $("<tr />").prependTo(".panel .owners");
+            				if (idx%2 == 0) $(tr).addClass("even");
             				$("<td />").text(owner.name).addClass("property").appendTo(tr);
             				$("<td />").text(owner.shares).addClass("property").appendTo(tr);
             				percent += owner.percent;
