@@ -105,7 +105,7 @@ var GLOSSARY =
 			definition: "Earnings Quality combines indications of operational efficiency, financial consistency, and accounting quality. The specific indicators of earnings quality include the company's cash conversion cycle, its net profit margin, its working capital accruals, its accrual ratio for cash flows, and its net income stability. "
 		},
 		{
-			id: "Size",
+			id: "size",
 			definition: "Size is measured here by market capitalization (log market cap) and by annual revenue (log sales cap). "
 		},
 		{
