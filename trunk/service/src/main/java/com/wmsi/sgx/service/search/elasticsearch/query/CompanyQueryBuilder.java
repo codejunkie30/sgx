@@ -29,7 +29,7 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 
 	private static final String SCRIPT_FIELD =
 			SCRIPT_SELECT_FRAGMENT +
-			"return prices.size() > 0 ? prices[prices.size()-1] - prices[0]";
+			"return prices.size() > 0 ? (prices[prices.size()-1] - prices[0]) * 100";
 	
 	private static final int MAX_RESULTS = 2000;
 	

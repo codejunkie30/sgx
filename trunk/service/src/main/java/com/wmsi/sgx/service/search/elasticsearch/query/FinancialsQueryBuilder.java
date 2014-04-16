@@ -7,6 +7,8 @@ import org.elasticsearch.search.sort.SortOrder;
 
 public class FinancialsQueryBuilder extends AbstractQueryBuilder<String>{
 
+	private static final int MAX_RESULTS = 2000;
+
 	@Override
 	public SearchSourceBuilder getBuilder(String id) {
 		
@@ -15,7 +17,7 @@ public class FinancialsQueryBuilder extends AbstractQueryBuilder<String>{
 					FilterBuilders.boolFilter()
 						.must(FilterBuilders.termFilter("tickerCode", id))
 						.must(FilterBuilders.typeFilter("financial"))))
-			.size(2000)
+			.size(MAX_RESULTS)
 			.sort("period", SortOrder.ASC);
 	}
 }

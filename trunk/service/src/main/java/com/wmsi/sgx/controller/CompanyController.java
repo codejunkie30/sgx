@@ -58,7 +58,10 @@ public class CompanyController{
 	@RequestMapping(value="company/holders")
 	public Holders getHolders(@RequestBody IdSearch search) throws CompanyServiceException {
 		Holders holders = companyService.loadHolders(search.getId());
-		holders.setHolders(holders.getHolders().subList(0,  5)); // Only return first 5 holders
+		
+		if(holders.getHolders() != null && holders.getHolders().size() > 5)
+			holders.setHolders(holders.getHolders().subList(0,  5)); // Only return first 5 holders
+		
 		return holders;
 	}
 	

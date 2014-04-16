@@ -4,13 +4,16 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 public class TextSearchQueryBuilder extends AbstractQueryBuilder<String>{
-
+	
+	private static final int MAX_RESULTS = 2000;
+	
 	@Override
 	public SearchSourceBuilder getBuilder(String text) {
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.queryString(text)
 			.analyzer("snowball")
 			.field("companyName")
-			.field("tickerSearch"));
+			.field("tickerSearch"))
+			.size(MAX_RESULTS);
 	}
 }
