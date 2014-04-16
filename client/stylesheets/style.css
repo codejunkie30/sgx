@@ -1278,42 +1278,31 @@ table.search-criteria .remove {
   border: none;
   text-decoration: none;
 }
+
 .legend-note {
   position: absolute;
   right: 10px;
-  bottom: 10px;
-  width: 100px;
-  position: absolute;
-  right: 10px;
   bottom: 120px;
-  width: 200px;
+  width: 300px;
   z-index: 10;
-  font-size: 11px;
 }
-.legend-note a {
-  color: #9c9e9f;
-  padding: 10px 0;
-  height: 20px;
-  line-height: 20px;
-  margin-top: 10px;
-  font-weight: bold;
-  text-decoration: none;
-  -webkit-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -webkit-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -moz-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -o-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -ms-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+.legend-note .item {
+	margin-bottom: 8px;
 }
-.legend-note a:visited {
-  color: #1e2171;
+
+.legend-note .item span {
+	display: inline-block;
+	font-weight: bold;
 }
-.legend-note a:hover {
-  border-left: 4px solid #9c9e9f;
-  padding-left: 10px;
-  margin-left: -4px;
-  color: #1e2070;
+
+.legend-note .item span.color {
+	height: 10px;
+	width: 10px;
+	background-color: red;
+	margin-right: 2px;
 }
+
 .back-button {
   float: left;
   margin: 0;
@@ -1396,8 +1385,9 @@ table.search-criteria .remove {
   padding: 20px;
 }
 .data-point-container .financials-viewport {
-  height: 400px;
-  overflow-y: scroll;
+	margin-top: 15px;
+	height: 400px;
+	overflow-y: scroll;
 }
 .chart-row {
 	display: none;
@@ -1694,9 +1684,12 @@ td .info {
 	cursor: pointer;
 }
 
-td.unchart a {
+td.unchart {
   text-decoration: none;
+  cursor: pointer;
+  font-size: smaller;
 }
+
 #loading {
   width: 100%;
   height: 100%;

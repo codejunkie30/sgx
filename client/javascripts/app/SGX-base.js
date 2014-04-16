@@ -1578,44 +1578,90 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	
             	addSeries: function(el) {
             		
+            		if ($(".checked").length >= 2) {
+            			
+                        SGX.modal.open({
+                            content: '<h4>Chart Company Financials <span>(Select up to 2)</h4><p>Only two data points can be charted at a time. Remove a data point before selecting a new one.</p>',
+                            type: 'alert'
+                        });
+                        
+            			return;
+            		}
+            		
         			$(el).addClass("checked");
-        			$(".unchart", el).text("[ UNCHART ]").click(function() {
-        				alert("TODO");
+        			
+        			$(el).closest("tr").find(".unchart").text("[ UNCHART ]").click(function() {
+        				$(this).closest("tr").find(".checkbox").click();
         			});
         			
         			// get the series data
         			var seriesData = [];
         			$(el).closest("td").siblings("[data-value]").each(function() {
         				seriesData.push(parseFloat($(this).attr("data-value"))); 
-        			})
+        			});
+        			
+        			var name = $(".trigger", el).attr("data-name");
 
         			// need to initialize
         			if ($(".chart-row").is(":hidden")) {
         				SGX.financials.initChart(el, seriesData);
-        				return;
         			}
-        			
-        			
-        			
-        			// otherwise need to manipulate a bit
+        			else {
+
+            			// otherwise need to manipulate a bit
+            			var chart = $('#large-bar-chart').highcharts();
+            			
+            			chart.addAxis({
+    				    	id: name,
+    				    	title: {
+    				    		text: $(".trigger", el).text()
+    				    	},
+    				    	opposite: !chart.yAxis[0].opposite,
+    				    	color: '#565b5c' == chart.yAxis[0].color ? '#1e2070' : '#565b5c'
+            			});
+            			
+            			chart.addSeries({
+    	                    name: $(".trigger", el).text(),
+    	                    data: seriesData,
+    	                    yAxis: name
+            			});
+
+        			}
+
+        			// legend formatting
         			var chart = $('#large-bar-chart').highcharts();
         			
-        			chart.addAxis({
-				    	id: $(".trigger", el).attr("data-name"),
-				    	title: {
-				    		text: $(".trigger", el).text()
-				    	},
-				    	opposite: true
-        			});
-        			
-        			chart.addSeries({
-	                    name: $(".trigger", el).text(),
-	                    data: seriesData,
-	                    yAxis: $(".trigger", el).attr("data-name")
-        			});
+        			$(".legend-note .item").hide();
+        			$(".legend-note .item").each(function(idx, item) {
+        				if (idx >= chart.series.length) return;
+        				$(".color", this).css({ "background-color": chart.series[idx].color  });
+        				$(".label", this).text(chart.series[idx].name);
+        				$(this).show();
+        			})
         			
             		
             	},
+            	
+            	removeSeries: function(el) {
+            		
+            		var name = $(".trigger", el).attr("data-name");
+            		var chart = $('#large-bar-chart').highcharts();
+
+            		$(el).removeClass("checked");
+            		$(el).closest("tr").find(".unchart").text("");
+
+            		// remove the entire chart
+            		if (chart.series.length == 1) {
+            			chart.destroy();
+            			$(".chart-row").hide();
+            			return;
+            		}
+            
+            		// remove the series
+            		chart.get(name).remove();
+            		
+            	},
+            	
             	
             	initChart: function(el, seriesData) {
             		
@@ -1624,7 +1670,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             		$(".chart-row").show();
             		
-            		$('#large-bar-chart').highcharts({
+            		var chart = $('#large-bar-chart').highcharts({
             			
             			colors: [ '#565b5c', '#1e2070' ], 
             			
@@ -1640,6 +1686,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	        },
             			yAxis: [
             			    {
+        						id: $(".trigger", el).attr("data-name"),
             					title: {
             						text: $(".trigger", el).text()
             					}
@@ -1662,6 +1709,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         }
             		});
             			
+            		return chart;
             	}
             	
             }
