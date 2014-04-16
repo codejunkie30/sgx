@@ -18,6 +18,6 @@ public class FinancialsQueryBuilder extends AbstractQueryBuilder<String>{
 						.must(FilterBuilders.termFilter("tickerCode", id))
 						.must(FilterBuilders.typeFilter("financial"))))
 			.size(MAX_RESULTS)
-			.sort("period", SortOrder.ASC);
+			.sort("absPeriod", SortOrder.ASC);
 	}
 }

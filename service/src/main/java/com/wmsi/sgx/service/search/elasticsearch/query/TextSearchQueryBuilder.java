@@ -11,7 +11,7 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder<String>{
 	public SearchSourceBuilder getBuilder(String text) {
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.queryString(text)
-			.analyzer("snowball")
+			.analyzer("sgx_text_ngram_analyzer")
 			.field("companyName")
 			.field("tickerSearch"))
 			.size(MAX_RESULTS);
