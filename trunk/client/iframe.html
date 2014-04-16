@@ -16,21 +16,27 @@
 	    // get height from remote content
 	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://localhost' );
 	    
-	    // resize the iframe based on response from remote iframe
-	    function resizeFrame(rHeight) {
-	    	
-	        // page objects   
+	    // resize the iframe and scroll based on response from remote iframe
+	    function resizeFrame(data) {
+
+	    	// page objects   
+	    	var headerHeight = 200; // this should be the height between the header and iframe
 			var cFrame = $("#company-info");
-	        var height = 600;
+	        var height = 600, scrollPos = 0;
 	        var scrolling = "yes";
 	        try{
-				height = parseInt(rHeight);
+		    	var parts = String(data).split("-");
+				height = parseInt(parts[0]);
+				if (parts.length > 1) {
+					scrollPos = parseInt(parts[1]) + headerHeight;
+				}
 				scrolling = "no";
 	        }
 	        catch(err){}
 	        
 	        // set the resized size
 	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
+	        window.scroll(scrollPos,0);
 	    	
 		}
 	    
