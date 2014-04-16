@@ -41,7 +41,7 @@ public class CapIQRequestExecutor{
 	
 	public CapIQResponse execute(String query) throws CapIQRequestException {
 		
-		log.debug("Excuting request to capital iq api");
+		log.debug("Executing request to capital iq api");
 		ResponseEntity<CapIQResponse> res = null;
 		
 		try{

@@ -31,14 +31,16 @@ public class AppConfig{
 		return ppc;
 	}
 	
+	/*
 	@Bean
 	public DozerBeanMapperFactoryBean dozerMappingBean() throws Exception{
 
 		DozerBeanMapperFactoryBean factory = new DozerBeanMapperFactoryBean();
 		factory.setMappingFiles( 
 				new PathMatchingResourcePatternResolver()
-					.getResources("classpath:META-INF/mappings/dozer/*.xml"));
+					.getResources("classpath*:META-INF/mappings/dozer/*.xml"));
 		
 		return factory; 
 	}
+	*/
 }

@@ -8,48 +8,49 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<task:executor id="indexerTaskExecutor" pool-size="5"
-		queue-capacity="100" rejection-policy="CALLER_RUNS" />
+	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
 
-	<int:publish-subscribe-channel id="buildIndexChannel" />
+	<int:inbound-channel-adapter id="cronProducer" channel="indexRequestChannel"
+		expression="'cronTest'">
+		<int:poller cron="0 58 14 ? * MON-FRI" />
+		<int:header name="jobId" expression="T(java.lang.System).currentTimeMillis()"/>
+    	<int:header name="jobDate" expression="new java.util.Date()"/>
+	</int:inbound-channel-adapter>
+ 
+	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="loggingChannel">
+		<int:header-enricher>
+			<int:header name="indexName" expression=" '${elasticsearch.index.prefix}' + headers.jobId" />
+			<int:header name="indexDate" expression="headers.jobDate" />
+		</int:header-enricher>	
+		<int:service-activator ref="indexerService" method="createIndex"/>		
+		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" />
+		<int:gateway request-channel="indexChannel"/>
+		<int:service-activator ref="indexerService" method="createIndexAlias" />		
+	</int:chain>
 
-	<int:channel id="indexRequestChannel" />
-	<int:channel id="indexReplyChannel" />
+	<int:chain id="indexSplitterChain" input-channel="indexChannel" output-channel="indexTicker">
+		<int:splitter ref="indexBuilderServiceImpl" method="getTickers"/>
+	</int:chain>
+	
+	<int:chain id="indexBuilderChain" input-channel="indexTicker" >
+		<int:service-activator ref="indexBuilderServiceImpl" method="index" />
+		
+		<int:aggregator 
+			correlation-strategy-expression="headers.correlationId"
+			release-strategy-expression="#this.size() == #this[0].headers.sequenceSize">
+		</int:aggregator>
+	</int:chain>
 
-	<int:gateway id="indexGateway" default-request-timeout="5000"
-		default-reply-timeout="5000" default-request-channel="indexRequestChannel"
-		default-reply-channel="indexReplyChannel"
-		service-interface="com.wmsi.sgx.service.indexer.IndexBuilderService">
-	</int:gateway>
 
-	<int:service-activator id="alphaFactorIndexer" input-channel="buildIndexChannel" 
-		ref="indexBuilderServiceImpl" method="buildAlphaFactors"/> 
+	<!--  Channel definitions -->
+	<int:channel id="indexRequestChannel"/>
 
-	<int:header-enricher input-channel="indexRequestChannel"
-		output-channel="buildIndexChannel">
-		<int:header name="indexName" expression=" 'int_index_' + T(java.lang.System).currentTimeMillis()" />
-		<int:header name="indexDate" expression="new java.util.Date()" />
-	</int:header-enricher>
-
-	<int:splitter id="tickerSplitter" input-channel="buildIndexChannel"
-		output-channel="indexTicker" ref="indexBuilderServiceImpl" method="getTickers" />
-
-	<int:channel id="indexTicker"
-		datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">
+	<int:channel id="indexTicker" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">
 		<int:dispatcher task-executor="indexerTaskExecutor" />
 	</int:channel>
 
-	<int:service-activator id="indexBuilder"
-		input-channel="indexTicker" output-channel="indexAggregator" ref="indexBuilderServiceImpl" method="index" />
-
-	<int:aggregator 
-		input-channel="indexAggregator" 
-		output-channel="splitterReplyChannel"
-		correlation-strategy-expression="headers.correlationId"
-		release-strategy-expression="#this.size() == #this[0].headers.sequenceSize">
-	</int:aggregator>
+	<int:channel id="loggingChannel"/>
 	
-	<int:service-activator id="alphaFactorIndexer" input-channel="splitterReplyChannel" 
-		ref="indexBuilderServiceImpl" method="createAlias"/> 
+	<int:logging-channel-adapter channel="loggingChannel" level="INFO" />
 
 </beans>

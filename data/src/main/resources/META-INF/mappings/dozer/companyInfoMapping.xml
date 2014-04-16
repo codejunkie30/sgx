@@ -31,10 +31,6 @@
         <a key="IQ_HIGHPRICE">this</a>
         <b>highPrice</b>
       </field>  
-      <field>
-        <a key="IQ_CLOSEPRICE_prev">this</a>
-        <b>previousClosePrice</b>
-      </field>      
       <field custom-converter-param="yyyy-MM-dd">
         <a date-format="yyyy-MM-dd" key="IQ_PRICEDATE">this</a>
         <b>previousCloseDate</b>
@@ -203,7 +199,11 @@
       <field>
         <a key="IQ_GVKEY">this</a>
         <b>gvKey</b>
-      </field>      
+      </field>
+      <field>
+        <a key="IQ_FILING_CURRENCY">this</a>
+        <b>filingCurrency</b>
+      </field>
   </mapping> 
             
 </mappings>  

@@ -4,16 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -32,13 +37,15 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
 
+	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
+	
 	@Autowired
 	private CapIQService capIQService;
 
 	@Autowired
 	private AlphaFactorIndexerService alphaFactorService;
 
-	private Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
+	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 
 	@Autowired
 	private IndexerService indexerService;
@@ -46,19 +53,18 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	@Override
 	public List<CompanyInputRecord> getTickers(@Header String indexName) throws IndexerServiceException {
 
-		System.out.println(indexName);
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
 		
 		try{
 			reader = new InputStreamReader(companyIds.getInputStream());
-			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
-
 			csvReader = new CSVReader(reader, '\t');
 			csvReader.readNext(); // skip header
 
 			String[] record = null;
 
+			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
+			
 			while((record = csvReader.readNext()) != null){
 				
 				CompanyInputRecord r = new CompanyInputRecord();
@@ -80,37 +86,37 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException {
-		
-		
-		String date = "03/10/2014";
+	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input){
 		
 		try{
-			indexerService.createIndex(indexName);
+			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
+			String date = fmt.format(jobDate);
+
 			index(indexName, date, input.getTicker());
 			return input;
 		}
-		catch(IOException | IndexerServiceException | CapIQRequestException | ParseException e){
-			throw new IndexerServiceException("Failed to index ticker " + input.getTicker(), e);
-		}		
-		
+		catch(Exception e){
+			log.error("Failed to index ticker " + input.getTicker(), e);
+			return input;
+		}				
 	}
 
 	@Override
-	public void createAlias(@Header String indexName) throws IndexerServiceException{
-		indexerService.createIndexAlias(indexName);
-	}
-	
-	@Override
-	public void buildAlphaFactors() throws IOException, AlphaFactorServiceException {
-		String index = "test";
-		
-		File file = alphaFactorService.getLatestFile();
-		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
+	public Boolean buildAlphaFactors(@Header String indexName){
+		try{
+			File file = alphaFactorService.getLatestFile();
+			List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
-		for(AlphaFactor f : factors){
-			indexerService.save("alphaFactor", f.getId(), f, index);
+			for(AlphaFactor f : factors){
+				indexerService.save("alphaFactor", f.getId(), f, indexName);
+			}
 		}
+		catch(IOException | AlphaFactorServiceException | IndexerServiceException e){
+			log.error("Failed to load alpha factors", e);
+			return false;
+		}
+		
+		return true;
 	}
 
 	private void index(String index, String date, String ticker) throws IOException,
@@ -133,7 +139,13 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(kd != null)
 			indexerService.save("keyDevs", ticker, kd, index);
 
-		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker);
+		String currency = companyInfo.getFilingCurrency();
+		
+		if(StringUtils.isEmpty(currency))
+			currency = "SGD";
+		
+		System.out.println("Curr " + companyInfo.getFilingCurrency());
+		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker, currency);
 
 		for(CompanyFinancial c : cfs){
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
@@ -157,4 +169,5 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		}
 
 	}
+
 }

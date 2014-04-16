@@ -48,7 +48,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@Test(dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException{
-		capIQService.getCompanyFinancials(ticker);
+		capIQService.getCompanyFinancials(ticker, "SGD");
 	}
 	
 	@Test(dataProvider="testTickers")

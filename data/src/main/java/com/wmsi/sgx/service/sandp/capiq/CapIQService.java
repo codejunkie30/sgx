@@ -17,5 +17,5 @@ public interface CapIQService{
 
 	KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException;
 
-	List<CompanyFinancial> getCompanyFinancials(String id) throws CapIQRequestException;
+	List<CompanyFinancial> getCompanyFinancials(String id, String currency) throws CapIQRequestException;
 }
