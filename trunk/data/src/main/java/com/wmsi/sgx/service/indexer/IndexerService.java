@@ -27,10 +27,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -41,8 +39,6 @@ public class IndexerService{
 	
 	@Value("${elasticsearch.url}")
 	private String esUrl;
-
-	private String indexNamePrefix = "sgx_";
 	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
@@ -51,8 +47,8 @@ public class IndexerService{
 	private RestTemplate restTemplate;
 	public void setRestTemplate(RestTemplate t){restTemplate = t;}
 	
-	public synchronized void createIndex(@Header String asOfDate) throws IOException, IndexerServiceException{
-		String indexName = indexNamePrefix + asOfDate;
+	@Transactional
+	public synchronized Boolean createIndex(@Header String indexName) throws IOException, IndexerServiceException{
 		URI indexUri = buildUri("/" + indexName);
 		
 		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(indexUri, HttpMethod.HEAD).execute();
@@ -60,7 +56,7 @@ public class IndexerService{
 		
 		if(indexExists){
 			log.debug("Index exists " + indexExists);
-			return;
+			return true;
 		}
 			
 		ObjectMapper mapper = new ObjectMapper();
@@ -72,12 +68,15 @@ public class IndexerService{
 		if(statusCode / 100 != 2){			
 			throw new IndexerServiceException("Create index request returned " + statusCode + " http response code. Could not create index");
 		}		
+		
+		return true;
 	}
 	
-	public synchronized void createIndexAlias(@Header String indexName) throws IndexerServiceException {
+	@Transactional
 		
+	public synchronized Boolean createIndexAlias(@Header String indexName) throws IndexerServiceException {
 		URI indexUri = buildUri("/_aliases");
-		JsonNode alias = buildAliasJson( indexNamePrefix + indexName);
+		JsonNode alias = buildAliasJson(indexName);
 		
 		log.debug("Updating index aliases {}", alias);
 			
@@ -85,8 +84,10 @@ public class IndexerService{
 			
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){	
-			throw new IndexerServiceException("Create alaias request returned " + statusCode + " http response code. Could not create alias.");
+			throw new IndexerServiceException("Create alias request returned " + statusCode + " http response code. Could not create alias.");
 		}		
+		
+		return true;
 	}
 	
 	private URI buildUri(String path) throws IndexerServiceException{
@@ -98,21 +99,27 @@ public class IndexerService{
 		}
 	}
 	
+	@Value("${elasticsearch.index.prefix}")
+	private String indexPrefix;
+	
+	@Value("${elasticsearch.index.name}")
+	private String indexAlias;
+	
 	private JsonNode buildAliasJson(String indexName){
 		ObjectMapper mapper = new ObjectMapper();
 		
 		ObjectNode removeAlias = mapper.createObjectNode();
 		ObjectNode remove = mapper.createObjectNode();
 		
-		removeAlias.put("index", "sgx_*");
-		removeAlias.put("alias", "sgx");
+		removeAlias.put("index", indexPrefix.concat("*"));
+		removeAlias.put("alias", indexAlias);
 		remove.put("remove",  removeAlias);
 		
 		ObjectNode addAlias = mapper.createObjectNode();
 		ObjectNode add = mapper.createObjectNode(); 
 
 		addAlias.put("index", indexName);
-		addAlias.put("alias", "sgx");
+		addAlias.put("alias", indexAlias);
 		add.put("add", addAlias);
 		
 		ArrayNode actions = mapper.createArrayNode();
@@ -142,12 +149,20 @@ public class IndexerService{
 	}
 
 	@Transactional
-	public void save(String type, String id, Object companyInfo, String asOfDate) {
-        String indexName = indexNamePrefix + asOfDate;
-        
+	public Boolean save(String type, String id, Object obj, String indexName) throws IndexerServiceException {
+		
         UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/{id}?opt_type=create").build();
         URI uri = uriComp.expand(indexName, type, id).toUri();
         
-        restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(companyInfo), Object.class);
+        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(obj), Object.class);
+        
+        int statusCode = res.getStatusCode().value();
+        
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+		}		
+        
+        return true;
 	}
 }

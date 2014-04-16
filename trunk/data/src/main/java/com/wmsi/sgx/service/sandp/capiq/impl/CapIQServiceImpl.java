@@ -1,7 +1,5 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -17,7 +15,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,42 +75,59 @@ public class CapIQServiceImpl implements CapIQService{
 			template = new ClassPathResource("META-INF/query/capiq/closePrice.json");
 
 			Date d = info.getPreviousCloseDate();
-			String pre = DateUtil.fromDate(d);
+			
+			if(d != null){
+				String pre = DateUtil.fromDate(d);
 
-			ctx = new HashMap<String, Object>();
-			ctx.put("id", id);
-			ctx.put("startDate", pre);
+				ctx = new HashMap<String, Object>();
+				ctx.put("id", id);
+				ctx.put("startDate", pre);
+			
+				CapIQResponse prevResp = executeCapIqRequests(template, ctx);
+				Map<String, String> m2 = capIqResponseToMap(prevResp);
 
-			CapIQResponse prevResp = executeCapIqRequests(template, ctx);
-			Map<String, String> m2 = capIqResponseToMap(prevResp);
+				CompanyInfo inf = (CompanyInfo) mapper.map(m2, CompanyInfo.class);
+				info.setPreviousClosePrice(inf.getClosePrice());
+				
+			}
+			
+			String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
 
-			CompanyInfo inf = (CompanyInfo) mapper.map(m2, CompanyInfo.class);
-
-			info.setPreviousClosePrice(inf.getClosePrice());
-			info.setAvgVolumeM3(getThreeMonthAvg(id, startDate));
-			info.setPriceHistory(getLastYear(id, startDate));
+			List<List<HistoricalValue>> historicalData = loadHistoricaData(id, yearAgo);
+			
+			List<HistoricalValue> lastYearPrice = historicalData.get(0);
+			List<HistoricalValue> lastYearVolume = historicalData.get(1);
+			
+			info.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
+			info.setPriceHistory(lastYearPrice);
 
 			return info;
 		}
 		catch(Exception e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception loading company info for ticker: " +  id, e);			
 		}
 
 		return null;
 	}
 
-	public Double getThreeMonthAvg(String id, String startDate) throws CapIQRequestException, ParseException {
+	public Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws CapIQRequestException {
 
 		String threeMonthsAgo = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -91);
 
-		List<List<HistoricalValue>> historicalData = loadHistoricaData(id, threeMonthsAgo);
-		List<HistoricalValue> volume = historicalData.get(1);
+		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
+
+		for(HistoricalValue val : lastYear){
+			if(val.getDate().compareTo(DateUtil.toDate(threeMonthsAgo)) >= 0)
+				volume.add(val);
+		}
 
 		Double sum = 0.0;
 
 		for(HistoricalValue v : volume)
 			sum += v.getValue();
+		
+		if(sum == 0)
+			return 0.0;
 
 		return avg(sum, volume.size(), 4);
 	}
@@ -125,20 +139,13 @@ public class CapIQServiceImpl implements CapIQService{
 		return avg.setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}
 
-	public List<HistoricalValue> getLastYear(String id, String startDate) throws CapIQRequestException, ParseException {
-
-		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-
-		List<List<HistoricalValue>> historicalData = loadHistoricaData(id, yearAgo);
-		return historicalData.get(0);
-	}
-
 	@Override
-	public List<CompanyFinancial> getCompanyFinancials(String id) throws CapIQRequestException {
+	public List<CompanyFinancial> getCompanyFinancials(String id, String currency) throws CapIQRequestException {
 		Resource template = new ClassPathResource("META-INF/query/capiq/companyFinancials.json");
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
+		ctx.put("currency", currency);
 
 		CapIQResponse response = executeCapIqRequests(template, ctx);
 		List<CompanyFinancial> ret = new ArrayList<CompanyFinancial>();
@@ -163,13 +170,8 @@ public class CapIQServiceImpl implements CapIQService{
 			return ret;
 
 		}
-		catch(IOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		catch(Exception e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception loading company financials for ticker: " +  id, e);			
 		}
 		return null;
 	}
@@ -215,8 +217,7 @@ public class CapIQServiceImpl implements CapIQService{
 				keyDev.setDate(sdf.parse(date.getRows().get(0).getValues().get(1)));
 			}
 			catch(ParseException e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Exception parsing key dev date ticker: " +  id, e);
 			}
 		}
 		return keyDev;
