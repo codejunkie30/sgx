@@ -53,10 +53,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	return SGX.getPage(SGX.financialsPage + "?code=" + code)
             },
             
-            resizeIframe: function(height) {
+            resizeIframe: function(height, scroll) {
             	var fn = function() {
             		SGX.pageHeight = height;
-            		XD.postMessage(height, SGX.getParentURL(), parent); 
+            		var msg = height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
+            		XD.postMessage(msg, SGX.getParentURL(), parent); 
             	};
             	setTimeout(fn, 10);
             },
@@ -66,6 +67,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         		init: function() {
         			
         			$(".editSearchB .checkbox").each(function(idx, el) {
+        				
+        				
+        				// set up glossary terms
+        				$(".trigger", this).addClass("glossary-item");
+        				$(".trigger", this).attr("glossary-key", $(this).attr("data-name"));
         				
         				$(this).attr("data-order", idx);
         				$(this).click(function(e) {
@@ -112,6 +118,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
         			});
         			
+            		
+            		$(".expand-criteria").click(function(e) {
+            			$(".advanced-criteria").show();
+            			$(".expand-criteria").hide();
+            		});
+
+        			
         			SGX.screener.initCriteria();
         			
         		},
@@ -120,8 +133,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
         			SGX.screener.drawInitialCriteria(data);
         			
-                	SGX.dropdowns.init(".search-criteria", SGX.screener.search.criteriaSearch);
-                	
                 	SGX.tooltip.init("body");
         			SGX.accordion();
         			
@@ -230,6 +241,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             
                 		});
                 		
+                		SGX.tooltip.init(template);
+                		
                 	});
                 	
                 	SGX.formatValues(".search-criteria");
@@ -245,6 +258,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             		// handle % change
         			var html = $(".change-picker").html();
+        			
                     SGX.modal.open({
                         content: html,
                         type: 'prompt',
@@ -252,19 +266,32 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         	SGX.dateranges.init($("#modal .date"));
                         },
                         cancel: function(options) {
-                        	SGX.screener.search.criteriaSearch();
+                        	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
                         },
                         confirm: function(options) {
                         	
+                        	if (parseInt($("#modal input").val()) <= 0 || parseInt($("#modal input").val()) > 100) {
+                        		alert("Percent Change must be between 1 and 100");
+                        		return;
+                        	} 
+                        	
+                        	$(".editSearchB [data-name='" + distribution.field + "']").addClass("checked");
+                        	
                         	distribution.label = distribution.shortName;
                         	$(template).data(distribution);
-                        	$(".info", template).text(distribution.label);
+                        	$(".info", template).text(distribution.name);
 
                         	$(".percent-value", template).text($("#modal input").val());
-                        	$(".start-date", template).text($.datepicker.formatDate("yy-mm-dd", $("#modal .start").datepicker( "getDate" )));
-                        	$(".end-date", template).text($.datepicker.formatDate("yy-mm-dd", $("#modal .end").datepicker( "getDate" )));
+                        	
+                        	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $("#modal .start").datepicker( "getDate" )));
+                        	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $("#modal .start").datepicker( "getDate" )))
+                        	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $("#modal .end").datepicker( "getDate" )));
+                        	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $("#modal .end").datepicker( "getDate" )))
                         	
                         	$(".search-criteria tbody").append(template);
+                        	
+                        	SGX.tooltip.init(template);
+                        	
                     		SGX.modal.close(); 
                     		
                 			SGX.screener.search.criteriaSearch();
@@ -286,11 +313,20 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	$(".info", template).text(distribution.shortName);
                 	$(".trigger .copy", template).text(distribution.label);
                 	
+                	distribution.buckets.sort(function(a, b) {
+                		var a = a.key, b = b.key;
+                    	if (a < b) return -1;
+                    	if (a > b) return 1;
+                    	return 0;
+                	});
+                	
                 	$.each(distribution.buckets, function(idx, bucket) {
                 		$(dd).append($("<li />").text(bucket.key));
                 	});
                 	
                 	$(".search-criteria tbody").append(template);
+                	
+                	SGX.dropdowns.init(template, SGX.screener.search.criteriaSearch);
                 	
                     return template;
                 	
@@ -306,7 +342,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	
                 	$(template).data(distribution);
                 	$(template).attr("data-name", distribution.id).attr("data-min", distribution.min).attr("data-max", distribution.max);
-                	$(".info", template).text(distribution.shortName)
+                	$(".info", template).text(distribution.name)
                 	$(".min", template).text(distribution.min).attr("data-format", distribution.format);
                 	$(".max", template).text(distribution.max).attr("data-format", distribution.format);;
                 	$(".matches", template).text(matches);
@@ -459,6 +495,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	SGX.showLoading();
                     	
                     	SGX.screener.criteriaChange.getDistributions(data, function(data) { 
+                    		$(".editSearchB .checkbox").removeClass("checked");
+                    		$(".editSearchB .checkbox.default").addClass("checked");
                     		SGX.screener.drawCriteria(data); 
                     		SGX.hideLoading(); 
                     		if (finished) finished(data);
@@ -471,20 +509,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 search: {
                 	
                 	nameSearch: function(val) {
-                		var endpoint = "/sgx/search/name";
-                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { search: val }, SGX.screener.search.scrollSearch, SGX.screener.search.fail);
+                		var endpoint = SGX.fqdn + "/sgx/search/name";
+                		SGX.screener.search.simpleSearch(endpoint, { search: val });
                 	},
                 
                 	showAll: function() {
-                		var endpoint = "/sgx/search/";
-                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, { criteria: [] }, SGX.screener.search.scrollSearch, SGX.screener.search.fail);
+                		var endpoint = SGX.fqdn + "/sgx/search/";
+                		SGX.screener.search.simpleSearch(endpoint, { criteria: [] });
                 	},
                 	
-                	scrollSearch: function(data) {
-                		SGX.screener.search.renderResults(data);
-                		$('.screener-page').animate({ scrollTop: $(".module-results").position().top }, 150);
+                	simpleSearch: function(endpoint, params) {
+                		SGX.showLoading();
+                		$(".advanced-criteria").hide();
+                		$(".expand-criteria").show();
+                		SGX.handleAjaxRequest(endpoint, params, function(data) { SGX.screener.search.renderResults(data); SGX.hideLoading(); }, SGX.screener.search.fail);
                 	},
-
+                	
                 	criteriaSearch: function() {
                 		
                 		var endpoint = "/sgx/search";
@@ -513,8 +553,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			}
                 			else if ($(this).attr("data-template") == "change") {
                 				param.value = $(".percent-value", this).text();
-                				param.from = $(".start-date", this).text();
-                				param.to = $(".end-date", this).text();
+                				param.from = $(".start-date", this).attr("data-value");
+                				param.to = $(".end-date", this).attr("data-value");
                 			}
                 			
                 			params.push(param);
@@ -666,14 +706,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         	
                         	// page navigation
                         	for (var i=1; i<page; i++) {
-                        		var navItem = $('<li><a class="page" href="#">' + i + '</a></li>');
+                        		var navItem = $('<span class="action-btn">' + i + '</span>');
                         		paging.append(navItem);
                         	}                        	
 
                         	// prev/next
                             if (page > 1) {
-                            	paging.prepend('<li><a class="prev" href="#">Prev</a></li>');
-                            	paging.append('<li><a class="next" href="#">Next</a></li>');
+                            	paging.prepend('<span class="action-btn prev">Prev</span>');
+                            	paging.append('<span class="action-btn next">Next</span>');
                             }
                             
                             SGX.screener.search.displayPage(1);
@@ -728,30 +768,30 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	$(".module-results .table-wrapper tbody").show();
                     	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").removeClass("even");
                     	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']:even").addClass("even");
-                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show(400, function() {
-                    	});
+                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show();
                     	
                     	// handle the navigation
                     	var paging = $('.module-results .pager');
-                    	$("a", paging).removeClass("inactive").unbind("click");
+                    	$(".action-btn", paging).removeClass("inactive").unbind("click");
                     	
                     	// previous
-                    	SGX.screener.search.pageButton($("a.prev", paging), page - 1 == 0 ? 1 : page - 1, page);
+                    	SGX.screener.search.pageButton($(".action-btn.prev", paging), page - 1 == 0 ? 1 : page - 1, page);
                     	
                     	// pages
                     	var lastPg = 1;
-                    	$("a.page", paging).each(function(idx, el) {
+                    	$(".action-btn", paging).each(function(idx, el) {
                     		var pg = parseInt($(el).text());
                     		lastPg = pg;
                     		SGX.screener.search.pageButton($(el), pg, page);
                     	});
                     	
                     	// next
-                    	SGX.screener.search.pageButton($("a.next", paging), lastPg == page ? page : page + 1, page);
+                    	SGX.screener.search.pageButton($(".action-btn.next", paging), lastPg == page ? page : page + 1, page);
 
-                    	// resize call
-                    	//SGX.resizeIframe();
-
+                    	// resize
+        	            var curHeight = SGX.getTrueContentHeight();
+        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+        	            
                     },
                     
                		pageButton: function(el, page, cur) {
@@ -765,7 +805,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			e.preventDefault();
                 			e.stopPropagation();
                 			if (cur == page) return;
-                			$('.screener-page').animate({ scrollTop: $(".module-results").position().top }, 150);
                 			SGX.screener.search.displayPage(page);
             			});
             			
@@ -861,6 +900,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     type: 'GET',
                     dataType: 'jsonp',
                     data: { 'json': JSON.stringify(data) },
+                    scriptCharset: "utf-8" , 
                     contentType: 'application/json; charset=UTF-8',           	
                     success: typeof successFN !== "undefined" ? successFN : SGX.genericAjaxSuccess,
                     error: typeof errorFN !== "undefined" ? errorFN : SGX.genericAjaxError,
@@ -976,7 +1016,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             modal: {
                 close: function(settings) {
             		var settings = $(".confirm", modal).data();
-                	$("#modal").fadeOut(100, function() { $(this).removeAttr("class"); if (settings.hasOwnProperty("cancel")) { settings.cancel(); } });
+                	$("#modal").fadeOut(100, function() { $(this).removeAttr("class"); if (settings.hasOwnProperty("close")) { settings.close(settings); } });
                 },
                 
                 open: function(settings) {
@@ -984,7 +1024,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	var modal = $("#modal");
                 	$(modal).addClass(settings.type);
                 	$(".modal-content .copy", modal).html(settings.content);
-                	$(".close, .cancel, .modal-close", modal).click(function(e) { SGX.modal.close(); });
+                	$(".close, .cancel, .modal-close", modal).click(function(e) {
+                    	if (settings.hasOwnProperty("cancel")) settings.cancel(settings);
+                		SGX.modal.close(); 
+                	});
 
                 	// clean up
                 	var confirm = $(".confirm", modal);
@@ -1171,7 +1214,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			var name = $(el).attr("data-name");
             			if (typeof name === "undefined" || !data.company.companyInfo.hasOwnProperty(name)) return;
             			
-            			if ($(el).is("a")) $(el).attr("href", data.company.companyInfo[name])
+            			if ($(el).is("a")) $(el).attr("href", "http://" + data.company.companyInfo[name])
             			else $(el).text(data.company.companyInfo[name]);
             			
             		});
@@ -1183,6 +1226,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		$.each(tree, function(idx, item) {
             			var a = $("<a href='broken.html?action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
             			var li = $("<li />").append(a);
+            			if (idx > 0) $(li).prepend($("<span />").html("&nbsp;>&nbsp;"));
                 		$(".breadcrumb-tree").append(li);
             		});
 
@@ -1286,6 +1330,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			$(".glossary-item", this).attr("glossary-key", name);
             			
             		});
+            		
+            		$(".alpha-factors").show();
             		
             		
             	},
@@ -1399,7 +1445,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 	            		        title: undefined,
 	            		        height: 170,
 	            		        lineWidth: 2,
-	            		        animation: false
+	            		        animation: false,
+	            		        labels: {
+		                            formatter: function() {
+		                                return "S$ " + Highcharts.numberFormat(this.value, 2);
+		                            }
+	            		        }
                             },
                             {
 	            		        title: undefined,
@@ -1407,7 +1458,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		        height: 60,
                 		        offset: 0,
                 		        lineWidth: 2,
-	            		        animation: false
+	            		        animation: false,
+	            		        labels: {
+		                            formatter: function() {
+		                                return Highcharts.numberFormat(this.value, 2) + " mm";
+		                            }
+	            		        }
                             }
                         ],
                         
@@ -1453,20 +1509,19 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                                 	html: "Price",
                                 	style: {
                                     	top: '-22px',
-                                    	left: '360px'
+                                    	left: '550px'
                                 	}
                         	    },
                         	    {
                                 	html: "Volume",
                                 	style: {
                                     	top: '190px',
-                                    	left: '290px'
+                                    	left: '550px'
                                 	}
                         	    }
                         	],
             	        	style: {
             	        		color: "#666",
-            	        		fontSize: "12pt",
             	        		fontWeight: "bold"
             	        	}
                         }
@@ -1639,6 +1694,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         				$(this).show();
         			})
         			
+                	// resize
+    	            var curHeight = SGX.getTrueContentHeight();
+    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
             		
             	},
             	
