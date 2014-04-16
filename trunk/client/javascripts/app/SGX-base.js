@@ -606,6 +606,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		$.each(fields, function(idx, field) {
                     			
                     			var th = $("<th />").attr("data-name", field.field).addClass(field.field).appendTo(header);
+                    			if (field.format != "string") $(th).attr("data-sort", "number")
                     			$("<span />").text(field.shortName).appendTo(th);
                     			if (!defaultDisplay.hasOwnProperty(field.field)) th.addClass('hidden');
                     			
@@ -740,6 +741,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		if ("number" == sortType) {
                     			a1 = parseFloat(a1);
                     			b1 = parseFloat(b1);
+                    			return b1-a1;
                     		}
                     		
                     		return a1.localeCompare(b1);
