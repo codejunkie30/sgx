@@ -4,7 +4,7 @@
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
 	<mapping wildcard="true">	
-		<class-a>com.wmsi.sgx.model.CompanyInfo</class-a>
+		<class-a>com.wmsi.sgx.model.Company</class-a>
 		<class-b>com.wmsi.sgx.model.search.SearchCompany</class-b>
 	</mapping>
 	
@@ -25,8 +25,6 @@
 			<b>field</b>
 		</field>
 	</mapping>
-	
-		
 	
 </mappings>  
         

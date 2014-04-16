@@ -5,7 +5,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 public class HistoricalValueQueryBuilder extends AbstractQueryBuilder<String>{
-
+	
+	private static final int MAX_RESULTS = 10000;
+	
 	@Override
 	public SearchSourceBuilder getBuilder(String id) {
 		
@@ -15,7 +17,7 @@ public class HistoricalValueQueryBuilder extends AbstractQueryBuilder<String>{
 				.fetchSource(
 					new String[]{"date", "value"}, 
 					null)
-				.size(10000)
+				.size(MAX_RESULTS)
 				.sort("date");
 	}
 }

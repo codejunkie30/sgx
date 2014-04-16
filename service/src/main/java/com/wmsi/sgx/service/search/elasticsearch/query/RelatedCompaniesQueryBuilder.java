@@ -7,7 +7,9 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import com.wmsi.sgx.model.Company;
 
 public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<Company>{
-
+	
+	private static final int MAX_RESULTS = 2000;
+	
 	@Override
 	public SearchSourceBuilder getBuilder(Company company) {
 		return new SearchSourceBuilder()
@@ -19,9 +21,9 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<Company>{
 					.scriptFilter(SCRIPT)
 					.addParam("f", "marketCap")
 					.addParam("fv",  company.getMarketCap())
-					.addParam("pct", 0.1)
+					.addParam("pct", 0.2)
 					)
-			.size(1000);
+			.size(MAX_RESULTS);
 	}
 	
 	private static final String SCRIPT =
