@@ -446,14 +446,16 @@ h1, h1.title {
   font-weight: bold;
   text-align: left;
 }
-.module a.link {
+
+.module a.link, .terms-conditions {
   font-weight: bold;
-  font-size: 16px;
-  line-height: 18px;
   color: #1e2171;
   text-decoration: none;
   margin-top: 10px;
   display: block;
+}
+.terms-conditions {
+	margin-top: 20px;
 }
 .module .toolbar {
   height: 39px;
@@ -1628,8 +1630,9 @@ td .info {
 }
 
 .modal-container h4 {
-  font: bold 25px Arial, Helvetica, sans-serif;
+  font: bold 18px Arial, Helvetica, sans-serif;
   color: gray2;
+  margin-bottom: 8px;
 }
 
 .modal-container h4 span {

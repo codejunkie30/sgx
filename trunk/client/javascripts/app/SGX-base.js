@@ -61,6 +61,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	};
             	setTimeout(fn, 10);
             },
+            
+            showTerms: function() {
+            	
+            	$.get("terms-conditions.html", function(data) {
+                    SGX.modal.open({ content: data, type: 'alert' });            		
+            	});
+            	
+            },
     		
     		screener: {
 
