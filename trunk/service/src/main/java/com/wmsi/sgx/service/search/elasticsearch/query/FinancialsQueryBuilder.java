@@ -3,7 +3,7 @@ package com.wmsi.sgx.service.search.elasticsearch.query;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.search.sort.SortBuilders;
 
 public class FinancialsQueryBuilder extends AbstractQueryBuilder<String>{
 
@@ -18,6 +18,6 @@ public class FinancialsQueryBuilder extends AbstractQueryBuilder<String>{
 						.must(FilterBuilders.termFilter("tickerCode", id))
 						.must(FilterBuilders.typeFilter("financial"))))
 			.size(MAX_RESULTS)
-			.sort("absPeriod", SortOrder.ASC);
+			.sort(SortBuilders.fieldSort("absPeriod").ignoreUnmapped(true));			
 	}
 }
