@@ -47,7 +47,7 @@ public class SearchServiceImpl<S> implements SearchService<S>{
 			return elasticSearchService.search(indexName, type, query, clz);
 		}
 		catch(ElasticSearchException e){
-			throw new SearchServiceException("Could not load related companies", e);
+			throw new SearchServiceException("Exception during search", e);
 		}
 	}
 

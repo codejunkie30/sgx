@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService{
 			return financialSearch.search(id, Financial.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading price history", e);
+			throw new CompanyServiceException("Exception loading financials", e);
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class CompanyServiceImpl implements CompanyService{
 			return priceHistorySearch.search(id, HistoricalValue.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading price history", e);
+			throw new CompanyServiceException("Exception loading volume history", e);
 		}
 	}
 
