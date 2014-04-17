@@ -654,7 +654,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			
                 			$.each(fields, function(fIdx, field) {
                 				var val = company.hasOwnProperty(field.field) ? company[field.field] : "-";
-                				var td = $("<td />").text(val).appendTo(tr).attr("data-value", val).attr("data-name", field.sortType == "string" ? field.field.toLowerCase() : field.field).attr("data-sort", field.sortType).addClass(field.field);
+                				var td = $("<td />").text(val).appendTo(tr).attr("data-value", val == "-" ? (field.sortType == "string" ? "" : "-9999999999") : val).attr("data-name", field.sortType == "string" ? field.field.toLowerCase() : field.field).attr("data-sort", field.sortType).addClass(field.field);
                 				if (field.format != "string") $(td).attr("data-format", "number").addClass("formattable");
                 				if (!defaultDisplay.hasOwnProperty(field.field)) td.addClass('hidden');
                 			});
