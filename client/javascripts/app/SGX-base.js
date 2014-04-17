@@ -27,6 +27,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		
     		financialsPage: "financials.html",
     		
+    		relatedPage: "related.html",
+    		
             parentURL: null,
             
             pageHeight: $(document).height(),
@@ -52,7 +54,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             getFinancialsPage: function(code) {
             	return SGX.getPage(SGX.financialsPage + "?code=" + code)
             },
-            
+
+            getRelatedPage: function(code) {
+            	return SGX.getPage(SGX.relatedPage + "?code=" + code)
+            },
+
             resizeIframe: function(height, scroll) {
             	var fn = function() {
             		SGX.pageHeight = height;
@@ -342,8 +348,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 
                 drawCriteriaSlider: function(distribution) {
                 	
-                	distribution.min = distribution.buckets[0].key;
-                	distribution.max = distribution.buckets[distribution.buckets.length - 1].key;
+                	
+                	
+                	distribution.min = distribution.buckets[0].from;
+                	distribution.max = distribution.buckets[distribution.buckets.length - 1].to;
                 	var matches = SGX.screener.getDistributionMatches(distribution, distribution.min, distribution.max) + ' matches';
                 	var template = $("#criteria-templates [data-template='number']").clone(true);
                 	
@@ -366,7 +374,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 getDistributionMatches: function(distribution, startVal, endVal) {
                 	var ret = 0;
                 	$.each(distribution.buckets, function(idx, bucket) {
-                		if (bucket.key >= startVal && bucket.key <= endVal) ret += bucket.count;
+                		console.log(startVal + ":" + endVal + ":" + bucket.from + ":" + bucket.to + ":" + (startVal >= bucket.from) + ":" + (bucket.to <= endVal))
+                		if (startVal >= bucket.from) ret += bucket.count;
                 	});
                 	return ret;
                 },
@@ -1154,6 +1163,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	var page = location.pathname;
             	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
             	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
+            	else if (page.indexOf(SGX.relatedPage) != -1) SGX.related.init();
             	else SGX.screener.init();
             },
             
@@ -1185,11 +1195,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	getCompany: function(code, loadedFN) {
             		var endpoint = SGX.fqdn + "/sgx/company";
             		var params = { id: code };
-            		SGX.handleAjaxRequest(endpoint, params, loadedFN, SGX.company.failed);
-            	},
-            	
-            	failed: function() {
-            		window.location = SGX.getPage(SGX.screenerPage);
+            		SGX.handleAjaxRequest(endpoint, params, loadedFN, SGX.failed);
             	},
             	
             	loaded: function(data) {
@@ -1234,7 +1240,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
             		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
             		$.each(tree, function(idx, item) {
-            			var a = $("<a href='broken.html?action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
+            			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode) + "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
             			var li = $("<li />").append(a);
             			if (idx > 0) $(li).prepend($("<span />").html("&nbsp;>&nbsp;"));
                 		$(".breadcrumb-tree").append(li);
@@ -1248,6 +1254,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		// company profile
             		$(".back-company-profile").attr("href", SGX.getCompanyPage(data.company.companyInfo.tickerCode));
+            		
+            		// comparable 
+            		$(".comparable-button").click(function(e) {  
+            			window.location = SGX.getRelatedPage(data.company.companyInfo.tickerCode) + "&action=related";
+            		});
             		
             		// init pricing
             		var endpoint = SGX.fqdn + "/sgx/price";
@@ -1780,7 +1791,72 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		return chart;
             	}
             	
-            }
+            },
+            
+            related: {
+            	
+            	init: function() {
+            		var code = SGX.getParameterByName("code");
+            		var company = SGX.company.getCompany(code, SGX.related.loadedCompany);
+            	},
+            	
+            	loadedCompany: function(data) {
+
+            		SGX.company.initSimple(data);
+            		
+            		var action = SGX.getParameterByName("action");
+            		
+            		if (action == "") {
+            			SGX.failed();
+            			return;
+            		}
+            		
+            		// show the elements for the page
+            		$("." + action).show();
+
+            		// handle the search
+            		if (action == "related") SGX.related.handleRelated(data.company.companyInfo.tickerCode);
+            		else if (action == "industry") SGX.related.handleIndustry();
+            		
+            	},
+            	
+            	handleRelated: function(ticker) {
+            		var endpoint = SGX.fqdn + "/sgx/company/relatedCompanies";
+            		var params = { id: ticker };
+            		$(".pager").hide();
+            		SGX.handleAjaxRequest(endpoint, params, SGX.screener.search.renderResults);            		
+            	},
+            	
+            	handleIndustry: function() {
+            		
+            		var field = SGX.getParameterByName("field");
+            		var value = SGX.getParameterByName("value");
+            		
+            		if (field == "" || value == "") {
+            			SGX.failed();
+            			return;
+            		}
+            		
+            		// dynamic copy
+            		$(".page-subtitle.industry").text($(".page-subtitle.industry").text() + " \"" + value + "\"");
+            		
+            		var param = { "field": field, "value": value };
+            		var params = [ param ];
+            		
+            		var endpoint = "/sgx/search";
+            		var qs = {};
+            		qs.criteria = params;
+            		SGX.handleAjaxRequest(SGX.fqdn + endpoint, qs, SGX.screener.search.renderResults, SGX.screener.search.fail);
+            		
+            	}
+            	
+            },
+            
+        	failed: function() {
+        		window.location = SGX.getPage(SGX.screenerPage);
+        	},
+        	
+
             
     };
     
