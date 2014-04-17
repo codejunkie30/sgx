@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SGX - Related</title>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+</head>
+
+<body class="related-page">
+
+    <div class="container_3">
+        <div class="row">
+            <div class="grid_3">
+                <div class="page-title property" data-name="companyName"></div>
+                <div class="stock-price">
+                    <div class="main">
+                    	S$ <span class="lastPrice">--</span>
+                        <span class="change">--</span>
+                    </div>
+                    <div class="last-updated">Last Price:
+                        <span class="date">
+							<span class="day">--</span>
+                            <span class="time">--</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <div class="button back-button"><a href="index.html" class="screener-link">Back to Stock Screener</a>
+                    </div>
+                    <ul class="breadcrumb-tree">
+                        <li>Industry Tree:</li>
+                    </ul>
+                    <div class="right-nav">
+                        <div class="print-button">Print</div>
+                        <div class="button comparable-button">Find comparable companies</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="grid_3 right back">
+                <a class="back-company-profile" href="#">&laquo; Back to Company Profile</a>
+            </div>
+        </div>
+
+        <div class="row">
+        
+	        <div class="grid_3">
+	        
+	        	<div class="module">
+	        	
+	        		<div class="page-subtitle related hidden">Comparable Companies</div>
+	        		<div class="page-subtitle industry hidden">All companies in</div>
+	        		<div class="module-results"><div class="results"></div></div>
+	        		
+	        	</div>
+	        	
+	        	<div class="module module-results results-display">
+
+	                <div class="title">
+	                    <div class="label">Results</div>
+	                </div>
+	                
+	                <div class="table-wrapper">
+	                    <table>
+	                        <thead>
+	                            <tr></tr>
+	                        </thead>
+	                        <tbody></tbody>
+	                    </table>
+						<div class="pager"></div>
+	                </div>
+
+	        	</div>
+	        
+	        </div>
+	        
+	        <div class="editSearchB hidden">
+	        
+                  <div class="checkbox checked default" data-type="millions" data-name="marketCap" data-display="true" data-short-name="Mtk. Cap.">
+                      <div class="trigger">Total Market Cap</div>
+                      <input type="checkbox">
+                  </div>
+
+                   <div class="checkbox checked default" data-type="millions" data-name="totalRevenue"  data-display="true" data-short-name="Tot. Rev.">
+                       <div class="trigger">Total Revenue</div>
+                       <input type="checkbox">
+                   </div>
+                   
+                   <div class="checkbox checked default" data-type="number" data-name="peRatio"  data-display="true" data-short-name="P/E">
+                       <div class="trigger">P/E Ratio</div>
+                       <input type="checkbox">
+                   </div>
+
+
+                   <div class="checkbox checked default" data-type="percent" data-name="dividendYield"  data-display="true" data-short-name="Div. Yld.">
+                       <div class="trigger">Dividend Yield</div>
+                       <input type="checkbox">
+                   </div>
+	        
+	        </div>
+	        
+	    </div>
+    
+		<div class="container_3 no-results-display hidden">
+			No companies matched your search.
+		</div>
+	
+    </div>
+
+</body>
+
+</html>

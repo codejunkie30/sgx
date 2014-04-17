@@ -44,6 +44,12 @@ h1, h1.title {
   color: #1e2171;
 }
 
+.page-subtitle {
+  font-weight: bold;
+  font-size: 20px;
+  color: #1e2171;
+}
+
 /* Containers */
 
 .container_3 {
