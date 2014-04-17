@@ -1700,7 +1700,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         			$(".legend-note .item").each(function(idx, item) {
         				if (idx >= chart.series.length) return;
         				$(".color", this).css({ "background-color": chart.series[idx].color  });
-        				$(".label", this).text(chart.series[idx].name);
+        				$(".label", this).html(chart.series[idx].name + " <span class='parent'>[ " + $(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text() + " ]</span>");
         				$(this).show();
         			})
         			
