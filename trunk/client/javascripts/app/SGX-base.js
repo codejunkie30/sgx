@@ -374,8 +374,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 getDistributionMatches: function(distribution, startVal, endVal) {
                 	var ret = 0;
                 	$.each(distribution.buckets, function(idx, bucket) {
-                		console.log(startVal + ":" + endVal + ":" + bucket.from + ":" + bucket.to + ":" + (startVal >= bucket.from) + ":" + (bucket.to <= endVal))
-                		if (startVal >= bucket.from) ret += bucket.count;
+                		if (startVal >= bucket.from && startVal <= bucket.to) ret += bucket.count;
                 	});
                 	return ret;
                 },
@@ -1122,25 +1121,28 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		if (val == "" || val == "-") return;
             		
-            		if (fmt == "simple-number") {
-            		    var parts = val.split(".");
+            		if (fmt == "simple-number" || fmt == "number" || fmt == "millions" || fmt == "percent") {
+            			
+            			val = parseFloat(val).toFixed(3) + "";
+
+            			var parts = val.split(".");
             		    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            		    val = parts.join(".");
-            		    if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
-            		}
-            		else if (fmt == "millions") {
-            			var tmp = parseInt(val) + "";
-            			val = parseFloat(val).toFixed(3);
-            			if (tmp.length >= 10) val = (val / 1000000000).toFixed(1).replace(/\.0$/, '') + 'b';
-            			else if (tmp.length >= 7) val = (val / 1000000).toFixed(1).replace(/\.0$/, '') + 'mm';
-            			else if (tmp.length >= 4) val = (val / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-            			val = "S$" + val;
-            		}
-            		else if (fmt == "number" && val.indexOf(".") != -1) {
-            			val = parseFloat(val).toFixed(3);
-            		}
-            		else if (fmt == "number") {
-            			// do nothing
+            		    if (parts.length > 1 && parseInt(parts[1]) > 0) val = parts.join(".");
+            		    else val = parts[0];
+            		    
+            		    if ("simple-number") {
+                		    if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
+            		    }
+            		    
+            		    if (fmt == "millions") {
+            		    	val = "S$" + val + " mm";
+            		    }
+
+            		    if (fmt == "percent") {
+            		    	val = val + "%";
+            		    }
+
+            		    
             		}
             		else if (fmt == "percent") {
             			val = val + "%";
@@ -1693,7 +1695,18 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     				    		text: $(".trigger", el).text()
     				    	},
     				    	opposite: !chart.yAxis[0].opposite,
-    				    	color: '#565b5c' == chart.yAxis[0].color ? '#1e2070' : '#565b5c'
+    				    	color: '#565b5c' == chart.yAxis[0].color ? '#1e2070' : '#565b5c',
+        					labels: {
+	                            formatter: function() {
+	                            	if ($(".trigger", el).attr("data-format") == "cash") {
+	                            		return "S$" + this.value;
+	                            	}
+	                            	else if ($(".trigger", el).attr("data-format") == "percent") {
+	                            		return this.value + "%";
+	                            	}
+	                                return this.value;
+	                            }
+        					}    				    			
             			});
             			
             			chart.addSeries({
@@ -1768,6 +1781,17 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         						id: $(".trigger", el).attr("data-name"),
             					title: {
             						text: $(".trigger", el).text()
+            					}, 
+            					labels: {
+		                            formatter: function() {
+		                            	if ($(".trigger", el).attr("data-format") == "cash") {
+		                            		return "S$" + this.value;
+		                            	}
+		                            	else if ($(".trigger", el).attr("data-format") == "percent") {
+		                            		return this.value + "%";
+		                            	}
+		                                return this.value;
+		                            }
             					}
             				}
             			],
