@@ -19,6 +19,7 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
+import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
@@ -87,8 +88,16 @@ public class CompanyController{
 	}
 
 	@RequestMapping(value="company/relatedCompanies")
-	public List<SearchCompany> getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
+	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
+		
+		// Get related companies
 		List<Company> companies = companyService.loadRelatedCompanies(search.getId());
-		return mapper.mapList(companies, SearchCompany.class);
+
+		// Convert to correct response type
+		List<SearchCompany> searchCompanies = mapper.mapList(companies, SearchCompany.class);
+		
+		SearchResults searchResults = new SearchResults();
+		searchResults.setCompanies(searchCompanies);
+		return searchResults;		
 	}
 }
