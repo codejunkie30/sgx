@@ -10,6 +10,7 @@ import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeFilterBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 				addScriptField(builder, to, from);
 				builder.fields("_source");
 			}
-			else if(c.getTo() != null && c.getFrom() != null){
+			else if(c.getTo() != null || c.getFrom() != null){
 				filter = buildRangeFilter(c);
 			}
 			else{
@@ -79,10 +80,15 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 	}
 	
 	private FilterBuilder buildRangeFilter(Criteria c){
-		return FilterBuilders
-				.rangeFilter(c.getField())
-				.from(c.getFrom())
-				.to(c.getTo());
+		RangeFilterBuilder rangeBuilder = FilterBuilders.rangeFilter(c.getField());
+		
+		if(c.getFrom() != null)
+			rangeBuilder.from(c.getFrom());
+
+		if(c.getTo() != null)
+			rangeBuilder.to(c.getTo());
+		
+		return rangeBuilder;
 	}
 
 	private FilterBuilder buildTermFilter(Criteria c){
