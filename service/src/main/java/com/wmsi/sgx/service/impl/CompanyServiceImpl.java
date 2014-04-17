@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -114,8 +115,10 @@ public class CompanyServiceImpl implements CompanyService{
 		List<AlphaFactor> hits = null;
 		Company info = getById(id);
 
-		if(info != null){
-			String gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
+		String gvKey = info.getGvKey();
+				
+		if(info != null && !StringUtils.isEmpty(gvKey)){
+			gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
 
 			try{
 				hits = alphaFactorIdSearch.search(gvKey, AlphaFactor.class);
