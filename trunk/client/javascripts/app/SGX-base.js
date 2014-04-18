@@ -468,7 +468,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	resetAdditionalCriteria: function() {
                 		
                 		$(".additional-criteria").each(function() {
-                			console.log("REMOVING");
                 			if ($(this).has(".button-dropdown")) {
                 				$(".button-dropdown ul li", this).remove();
                 				$(".button-dropdown .trigger .copy", this).text($(".button-dropdown", this).attr("data-label"));
@@ -738,7 +737,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			$("<li />").text(text).appendTo(".module-results .button-dropdown ul");
                 		});
             			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
-            			console.log("ADDING");
                 		
                 		SGX.screener.search.displayRows(sort, direction);
                 		
@@ -1069,8 +1067,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 },
                 
                 init: function(selector, finished) {
-                	
-                	console.log("INIT");
                 	
                 	$('.button-dropdown', selector).unbind("click");
                 	$('.button-dropdown', selector).click(function(e) {
