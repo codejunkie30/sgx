@@ -268,7 +268,13 @@ h1, h1.title {
   height: 11px;
   background: url("../img/slider-full.png") no-repeat;
   margin: 4px auto;
+  cursor: pointer;
 }
+
+.slider .per-100 {
+	width: 177px;
+}
+
 .slider .per-80 {
   width: 143.6px;
 }
@@ -1656,6 +1662,11 @@ td .info {
   right: 10px;
   cursor: pointer;
 }
+
+.alphas-page .module-results {
+	margin-top: 20px !important;
+}
+
 .alpha-factor {
   background: #f2f2f2;
   border: 1px solid #c1c1c1;
