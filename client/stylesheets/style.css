@@ -1022,21 +1022,16 @@ table.search-criteria .remove {
 
 .module-results .industry {
   text-align: left;
-  width: 240px;
+  width: 220px;
 }
 
 .module-results .companyName {
   text-align: left;
-  width: 240px;
+  width: 220px;
 }
 
 .module-results .tickerCode {
-  width: 65px;
-}
-
-.module-results .industry {
-  text-align: left;
-  width: 240px;
+  width: 50px;
 }
 
 .module-results a {
