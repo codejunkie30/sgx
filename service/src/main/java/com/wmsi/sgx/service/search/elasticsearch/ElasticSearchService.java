@@ -31,8 +31,8 @@ public class ElasticSearchService{
 		return response.getHits(clz);
 	}		
 
-	public ESResponse search(String index, String query, Map<String, Object> parms) throws ElasticSearchException{
-		ESQuery esQuery = getQuery(index, null, query, parms);
+	public ESResponse search(String index, String type, String query, Map<String, Object> parms) throws ElasticSearchException{
+		ESQuery esQuery = getQuery(index, type, query, parms);
 		return query(esQuery);
 	}
 

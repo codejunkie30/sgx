@@ -50,11 +50,13 @@ public class AggregationsDeserializer extends JsonDeserializer<Object>{
 	private Aggregation aggregationByType(JsonNode fieldNode) throws JsonProcessingException{
 		Aggregation agg = new Aggregation();
 		
-        if(fieldNode.has("buckets")){
-        	agg = mapper.treeToValue(fieldNode, BucketAggregation.class);
+        if(fieldNode.findParent("buckets") != null){
+        	JsonNode n = fieldNode.findParent("buckets");
+        	agg = mapper.treeToValue(n, BucketAggregation.class);
         }
-        else if(fieldNode.has("min")){
-        	agg = mapper.treeToValue(fieldNode, StatAggregation.class);
+        else if(fieldNode.findParent("min") != null){
+        	JsonNode n = fieldNode.findParent("min");
+            agg = mapper.treeToValue(n, StatAggregation.class);
         }
         else{
         	DefaultAggregation def = new DefaultAggregation();

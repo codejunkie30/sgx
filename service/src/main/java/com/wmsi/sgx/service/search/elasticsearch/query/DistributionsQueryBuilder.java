@@ -1,42 +1,51 @@
 package com.wmsi.sgx.service.search.elasticsearch.query;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.RangeBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
+import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.search.elasticsearch.StatAggregation;
+import com.wmsi.sgx.util.Util;
 
 public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, StatAggregation>>{
 
 	private static final int MAX_RESULTS = 2000;
 	
-	private List<DistributionRequestField> fields;
+	private List<String> fields;
 	
 	public DistributionsQueryBuilder(List<DistributionRequestField> f){
-		fields = f;
-	}
 	
+		fields = new ArrayList<String>();
+		
+		for(DistributionRequestField req : f){
+			fields.add(req.getField());
+		}	
+	}
+
 	@Override
 	public SearchSourceBuilder getBuilder(Map<String, StatAggregation> ranges) {
-
+		
 		SearchSourceBuilder query = new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(
-				FilterBuilders.matchAllFilter()))
+					FilterBuilders.matchAllFilter()))
 			.fetchSource(false)
 			.size(MAX_RESULTS);
 		
-		for(DistributionRequestField req : fields){
+		for(String field : fields){
 			
-			String field = req.getField();
-			
-			if(field.equals("industry") || field.equals("industryGroup")){
+			// TODO Disallow tickerCode
+			if(!Util.isNumberField(SearchCompany.class, field)){
 				query.aggregation(
 					AggregationBuilders.terms(field)
 					.field(field)
@@ -57,13 +66,31 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, 
 						range.addRange(i, to);					
 						i = to;
 					}
-				
-					query.aggregation(range);
+					
+					query.aggregation(getAggregationFilter(range, field));
 				}
 			}
 		}	
 
 		return query;
+	}
+	
+	private AggregationBuilder<?> getAggregationFilter(AggregationBuilder<?> agg, String field){
+
+		AggregationBuilder<?> builder = agg;
+		
+		if(field.equals("avgBrokerReq")){
+			FilterBuilder filter = FilterBuilders
+				.rangeFilter("targetPriceNum")
+				.from(3);
+			
+			builder = AggregationBuilders
+				.filter(field)
+				.filter(filter)
+				.subAggregation(agg);
+		}
+		
+		return builder;
 	}
 	
 	private Double calculateInterval(StatAggregation stat){

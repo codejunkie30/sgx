@@ -12,7 +12,7 @@ public class SearchRequest{
 
 	@Valid
 	@NotNull
-	@Size(min = 0, max = 5, message="Invalid criteria size")
+	@Size(min = 0, max = 6, message="Invalid criteria size")
 	private List<Criteria> criteria;
 	
 	public List<Criteria> getCriteria() {
