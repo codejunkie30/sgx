@@ -98,7 +98,7 @@ public class CompanyServiceImpl implements CompanyService{
 	@Cacheable(value = "volumeHistory")
 	public List<HistoricalValue> loadVolumeHistory(String id) throws CompanyServiceException {
 		try{
-			return priceHistorySearch.search(id, HistoricalValue.class);
+			return volumeHistorySearch.search(id, HistoricalValue.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading volume history", e);

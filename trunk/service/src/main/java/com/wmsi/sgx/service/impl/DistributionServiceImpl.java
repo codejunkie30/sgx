@@ -1,6 +1,5 @@
 package com.wmsi.sgx.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.distribution.Distributions;
 import com.wmsi.sgx.model.distribution.DistributionsRequest;
+import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
@@ -24,6 +24,7 @@ import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.service.search.elasticsearch.StatAggregation;
 import com.wmsi.sgx.service.search.elasticsearch.query.DistributionsQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.StatsQueryBuilder;
+import com.wmsi.sgx.util.Util;
 
 @Service
 public class DistributionServiceImpl implements DistributionService{
@@ -48,16 +49,29 @@ public class DistributionServiceImpl implements DistributionService{
 		return (Distributions) mapper.map(aggs, Distributions.class);
 	}
 	
+	private boolean hasNumericFields(List<DistributionRequestField> fields){
+		
+		for(DistributionRequestField field : fields){
+			if(Util.isNumberField(SearchCompany.class, field.getField()))
+				return true;
+		}
+		
+		return false;
+	}
+	
 	private Map<String, StatAggregation> getHistogramIntervals(List<DistributionRequestField> fields) throws ServiceException{
 		
+		if(!hasNumericFields(fields))
+			return null;
+		
 		Aggregations stats = getStatsAggregations(fields);		
-		Map<String, StatAggregation> intervals = new HashMap<String, StatAggregation>();
+		Map<String, StatAggregation> aggs = new HashMap<String, StatAggregation>();
 		
 		for(Aggregation a : stats.getAggregations()){			
-			intervals.put(a.getName(), (StatAggregation) a);			
+			aggs.put(a.getName(), (StatAggregation) a);			
 		}	
 		
-		return intervals;
+		return aggs;
 	}
 	
 	private Aggregations getAggregations(List<DistributionRequestField> fields, Map<String, StatAggregation> intervals) throws ServiceException {
@@ -72,7 +86,8 @@ public class DistributionServiceImpl implements DistributionService{
 	public Aggregations loadAggregations(String query) throws ServiceException {
 		
 		try{			
-			ESResponse stats = elasticSearchService.search(indexName, query, new HashMap<String, Object>());
+			// TODO Externalize 'company'
+			ESResponse stats = elasticSearchService.search(indexName, "company", query, new HashMap<String, Object>());
 			return stats.getAggregations();
 		}
 		catch(ElasticSearchException e){
