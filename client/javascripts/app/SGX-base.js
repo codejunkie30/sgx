@@ -1951,25 +1951,40 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			var name = $(this).attr("data-name");
             			
             			// select the current one
-            			if (name == factor && !isNaN(quintile) && quintile > 0 && quintile < 5) {
-            				$(".bar-progress", this).addClass("per-" + (quintile*20));
+            			if (name == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
+            				$(".bar-progress", this).addClass("per-" + (quintile*20)).attr("data-class", "per-" + (quintile*20));
             				doSearch = true;
             			}
-
+        				
+        				// add in spans
+        				$.each(new Array(5), function(quint) {
+        					
+        					var span = $("<span />").attr("data-quintile", quint + 1).appendTo(".bar-progress", this);
+        					
+        					$(span).hover(
+        							function(e) {
+        								var mine = $(this).attr("data-quintile");
+        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
+        								$(this).parent().addClass("per-" + (mine*20));
+        							},
+        							function(e) {
+        								var mine = $(this).attr("data-quintile");
+        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
+        								if (typeof $(this).parent().attr("data-class") !== "undefined") $(this).parent().addClass($(this).parent().attr("data-class"));
+        					});
+        					
+        					$(span).click(function(e) {
+        						window.location = SGX.getAlphasPage($(this).closest(".slider").attr("data-name"), $(this).attr("data-quintile"));
+        					});
+        					
+        				});
+        				
             			// set up glossary terms
             			$(".glossary-item", this).attr("glossary-key", name);
             			
-            			/**
-            			
-            			$(this).click(function(el) { window.location = SGX.getAlphasPage(name, factors[name]); });
-            			
-            			
-            			
-            			*/
             		});
 
         			SGX.tooltip.init("body");
-
         			
         			if (doSearch) {
                 		var endpoint = "/sgx/search/alphaFactors";

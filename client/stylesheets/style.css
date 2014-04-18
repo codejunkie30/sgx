@@ -264,11 +264,25 @@ h1, h1.title {
 .slider .bar-progress {
   position: absolute;
   display: inline-block;
-  width: 177px;
+  width: 1px;
   height: 11px;
   background: url("../img/slider-full.png") no-repeat;
   margin: 4px auto;
   cursor: pointer;
+  white-space: nowrap;
+  padding: 0px;
+}
+
+.glossary-item {
+	cursor: pointer;
+}
+
+.slider .bar-progress span {
+	display: inline-block;
+	width: 34px;
+	overflow: visible;
+	height: 11px;
+	margin-left: 1px;
 }
 
 .slider .per-100 {
@@ -1571,14 +1585,15 @@ td .info {
   -moz-background-clip: padding;
   background-clip: padding-box;
   width: 160px;
-  font-size: 10px;
 }
 .tooltip-content {
   background: #ecf1c4;
   color: #000;
   margin: 4px;
   padding: 10px;
+  font-size: 10px;
 }
+
 .tooltip-arrow {
   background: url("../img/tooltip-arrow.png") no-repeat;
   position: absolute;
@@ -1588,6 +1603,15 @@ td .info {
   width: 14px;
   height: 14px;
 }
+
+.alphas-page .tooltip {
+	width: 350px;
+} 
+
+.alphas-page .factors-wrapper {
+	margin-top: 20px;
+} 
+
 #modal {
 /* default fallback */
   background: #000 transparent;
