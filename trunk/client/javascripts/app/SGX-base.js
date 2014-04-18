@@ -38,7 +38,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             numberFormats: {
             	millions: { header: " (S$ mm)", decimals: 1, format: "S$ $VALUE mm" },
             	percent: { header: " (%)", decimals:2, format: "$VALUE%" },
-            	number: { header: "", decimals: 2 },
+            	number: { header: "", decimals: 3 },
             	number1: { decimals: 1 }
             },
             
