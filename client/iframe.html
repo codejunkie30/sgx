@@ -25,18 +25,14 @@
 	        var height = 600, scrollPos = 0;
 	        var scrolling = "yes";
 	        try{
-		    	var parts = String(data).split("-");
-				height = parseInt(parts[0]);
-				if (parts.length > 1) {
-					scrollPos = parseInt(parts[1]) + headerHeight;
-				}
+				height = parseInt(data);
 				scrolling = "no";
 	        }
 	        catch(err){}
 	        
 	        // set the resized size
 	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
-	        window.scroll(scrollPos,0);
+	        window.scroll(0,0);
 	    	
 		}
 	    

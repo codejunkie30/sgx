@@ -9,7 +9,7 @@
     <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
 </head>
 
-<body>
+<body class="alphas-page">
 
     <div class="container_3">
         <div class="grid_3">
@@ -26,95 +26,110 @@
             </div>
             <div class="grid_2">
                 <div class="alpha-factor">
-                    <div class="slider">
-                        <div class="slider-label">Valuation
-                            <div alt="Info" class="info">Info</div>
+
+                    <div class="slider" data-name="valuation">
+                        <div class="slider-label">
+                        	Valuation 
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-80"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider">
-                        <div class="slider-label">Earnings Quality
-                            <div alt="Info" class="info">Info</div>
+                
+                    <div class="slider" data-name="earningsQuality">
+                        <div class="slider-label">
+                        	Earnings Quality
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider">
-                        <div class="slider-label">Analyst Expectations
-                            <div alt="Info" class="info">Info</div>
+
+                    <div class="slider" data-name="analystExpectations">
+                        <div class="slider-label">
+                        	Analyst Expectations
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-60"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider">
-                        <div class="slider-label">Volatility
-                            <div alt="Info" class="info">Info</div>
+                    
+                    <div class="slider" data-name="volatility">
+                        <div class="slider-label">
+                        	Volatility
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">High</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">Low</div>
                         </div>
                     </div>
-                    <div class="slider">
-                        <div class="slider-label">Historical Growth
-                            <div alt="Info" class="info">Info</div>
+                    
+                    <div class="slider" data-name="capitalEfficiency">
+                        <div class="slider-label">
+                        	Capital Efficiency
+							<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
-                    <div class="slider">
-                        <div class="slider-label">Size
-                            <div alt="Info" class="info">Info</div>
+                    
+                    <div class="slider" data-name="size">
+                        <div class="slider-label">
+                        	Size
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Small</div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">Large</div>
                         </div>
                     </div>
 
-
-                    
-                    <div class="slider">
-                        <div class="slider-label">Price Momentum
-                            <div alt="Info" class="info">Info</div>
+                    <div class="slider" data-name="priceMomentum">
+                        <div class="slider-label">
+                        	Price Momentum
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
                         </div>
                         <div class="bar-container">
                             <div class="slider-left-label">Low</div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
-                    <div class="slider">
-                        <div class="slider-label">Growth
-                            <div alt="Info" class="info">Info</div>
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress per-40"></div>
+                            <div class="bar-progress"></div>
                             <div class="bar"></div>
                             <div class="slider-right-label">High</div>
                         </div>
                     </div>
                     
-                    
-                    
+                    <div class="slider" data-name="historicalGrowth">
+                        <div class="slider-label">
+                        	Growth
+                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+                        </div>
+                        <div class="bar-container">
+                            <div class="slider-left-label">Low</div>
+                            <div class="bar-progress"></div>
+                            <div class="bar"></div>
+                            <div class="slider-right-label">High</div>
+                        </div>
+                    </div>                    
                 </div>
 
 
@@ -122,8 +137,11 @@
         </div>
     </div>
     <div class="container_3">
-        <div class="grid_3">
-            <div class="module module-results">
+
+		<div class="grid_3">
+	        
+	        	<div class="module module-results results-display">
+
                 <div class="title">
                     <div class="label">Results</div>
                 </div>
@@ -131,126 +149,52 @@
                     <div class="results">72 total matches</div>
                     
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="296">Company Name</th>
-                            <th>Code</th>
-                            <th>Industry</th>
-                            <th>Market Cap</th>
-                            <th>Revenue</th>
-                            <th>P/E Ratio</th>
-                            <th>Div Yield</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>E25</td>
-                            <td>Communications Equipment</td>
-                            <td>-</td>
-                            <td>44.5</td>
-                            <td>0.979</td>
-                            <td>0.01</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">8Telecom</a>
-                            </td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                            <td>8Telecom</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="grid_3">
-            <div class="pager">
-                <ul>
-                    <li><a href="#">Previous</a>
-                    </li>
-                    <li>
-                        <a href="#">1</a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">&hellip;</a>
-                    </li>
-                    <li>
-                        <a href="#">8</a>
-                    </li>
-                    <li>
-                        <a href="#">Next</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+	                
+	                <div class="table-wrapper">
+	                    <table>
+	                        <thead>
+	                            <tr></tr>
+	                        </thead>
+	                        <tbody></tbody>
+	                    </table>
+						<div class="pager"></div>
+	                </div>
+
+	        	</div>
+	        
+	        </div>
+	        
+	        <div class="editSearchB hidden">
+	        
+                  <div class="checkbox checked default" data-type="millions" data-name="marketCap" data-display="true" data-short-name="Mtk. Cap.">
+                      <div class="trigger">Total Market Cap</div>
+                      <input type="checkbox">
+                  </div>
+
+                   <div class="checkbox checked default" data-type="millions" data-name="totalRevenue"  data-display="true" data-short-name="Tot. Rev.">
+                       <div class="trigger">Total Revenue</div>
+                       <input type="checkbox">
+                   </div>
+                   
+                   <div class="checkbox checked default" data-type="number" data-name="peRatio"  data-display="true" data-short-name="P/E">
+                       <div class="trigger">P/E Ratio</div>
+                       <input type="checkbox">
+                   </div>
+
+
+                   <div class="checkbox checked default" data-type="percent" data-name="dividendYield"  data-display="true" data-short-name="Div. Yld.">
+                       <div class="trigger">Dividend Yield</div>
+                       <input type="checkbox">
+                   </div>
+	        
+	        </div>
+	        
+	    </div>
+    
+		<div class="container_3 no-results-display hidden">
+			No companies matched your search.
+		</div>
+
     </div>
 </body>
 

@@ -29,6 +29,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		
     		relatedPage: "related.html",
     		
+    		alphasPage: "alpha-factor.html",
+    		
             parentURL: null,
             
             pageHeight: $(document).height(),
@@ -39,12 +41,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	number: { header: "", decimals: 2 },
             	number1: { decimals: 1 }
             },
-
-            getPage: function(page) {
-            	var parentURL = SGX.getParentURL();
-            	if (parentURL == null) return page;
-            	return page + "#" + SGX.getParentURL();
-            },
             
             getParentURL: function() {
             	if (SGX.parentURL != null) return SGX.parentURL;
@@ -53,23 +49,33 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	}
             	return SGX.parentURL;
             },
-            
-            getCompanyPage: function(code) {
-            	return SGX.getPage(SGX.companyPage + "?code=" + code)
+
+            getPage: function(page) {
+            	var parentURL = SGX.getParentURL();
+            	if (parentURL == null) return page;
+            	return page + "#" + SGX.getParentURL();
+            },
+                        
+            getCompanyPage: function(code, extra) {
+            	return SGX.getPage(SGX.companyPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
             
-            getFinancialsPage: function(code) {
-            	return SGX.getPage(SGX.financialsPage + "?code=" + code)
+            getFinancialsPage: function(code, extra) {
+            	return SGX.getPage(SGX.financialsPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
-            getRelatedPage: function(code) {
-            	return SGX.getPage(SGX.relatedPage + "?code=" + code)
+            getRelatedPage: function(code, extra) {
+            	return SGX.getPage(SGX.relatedPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            },
+            
+            getAlphasPage: function(factor, quintile, extra) {
+            	return SGX.getPage(SGX.alphasPage + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
             },
 
             resizeIframe: function(height, scroll) {
             	var fn = function() {
             		SGX.pageHeight = height;
-            		var msg = height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
+            		var msg = height; //height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
             		XD.postMessage(msg, SGX.getParentURL(), parent); 
             	};
             	setTimeout(fn, 10);
@@ -1213,6 +1219,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
             	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
             	else if (page.indexOf(SGX.relatedPage) != -1) SGX.related.init();
+            	else if (page.indexOf(SGX.alphasPage) != -1) SGX.alphas.init();
             	else SGX.screener.init();
             },
             
@@ -1290,7 +1297,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
             		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
             		$.each(tree, function(idx, item) {
-            			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode) + "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value) + "'>" + item.value + "</a>");
+            			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value)) + "'>" + item.value + "</a>");
             			var li = $("<li />").append(a);
             			if (idx > 0) $(li).prepend($("<span />").html("&nbsp;>&nbsp;"));
                 		$(".breadcrumb-tree").append(li);
@@ -1307,7 +1314,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		// comparable 
             		$(".comparable-button").click(function(e) {  
-            			window.location = SGX.getRelatedPage(data.company.companyInfo.tickerCode) + "&action=related";
+            			window.location = SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=related");
             		});
             		
             		// init pricing
@@ -1399,6 +1406,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				return;
             			}
             			
+            			$(this).click(function(el) {
+            				window.location = SGX.getAlphasPage(name, factors[name]);
+            			});
+            			
             			$(".bar-progress", this).addClass("per-" + (factors[name]*20));
             			
             			// set up glossary terms
@@ -1463,7 +1474,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         colors: [ '#363473', '#BFCE00' ],
                         
                         chart: {
-                        	backgroundColor: 'transparent'
+                        	backgroundColor:'rgba(255, 255, 255, 0.1)'
                         },
                         
             		    rangeSelector: {
@@ -1924,6 +1935,55 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		SGX.handleAjaxRequest(SGX.fqdn + endpoint, qs, SGX.screener.search.renderResults, SGX.screener.search.fail);
             		
             	}
+            	
+            },
+            
+            alphas: {
+            	
+            	init: function() {
+            		
+            		var factor = SGX.getParameterByName("factor");
+            		var quintile = parseInt(SGX.getParameterByName("quintile"));
+            		var doSearch = false;
+            		
+            		$(".alpha-factor .slider").each(function(idx, el) {
+            			
+            			var name = $(this).attr("data-name");
+            			
+            			// select the current one
+            			if (name == factor && !isNaN(quintile) && quintile > 0 && quintile < 5) {
+            				$(".bar-progress", this).addClass("per-" + (quintile*20));
+            				doSearch = true;
+            			}
+
+            			// set up glossary terms
+            			$(".glossary-item", this).attr("glossary-key", name);
+            			
+            			/**
+            			
+            			$(this).click(function(el) { window.location = SGX.getAlphasPage(name, factors[name]); });
+            			
+            			
+            			
+            			*/
+            		});
+
+        			SGX.tooltip.init("body");
+
+        			
+        			if (doSearch) {
+                		var endpoint = "/sgx/search/alphaFactors";
+                		var params = {};
+                		params[factor] = quintile;
+                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, SGX.screener.search.renderResults, SGX.screener.search.fail);
+        			}
+        			else {
+        	            var curHeight = SGX.getTrueContentHeight();
+        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+        			}
+
+            	}
+            	
             	
             },
             
