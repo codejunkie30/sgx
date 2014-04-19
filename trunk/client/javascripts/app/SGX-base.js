@@ -84,7 +84,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             showTerms: function() {
             	
             	$.get("terms-conditions.html", function(data) {
-                    SGX.modal.open({ content: data, type: 'alert' });            		
+            		try {
+                        SGX.modal.open({ content: data, type: 'alert' });            		
+            		}
+            		catch(err) {
+            			console.log(err);
+            		}
             	});
             	
             },
@@ -1211,7 +1216,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent") {
 
             			// round
-            			val = parseFloat(val).toFixed(formatter.decimals) + "";
+            			val = parseFloat(val).toFixed(formatter.decimals).replace(/(\.\d*[1-9])0+$/,'$1').replace(/\.0*$/,'');
 
             			// give some commas
             			var parts = val.split(".");
@@ -1242,6 +1247,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             
             init: function() {
+            	
+            	$(".terms-conditions").click(function(e) { 
+            		e.preventDefault();
+            		e.stopPropagation();
+            		SGX.showTerms();  
+            	});
+            	
             	var page = location.pathname;
             	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
             	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
@@ -1454,6 +1466,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var company = data.company.companyInfo;
             		
             		$(".progress-estimate").show();
+            		
+            		$(".theme-three-bubble-progress").addClass("opt-" + (company.avgBrokerReq | 0));
+            		console.log($(".theme-three-bubble-progress"));
             		
             		// no estimate to display
             		if (!company.hasOwnProperty("targetPriceNum")  || company.targetPriceNum < 3) {

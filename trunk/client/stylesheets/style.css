@@ -481,7 +481,7 @@ h1, h1.title {
   display: block;
 }
 .terms-conditions {
-	margin-top: 20px;
+	margin: 20px 0;
 }
 .module .toolbar {
   height: 39px;
@@ -579,8 +579,7 @@ h1, h1.title {
   text-align: right;
 }
 
-.progress-estimate .theme-three-bubble-progress {
-  background: url("../img/progress-3-step-1.jpg") no-repeat;
+.progress-estimate .theme-three-bubble-progress  {
   -webkit-background-size: 292px auto;
   -moz-background-size: 292px auto;
   background-size: 292px auto;
@@ -589,18 +588,27 @@ h1, h1.title {
   z-index: 2;
 }
 
-.progress-estimate .theme-three-bubble-progress.progress-2 {
-  background: url("../img/progress-3-step-2.jpg") no-repeat;
-  -webkit-background-size: 292px auto;
-  -moz-background-size: 292px auto;
-  background-size: 292px auto;
+.progress-estimate .theme-three-bubble-progress.opt-1 {
+	background: url("../img/progress-3-step-1.jpg") no-repeat;	
 }
-.progress-estimate .theme-three-bubble-progress.progress-3 {
-  background: url("../img/progress-3-step-3.jpg") no-repeat;
-  -webkit-background-size: 292px auto;
-  -moz-background-size: 292px auto;
-  background-size: 292px auto;
+
+.progress-estimate .theme-three-bubble-progress.opt-2 {
+	background: url("../img/progress-3-step-2.jpg") no-repeat;	
 }
+
+.progress-estimate .theme-three-bubble-progress.opt-3 {
+	background: url("../img/progress-3-step-3.jpg") no-repeat;	
+}
+
+.progress-estimate .theme-three-bubble-progress.opt-4 {
+	background: url("../img/progress-3-step-4.jpg") no-repeat;	
+}
+
+.progress-estimate .theme-three-bubble-progress.opt-5 {
+	background: url("../img/progress-3-step-5.jpg") no-repeat;	
+}
+
+
 .progress-estimate li {
   list-style: none;
   display: inline-block;
