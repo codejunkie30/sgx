@@ -1,5 +1,5 @@
 // This is the modular wrapper for any page
-define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock'], function($, _, SGX) {
+define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock', 'colorbox'], function($, _, SGX) {
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
 	
@@ -83,9 +83,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             showTerms: function() {
             	
-            	$.get("terms-conditions.html", function(data) {
+            	$.get("terms-conditions.html?mike=2", function(data) {
             		try {
-                        SGX.modal.open({ content: data, type: 'alert' });            		
+                        SGX.modal.open({ content: data, type: 'alert', maxWidth: 1000 });            		
             		}
             		catch(err) {
             			console.log(err);
@@ -301,15 +301,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     SGX.modal.open({
                         content: html,
                         type: 'prompt',
+                        maxWidth: 600,
                         postLoad: function(options) {
-                        	SGX.dateranges.init($("#modal .date"));
+                        	SGX.dateranges.init($(".modal-container .date"));
                         },
                         cancel: function(options) {
                         	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
                         },
                         confirm: function(options) {
                         	
-                        	if (parseInt($("#modal input").val()) <= 0 || parseInt($("#modal input").val()) > 100) {
+                        	if (parseInt($(".modal-container input").val()) <= 0 || parseInt($(".modal-container input").val()) > 100) {
                         		alert("Percent Change must be between 1 and 100");
                         		return;
                         	} 
@@ -320,12 +321,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         	$(template).data(distribution);
                         	$(".info", template).text(distribution.name);
 
-                        	$(".percent-value", template).text($("#modal input").val());
+                        	$(".percent-value", template).text($(".modal-container input").val());
                         	
-                        	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $("#modal .start").datepicker( "getDate" )));
-                        	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $("#modal .start").datepicker( "getDate" )))
-                        	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $("#modal .end").datepicker( "getDate" )));
-                        	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $("#modal .end").datepicker( "getDate" )))
+                        	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .start").datepicker( "getDate" )));
+                        	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .start").datepicker( "getDate" )))
+                        	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .end").datepicker( "getDate" )));
+                        	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .end").datepicker( "getDate" )))
                         	
                         	$(".search-criteria tbody").append(template);
                         	
@@ -918,7 +919,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			var currentCols = SGX.screener.search.getDisplayColumns();
             			var container = $("<div />");
             			var table = $("<table />").addClass("customize-display-table").appendTo(container);
-            			$("<tr />").append($("<td colspan='2' />").html("<h3>Customize Results Display</h3>")).appendTo(table);
+            			$("<tr />").append($("<td colspan='2' />").html("<h4>Customize Results Display</h4>")).appendTo(table);
             			
             			var tr = $("<tr />").appendTo(table), column, header = 0;
             			
@@ -955,12 +956,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             type: 'prompt',
                             confirm: function(settings) {
                             	var dcs = {};
-                            	$("#modal .checkbox.checked").each(function() { dcs[$(this).attr("data-name")] = true; });
+                            	$(".modal-container .checkbox.checked").each(function() { dcs[$(this).attr("data-name")] = true; });
                             	SGX.screener.search.setDisplayColumns(dcs);
                             	SGX.modal.close();
                             },
                             postLoad: function(settings) {
-                            	$("#modal .checkbox").click(function(e) {
+                            	$(".modal-container .checkbox").click(function(e) {
         							if ($(this).is(".checked")) { $(this).removeClass("checked"); return; }
                             		if ($(this).closest("table").find(".checked").length >= 4) { alert("Please remove a column before adidng a new one."); return; }
                             		$(this).addClass("checked");
@@ -1117,35 +1118,50 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             modal: {
                 close: function(settings) {
-            		var settings = $(".confirm", modal).data();
-                	$("#modal").fadeOut(100, function() { $(this).removeAttr("class"); if (settings.hasOwnProperty("close")) { settings.close(settings); } });
+                	$.colorbox.close();
+                },
+                
+                container: function() {
+                	var container = $("<div />").addClass("modal-container");
+                	$(container).append($("<div />").addClass("content"));
+                	$(container).append($("<div />").addClass("nav"));
+                	$(".nav", container).append('<span class="action-btn confirm prompt-display">Confirm</span><span class="action-btn cancel prompt-display">Cancel</span><span class="action-btn cancel alert-display">Close</span>');
+                	return container;
                 },
                 
                 open: function(settings) {
-                
-                	var modal = $("#modal");
-                	$(modal).addClass(settings.type);
-                	$(".modal-content .copy", modal).html(settings.content);
-                	$(".close, .cancel, .modal-close", modal).click(function(e) {
-                    	if (settings.hasOwnProperty("cancel")) settings.cancel(settings);
-                		SGX.modal.close(); 
+
+                	var container = SGX.modal.container();
+                	$(".content", container).html(settings.content);
+                	$(container).addClass(settings.type);
+                	
+                	$.colorbox({
+                		html: $(container),
+                		overlayClose: false,
+                		transition: 'none',
+                		maxWidth: settings.hasOwnProperty("maxWidth") ? settings.maxWidth : 550,
+                		onComplete: function() {
+                			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
+                		},
+                		onClose: function() {
+                			if (settings.hasOwnProperty("close")) settings.close(settings);
+                		}
                 	});
 
-                	// clean up
-                	var confirm = $(".confirm", modal);
+                	// cancel/close
+                	$(".cancel, .close").click(function(e) {
+                		if ($(this).hasClass("cancel") && settings.hasOwnProperty("cancel")) settings.cancel(settings);
+                		SGX.modal.close(); 
+                	});
+                	
+                	// confirm
+                	var confirm = $(".confirm", container);
             		confirm.removeData();
             		confirm.unbind();
-
                 	if (settings.type == "prompt") {
                 		confirm.data(settings);
                 		$(confirm).click(function(e) { settings.confirm($(this).data()); });
                 	}
-                	
-                	if (settings.hasOwnProperty("postLoad")) {
-                		settings.postLoad(settings);
-                	}
-                	
-                	$("#modal").fadeIn(100);
 
                 }
             },

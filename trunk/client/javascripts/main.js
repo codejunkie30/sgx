@@ -13,7 +13,8 @@
             tabs: 'vendor/jquery.ui/ui/jquery.ui.tabs',
             highstock: 'vendor/highstock/highstock',
             debug: 'vendor/ba-debug.min',
-            underscore: 'vendor/underscore/underscore'
+            underscore: 'vendor/underscore/underscore',
+            colorbox: 'app/colorbox'
         },
         waitSeconds: 5,
         shim: {
@@ -50,6 +51,9 @@
             },
             "underscore": {
                 "exports": "_"
+            },
+            "colorbox": {
+            	deps: ['jquery']
             }
         }
     }, [ 'app/SGX-base', 'app/SGX-glossary', 'app/utils' ], function($, SGX, _) {
