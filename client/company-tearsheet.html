@@ -40,7 +40,7 @@
                 <div class="page-title" data-name="companyName"><span class="property" data-name="companyName"></span> (<span class="property" data-name="tickerCode"></span>)</div>
                 <div class="stock-price">
                     <div class="main">
-                    	S$ <span class="lastPrice">--</span>
+                    	S$ <span class="lastPrice formattable" data-format="number">--</span>
                         <span class="change">--</span>
                     </div>
                     <div class="last-updated">Last Price:
@@ -239,7 +239,8 @@
 	                    </div>
 	                    <div class="col-2">
 	                        <h5># of Employees</h5>
-	                        <div class="property" data-name="employees">-</div>
+	                        <div class="property formattable" data-format="number" data-name="employees">-</div>
+	                        <br />
 	                        <h5>Current Fiscal Year End</h5>
 	                        <div class="property formattable" data-name="fiscalYearEnd" data-format="date">-</div>
 	                    </div>
@@ -281,7 +282,7 @@
 	                    <p class="centered">
 	                        Consensus Target Price
 	                    </p>
-	                    <div class="price">--</div>
+	                    <div class="price formattable" data-format="number">--</div>
                     </div>
                     <div class="no-estimate">
                     	No Recommendation
@@ -392,9 +393,14 @@
                 </div>
             </div>
         </div>
+   		<div class="row">
+   			<div class="grid_3 center">
+				<a href="terms-conditions.html" class="terms-conditions">Use of this information is subject to terms and conditions</a>
+   			</div>
+    	</div>
 
     </div>
-
+    
 </body>
 
 </html>
