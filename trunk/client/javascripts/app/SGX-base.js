@@ -700,7 +700,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 				
                 				$(this).addClass("sort").addClass(sort);
 
-                        		SGX.screener.search.displayRows($(this).attr("data-name"), sort);
+                        		SGX.screener.search.displayRows(1, $(this).attr("data-name"), sort);
                                 
                 			});
 
@@ -726,7 +726,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		
                 		
             			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
-                		SGX.screener.search.displayRows(sort, direction);
+                		SGX.screener.search.displayRows(1, sort, direction);
                 		
                 		return;
                 	},
@@ -777,47 +777,15 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         SGX.screener.search.displayPage(1);
                 	},
                 	
-                    displayRows: function(sort, direction) {
+                    displayRows: function(curPage, sort, direction) {
 
                     	var data = $(".module-results").data();
                     	var page = SGX.screener.search.sortRows(data, sort, direction);
-
-            			var fields = SGX.screener.search.getAllColumns();
-            			var defaultDisplay = SGX.screener.search.getDisplayColumns();
-            			var tbodyData = "", fmtCache = {};
-
-            			$(".module-results thead th").each(function(idx, el) {
-                			var fmt = $(el).attr("data-format") == "millions" ? "number1" : $(el).attr("data-format");
-                			fmtCache[$(el).attr("data-name")] = fmt;
-                		});
-            			
-                		$.each(data.companies, function(idx, company) {
-                			
-                			// for IE8 support need to clean up
-                			tbodyData += '<tr class="result" data-page="' + company.page + '"><td class="companyName" data-name="companyName">';
-                			tbodyData += '<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>';
-                			tbodyData += "</td>";
-                			
-                			$.each(fields, function(fIdx, field) {
-                				var val = SGX.screener.search.getColumnValue(company, field);
-                				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
-                				tbodyData += '<td class="' + field.field;
-                				if (!defaultDisplay.hasOwnProperty(field.field)) tbodyData += ' hidden';
-                				tbodyData += '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
-                			});
-                			
-                			tbodyData += '</tr>';
-                			
-                		});
-
-                		$(".module-results tbody").html(tbodyData);
-                    	
                     	var paging = $('.module-results .pager');
+                    	
                         paging.empty();
                         
-                        var resultRows = $('.module-results tr.result');
-                        
-                        if (resultRows.length > 0) {
+                        if (data.companies.length > 0) {
                         	
                         	// page navigation
                         	for (var i=1; i<page; i++) {
@@ -831,7 +799,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             	paging.append('<span class="action-btn next">Next</span>');
                             }
                             
-                            SGX.screener.search.displayPage(1);
+                            SGX.screener.search.displayPage(curPage);
                             
                         }
                         
@@ -870,13 +838,46 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     },
                     
                     displayPage: function(page) {
-                    	
-                    	// display the results
-                    	$(".module-results .table-wrapper tbody tr").hide();
+
+                    	var data = $(".module-results").data();
+
+                    	$(".module-results tbody").children().remove();
                     	$(".module-results .table-wrapper tbody").show();
-                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").removeClass("even");
-                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']:even").addClass("even");
-                    	$(".module-results .table-wrapper tbody tr[data-page='" + page + "']").show();
+                    	
+            			var fields = SGX.screener.search.getAllColumns();
+            			var defaultDisplay = SGX.screener.search.getDisplayColumns();
+            			var tbodyData = "", fmtCache = {};
+
+            			$(".module-results thead th").each(function(idx, el) {
+                			var fmt = $(el).attr("data-format") == "millions" ? "number1" : $(el).attr("data-format");
+                			fmtCache[$(el).attr("data-name")] = fmt;
+                		});
+
+            			// append the rows
+                		$.each(data.companies, function(idx, company) {
+                			
+                			if (company.page != page) return;
+                			
+                			// the row
+                			var tr = $("<tr />").addClass("result");
+                			if (idx%2 == 0) $(tr).addClass("even");
+                			
+                			// company td
+                			var td = $("<td />").addClass("companyName").attr("data-name", "companyName").appendTo(tr);
+                			$(td).append('<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>');
+                			
+                			// rest of the rows
+                			$.each(fields, function(fIdx, field) {
+                				var val = SGX.screener.search.getColumnValue(company, field);
+                				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
+                				td = $("<td />").addClass(field.field).attr("data-name", field.field).text(typeof formatted === "undefined" ? val : formatted);
+                				if (!defaultDisplay.hasOwnProperty(field.field)) $(td).addClass("hidden");
+                				$(td).appendTo(tr);
+                			});
+                			
+                			$(".module-results tbody").append(tr);
+                			
+                		});
                     	
                     	// handle the navigation
                     	var paging = $('.module-results .pager');
@@ -886,14 +887,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	SGX.screener.search.pageButton($(".action-btn.prev", paging), page - 1 == 0 ? 1 : page - 1, page);
                     	
                     	// pages
-                    	var lastPg = 1;
-                    	$(".action-btn", paging).not(".prev, .next").each(function(idx, el) {
-                    		var pg = parseInt($(el).text());
-                    		lastPg = pg;
-                    		SGX.screener.search.pageButton($(el), pg, page);
-                    	});
-                    	
+                    	$(".action-btn", paging).not(".prev, .next").each(function(idx, el) { SGX.screener.search.pageButton($(el), parseInt($(el).text()), page); });
+
                     	// next
+                    	var lastPg = parseInt($(".action-btn:not(.prev,.next):last", paging).text());
                     	SGX.screener.search.pageButton($(".action-btn.next", paging), lastPg == page ? page : page + 1, page);
 
                     	// resize
@@ -1408,8 +1405,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
         			var ret = [];
         			
-        			console.log(data);
-
             		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0 && !$.isEmptyObject(data.keyDevs[0])) {
             			
             			data.keyDevs.sort(function(a, b) {
