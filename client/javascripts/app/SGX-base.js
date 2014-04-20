@@ -36,8 +36,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             pageHeight: $(document).height(),
             
             numberFormats: {
-            	millions: { header: " (S$ mm)", decimals: 1, format: "S$ $VALUE mm" },
-            	percent: { header: " (%)", decimals:2, format: "$VALUE%" },
+            	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
+            	percent: { header: "in %", decimals:2, format: "$VALUE%" },
             	number: { header: "", decimals: 3 },
             	number1: { decimals: 1 }
             },
@@ -155,8 +155,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			$(".advanced-criteria").show();
             			$(".expand-criteria").hide();
             		});
-
-        			
+            		
         			SGX.screener.initCriteria();
         			
         		},
@@ -182,8 +181,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	// load up all fields for distributions
                 	var allFields = SGX.screener.getAllCriteria();
                 	var data = { "fields" : [] };
-                	$.each(allFields, function(idx, field) { if (field.selected) data.fields.push(field.id); });
-                	
+                	$.each(allFields, function(idx, field) { 
+                		if (field.selected) data.fields.push(field.id); 
+                	});
+
                 	SGX.screener.criteriaChange.getDistributions(data, SGX.screener.finalize);
                 	
                 },
@@ -224,7 +225,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 },
                 
                 drawCriteria: function(data) {
-
+                	
                 	var runsearch = false;
                 	
                 	if (data.distributions.length > 1) {
@@ -240,7 +241,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	$.each(data.distributions, function(idx, distribution) {
                 		
                 		if ($(".search-criteria [data-name='" + distribution.field + "']").length > 0) return;
-
+                		
                 		// populate with label, other info from HTML
                 		var el = $(".editSearchB [data-name='" + distribution.field + "']");
                 		SGX.screener.populateField(distribution, el);
@@ -284,6 +285,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		
                 	});
                 	
+                	$(".search-criteria .criteria").removeClass("even");
+                	$(".search-criteria .criteria:even").addClass("even");
                 	SGX.formatter.formatElements(".search-criteria");
                 	
                 	return runsearch;                	
@@ -295,50 +298,59 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
                 	var template = $("#criteria-templates [data-template='change']").clone(true);
 
-            		// handle % change
-        			var html = $(".change-picker").html();
         			
-                    SGX.modal.open({
-                        content: html,
-                        type: 'prompt',
-                        maxWidth: 600,
-                        postLoad: function(options) {
-                        	SGX.dateranges.init($(".modal-container .date"));
-                        },
-                        cancel: function(options) {
-                        	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
-                        },
-                        confirm: function(options) {
-                        	
-                        	if (parseInt($(".modal-container input").val()) <= 0 || parseInt($(".modal-container input").val()) > 100) {
-                        		alert("Percent Change must be between 1 and 100");
-                        		return;
-                        	} 
-                        	
-                        	$(".editSearchB [data-name='" + distribution.field + "']").addClass("checked");
-                        	
-                        	distribution.label = distribution.shortName;
-                        	$(template).data(distribution);
-                        	$(".info", template).text(distribution.name);
+                	$(".checkbox", template).unbind("click");
+        			$(".checkbox", template).click(function(e) {
 
-                        	$(".percent-value", template).text($(".modal-container input").val());
-                        	
-                        	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .start").datepicker( "getDate" )));
-                        	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .start").datepicker( "getDate" )))
-                        	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .end").datepicker( "getDate" )));
-                        	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .end").datepicker( "getDate" )))
-                        	
-                        	$(".search-criteria tbody").append(template);
-                        	
-                        	SGX.tooltip.init(template);
-                        	
-                    		SGX.modal.close(); 
-                    		
-                			SGX.screener.search.criteriaSearch();
-                    		
-                        }
-                        
-                    });
+            			e.preventDefault();
+            			e.stopPropagation();        				
+
+                		// handle % change
+            			var html = $(".change-picker").html();
+
+                        SGX.modal.open({
+                            content: html,
+                            type: 'prompt',
+                            maxWidth: 600,
+                            postLoad: function(options) {
+                            	SGX.dateranges.init($(".modal-container .date"));
+                            },
+                            cancel: function(options) {
+                            	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
+                            },
+                            confirm: function(options) {
+                            	
+                            	if (parseInt($(".modal-container input").val()) <= 0 || parseInt($(".modal-container input").val()) > 100) {
+                            		alert("Percent Change must be between 1 and 100");
+                            		return;
+                            	} 
+                            	
+                            	$(".editSearchB [data-name='" + distribution.field + "']").addClass("checked");
+                            	
+                            	distribution.label = distribution.shortName;
+                            	$(template).data(distribution);
+                            	$(".info", template).text(distribution.name);
+
+                            	$(".percent-value", template).text($(".modal-container input").val());
+                            	
+                            	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .start").datepicker( "getDate" )));
+                            	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .start").datepicker( "getDate" )))
+                            	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .end").datepicker( "getDate" )));
+                            	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .end").datepicker( "getDate" )))
+                            	
+                            	$(".search-criteria tbody").append(template);
+                            	
+                            	SGX.tooltip.init(template);
+                            	
+                        		SGX.modal.close(); 
+                        		
+                    			SGX.screener.search.criteriaSearch();
+                        		
+                            }
+                            
+                        });            			
+        				
+        			});
                 	
                 	return template;
                 },
@@ -504,16 +516,17 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	},
                 	
                 	getDistributions: function(data, finished) {
+                		
                 		var tmpF = finished;
                 		var endpoint = SGX.fqdn + "/sgx/search/distributions";
-                		var hasPercentChange = _.findWhere(data.fields, "percentChange" );
-                		if (typeof hasPercentChange !== "undefined") data.fields = _.without(data.fields, hasPercentChange);
+                		var hasPercentChange = $.inArray("percentChange", data.fields);
+                		if (hasPercentChange != -1) data.fields.splice(hasPercentChange, 1);
                 		
                 		// change the function
-                		if (hasPercentChange) {
+                		if (hasPercentChange != -1) {
                 			tmpF = function(data) { 
                 				data.distributions.push({ "field": "percentChange", buckets: [], template: "change" }); 
-                				finished(data); 
+                				finished(data);
                 			};
                 		}
                 		
@@ -674,14 +687,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		
                     		$.each(fields, function(idx, field) {
                     			var title = field.shortName;
-                    			if (SGX.numberFormats.hasOwnProperty(field.format)) title += SGX.numberFormats[field.format].header;
                     			var th = $("<th />").attr("data-name", field.field).addClass(field.field).appendTo(header);
                     			if (field.format != "string" && field.format != "lookup") $(th).attr("data-sort", "number")
                     			$(th).attr("data-format", field.format);
                     			$("<span />").text(title).appendTo(th);
+                    			if (SGX.numberFormats.hasOwnProperty(field.format)) $("<span />").addClass("fmt").text(SGX.numberFormats[field.format].header).appendTo(th);
                     			if (!defaultDisplay.hasOwnProperty(field.field)) th.addClass('hidden');
                     		});
-
+                    		
                     		$(".module-results thead th").click(function(e) {
                     			
                 				var table = $(".module-results table");
@@ -706,48 +719,57 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				direction = $("th.sort").hasClass("desc") ? "desc" : "asc";
             			}
             			
-                		$.each(data.companies, function(idx, company) {
-                			
-                			var tr = $("<tr />").addClass("result").data(company);
-                			var cLink = $("<a href='" + SGX.getCompanyPage(company.tickerCode) + "'>" + company.companyName + "</a>");
-
-                			// company name
-                			$("<td />").append(cLink).addClass("companyName").appendTo(tr).attr("data-value", company.companyName.toLowerCase()).attr('data-name', 'companyName');
-                			
-                			$.each(fields, function(fIdx, field) {
-                				var val = SGX.screener.search.getColumnValue(company, field);
-                				if (field.sortType == "string") val = val.toLowerCase();
-                				else if (field.sortType == "number" && val == "-") val = "-9999999999";
-                				var td = $("<td />").text(val).appendTo(tr).attr("data-value", val).attr("data-name", field.field).addClass(field.field);
-                				if (!defaultDisplay.hasOwnProperty(field.field)) td.addClass('hidden');
-                			});
-                			
-                			$(".module-results tbody").append(tr);
-                			
-                		});
-
-                		// format
+            			var tbodyData = "", fmtCache = {};
                 		$(".module-results thead th").each(function(idx, el) {
                 			var fmt = $(el).attr("data-format") == "millions" ? "number1" : $(el).attr("data-format");
-            				$(".module-results tbody td:nth-child(" + (idx+1) + ")").not("[formatted]").each(function() {
-            					SGX.formatter.formatValue($(this), fmt);
-            				});
+                			fmtCache[$(el).attr("data-name")] = fmt;
                 		});
                 		
-                		// collect industries
+                		$(".module-results").data(data.companies);
+                		
                 		var industries = [];
-                		$(".module-results tbody td.industry").each(function(idx, el) {
-                			var text = $(el).text();
-                			if ($.inArray(text, industries) != -1) return;
-                			industries.push(text);
-                			$("<li />").text(text).appendTo(".module-results .button-dropdown ul");
+                		$.each(data.companies, function(idx, company) {
+                			
+                			// for IE8 support need to clean up
+                			tbodyData += '<tr class="result"><td class="companyName" data-name="companyName" data-value="' + company.companyName.toLowerCase() + '">';
+                			tbodyData += '<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>';
+                			tbodyData += "</td>";
+                			
+                			$.each(fields, function(fIdx, field) {
+                				
+                				// the column
+                				var val = SGX.screener.search.getColumnValue(company, field);
+                				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
+                				if (field.sortType == "string") val = val.toLowerCase();
+                				else if (field.sortType == "number" && val == "-") val = "-9999999999";
+                				tbodyData += '<td class="' + field.field;
+                				if (!defaultDisplay.hasOwnProperty(field.field)) tbodyData += ' hidden';
+                				tbodyData += '" data-value="' + val + '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
+                				
+                				// if industry
+                				if (field.field == "industry") {
+                        			if ($.inArray(val, industries) != -1) return;
+                        			industries.push(val);
+                				}
+
+                				
+                			});
+                			
+                			tbodyData += '</tr>';
+                			
                 		});
-            			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
+
+                		// append the industries
+                		industries.sort(function(a, b) { return a.localeCompare(b); });
+                    	$.each(industries, function(idx, val) { $("<li />").text(val).appendTo(".module-results .button-dropdown ul");  });
+
                 		
+                		$(".module-results tbody").html(tbodyData);
+
+            			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
                 		SGX.screener.search.displayRows(sort, direction);
                 		
                 		return;
-
                 	},
                 	
                 	getColumnValue: function(company, field) {
@@ -1221,10 +1243,15 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 },
 
                 formatValue: function(el, fmt) {
-                	
+            		var val = SGX.formatter.getFormatted(fmt, $(el).text());
+            		$(el).attr("formatted", "true").text(val);
+                },
+
+                getFormatted: function(fmt, value) {
+
                 	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return;
                 	
-            		var val = $(el).text();
+            		var val = value;
             		if (val == "" || val == "-") return;
             		
             		var formatter = SGX.numberFormats.hasOwnProperty(fmt) ? SGX.numberFormats[fmt] : {};
@@ -1253,10 +1280,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		else {
             			console.log(fmt);
             		}
-            		
-            		// we formatted it
-            		$(el).attr("formatted", "true").text(val);
                 	
+            		return val;
                 }
 
             },
@@ -1353,9 +1378,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
             		$.each(tree, function(idx, item) {
             			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value)) + "'>" + item.value + "</a>");
-            			var li = $("<li />").append(a);
-            			if (idx > 0) $(li).prepend($("<span />").html("&nbsp;>&nbsp;"));
-                		$(".breadcrumb-tree").append(li);
+            			if (idx > 0) $(".breadcrumb-tree .dynamic").append($("<span />").html("&nbsp;>&nbsp;"));
+            			$(".breadcrumb-tree .dynamic").append(a);
             		});
 
             		// screener
@@ -1428,7 +1452,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             					x: Date.fromISO(keyDev.date),
             					title: letter,
             					text: keyDev.headline,
-            					shape: 'url(../../img/stock-marker.png)',
+            					shape: 'url(img/stock-marker.png)',
             					id: nId
             				};
             				ret.push(chartData);
@@ -1484,7 +1508,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		$(".progress-estimate").show();
             		
             		$(".theme-three-bubble-progress").addClass("opt-" + (company.avgBrokerReq | 0));
-            		console.log($(".theme-three-bubble-progress"));
             		
             		// no estimate to display
             		if (!company.hasOwnProperty("targetPriceNum")  || company.targetPriceNum < 3) {
