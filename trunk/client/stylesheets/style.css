@@ -363,8 +363,8 @@ h1, h1.title {
   background: #f2f2f2;
   padding-bottom: 8px;
 }
+
 .module .title {
-  background-color: #dcdcdc;
   background-image: -webkit-gradient(linear, left bottom, left top, from(#dcdcdc), to(#fff));
   background-image: -webkit-gradient(linear, left bottom, left top, from(#dcdcdc), to(#fff));
   background-image: -webkit-gradient(linear, left bottom, left top, from(#dcdcdc), to(#fff));
@@ -392,6 +392,7 @@ h1, h1.title {
   background-image: linear-gradient(to top, #dcdcdc, #fff);
   height: 25px;
 }
+
 .module .title .label {
   padding-left: 10px;
   font-weight: bold;
