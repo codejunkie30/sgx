@@ -74,8 +74,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             resizeIframe: function(height, scroll) {
             	var fn = function() {
-            		SGX.pageHeight = height;
             		var msg = height; //height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
+            		SGX.pageHeight = msg;
             		XD.postMessage(msg, SGX.getParentURL(), parent); 
             	};
             	setTimeout(fn, 10);
@@ -1867,13 +1867,20 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             		// remove the entire chart
             		if (chart.series.length == 1) {
+
             			chart.destroy();
             			$(".chart-row").hide();
+            			
+                    	// resize
+        	            var curHeight = SGX.getTrueContentHeight();
+        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+            			
             			return;
             		}
             
             		// remove the series
             		chart.get(name).remove();
+
             		
             	},
             	

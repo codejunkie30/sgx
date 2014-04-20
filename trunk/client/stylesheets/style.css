@@ -33,9 +33,14 @@ h1, h1.title {
 }
 
 .page-title {
-  margin: 20px 0 10px;
+  margin: 0 0 10px 0;
   width: 100%;
   height: 42px;
+}
+
+.company-tearsheet-page .page-title, .related-page .page-title {
+	margin-top: 10px;
+	margin-bottom: 20px;
 }
 
 .page-title, .page-title span {
