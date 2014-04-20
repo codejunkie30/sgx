@@ -1407,8 +1407,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	initNews: function(data) {
 
         			var ret = [];
+        			
+        			console.log(data);
 
-            		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0) {
+            		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0 && !$.isEmptyObject(data.keyDevs[0])) {
             			
             			data.keyDevs.sort(function(a, b) {
                     		a = a.date, b = b.date
@@ -1418,7 +1420,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			});
             			
             			$.each(data.keyDevs, function(idx, keyDev) {
-
+            				
             				// sidebar display
             				var letter = SGX.letters.substring(idx, idx+1);
             				var nId = 'keyDev-' + letter;
