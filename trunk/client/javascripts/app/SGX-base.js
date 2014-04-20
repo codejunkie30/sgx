@@ -710,53 +710,21 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				direction = $("th.sort").hasClass("desc") ? "desc" : "asc";
             			}
             			
-            			var tbodyData = "", fmtCache = {};
-                		$(".module-results thead th").each(function(idx, el) {
-                			var fmt = $(el).attr("data-format") == "millions" ? "number1" : $(el).attr("data-format");
-                			fmtCache[$(el).attr("data-name")] = fmt;
-                		});
+                		// add to the element
+                		$(".module-results").data(data);
                 		
-                		$(".module-results").data(data.companies);
-                		
+                		// append the industries
                 		var industries = [];
                 		$.each(data.companies, function(idx, company) {
-                			
-                			// for IE8 support need to clean up
-                			tbodyData += '<tr class="result"><td class="companyName" data-name="companyName" data-value="' + company.companyName.toLowerCase() + '">';
-                			tbodyData += '<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>';
-                			tbodyData += "</td>";
-                			
-                			$.each(fields, function(fIdx, field) {
-                				
-                				// the column
-                				var val = SGX.screener.search.getColumnValue(company, field);
-                				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
-                				if (field.sortType == "string") val = val.toLowerCase();
-                				else if (field.sortType == "number" && val == "-") val = "-9999999999";
-                				tbodyData += '<td class="' + field.field;
-                				if (!defaultDisplay.hasOwnProperty(field.field)) tbodyData += ' hidden';
-                				tbodyData += '" data-value="' + val + '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
-                				
-                				// if industry
-                				if (field.field == "industry") {
-                        			if ($.inArray(val, industries) != -1) return;
-                        			industries.push(val);
-                				}
-
-                				
-                			});
-                			
-                			tbodyData += '</tr>';
-                			
+                			if (!company.hasOwnProperty("industry")) return;
+                			var val = company.industry;
+                			if ($.inArray(val, industries) != -1) return;
+                			industries.push(val);
                 		});
-
-                		// append the industries
                 		industries.sort(function(a, b) { return a.localeCompare(b); });
                     	$.each(industries, function(idx, val) { $("<li />").text(val).appendTo(".module-results .button-dropdown ul");  });
-
                 		
-                		$(".module-results tbody").html(tbodyData);
-
+                		
             			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
                 		SGX.screener.search.displayRows(sort, direction);
                 		
@@ -810,12 +778,46 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	},
                 	
                     displayRows: function(sort, direction) {
+
+                    	var data = $(".module-results").data();
+                    	var page = SGX.screener.search.sortRows(data, sort, direction);
+
+            			var fields = SGX.screener.search.getAllColumns();
+            			var defaultDisplay = SGX.screener.search.getDisplayColumns();
+            			var tbodyData = "", fmtCache = {};
+
+            			$(".module-results thead th").each(function(idx, el) {
+                			var fmt = $(el).attr("data-format") == "millions" ? "number1" : $(el).attr("data-format");
+                			fmtCache[$(el).attr("data-name")] = fmt;
+                		});
+            			
+                		$.each(data.companies, function(idx, company) {
+                			
+                			// for IE8 support need to clean up
+                			tbodyData += '<tr class="result" data-page="' + company.page + '"><td class="companyName" data-name="companyName" data-value="' + company.companyName.toLowerCase() + '">';
+                			tbodyData += '<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>';
+                			tbodyData += "</td>";
+                			
+                			$.each(fields, function(fIdx, field) {
+                				var val = SGX.screener.search.getColumnValue(company, field);
+                				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
+                				if (field.sortType == "string") val = val.toLowerCase();
+                				else if (field.sortType == "number" && val == "-") val = "-9999999999";
+                				tbodyData += '<td class="' + field.field;
+                				if (!defaultDisplay.hasOwnProperty(field.field)) tbodyData += ' hidden';
+                				tbodyData += '" data-value="' + val + '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
+                			});
+                			
+                			tbodyData += '</tr>';
+                			
+                		});
+
+                		$(".module-results tbody").html(tbodyData);
                     	
                     	var paging = $('.module-results .pager');
                         paging.empty();
                         
                         var resultRows = $('.module-results tr.result');
-                        var page = SGX.screener.search.sortRows($(resultRows).closest("table"), sort, direction);
                         
                         if (resultRows.length > 0) {
                         	
@@ -837,26 +839,17 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         
                     },
                     
-                    sortRows: function(table, sort, direction) {
-                    	
-                    	var rows = $("tbody tr", table);
-                    	
-                    	if (rows <= 1) return;
+                    sortRows: function(data, sort, direction) {
                     	
                     	if (typeof direction === "undefined") direction = "asc";
-                    	var sortType = $(table).find("th[data-name='" + sort + "']").attr("data-sort");
+                    	var sortType = $(".module-results").find("th[data-name='" + sort + "']").attr("data-sort");
                     	
                     	// sort
-                    	rows.sort(function(a, b) {
+                    	data.companies.sort(function(a, b) {
                     		
-                    		var a1 = $("[data-name='" + sort + "']", "asc" == direction ? a : b).attr("data-value");
-                    		var b1 = $("[data-name='" + sort + "']", "asc" == direction ? b : a).attr("data-value");
-
-                    		if ("number" == sortType) {
-                    			a1 = parseFloat(a1);
-                    			b1 = parseFloat(b1);
-                    			return b1-a1;
-                    		}
+                    		var a1 = "asc" == direction ? a[sort] : b[sort];
+                    		var b1 = "asc" == direction ? b[sort] : a[sort];
+                    		if ("number" == sortType) return b1-a1;
                     		
                     		return a1.localeCompare(b1);
                     		
@@ -864,15 +857,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	
                     	// break into pages
                     	var i, j, page = 1;
-                    	for (i=0, j=rows.length; i<j; i+=SGX.resultSize) {
-                    		var tmp = rows.slice(i,i+SGX.resultSize);
+                    	for (i=0, j=data.companies.length; i<j; i+=SGX.resultSize) {
+                    		var tmp = data.companies.slice(i,i+SGX.resultSize);
                     		if (tmp.length == 0) continue;
-                    		$(tmp).attr("data-page", page);
+                    		$.each(tmp, function(idx, obj) { obj.page = page;   });
                     		page++;
                     	}
-
-                    	// reappend in order
-                    	$(table).children('tbody').append(rows);
 
                     	return page;
                     },
