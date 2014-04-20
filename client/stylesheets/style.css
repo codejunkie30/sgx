@@ -1671,6 +1671,7 @@ td .info {
 .alpha-factor {
   background: #f2f2f2;
   border: 1px solid #c1c1c1;
+  overflow: hidden;
 }
 .alpha-factor .slider {
   display: inline-block;
