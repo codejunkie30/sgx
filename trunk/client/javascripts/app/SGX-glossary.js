@@ -30,7 +30,7 @@ var GLOSSARY =
 		},
 		{
 			id: "totalRevenue",
-			definition: "Total Revenue is the sum of the cash inflows, increases in operating accounts such as receivables, and occasionally, unrealized gains generated in the course of a company’s business activities."
+			definition: "Total Revenue is the sum of the cash inflows, increases in operating accounts such as receivables, and occasionally, unrealized gains generated in the course of a company's business activities."
 		},
 		{
 			id: "ebitdaMargin",
@@ -82,7 +82,7 @@ var GLOSSARY =
 		},
 		{
 			id: "priceMomentum",
-			definition: "Price Momentum generally is an appraisal of how quickly a share’s price is moving in a particular direction. To develop a complete picture of momentum, the indicator looks at nine-month, one-month, and five-day price momentum statistics. It also weighs the one-year to one-month price momentum ratio and one-month price high to one-month price low ratio."
+			definition: "Price Momentum generally is an appraisal of how quickly a share's price is moving in a particular direction. To develop a complete picture of momentum, the indicator looks at nine-month, one-month, and five-day price momentum statistics. It also weighs the one-year to one-month price momentum ratio and one-month price high to one-month price low ratio."
 		},
 		{
 			id: "analystExpectations",
@@ -94,7 +94,7 @@ var GLOSSARY =
 		},
 		{
 			id: "valuation",
-			definition: "Valuation is the measurement of a company’s worth. Five ratios are used in this factor: book value to share price, free cash flow to share price, EBITDA (earnings before interest, taxes, depreciation, and amortization) to enterprise value (net worth), sales to enterprise value, and earnings to share price."
+			definition: "Valuation is the measurement of a company's worth. Five ratios are used in this factor: book value to share price, free cash flow to share price, EBITDA (earnings before interest, taxes, depreciation, and amortization) to enterprise value (net worth), sales to enterprise value, and earnings to share price."
 		},
 		{
 			id: "capitalEfficiency",

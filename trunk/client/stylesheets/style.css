@@ -846,9 +846,7 @@ table.search-criteria tr {
   height: 45px;
   font-size: 14px;
 }
-table.search-criteria tr:nth-child(2n+2) {
-  background-color: #f3f3f3;
-}
+
 table.search-criteria tr.criteria .dropdown {
   width: 347px;
 }
@@ -1033,6 +1031,17 @@ table.search-criteria .remove {
   font: bold 14px/12px Arial, Helvetica, sans-serif;
   text-align: center;
   cursor: pointer;
+  vertical-align: top;
+}
+
+.module-results th span {
+	display: block;
+}
+
+.module-results th span.fmt {
+	font-size: smaller;
+	font-weight: normal;
+	margin-top: 3px;
 }
 
 .module-results th.asc {
@@ -1375,22 +1384,21 @@ table.search-criteria .remove {
 .comparable-button {
   display: inline-block;
 }
+
 .breadcrumb-tree {
-  display: inline;
-  margin: 0 0 0 10px;
-  padding: 0;
+	margin: 0 0 10px 0;
 }
-.breadcrumb-tree li {
-  display: inline-block;
-  list-style: none;
-  font-size: 12px;
-  line-height: 25px;
-}
-.breadcrumb-tree li a, .breadcrumb-tree li span {
+
+.breadcrumb-tree a, .breadcrumb-tree span {
   text-decoration: none;
   color: #1e2171;
   font-weight: bold;
 }
+
+.breadcrumb-tree span {
+	color: #000;	
+}
+
 .print-button {
   background: url("../img/breadcrumb-printicon.jpg") no-repeat 0 -2px;
   display: inline-block;
@@ -1421,8 +1429,8 @@ table.search-criteria .remove {
   color: #565a5c;
 }
 
-.right.back {
-	margin-bottom: 10px;
+.back-company-profile {
+	float: right;
 }
 
 .data-point-container {
