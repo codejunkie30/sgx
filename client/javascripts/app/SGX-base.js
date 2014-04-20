@@ -298,59 +298,50 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
                 	var template = $("#criteria-templates [data-template='change']").clone(true);
 
-        			
-                	$(".checkbox", template).unbind("click");
-        			$(".checkbox", template).click(function(e) {
+            		// handle % change
+        			var html = $(".change-picker").html();
 
-            			e.preventDefault();
-            			e.stopPropagation();        				
+                    SGX.modal.open({
+                        content: html,
+                        type: 'prompt',
+                        maxWidth: 600,
+                        postLoad: function(options) {
+                        	SGX.dateranges.init($(".modal-container .date"));
+                        },
+                        cancel: function(options) {
+                        	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
+                        },
+                        confirm: function(options) {
+                        	
+                        	if (parseInt($(".modal-container input").val()) <= 0 || parseInt($(".modal-container input").val()) > 100) {
+                        		alert("Percent Change must be between 1 and 100");
+                        		return;
+                        	} 
+                        	
+                        	$(".editSearchB [data-name='" + distribution.field + "']").addClass("checked");
+                        	
+                        	distribution.label = distribution.shortName;
+                        	$(template).data(distribution);
+                        	$(".info", template).text(distribution.name);
 
-                		// handle % change
-            			var html = $(".change-picker").html();
-
-                        SGX.modal.open({
-                            content: html,
-                            type: 'prompt',
-                            maxWidth: 600,
-                            postLoad: function(options) {
-                            	SGX.dateranges.init($(".modal-container .date"));
-                            },
-                            cancel: function(options) {
-                            	$(".editSearchB [data-name='" + distribution.field + "']").removeClass("checked");
-                            },
-                            confirm: function(options) {
-                            	
-                            	if (parseInt($(".modal-container input").val()) <= 0 || parseInt($(".modal-container input").val()) > 100) {
-                            		alert("Percent Change must be between 1 and 100");
-                            		return;
-                            	} 
-                            	
-                            	$(".editSearchB [data-name='" + distribution.field + "']").addClass("checked");
-                            	
-                            	distribution.label = distribution.shortName;
-                            	$(template).data(distribution);
-                            	$(".info", template).text(distribution.name);
-
-                            	$(".percent-value", template).text($(".modal-container input").val());
-                            	
-                            	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .start").datepicker( "getDate" )));
-                            	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .start").datepicker( "getDate" )))
-                            	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .end").datepicker( "getDate" )));
-                            	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .end").datepicker( "getDate" )))
-                            	
-                            	$(".search-criteria tbody").append(template);
-                            	
-                            	SGX.tooltip.init(template);
-                            	
-                        		SGX.modal.close(); 
-                        		
-                    			SGX.screener.search.criteriaSearch();
-                        		
-                            }
-                            
-                        });            			
-        				
-        			});
+                        	$(".percent-value", template).text($(".modal-container input").val());
+                        	
+                        	$(".start-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .start").datepicker( "getDate" )));
+                        	$(".start-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .start").datepicker( "getDate" )))
+                        	$(".end-date", template).text($.datepicker.formatDate("dd/M/yy", $(".modal-container .end").datepicker( "getDate" )));
+                        	$(".end-date", template).attr("data-value", $.datepicker.formatDate("yy-mm-dd", $(".modal-container .end").datepicker( "getDate" )))
+                        	
+                        	$(".search-criteria tbody").append(template);
+                        	
+                        	SGX.tooltip.init(template);
+                        	
+                    		SGX.modal.close(); 
+                    		
+                			SGX.screener.search.criteriaSearch();
+                    		
+                        }
+                        
+                    });            			
                 	
                 	return template;
                 },
