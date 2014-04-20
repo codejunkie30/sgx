@@ -45,7 +45,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             getParentURL: function() {
             	if (SGX.parentURL != null) return SGX.parentURL;
             	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
-                	SGX.parentURL = document.location.hash.replace(/^#/, '');
+                	SGX.parentURL = unescape(document.location.hash.replace(/^#/, ''));
             	}
             	return SGX.parentURL;
             },
@@ -1021,11 +1021,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
             
             getTrueContentHeight: function() {
+            	/**
+            	console.log($("body:first,html:first").height());
 	            var curHeight = 0;
-        		$(".container_3:visible:last").each(function(idx) {
+        		$(".container_3:visible:last").each(function(idx, el) {
+        			console.log(el);
         			curHeight += ($(this).prop("scrollHeight")); 
         		});
-        		return curHeight + 50;
+        		return curHeight;
+        		*/
+            	return $("body:first,html:first").height();
             },
             
             genericAjaxSuccess: function(data) {
