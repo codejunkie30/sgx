@@ -45,7 +45,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             getParentURL: function() {
             	if (SGX.parentURL != null) return SGX.parentURL;
             	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
-                	SGX.parentURL = unescape(document.location.hash.replace(/^#/, ''));
+                	SGX.parentURL = decodeURIComponent(document.location.hash.replace(/^#/, ''));
             	}
             	return SGX.parentURL;
             },
