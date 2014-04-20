@@ -794,18 +794,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		$.each(data.companies, function(idx, company) {
                 			
                 			// for IE8 support need to clean up
-                			tbodyData += '<tr class="result" data-page="' + company.page + '"><td class="companyName" data-name="companyName" data-value="' + company.companyName.toLowerCase() + '">';
+                			tbodyData += '<tr class="result" data-page="' + company.page + '"><td class="companyName" data-name="companyName">';
                 			tbodyData += '<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>';
                 			tbodyData += "</td>";
                 			
                 			$.each(fields, function(fIdx, field) {
                 				var val = SGX.screener.search.getColumnValue(company, field);
                 				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
-                				if (field.sortType == "string") val = val.toLowerCase();
-                				else if (field.sortType == "number" && val == "-") val = "-9999999999";
                 				tbodyData += '<td class="' + field.field;
                 				if (!defaultDisplay.hasOwnProperty(field.field)) tbodyData += ' hidden';
-                				tbodyData += '" data-value="' + val + '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
+                				tbodyData += '" data-name="' +  field.field + '">' + (typeof formatted === "undefined" ? val : formatted) + '</td>';
                 			});
                 			
                 			tbodyData += '</tr>';
@@ -849,7 +847,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		
                     		var a1 = "asc" == direction ? a[sort] : b[sort];
                     		var b1 = "asc" == direction ? b[sort] : a[sort];
-                    		if ("number" == sortType) return b1-a1;
+                    		if ("number" == sortType) {
+                    			if (typeof b1 === "undefined") b1 = "-99999999999999";
+                    			if (typeof a1 === "undefined") a1 = "-99999999999999";
+                    			return b1-a1;
+                    		}
                     		
                     		return a1.localeCompare(b1);
                     		
