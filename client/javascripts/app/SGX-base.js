@@ -1337,7 +1337,64 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             	},
             	
+            	installCompanyHeader: function() {
+            		
+            		var companyHeader="";
+            		companyHeader += "<div class=\"row\">";
+            		companyHeader += "<div class=\"grid_3\">";
+            		companyHeader += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" class=\"company-header\">";
+            		companyHeader += "<tr>";
+            		companyHeader += "<td class=\"page-title\">";
+            		companyHeader += "<span class=\"property\" data-name=\"companyName\"><\/span> (<span class=\"property\" data-name=\"tickerCode\"><\/span>)";
+            		companyHeader += "<\/td>";
+            		companyHeader += "<td valign=\"bottom\">";
+            		companyHeader += "<span class=\"stock-price\">";
+            		companyHeader += "<div class=\"main\">";
+            		companyHeader += "S$ <span class=\"lastPrice formattable\" data-format=\"number\">--<\/span>";
+            		companyHeader += "&nbsp;";
+            		companyHeader += "<span class=\"change\">--<\/span>";
+            		companyHeader += "<\/div>";
+            		companyHeader += "<div class=\"last-updated\">Last Price:&nbsp;";
+            		companyHeader += "<span class=\"date\">&nbsp;";
+            		companyHeader += "<span class=\"day\">--<\/span>&nbsp;";
+            		companyHeader += "<span class=\"time\">--<\/span>";
+            		companyHeader += "<\/span>";
+            		companyHeader += "<\/div>";
+            		companyHeader += "<\/span>";
+            		companyHeader += "<\/td>";
+            		companyHeader += "<\/tr>";
+            		companyHeader += "<\/table>";
+            		companyHeader += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" class=\"company-header\">";
+            		companyHeader += "<tr>";
+            		companyHeader += "<td class=\"breadcrumb\">";
+            		companyHeader += "<span class=\"button back-button\"><a href=\"index.html\" class=\"screener-link\">Back to Stock Screener<\/a><\/span>";
+            		companyHeader += "<\/td>";
+            		companyHeader += "<td class=\"breadcrumb right\">";
+            		companyHeader += "<div class=\"print-button\">Print<\/div>";
+            		companyHeader += "<div class=\"button comparable-button\">Find comparable companies<\/div>";
+            		companyHeader += "<\/td>";
+            		companyHeader += "<\/tr>";
+            		companyHeader += "<\/table>";
+            		companyHeader += "<\/div>";
+            		companyHeader += "<\/div>";
+            		companyHeader += "<div class=\"row\">";
+            		companyHeader += "<div class=\"grid_3\">";
+            		companyHeader += "<span class=\"column\">";
+            		companyHeader += "<p class=\"breadcrumb-tree\">";
+            		companyHeader += "<span>Industry Tree:<\/span> <span class=\"dynamic\"><\/span>";
+            		companyHeader += "<\/p>";
+            		companyHeader += "<\/span>";
+            		companyHeader += "<a class=\"back-company-profile\" href=\"#\">&laquo; Back to Company Profile<\/a>";
+            		companyHeader += "<\/div>";
+            		companyHeader += "<\/div>";
+            		
+            		$(".container_3:first").prepend($(companyHeader));
+            		
+            	},
+            	
             	initSimple: function(data) {
+            		
+            		SGX.company.installCompanyHeader();
             		
             		// simple properties
             		$(".property").each(function(idx, el) {
@@ -1464,7 +1521,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			}
             			
             			$(this).click(function(el) {
-            				window.location = SGX.getAlphasPage(name, factors[name]);
+            				window.location = SGX.getAlphasPage(name, factors[name], "&code=" + data.company.companyInfo.tickerCode);
             			});
             			
             			$(".bar-progress", this).addClass("per-" + (factors[name]*20));
@@ -1700,8 +1757,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	},
             	
             	loadedCompany: function(data) {
-
+            		
             		SGX.company.initSimple(data);
+            		
+            		$(".back-company-profile").show();
             		
             		$(".financials-viewport tbody").each(function() { $("tr:even", this).addClass("even"); }); 
 
@@ -1811,7 +1870,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         				SGX.financials.initChart(el, seriesData);
         			}
         			else {
-
+        				
             			// otherwise need to manipulate a bit
             			var chart = $('#large-bar-chart').highcharts();
             			
@@ -1821,7 +1880,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     				    		text: $(".trigger", el).text()
     				    	},
     				    	opposite: !chart.yAxis[0].opposite,
-    				    	color: '#565b5c' == chart.yAxis[0].color ? '#1e2070' : '#565b5c',
         					labels: {
 	                            formatter: function() {
 	                            	if ($(".trigger", el).attr("data-format") == "cash") {
@@ -1838,6 +1896,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			chart.addSeries({
     	                    name: $(".trigger", el).text(),
     	                    data: seriesData,
+    				    	color: '#565b5c' == chart.series[0].color ? '#1e2070' : '#565b5c',
     	                    yAxis: name
             			});
 
@@ -1897,8 +1956,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		var chart = $('#large-bar-chart').highcharts({
             			
-            			colors: [ '#565b5c', '#1e2070' ], 
-            			
             			chart: {
             				type: 'column'
             			},
@@ -1932,6 +1989,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			    {
             			    	id: $(".trigger", el).attr("data-name"),
                                 name: $(".trigger", el).text(),
+            					color: '#565b5c',
                                 data: seriesData
                             }
                         ],
@@ -1960,6 +2018,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	loadedCompany: function(data) {
 
             		SGX.company.initSimple(data);
+            		
+            		$(".back-company-profile").show();
             		
             		var action = SGX.getParameterByName("action");
             		
@@ -2012,6 +2072,25 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             alphas: {
             	
             	init: function() {
+            		var code = SGX.getParameterByName("code");
+            		if (code != "") {
+            			SGX.company.getCompany(code, SGX.alphas.companyLoaded);
+            			return;
+            		}
+            		$(".no-company-row").show();
+            		SGX.alphas.loadAlphas();
+            	},
+            	
+            	companyLoaded: function(data) {
+            		
+            		$(".company-row").show();
+            		SGX.company.initSimple(data);
+            		$(".back-company-profile").show();            		
+            		SGX.alphas.loadAlphas();
+            		
+            	},
+            	
+            	loadAlphas: function() {
             		
             		var factor = SGX.getParameterByName("factor");
             		var quintile = parseInt(SGX.getParameterByName("quintile"));
