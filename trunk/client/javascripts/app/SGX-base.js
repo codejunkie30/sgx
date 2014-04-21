@@ -35,6 +35,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             pageHeight: $(document).height(),
             
+            trackPage: function(title) {
+            	window.document.title = title;
+            	_gaTracker('send', 'pageview', { 'title': title });
+            },
+            
             numberFormats: {
             	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
             	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
@@ -99,6 +104,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		screener: {
 
         		init: function() {
+        			
+        			SGX.trackPage("SGX - Screener");
         			
         			$(".editSearchB .checkbox").each(function(idx, el) {
         				
@@ -1268,12 +1275,21 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             init: function() {
             	
+            	// google analytics
+          	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          		  })(window,document,'script','//www.google-analytics.com/analytics.js','_gaTracker');
+          		  _gaTracker('create', 'UA-50238919-1', { 'cookieDomain': 'none' });
+            	
+          		// terms and conditions
             	$(".terms-conditions").click(function(e) { 
             		e.preventDefault();
             		e.stopPropagation();
             		SGX.showTerms();  
             	});
             	
+            	// the page
             	var page = location.pathname;
             	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
             	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
@@ -1314,6 +1330,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	},
             	
             	loaded: function(data) {
+            		
+        			SGX.trackPage("SGX Company Profile - " + data.company.companyInfo.companyName);
             		
             		SGX.company.initSimple(data);
 
@@ -1760,6 +1778,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	
             	loadedCompany: function(data) {
             		
+        			SGX.trackPage("SGX Company Profile - " + data.company.companyInfo.companyName);
+            		
             		SGX.company.initSimple(data);
             		
             		$(".back-company-profile").show();
@@ -2018,7 +2038,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	},
             	
             	loadedCompany: function(data) {
-
+            		
             		SGX.company.initSimple(data);
             		
             		$(".back-company-profile").show();
@@ -2033,21 +2053,26 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		// show the elements for the page
             		$("." + action).show();
 
+            		var pageTitle = "Related Companies";
+
             		// handle the search
-            		if (action == "related") SGX.related.handleRelated(data.company.companyInfo.tickerCode);
-            		else if (action == "industry") SGX.related.handleIndustry();
-            		
+            		if (action == "related") SGX.related.handleRelated(data.company.companyInfo.tickerCode, data);
+            		else if (action == "industry") SGX.related.handleIndustry(data);
+
             	},
             	
-            	handleRelated: function(ticker) {
+            	handleRelated: function(ticker, data) {
+        			SGX.trackPage("SGX Related Companies (Comparative) - " + data.company.companyInfo.companyName);
             		var endpoint = SGX.fqdn + "/sgx/company/relatedCompanies";
             		var params = { id: ticker };
             		$(".pager").hide();
             		SGX.handleAjaxRequest(endpoint, params, SGX.screener.search.renderResults);            		
             	},
             	
-            	handleIndustry: function() {
-            		
+            	handleIndustry: function(data) {
+
+        			SGX.trackPage("SGX Related Industries (Industry) - " + data.company.companyInfo.companyName);
+
             		var field = SGX.getParameterByName("field");
             		var value = SGX.getParameterByName("value");
             		
@@ -2079,12 +2104,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			SGX.company.getCompany(code, SGX.alphas.companyLoaded);
             			return;
             		}
+
+        			SGX.trackPage("SGX Alpha Factor Libraries");
             		$(".no-company-row").show();
             		SGX.alphas.loadAlphas();
             	},
             	
             	companyLoaded: function(data) {
-            		
+
+        			SGX.trackPage("SGX Alpha Factor Libraries (" + data.company.companyInfo.companyName + ")");
+
             		$(".company-row").show();
             		SGX.company.initSimple(data);
             		$(".back-company-profile").show();            		
