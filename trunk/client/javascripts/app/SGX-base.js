@@ -37,6 +37,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             numberFormats: {
             	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
+            	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+            	dollars: { header: "in S$", decimals: 3 },
             	percent: { header: "in %", decimals:2, format: "$VALUE%" },
             	number: { header: "", decimals: 3 },
             	number1: { decimals: 1 }
@@ -1233,7 +1235,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		var formatter = SGX.numberFormats.hasOwnProperty(fmt) ? SGX.numberFormats[fmt] : {};
             		
-            		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent") {
+            		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent" || fmt =="dollars" || fmt == "volume") {
 
             			// round
             			val = parseFloat(val).toFixed(formatter.decimals).replace(/(\.\d*[1-9])0+$/,'$1').replace(/\.0*$/,'');
