@@ -21,3 +21,13 @@ Array.prototype.remove= function(){
     }
     return this;
 }
+
+var getPropIE = function ( name ) {
+	 
+    return Math.max(
+        document.documentElement["client" + name],
+        document.documentElement["scroll" + name],
+        document.body["scroll" + name]
+    );
+
+}

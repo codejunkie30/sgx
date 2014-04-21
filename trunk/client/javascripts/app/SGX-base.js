@@ -1021,15 +1021,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
             
             getTrueContentHeight: function() {
-            	/**
-            	console.log($("body:first,html:first").height());
-	            var curHeight = 0;
-        		$(".container_3:visible:last").each(function(idx, el) {
-        			console.log(el);
-        			curHeight += ($(this).prop("scrollHeight")); 
-        		});
-        		return curHeight;
-        		*/
+            	alert(
+            				document.documentElement["clientHeight"] + ":" +
+            				document.documentElement["scrollHeight"]
+            			);
+            	
+            	if (document.isIE) return getPropIE('Height');
             	return $("body:first,html:first").height();
             },
             
