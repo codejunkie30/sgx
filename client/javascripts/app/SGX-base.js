@@ -1021,11 +1021,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
             
             getTrueContentHeight: function() {
-            	alert(
-            				document.documentElement["clientHeight"] + ":" +
-            				document.documentElement["scrollHeight"]
-            			);
-            	
             	if (document.isIE) return getPropIE('Height');
             	return $("body:first,html:first").height();
             },
