@@ -642,8 +642,9 @@ h1, h1.title {
 .module-info .col-2,
 .module-info .col-3 {
   display: inline-block;
-  width: 32%;
+  width: 30%;
   vertical-align: top;
+  padding-right: 10px;
 }
 .icon {
   margin: 0 10px 0 0;

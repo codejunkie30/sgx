@@ -1,13 +1,14 @@
 var D= new Date('2011-06-02T09:34:29+02:00');
 if(!D || +D!== 1307000069000){
     Date.fromISO= function(s){
-	  s = s.split(/\D/);
-	  return new Date(Date.UTC(s[0], --s[1]||'', s[2]||'', s[3]||'', s[4]||'', s[5]||'', s[6]||''))
+    	return fixIEDate(s);
     }
 }
 else{
     Date.fromISO= function(s){
-        return new Date(s);
+    	var ret = new Date(s);
+    	if (!isValidDate(ret)) ret = fixIEDate(s);
+        return ret;
     }
 }
 
@@ -30,4 +31,14 @@ var getPropIE = function ( name ) {
         document.body["scroll" + name]
     );
 
+}
+
+function fixIEDate(s) {
+	s = s.split(/\D/);
+	return new Date(Date.UTC(s[0], --s[1]||'', s[2]||'', s[3]||'', s[4]||''));
+}
+
+function isValidDate(d) {
+	if ( Object.prototype.toString.call(d) !== "[object Date]" ) return false;
+	return !isNaN(d.getTime());
 }

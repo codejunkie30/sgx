@@ -1381,7 +1381,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	},
             	
             	initPrice: function(data) {
-            		
             		var date = Date.fromISO(data.price.currentDate);
             		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
             		
