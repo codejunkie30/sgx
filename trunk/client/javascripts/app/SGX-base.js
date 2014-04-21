@@ -870,7 +870,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			$.each(fields, function(fIdx, field) {
                 				var val = SGX.screener.search.getColumnValue(company, field);
                 				var formatted = SGX.formatter.getFormatted(fmtCache[field.field], val);
-                				td = $("<td />").addClass(field.field).attr("data-name", field.field).text(typeof formatted === "undefined" ? val : formatted);
+                				td = $("<td />").addClass(field.field).attr("data-name", field.field).text(typeof formatted === "undefined" ? val : formatted.replace("%", ""));
                 				if (!defaultDisplay.hasOwnProperty(field.field)) $(td).addClass("hidden");
                 				$(td).appendTo(tr);
                 			});
@@ -1445,9 +1445,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	initAlphaFactors: function(data) {
             		
             		if (!data.hasOwnProperty("alphaFactors") || data.alphaFactors == null) {
-            			$(".alpha-factors").hide();
+            			$(".alpha-factors .no-factors").show();
             			return;
             		}
+            		
+        			$(".alpha-factors .has-factors").show();
             		
             		var factors = data.alphaFactors;
             		
@@ -1456,7 +1458,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			var name = $(this).attr("data-name");
             			
             			// no data
-            			if (!factors.hasOwnProperty(name)) {
+            			if (!factors.hasOwnProperty(name) || factors[name] == 0) {
             				$(this).hide();
             				return;
             			}
@@ -1501,6 +1503,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		// holders
             		if (data.hasOwnProperty("holders") && data.holders.hasOwnProperty("holders") && data.holders.holders.length > 0) {
             			
+            			data.holders.holders.sort(function(a, b) {
+            				return (a.shares - b.shares) > 0;
+            			});
+            			
             			$(".panel .owners tr:first").hide();
             			var percent = 0;
             			
@@ -1508,7 +1514,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				var tr = $("<tr />").prependTo(".panel .owners");
             				if (idx%2 == 0) $(tr).addClass("even");
             				$("<td />").text(owner.name).addClass("property").appendTo(tr);
-            				$("<td />").text(owner.shares).addClass("property").appendTo(tr);
+            				$("<td />").text(owner.shares).addClass("property formattable").attr("data-format", "number").appendTo(tr);
+            				$("<td />").text(owner.percent).addClass("property formattable").attr("data-format", "percent").appendTo(tr);
             				percent += owner.percent;
             			});
              			
@@ -1818,7 +1825,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         					labels: {
 	                            formatter: function() {
 	                            	if ($(".trigger", el).attr("data-format") == "cash") {
-	                            		return "S$" + this.value;
+	                            		return Highcharts.numberFormat(this.value);
 	                            	}
 	                            	else if ($(".trigger", el).attr("data-format") == "percent") {
 	                            		return this.value + "%";
@@ -1911,7 +1918,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             					labels: {
 		                            formatter: function() {
 		                            	if ($(".trigger", el).attr("data-format") == "cash") {
-		                            		return "S$" + this.value;
+		                            		return Highcharts.numberFormat(this.value);
 		                            	}
 		                            	else if ($(".trigger", el).attr("data-format") == "percent") {
 		                            		return this.value + "%";

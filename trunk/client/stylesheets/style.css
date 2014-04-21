@@ -555,7 +555,7 @@ h1, h1.title {
 	display: none;
 }
 
-.progress-estimate .no-estimate {
+.progress-estimate .no-estimate, .alpha-factors .no-factors {
 	padding: 20px;
 	font-size: larger;
 	font-weight: bold;
@@ -1650,7 +1650,7 @@ td .info {
 .modal-container h4 {
   font: bold 18px Arial, Helvetica, sans-serif;
   color: gray2;
-  margin: -5px 0 8px 0;
+  margin: 0 0 8px 0;
 }
 
 .modal-container h4 span {
@@ -1684,7 +1684,11 @@ td .info {
   width: 45%;
 }
 
-.alpha-factors {
+.alpha-factors .has-factors {
+	display: none;
+}
+
+.alpha-factors .no-factors {
 	display: none;
 }
 
