@@ -205,17 +205,20 @@
                                 <thead>
                                     <tr>
                                         <td width="50%">Top 5 owners by shares held</td>
-                                        <td width="50%">Number of shared held</td>
+                                        <td width="25%">Number of shares held</td>
+                                        <td width="25%">Percent of shares held</td>
                                     </tr>
                                 </thead>
                                 <tbody class="owners">
-                                	<tr>
-                                		<td>-</td>
-                                		<td>-</td>
-                                	</tr>
                                     <tr>
-                                        <td class="right">% of common stock</td>
-                                        <td class="property" data-name="percentCommonStock">-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                    	<td>&nbsp;</td>
+                                        <td class="right">Total % of common stock:</td>
+                                        <td class="property formattable" data-format="percent" data-name="percentCommonStock">-</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -300,104 +303,109 @@
                     <div class="title">
                         <div class="label label-small label-info">S&amp;P Capital IQ Alpha Factor Composites</div>
                     </div>
-                    <p class="left">Select a scale to display a list of companies with a matching composite.</p>
-                    <hr>
-                    <div class="slider" data-name="valuation">
-                        <div class="slider-label">
-                        	Valuation 
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
+                    <div class="no-factors">
+                    	No Data Available
                     </div>
-                    <div class="slider" data-name="analystExpectations">
-                        <div class="slider-label">
-                        	Analyst Expectations
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="capitalEfficiency">
-                        <div class="slider-label">
-                        	Capital Efficiency
-							<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="priceMomentum">
-                        <div class="slider-label">
-                        	Price Momentum
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="earningsQuality">
-                        <div class="slider-label">
-                        	Earnings Quality
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="volatility">
-                        <div class="slider-label">
-                        	Volatility
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">High</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">Low</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="size">
-                        <div class="slider-label">
-                        	Size
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Small</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">Large</div>
-                        </div>
-                    </div>
-                    <div class="slider" data-name="historicalGrowth">
-                        <div class="slider-label">
-                        	Growth
-                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
-                        </div>
-                        <div class="bar-container">
-                            <div class="slider-left-label">Low</div>
-                            <div class="bar-progress"></div>
-                            <div class="bar"></div>
-                            <div class="slider-right-label">High</div>
-                        </div>
-                    </div>
+                    <div class="has-factors">
+	                    <p class="left">Select a scale to display a list of companies with a matching composite.</p>
+	                    <hr>
+	                    <div class="slider" data-name="valuation">
+	                        <div class="slider-label">
+	                        	Valuation 
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="analystExpectations">
+	                        <div class="slider-label">
+	                        	Analyst Expectations
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="capitalEfficiency">
+	                        <div class="slider-label">
+	                        	Capital Efficiency
+								<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="priceMomentum">
+	                        <div class="slider-label">
+	                        	Price Momentum
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="earningsQuality">
+	                        <div class="slider-label">
+	                        	Earnings Quality
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="volatility">
+	                        <div class="slider-label">
+	                        	Volatility
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="size">
+	                        <div class="slider-label">
+	                        	Size
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Small</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Large</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="historicalGrowth">
+	                        <div class="slider-label">
+	                        	Growth
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Low</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">High</div>
+	                        </div>
+	                    </div>
+					</div>
                 </div>
             </div>
         </div>
