@@ -407,10 +407,7 @@ td .page-title {
 .module .title .label-small {
   font-size: 14px;
 }
-.module .title .label-info {
-  background: url("../img/info.jpg") no-repeat right center;
-  padding-right: 14px;
-}
+
 .module .title .button {
   float: right;
   color: #1E2171;

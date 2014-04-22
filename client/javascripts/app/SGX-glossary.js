@@ -111,6 +111,10 @@ var GLOSSARY =
 		{
 			id: "volatility",
 			definition: "Volatility is a measure of market price variability that is widely used as a measure of stock-specific risk. Indicators include one-year realized price volatility (long-term volatility) and one-month realized price volatility (short-term). Also considered are comparative statistics: five-year beta and the three-month coefficient of variation. "
+		},
+		{
+			id: "alphaFactors",
+			definition: "You can use the S&P Capital IQ Alpha Factor Composites to differentiate between companies. They show the company's ranking in eight categories that are likely to affect the stock's price."
 		}
 		
 ];
