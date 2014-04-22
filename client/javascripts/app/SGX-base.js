@@ -51,7 +51,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             getParentURL: function() {
             	if (SGX.parentURL != null) return SGX.parentURL;
-            	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
+             	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
                 	SGX.parentURL = decodeURIComponent(document.location.hash.replace(/^#/, ''));
             	}
             	return SGX.parentURL;
@@ -143,7 +143,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         			});
         			
         			$(".editSearchB .button-reset").click(function(e) {
-        				SGX.screener.criteriaChange.reset();
+        				SGX.screener.criteriaChange.reset(SGX.screener.search.criteriaSearch);
         			});
         			
         			$(".searchbar input").keypress(function(e) {
@@ -498,6 +498,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		SGX.screener.criteriaChange.uncheckCriteriaItem(target);
                         $(target).remove();
                         SGX.screener.search.criteriaSearch();
+                    	$(".search-criteria .criteria").removeClass("even");
+                    	$(".search-criteria .criteria:even").addClass("even");
                         if (typeof finished !== "undefined") finished();
                 	},
                 	
@@ -1074,16 +1076,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 open: function(selector) {
                 	$('.dropdown').closest(".button-dropdown").removeClass("open");
                 	$(selector).addClass("open");
+                	$("html").bind("click", SGX.dropdowns.close);
                 },
 
                 close: function(selector) {
+                	$("html").unbind("click", SGX.dropdowns.close);
                 	$('.dropdown').closest(".button-dropdown").removeClass("open");
                 },
                 
                 init: function(selector, finished) {
                 	
                 	$('.button-dropdown', selector).unbind("click");
+                	
                 	$('.button-dropdown', selector).click(function(e) {
+
+                    	e.preventDefault();
+                    	e.stopPropagation()
 
                 		var isOpen = $(this).hasClass("open");
 
@@ -1107,6 +1115,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	
                     	if ($("ul li", dd).first().text() != def && text != def) {
                     		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
+                            	e.preventDefault();
+                            	e.stopPropagation()
                     			$(dd).find(".copy").text($(e.target).text());
                     			$(e.target).remove();
                     			if (typeof finished !== "undefined") finished();
@@ -1120,7 +1130,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	dd.click();
                     	
                     });
-
+                    
                 }
             },
             
@@ -1923,21 +1933,28 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			});
 
         			}
-
-        			// legend formatting
-        			var chart = $('#large-bar-chart').highcharts();
         			
+        			// draw legend
+        			SGX.financials.drawLegend();
+
+                	// resize
+    	            var curHeight = SGX.getTrueContentHeight();
+    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+            		
+            	},
+            	
+            	drawLegend: function() {
+
+        			var chart = $('#large-bar-chart').highcharts();
+
         			$(".legend-note .item").hide();
+            		
         			$(".legend-note .item").each(function(idx, item) {
         				if (idx >= chart.series.length) return;
         				$(".color", this).css({ "background-color": chart.series[idx].color  });
         				$(".label", this).html(chart.series[idx].name + " <span class='parent'>[ " + $(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text() + " ]</span>");
         				$(this).show();
-        			})
-        			
-                	// resize
-    	            var curHeight = SGX.getTrueContentHeight();
-    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+        			});
             		
             	},
             	
@@ -1945,7 +1962,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		var name = $(".trigger", el).attr("data-name");
             		var chart = $('#large-bar-chart').highcharts();
-
+            		
             		$(el).removeClass("checked");
             		$(el).closest("tr").find(".unchart").text("");
 
@@ -1964,6 +1981,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             		// remove the series
             		chart.get(name).remove();
+
+        			// draw legend
+        			SGX.financials.drawLegend();
 
             		
             	},
