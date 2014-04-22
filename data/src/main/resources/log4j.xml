@@ -10,9 +10,18 @@
 		</layout>
 	</appender>
 
+	<appender name="file" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="/var/log/sgx/sgx-loader.log" />
+		<param name="MaxFileSize" value="1MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
+		</layout>
+	</appender>
+
 	<!-- Loggers -->
 	<logger name="org.springframework.integration">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="com.wmsi.sgx">
@@ -24,13 +33,14 @@
 	</logger>
 
 	<logger name="org.apache.http.wire">
-		<level value="info"/>
+		<level value="info" />
 	</logger>
-	
+
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
+		<appender-ref ref="file" />
 	</root>
 
 </log4j:configuration>

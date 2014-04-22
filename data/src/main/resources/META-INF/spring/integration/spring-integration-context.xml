@@ -12,7 +12,7 @@
 
 	<int:inbound-channel-adapter id="cronProducer" channel="indexRequestChannel"
 		expression="'cronTest'">
-		<int:poller cron="0 58 14 ? * MON-FRI" />
+		<int:poller cron="${loader.cron}" />
 		<int:header name="jobId" expression="T(java.lang.System).currentTimeMillis()"/>
     	<int:header name="jobDate" expression="new java.util.Date()"/>
 	</int:inbound-channel-adapter>
