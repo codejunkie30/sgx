@@ -462,10 +462,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     
                     slide: function(event, ui) {
                     	
-                    	// get the parent element
                     	var template = $(event.target).closest(".criteria");
+                    	var min = ui.values[0], max = ui.values[1];
                     	var distribution = $(template).data();
-                    	var matches = SGX.screener.getDistributionMatches(distribution, ui.values[0], ui.values[1]) + ' matches';
+                    	
+                    	$(".min", template).text(SGX.formatter.getFormatted($(".min", template).attr("data-format"), min));
+                    	$(".max", template).text(SGX.formatter.getFormatted($(".max", template).attr("data-format"), max));
+                    	
+                    	var matches = SGX.screener.getDistributionMatches(distribution, min, max) + ' matches';
                     	$(".matches", template).text(matches);
 
                     }
