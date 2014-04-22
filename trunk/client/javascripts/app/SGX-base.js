@@ -364,7 +364,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	$(".button-dropdown", template).attr("data-label", distribution.label);
                 	$(".info", template).text(distribution.shortName);
                 	$(".trigger .copy", template).text(distribution.label);
-                	
+
+                	// hack for industryGroup
+                	if (distribution.field == "industryGroup") {
+                		distribution.buckets.push({ "data-name": "industry", count: 0, key: "Real Estate Investment Trusts (REITs)" });
+                	}
+
                 	distribution.buckets.sort(function(a, b) {
                 		var a = a.key, b = b.key;
                     	if (a < b) return -1;
@@ -373,7 +378,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	});
                 	
                 	$.each(distribution.buckets, function(idx, bucket) {
-                		$(dd).append($("<li />").text(bucket.key));
+                		var li = $("<li />").text(bucket.key).appendTo(dd);
+                		if (bucket.hasOwnProperty("data-name")) li.attr("data-name", bucket["data-name"]);
                 	});
                 	
                 	$(".search-criteria tbody").append(template);
@@ -630,6 +636,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 				var dd = $(".button-dropdown", this);
                 				var copy = $(".trigger .copy", dd).text();
                 				if (dd.attr("data-label") == copy) return;
+                				param.field = $(".trigger .copy", dd).attr("data-name");
                 				param.value = copy;
                 			}
                 			// percent change
@@ -1116,6 +1123,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	var dd = $(this).closest(".button-dropdown");
                     	var def = typeof $(dd).attr("data-label") !== "undefined" ? $(dd).attr("data-label") : "";
                     	var text = $(this).text();
+                    	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name"); 
                     	
                     	if ($("ul li", dd).first().text() != def && text != def) {
                     		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
@@ -1127,7 +1135,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		});
                     	}
                     	
-                    	$(dd).find(".copy").text(text);
+                    	$(".copy", dd).text(text).attr("data-name", dataName);
                     	
                     	if (typeof finished !== "undefined") finished();
                     	
@@ -1719,14 +1727,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             	type: 'column',
             		        	yAxis: 1
                             },
-                            
                             {
                             	type: 'flags',
                                 data: newsData,
-                                onSeries: 'priceData',
-                                shape: 'circlepin',
-                                y: -24,
-                                width: 16,
                                 style: { 
                                 	color: 'black',
                                 	cursor: 'pointer'
@@ -1736,7 +1739,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                                 		$(".stock-events [data-name='" + e.point.id + "']").click();
                                 	},
                                 },
-
+                                onSeries: 'priceData',
+                                shape: 'circlepin',
+                                stackDistance: 60,
+                                width: 16,
+                                y: -26
                             }
 
                                  
