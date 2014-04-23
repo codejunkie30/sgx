@@ -115,6 +115,62 @@ var GLOSSARY =
 		{
 			id: "alphaFactors",
 			definition: "You can use the S&P Capital IQ Alpha Factor Composites to differentiate between companies. They show the company's ranking in eight categories that are likely to affect the stock's price."
+		},
+		{
+			id: "roa",
+			definition: "Return on Assets is a measure of company profitability relative to total assets. It is calculated by dividing tax-effective EBIT (Earnings before Interest and Tax) by Average Total Assets over a 12-months period."
+		},
+		{
+			id: "roc",
+			definition: "Return on Capital is a measure of company profitability relative to total capitals. It is calculated by dividing tax-effective EBIT (Earnings before Interest and Tax) by Average Total Capital over a 12-months period."
+		},
+		{
+			id: "roe",
+			definition: "Return on Equity is a measure of company profitability relative to its total equity. It is calculated by dividing tax-effective EBIT (Earnings before Interest and tax) by Average Total Equity over a 12-months period."
+		},
+		{
+			id: "grossMargin",
+			definition: "Gross Margin is difference between Revenue and COGS (Cost of Goods Sold)."
+		},
+		{
+			id: "ebitdaMarginFinancial",
+			definition: "EBITDA Margin is a difference between Revenue and EBITDA (Earnings Before Interest, Taxes, Depreciation, and Amortization)."
+		},
+		{
+			id: "netIncomeMargin",
+			definition: "Net Income Margin is the difference between Revenue and all expenses."
+		},
+		{
+			id: "totalAssetTurnover",
+			definition: "Total Asset Turnover is the ratio between Total Revenue and Average Total Assets over a 12-months period"
+		},
+		{
+			id: "currentRatio",
+			definition: "Current Ratio measures a company’s ability to cover current debt with current assets. It is calculated by dividing Total Current Assets by Total Current Liabilities"
+		},
+		{
+			id: "quickRatio",
+			definition: "Quick Ratio measures a company’s ability to cover current debt with liquid current assets. It is calculated by dividing the sum of Cash, Short Term Investments, and Accounts Receivable by Total Current Liabilities."
+		},
+		{
+			id: "avgDaysInventory",
+			definition: "Average Days Inventory is a measure of estimated days to sell inventory. It is calculated by dividing Average Inventory by Cost of Goods Sold over a 12-month period, then multiplying by number of days in the period."
+		},
+		{
+			id: "avgDaysPayable",
+			definition: "Average Days Payable is a measure of estimated days to pay Accounts Payable. It is calculated by dividing Average Accounts Payable by Cost of Goods Sold minus Change in Inventory over a 12-month period, then multiplying by number of days in the period."
+		},
+		{
+			id: "avgCashConversion",
+			definition: "Average Cash Conversion a measure of estimated days to convert activities into cash flow. It is calculated by adding Avg Days Inventory and Avg Days Receivables, then subtracting Avg Days Payable."
+		},
+		{
+			id: "totalDebtEquityFinancial",
+			definition: "Total Debt/Equity is a measure of financial leverage to determine the amount of Debt used to finance operations."
+		},
+		{
+			id: "ebitdaIntExp",
+			definition: "Total EBITDA/Int Exp is a measure of a company’s ability to produce Earnings Before Interest, Taxes, Depreciation, and Amortization to cover its Interest Expense."
 		}
 		
 ];
