@@ -144,7 +144,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(StringUtils.isEmpty(currency))
 			currency = "SGD";
 		
-		System.out.println("Curr " + companyInfo.getFilingCurrency());
 		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker, currency);
 
 		for(CompanyFinancial c : cfs){
