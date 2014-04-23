@@ -50,7 +50,7 @@ var GLOSSARY =
 		},
 		{
 			id: "totalRev1YrAnnGrowth",
-			definition: "1-Year Revenue Growth is the percentage change in the amount of revenue earned in the most recent fiscal year compared with the amount earned in the fiscal year before that.  "
+			definition: "1-Year Revenue Growth is the percentage change in the amount of revenue earned in the most recent fiscal year compared with the amount earned in the fiscal year before that."
 		},
 		{
 			id: "totalRev3YrAnnGrowth",
@@ -146,11 +146,11 @@ var GLOSSARY =
 		},
 		{
 			id: "currentRatio",
-			definition: "Current Ratio measures a company’s ability to cover current debt with current assets. It is calculated by dividing Total Current Assets by Total Current Liabilities"
+			definition: "Current Ratio measures a company's ability to cover current debt with current assets. It is calculated by dividing Total Current Assets by Total Current Liabilities"
 		},
 		{
 			id: "quickRatio",
-			definition: "Quick Ratio measures a company’s ability to cover current debt with liquid current assets. It is calculated by dividing the sum of Cash, Short Term Investments, and Accounts Receivable by Total Current Liabilities."
+			definition: "Quick Ratio measures a company's ability to cover current debt with liquid current assets. It is calculated by dividing the sum of Cash, Short Term Investments, and Accounts Receivable by Total Current Liabilities."
 		},
 		{
 			id: "avgDaysInventory",
@@ -170,7 +170,7 @@ var GLOSSARY =
 		},
 		{
 			id: "ebitdaIntExp",
-			definition: "Total EBITDA/Int Exp is a measure of a company’s ability to produce Earnings Before Interest, Taxes, Depreciation, and Amortization to cover its Interest Expense."
+			definition: "Total EBITDA/Int Exp is a measure of a company's ability to produce Earnings Before Interest, Taxes, Depreciation, and Amortization to cover its Interest Expense."
 		}
 		
 ];
