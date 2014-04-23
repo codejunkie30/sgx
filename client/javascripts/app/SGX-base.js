@@ -1834,7 +1834,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		$(".financials-viewport thead").each(function() {
             			
             			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
-            				$(this).text(financials[idx].absPeriod);
+            				$(this).html(financials[idx].absPeriod + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
             				$(".currency").text(financials[idx].filingCurrency);
             			});
             			
