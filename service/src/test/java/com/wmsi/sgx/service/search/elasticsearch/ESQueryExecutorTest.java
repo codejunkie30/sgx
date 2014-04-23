@@ -4,6 +4,7 @@ import static org.testng.Assert.*;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,6 +30,10 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 	
 	@Autowired
 	ESQueryExecutor esExecutor;
+	
+	@Value("${elasticsearch.index.name}")
+	private String indexName;
+
 
 	@Test(groups={"functional", "integration"})
 	public void testSearch() throws ElasticSearchException {
@@ -41,7 +46,7 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 	@Test(groups={"functional", "integration"})
 	public void testGet() throws ElasticSearchException {
 		SourceQuery query = new SourceQuery("A7S");
-		query.setIndex("sgx_test");
+		query.setIndex(indexName);
 		query.setType("company");
 		
 		Company response = esExecutor.executeGet(query, Company.class);

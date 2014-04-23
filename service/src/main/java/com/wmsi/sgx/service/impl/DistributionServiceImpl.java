@@ -87,8 +87,8 @@ public class DistributionServiceImpl implements DistributionService{
 		
 		try{			
 			// TODO Externalize 'company'
-			ESResponse stats = elasticSearchService.search(indexName, "company", query, new HashMap<String, Object>());
-			return stats.getAggregations();
+			ESResponse res = elasticSearchService.search(indexName, "company", query, new HashMap<String, Object>());
+			return res.getAggregations();
 		}
 		catch(ElasticSearchException e){
 			throw new ServiceException("Error loading stats aggregation", e);
