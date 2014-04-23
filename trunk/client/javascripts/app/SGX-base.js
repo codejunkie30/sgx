@@ -1869,6 +1869,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             		});
 
+        			SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
             		
             	},
