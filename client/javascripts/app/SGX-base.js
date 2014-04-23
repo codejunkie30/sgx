@@ -1741,7 +1741,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                                 },
                                 onSeries: 'priceData',
                                 shape: 'circlepin',
-                                stackDistance: 60,
                                 width: 16,
                                 y: -26
                             }
