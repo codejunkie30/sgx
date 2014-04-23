@@ -21,87 +21,98 @@ import com.wmsi.sgx.util.Util;
 public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, StatAggregation>>{
 
 	private static final int MAX_RESULTS = 2000;
-	
+
 	private List<String> fields;
-	
+
 	public DistributionsQueryBuilder(List<DistributionRequestField> f){
-	
+
 		fields = new ArrayList<String>();
-		
+
 		for(DistributionRequestField req : f){
 			fields.add(req.getField());
-		}	
+		}
 	}
 
 	@Override
 	public SearchSourceBuilder getBuilder(Map<String, StatAggregation> ranges) {
-		
+
 		SearchSourceBuilder query = new SearchSourceBuilder()
-			.query(QueryBuilders.constantScoreQuery(
-					FilterBuilders.matchAllFilter()))
-			.fetchSource(false)
-			.size(MAX_RESULTS);
-		
+				.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter())).fetchSource(false)
+				.size(MAX_RESULTS);
+
 		for(String field : fields){
-			
+
 			// TODO Disallow tickerCode
 			if(!Util.isNumberField(SearchCompany.class, field)){
-				query.aggregation(
-					AggregationBuilders.terms(field)
-					.field(field)
-					.size(2000)
-				);
+				query.aggregation(AggregationBuilders.terms(field).field(field).size(2000));
 			}
 			else if(ranges != null && ranges.size() > 0){
-				StatAggregation a = ranges.get(field);
-				double interval = calculateInterval(a);
+				StatAggregation stat = ranges.get(field);
 				
-				if(interval > 0){
-					RangeBuilder range = AggregationBuilders
-						.range(field)
-						.field(field);
-				
-					for(double i = a.getMin(); i < a.getMax(); ){
-						double to = i + interval;
-						range.addRange(i, to);					
-						i = to;
-					}
-					
-					query.aggregation(getAggregationFilter(range, field));
+				AggregationBuilder<?> range = buildRangeAggregation(field, stat);
+
+				if(range != null){
+					query.aggregation(range);
 				}
 			}
-		}	
+		}
 
 		return query;
 	}
-	
-	private AggregationBuilder<?> getAggregationFilter(AggregationBuilder<?> agg, String field){
+
+	private AggregationBuilder<?> buildRangeAggregation(String field, StatAggregation stat) {
+		
+		double interval = calculateInterval(stat);
+		double min = stat.getMin();
+		double max = stat.getMax();
+
+		if(interval <= 0)
+			return null;
+		
+		RangeBuilder range = AggregationBuilders.range(field).field(field);
+
+		for(double i = min; i < max;){
+			
+			double to = i + interval;
+			
+			if(to > max){			
+				// Hack to return make 'to' inclusive for last range so max value is returned
+				// Elasticsearch is as of version 1.1 sorely missing a way to do this with aggregations
+				// other using unbounded 'from' which won't return the max value in the results.
+				to = max + 0.000000001;
+			}
+			
+			range.addRange(i, to);
+			
+			i = to;
+		}
+
+		return getAggregationFilter(range, field);
+
+	}
+
+	private AggregationBuilder<?> getAggregationFilter(AggregationBuilder<?> agg, String field) {
 
 		AggregationBuilder<?> builder = agg;
-		
+
 		if(field.equals("avgBrokerReq")){
-			FilterBuilder filter = FilterBuilders
-				.rangeFilter("targetPriceNum")
-				.from(3);
-			
-			builder = AggregationBuilders
-				.filter(field)
-				.filter(filter)
-				.subAggregation(agg);
+			FilterBuilder filter = FilterBuilders.rangeFilter("targetPriceNum").from(3);
+
+			builder = AggregationBuilders.filter(field).filter(filter).subAggregation(agg);
 		}
-		
+
 		return builder;
 	}
-	
-	private Double calculateInterval(StatAggregation stat){
+
+	private Double calculateInterval(StatAggregation stat) {
 		double total = stat.getMax() - stat.getMin();
 		double sqrt = Math.sqrt(stat.getCount());
-		
+
 		double ret = 0.0;
-		
-		if(total != 0)			
+
+		if(total != 0)
 			ret = new BigDecimal(total / sqrt).doubleValue();
-		
+
 		return ret;
 	}
 }

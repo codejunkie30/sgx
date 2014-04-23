@@ -10,7 +10,6 @@ import org.hamcrest.Matchers;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,7 +31,7 @@ import com.wmsi.sgx.model.search.SearchCompanyBuilder;
 import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchRequestBuilder;
 import com.wmsi.sgx.model.search.SearchResultsBuilder;
-import com.wmsi.sgx.service.impl.CompanySearchServiceImpl;
+import com.wmsi.sgx.service.CompanySearchService;
 import com.wmsi.sgx.test.TestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,7 +42,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	private MockMvc mockMvc;
 	
 	@Autowired
-	private CompanySearchServiceImpl companySearchService;
+	private CompanySearchService companySearchService;
 
 	@Test	
 	public void testGetNotAllowed() throws Exception{		
@@ -146,20 +145,21 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	}
 
 	@Configuration
-	@ComponentScan(basePackageClasses = {SearchController.class})
 	static class SearchControllerTestConfig{
 
-		@Autowired
-		SearchController searchController;
-
 		@Bean
-		public CompanySearchServiceImpl companySearchService(){
-			return mock(CompanySearchServiceImpl.class);
+		public SearchController searchController(){
+			return new SearchController();
 		}
-
+		
+		@Bean
+		public CompanySearchService companySearchService(){
+			return mock(CompanySearchService.class);
+		}		
+ 
 		@Bean
 		public MockMvc mockMvc(){			
-			return MockMvcBuilders.standaloneSetup(searchController).build();
+			return MockMvcBuilders.standaloneSetup(searchController()).build();
 		}
 	}
 

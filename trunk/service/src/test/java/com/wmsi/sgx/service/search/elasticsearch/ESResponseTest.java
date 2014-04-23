@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("rawtypes")
 public class ESResponseTest{
 
 	ObjectMapper mapper = new ObjectMapper();
@@ -56,6 +57,7 @@ public class ESResponseTest{
 		assertEquals(hits.size(), 0);		
 	}
 
+	
 	@Test
 	public void testHits() throws ElasticSearchException, JsonProcessingException, IOException{
 		ESResponse response = new ESResponse();
