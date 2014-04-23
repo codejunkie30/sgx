@@ -124,10 +124,10 @@ public class HttpConfig{
 	public DefaultFtpSessionFactory ftpSessionFactory(){
 		DefaultFtpSessionFactory factory = new DefaultFtpSessionFactory();
 		factory.setClientMode(2);
-		factory.setHost("ftp.capitaliq.com");
-		factory.setPort(21);
-		factory.setUsername("SGX");
-		factory.setPassword("5t9PWjYS");		
+		factory.setHost(capIQEnv.getProperty("capiq.ftp.url"));
+		factory.setPort(new Integer(capIQEnv.getProperty("capiq.ftp.port")));
+		factory.setUsername(capIQEnv.getProperty("capiq.ftp.user"));
+		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;
 	}
 }

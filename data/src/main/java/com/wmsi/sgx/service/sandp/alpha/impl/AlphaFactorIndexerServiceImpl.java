@@ -55,9 +55,9 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			Collections.sort(names);
 			String fileName = names.get(names.size() - 1);
 			
-			if(tmpDir == null){				
+			//if(tmpDir == null){				
 				tmpDir = System.getProperty("java.io.tmpDir");
-			}
+			//}
 			
 			// Transfer
 			File ret = new File(tmpDir + fileName);
