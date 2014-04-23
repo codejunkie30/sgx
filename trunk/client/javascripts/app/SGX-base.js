@@ -744,10 +744,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			industries.push(val);
                 		});
                 		industries.sort(function(a, b) { return a.localeCompare(b); });
-                    	$.each(industries, function(idx, val) { $("<li />").text(val).appendTo(".module-results .button-dropdown ul");  });
-                		
-                		
+                		$(".module-results .button-dropdown ul li").remove();
+                		if ($(".module-results .button-dropdown .copy").text() != $(".module-results .button-dropdown").attr("data-label")) {
+                    		$("<li />").text($(".module-results .button-dropdown").attr("data-label")).appendTo(".module-results .button-dropdown ul"); 
+                		}
+                		$.each(industries, function(idx, val) { $("<li />").text(val).appendTo(".module-results .button-dropdown ul");  });
             			SGX.dropdowns.init(".module-results", SGX.screener.search.addtlCritSearch);
+
+            			// display the rows
                 		SGX.screener.search.displayRows(1, sort, direction);
                 		
                 		return;
@@ -1698,6 +1702,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 	            		        labels: {
 		                            formatter: function() {
 		                                return "S$ " + Highcharts.numberFormat(this.value, 2);
+		                            },
+		                            style: {
+		                            	color: "#000000",
+		                            	fontWeight: "bold"
 		                            }
 	            		        }
                             },
@@ -1711,6 +1719,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 	            		        labels: {
 		                            formatter: function() {
 		                                return Highcharts.numberFormat(this.value, 2) + " mm";
+		                            },
+		                            style: {
+		                            	color: "#000000",
+		                            	fontWeight: "bold"
 		                            }
 	            		        }
                             }
