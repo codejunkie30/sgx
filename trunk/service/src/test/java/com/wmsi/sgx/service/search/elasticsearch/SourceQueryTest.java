@@ -4,6 +4,8 @@ import static org.testng.Assert.*;
 
 import org.testng.annotations.Test;
 
+import com.wmsi.sgx.service.search.elasticsearch.impl.SourceQuery;
+
 public class SourceQueryTest{
 
 	@Test
@@ -24,14 +26,14 @@ public class SourceQueryTest{
 
 	@Test(expectedExceptions={ElasticSearchException.class})
 	public void testMissingType() throws ElasticSearchException{
-		ESQuery query = new SourceQuery("223");
+		AbstractQuery query = new SourceQuery("223");
 		query.setIndex("testIndex");
 		query.getURI();
 	}
 
 	@Test(expectedExceptions={ElasticSearchException.class})
 	public void testMissingIndex() throws ElasticSearchException{
-		ESQuery query = new SourceQuery();
+		AbstractQuery query = new SourceQuery();
 		query.setIndex("mine");
 		query.setType("testIndex");
 		query.getURI();
@@ -39,7 +41,7 @@ public class SourceQueryTest{
 
 	@Test(expectedExceptions={ElasticSearchException.class})
 	public void testMissingId() throws ElasticSearchException{
-		ESQuery query = new SourceQuery();
+		AbstractQuery query = new SourceQuery();
 		query.setIndex("testIndex");
 		query.setIndex("mine");
 		query.getURI();

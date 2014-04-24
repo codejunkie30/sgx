@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class ESQuery{
+public abstract class AbstractQuery implements Query{
 
 	public enum EndPoint {
 		SEARCH, SOURCE;
@@ -26,13 +26,14 @@ public abstract class ESQuery{
 	public String getType(){return type;}
 	public void setType(String t){type = t;}
 
-	private String queryTemplate;
-	public String getQueryTemplate(){return queryTemplate;}
-	public void setQueryTemplate(String q){queryTemplate = q;}
+	private String query;
+	public String getQuery(){return query;}
+	public void setQuery(String q){query = q;}
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 
+	@Override
 	public URI getURI() throws ElasticSearchException{
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 		
@@ -49,11 +50,12 @@ public abstract class ESQuery{
 		return builder.build().toUri();		
 	}
 	
+	@Override
 	public JsonNode toJson() throws ElasticSearchException{
 		JsonNode node = null;
 		
 		try{
-			node = objectMapper.readTree(queryTemplate);
+			node = objectMapper.readTree(query);
 		}
 		catch(IOException e){
 			throw new ElasticSearchException("Error parsing string to json", e);

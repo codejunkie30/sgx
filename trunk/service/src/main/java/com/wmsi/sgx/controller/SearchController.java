@@ -13,7 +13,6 @@ import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.CompanySearchService;
 import com.wmsi.sgx.service.ServiceException;
-import com.wmsi.sgx.service.search.SearchServiceException;
 
 @RestController()
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
@@ -28,7 +27,7 @@ public class SearchController{
 	}	
 	
 	@RequestMapping("search/name")
-	public SearchResults searchCompaniesByName(@Valid @RequestBody CompanySearchRequest req) throws SearchServiceException{		
+	public SearchResults searchCompaniesByName(@Valid @RequestBody CompanySearchRequest req) throws ServiceException{		
 		return companySearchService.searchCompaniesByName(req);
 	}
 

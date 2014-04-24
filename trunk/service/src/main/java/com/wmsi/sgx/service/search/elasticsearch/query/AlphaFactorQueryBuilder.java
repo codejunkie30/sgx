@@ -9,16 +9,24 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.wmsi.sgx.model.AlphaFactor;
 
-public class AlphaFactorQueryBuilder extends AbstractQueryBuilder<List<AlphaFactor>>{
+public class AlphaFactorQueryBuilder extends AbstractQueryBuilder{
 	
 	private static final int MAX_RESULTS = 2000;
+	private List<AlphaFactor> alphas;
 	
-	public SearchSourceBuilder getBuilder(List<AlphaFactor> alphas){
+	public AlphaFactorQueryBuilder(List<AlphaFactor> alphas){
+		this.alphas = alphas;
+	}
+	
+	@Override
+	public String build(){
 		
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(
 					FilterBuilders.termsFilter("gvKey", getGVKeys(alphas))))
-			.size(MAX_RESULTS);
+			.size(MAX_RESULTS)
+			.toString();
+		
 	}
 	
 	private List<String> getGVKeys(List<AlphaFactor> alphas){

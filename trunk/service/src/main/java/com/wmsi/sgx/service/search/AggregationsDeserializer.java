@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service.search.elasticsearch;
+package com.wmsi.sgx.service.search;
 
 import java.io.IOException;
 import java.util.ArrayList;

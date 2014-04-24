@@ -15,20 +15,25 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
+import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
 
 	@Autowired
-	private SearchService<Company> companySearchService;
+	private SearchService companySearch;
 
 	@Override
 	@Cacheable(value = "company")
 	public Company getById(String id) throws CompanyServiceException {
 		try{
-			return companySearchService.getById(id, Company.class);
+			return companySearch.getById(id, Company.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load company by id", e);
@@ -36,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<String> keyDevsSearch;
+	private SearchService keyDevsSearch;
 	
 	@Override
 	@Cacheable(value = "keyDevs")
@@ -50,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<String> holdersSearch;
+	private SearchService holdersSearch;
 
 	@Override
 	@Cacheable(value = "holders")
@@ -64,13 +69,13 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<String> financialSearch;
+	private SearchService financialSearch;
 	
 	@Override
 	@Cacheable(value = "financials")
 	public List<Financial> loadFinancials(String id) throws CompanyServiceException {
 		try{
-			return financialSearch.search(id, Financial.class);
+			return financialSearch.search(new FinancialsQueryBuilder(id), Financial.class).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading financials", e);
@@ -78,13 +83,14 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 	
 	@Autowired
-	private SearchService<String> priceHistorySearch;
+	private SearchService priceHistorySearch;
 
 	@Override
 	@Cacheable(value = "priceHistory")
 	public List<HistoricalValue> loadPriceHistory(String id) throws CompanyServiceException {
 		try{
-			return priceHistorySearch.search(id, HistoricalValue.class);
+			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
+			return priceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading price history", e);
@@ -92,13 +98,14 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<String> volumeHistorySearch;
+	private SearchService volumeHistorySearch;
 
 	@Override
 	@Cacheable(value = "volumeHistory")
 	public List<HistoricalValue> loadVolumeHistory(String id) throws CompanyServiceException {
 		try{
-			return volumeHistorySearch.search(id, HistoricalValue.class);
+			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
+			return volumeHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading volume history", e);
@@ -106,7 +113,7 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Autowired
-	private SearchService<String> alphaFactorIdSearch;
+	private SearchService alphaFactorSearch;
 	
 	@Override
 	@Cacheable(value = "alphaFactor")
@@ -121,18 +128,17 @@ public class CompanyServiceImpl implements CompanyService{
 			gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
 
 			try{
-				hits = alphaFactorIdSearch.search(gvKey, AlphaFactor.class);
+				AlphaFactorIdQueryBuilder query = new AlphaFactorIdQueryBuilder(gvKey);				
+				SearchResult<AlphaFactor> results = alphaFactorSearch.search(query, AlphaFactor.class);
+				hits = results.getHits();
 			}
 			catch(SearchServiceException e){
-				throw new CompanyServiceException("Exception alpha factors for company", e);
+				throw new CompanyServiceException("Exception loading alpha factors", e);
 			}
 		}
 
 		return hits != null && hits.size() > 0 ? hits.get(0) : null;
 	}
-
-	@Autowired
-	private SearchService<Company> relatedCompaniesSearch;
 
 	@Override
 	@Cacheable(value = "relatedCompanies")
@@ -140,7 +146,8 @@ public class CompanyServiceImpl implements CompanyService{
 
 		try{
 			Company company = getById(id);
-			return relatedCompaniesSearch.search(company, Company.class);
+			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company);
+			return companySearch.search(query, Company.class).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load related companies", e);

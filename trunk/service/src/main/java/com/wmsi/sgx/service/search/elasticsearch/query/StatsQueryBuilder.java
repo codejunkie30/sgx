@@ -1,13 +1,11 @@
 package com.wmsi.sgx.service.search.elasticsearch.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
@@ -15,12 +13,16 @@ import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.util.Util;
 
-public class StatsQueryBuilder extends AbstractQueryBuilder<List<DistributionRequestField>>{
-
-	private static final int MAX_RESULTS = 2000;
+public class StatsQueryBuilder extends AbstractQueryBuilder{
 	
+	private List<DistributionRequestField> fields;
+	
+	public StatsQueryBuilder(List<DistributionRequestField> f){
+		fields = f;
+	}
+
 	@Override
-	public SearchSourceBuilder getBuilder(List<DistributionRequestField> fields) {
+	public String build() {
 		
 		SearchSourceBuilder query = new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(
@@ -42,7 +44,7 @@ public class StatsQueryBuilder extends AbstractQueryBuilder<List<DistributionReq
 			}
 		}
 
-		return query;
+		return query.toString();
 	}
 	
 
@@ -63,5 +65,6 @@ public class StatsQueryBuilder extends AbstractQueryBuilder<List<DistributionReq
 		
 		return builder;
 	}
+
 	
 }

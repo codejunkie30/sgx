@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.wmsi.sgx.model.search.Criteria;
 
-public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
+public class CompanyQueryBuilder extends AbstractQueryBuilder{
 
 	private static final Logger log = LoggerFactory.getLogger(CompanyQueryBuilder.class);
 	
@@ -31,15 +31,19 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 	private static final String SCRIPT_FIELD =
 			SCRIPT_SELECT_FRAGMENT +
 			"return prices.size() > 0 ? (prices[prices.size()-1] - prices[0]) * 100";
+
+	private List<Criteria> criteria;	
 	
-	private static final int MAX_RESULTS = 2000;
+	public CompanyQueryBuilder (List<Criteria> criteria) {
+		this.criteria = criteria;		
+	}
 	
 	@Override
-	public SearchSourceBuilder getBuilder(List<Criteria> criteria) {
+	public String build(){
 
 		// Match all if no criteria
 		if(criteria == null || criteria.size() <= 0)
-			return new SearchSourceBuilder().query(QueryBuilders.matchAllQuery()).size(MAX_RESULTS);
+			return new SearchSourceBuilder().query(QueryBuilders.matchAllQuery()).size(MAX_RESULTS).toString();
 		
 		BoolFilterBuilder boolFilter = FilterBuilders.boolFilter();		
 		SearchSourceBuilder builder = new SearchSourceBuilder()
@@ -76,7 +80,7 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder<List<Criteria>>{
 			boolFilter.must(filter);
 		}
 		
-		return builder;
+		return builder.toString();
 	}
 	
 	private FilterBuilder buildRangeFilter(Criteria c){

@@ -6,12 +6,16 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.wmsi.sgx.model.Company;
 
-public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<Company>{
+public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 	
-	private static final int MAX_RESULTS = 2000;
+	private Company company;
+
+	public RelatedCompaniesQueryBuilder(Company company) {
+		this.company = company;
+	}
 	
 	@Override
-	public SearchSourceBuilder getBuilder(Company company) {
+	public String build(){
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.boolQuery()
 					.mustNot(QueryBuilders.termQuery("tickerCode", company.getTickerCode()))
@@ -23,7 +27,8 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder<Company>{
 					.addParam("fv",  company.getMarketCap())
 					.addParam("pct", 0.2)
 					)
-			.size(MAX_RESULTS);
+			.size(MAX_RESULTS)
+			.toString();
 	}
 	
 	private static final String SCRIPT =

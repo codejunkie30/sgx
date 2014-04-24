@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service.search.elasticsearch;
+package com.wmsi.sgx.service.search.elasticsearch.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,13 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
+import com.wmsi.sgx.service.search.elasticsearch.Query;
+import com.wmsi.sgx.service.search.elasticsearch.QueryExecutor;
 
 
 @Service
-public class ESQueryExecutor{
+public class ESQueryExecutor implements QueryExecutor{
 	
 	private static final Logger log = LoggerFactory.getLogger(ESQueryExecutor.class);
 	
@@ -24,8 +27,11 @@ public class ESQueryExecutor{
 	@Value("${elasticsearch.url}")
 	private String indexUrl;
 	
+	public void setIndexUrl(String indexUrl) {
+		this.indexUrl = indexUrl;
+	}
 
-	public ESResponse executeQuery(ESQuery q) throws ElasticSearchException{
+	public ESResponse executeQuery(Query q) throws ElasticSearchException{
 		
 		try{
 			log.debug("Executing query on {}", indexUrl);
@@ -48,7 +54,7 @@ public class ESQueryExecutor{
 		}
 	}
 
-	public <T> T executeGet(SourceQuery q, Class<T> clz) throws ElasticSearchException{
+	public <T> T executeGet(Query q, Class<T> clz) throws ElasticSearchException{
 		
 		try{
 			String url = indexUrl.concat(q.getURI().toString());
