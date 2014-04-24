@@ -8,31 +8,36 @@
     <script type="text/javascript" src="javascripts/vendor/jquery-modern/jquery.js"></script>		
     <script type="text/javascript">
     
+    	var domain = window.location.hostname;
+    
     	$(document).ready(function() {
-    		var companyURL = "http://192.168.2.4/index.html#" + encodeURIComponent(document.location.href);
+    		var companyURL = "http://" + domain + "/index.html#" + encodeURIComponent(document.location.href);
     		$("#company-info").attr("src", companyURL);
     	});
     
 	    // get height from remote content
-	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://192.168.2.4' );
+	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://' + domain );
 	    
 	    // resize the iframe and scroll based on response from remote iframe
 	    function resizeFrame(data) {
 	    	
-	    	// page objects   
-	    	var headerHeight = 200; // this should be the height between the header and iframe
+	    	// page objects 
+	    	var headerHeight = 390;
 			var cFrame = $("#company-info");
 	        var height = 600, scrollPos = 0;
 	        var scrolling = "yes";
 	        try{
-				height = parseInt(data);
+	        	var pieces = data.split("-");
+				height = parseInt(pieces[0]);
+				scrollPos = parseInt(pieces[1]);
+				if (scrollPos > 0) scrollPos += headerHeight;
 				scrolling = "no";
 	        }
 	        catch(err){}
 	        
 	        // set the resized size
 	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
-	        window.scroll(0,0);
+	        window.scrollTo(0, scrollPos);
 	    	
 		}
 	    
@@ -51,12 +56,16 @@
 			width: 1008px;
     	}
     	
-    	.footer {
+    	.header, .footer {
     		background-color: #CCC;
     		height: 80px;
     	}
     	
-    	.footer p {
+    	.header {
+    		height: 300px;
+    	}
+    	
+    	p {
     		padding: 30px;
     		font-family: Arial;
     	}
@@ -67,9 +76,11 @@
 
 <body>
 
+<div class="container header">
+<p>HEADER GOES HERE</p>
+</div>
+
 <div class="container">
-	<img src="img/placeholder-header.jpg" alt="SGX HEADER " />
-	<br />
 	<iframe id="company-info" style="overflow: hidden; padding: 0px; margin:0px;" allowTransparency="true" frameborder="0" width="1008" height="1" scrolling="no"></iframe>
 </div>
 
