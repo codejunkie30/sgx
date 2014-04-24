@@ -4,12 +4,14 @@ import static org.testng.Assert.*;
 
 import org.testng.annotations.Test;
 
+import com.wmsi.sgx.service.search.elasticsearch.impl.SearchQuery;
+
 public class SearchQueryTest{
 
 	
 	@Test
 	public void testUriWithType() throws ElasticSearchException{
-		ESQuery query = new SearchQuery();
+		AbstractQuery query = new SearchQuery();
 		query.setIndex("testIndex");
 		query.setType("mine");
 		
@@ -18,7 +20,7 @@ public class SearchQueryTest{
 	
 	@Test
 	public void testUriNoType() throws ElasticSearchException{
-		ESQuery query = new SearchQuery();
+		AbstractQuery query = new SearchQuery();
 		query.setIndex("testIndex");
 		
 		assertEquals(query.getURI().toString(), "/testIndex/_search");
@@ -26,13 +28,13 @@ public class SearchQueryTest{
 
 	@Test
 	public void testEndpointOnly() throws ElasticSearchException{
-		ESQuery query = new SearchQuery();
+		Query query = new SearchQuery();
 		assertEquals(query.getURI().toString(), "/_search");
 	}
 	
 	@Test
 	public void testQueryParsing() throws ElasticSearchException{
-		ESQuery query = new SearchQuery();
+		Query query = new SearchQuery();
 		assertEquals(query.getURI().toString(), "/_search");
 	}
 

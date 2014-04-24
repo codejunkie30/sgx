@@ -15,9 +15,11 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.AppConfig;
-import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.config.SearchConfig;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.service.search.elasticsearch.impl.ESQueryExecutor;
+import com.wmsi.sgx.service.search.elasticsearch.impl.SearchQuery;
+import com.wmsi.sgx.service.search.elasticsearch.impl.SourceQuery;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class)
@@ -25,7 +27,7 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 
 	@Configuration
 	@ComponentScan(basePackageClasses = {ESQueryExecutor.class})
-	@Import(value={HttpConfig.class, AppConfig.class, SearchConfig.class})	
+	@Import(value={AppConfig.class, SearchConfig.class})	
 	static class ESQueryExecutorTestConfig{}
 	
 	@Autowired
@@ -38,8 +40,8 @@ public class ESQueryExecutorTest extends AbstractTestNGSpringContextTests{
 	@Test(groups={"functional", "integration"})
 	public void testSearch() throws ElasticSearchException {
 		SearchQuery query = new SearchQuery();
-		query.setQueryTemplate("{ \"query\":{ \"match_all\":{} } }");
-		ESResponse response = esExecutor.executeQuery(query);
+		query.setQuery("{ \"query\":{ \"match_all\":{} } }");
+		QueryResponse response = esExecutor.executeQuery(query);
 		assertNotNull(response);
 	}
 

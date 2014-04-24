@@ -10,25 +10,31 @@ import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 import com.wmsi.sgx.service.AlphaFactorService;
 import com.wmsi.sgx.service.AlphaFactorServiceException;
+import com.wmsi.sgx.service.search.QueryBuilder;
+import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
+import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorSearchQueryBuilder;
 
 @Service
 public class AlphaFactorServiceImpl implements AlphaFactorService{
 
 	@Autowired
-	private SearchService<AlphaFactorSearchRequest> alphaFactorSearchService;
+	private SearchService alphaFactorSearch;
 	
 	@Autowired
-	private SearchService<List<AlphaFactor>> alphaFactorService;
+	private SearchService companySearch;
 
 	@Override
 	@Cacheable(value="alphaFactorSearch")
 	public <T> List<T> search(AlphaFactorSearchRequest search, Class<T> clz) throws AlphaFactorServiceException {
 		try{
-			List<AlphaFactor> alphas = alphaFactorSearchService.search(search, AlphaFactor.class);
+			QueryBuilder query = new AlphaFactorSearchQueryBuilder(search);
+			SearchResult<AlphaFactor> results = alphaFactorSearch.search(query, AlphaFactor.class);
 			
-			return alphaFactorService.search(alphas, clz);
+			query = new AlphaFactorQueryBuilder(results.getHits());
+			return companySearch.search(query, clz).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new AlphaFactorServiceException("Error loading company data.", e);

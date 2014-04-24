@@ -1,16 +1,15 @@
 package com.wmsi.sgx.service.search.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wmsi.sgx.service.search.QueryBuilder;
+import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 
-public class SearchServiceImpl<S> implements SearchService<S>{
+public class SearchServiceImpl implements SearchService{
 
 	@Autowired
 	private ElasticSearchService elasticSearchService;
@@ -24,9 +23,6 @@ public class SearchServiceImpl<S> implements SearchService<S>{
 
 	private String type;
 	public void setType(String t){type = t;}
-
-	private QueryBuilder<S> queryBuilder;
-	public void setQueryBuilder(QueryBuilder<S> b){queryBuilder = b;}
 		
 	@Override
 	public <T> T getById(String id, Class<T> clz) throws SearchServiceException {
@@ -39,10 +35,7 @@ public class SearchServiceImpl<S> implements SearchService<S>{
 	}
 
 	@Override
-	public <T> List<T> search(S search, Class<T> clz) throws SearchServiceException {
-
-		String query = queryBuilder.build(search);
-
+	public <T> SearchResult<T> search(String query, Class<T> clz) throws SearchServiceException {
 		try{
 			return elasticSearchService.search(indexName, type, query, clz);
 		}
@@ -50,5 +43,10 @@ public class SearchServiceImpl<S> implements SearchService<S>{
 			throw new SearchServiceException("Exception during search", e);
 		}
 	}
-
+	
+	@Override
+	public <T> SearchResult<T>  search(QueryBuilder builder, Class<T> clz) throws SearchServiceException {
+		String query = builder.build();
+		return search(query, clz);		
+	}
 }

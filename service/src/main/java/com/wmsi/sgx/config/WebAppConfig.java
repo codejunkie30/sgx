@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.wmsi.sgx.controller"})
-@Import(value={AppConfig.class, HttpConfig.class, SearchConfig.class})
+@Import(value={AppConfig.class, SearchConfig.class})
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
@@ -40,18 +40,23 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 	
     @Bean
     public MappingJackson2HttpMessageConverter jsonConverter() {
-    	ObjectMapper mapper = new ObjectMapper();
-    	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    	mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
     	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
-    	jackson.setObjectMapper(mapper);
+    	jackson.setObjectMapper(objectMapper());
     	
     	return jackson;
     }
-    
+
+    @Bean
+    public ObjectMapper objectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+		return mapper;
+    }
+
     /**
      * Catch all exceptions that might bubble up to prevent stack traces 
      * in the view. 

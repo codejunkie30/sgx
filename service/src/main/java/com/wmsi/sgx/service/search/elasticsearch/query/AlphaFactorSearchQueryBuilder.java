@@ -8,16 +8,19 @@ import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 
-public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder<AlphaFactorSearchRequest>{
+public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder{
 	
-	private static final int MAX_RESULTS = 2000;
+	private AlphaFactorSearchRequest request;
 	
-	@Override
-	public SearchSourceBuilder getBuilder(AlphaFactorSearchRequest request){
+	public AlphaFactorSearchQueryBuilder (AlphaFactorSearchRequest request){
+		this.request = request;
+	}
 	
+	public String build(){
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(getBoolFilter(request)))
-			.size(MAX_RESULTS);	
+			.size(MAX_RESULTS)
+			.toString();	
 	}
 
 	private BoolFilterBuilder getBoolFilter(AlphaFactorSearchRequest req){

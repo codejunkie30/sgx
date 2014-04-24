@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service.search.elasticsearch;
+package com.wmsi.sgx.service.search.elasticsearch.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +14,11 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
+import com.wmsi.sgx.service.search.Aggregations;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
+import com.wmsi.sgx.service.search.elasticsearch.QueryResponse;
 
-public class ESResponse{
+public class ESResponse implements QueryResponse{
 
 	private JsonNode response;
 	
@@ -31,6 +34,7 @@ public class ESResponse{
 	private ObjectMapper objectMapper  = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 	
+	@Override
 	public <T> List<T> getHits(Class<T> clz) throws ElasticSearchException{
 		
 		if(response == null)
@@ -52,6 +56,28 @@ public class ESResponse{
 		}
 		
 		return ret;		
+	}
+	
+	@Override
+	public Aggregations getAggregations() throws ElasticSearchException{
+		
+		if(response == null)
+			throw new ElasticSearchException("Response is null or empty");
+		
+		if(!hasAggregations())
+			throw new ElasticSearchException("Response is missing 'aggregations' field");
+
+		try{
+			return objectMapper.treeToValue(response.get("aggregations"), Aggregations.class);
+		}
+		catch(JsonProcessingException e){
+			throw new ElasticSearchException("Error converting json to object",e );
+		}
+	}
+
+	@Override
+	public boolean hasAggregations() throws ElasticSearchException{
+		return response != null && !response.path("aggregations").isMissingNode();
 	}
 	
 	private <T> T parseHitNode(JsonNode n, Class<T> clz) throws ElasticSearchException{
@@ -102,22 +128,6 @@ public class ESResponse{
 		return node;
 	}
 	
-	public Aggregations getAggregations() throws ElasticSearchException{
-		
-		if(response == null)
-			throw new ElasticSearchException("Response is null or empty");
-		
-		if(response.path("aggregations").isMissingNode())
-			throw new ElasticSearchException("Response is missing 'aggregations' field");
-
-		try{
-			return objectMapper.treeToValue(response.get("aggregations"), Aggregations.class);
-		}
-		catch(JsonProcessingException e){
-			throw new ElasticSearchException("Error converting json to object",e );
-		}
-	}
-
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)

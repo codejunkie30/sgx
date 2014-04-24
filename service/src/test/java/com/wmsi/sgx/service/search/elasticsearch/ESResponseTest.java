@@ -11,6 +11,11 @@ import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.service.search.Aggregations;
+import com.wmsi.sgx.service.search.BucketAggregation;
+import com.wmsi.sgx.service.search.DefaultAggregation;
+import com.wmsi.sgx.service.search.StatAggregation;
+import com.wmsi.sgx.service.search.elasticsearch.impl.ESResponse;
 
 @SuppressWarnings("rawtypes")
 public class ESResponseTest{

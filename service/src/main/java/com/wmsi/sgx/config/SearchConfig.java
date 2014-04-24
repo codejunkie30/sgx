@@ -1,134 +1,113 @@
 package com.wmsi.sgx.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
-import com.wmsi.sgx.model.AlphaFactor;
-import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
-import com.wmsi.sgx.model.search.Criteria;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.service.search.SearchService;
-import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorSearchQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.CompanyQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.TextSearchQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
+import com.wmsi.sgx.service.search.elasticsearch.QueryExecutor;
+import com.wmsi.sgx.service.search.elasticsearch.impl.ESQueryExecutor;
+import com.wmsi.sgx.service.search.elasticsearch.impl.ElasticSearchServiceImpl;
 import com.wmsi.sgx.service.search.impl.SearchServiceImpl;
 
 @Configuration
 public class SearchConfig{
-	
+
 	@Value("${elasticsearch.index.name}")
 	private String indexName;
 	
-	@Bean
-	public SearchService<Company> companySearchService(){
-		SearchServiceImpl<Company> serv = new SearchServiceImpl<Company>();
+	@Value("${elasticsearch.url}")
+	private String indexUrl;
+
+	private SearchService searchService(String type){
+		SearchServiceImpl serv = new SearchServiceImpl();
 		serv.setIndexName(indexName);
-		serv.setType("company");
+		serv.setType(type);
 		return serv;
 	}
 
 	@Bean
-	public SearchService<List<Criteria>> companyScreenerSearchService(){
-		SearchServiceImpl<List<Criteria>> serv = new SearchServiceImpl<List<Criteria>>();
-		serv.setIndexName(indexName);
-		serv.setType("company");
-		serv.setQueryBuilder(new CompanyQueryBuilder());
-		return serv;
+	public SearchService companySearch(){
+		return searchService("company");
+	}
+	
+	@Bean
+	public SearchService alphaFactorSearch(){
+		return searchService("alphaFactor");
+	}
+
+	@Bean 
+	public SearchService priceHistorySearch(){
+		return searchService("price");		
 	}
 
 	@Bean
-	public SearchService<String> companyTextSearchService(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("company");
-		serv.setQueryBuilder(new TextSearchQueryBuilder());
-		return serv;
+	public SearchService volumeHistorySearch(){
+		return searchService("volume");
 	}
 
-	@Bean
-	public SearchService<List<AlphaFactor>> alphaFactorService(){
-		SearchServiceImpl<List<AlphaFactor>> serv = new SearchServiceImpl<List<AlphaFactor>>();
-		serv.setIndexName(indexName);
-		serv.setType("company");
-		serv.setQueryBuilder(new AlphaFactorQueryBuilder());
-		return serv;
+	@Bean 
+	public SearchService financialSearch(){
+		return searchService("financial");
 	}
 
-	@Bean
-	public SearchService<AlphaFactorSearchRequest> alphaFactorSearchService(){
-		SearchServiceImpl<AlphaFactorSearchRequest> serv = new SearchServiceImpl<AlphaFactorSearchRequest>();
-		serv.setIndexName(indexName);
-		serv.setType("alphaFactor");
-		serv.setQueryBuilder(new AlphaFactorSearchQueryBuilder());
-		return serv;
+	@Bean 
+	public SearchService holdersSearch(){
+		return searchService("holders");		
+	}
+
+	@Bean 
+	public SearchService keyDevsSearch(){
+		return searchService("keyDevs");		
 	}
 	
 	@Bean 
-	public SearchService<Company> relatedCompaniesSearch(){
-		SearchServiceImpl<Company> serv = new SearchServiceImpl<Company>();
-		serv.setIndexName(indexName);
-		serv.setType("company");
-		serv.setQueryBuilder(new RelatedCompaniesQueryBuilder());
-		return serv;		
+	public ElasticSearchService elasticSearchService(){
+		ElasticSearchServiceImpl es = new ElasticSearchServiceImpl();
+		es.setExecutor(esQueryExecutor());
+		es.setMapper(objectMapper);
+		return es;
 	}
-
-	@Bean 
-	public SearchService<String> alphaFactorIdSearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("alphaFactor");
-		serv.setQueryBuilder(new AlphaFactorIdQueryBuilder());
-		return serv;		
+	
+	@Bean
+	public QueryExecutor esQueryExecutor(){
+		ESQueryExecutor executor = new ESQueryExecutor();
+		executor.setRestTemplate(esRestTemplate());
+		executor.setIndexUrl(indexUrl);
+		return executor;
 	}
+	
+	@Autowired 
+	private MappingJackson2HttpMessageConverter jsonConverter;
 
-	@Bean 
-	public SearchService<String> priceHistorySearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("price");
-		serv.setQueryBuilder(new HistoricalValueQueryBuilder());
-		return serv;		
-	}
+	@Autowired 
+	private ObjectMapper objectMapper;
 
-	@Bean 
-	public SearchService<String> volumeHistorySearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("volume");
-		serv.setQueryBuilder(new HistoricalValueQueryBuilder());
-		return serv;		
-	}
+	@Bean(name = "esRestTemplate")	
+	public RestTemplate esRestTemplate() {
+		HttpClient httpClient = HttpClients.custom()
+				.setConnectionManager(new PoolingHttpClientConnectionManager())
+				.build();
 
-	@Bean 
-	public SearchService<String> financialSearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("financial");
-		serv.setQueryBuilder(new FinancialsQueryBuilder());
-		return serv;		
-	}
-
-	@Bean 
-	public SearchService<String> holdersSearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("holders");
-		return serv;		
-	}
-
-	@Bean 
-	public SearchService<String> keyDevsSearch(){
-		SearchServiceImpl<String> serv = new SearchServiceImpl<String>();
-		serv.setIndexName(indexName);
-		serv.setType("keyDevs");
-		return serv;		
+		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
+		converters.add(jsonConverter);
+		
+		RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+		template.setMessageConverters(converters);
+		
+		return template;
 	}
 }

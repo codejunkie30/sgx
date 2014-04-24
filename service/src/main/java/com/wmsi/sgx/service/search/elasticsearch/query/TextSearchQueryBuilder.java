@@ -5,13 +5,16 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.MatchQueryBuilder.Operator;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-public class TextSearchQueryBuilder extends AbstractQueryBuilder<String>{
+public class TextSearchQueryBuilder extends AbstractQueryBuilder{
 	
-	private static final int MAX_RESULTS = 2000;
+	private String text;
+	
+	public TextSearchQueryBuilder(String text) {
+		this.text = text;
+	}
 	
 	@Override
-	public SearchSourceBuilder getBuilder(String text) {
-		
+	public String build(){
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.boolQuery()
 				// Text search on company Name - boosted for importance
@@ -31,6 +34,7 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder<String>{
 						.operator(Operator.AND)
 						.type(Type.PHRASE_PREFIX)))
 
-				.size(MAX_RESULTS);
+				.size(MAX_RESULTS)
+				.toString();
 	}
 }

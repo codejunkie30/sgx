@@ -15,26 +15,26 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.search.SearchCompany;
-import com.wmsi.sgx.service.search.elasticsearch.StatAggregation;
+import com.wmsi.sgx.service.search.StatAggregation;
 import com.wmsi.sgx.util.Util;
 
-public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, StatAggregation>>{
-
-	private static final int MAX_RESULTS = 2000;
+public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 	private List<String> fields;
+	private Map<String, StatAggregation> ranges;
+	
+	public DistributionsQueryBuilder(List<DistributionRequestField> f, Map<String, StatAggregation> r){
 
-	public DistributionsQueryBuilder(List<DistributionRequestField> f){
-
+		ranges = r;
 		fields = new ArrayList<String>();
-
+		
 		for(DistributionRequestField req : f){
 			fields.add(req.getField());
 		}
 	}
 
 	@Override
-	public SearchSourceBuilder getBuilder(Map<String, StatAggregation> ranges) {
+	public String build() {
 
 		SearchSourceBuilder query = new SearchSourceBuilder()
 				.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter())).fetchSource(false)
@@ -57,7 +57,7 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, 
 			}
 		}
 
-		return query;
+		return query.toString();
 	}
 
 	private AggregationBuilder<?> buildRangeAggregation(String field, StatAggregation stat) {
@@ -115,4 +115,5 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder<Map<String, 
 
 		return ret;
 	}
+
 }

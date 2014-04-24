@@ -1,12 +1,15 @@
-package com.wmsi.sgx.service.search.elasticsearch;
+package com.wmsi.sgx.service.search.elasticsearch.impl;
 
 import java.net.URI;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.wmsi.sgx.service.search.elasticsearch.AbstractQuery;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
 
-public class SourceQuery extends ESQuery{
+
+public class SourceQuery extends AbstractQuery{
 
 	public SourceQuery(){}
 	public SourceQuery(String i){id = i;}
