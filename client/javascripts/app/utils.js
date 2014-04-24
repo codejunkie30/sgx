@@ -42,3 +42,12 @@ function isValidDate(d) {
 	if ( Object.prototype.toString.call(d) !== "[object Date]" ) return false;
 	return !isNaN(d.getTime());
 }
+
+var ie1011Styles = [ 'msTouchAction', 'msWrapFlow', 'msWrapMargin', 'msWrapThrough', 'msOverflowStyle', 'msScrollChaining', 'msScrollLimit', 'msScrollLimitXMin', 'msScrollLimitYMin', 'msScrollLimitXMax', 'msScrollLimitYMax', 'msScrollRails', 'msScrollSnapPointsX', 'msScrollSnapPointsY', 'msScrollSnapType', 'msScrollSnapX', 'msScrollSnapY', 'msScrollTranslation', 'msFlexbox', 'msFlex', 'msFlexOrder', 'msTextCombineHorizontal' ];
+
+function isAnyIE() {
+	var myNav = navigator.userAgent.toLowerCase();
+	var d = document,  b = d.body, s = b.style, ret = myNav.indexOf('msie') != -1;
+	$.each(ie1011Styles, function(idx, property) { if (typeof s[property] !== "undefined") ret = true; });
+	return ret;
+}

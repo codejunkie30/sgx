@@ -81,8 +81,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             resizeIframe: function(height, scroll) {
             	var fn = function() {
-            		var msg = height; //height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
-            		SGX.pageHeight = msg;
+            		var msg = height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
+            		SGX.pageHeight = height;
             		XD.postMessage(msg, SGX.getParentURL(), parent); 
             	};
             	setTimeout(fn, 10);
@@ -924,8 +924,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	SGX.screener.search.pageButton($(".action-btn.next", paging), lastPg == page ? page : page + 1, page);
 
                     	// resize
-        	            var curHeight = SGX.getTrueContentHeight();
-        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+                    	var scroll = $(".expand-criteria").is(":visible") ? 210 : 540;
+        	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
                     },
                     
@@ -1051,8 +1051,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
             
             getTrueContentHeight: function() {
-            	if (document.isIE) return getPropIE('Height');
-            	return $("body:first,html:first").height();
+            	return isAnyIE() ? getPropIE('Height') : $("body:first,html:first").height();
             },
             
             genericAjaxSuccess: function(data) {
@@ -1384,6 +1383,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
             		SGX.tabs();
+            		
+            		// resize/scroll
+            		SGX.resizeIframe(1300, 0);
             		
             	},
             	
@@ -1838,7 +1840,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		$(".financials-viewport thead").each(function() {
             			
             			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
-            				$(this).html(financials[idx].absPeriod + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
+            				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending" : financials[idx].absPeriod;
+            				$(this).html(txt + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
             				$(".currency").text(financials[idx].filingCurrency);
             			});
             			
