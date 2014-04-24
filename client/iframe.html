@@ -9,9 +9,12 @@
     <script type="text/javascript">
     
     	var domain = window.location.hostname;
-    
+    	var path = document.location.pathname;
+    	var folder = path.replace("/", "").split("/").length > 1 ? path.replace("/", "").split("/")[0] : "";
+    	if (folder.length > 0) folder = "/" + folder;
+    	
     	$(document).ready(function() {
-    		var companyURL = "http://" + domain + "/index.html#" + encodeURIComponent(document.location.href);
+    		var companyURL = "http://" + domain + folder + "/index.html#" + encodeURIComponent(document.location.href);
     		$("#company-info").attr("src", companyURL);
     	});
     
@@ -40,7 +43,6 @@
 	        window.scrollTo(0, scrollPos);
 	    	
 		}
-	    
     </script>
     
     <style>
