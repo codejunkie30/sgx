@@ -670,6 +670,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	
                 	renderResults: function(data) {
 
+                		// one match, redirect
+                        if (data.companies.length == 1) {
+                        	window.location = SGX.getCompanyPage(data.companies[0].tickerCode);
+                        }
                 		
                 		// reset name input
                 		$(".searchbar input").val("");
@@ -1454,8 +1458,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		// industry tree
             		var tree = [];
-            		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
             		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
+            		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
             		$.each(tree, function(idx, item) {
             			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value)) + "'>" + item.value + "</a>");
             			if (idx > 0) $(".breadcrumb-tree .dynamic").append($("<span />").html("&nbsp;>&nbsp;"));
@@ -1646,7 +1650,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         
             		    rangeSelector: {
             				inputEnabled: false,
-            		        selected: 3,
+            		        selected: 6,
                             buttons: [{
                                 type: 'day',
                                 count: 1,
