@@ -1840,7 +1840,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		$(".financials-viewport thead").each(function() {
             			
             			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
-            				if (idx >= financials.length) return;
             				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending" : financials[idx].absPeriod;
             				$(this).html(txt + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
             				$(".currency").text(financials[idx].filingCurrency);
@@ -1860,7 +1859,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             			// now get the siblings
             			$(el).siblings().not(".unchart").each(function(idx, td) {
-            				if (idx >= financials.length) return;
             				var cur = financials[idx];
             				if (cur.hasOwnProperty(name)) $(td).text(cur[name]).attr("data-value", cur[name]).addClass("formattable").attr("data-format", "number");
             			});
@@ -1893,6 +1891,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	if (a > b) return 1;
                     	return 0;
                 	});          		
+                	
+                	if (financials.length == 5) return financials;
 
             		// we need to decide whether to use the latest year end
             		// or quarter data
