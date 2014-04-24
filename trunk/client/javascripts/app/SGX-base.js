@@ -705,7 +705,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     		$.each(fields, function(idx, field) {
                     			var title = field.shortName;
                     			var th = $("<th />").attr("data-name", field.field).addClass(field.field).appendTo(header);
-                    			if (field.format != "string" && field.format != "lookup") $(th).attr("data-sort", "number")
+                    			if (field.format != "string" && field.format != "lookup") $(th).attr("data-sort", "number");
+                    			else if (field.format == "lookup") $(th).attr("data-sort", "lookup")
                     			$(th).attr("data-format", field.format);
                     			$("<span />").text(title).appendTo(th);
                     			if (SGX.numberFormats.hasOwnProperty(field.format)) $("<span />").addClass("fmt").text(SGX.numberFormats[field.format].header).appendTo(th);
@@ -840,6 +841,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	if (typeof direction === "undefined") direction = "asc";
                     	var sortType = $(".module-results").find("th[data-name='" + sort + "']").attr("data-sort");
                     	
+                    	var field = null;
+                    	if ($(".editSearchB .checkbox[data-name='" + sort + "']").length > 0) {
+                        	field = {};
+                        	SGX.screener.populateField(field, $(".editSearchB .checkbox[data-name='" + sort + "']"));
+                    	}
+                    	
                     	// sort
                     	data.companies.sort(function(a, b) {
                     		
@@ -850,9 +857,12 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     			if (typeof a1 === "undefined") a1 = "-99999999999999";
                     			return b1-a1;
                     		}
+                    		else if ("lookup" == sortType && field != null) {
+                				a1 = "asc" == direction ? field.formatter.values[a[sort]|0].toLowerCase() : field.formatter.values[b[sort]|0].toLowerCase();
+                				b1 = "asc" == direction ? field.formatter.values[b[sort]|0].toLowerCase() : field.formatter.values[a[sort]|0].toLowerCase();
+                    		}
                     		
                     		return a1.localeCompare(b1);
-                    		
                     	});
                     	
                     	// break into pages
