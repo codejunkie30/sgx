@@ -404,6 +404,63 @@ public class Financial{
 	}
 
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(absPeriod, assetTurns, avgDaysInventory, avgDaysPayable, cashConversion, cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio, dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth, filingCurrency, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange, netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets, totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue, totalRevenue1YrAnnGrowth);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Financial) {
+			Financial that = (Financial) object;
+			return Objects.equal(this.absPeriod, that.absPeriod)
+				&& Objects.equal(this.assetTurns, that.assetTurns)
+				&& Objects.equal(this.avgDaysInventory, that.avgDaysInventory)
+				&& Objects.equal(this.avgDaysPayable, that.avgDaysPayable)
+				&& Objects.equal(this.cashConversion, that.cashConversion)
+				&& Objects.equal(this.cashFinancing, that.cashFinancing)
+				&& Objects.equal(this.cashInvesting, that.cashInvesting)
+				&& Objects.equal(this.cashOperations, that.cashOperations)
+				&& Objects.equal(this.commonEquity1YrAnnGrowth, that.commonEquity1YrAnnGrowth)
+				&& Objects.equal(this.commonStock, that.commonStock)
+				&& Objects.equal(this.currentRatio, that.currentRatio)
+				&& Objects.equal(this.dividendsPerShare, that.dividendsPerShare)
+				&& Objects.equal(this.ebitda, that.ebitda)
+				&& Objects.equal(this.ebitda1YrAnnGrowth, that.ebitda1YrAnnGrowth)
+				&& Objects.equal(this.ebitdaInterest, that.ebitdaInterest)
+				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
+				&& Objects.equal(this.eps, that.eps)
+				&& Objects.equal(this.eps1YrAnnGrowth, that.eps1YrAnnGrowth)
+				&& Objects.equal(this.filingCurrency, that.filingCurrency)
+				&& Objects.equal(this.grossMargin, that.grossMargin)
+				&& Objects.equal(this.grossProfit, that.grossProfit)
+				&& Objects.equal(this.longTermDebt, that.longTermDebt)
+				&& Objects.equal(this.minorityInterest, that.minorityInterest)
+				&& Objects.equal(this.netChange, that.netChange)
+				&& Objects.equal(this.netIncome, that.netIncome)
+				&& Objects.equal(this.netIncome1YrAnnGrowth, that.netIncome1YrAnnGrowth)
+				&& Objects.equal(this.netIncomeMargin, that.netIncomeMargin)
+				&& Objects.equal(this.netPpe, that.netPpe)
+				&& Objects.equal(this.payoutRatio, that.payoutRatio)
+				&& Objects.equal(this.periodDate, that.periodDate)
+				&& Objects.equal(this.quickRatio, that.quickRatio)
+				&& Objects.equal(this.retainedEarnings, that.retainedEarnings)
+				&& Objects.equal(this.returnAssets, that.returnAssets)
+				&& Objects.equal(this.returnCapital, that.returnCapital)
+				&& Objects.equal(this.returnEquity, that.returnEquity)
+				&& Objects.equal(this.tickerCode, that.tickerCode)
+				&& Objects.equal(this.totalAssets, that.totalAssets)
+				&& Objects.equal(this.totalCurrentAssets, that.totalCurrentAssets)
+				&& Objects.equal(this.totalCurrentLiabily, that.totalCurrentLiabily)
+				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+				&& Objects.equal(this.totalEquity, that.totalEquity)
+				&& Objects.equal(this.totalLiability, that.totalLiability)
+				&& Objects.equal(this.totalRevenue, that.totalRevenue)
+				&& Objects.equal(this.totalRevenue1YrAnnGrowth, that.totalRevenue1YrAnnGrowth);
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("absPeriod", absPeriod)
@@ -451,5 +508,5 @@ public class Financial{
 			.add("totalRevenue", totalRevenue)
 			.add("totalRevenue1YrAnnGrowth", totalRevenue1YrAnnGrowth)
 			.toString();
-	}	
+	}
 }

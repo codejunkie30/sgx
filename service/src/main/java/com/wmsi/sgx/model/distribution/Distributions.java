@@ -16,6 +16,20 @@ public class Distributions{
 	}
 
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(distributions);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Distributions) {
+			Distributions that = (Distributions) object;
+			return Objects.equal(this.distributions, that.distributions);
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("distributions", distributions)

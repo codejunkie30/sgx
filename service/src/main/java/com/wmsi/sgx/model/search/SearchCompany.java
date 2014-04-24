@@ -213,6 +213,42 @@ public class SearchCompany{
 	}
 
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(avgBrokerReq, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof SearchCompany) {
+			SearchCompany that = (SearchCompany) object;
+			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
+				&& Objects.equal(this.beta5Yr, that.beta5Yr)
+				&& Objects.equal(this.companyName, that.companyName)
+				&& Objects.equal(this.dividendYield, that.dividendYield)
+				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
+				&& Objects.equal(this.eps, that.eps)
+				&& Objects.equal(this.industry, that.industry)
+				&& Objects.equal(this.industryGroup, that.industryGroup)
+				&& Objects.equal(this.marketCap, that.marketCap)
+				&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
+				&& Objects.equal(this.peRatio, that.peRatio)
+				&& Objects.equal(this.percentChange, that.percentChange)
+				&& Objects.equal(this.priceToBookRatio, that.priceToBookRatio)
+				&& Objects.equal(this.priceVs52WeekHigh, that.priceVs52WeekHigh)
+				&& Objects.equal(this.priceVs52WeekLow, that.priceVs52WeekLow)
+				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
+				&& Objects.equal(this.tickerCode, that.tickerCode)
+				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+				&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
+				&& Objects.equal(this.totalRevenue, that.totalRevenue)
+				&& Objects.equal(this.volume, that.volume);
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)

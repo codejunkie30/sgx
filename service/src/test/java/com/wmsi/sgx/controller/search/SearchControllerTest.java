@@ -136,6 +136,14 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isBadRequest());
 	}
 
+	@Test(dataProvider="validFields")
+	public void testSearchCompany_PassValidation(String json) throws Exception{
+		mockMvc.perform(post("/search")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+
 	@Test(dataProvider="invalidSearchString")
 	public void testSearchCompany_FailValidation(String json) throws Exception{
 		mockMvc.perform(post("/search/name")
@@ -175,35 +183,39 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 		};
 	}	
 
+	private String[] validFields = new String[]{"beta5Yr", "dividendYield", "targetPriceNum", "eps", "marketCap"};
+	private String[] validWithIgnoredFields = new String[]{"beta5Yr", "dividendYield", "ebitdaMargin", "targetPriceNum", "eps", "industry", "marketCap"};
+	
+	private String[] invalidFieldTooMany = new String[]{"beta5Yr", "dividendYield", "ebitdaMargin", "eps", "netProfitMargin", "marketCap"};
+	private String[] invalidFieldTooManyWithIgnored = new String[]{"beta5Yr", "dividendYield", "ebitdaMargin", "eps", "targetPriceNum", "netProfitMargin", "industry", "marketCap"};
+
 	@DataProvider
 	public Object[][] invalidSearchCriteria() throws JsonProcessingException, IllegalArgumentException{
-		
-		CriteriaBuilder b =
-				new CriteriaBuilder()
-				.withField("doesntMatter");
-		
-		SearchRequestBuilder tooMuchCriteria = new SearchRequestBuilder();
-		
-		for(int i = 0; i < 6; i++){
-			tooMuchCriteria.withAddedCriteriaElement(b.build());
-		}
-		
 		return new String[][]{
 			{""},
 			{"{}"},
 			{"{\"criteria\":[ {\"field\":\"wrongName\",\"to\":500,\"from\":15} ]}"},
-			{TestUtils.objectToJson(requestWithCriteria(6))}
+			{TestUtils.objectToJson(requestWithCriteria(invalidFieldTooMany))},
+			{TestUtils.objectToJson(requestWithCriteria(invalidFieldTooManyWithIgnored))}
 		};
 	}	
 
-	private SearchRequest requestWithCriteria(Integer size){
-		CriteriaBuilder b =
-				new CriteriaBuilder()
-				.withField("doesntMatter");
+	@DataProvider
+	public Object[][] validFields() throws JsonProcessingException, IllegalArgumentException{
+		return new String[][]{
+			{TestUtils.objectToJson(requestWithCriteria(validFields))},
+			{TestUtils.objectToJson(requestWithCriteria(validWithIgnoredFields))}
+		};
+	}	
+
+	private SearchRequest requestWithCriteria(String[] fields){
 		
 		SearchRequestBuilder req = new SearchRequestBuilder();
-		
-		for(int i = 0; i < size; i++){
+
+		for(String field : fields){
+			CriteriaBuilder b =	new CriteriaBuilder()
+			.withField(field);
+			
 			req.withAddedCriteriaElement(b.build());
 		}
 		

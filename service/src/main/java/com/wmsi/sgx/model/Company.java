@@ -475,6 +475,71 @@ public class Company{
 	}
 
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Company) {
+			Company that = (Company) object;
+			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
+				&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
+				&& Objects.equal(this.beta5Yr, that.beta5Yr)
+				&& Objects.equal(this.businessDescription, that.businessDescription)
+				&& Objects.equal(this.bvShare, that.bvShare)
+				&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
+				&& Objects.equal(this.cashInvestments, that.cashInvestments)
+				&& Objects.equal(this.closePrice, that.closePrice)
+				&& Objects.equal(this.companyAddress, that.companyAddress)
+				&& Objects.equal(this.companyName, that.companyName)
+				&& Objects.equal(this.companyWebsite, that.companyWebsite)
+				&& Objects.equal(this.dividendYield, that.dividendYield)
+				&& Objects.equal(this.ebit, that.ebit)
+				&& Objects.equal(this.ebitda, that.ebitda)
+				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
+				&& Objects.equal(this.employees, that.employees)
+				&& Objects.equal(this.enterpriseValue, that.enterpriseValue)
+				&& Objects.equal(this.eps, that.eps)
+				&& Objects.equal(this.evEbitData, that.evEbitData)
+				&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
+				&& Objects.equal(this.floatPercentage, that.floatPercentage)
+				&& Objects.equal(this.gvKey, that.gvKey)
+				&& Objects.equal(this.highPrice, that.highPrice)
+				&& Objects.equal(this.industry, that.industry)
+				&& Objects.equal(this.industryGroup, that.industryGroup)
+				&& Objects.equal(this.lowPrice, that.lowPrice)
+				&& Objects.equal(this.marketCap, that.marketCap)
+				&& Objects.equal(this.netIncome, that.netIncome)
+				&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
+				&& Objects.equal(this.openPrice, that.openPrice)
+				&& Objects.equal(this.peRatio, that.peRatio)
+				&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
+				&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
+				&& Objects.equal(this.priceToBookRatio, that.priceToBookRatio)
+				&& Objects.equal(this.priceVs52WeekHigh, that.priceVs52WeekHigh)
+				&& Objects.equal(this.priceVs52WeekLow, that.priceVs52WeekLow)
+				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
+				&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
+				&& Objects.equal(this.targetPrice, that.targetPrice)
+				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
+				&& Objects.equal(this.tickerCode, that.tickerCode)
+				&& Objects.equal(this.totalAssets, that.totalAssets)
+				&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
+				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+				&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
+				&& Objects.equal(this.totalRevenue, that.totalRevenue)
+				&& Objects.equal(this.volume, that.volume)
+				&& Objects.equal(this.yearFounded, that.yearFounded)
+				&& Objects.equal(this.yearHigh, that.yearHigh)
+				&& Objects.equal(this.yearLow, that.yearLow);
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)
@@ -530,7 +595,5 @@ public class Company{
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
 			.toString();
-	}
-
-	
+	}	
 }
