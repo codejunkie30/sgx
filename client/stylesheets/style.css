@@ -25,6 +25,10 @@ body * {
 	text-align: right;
 }
 
+.no-results-display {
+	margin: 10px;
+}
+
 h1, h1.title {
   margin: 20px 0 0;
   font-weight: bold;
