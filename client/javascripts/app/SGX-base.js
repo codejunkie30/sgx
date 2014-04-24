@@ -1908,15 +1908,25 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
         			$(el).addClass("checked");
         			
-        			$(el).closest("tr").find(".unchart").text("[ UNCHART ]").click(function() {
-        				$(this).closest("tr").find(".checkbox").click();
-        			});
+        			$(el).closest("tr").find(".unchart").text("[ UNCHART ]").click(function() { $(this).closest("tr").find(".checkbox").click(); });
         			
         			// get the series data
-        			var seriesData = [];
-        			$(el).closest("td").siblings("[data-value]").each(function() {
-        				seriesData.push(parseFloat($(this).attr("data-value"))); 
+        			var seriesData = [], empty = 0;
+        			$(el).closest("tr").children().not(".unchart").each(function(idx, td) {
+        				if (idx == 0) return;
+        				if (typeof $(td).attr("data-value") === "undefined") empty++;
+        				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
+        				seriesData.push(val); 
         			});
+        			
+        			// no data to plot
+        			if (empty == seriesData.length) {
+        				SGX.modal.open({
+        					type: "alert",
+        					content: "<p>No data available for this series.</p>"
+        				});
+        				return;
+        			}
         			
         			var name = $(".trigger", el).attr("data-name");
 
@@ -1950,6 +1960,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             			chart.addSeries({
     	                    name: $(".trigger", el).text(),
+    	                    
     	                    data: seriesData,
     				    	color: '#565b5c' == chart.series[0].color ? '#1e2070' : '#565b5c',
     	                    yAxis: name
@@ -2015,7 +2026,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	initChart: function(el, seriesData) {
             		
         			var categories = [];
-            		$(".financials-viewport thead:first th").not(".title").each(function() { categories.push($(this).text()); });
+            		$(".financials-viewport thead:first th").not(".title").each(function() { categories.push($(this).html()); });
 
             		$(".chart-row").show();
             		
@@ -2065,7 +2076,13 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             plotBands: {
                                 color: '#e2e2e2',
                                 from: 0
-                            }
+                            },
+            	        	labels: {
+            	        		useHTML: true,
+            	        		style: {
+            	        			textAlign: "center"
+            	        		}
+            	        	}
                         }
             		});
             			
