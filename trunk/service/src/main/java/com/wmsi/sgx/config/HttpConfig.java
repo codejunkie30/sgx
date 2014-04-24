@@ -26,12 +26,17 @@ public class HttpConfig{
 
 	@Bean 
 	public ElasticSearchService elasticSearchService(){
-		return new ElasticSearchService();
+		ElasticSearchService es = new ElasticSearchService();
+		es.setExecutor(esQueryExecutor());
+		es.setMapper(esObjectMapper());
+		return es;
 	}
-
+	
 	@Bean
-	public ESQueryExecutor esExecutor(){
-		return new ESQueryExecutor();
+	public ESQueryExecutor esQueryExecutor(){
+		ESQueryExecutor executor = new ESQueryExecutor();
+		executor.setRestTemplate(esRestTemplate());
+		return executor;
 	}
 	
 	@Bean(name="esObjectMapper")

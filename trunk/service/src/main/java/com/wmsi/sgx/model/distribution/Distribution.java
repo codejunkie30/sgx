@@ -25,10 +25,25 @@ public class Distribution{
 	}
 
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(field, buckets);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Distribution) {
+			Distribution that = (Distribution) object;
+			return Objects.equal(this.field, that.field)
+				&& Objects.equal(this.buckets, that.buckets);
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("field", field)
 			.add("buckets", buckets)
 			.toString();
-	}
+	}	
 }

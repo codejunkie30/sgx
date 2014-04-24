@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.validation.annotations.CriteriaSize;
 
 public class SearchRequest{
 
 	@Valid
 	@NotNull
-	@Size(min = 0, max = 6, message="Invalid criteria size")
+	@CriteriaSize(min = 0, max = 5, ignoreFields = {"industry", "targetPriceNum"})
 	private List<Criteria> criteria;
 	
 	public List<Criteria> getCriteria() {

@@ -6,7 +6,6 @@ import com.google.common.base.Objects;
 
 public class HistoricalValue{
 
-
 	private String tickerCode;
 	private Date date;
 	private Double value;
@@ -28,6 +27,22 @@ public class HistoricalValue{
 	}
 	public void setValue(Double value) {
 		this.value = value;
+	}
+	
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(tickerCode, date, value);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof HistoricalValue) {
+			HistoricalValue that = (HistoricalValue) object;
+			return Objects.equal(this.tickerCode, that.tickerCode)
+				&& Objects.equal(this.date, that.date)
+				&& Objects.equal(this.value, that.value);
+		}
+		return false;
 	}
 	
 	@Override

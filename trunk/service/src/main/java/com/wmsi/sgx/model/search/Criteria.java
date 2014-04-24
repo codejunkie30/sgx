@@ -11,10 +11,8 @@ public class Criteria{
 	@ValidFieldName(model = SearchCompany.class)
 	private String field;
 	
-	private String value;
-	
-	private Object to;
-	
+	private String value;	
+	private Object to;	
 	private Object from;
 
 	public String getField() {
@@ -50,16 +48,6 @@ public class Criteria{
 	}
 
 	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("field", field)
-			.add("value", value)
-			.add("to", to)
-			.add("from", from)
-			.toString();
-	}
-
-	@Override
 	public int hashCode(){
 		return Objects.hashCode(field, value, to, from);
 	}
@@ -75,4 +63,15 @@ public class Criteria{
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("field", field)
+			.add("value", value)
+			.add("to", to)
+			.add("from", from)
+			.toString();
+	}
+
 }

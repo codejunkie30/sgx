@@ -78,20 +78,6 @@ public class AlphaFactorSearchRequest{
 	}
 
 	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("analystExpectations", analystExpectations)
-			.add("capitalEfficiency", capitalEfficiency)
-			.add("earningsQuality", earningsQuality)
-			.add("historicalGrowth", historicalGrowth)
-			.add("priceMomentum", priceMomentum)
-			.add("size", size)
-			.add("valuation", valuation)
-			.add("volatility", volatility)
-			.toString();
-	}
-
-	@Override
 	public int hashCode(){
 		return Objects.hashCode(analystExpectations, capitalEfficiency, earningsQuality, historicalGrowth, priceMomentum, size, valuation, volatility);
 	}
@@ -112,5 +98,17 @@ public class AlphaFactorSearchRequest{
 		return false;
 	}
 
-	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("analystExpectations", analystExpectations)
+			.add("capitalEfficiency", capitalEfficiency)
+			.add("earningsQuality", earningsQuality)
+			.add("historicalGrowth", historicalGrowth)
+			.add("priceMomentum", priceMomentum)
+			.add("size", size)
+			.add("valuation", valuation)
+			.add("volatility", volatility)
+			.toString();
+	}
 }

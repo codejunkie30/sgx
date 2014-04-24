@@ -14,14 +14,12 @@ public class CompanySearchRequest{
 	@SafeHtml
 	private String search;
 	
-	public String getSearch(){return search;}
-	public void setSearch(String s){search = s;}
-	
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("search", search)
-			.toString();
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String s) {
+		search = s;
 	}
 	
 	@Override
@@ -36,5 +34,12 @@ public class CompanySearchRequest{
 			return Objects.equal(this.search, that.search);
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("search", search)
+			.toString();
 	}
 }
