@@ -122,10 +122,8 @@ public class CompanyServiceImpl implements CompanyService{
 		List<AlphaFactor> hits = null;
 		Company info = getById(id);
 
-		String gvKey = info.getGvKey();
-				
-		if(info != null && !StringUtils.isEmpty(gvKey)){
-			gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
+		if(info != null && !StringUtils.isEmpty(info.getGvKey())){
+			String gvKey = info.getGvKey().substring(3); // Trim 'GV_' prefix from actual id
 
 			try{
 				AlphaFactorIdQueryBuilder query = new AlphaFactorIdQueryBuilder(gvKey);				
