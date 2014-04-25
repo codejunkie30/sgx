@@ -1146,6 +1146,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                             	e.stopPropagation()
                     			$(dd).find(".copy").text($(e.target).text());
                     			$(e.target).remove();
+                    			SGX.dropdowns.close();
                     			if (typeof finished !== "undefined") finished();
                     		});
                     	}
