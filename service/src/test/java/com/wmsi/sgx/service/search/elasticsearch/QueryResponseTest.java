@@ -18,7 +18,7 @@ import com.wmsi.sgx.service.search.StatAggregation;
 import com.wmsi.sgx.service.search.elasticsearch.impl.ESResponse;
 
 @SuppressWarnings("rawtypes")
-public class ESResponseTest{
+public class QueryResponseTest{
 
 	ObjectMapper mapper = new ObjectMapper();
 	
@@ -27,12 +27,27 @@ public class ESResponseTest{
 		ESResponse response = new ESResponse();
 		response.getHits(String.class);		
 	}
-	
-	@Test( expectedExceptions={ElasticSearchException.class},expectedExceptionsMessageRegExp="Response is missing 'hits' field")
-	public void testNoHitsField() throws ElasticSearchException{
+
+	@Test( expectedExceptions={ElasticSearchException.class})
+	public void testNullResponse_Aggregations() throws ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.getAggregations();		
+	}
+
+	@Test( expectedExceptions={ElasticSearchException.class},
+			expectedExceptionsMessageRegExp="Response is missing 'hits' field")
+	public void testEmptyResponse() throws ElasticSearchException{
 		ESResponse response = new ESResponse();
 		response.setResponse(mapper.createObjectNode());
 		response.getHits(String.class);		
+	}
+
+	@Test( expectedExceptions={ElasticSearchException.class},
+		   expectedExceptionsMessageRegExp="Response is missing 'aggregations' field")
+	public void testEmptyResponse_Aggregations() throws ElasticSearchException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.createObjectNode());
+		response.getAggregations();		
 	}
 
 	@DataProvider
@@ -44,15 +59,25 @@ public class ESResponseTest{
 			{"{\"hits\":[]}"}
 		};
 	}
-	@Test( dataProvider="wrongFields", expectedExceptions={ElasticSearchException.class},expectedExceptionsMessageRegExp="Response is missing 'hits' field")
-	public void testWrongFields(String json) throws ElasticSearchException, JsonProcessingException, IOException{
+
+	@Test(dataProvider="wrongFields", 
+		expectedExceptions={ElasticSearchException.class},
+		expectedExceptionsMessageRegExp="Response is missing 'hits' field")
+	public void testWrongFields_Hits(String json) throws ElasticSearchException, JsonProcessingException, IOException{
 		ESResponse response = new ESResponse();
 		response.setResponse(mapper.readTree(json));
-		List<String> hits = response.getHits(String.class);
-		assertNotNull(hits);
-		assertEquals(hits.size(), 0);		
+		response.getHits(String.class);
 	}
 
+	@Test(dataProvider="wrongFields", 
+		expectedExceptions={ElasticSearchException.class},
+		expectedExceptionsMessageRegExp="Response is missing 'aggregations' field")
+	public void testWrongFields_Aggregations(String json) throws ElasticSearchException, JsonProcessingException, IOException{
+		ESResponse response = new ESResponse();
+		response.setResponse(mapper.readTree(json));
+		response.getAggregations();				
+	}
+	
 	@Test
 	public void testNoHits() throws ElasticSearchException, JsonProcessingException, IOException{
 		ESResponse response = new ESResponse();
@@ -61,7 +86,6 @@ public class ESResponseTest{
 		assertNotNull(hits);
 		assertEquals(hits.size(), 0);		
 	}
-
 	
 	@Test
 	public void testHits() throws ElasticSearchException, JsonProcessingException, IOException{
@@ -74,23 +98,53 @@ public class ESResponseTest{
 		assertEquals(hits.get(1).get("test2"), "test2");
 	}
 
+	/**
+	 * Test elasticsearch responses which is the 'field' setting to include/exlude fields. ESResponse will 
+	 * attempt to merge these into top level objects. This test proves that it's working correctly.  
+	 */
 	@Test
 	public void testHitsWithFields() throws ElasticSearchException, JsonProcessingException, IOException{
 		ESResponse response = new ESResponse();
 		response.setResponse(mapper.readTree(
 				"{\"hits\":"
-				+ "{\"hits\":["
+				+ "{\"hits\":["						
 				+ "{\"_source\":{\"test\":\"test1\"},\"fields\":{\"percentChange\":[-0.011999999997], \"beta5Yr\":[1.826588992]}},"
-				+ "{\"_source\":{\"test2\":\"test2\"}}]}}"));
+				+ "{\"_source\":{\"test2\":\"test2\"}},"
+				+ "{\"_source\":{\"test3\":\"test3\"},\"fields\":{\"prices\":[1.99997, 2.123, 4.2]}},"
+				+ "{\"_source\":{\"test4\":\"test4\"},\"fields\":{\"prices\":[2.9, 11.3 ], \"vol\":[5.8, 0.2]}}"
+				+ "]}}"));
 		
 		List<Map> hits = response.getHits(Map.class);
-		System.out.println(hits);
+
 		assertNotNull(hits);
-		assertEquals(hits.size(), 2);
+		assertEquals(hits.size(), 4);
+
+		// Multiple fields with singel values
 		assertEquals(hits.get(0).get("test"), "test1");
-		assertEquals(hits.get(1).get("test2"), "test2");
 		assertEquals(hits.get(0).get("percentChange"), -0.011999999997);
 		assertEquals(hits.get(0).get("beta5Yr"), 1.826588992);
+		
+		// No fields object
+		assertEquals(hits.get(1).get("test2"), "test2");
+		assertNull(hits.get(1).get("percentChange"));
+		
+		// Single field with array value
+		assertEquals(hits.get(2).get("test3"), "test3");
+		List prices = (List) hits.get(2).get("prices");		
+		assertEquals(prices.size(), 3);
+		assertEquals(prices.get(0), 1.99997);
+		assertEquals(prices.get(1), 2.123);
+		assertEquals(prices.get(2), 4.2);
+		
+		// Multi field with array values
+		assertEquals(hits.get(3).get("test4"), "test4");
+		prices = (List) hits.get(3).get("prices");		
+		List vols = (List) hits.get(3).get("vol");
+		assertEquals(prices.size(), 2);
+		assertEquals(prices.get(0), 2.9);
+		assertEquals(prices.get(1), 11.3);
+		assertEquals(vols.get(0), 5.8);
+		assertEquals(vols.get(1), 0.2);
 	}
 
 	@Test
@@ -105,6 +159,19 @@ public class ESResponseTest{
 	
 	private String testSingleBucketAggregation = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]}}}";
 	private String testMultipleBucketAggregations = "{\"aggregations\": {\"marketCap\":{\"buckets\":[{\"key\": 0,	\"doc_count\": 1},{\"key\": 15,	\"doc_count\": 5}]},\"totalRev\":{\"buckets\":[{\"key\": 0,\"doc_count\": 1},{\"key\": 15,\"doc_count\": 5}]}}} }";
+
+	@Test
+	public void testHasAggregation() throws JsonProcessingException, IOException, ElasticSearchException{
+		
+		ESResponse response = new ESResponse();
+		assertFalse(response.hasAggregations());
+		
+		response.setResponse(mapper.readTree("{\"hits\":{\"hits\":{\"_source\":{\"test\":\"test1\"}}}}"));
+		assertFalse(response.hasAggregations());
+		
+		response.setResponse(mapper.readTree(testSingleBucketAggregation));
+		assertTrue(response.hasAggregations());
+	}
 	
 	@Test
 	public void testBucketAggregation() throws JsonProcessingException, IOException, ElasticSearchException{
@@ -182,7 +249,6 @@ public class ESResponseTest{
 		assertEquals(aggregations.getAggregations().get(0).getClass(), StatAggregation.class);
 		assertEquals(aggregations.getAggregations().get(1).getClass(), BucketAggregation.class);
 	}
-	
 	
 }
 	

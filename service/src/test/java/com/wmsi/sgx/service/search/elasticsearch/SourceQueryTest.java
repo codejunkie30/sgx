@@ -25,6 +25,12 @@ public class SourceQueryTest{
 	}
 
 	@Test(expectedExceptions={ElasticSearchException.class})
+	public void testEmpty() throws ElasticSearchException{
+		AbstractQuery query = new SourceQuery();
+		query.getURI();
+	}
+
+	@Test(expectedExceptions={ElasticSearchException.class})
 	public void testMissingType() throws ElasticSearchException{
 		AbstractQuery query = new SourceQuery("223");
 		query.setIndex("testIndex");
@@ -32,9 +38,8 @@ public class SourceQueryTest{
 	}
 
 	@Test(expectedExceptions={ElasticSearchException.class})
-	public void testMissingIndex() throws ElasticSearchException{
-		AbstractQuery query = new SourceQuery();
-		query.setIndex("mine");
+	public void testMissingIdex() throws ElasticSearchException{
+		AbstractQuery query = new SourceQuery("223");
 		query.setType("testIndex");
 		query.getURI();
 	}
@@ -43,7 +48,7 @@ public class SourceQueryTest{
 	public void testMissingId() throws ElasticSearchException{
 		AbstractQuery query = new SourceQuery();
 		query.setIndex("testIndex");
-		query.setIndex("mine");
+		query.setType("mine");
 		query.getURI();
 	}
 
