@@ -12,15 +12,14 @@ public abstract class AbstractQuery implements Query{
 
 	public enum EndPoint {
 		SEARCH, SOURCE;
-		@Override public String toString(){return "_".concat(super.toString().toLowerCase());}
+		
+		@Override 
+		public String toString(){return "_".concat(super.toString().toLowerCase());}
 	}
 	
 	private String index;
 	public String getIndex(){return index;}
 	public void setIndex(String i){index = i;}
-
-	private EndPoint endPoint;
-	public EndPoint getEndPoint(){return endPoint;}	
 	
 	private String type;	
 	public String getType(){return type;}
@@ -33,6 +32,8 @@ public abstract class AbstractQuery implements Query{
 	private ObjectMapper objectMapper = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 
+	public abstract EndPoint getEndPoint();
+	
 	@Override
 	public URI getURI() throws ElasticSearchException{
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();

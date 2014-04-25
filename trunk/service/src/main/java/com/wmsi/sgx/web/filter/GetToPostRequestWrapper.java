@@ -56,13 +56,16 @@ public class GetToPostRequestWrapper extends HttpServletRequestWrapper{
 	@Override
 	public ServletInputStream getInputStream(){
 		
-		byte[] body = null;
+		ServletInputStream in = null;
+		
 		String json = getParameter(param);
 		
-		if(json != null)
-			body = json.getBytes();
+		if(json != null){
+			byte[] body = json.getBytes();
+			in = new LocalInputStream(new ByteArrayInputStream(body));
+		}
 		
-		return new LocalInputStream(new ByteArrayInputStream(body));	
+		return in;	
 	}
 
 	class LocalInputStream extends ServletInputStream{
