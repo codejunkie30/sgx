@@ -15,7 +15,6 @@ public class SourceQuery extends AbstractQuery{
 	public SourceQuery(String i){id = i;}
 
 	private String id;
-	public String getId(String id){return id;}
 	public void setId(String i){id = i;}
 
 	@Override
