@@ -394,7 +394,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	
                 	distribution.min = distribution.buckets[0].from;
                 	distribution.max = distribution.buckets[distribution.buckets.length - 1].to;
-                	var matches = SGX.screener.getDistributionMatches(distribution, distribution.min, distribution.max) + ' matches';
+                	var matches = SGX.screener.getDistributionMatches(distribution, 0, distribution.buckets.length - 1) + ' matches';
                 	var template = $("#criteria-templates [data-template='number']").clone(true);
                 	
                 	
@@ -415,11 +415,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 
                 getDistributionMatches: function(distribution, startVal, endVal) {
                 	var ret = 0;
-                	$.each(distribution.buckets, function(idx, bucket) {
-                		if ((startVal >= bucket.from && endVal <= bucket.to) || bucket.from >= startVal) {
-                			ret += bucket.count;
-                		}
-                	});
+                	for (i = startVal; i<=endVal; i++) ret += distribution.buckets[i].count;
                 	return ret;
                 },
                 
@@ -439,9 +435,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
                         $(container).find('.slider-bar').slider({
                             range: true,
-                            min: parseFloat(distribution.min, 10),
-                            max: parseFloat(distribution.max, 10),
-                            values: [ distribution.min, distribution.max ],
+                            min: 0, //parseFloat(distribution.min, 10),
+                            max: distribution.buckets.length - 1, //parseFloat(distribution.max, 10),
+                            values: [ 0, distribution.buckets.length - 1 ],
                             slide: SGX.screener.criteriaSlider.slide,
                             stop: SGX.screener.search.criteriaSearch,
                             step: 1
@@ -469,13 +465,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     slide: function(event, ui) {
                     	
                     	var template = $(event.target).closest(".criteria");
-                    	var min = ui.values[0], max = ui.values[1];
                     	var distribution = $(template).data();
+                    	
+                    	var min = distribution.buckets[ui.values[0]].from, max = distribution.buckets[ui.values[1]].to;
                     	
                     	$(".min", template).text(SGX.formatter.getFormatted($(".min", template).attr("data-format"), min));
                     	$(".max", template).text(SGX.formatter.getFormatted($(".max", template).attr("data-format"), max));
                     	
-                    	var matches = SGX.screener.getDistributionMatches(distribution, min, max) + ' matches';
+                    	var matches = SGX.screener.getDistributionMatches(distribution, ui.values[0], ui.values[1]) + ' matches';
                     	$(".matches", template).text(matches);
 
                     }
@@ -627,9 +624,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			
                 			// handle slider criteria
                 			if ($(".slider-bar", this).length > 0) {
+                				var distribution = $(this).data();
                 				var sliderVals = $(".slider-bar", this).slider("values");
-                				param.from = sliderVals[0];
-                				param.to = sliderVals[1];
+                				param.from = distribution.buckets[sliderVals[0]].from;
+                				param.to = distribution.buckets[sliderVals[1]].to;
                 			}
                 			// dropdown
                 			else if ($(".button-dropdown", this).length > 0) {
