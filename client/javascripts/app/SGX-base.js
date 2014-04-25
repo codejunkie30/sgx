@@ -669,7 +669,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	renderResults: function(data) {
 
                 		// one match, redirect
-                        if (data.companies.length == 1) {
+                        if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
                         	window.location = SGX.getCompanyPage(data.companies[0].tickerCode);
                         }
                 		
