@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.search.elasticsearch.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,7 +11,6 @@ import com.wmsi.sgx.service.search.elasticsearch.Query;
 import com.wmsi.sgx.service.search.elasticsearch.QueryExecutor;
 import com.wmsi.sgx.service.search.elasticsearch.QueryResponse;
 
-@Service
 public class ESQueryExecutor implements QueryExecutor{
 	
 	private static final Logger log = LoggerFactory.getLogger(ESQueryExecutor.class);
