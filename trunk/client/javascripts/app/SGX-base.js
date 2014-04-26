@@ -90,7 +90,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             showTerms: function() {
             	
-            	$.get("terms-conditions.html?mike=2", function(data) {
+            	$.get("terms-conditions.html", function(data) {
             		try {
                         SGX.modal.open({ content: data, type: 'alert', maxWidth: 1000 });            		
             		}
@@ -1201,18 +1201,26 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 	$(".content", container).html(settings.content);
                 	$(container).addClass(settings.type);
                 	
-                	$.colorbox({
+                	var cboxSettings = {
                 		html: $(container),
                 		overlayClose: false,
                 		transition: 'none',
                 		maxWidth: settings.hasOwnProperty("maxWidth") ? settings.maxWidth : 550,
                 		onComplete: function() {
                 			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
+                			if (SGX.getParentURL() != null) {
+                				SGX.resizeIframe(SGX.pageHeight, 10);
+                				$(this).position();
+                			}
                 		},
                 		onClose: function() {
                 			if (settings.hasOwnProperty("close")) settings.close(settings);
                 		}
-                	});
+                	};
+                	
+                	if (SGX.getParentURL() != null) cboxSettings.top = 100;
+                	
+                	$.colorbox(cboxSettings);
 
                 	// cancel/close
                 	$(".cancel, .close").click(function(e) {
