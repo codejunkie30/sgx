@@ -1640,6 +1640,9 @@ td .info {
 	display: none;
 } 
 
+.terms-copy {
+	width: 800px;
+}
 
 .modal-container {
 	padding: 0 20px 20px 20px;

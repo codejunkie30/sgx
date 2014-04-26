@@ -309,6 +309,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
             		// handle % change
         			var html = $(".change-picker").html();
+        			
+        			//SGX.resizeIframe(SGX.pageHeight, 0);
 
                     SGX.modal.open({
                         content: html,
@@ -608,7 +610,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		SGX.screener.search.fullSearch(true);
                 	},
                 	
-                	fullSearch: function(resetAddtl) {
+                	fullSearch: function(resetAddtl, finalize) {
                 		
                 		var endpoint = "/sgx/search";
                 		var params = [];
@@ -757,7 +759,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			// display the rows
                 		SGX.screener.search.displayRows(1, sort, direction);
                 		
-                		return;
                 	},
                 	
                 	getColumnValue: function(company, field) {
@@ -877,8 +878,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     
                     displayPage: function(page) {
 
+                    	var isFirst = (typeof $(".module-results tbody").attr("rendered") === "undefined") ? true : false;
                     	var data = $(".module-results").data();
 
+                    	$(".module-results tbody").attr("rendered", "true");
                     	$(".module-results tbody").children().remove();
                     	$(".module-results .table-wrapper tbody").show();
                     	
@@ -931,8 +934,22 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     	var lastPg = parseInt($(".action-btn:not(.prev,.next):last", paging).text());
                     	SGX.screener.search.pageButton($(".action-btn.next", paging), lastPg == page ? page : page + 1, page);
 
-                    	// resize
-                    	var scroll = $(".expand-criteria").is(":visible") ? 210 : 540;
+                    	// resize, so many different ways to handle scroll
+                    	var scroll = -1;
+                    	
+                    	// first load (scroll to top)
+                    	if (isFirst) scroll = 0;
+                    	// by indsutry
+                    	else if ($(".related-page").length > 0) scroll = 30;
+                    	// screener with advanced criteria being displayed
+                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 540;
+                    	// screener with advanced criteria hidden
+                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 210;
+                    	// alpha factors (company version)
+                    	else if ($(".alphas-page").length > 0 && $(".company-header").is(":visible")) scroll = 480;
+                    	// alpha factors (no company)
+                    	else if ($(".alphas-page").length > 0) scroll = 330;
+                    	
         	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
                     },
@@ -1047,13 +1064,16 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                     scriptCharset: "utf-8" , 
                     contentType: 'application/json; charset=UTF-8',           	
                     success: typeof successFN !== "undefined" ? successFN : SGX.genericAjaxSuccess,
-                    error: typeof errorFN !== "undefined" ? errorFN : SGX.genericAjaxError,
+                    error: typeof errorFN !== "undefined" ? errorFN : SGX.genericAjaxError
+                    /**
+                    ,
                     complete: function() {
                     	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
             	            var curHeight = SGX.getTrueContentHeight();
             	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
                     	}
                     }
+                    */
             	});
             	
             },
@@ -1394,7 +1414,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		SGX.tabs();
             		
             		// resize/scroll
-            		SGX.resizeIframe(1300, 0);
+            		SGX.resizeIframe(SGX.getTrueContentHeight() + 50, 0);
             		
             	},
             	
@@ -1887,6 +1907,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
         			SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
+            		SGX.resizeIframe(650, 0);
             		
             	},
             	
@@ -1926,8 +1947,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
         			$(el).addClass("checked");
         			
-        			$(el).closest("tr").find(".unchart").text("[ UNCHART ]").click(function() { $(this).closest("tr").find(".checkbox").click(); });
-        			
         			// get the series data
         			var seriesData = [], empty = 0;
         			$(el).closest("tr").children().not(".unchart").each(function(idx, td) {
@@ -1943,8 +1962,11 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         					type: "alert",
         					content: "<p>No data available for this series.</p>"
         				});
+                        $(el).removeClass("checked");
         				return;
         			}
+
+        			$(el).closest("tr").find(".unchart").text("[ UNCHART ]").click(function() { $(this).closest("tr").find(".checkbox").click(); });
         			
         			var name = $(".trigger", el).attr("data-name");
 
@@ -1991,7 +2013,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
 
                 	// resize
     	            var curHeight = SGX.getTrueContentHeight();
-    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight, 10);
             		
             	},
             	
@@ -2025,8 +2047,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			$(".chart-row").hide();
             			
                     	// resize
-        	            var curHeight = SGX.getTrueContentHeight();
-        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+                		SGX.resizeIframe(650, 0);
             			
             			return;
             		}
@@ -2145,7 +2166,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var endpoint = SGX.fqdn + "/sgx/company/relatedCompanies";
             		var params = { id: ticker };
             		$(".pager").hide();
-            		SGX.handleAjaxRequest(endpoint, params, SGX.screener.search.renderResults);            		
+            		
+            		SGX.handleAjaxRequest(endpoint, params, function(data) { SGX.screener.search.renderResults(data); SGX.resizeIframe(SGX.getTrueContentHeight(), 0);   });            		
             	},
             	
             	handleIndustry: function(data) {
@@ -2166,10 +2188,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		var param = { "field": field, "value": value };
             		var params = [ param ];
             		
-            		var endpoint = "/sgx/search";
+            		var endpoint = SGX.fqdn + "/sgx/search";
             		var qs = {};
             		qs.criteria = params;
-            		SGX.handleAjaxRequest(SGX.fqdn + endpoint, qs, SGX.screener.search.renderResults, SGX.screener.search.fail);
+            		SGX.handleAjaxRequest(endpoint, qs, function(data) { SGX.screener.search.renderResults(data); SGX.resizeIframe(SGX.getTrueContentHeight(), 0);   }, SGX.screener.search.fail);
             		
             	}
             	
@@ -2253,8 +2275,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 		SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, SGX.screener.search.renderResults, SGX.screener.search.fail);
         			}
         			else {
-        	            var curHeight = SGX.getTrueContentHeight();
-        	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
+        	           // var curHeight = SGX.getTrueContentHeight();
+        	           // if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
         			}
 
             	}
