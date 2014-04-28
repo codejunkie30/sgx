@@ -3,11 +3,16 @@ package com.wmsi.sgx.model.distribution;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.google.common.base.Objects;
 
 public class DistributionsRequest{
-
+	
 	@Valid
+	@NotNull(message="Fields can not be null")
+	@Size(min = 1 , max = 5, message="Field count outside of range 1 - 5")
 	private List<DistributionRequestField> fields;
 
 	public List<DistributionRequestField> getFields() {
