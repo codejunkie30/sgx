@@ -3,11 +3,22 @@ body {
 	padding: 0;
 }
 
+body * {
+	font-size: 11.5px;
+}
+
 hr {
 	height: 2px;
 	background: #9e9d98;
 	border: 0;
 	margin: 15px 0 15px 0;
+}
+
+h2 {
+	font-size: 22px;
+	font-weight: normal;
+	margin: 0px;
+	color: #1e2171;
 }
 
 h3 {
@@ -26,11 +37,10 @@ td {
 	page-break: always;
 	border-top: 15px solid #BFCE00;
 	overflow: hidden;
+	height: 1104px;
 }
 
 .container_3 {
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
 }
 
 .row {
@@ -64,15 +74,20 @@ td {
 }
 
 .header {
-	padding-top: 25px;
+	padding-top: 20px;
 }
 
 .header .row {
-	padding: 15px 25px 5px 25px;
+	padding: 5px 25px 5px 25px;
 }
 
 .logos {
 	white-space: nowrap;
+}
+
+.dark-module {
+	padding-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .breadcrumb-tree {
@@ -80,11 +95,11 @@ td {
 }
 
 .breadcrumb-tree a, .breadcrumb-tree span {
-	font-size: 14px !important;
+	font-size: 12px !important;
 }
 
-.stock-events {
-	margin-top: 40px;
+#area-chart {
+	width: 600px;
 }
 
 .stock-events ul {
@@ -92,7 +107,7 @@ td {
 }
 
 table.panel {
-	width: 100%;
+	width: 600px;
 }
 
 table.panel td, .general-info td {
@@ -114,11 +129,6 @@ td.right {
 	padding-top: 20px;
 }
 
-.dark-module {
-	padding-bottom: 20px;
-	margin-bottom: 20px;
-}
-
 .right .left {
 	padding: 10px;
 }
@@ -129,4 +139,58 @@ td.right {
 
 .right .left hr {
 	width: 75%;
+}
+
+.financials-section td {
+  padding: 4px;
+  font: normal 11px/11px Arial, Helvetica, sans-serif;
+  text-align: center;
+  height: auto;
+}
+
+
+.financials-section h4 {
+	font-size: 13px;	
+}
+
+.financials-section tr td:first-child {
+	font-weight: bold;
+}
+
+.financials-section td.right {
+	padding-left: 5%;
+}
+
+.financials-section table {
+	margin:0px;
+}
+
+.financials-section p {
+	font-size: 15px;
+	margin-bottom:0px;
+}
+
+
+.financials-section th {
+	font-size: 9px;
+	border-left: 4px solid #FFF;
+}
+
+.terms ul * {
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.terms ul li {
+	margin-bottom: 10px;
+}
+
+.footer {
+	width: 100%;
+	background-color: #eee;
+	padding: 10px;
+}
+
+.footer * {
+	font-size: 14px;
 }
