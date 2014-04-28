@@ -30,7 +30,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
     		relatedPage: "related.html",
     		
     		alphasPage: "alpha-factor.html",
-    		
+
+    		printPage: "print.html",
+
             parentURL: null,
             
             pageHeight: $(document).height(),
@@ -77,6 +79,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             
             getAlphasPage: function(factor, quintile, extra) {
             	return SGX.getPage(SGX.alphasPage + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
+            },
+            
+            getPrintPage: function(code, extra) {
+            	return SGX.getPage(SGX.printPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
             resizeIframe: function(height, scroll) {
@@ -1361,6 +1367,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
             	else if (page.indexOf(SGX.relatedPage) != -1) SGX.related.init();
             	else if (page.indexOf(SGX.alphasPage) != -1) SGX.alphas.init();
+            	else if (page.indexOf(SGX.printPage) != -1) SGX.print.init();
             	else SGX.screener.init();
             },
             
@@ -1399,7 +1406,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
         			SGX.trackPage("SGX Company Profile - " + data.company.companyInfo.companyName);
             		
-            		SGX.company.initSimple(data);
+            		SGX.company.initSimple(data, true);
 
             		// news
             		var newsData = SGX.company.initNews(data);
@@ -1481,9 +1488,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             	},
             	
-            	initSimple: function(data) {
+            	initSimple: function(data, addHeader) {
             		
-            		SGX.company.installCompanyHeader();
+            		if (addHeader) SGX.company.installCompanyHeader();
             		
             		// simple properties
             		$(".property").each(function(idx, el) {
@@ -1562,10 +1569,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             				var letter = SGX.letters.substring(idx, idx+1);
             				var nId = 'keyDev-' + letter;
             				var icon = $("<div />").addClass("icon").text(letter); 
-            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId);
+            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId).attr("data-dt", SGX.formatter.getFormatted("date", keyDev.date));
             				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
             				$(link).click(function(e) {
-            					var copy = "<h4>" + $(this).text() + "</h4><div class='news'>" + $(this).attr("data-content") + "</div>";
+            					var copy = "<h4>" + $(this).text() + "</h4><p class='bold'>From " + $(this).attr("data-dt") + "</p><div class='news'>" + $(this).attr("data-content") + "</div>";
                                 SGX.modal.open({ content: copy, type: 'alert' });
             				});
             				
@@ -1631,6 +1638,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		$(".progress-estimate").show();
             		
+            		console.log(company.avgBrokerReq);
+            		
             		$(".theme-three-bubble-progress").addClass("opt-" + (company.avgBrokerReq | 0));
             		
             		// no estimate to display
@@ -1689,7 +1698,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                         
             		    rangeSelector: {
             				inputEnabled: false,
-            		        selected: 6,
+            		        selected: 4,
                             buttons: [{
                                 type: 'day',
                                 count: 1,
@@ -1855,7 +1864,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
         			SGX.trackPage("SGX Company Profile - " + data.company.companyInfo.companyName);
             		
-            		SGX.company.initSimple(data);
+            		SGX.company.initSimple(data, true);
             		
             		$(".back-company-profile").show();
             		
@@ -2147,7 +2156,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             	
             	loadedCompany: function(data) {
             		
-            		SGX.company.initSimple(data);
+            		SGX.company.initSimple(data, true);
             		
             		$(".back-company-profile").show();
             		
@@ -2224,7 +2233,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         			SGX.trackPage("SGX Alpha Factor Libraries (" + data.company.companyInfo.companyName + ")");
 
             		$(".company-row").show();
-            		SGX.company.initSimple(data);
+            		SGX.company.initSimple(data, true);
             		$(".back-company-profile").show();            		
             		SGX.alphas.loadAlphas();
             		
@@ -2295,6 +2304,37 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         	failed: function() {
         		window.location = SGX.getPage(SGX.screenerPage);
         	},
+        	
+        	print: {
+        		
+        		init: function() {
+            		var code = SGX.getParameterByName("code");
+            		var company = SGX.company.getCompany(code, SGX.print.loadedCompany);        			
+        		},
+        	
+        		loadedCompany: function(data) {
+        			
+        			SGX.company.initSimple(data, false);
+        			var newsData = SGX.company.initNews(data);
+
+            		// init charts
+            		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
+            		var params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
+
+            		// all other sections
+            		SGX.company.initHolders(data);
+            		SGX.company.initConsensus(data);
+            		SGX.company.initAlphaFactors(data);
+            		
+            		// hide/show
+            		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
+            		
+            		SGX.formatter.formatElements("body");
+        			
+        		}
+        		
+        	}
         	
 
             

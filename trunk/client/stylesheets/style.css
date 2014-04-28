@@ -17,12 +17,20 @@ body * {
 	display: none;
 }
 
+.left {
+	text-align: left;
+}
+
 .center {
 	text-align: center;
 }
 
 .right {
 	text-align: right;
+}
+
+.bold {
+	font-weight: bold;
 }
 
 .no-results-display {
@@ -366,7 +374,8 @@ td .page-title {
   height: 3px;
   border: none;
 }
-.module.dark-module {
+
+.dark-module {
   background: #f2f2f2;
   padding-bottom: 8px;
 }
