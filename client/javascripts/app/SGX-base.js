@@ -1,5 +1,5 @@
 // This is the modular wrapper for any page
-define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock', 'colorbox'], function($, _, SGX) {
+define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock', 'colorbox', 'placeholder'], function($, _, SGX) {
     // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
     // Instead of console.log() use Paul Irish's debug.log()
 	
@@ -171,7 +171,9 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			$(".advanced-criteria").show();
             			$(".expand-criteria").hide();
             		});
-            		
+
+        			$.placeholder.shim();
+
         			SGX.screener.initCriteria();
         			
         		},
@@ -1217,7 +1219,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
                 			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
                 			if (SGX.getParentURL() != null) {
                 				SGX.resizeIframe(SGX.pageHeight, 10);
-                				$(this).position();
+                				$("#colorbox").position();
                 			}
                 		},
                 		onClose: function() {
@@ -1855,8 +1857,71 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             financials: {
             	
             	init: function() {
+            		SGX.financials.registerPlugin();
             		var code = SGX.getParameterByName("code");
             		var company = SGX.company.getCompany(code, SGX.financials.loadedCompany);
+            	},
+            	
+            	registerPlugin: function() {
+            		
+            	    /**
+            	     * Experimental Highcharts plugin to implement chart.alignThreshold option.
+            	     * Author: Torstein Hønsi
+            	     * Last revision: 2013-12-02
+            	     */
+            	    (function (H) {
+            	        var each = H.each;
+            	        H.wrap(H.Chart.prototype, 'adjustTickAmounts', function (proceed) {
+            	            var ticksBelowThreshold = 0,
+            	                ticksAboveThreshold = 0;
+            	            if (this.options.chart.alignThresholds) {
+            	                each(this.yAxis, function (axis) {
+            	                    var threshold = axis.series[0] && axis.series[0].options.threshold || 0,
+            	                        index = axis.tickPositions && $.inArray(threshold, axis.tickPositions);
+
+            	                    if (index !== undefined && index !== -1) {
+            	                        axis.ticksBelowThreshold = index;
+            	                        axis.ticksAboveThreshold = axis.tickPositions.length - index;
+            	                        ticksBelowThreshold = Math.max(ticksBelowThreshold, index);
+            	                        ticksAboveThreshold = Math.max(ticksAboveThreshold, axis.ticksAboveThreshold);
+            	                    }
+            	                });
+
+            	                each(this.yAxis, function (axis) {
+            	                    
+            	                    var tickPositions = axis.tickPositions;
+
+            	                    if (tickPositions) {
+
+            	                        if (axis.ticksAboveThreshold < ticksAboveThreshold) {
+            	                            while (axis.ticksAboveThreshold < ticksAboveThreshold) {
+            	                                tickPositions.push(
+            	                                    tickPositions[tickPositions.length - 1] + axis.tickInterval
+            	                                );
+            	                                axis.ticksAboveThreshold++;
+            	                            }
+            	                        }
+
+            	                        if (axis.ticksBelowThreshold < ticksBelowThreshold) {
+            	                            while (axis.ticksBelowThreshold < ticksBelowThreshold) {
+            	                                tickPositions.unshift(
+            	                                    tickPositions[0] - axis.tickInterval
+            	                                );
+            	                                axis.ticksBelowThreshold++;
+            	                            }
+
+            	                        }
+            	                        axis.min = tickPositions[0];
+            	                        axis.max = tickPositions[tickPositions.length - 1];
+            	                    }
+            	                });
+            	            } else {
+            	                proceed.call(this);
+            	            }
+
+            	        })
+            	    }(Highcharts));            		
+            		
             	},
             	
             	loadedCompany: function(data) {
@@ -2314,13 +2379,14 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         		loadedCompany: function(data) {
         			
         			SGX.company.initSimple(data, false);
+
         			var newsData = SGX.company.initNews(data);
 
             		// init charts
             		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
             		var params = { id: data.company.companyInfo.tickerCode };
             		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
-
+        			
             		// all other sections
             		SGX.company.initHolders(data);
             		SGX.company.initConsensus(data);
@@ -2329,9 +2395,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
 
-            		// make everything pretty
-            		//$(".financials-section tbody tr:even").addClass("even");
-            		
             		var endpoint = SGX.fqdn + "/sgx/company/financials";
             		var params = { id: data.company.companyInfo.tickerCode };
             		SGX.handleAjaxRequest(endpoint, params, function(fData) { SGX.print.finishedPage(fData, data); });
@@ -2371,10 +2434,10 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             			
             		});
         			
-        			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
-
             		SGX.formatter.formatElements(".financials-section tbody");
             		$(".financials-section .statistics tbody tr:even").addClass("even");
+
+        			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
 
         		}
         		
@@ -2382,66 +2445,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         	
 
             
-    };
-
-    
-    /**
-     * Experimental Highcharts plugin to implement chart.alignThreshold option.
-     * Author: Torstein Hønsi
-     * Last revision: 2013-12-02
-     */
-    (function (H) {
-        var each = H.each;
-        H.wrap(H.Chart.prototype, 'adjustTickAmounts', function (proceed) {
-            var ticksBelowThreshold = 0,
-                ticksAboveThreshold = 0;
-            if (this.options.chart.alignThresholds) {
-                each(this.yAxis, function (axis) {
-                    var threshold = axis.series[0] && axis.series[0].options.threshold || 0,
-                        index = axis.tickPositions && $.inArray(threshold, axis.tickPositions);
-
-                    if (index !== undefined && index !== -1) {
-                        axis.ticksBelowThreshold = index;
-                        axis.ticksAboveThreshold = axis.tickPositions.length - index;
-                        ticksBelowThreshold = Math.max(ticksBelowThreshold, index);
-                        ticksAboveThreshold = Math.max(ticksAboveThreshold, axis.ticksAboveThreshold);
-                    }
-                });
-
-                each(this.yAxis, function (axis) {
-                    
-                    var tickPositions = axis.tickPositions;
-
-                    if (tickPositions) {
-
-                        if (axis.ticksAboveThreshold < ticksAboveThreshold) {
-                            while (axis.ticksAboveThreshold < ticksAboveThreshold) {
-                                tickPositions.push(
-                                    tickPositions[tickPositions.length - 1] + axis.tickInterval
-                                );
-                                axis.ticksAboveThreshold++;
-                            }
-                        }
-
-                        if (axis.ticksBelowThreshold < ticksBelowThreshold) {
-                            while (axis.ticksBelowThreshold < ticksBelowThreshold) {
-                                tickPositions.unshift(
-                                    tickPositions[0] - axis.tickInterval
-                                );
-                                axis.ticksBelowThreshold++;
-                            }
-
-                        }
-                        axis.min = tickPositions[0];
-                        axis.max = tickPositions[tickPositions.length - 1];
-                    }
-                });
-            } else {
-                proceed.call(this);
-            }
-
-        })
-    }(Highcharts));    
+    };    
     
     SGX.init();    
 

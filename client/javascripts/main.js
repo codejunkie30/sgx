@@ -14,7 +14,8 @@
             highstock: 'vendor/highstock/highstock',
             debug: 'vendor/ba-debug.min',
             underscore: 'vendor/underscore/underscore',
-            colorbox: 'app/colorbox'
+            colorbox: 'app/colorbox',
+            placeholder: 'app/jquery.placeholder'
         },
         waitSeconds: 5,
         shim: {
@@ -53,6 +54,9 @@
                 "exports": "_"
             },
             "colorbox": {
+            	deps: ['jquery']
+            },
+            "placeholder": {
             	deps: ['jquery']
             }
         }
