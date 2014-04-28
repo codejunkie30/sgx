@@ -152,6 +152,26 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isBadRequest());
 	}
 
+	@Test
+	public void testMethodsNotAllowed() throws Exception{
+
+		mockMvc.perform(get("/search")
+				.content("{}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+
+		mockMvc.perform(put("/search")
+				.content("{}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+
+		mockMvc.perform(delete("/search")
+				.content("{}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+
+	}
+
 	@Configuration
 	static class SearchControllerTestConfig{
 
