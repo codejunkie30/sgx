@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SGX - Company Profile</title>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="stylesheets/print.css" />
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+</head>
+
+<body class="print-page">
+
+
+	<div class="page">
+	
+		<div class="container_3 header" type="special">
+		
+			<div class="row logos">
+				<span class="column50"><img src="img/sgxlogo.jpg" /></span>
+				<span class="column50 right"><img src="img/CAPIQ.png" /></span>
+				<hr />
+			</div>
+		
+		</div>
+		
+		<div class="container_3">
+
+			<div class="row">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" class="company-header">
+					<tr>
+						<td class="page-title">
+							<span class="property" data-name="companyName"></span> (<span class="property" data-name="tickerCode"></span>)
+						</td>
+						<td>
+							<span class="stock-price">
+								<div class="main">
+									S$ <span class="lastPrice formattable" data-format="number">--</span>
+									&nbsp;
+									<span class="change">--</span>
+								</div>
+								<div class="last-updated">
+									Last Price:&nbsp;
+									<span class="date">
+										<span class="day">--</span>&nbsp;
+										<span class="time">--</span>
+									</span>
+								</div>
+							</span>				
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="row">
+              	<div class="module dark-module breadcrumb-tree">
+					<span>Industry Tree:</span> <span class="dynamic"></span>
+				</div>
+			</div>
+
+			<div class="row center">
+              	<div id="area-chart">Loading price and volume history</div>
+			</div>
+
+			<div class="row dark-module stock-events">
+				<div>
+					<h3>News</h3>					
+				</div>
+				<ul></ul>
+			</div>
+			
+		</div>
+	
+	</div>
+	
+	<div class="page">
+
+	    <div class="container_3">
+
+	        <div class="row">
+	        
+	        	<table cellpadding="0">
+	        	
+	        		<tr>
+	        			<td width="60%">
+
+			            	<h3>Overview</h3>
+			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+										<td width="25%">Open Price</td>
+										<td width="25%" class="property formattable" data-format="dollars" data-name="openPrice">-</td>
+										<td width="25%">Day High/Low</td>
+											<td width="25%">
+											<span class="property formattable" data-format="dollars" data-name="highPrice">-</span>-<span class="property formattable" data-format="dollars" data-name="lowPrice">-</span>
+										</td>
+									</tr>
+									<tr class="even">
+										<td>Volume</td>
+										<td class="property" data-name="volume formattable" data-format="millions">-</td>
+										<td>Previous Close</td>
+										<td class="property formattable" data-format="number" data-name="previousClosePrice">-</td>
+									</tr>
+									<tr>
+										<td>Previous Close Date</td>
+										<td class="property formattable" data-name="previousCloseDate" data-format="date">-</td>
+										<td>52 Week High/Low</td>
+										<td class="custom">
+											<span class="property formattable" data-format="number" data-name="yearHigh">-</span>-<span class="property formattable" data-format="number" data-name="yearLow">-</span>
+										</td>
+									</tr>
+									<tr class="even">
+										<td>5-Year Beta</td>
+										<td class="property formattable" data-format="number" data-name="beta5Yr">-</td>
+										<td>Shares Outstanding</td>
+										<td class="property formattable" data-format="volume" data-name="sharesOutstanding"></td>
+									</tr>
+									<tr>
+										<td>Shares Sold Short</td>
+										<td class="property formattable" data-format="millions" data-name="sharesSoldShort">-</td>
+										<td>Diluted Normalized EPS</td>
+										<td class="property formattable" data-format="number" data-name="eps">-</td>
+									</tr>
+									<tr class="even">
+										<td>Average 3-month Volume</td>
+										<td class="property formattable" data-format="volume" data-name="avgVolumeM3"></td>
+										<td>Total Market Cap</td>
+										<td class="property formattable" data-format="millions" data-name="marketCap"></td>
+									</tr>
+									<tr>
+										<td>Float %</td>
+										<td class="property formattable" data-format="percent" data-name="floatPercentage" data-unit="percent">-</td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<h3>Valuation</h3>
+			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+										<td width="25%">Price/Book Value</td>
+										<td width="25%" class="property formattable" data-format="number" data-name="priceToBookRatio">-</td>
+										<td width="25%">P/E Ratio</td>
+										<td width="25%" class="property formattable" data-format="number" data-name="peRatio">-</td>
+									</tr>
+									<tr class="even">
+										<td>Dividend Yield</td>
+										<td class="property formattable" data-format="percent" data-name="dividendYield" data-unit="percent">-</td>
+										<td>EV/EBITDA</td>
+										<td class="property formattable" data-format="number" data-name="evEbitData">-</td>
+									</tr>
+								</tbody>
+							</table>
+			
+							<h3>Financials</h3>
+			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+										<td width="25%">Debt/EBITDA</td>
+										<td width="25%" class="property formattable" data-format="percent" data-name="totalDebtEbitda">-</td>
+										<td width="25%">Cap Ex</td>
+										<td width="25%" class="property formattable" data-format="millions" data-name="capitalExpenditures">-</td>
+									</tr>
+									<tr class="even">
+										<td>Total Debt</td>
+										<td class="property formattable" data-format="millions" data-name="totalDebtEquity">-</td>
+										<td>EBIT</td>
+										<td class="property formattable" data-format="millions" data-name="ebit" data-unit="mil">-</td>
+									</tr>
+									<tr>
+										<td>Enterprise Value</td>
+										<td class="property formattable" data-format="millions" data-name="enterpriseValue">-</td>
+										<td>Total Revenue</td>
+										<td class="property formattable" data-format="millions" data-name="totalRevenue" data-unit="mil">-</td>
+									</tr>
+									<tr class="even">
+										<td>Total Assets</td>
+										<td class="property formattable" data-format="millions" data-name="totalAssets" data-unit="mil">-</td>
+										<td>Net Income</td>
+										<td class="property formattable" data-format="millions" data-name="netIncome">-</td>
+									</tr>
+									<tr>
+										<td>Cash &amp; ST Investments</td>
+										<td class="property formattable" data-format="millions" data-name="cashInvestments">-</td>
+										<td>EBITDA</td>
+										<td class="property formattable" data-format="millions" data-name="ebitda" data-unit="mil">-</td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<h3>Ownership</h3>
+			
+							<table cellspacing="0" class="panel">
+								<thead>
+									<tr>
+										<td width="50%">Top 5 owners by shares held</td>
+										<td width="25%">Number of shares held</td>
+										<td width="25%">Percent of shares held</td>
+									</tr>
+								</thead>
+								<tbody class="owners">
+									<tr>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+			                        <tr>
+										<td>&nbsp;</td>
+										<td class="right">Total % of common stock:</td>
+										<td class="property formattable" data-format="percent" data-name="percentCommonStock">-</td>
+									</tr>
+								</tbody>
+							</table>
+			            
+			
+			                <div class="businessDescription">
+			                	<h3>Company Description</h3>
+			                    <p class="property" data-name="businessDescription">-</p>
+			                </div>
+			
+			               	<h3>General Information</h3>
+			               	
+							<table cellspacing="0" class="general-info">
+								<tr>
+									<td width="33%">Contact</td>
+									<td width="33%"># of Employees</td>
+									<td width="33%">Year Founded</td>
+								</tr>
+								<tr>
+									<td rowspan="3" class="property" data-name="companyAddress">-</td>
+									<td class="property formattable" data-format="number" data-name="employees">-</td>
+									<td class="property" data-name="yearFounded">-</td>
+								</tr>
+								<tr>
+									<td>Current Fiscal Year End</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td class="property formattable" data-name="fiscalYearEnd" data-format="date">-</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td rowpan="3">
+										<a href="#" target="_blank" alt="" class="link property" data-name="companyWebsite"><span class="property" data-name="companyWebsite"></span></a>
+									</td>
+								</tr>
+							</table>
+				        			
+	        			
+	        			</td>
+	        			<td width="40%" class="right">
+	        			
+			                <div class="dark-module progress-estimate left">
+								<h3>S&amp;P Capital IQ Consensus Estimates</h3>
+			                    <div class="has-estimate">
+			                    	<p class="center bold">Consensus Recommendation</p>
+				                    <div class="bar-container">
+				                        <ul class="progress-mask theme-three-bubble-progress">
+				                            <li class="sell">
+				                                <span href="">Sell</span>
+				                            </li>
+				                            <li class="hold">
+				                                <span href="">Hold</span>
+				                            </li>
+				                            <li class="buy">
+				                                <span href="">Buy</span>
+				                            </li>
+				                        </ul>
+				                    </div>
+				                    <div class="center"><hr /></div>
+				                    <p class="center bold">
+				                        Consensus Target Price
+				                    </p>
+				                    <div class="price formattable" data-format="number">--</div>
+			                    </div>
+			                    <div class="no-estimate">
+			                    	No Recommendation
+			                    </div>
+			                </div>	        				
+			                
+			                <!-- alpha factors -->
+			                <div class="dark-module alpha-factors left">
+			                
+			                	<h3>S&amp;P Capital IQ Alpha Factor Composites</h3>
+			                	
+			                    <div class="no-factors">
+			                    	No Data Available
+			                    </div>
+			                    
+			                    <div class="has-factors">
+				                    <p class="left">Click on the composite to see companies with the same rank.</p>
+				                    <hr>
+				                    <div class="slider" data-name="valuation">
+				                        <div class="slider-label">
+				                        	Valuation 
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="analystExpectations">
+				                        <div class="slider-label">
+				                        	Analyst Expectations
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="capitalEfficiency">
+				                        <div class="slider-label">
+				                        	Capital Efficiency
+											<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="priceMomentum">
+				                        <div class="slider-label">
+				                        	Price Momentum
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="earningsQuality">
+				                        <div class="slider-label">
+				                        	Earnings Quality
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="volatility">
+				                        <div class="slider-label">
+				                        	Volatility
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">High</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">Low</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="size">
+				                        <div class="slider-label">
+				                        	Size
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Small</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">Large</div>
+				                        </div>
+				                    </div>
+				                    <div class="slider" data-name="historicalGrowth">
+				                        <div class="slider-label">
+				                        	Growth
+				                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+				                        </div>
+				                        <div class="bar-container">
+				                            <div class="slider-left-label">Low</div>
+				                            <div class="bar-progress"></div>
+				                            <div class="bar"></div>
+				                            <div class="slider-right-label">High</div>
+				                        </div>
+				                    </div>
+								</div>
+			                </div>
+	        			
+	        			</td>
+	        		</tr>
+	        	
+	        	</table>
+				
+			</div>
+	
+				
+		</div>
+		
+	</div>
+
+    
+</body>
+
+</html>

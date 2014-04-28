@@ -1,0 +1,132 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+hr {
+	height: 2px;
+	background: #9e9d98;
+	border: 0;
+	margin: 15px 0 15px 0;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 26px;
+  color: #1e2171;
+  border-bottom: 1px solid #CCC;
+}
+
+td {
+	vertical-align: top;
+}
+
+.page {
+	page-break: always;
+	border-top: 15px solid #BFCE00;
+	overflow: hidden;
+}
+
+.container_3 {
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
+}
+
+.row {
+	padding: 5px 25px 5px 25px;
+}
+
+.column50 {
+	display: inline-block;
+	width: 50%;
+	padding-left: 15px;
+	vertical-align: top;
+}
+
+.column50.right {
+	width: 47%;
+	padding-left: 0;
+}
+
+
+.column70 {
+	display: inline-block;
+	width: 70%;
+	padding-left: 15px;
+	vertical-align: top;
+}
+
+.column30.right {
+	width: 30%;
+	padding-left: 0;
+	vertical-align: top;
+}
+
+.header {
+	padding-top: 25px;
+}
+
+.header .row {
+	padding: 15px 25px 5px 25px;
+}
+
+.logos {
+	white-space: nowrap;
+}
+
+.breadcrumb-tree {
+	padding: 8px;
+}
+
+.breadcrumb-tree a, .breadcrumb-tree span {
+	font-size: 14px !important;
+}
+
+.stock-events {
+	margin-top: 40px;
+}
+
+.stock-events ul {
+	border: 0;	
+}
+
+table.panel {
+	width: 100%;
+}
+
+table.panel td, .general-info td {
+	padding: 8px;
+	font-weight: bold;
+}
+
+table.panel td.property, .general-info td.property {
+	font-weight: normal;
+}
+
+.general-info td {
+	padding: 0;
+	padding: 3px;
+}
+
+td.right {
+	padding-left: 20px;
+	padding-top: 20px;
+}
+
+.dark-module {
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.right .left {
+	padding: 10px;
+}
+
+.right .left h3 {
+	margin-top: 0px;
+}
+
+.right .left hr {
+	width: 75%;
+}
