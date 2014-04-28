@@ -86,6 +86,7 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             },
 
             resizeIframe: function(height, scroll) {
+            	if (SGX.getParentURL() == null) return;
             	var fn = function() {
             		var msg = height + "-" + ((typeof scroll === "undefined") ? "0" : scroll);
             		SGX.pageHeight = height;
@@ -1638,8 +1639,6 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		$(".progress-estimate").show();
             		
-            		console.log(company.avgBrokerReq);
-            		
             		$(".theme-three-bubble-progress").addClass("opt-" + (company.avgBrokerReq | 0));
             		
             		// no estimate to display
@@ -2329,9 +2328,54 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
+
+            		// make everything pretty
+            		//$(".financials-section tbody tr:even").addClass("even");
+            		
+            		var endpoint = SGX.fqdn + "/sgx/company/financials";
+            		var params = { id: data.company.companyInfo.tickerCode };
+            		SGX.handleAjaxRequest(endpoint, params, function(fData) { SGX.print.finishedPage(fData, data); });
             		
             		SGX.formatter.formatElements("body");
         			
+        		},
+        		
+        		finishedPage: function(data, cData) {
+
+            		if (!data.hasOwnProperty("financials")  || data.financials.length == 0) return;
+            		
+            		var financials = SGX.financials.cleanFinancials(data.financials); 
+            		
+            		// headings
+            		$(".financials-section thead").each(function() {
+            			
+            			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
+            				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)) : financials[idx].absPeriod.replace("FY", "FY  ");
+            				$(this).html(txt);
+            				$(".currency").text(financials[idx].filingCurrency);
+            			});
+            			
+            		});
+            		
+            		// loop through the td's
+            		$(".financials-section tbody tr").each(function(idx, el) {
+            			
+            			var name = $("td:first", el).attr("data-name");
+            			
+            			if (typeof name === "undefined") return;
+            			
+            			$("td", el).not(":first").each(function(i, td) {
+            				var cur = financials[i];
+            				if (cur.hasOwnProperty(name)) $(td).text(cur[name]).attr("data-value", cur[name]).addClass("formattable").attr("data-format", "number");
+            			});
+            			
+            		});
+        			
+        			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
+
+            		SGX.formatter.formatElements(".financials-section tbody");
+            		$(".financials-section .statistics tbody tr:even").addClass("even");
+
         		}
         		
         	}
