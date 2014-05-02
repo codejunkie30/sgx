@@ -34,10 +34,17 @@ td {
 }
 
 .page {
-	page-break: always;
+	margin: 0; 
+	padding: 0; 
+	page-break-after: always; 
+	clear: both; 
+	min-height: 1220px; 
+	overflow: hidden; 	
 	border-top: 15px solid #BFCE00;
-	overflow: hidden;
-	height: 1104px;
+}
+
+.last {
+	page-break: never;
 }
 
 .container_3 {
@@ -183,14 +190,4 @@ td.right {
 
 .terms ul li {
 	margin-bottom: 10px;
-}
-
-.footer {
-	width: 100%;
-	background-color: #eee;
-	padding: 10px;
-}
-
-.footer * {
-	font-size: 14px;
 }

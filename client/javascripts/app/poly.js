@@ -1,26 +1,23 @@
-/** @license MIT License (c) copyright 2013 original authors */
-/**
-* polyfill / shim for AMD loaders
-*
-* @author Brian Cavalier
-* @author John Hann
-*/
-(function (define) {
-define(function (require) {
-"use strict";
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (oThis) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5 internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
 
-var all = require('./all');
+    var aArgs = Array.prototype.slice.call(arguments, 1), 
+        fToBind = this, 
+        fNOP = function () {},
+        fBound = function () {
+          return fToBind.apply(this instanceof fNOP && oThis
+                                 ? this
+                                 : oThis,
+                               aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
 
-var poly = {};
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
 
-// copy all
-for (var p in all) poly[p] = all[p];
-
-return poly;
-
-});
-}(
-typeof define == 'function' && define.amd
-? define
-: function (factory) { module.exports = factory(require); }
-));
+    return fBound;
+  };
+}

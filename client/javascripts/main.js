@@ -12,16 +12,12 @@
             slider: 'vendor/jquery.ui/ui/jquery.ui.slider',
             tabs: 'vendor/jquery.ui/ui/jquery.ui.tabs',
             highstock: 'vendor/highstock/highstock',
-            debug: 'vendor/ba-debug.min',
             underscore: 'vendor/underscore/underscore',
             colorbox: 'app/colorbox',
             placeholder: 'app/jquery.placeholder'
         },
         waitSeconds: 5,
         shim: {
-            "debug": {
-                exports: 'debug'
-            },
             "jquery": {
                 exports: '$'
             },
