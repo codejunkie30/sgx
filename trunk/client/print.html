@@ -5,6 +5,32 @@
     <title>SGX</title>
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="stylesheets/print.css" />
+    <script type="text/javascript">
+    if (!Function.prototype.bind) {
+
+    	  Function.prototype.bind = function (oThis) {
+    	    if (typeof this !== "function") {
+    	      // closest thing possible to the ECMAScript 5 internal IsCallable function
+    	      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    	    }
+    	 
+    	    var aArgs = Array.prototype.slice.call(arguments, 1),
+    	      fToBind = this,
+    	      fNOP = function () {},
+    	      fBound = function () {
+    	        return fToBind.apply(this instanceof fNOP && oThis
+    	                               ? this
+    	                               : oThis,
+    	                             aArgs.concat(Array.prototype.slice.call(arguments)));
+    	      };
+    	 
+    	    fNOP.prototype = this.prototype;
+    	    fBound.prototype = new fNOP();
+    	 
+    	    return fBound;
+    	  };
+    	}    
+    </script>
     <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
 </head>
 
@@ -71,35 +97,6 @@
 			                    <p class="property" data-name="businessDescription">-</p>
 			                </div>
 			
-			               	<h3>General Information</h3>
-			               	
-							<table cellspacing="0" class="general-info">
-								<tr>
-									<td width="33%">Contact</td>
-									<td width="33%"># of Employees</td>
-									<td width="33%">Year Founded</td>
-								</tr>
-								<tr>
-									<td rowspan="3" class="property" data-name="companyAddress">-</td>
-									<td class="property formattable" data-format="number" data-name="employees">-</td>
-									<td class="property" data-name="yearFounded">-</td>
-								</tr>
-								<tr>
-									<td>Current Fiscal Year End</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td class="property formattable" data-name="fiscalYearEnd" data-format="date">-</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td rowpan="3">
-										<a href="#" target="_blank" alt="" class="link property" data-name="companyWebsite"><span class="property" data-name="companyWebsite"></span></a>
-									</td>
-								</tr>
-							</table>
-
-			
 						</td>
 						<td width="40%" class="right" valign="top">
 
@@ -108,6 +105,42 @@
 									<h3>News</h3>					
 								</div>
 								<ul></ul>
+							</div>
+							
+							<div class="dark-module left">
+							
+				               	<h3>General Information</h3>
+				               	
+				               	<p>
+				               		<span class="bold">Contact</span>
+				               		<br />
+				               		<span class="property" data-name="companyAddress">-</span>
+				               	</p>
+	
+				               	<p>
+				               		<span class="bold"># of Employees</span>
+				               		<br />
+				               		<span class="property formattable" data-format="number" data-name="employees">-</span>
+				               	</p>
+	
+				               	<p>
+				               		<span class="bold">Year Founded</span>
+				               		<br />
+				               		<span class="property" data-name="yearFounded">-</span>
+				               	</p>
+	
+				               	<p>
+				               		<span class="bold">Current Fiscal Year End</span>
+				               		<br />
+				               		<span class="property formattable" data-name="fiscalYearEnd" data-format="date">-</span>
+				               	</p>
+	
+				               	<p>
+				               		<span class="bold">Website</span>
+				               		<br />
+									<span class="property" data-name="companyWebsite"></span>
+				               	</p>
+			               	
 							</div>
 						
 						</td>
@@ -190,6 +223,8 @@
 									<tr>
 										<td>Float %</td>
 										<td class="property formattable" data-format="percent" data-name="floatPercentage" data-unit="percent">-</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
 									</tr>
 								</tbody>
 							</table>
@@ -708,13 +743,32 @@
 	
 	
 	</div>
-	
-	<table class="footer">
-		<tr>
-			<td width="50%">Source: S&P Capital IQ</td>
-			<td width="50%" class="right property" data-name="companyName"></td>
-		</tr>
-	</table>
+
+
+	<div class="footer-content">
+		<style>
+			table.footer {
+				width: 100%;
+				background-color: #eee;
+			}
+
+			table.footer td {
+				padding: 10px;
+			}
+			
+			table.footer * {
+				font-size: 14px;
+				color: #333;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+		</style>
+		<table class="footer">
+			<tr>
+				<td width="50%">Source: S&P Capital IQ</td>
+				<td width="50%" align="right" class="property" data-name="companyName"></td>
+			</tr>
+		</table>
+	</div>
 
     
 </body>

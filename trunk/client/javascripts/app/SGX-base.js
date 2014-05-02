@@ -1,7 +1,7 @@
-// This is the modular wrapper for any page
-define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'debug', 'highstock', 'colorbox', 'placeholder'], function($, _, SGX) {
-    // Nested namespace uses initial caps for AMD module references, lowercased for namespaced objects within AMD modules
-    // Instead of console.log() use Paul Irish's debug.log()
+var deps = ['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidatepicker', 'accordion', 'slider', 'tabs', 'highstock', 'colorbox', 'placeholder'];
+if (location.pathname.indexOf("print.html") != -1) deps = ['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquidatepicker', 'highstock', 'colorbox'];
+
+define(deps, function($, _, SGX) {
 	
     SGX = {
     		
@@ -2436,6 +2436,8 @@ define(['jquery', 'underscore', 'jquicore', 'jquiwidget', 'jquimouse', 'jquidate
         			
             		SGX.formatter.formatElements(".financials-section tbody");
             		$(".financials-section .statistics tbody tr:even").addClass("even");
+            		$(".panel tbody tr").removeClass("even");
+            		$(".panel tbody tr:even").addClass("even");
 
         			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
 

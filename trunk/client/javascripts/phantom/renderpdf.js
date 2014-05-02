@@ -63,43 +63,40 @@ else {
             waitFor(function () { return page.evaluate(function () { alert(document.title); return document.title.indexOf("PRINT") != -1; });
                     },
                     function () {
-                        page.render('page2.pdf');
-                        phantom.exit();
+
+                    	var pageProps = {};
+                    	
+            			var pageProps = page.evaluate(function() {
+            				var pageProps = new Object();
+            				pageProps.footerHTML = $(".footer-content").html();
+            				pageProps.footerHeight = ($(".footer-content").outerHeight() + 35) + "px";
+            				$(".footer").hide();
+            				return pageProps;
+            			});
+
+            			page.paperSize = {
+            					height: "11in",
+            					width: "8.5in",
+            					margin: {
+            						top: 0,
+            						bottom: 0,
+            						left: 0,
+            						right: 0
+            					},
+            					footer: {
+            						height: pageProps.footerHeight,
+            						contents: typeof pageProps.footerHTML == 'undefined' ? "" : phantom.callback(function(pageNum, numPages) { return pageProps.footerHTML; })
+            					}
+            			};
+
+            			pageProps.outputPath = "Fake.pdf";
+            			
+            		    page.render(pageProps.outputPath);
+            			
+            			console.log("Rendering: " + pageProps.outputPath);
+            		    phantom.exit();
+                        
                     }, 20000);        	
-        	
-            
-
-            /**
-			var pageProps = page.evaluate(function() {
-				var pageProps = new Object();
-				pageProps.footerHTML = $(".footer").html();
-				pageProps.footerHeight = $(".footer").outerHeight() + "px";
-				$(".footer").hide();
-				return pageProps;
-			});
-			
-			page.paperSize = {
-					height: "11in",
-					width: "8.5in",
-					margin: {
-						top: ".34in",
-						bottom: ".34in",
-						left: ".55in",
-						right: ".55in"
-					},
-					footer: {
-						height: pageProps.footerHeight,
-						contents: typeof pageProps.footerHTML == 'undefined' ? "" : phantom.callback(function(pageNum, numPages) { return pageProps.footerHTML; })
-					}
-			};
-
-			pageProps.outputPath = "Fake.pdf";
-			
-		    page.render(pageProps.outputPath);
-			
-			console.log("Rendering: " + pageProps.outputPath);
-		    phantom.exit();
-*/
 
         }
     });
