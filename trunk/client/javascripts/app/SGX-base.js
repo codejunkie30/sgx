@@ -1074,15 +1074,6 @@ define(deps, function($, _, SGX) {
                     contentType: 'application/json; charset=UTF-8',           	
                     success: typeof successFN !== "undefined" ? successFN : SGX.genericAjaxSuccess,
                     error: typeof errorFN !== "undefined" ? errorFN : SGX.genericAjaxError
-                    /**
-                    ,
-                    complete: function() {
-                    	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
-            	            var curHeight = SGX.getTrueContentHeight();
-            	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
-                    	}
-                    }
-                    */
             	});
             	
             },
@@ -1682,7 +1673,7 @@ define(deps, function($, _, SGX) {
             		
             	},
             	
-            	initStockCharts: function(data, newsData) {
+            	initStockCharts: function(data, newsData, finishedDrawing) {
             		
             		var priceData = SGX.company.toHighCharts(data.price);
             		var volumeData = SGX.company.toHighCharts(data.volume);
@@ -1696,6 +1687,12 @@ define(deps, function($, _, SGX) {
                         chart: {
                         	backgroundColor:'rgba(255, 255, 255, 0.1)'
                         },
+                        
+                        plotOptions: {
+                            series: {
+                                animation: false
+                            }
+                        },                        
                         
             		    rangeSelector: {
             				inputEnabled: false,
@@ -1839,7 +1836,11 @@ define(deps, function($, _, SGX) {
                         }
 
                         
-                    });
+                    }, 
+                    function() {
+                    	if (typeof finishedDrawing !== "undefined") finishedDrawing();
+                    }
+                    );
             		
             	},
             	
@@ -2385,7 +2386,7 @@ define(deps, function($, _, SGX) {
             		// init charts
             		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
             		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData, SGX.print.finishedChart); });
         			
             		// all other sections
             		SGX.company.initHolders(data);
@@ -2438,9 +2439,15 @@ define(deps, function($, _, SGX) {
             		$(".financials-section .statistics tbody tr:even").addClass("even");
             		$(".panel tbody tr").removeClass("even");
             		$(".panel tbody tr:even").addClass("even");
-
+            		
+            		$("body").attr("pdf-name", cData.company.companyInfo.tickerCode + "-" + new Date().getTime() + ".pdf");
+            		
         			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
 
+        		},
+        		
+        		finishedChart: function() {
+        			document["pdf-name"] = $("body").attr("pdf-name");
         		}
         		
         	}
