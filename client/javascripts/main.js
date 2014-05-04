@@ -1,7 +1,7 @@
 (function() {
 
     require({
-        urlArgs: "b=" + ((new Date()).getTime()),
+        urlArgs: "v=1.0",
         paths: {
             jquery: 'vendor/jquery-modern/jquery',
             jquicore: 'vendor/jquery.ui/ui/jquery.ui.core',
@@ -16,7 +16,7 @@
             colorbox: 'app/colorbox',
             placeholder: 'app/jquery.placeholder'
         },
-        waitSeconds: 5,
+        waitSeconds: 10,
         shim: {
             "jquery": {
                 exports: '$'
