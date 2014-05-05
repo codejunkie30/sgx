@@ -55,12 +55,18 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			Collections.sort(names);
 			String fileName = names.get(names.size() - 1);
 			
-			//if(tmpDir == null){				
+			if(tmpDir == null){				
 				tmpDir = System.getProperty("java.io.tmpDir");
-			//}
+			}
 			
+			File dir = new File(tmpDir);
+			
+			if(!dir.exists() && !dir.mkdirs())
+				throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());
+
 			// Transfer
 			File ret = new File(tmpDir + fileName);
+			
 			FileOutputStream out = new FileOutputStream(ret);
 			session.read(fileName, out);
 
@@ -68,6 +74,9 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 		}
 		catch(IOException e){
 			throw new AlphaFactorServiceException("Exception downloading alpha factors file ", e);
+		}
+		finally{
+			session.close();
 		}
 	}
 

@@ -7,6 +7,15 @@ public class CompanyInputRecord{
 	private String id;
 	private String ticker;
 	private String date;
+	private Boolean indexed = false; 
+	
+	public Boolean getIndexed() {
+		return indexed;
+	}
+
+	public void setIndexed(Boolean indexed) {
+		this.indexed = indexed;
+	}
 
 	public String getId() {
 		return id;
@@ -34,7 +43,7 @@ public class CompanyInputRecord{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(id, ticker, date);
+		return Objects.hashCode(id, ticker, date, indexed);
 	}
 	
 	@Override
@@ -43,7 +52,8 @@ public class CompanyInputRecord{
 			CompanyInputRecord that = (CompanyInputRecord) object;
 			return Objects.equal(this.id, that.id)
 				&& Objects.equal(this.ticker, that.ticker)
-				&& Objects.equal(this.date, that.date);
+				&& Objects.equal(this.date, that.date)
+				&& Objects.equal(this.indexed, that.indexed);
 		}
 		return false;
 	}
@@ -54,6 +64,8 @@ public class CompanyInputRecord{
 			.add("id", id)
 			.add("ticker", ticker)
 			.add("date", date)
+			.add("indexed", indexed)
 			.toString();
 	}
+	
 }

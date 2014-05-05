@@ -2,11 +2,16 @@ package com.wmsi.sgx.service.sandp.capiq;
 
 import static org.testng.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -31,8 +36,14 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 	
 	@Test(groups={"functional", "integration"})
 	public void testValidRequest() throws CapIQRequestException{
-		String validQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"IBM\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
-		CapIQResponse response = executor.execute(validQuery);
+		
+		String validQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"$id$\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
+		
+		Map<String, Object> ctx = new HashMap<String,Object>();
+		ctx.put("id", "IBM");
+		Resource template = new ByteArrayResource(validQuery.getBytes());
+		
+		CapIQResponse response = executor.execute(new CapIQRequest(template), ctx);
 		
 		assertNotNull(response);
 		assertEquals(response.getResults().size(), 1);
@@ -44,8 +55,13 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 
 	@Test(groups={"functional", "integration"})
 	public void testInvalidId() throws CapIQRequestException{
-		String invalidQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"ffffffffff\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
-		CapIQResponse response = executor.execute(invalidQuery);
+		String invalidQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"$id$\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
+		
+		Map<String, Object> ctx = new HashMap<String,Object>();
+		ctx.put("id", "ffffffffff");
+		Resource template = new ByteArrayResource(invalidQuery.getBytes());
+		
+		CapIQResponse response = executor.execute(new CapIQRequest(template), ctx);
 		
 		assertNotNull(response);
 		assertNull(response.getErrorMsg());
@@ -55,25 +71,11 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 
 	@Test(groups={"functional", "integration"})
 	public void testErrorMsgResponse() throws CapIQRequestException{
-		CapIQResponse response = executor.execute(null);
+		
+		Resource template = new ByteArrayResource(new byte[]{});
+		CapIQResponse response = executor.execute(new CapIQRequest(template), null);
 		assertNotNull(response);
 		assertNotNull(response.getErrorMsg());
 		assertNull(response.getResults());
 	}
-	
-	/*
-	 * Fixed in the capIQ api, this used to return and array
-	 * where good responses returned a String causing the json parser to fail
-	 * on error messages. The response always returns an array now and
-	 * this test is no longer valid. 
-	@Test(groups={"functional", "integration"},
-			expectedExceptions={CapIQRequestException.class})	
-	public void testJsonDeserializationResponse() throws CapIQRequestException{
-		String badJsonQuery = "{\"inputRequests\":[{ \"mnemonicSpelledWrong\":\"IQ_MARKETCAP\"}]}";;
-		CapIQResponse response = executor.execute(badJsonQuery);
-		
-		assertNotNull(response);
-		assertNotNull(response.getErrorMsg());
-	}
-	*/	
 }

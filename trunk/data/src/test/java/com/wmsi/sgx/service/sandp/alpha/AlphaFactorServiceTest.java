@@ -14,7 +14,7 @@ import com.wmsi.sgx.config.HttpConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={HttpConfig.class})
-public class AlphaFactorServiceTest  extends AbstractTestNGSpringContextTests{
+public class AlphaFactorServiceTest extends AbstractTestNGSpringContextTests{
 
 	@Autowired
 	private AlphaFactorIndexerService service;

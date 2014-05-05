@@ -1,56 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
 	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation="http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp-3.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
-		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
 
-	<int:inbound-channel-adapter id="cronProducer" channel="indexRequestChannel"
-		expression="'cronTest'">
-		<int:poller cron="${loader.cron}" />
-		<int:header name="jobId" expression="T(java.lang.System).currentTimeMillis()"/>
-    	<int:header name="jobDate" expression="new java.util.Date()"/>
-	</int:inbound-channel-adapter>
- 
-	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="loggingChannel">
+ <!-- 
+ 	<int:gateway id="indexRequestGateway" default-request-channel="indexRequestChannel"/>
+  -->	
+ 	
+ 	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
 		<int:header-enricher>
-			<int:header name="indexName" expression=" '${elasticsearch.index.prefix}' + headers.jobId" />
-			<int:header name="indexDate" expression="headers.jobDate" />
+			<int:header name="indexName" expression="'${elasticsearch.index.prefix}' + headers.jobId" />
+			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>		
-		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" />
-		<int:gateway request-channel="indexChannel"/>
-		<int:service-activator ref="indexerService" method="createIndexAlias" />		
+<!-- 		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" /> -->
+<!-- 		<int:gateway request-channel="indexChannel" /> -->				
 	</int:chain>
 
-	<int:chain id="indexSplitterChain" input-channel="indexChannel" output-channel="indexTicker">
-		<int:splitter ref="indexBuilderServiceImpl" method="getTickers"/>
-	</int:chain>
+	<int:splitter id="tickerSplitter"
+		input-channel="indexChannel" 
+		output-channel="indexTickerChannel"
+		ref="indexBuilderServiceImpl" method="getTickers"/>
+<!-- 	
+	<int:gateway default-request-channel="indexChannel" error-channel="indexErrorChannel"/>
 	
-	<int:chain id="indexBuilderChain" input-channel="indexTicker" >
-		<int:service-activator ref="indexBuilderServiceImpl" method="index" />
+ -->
+ 	<!-- Load Data -->
+ 	<int:chain
+		input-channel="indexTickerChannel"
+		output-channel="tickerAggregatorChannel">
+
+		<int:header-enricher>
+			<int:error-channel value="indexErrorChannel"/>
+		</int:header-enricher>	
 		
-		<int:aggregator 
-			correlation-strategy-expression="headers.correlationId"
-			release-strategy-expression="#this.size() == #this[0].headers.sequenceSize">
-		</int:aggregator>
+	<int:service-activator ref="indexBuilderServiceImpl" method="index"/>
 	</int:chain>
+		
 
-
-	<!--  Channel definitions -->
-	<int:channel id="indexRequestChannel"/>
-
-	<int:channel id="indexTicker" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">
+	<!-- Indexing Error Handling -->
+	<int:chain 
+		input-channel="indexErrorChannel" 
+		output-channel="tickerAggregatorChannel">		
+			
+			<int:transformer expression="payload.failedMessage"/>
+						
+			<int:enricher>
+				<int:property name="indexed" value="false"/>
+			</int:enricher>							
+	</int:chain>
+		
+	<int:aggregator id="tickerAggregtor" 
+		input-channel="tickerAggregatorChannel"
+	 	output-channel="aggregationCompleteChannel"
+		correlation-strategy-expression="headers.jobId"
+		release-strategy-expression="#this.size() == #this[0].headers.sequenceSize">
+	</int:aggregator>
+	
+	<int:router	input-channel="aggregationCompleteChannel" 
+		expression="#this.payload.?[indexed == false].size() == 0">
+    	
+    	<int:mapping value="true" channel="createAlias"/>
+    	<int:mapping value="false" channel="failedJobChannel"/>
+    	    	
+	</int:router>
+ 
+ 	<int:service-activator input-channel="createAlias" output-channel="loggingChannel" ref="indexerService" method="createIndexAlias" />
+	
+	<int:header-enricher input-channel="failedJobChannel" output-channel="failedLogger">
+		<int:header name="failedJob" value="true"/>
+	</int:header-enricher>	
+	
+	<int:channel id="failedLogger"/>
+	
+	<int:logging-channel-adapter channel="failedLogger" level="ERROR" expression=" 'Job Failed ' + payload.toString()"/>
+	
+	<int:logging-channel-adapter channel="loggingChannel" level="ERROR" expression=" 'Job Complete ' + payload.toString()"/>
+	
+	<!-- 
+	  Channel definitions
+	 -->
+	<int:channel id="indexTickerChannel" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">	
 		<int:dispatcher task-executor="indexerTaskExecutor" />
 	</int:channel>
-
-	<int:channel id="loggingChannel"/>
 	
-	<int:logging-channel-adapter channel="loggingChannel" level="INFO" />
+	<int:channel id="indexErrorChannel">
+		<int:interceptors>
+		<int:wire-tap channel="errorLoggerChannel"/>
+		</int:interceptors>
+	</int:channel>
+	
+	<int:channel id="errorLoggerChannel"/>	
+	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
+	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
+	
+<!-- 	<int:logging-channel-adapter channel="errorLoggerChannel" level="ERROR" expression=" payload.printStackTrace()"/> -->
+	
+	<int:channel id="indexRequestChannel"/>		
+	<int:channel id="indexChannel"/>
+	
+	<int:publish-subscribe-channel id="aggregationCompleteChannel"/>
 
+
+	<int:channel id="tickerAggregatorChannel">
+		<int:interceptors>
+			<int:wire-tap channel="statusLoggingChannel" />
+		</int:interceptors>
+	</int:channel>
+	
+	<int:channel id="statusLoggingChannel"/>	
+	<int:logging-channel-adapter channel="statusLoggingChannel" level="ERROR" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
+	
+	<int:channel id="loggingChannel"/>
+ 	
+	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
+ 	
 </beans>

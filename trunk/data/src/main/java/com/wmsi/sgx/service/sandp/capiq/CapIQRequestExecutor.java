@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
@@ -39,12 +40,17 @@ public class CapIQRequestExecutor{
 	private static final String PARAM_INPUTS = "inputRequests";
 	private static final String PARAM_USERID = "userId";
 	
+	public CapIQResponse execute(CapIQRequest req, Map<String, Object> ctx) throws CapIQRequestException {
+		String query = req.buildQuery(ctx);
+		return execute(query);
+	}
+	
 	public CapIQResponse execute(String query) throws CapIQRequestException {
 		
 		log.debug("Executing request to capital iq api");
 		ResponseEntity<CapIQResponse> res = null;
 		
-		try{
+		try{			
 			res = restTemplate.exchange(url, HttpMethod.POST, buildEntity(query), CapIQResponse.class);
 			
 			if(res == null)
