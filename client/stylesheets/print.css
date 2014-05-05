@@ -92,6 +92,14 @@ td {
 	white-space: nowrap;
 }
 
+.company-header td {
+	vertical-align: bottom;
+}
+
+.page-title {
+	width: 700px !important;
+}
+
 .dark-module {
 	padding-bottom: 20px;
 	margin-bottom: 20px;

@@ -7,6 +7,8 @@ define(deps, function($, _, SGX) {
     		
     		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
+    		pqdn : "http://54.254.195.85/pdfx/",
+    		
     		resultSize: 25,
     		
     		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
@@ -1520,6 +1522,15 @@ define(deps, function($, _, SGX) {
             			window.location = SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=related");
             		});
             		
+            		$(".print-button").click(function(e) {
+            			var page = SGX.getPrintPage(data.company.companyInfo.tickerCode);
+            	    	var domain = window.location.hostname;
+            	    	var path = document.location.pathname;
+            	    	var folder = path.replace("/", "").split("/").length > 1 ? path.replace("/", "").split("/")[0] : "";
+            	    	if (folder.length > 0) folder = "/" + folder;
+            			window.open(SGX.pqdn + encodeURIComponent(location.protocol + "//" + domain + folder + "/" + page));
+            		});
+            		
             		// init pricing
             		var endpoint = SGX.fqdn + "/sgx/price";
             		var params = { id: data.company.companyInfo.tickerCode };
@@ -2447,7 +2458,7 @@ define(deps, function($, _, SGX) {
         		},
         		
         		finishedChart: function() {
-        			document["pdf-name"] = $("body").attr("pdf-name");
+        			setTimeout(function() { document["pdf-name"] = $("body").attr("pdf-name"); }, 100);
         		}
         		
         	}

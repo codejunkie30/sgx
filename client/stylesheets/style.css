@@ -1393,6 +1393,7 @@ table.search-criteria .remove {
 .print-button {
   display: inline-block;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .comparable-button {
