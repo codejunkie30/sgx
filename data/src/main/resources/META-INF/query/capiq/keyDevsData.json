@@ -16,12 +16,6 @@
 		{
 			"function": "GDSP",
 			"identifier": "$id$",
-			"mnemonic": "IQ_KEY_DEV_TIME"
-		},
-
-		{
-			"function": "GDSP",
-			"identifier": "$id$",
 			"mnemonic": "IQ_KEY_DEV_SITUATION"
 		}
 	]

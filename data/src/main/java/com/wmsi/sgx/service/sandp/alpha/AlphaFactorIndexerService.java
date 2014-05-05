@@ -10,5 +10,5 @@ public interface AlphaFactorIndexerService{
 
 	List<AlphaFactor> loadAlphaFactors(File file) throws AlphaFactorServiceException;
 
-	File getLatestFile() throws IOException, AlphaFactorServiceException;
+	File getLatestFile() throws AlphaFactorServiceException;
 }

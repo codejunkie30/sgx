@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.integration.Message;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,20 @@ import org.springframework.util.StringUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.wmsi.sgx.model.CompanyInfo;
+import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.CompanyFinancial;
+import com.wmsi.sgx.model.financials.Financial;
+import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
+import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
+import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -42,10 +46,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	@Autowired
 	private CapIQService capIQService;
 
+	public void setCapIQService(CapIQService capIQService) {
+		this.capIQService = capIQService;
+	}
+
 	@Autowired
 	private AlphaFactorIndexerService alphaFactorService;
 
-	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
+	private Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
 
 	@Autowired
 	private IndexerService indexerService;
@@ -86,43 +94,45 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input){
+	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input) throws IOException, IndexerServiceException, CapIQRequestException, ParseException, CapIQServiceException{
+		
+		SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
+		String date = fmt.format(jobDate);
+
 		
 		try{
-			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
-			String date = fmt.format(jobDate);
-
 			index(indexName, date, input.getTicker());
-			return input;
 		}
-		catch(Exception e){
-			log.error("Failed to index ticker " + input.getTicker(), e);
-			return input;
-		}				
+		catch(InvalidIdentifierException e){
+			log.error("Invalid id " + input.getTicker());
+		}
+
+		input.setIndexed(true);
+		return input;
+	}
+	
+	public boolean aggregation(Message msg){
+			System.out.println(msg.getHeaders());
+			return true;
 	}
 
 	@Override
-	public Boolean buildAlphaFactors(@Header String indexName){
-		try{
-			File file = alphaFactorService.getLatestFile();
-			List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
+	public Boolean buildAlphaFactors(@Header String indexName) throws AlphaFactorServiceException, IndexerServiceException{
+		File file = alphaFactorService.getLatestFile();
+		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
-			for(AlphaFactor f : factors){
-				indexerService.save("alphaFactor", f.getId(), f, indexName);
-			}
-		}
-		catch(IOException | AlphaFactorServiceException | IndexerServiceException e){
-			log.error("Failed to load alpha factors", e);
-			return false;
+		for(AlphaFactor f : factors){
+			indexerService.save("alphaFactor", f.getId(), f, indexName);
 		}
 		
 		return true;
 	}
-
+	
+	
 	private void index(String index, String date, String ticker) throws IOException,
-			IndexerServiceException, CapIQRequestException, ParseException {
+			IndexerServiceException, CapIQRequestException, ParseException, InvalidIdentifierException, CapIQServiceException {
 
-		CompanyInfo companyInfo = capIQService.getCompanyInfo(ticker, date);
+		Company companyInfo = capIQService.getCompanyInfo(ticker, date);
 
 		if(companyInfo == null)
 			return;
@@ -144,9 +154,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(StringUtils.isEmpty(currency))
 			currency = "SGD";
 		
-		List<CompanyFinancial> cfs = capIQService.getCompanyFinancials(ticker, currency);
+		Financials financials = capIQService.getCompanyFinancials(ticker, currency);
 
-		for(CompanyFinancial c : cfs){
+		for(Financial c : financials.getFinancials()){
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
 			indexerService.save("financial", id, c, index);
 		}

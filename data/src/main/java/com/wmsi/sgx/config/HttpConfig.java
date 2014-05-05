@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,6 +32,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevResponseParser;
 
 @Configuration
 @ComponentScan(basePackages="com.wmsi.sgx.service")
@@ -130,4 +134,29 @@ public class HttpConfig{
 		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;
 	}
+
+	@Autowired
+	private Mapper dozerMappper;
+	
+	@Bean
+	public CompanyResponseParser companyResponseParser() {
+		CompanyResponseParser parser = new CompanyResponseParser();
+		parser.setMapper(dozerMappper);
+		return parser;
+	}
+
+	@Bean
+	public FinancialsResponseParser financialsResponseParser() {
+		FinancialsResponseParser parser = new FinancialsResponseParser();
+		parser.setMapper(dozerMappper);
+		return parser;
+	}
+
+	@Bean
+	public KeyDevResponseParser keyDevsResponseParser() {
+		KeyDevResponseParser parser = new KeyDevResponseParser();
+		parser.setMapper(dozerMappper);
+		return parser;
+	}
+
 }

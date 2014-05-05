@@ -15,7 +15,7 @@ public class ModelMapper{
 	@Autowired
 	public void setDozerMappingBean(Mapper m){dozerMappingBean = m;}
 
-	public <T> Object map(Object src, Class<T> clz){
+	public <T> T map(Object src, Class<T> clz){
 		return dozerMappingBean.map(src, clz);
 	}
 	

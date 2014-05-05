@@ -8,15 +8,13 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-
 public class DateUtil{
 
 	private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
 
 	private static final String DEFAULT_DATE_FMT = "MM/dd/yyyy";
 	
-	public static String adjustDate(String date, int field, int amount) throws CapIQRequestException {
+	public static String adjustDate(String date, int field, int amount){
 		Date currentDate = toDate(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(currentDate);

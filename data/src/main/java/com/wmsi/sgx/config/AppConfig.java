@@ -10,6 +10,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
+
 @Configuration
 @PropertySources(value = {
 		// If spring.profiles is set use <profile>.application.properties else defaults to application.properties
@@ -31,7 +33,6 @@ public class AppConfig{
 		return ppc;
 	}
 	
-	/*
 	@Bean
 	public DozerBeanMapperFactoryBean dozerMappingBean() throws Exception{
 
@@ -41,6 +42,6 @@ public class AppConfig{
 					.getResources("classpath*:META-INF/mappings/dozer/*.xml"));
 		
 		return factory; 
-	}
-	*/
+	}	
+	
 }

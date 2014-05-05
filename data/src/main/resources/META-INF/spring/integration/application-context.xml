@@ -6,8 +6,8 @@
 
 	<context:annotation-config />
 
-	<bean name="httpConfig" class="com.wmsi.sgx.config.HttpConfig" />
-
+	<bean name="httpConfig" class="com.wmsi.sgx.config.HttpConfig" />								   
+<!-- 
 	<bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
 		<property name="mappingFiles">
 			<list>
@@ -19,5 +19,5 @@
 		</property>
 	</bean>
 	
-	
+ -->	
 </beans>

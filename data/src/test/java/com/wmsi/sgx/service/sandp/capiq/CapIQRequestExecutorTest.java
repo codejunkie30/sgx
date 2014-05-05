@@ -3,9 +3,13 @@ package com.wmsi.sgx.service.sandp.capiq;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
+import java.util.HashMap;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,6 +21,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
+import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={HttpConfig.class})
@@ -44,7 +49,8 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withSuccess("{\"test\":2}", MediaType.APPLICATION_JSON));
 		
-		executor.execute("test");
+		Resource template = new ByteArrayResource(new byte[]{});
+		executor.execute(new CapIQRequest(template), null);
 	}
 
 	@Test(expectedExceptions={CapIQRequestException.class})
@@ -53,7 +59,8 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withBadRequest());
 		
-		executor.execute("test");
+		Resource template = new ByteArrayResource(new byte[]{});
+		executor.execute(new CapIQRequest(template), null);
 	}
 
 	@Test(expectedExceptions={CapIQRequestException.class})
@@ -62,7 +69,8 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withServerError());
 		
-		executor.execute("test");
+		Resource template = new ByteArrayResource(new byte[]{});
+		executor.execute(new CapIQRequest(template), null);
 	}
 	
 	/**
@@ -77,7 +85,8 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withSuccess(goodResponse, MediaType.APPLICATION_JSON));
 		
-		executor.execute("test");
+		Resource template = new ByteArrayResource(new byte[]{});
+		executor.execute(new CapIQRequest(template), null);
 	}
 
 	/**
@@ -102,7 +111,8 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withSuccess(validButUnexpectedResponse, MediaType.APPLICATION_JSON));
 		
-		executor.execute("test");
+		Resource template = new ByteArrayResource(new byte[]{});
+		executor.execute(new CapIQRequest(template), null);
 	}
 
 }

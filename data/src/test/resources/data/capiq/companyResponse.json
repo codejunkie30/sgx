@@ -1,0 +1,2248 @@
+{
+    "GDSSDKResponse": [
+        {
+            "Headers": [
+                "IQ_MARKETCAP"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "346.872917"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_MARKETCAP",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_YEARHIGH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.795000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_YEARHIGH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_YEARLOW"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.350000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_YEARLOW",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_BETA_5YR"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "1.41891904100665"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_BETA_5YR",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_VOLUME"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "5.652000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_VOLUME",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_REV"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "6325.799000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_REV",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EBITDA_MARGIN"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "14.898600"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EBITDA_MARGIN",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_NI_MARGIN"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "6.082700"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_NI_MARGIN",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_DEBT_EQUITY"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "143.067200"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_DEBT_EQUITY",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_REV_1YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "46.382000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_REV_1YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_REV_3YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "23.436700"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_REV_3YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_REV_5YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "20.184000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_REV_5YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_PE_EXCL_FWD"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "3.403137020281635298915778803935054548594431138779809410380614702206988070"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_PE_EXCL_FWD",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_DIVIDEND_YIELD"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_DIVIDEND_YIELD",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CLOSEPRICE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.650000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CLOSEPRICE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CLOSEPRICE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.650000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CLOSEPRICE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_BV_SHARE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "4.224335"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_BV_SHARE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_AVG_BROKER_REC_NO_CIQ"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_AVG_BROKER_REC_NO_CIQ",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TARGET_PRICE_NUM_CIQ"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TARGET_PRICE_NUM_CIQ",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_INDUSTRY_GROUP"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Materials"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_INDUSTRY_GROUP",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_INDUSTRY"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Chemicals"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_INDUSTRY",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_OPENPRICE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.670000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_OPENPRICE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_LOWPRICE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.645000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_LOWPRICE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HIGHPRICE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.670000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_HIGHPRICE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_PRICEDATE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "2014-03-10"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_PRICEDATE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_SHARESOUTSTANDING"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "533.650641"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_SHARESOUTSTANDING",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_SHORT_INTEREST"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_SHORT_INTEREST",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_FLOAT_PERCENT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_FLOAT_PERCENT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMPANY_NAME"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "SunVic Chemical Holdings Ltd."
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMPANY_NAME",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMPANY_TICKER_NO_EXCH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "A7S"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMPANY_TICKER_NO_EXCH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TEV_EBITDA"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "4.668727"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TEV_EBITDA",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_DEBT_EBITDA"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "3.505149"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_DEBT_EBITDA",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CAPEX"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "-432.390000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CAPEX",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EBIT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "680.721000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EBIT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TEV"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "889.823406"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TEV",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "startdate": "03/10/2014"
+            },
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_ASSETS"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "6643.060000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_ASSETS",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_NI"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "384.780000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_NI",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CASH_ST_INVEST"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "341.246000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CASH_ST_INVEST",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EBITDA"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "942.460000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EBITDA",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HOLDER_NAME",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Sun, Liping",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "KIM Eng Holdings Ltd., Asset Management Arm",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Dimensional Fund Advisors LP",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Lim, Chap Huat ",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Vantagepoint Investment Advisers, LLC",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_NAME",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "Properties": {
+                "endrank": "5",
+                "startrank": "1"
+            },
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 5,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HOLDER_SHARES",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "329152241",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "16878000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "10440000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "7808000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "5957900",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_SHARES",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "Properties": {
+                "endrank": "5",
+                "startrank": "1"
+            },
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 5,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HOLDER_PERCENT",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "61.67935",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "3.16274",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.95634",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.46313",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.11644",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_PERCENT",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "Properties": {
+                "endrank": "5",
+                "startrank": "1"
+            },
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 5,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_ABS_PERIOD"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "LTM42013"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_ABS_PERIOD",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_BUSINESS_DESCRIPTION"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "SunVic Chemical Holdings Limited, an investment holding company, is engaged in the manufacture and sale of intermediate chemical products primarily in the People’s Republic of China, rest of Asia, Europe, North America, and South America. It provides acrylic acid (AA) products, including purified AA and glacial AA; arylate esters comprising butyl acrylate, methyl acrylate, ethyl acrylate, and 2-ethylhexyl acrylate; N-phosphonomethyl lminodiacetic acid products; and glyphosate. The company’s products are fundamental chemicals used in the production of various industrial, consumer and agricultural products, such as coatings, adhesives, diapers, textiles, detergents, water treatment materials, and herbicides. It is also involved in the import and export of chemical products, as well as in the manufacture and sale of methyl tertiary-butyl ether and petroleum products. The company was incorporated in 2004 and is based in Singapore. SunVic Chemical Holdings Limited is a subsidiary of DBS Vickers Securities (Singapore) Pte Ltd."
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_BUSINESS_DESCRIPTION",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_PRICE_TARGET_CIQ"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_PRICE_TARGET_CIQ",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMPANY_ADDRESS"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "112 Robinson Road, No. 12-04 HB Robinson, Singapore  068902, Singapore"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMPANY_ADDRESS",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMPANY_WEBSITE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "www.sunvic-chem.com"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMPANY_WEBSITE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EMPLOYEES"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EMPLOYEES",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_YEAR_FOUNDED"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "2004"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_YEAR_FOUNDED",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_PERIODDATE_IS"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Dec 31 2013 12:00AM"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_PERIODDATE_IS",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_FILING_CURRENCY"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "CNY"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_FILING_CURRENCY",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_GP"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "934.355000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_GP",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_DILUT_EPS_NORM"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.634513"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_PAYOUT_RATIO"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_PAYOUT_RATIO",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_DIV_SHARE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Data Unavailable"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_DIV_SHARE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_CA"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "3456.769000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_CA",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_NPPE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "2942.244000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_NPPE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_CL"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "4078.497000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_CL",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_LTM"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_LT_DEBT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "248.035000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_LT_DEBT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_LIAB"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "4334.032000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_LIAB",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_RE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "1981.190000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_RE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMMON"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "291.516000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMMON",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_EQUITY"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "2309.028000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_EQUITY",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_MINORITY_INTEREST"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "54.707000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_MINORITY_INTEREST",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CASH_OPER"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "158.311000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CASH_OPER",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CASH_INVEST"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "-399.294000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CASH_INVEST",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CASH_FINAN"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "263.160000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CASH_FINAN",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_NET_CHANGE"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "14.636000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_NET_CHANGE",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_RETURN_ASSETS"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "6.793000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_RETURN_ASSETS",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_RETURN_CAPITAL"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "8.051600"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_RETURN_CAPITAL",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_RETURN_EQUITY"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "18.019200"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_RETURN_EQUITY",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_GROSS_MARGIN"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "14.770500"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_GROSS_MARGIN",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_ASSET_TURNS"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "1.010022"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_ASSET_TURNS",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CURRENT_RATIO"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.847559"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CURRENT_RATIO",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_QUICK_RATIO"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "0.326573"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_QUICK_RATIO",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_DAYS_INVENTORY_OUT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "28.502485"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_DAYS_INVENTORY_OUT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_DAYS_PAYABLE_OUT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "52.588470"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_DAYS_PAYABLE_OUT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_CASH_CONVERSION"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "3.266020"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_CASH_CONVERSION",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EBITDA_INT"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "6.610182"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EBITDA_INT",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EBITDA_1YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "91.469300"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EBITDA_1YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_NI_1YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "320.350000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_NI_1YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_TOTAL_CA"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "957.240000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_TOTAL_CA",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY-4"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_EPS_1YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "320.351400"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_EPS_1YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_COMMON_EQUITY_1YR_ANN_GROWTH"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "20.097000"
+                    ]
+                }
+            ],
+            "NumCols": 1,
+            "Seniority": "",
+            "Mnemonic": "IQ_COMMON_EQUITY_1YR_ANN_GROWTH",
+            "Function": "GDSP",
+            "ErrMsg": null,
+            "Properties": {
+                "periodtype": "IQ_FY"
+            },
+            "StartDate": "",
+            "NumRows": 1,
+            "CacheExpiryTime": "0",
+            "SnapType": "",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        }
+    ]
+}
