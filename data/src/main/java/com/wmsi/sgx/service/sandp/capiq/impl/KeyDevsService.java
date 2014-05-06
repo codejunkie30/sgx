@@ -24,8 +24,7 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 import com.wmsi.sgx.util.TemplateUtil;
 
@@ -34,13 +33,16 @@ public class KeyDevsService{
 
 	private static final Logger log = LoggerFactory.getLogger(KeyDevsService.class);
 
-	@Autowired
 	private CapIQRequestExecutor requestExecutor;
-	
-	@Autowired
-	KeyDevResponseParser keyDevResponseParser;
 
-	public KeyDevs loadKeyDevelopments(String id, String asOfDate) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
+	@Autowired
+	public void setRequestExecutor(CapIQRequestExecutor e) {
+		requestExecutor = e;
+	}
+
+	KeyDevResponseParser keyDevResponseParser = new KeyDevResponseParser();
+
+	public KeyDevs loadKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
 		List<String> ids = getKeyDevelopmentIds(id, asOfDate);
 
 		String json = getQuery(ids);

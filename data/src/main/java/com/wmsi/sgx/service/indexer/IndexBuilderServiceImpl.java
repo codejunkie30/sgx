@@ -37,6 +37,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -94,7 +95,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input) throws IOException, IndexerServiceException, CapIQRequestException, ParseException, CapIQServiceException{
+	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
 		
 		SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 		String date = fmt.format(jobDate);
@@ -129,8 +130,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	
-	private void index(String index, String date, String ticker) throws IOException,
-			IndexerServiceException, CapIQRequestException, ParseException, InvalidIdentifierException, CapIQServiceException {
+	private void index(String index, String date, String ticker) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
 		Company companyInfo = capIQService.getCompanyInfo(ticker, date);
 

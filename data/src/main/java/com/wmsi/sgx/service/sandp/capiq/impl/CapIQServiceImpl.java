@@ -16,6 +16,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @Service
 public class CapIQServiceImpl implements CapIQService{
@@ -26,7 +27,7 @@ public class CapIQServiceImpl implements CapIQService{
 	private CompanyService companyService;
 
 	@Override
-	public Company getCompanyInfo(String id, String startDate) throws CapIQRequestException, InvalidIdentifierException, CapIQServiceException {
+	public Company getCompanyInfo(String id, String startDate) throws ResponseParserException, CapIQRequestException{
 		return companyService.loadCompany(id,  startDate);	
 	}
 
@@ -34,30 +35,30 @@ public class CapIQServiceImpl implements CapIQService{
 	private FinancialsService financialsService;
 
 	@Override
-	public Financials getCompanyFinancials(String id, String currency) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
-		return financialsService.getCompanyFinancials(id, currency);		
+	public Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException{
+		return financialsService.loadFinancials(id, currency);		
 	}
 
 	@Autowired
 	private KeyDevsService keyDevsService;
 	
 	@Override
-	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {		
+	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException{		
 		return keyDevsService.loadKeyDevelopments(id, asOfDate);
 	}
 	
 	@Autowired
 	private HoldersService holdersService;
 	
-	public Holders getHolderDetails(String id) throws CapIQRequestException {
-		return holdersService.getHolders(id);
+	public Holders getHolderDetails(String id) throws ResponseParserException, CapIQRequestException {
+		return holdersService.loadHolders(id);
 	}
 
 	@Autowired
 	private HistoricalService historicalService;
 	
 	@Override
-	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException {
+	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
 		return historicalService.getHistoricalData(id, asOfDate);
 	}
 }

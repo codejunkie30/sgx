@@ -20,7 +20,7 @@
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>		
-<!-- 		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" /> -->
+		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" /> 
 <!-- 		<int:gateway request-channel="indexChannel" /> -->				
 	</int:chain>
 

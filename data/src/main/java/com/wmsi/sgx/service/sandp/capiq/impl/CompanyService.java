@@ -19,8 +19,7 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
 @Service
@@ -32,14 +31,13 @@ public class CompanyService{
 	@Autowired
 	private CapIQRequestExecutor requestExecutor;
 
-	@Autowired
-	private CompanyResponseParser companyResponseParser;
+	private CompanyResponseParser companyResponseParser = new CompanyResponseParser();
 
-	public CapIQRequest companyRequest() {
+	private CapIQRequest companyRequest() {
 		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
 	}
 
-	public Company loadCompany(String id, String startDate) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
+	public Company loadCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException{
 
 		Company company = executeRequest(id, startDate);
 
@@ -49,7 +47,7 @@ public class CompanyService{
 		return company;
 	}
 
-	private Company loadPreviousClose(Company comp) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
+	private Company loadPreviousClose(Company comp) throws ResponseParserException, CapIQRequestException {
 
 		Date d = comp.getPreviousCloseDate();
 
@@ -63,14 +61,14 @@ public class CompanyService{
 		return comp;
 	}
 
-	private Company executeRequest(String id, String startDate) throws CapIQServiceException, InvalidIdentifierException, CapIQRequestException {
+	private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
 		Map<String, Object> ctx = buildContext(id, startDate);
 		CapIQResponse response = requestExecutor.execute(companyRequest(), ctx);
 
 		return companyResponseParser.convert(response);
 	}
 	
-	private Company loadHistorical(Company comp, final String startDate) throws CapIQRequestException {
+	private Company loadHistorical(Company comp, final String startDate) throws ResponseParserException, CapIQRequestException {
 
 		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
 		List<List<HistoricalValue>> historicalData = historicalService.loadHistoricaData(comp.getTickerCode(), yearAgo);
@@ -84,7 +82,7 @@ public class CompanyService{
 		return comp;
 	}
 
-	public Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws CapIQRequestException {
+	private Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws ResponseParserException {
 
 		List<HistoricalValue> volume = getLastThreeMonths(lastYear, startDate);
 

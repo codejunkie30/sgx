@@ -38,12 +38,12 @@
 	</logger>
 
 	<logger name="org.apache.http" additivity="false">
-		<level value="info" />
+		<level value="debug" />
 		<appender-ref ref="apache"/>
 	</logger>
 
 	<logger name="org.apache.http.wire" additivity="false">
-		<level value="info" />
+		<level value="error" />
 		<appender-ref ref="apache"/>
 	</logger>
 

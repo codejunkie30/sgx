@@ -135,28 +135,19 @@ public class HttpConfig{
 		return factory;
 	}
 
-	@Autowired
-	private Mapper dozerMappper;
-	
 	@Bean
 	public CompanyResponseParser companyResponseParser() {
-		CompanyResponseParser parser = new CompanyResponseParser();
-		parser.setMapper(dozerMappper);
-		return parser;
+		return new CompanyResponseParser();
 	}
 
 	@Bean
 	public FinancialsResponseParser financialsResponseParser() {
-		FinancialsResponseParser parser = new FinancialsResponseParser();
-		parser.setMapper(dozerMappper);
-		return parser;
+		return new FinancialsResponseParser();
 	}
 
 	@Bean
 	public KeyDevResponseParser keyDevsResponseParser() {
-		KeyDevResponseParser parser = new KeyDevResponseParser();
-		parser.setMapper(dozerMappper);
-		return parser;
+		return new KeyDevResponseParser();
 	}
 
 }

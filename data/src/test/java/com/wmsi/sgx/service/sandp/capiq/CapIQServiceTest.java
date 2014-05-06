@@ -42,22 +42,22 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, InvalidIdentifierException, CapIQServiceException{
+	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		capIQService.getCompanyInfo(ticker, date);
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException{
+	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		capIQService.getCompanyFinancials(ticker, "SGD");
 	}
 	
 	@Test(dataProvider="testTickers")
-	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException{
+	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		capIQService.getHistoricalData(ticker, date);
 	}
 
 	@Test(dataProvider="testTickers")
-	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException{
+	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		KeyDevs keyDevs = capIQService.getKeyDevelopments(ticker, date);
 		assertNotNull(keyDevs);		
 		assertNotNull(keyDevs.getKeyDevs());		
