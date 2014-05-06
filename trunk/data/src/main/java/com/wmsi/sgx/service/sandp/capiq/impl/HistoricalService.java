@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +22,18 @@ import com.wmsi.sgx.util.DateUtil;
 @Service
 public class HistoricalService{
 	
-	@Autowired
 	private CapIQRequestExecutor requestExecutor;
+
+	public void setRequestExecutor(CapIQRequestExecutor requestExecutor) {
+		this.requestExecutor = requestExecutor;
+	}
 
 	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException {
 		String sDate = DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5);
 		return loadHistoricaData(id, sDate);
 	}
 
-	public CapIQRequest priceRequest(){
+	private CapIQRequest priceRequest(){
 		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/priceHistory.json"));		
 	}
 
@@ -48,7 +50,7 @@ public class HistoricalService{
 		List<HistoricalValue> price = getHistory(prices, id);
 		List<HistoricalValue> volume = getHistory(volumes, id);
 
-		List ret = new ArrayList();
+		List<List<HistoricalValue>> ret = new ArrayList<List<HistoricalValue>>();
 		ret.add(price);
 		ret.add(volume);
 		return ret;

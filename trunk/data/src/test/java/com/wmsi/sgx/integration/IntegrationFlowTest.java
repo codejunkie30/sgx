@@ -43,6 +43,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -66,7 +67,7 @@ public class IntegrationFlowTest extends AbstractTestNGSpringContextTests{
 	private CapIQService capIQService;
 		
 	@Test
-	public void testIndexTickerChannel() throws IndexerServiceException, InterruptedException, CapIQRequestException, InvalidIdentifierException, CapIQServiceException{
+	public void testIndexTickerChannel() throws IndexerServiceException, InterruptedException, CapIQRequestException, ResponseParserException{
 		
 		CompanyInputRecord input = new CompanyInputRecord();
 		input.setDate("2014-04-23");

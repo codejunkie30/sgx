@@ -9,23 +9,22 @@ import java.util.Map.Entry;
 
 import com.wmsi.sgx.model.KeyDev;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 public class KeyDevResponseParser extends AbstractResponseParser{
-
+	
 	@Override
-	protected Class<KeyDev> getType() {
+	@SuppressWarnings("unchecked")
+	public Class<KeyDev> getType() {
 		return KeyDev.class;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public KeyDevs convert(CapIQResponse response) throws CapIQServiceException, InvalidIdentifierException {
+	public KeyDevs convert(CapIQResponse response) throws ResponseParserException {
 
 		List<KeyDev> ret = new ArrayList<KeyDev>();
 
@@ -44,7 +43,7 @@ public class KeyDevResponseParser extends AbstractResponseParser{
 		return keyDevs;
 	}
 
-	private KeyDev getKeyDev(List<CapIQResult> results) throws CapIQServiceException {
+	private KeyDev getKeyDev(List<CapIQResult> results) throws ResponseParserException {
 
 		KeyDev dev = new KeyDev();
 

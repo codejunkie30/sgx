@@ -11,19 +11,19 @@ import com.wmsi.sgx.model.financials.Financial;
 import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 public class FinancialsResponseParser extends AbstractResponseParser{
 
 	@Override
-	protected Class<Financial> getType() {
+	public Class<Financial> getType() {
 		return Financial.class;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Financials convert(CapIQResponse response) throws CapIQServiceException, InvalidIdentifierException {
+	public Financials convert(CapIQResponse response) throws ResponseParserException {
 
 		List<Financial> ret = new ArrayList<Financial>();
 
@@ -37,7 +37,6 @@ public class FinancialsResponseParser extends AbstractResponseParser{
 
 			// AbsPeriod should never be null if there's data
 			if(financial != null && financial.getAbsPeriod() != null){
-				//financial.setTickerCode(id);
 				ret.add(financial);
 			}
 		}
@@ -49,7 +48,7 @@ public class FinancialsResponseParser extends AbstractResponseParser{
 
 	}
 	
-	private Financial getFinancial(List<CapIQResult> results) throws CapIQServiceException{
+	private Financial getFinancial(List<CapIQResult> results) throws ResponseParserException {
 	
 		Financial fin = new Financial();
 		

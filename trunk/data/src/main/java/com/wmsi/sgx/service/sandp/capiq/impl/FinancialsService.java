@@ -12,8 +12,7 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @Service
 public class FinancialsService{
@@ -21,18 +20,17 @@ public class FinancialsService{
 	@Autowired
 	private CapIQRequestExecutor requestExecutor;
 
-	@Autowired
-	private FinancialsResponseParser finanicalsResponseParser;
+	private FinancialsResponseParser finanicalsResponseParser = new FinancialsResponseParser();
 
-	public CapIQRequest companyFinancialsRequest(){
+	public Financials loadFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException {
+		return executeRequest(id, currency);
+	}
+
+	private CapIQRequest companyFinancialsRequest(){
 		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/companyFinancials.json"));		
 	}
 
-	public Financials getCompanyFinancials(String id, String currency) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
-		return executeRequest(id, currency);
-	}
-	
-	private Financials executeRequest(String id, String currency) throws CapIQRequestException, CapIQServiceException, InvalidIdentifierException {
+	private Financials executeRequest(String id, String currency) throws ResponseParserException, CapIQRequestException {
 		Map<String, Object> ctx = buildContext(id, currency);
 		CapIQResponse response = requestExecutor.execute(companyFinancialsRequest(), ctx);
 

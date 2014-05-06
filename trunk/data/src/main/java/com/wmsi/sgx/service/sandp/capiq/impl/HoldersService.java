@@ -24,11 +24,11 @@ public class HoldersService{
 	@Autowired
 	private CapIQRequestExecutor requestExecutor;
 
-	public CapIQRequest holdersRequest(){
+	private CapIQRequest holdersRequest(){
 		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/holderDetails.json"));		
 	}
 	
-	public Holders getHolders(String id) throws CapIQRequestException {
+	public Holders loadHolders(String id) throws CapIQRequestException {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
 

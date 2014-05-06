@@ -1,6 +1,6 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
-public class InvalidIdentifierException extends Exception{
+public class InvalidIdentifierException extends ResponseParserException{
 
 	private static final long serialVersionUID = 1L;
 
