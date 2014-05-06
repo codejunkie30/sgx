@@ -26,9 +26,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.integration.MessageChannel;
 import org.springframework.integration.support.MessageBuilder;
 
-import com.wmsi.sgx.model.integration.DataLoadJob;
-import com.wmsi.sgx.service.indexer.IndexBuilderService;
-
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
  *

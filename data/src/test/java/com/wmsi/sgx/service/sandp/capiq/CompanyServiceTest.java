@@ -75,7 +75,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 		
 		@Bean
 		@SuppressWarnings("unchecked")
-		public CapIQRequestExecutor requestExecutor() throws CapIQRequestException, JsonParseException, JsonMappingException, IOException{
+		public CapIQRequestExecutor requestExecutor() throws CapIQRequestException{
 			
 			CapIQResponse response = CompanyTestUtils.getCompanyResponse();
 

@@ -26,10 +26,9 @@ public abstract class AbstractResponseParser implements ResponseParser{
 	private static final String[] DEFAULT_DATE_FORMATS = new String[]{ "yyyy-MM-dd", "MMM dd yyyy hh:mma", "MM/dd/yyyy hh:mm:ss"};
 	
 	@Override
-	public abstract <T> T convert(CapIQResponse response) throws ResponseParserException;
-
-	@Override
 	public abstract <T> Class<T> getType();
+	
+	public abstract <T> T convert(CapIQResponse response) throws ResponseParserException;
 	
 	protected Map<String, Field> getAnnotedFields() {
 		if(annotedFields == null)
