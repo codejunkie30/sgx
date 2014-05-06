@@ -12,7 +12,8 @@ public class CompanyResponseParser extends AbstractResponseParser{
 	public Class<Company> getType() {
 		return Company.class;
 	}
-
+	
+	@Override
 	public Company convert(CapIQResponse response) throws ResponseParserException{
 
 		Company company = new Company();

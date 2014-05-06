@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.sandp.capiq;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -43,4 +42,5 @@ public class CompanyResponseParserTest{
 		CapIQResponse response = mapper.readValue(json.getInputStream(), CapIQResponse.class);		
 		companyResponseParser.convert(response);
 	}
+
 }

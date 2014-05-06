@@ -11,7 +11,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -134,20 +133,4 @@ public class HttpConfig{
 		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;
 	}
-
-	@Bean
-	public CompanyResponseParser companyResponseParser() {
-		return new CompanyResponseParser();
-	}
-
-	@Bean
-	public FinancialsResponseParser financialsResponseParser() {
-		return new FinancialsResponseParser();
-	}
-
-	@Bean
-	public KeyDevResponseParser keyDevsResponseParser() {
-		return new KeyDevResponseParser();
-	}
-
 }
