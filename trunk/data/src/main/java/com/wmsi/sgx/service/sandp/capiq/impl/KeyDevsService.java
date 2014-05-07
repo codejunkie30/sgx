@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -23,19 +21,19 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 import com.wmsi.sgx.util.TemplateUtil;
 
+@SuppressWarnings("unchecked")
 public class KeyDevsService extends AbstractDataService {
 
 	private ClassPathResource keyDevsIdsTemplate = new ClassPathResource("META-INF/query/capiq/keyDevs.json");
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
 
-	@Override
+	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		
 		Assert.notEmpty(parms);
@@ -45,7 +43,7 @@ public class KeyDevsService extends AbstractDataService {
 		String json = getQuery(ids);
 		
 		Resource template = new ByteArrayResource(json.getBytes());
-		KeyDevs devs =  executeRequest(new CapIQRequest(template), null);
+		KeyDevs devs =  executeRequest(new CapIQRequestImpl(template), null);
 		
 		devs.setTickerCode(id);
 		return devs;
@@ -86,7 +84,7 @@ public class KeyDevsService extends AbstractDataService {
 		ctx.put("id", id);
 		ctx.put("startDate", DateUtil.adjustDate(asOfDate, Calendar.MONTH, -1));
 
-		CapIQResponse response = requestExecutor.execute(new CapIQRequest(keyDevsIdsTemplate), ctx);
+		CapIQResponse response = requestExecutor.execute(new CapIQRequestImpl(keyDevsIdsTemplate), ctx);
 
 		String err = response.getErrorMsg();
 		if(StringUtils.isNotEmpty(err)){

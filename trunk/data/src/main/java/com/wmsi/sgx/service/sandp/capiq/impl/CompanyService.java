@@ -17,22 +17,21 @@ import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
+@SuppressWarnings("unchecked")
 public class CompanyService extends AbstractDataService{
 
 	@Autowired
 	private HistoricalService historicalService;
 
-	private CapIQRequest companyRequest() {
-		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
+	private CapIQRequestImpl companyRequest() {
+		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
+	@Override	
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException{
 
 		Assert.notEmpty(parms);
@@ -63,7 +62,7 @@ public class CompanyService extends AbstractDataService{
 	private Company loadHistorical(Company comp, final String startDate) throws ResponseParserException, CapIQRequestException {
 
 		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-		PriceHistory historicalData = historicalService.load(comp.getTickerCode(), yearAgo);
+		PriceHistory historicalData = historicalService.load(comp.getTickerCode(), yearAgo, startDate);
 
 		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
 		List<HistoricalValue> lastYearVolume = historicalData.getVolume();

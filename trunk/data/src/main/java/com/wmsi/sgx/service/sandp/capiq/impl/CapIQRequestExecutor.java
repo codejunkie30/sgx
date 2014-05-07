@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service.sandp.capiq;
+package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -19,6 +19,9 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.CapIQResponseConversionException;
+import com.wmsi.sgx.service.sandp.capiq.RequestExecutor;
 
 /**
  * Class for handling requests to the Capital IQ API Rest Service
@@ -41,18 +44,13 @@ public class CapIQRequestExecutor implements RequestExecutor{
 	private static final String PARAM_USERID = "userId";
 	
 	@Override
-	public CapIQResponse execute(CapIQRequest req, Map<String, Object> ctx) throws CapIQRequestException {
-		String query = req.buildQuery(ctx);
-		return execute(query);
-	}
-	
-	@Override
-	public CapIQResponse execute(String query) throws CapIQRequestException {
-		
+	public CapIQResponse execute(CapIQRequestImpl req, Map<String, Object> ctx) throws CapIQRequestException {
+
 		log.debug("Executing request to capital iq api");
 		ResponseEntity<CapIQResponse> res = null;
 		
-		try{			
+		try{
+			String query = req.buildQuery(ctx);
 			res = restTemplate.exchange(url, HttpMethod.POST, buildEntity(query), CapIQResponse.class);
 			
 			if(res == null)

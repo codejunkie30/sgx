@@ -9,29 +9,20 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
- <!-- 
- 	<int:gateway id="indexRequestGateway" default-request-channel="indexRequestChannel"/>
-  -->	
- 	
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
 		<int:header-enricher>
 			<int:header name="indexName" expression="'${elasticsearch.index.prefix}' + headers.jobId" />
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>		
-		<int:service-activator ref="indexBuilderServiceImpl" method="buildAlphaFactors" /> 
-<!-- 		<int:gateway request-channel="indexChannel" /> -->				
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" /> 
 	</int:chain>
 
 	<int:splitter id="tickerSplitter"
 		input-channel="indexChannel" 
 		output-channel="indexTickerChannel"
-		ref="indexBuilderServiceImpl" method="getTickers"/>
-<!-- 	
-	<int:gateway default-request-channel="indexChannel" error-channel="indexErrorChannel"/>
-	
- -->
+		ref="indexBuilderService" method="getTickers"/>
+
  	<!-- Load Data -->
  	<int:chain
 		input-channel="indexTickerChannel"
@@ -41,9 +32,8 @@
 			<int:error-channel value="indexErrorChannel"/>
 		</int:header-enricher>	
 		
-	<int:service-activator ref="indexBuilderServiceImpl" method="index"/>
+	<int:service-activator ref="indexBuilderService" method="index"/>
 	</int:chain>
-		
 
 	<!-- Indexing Error Handling -->
 	<int:chain 
@@ -101,13 +91,9 @@
 	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
 	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
 	
-<!-- 	<int:logging-channel-adapter channel="errorLoggerChannel" level="ERROR" expression=" payload.printStackTrace()"/> -->
-	
 	<int:channel id="indexRequestChannel"/>		
 	<int:channel id="indexChannel"/>
-	
 	<int:publish-subscribe-channel id="aggregationCompleteChannel"/>
-
 
 	<int:channel id="tickerAggregatorChannel">
 		<int:interceptors>

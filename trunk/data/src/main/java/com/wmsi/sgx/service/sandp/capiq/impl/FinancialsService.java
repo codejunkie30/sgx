@@ -8,21 +8,21 @@ import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
+@SuppressWarnings("unchecked")
 public class FinancialsService extends AbstractDataService {
 
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/companyFinancials.json");
 	
-	@Override
+	@Override	
 	public Financials load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		
 		Assert.notEmpty(parms);
 		
 		Map<String, Object> ctx = buildContext(id, parms[0]);		
-		return executeRequest(new CapIQRequest(template), ctx);
+		return executeRequest(new CapIQRequestImpl(template), ctx);
 	}
 	
 	private Map<String, Object> buildContext(String id, String currency){

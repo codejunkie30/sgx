@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
 import com.wmsi.sgx.util.test.TestUtils;
 
@@ -40,7 +42,7 @@ public class HistoricalServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@Test
 	public void testLoadHistory() throws CapIQRequestException, ParseException, ResponseParserException{
-		PriceHistory history = historicalService.load("A7S", "05/06/2013");
+		PriceHistory history = historicalService.load("A7S", "05/06/2013", "05/06/2014");
 		
 		assertNotNull(history);
 		
@@ -97,7 +99,7 @@ public class HistoricalServiceTest extends AbstractTestNGSpringContextTests{
 			CapIQResponse response = mapper.readValue(json.getInputStream(), CapIQResponse.class);
 
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
-			when(mock.execute( any(CapIQRequest.class), anyMap()) )
+			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(response);
 
 			return mock;

@@ -30,7 +30,11 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.indexer.IndexBuilderService;
+import com.wmsi.sgx.service.indexer.IndexerService;
+import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
+import com.wmsi.sgx.service.indexer.impl.IndexerServiceImpl;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
@@ -134,10 +138,22 @@ public class HttpConfig{
 		DefaultFtpSessionFactory factory = new DefaultFtpSessionFactory();
 		factory.setClientMode(2);
 		factory.setHost(capIQEnv.getProperty("capiq.ftp.url"));
-		factory.setPort(new Integer(capIQEnv.getProperty("capiq.ftp.port")));
+		factory.setPort(Integer.valueOf(capIQEnv.getProperty("capiq.ftp.port")));
 		factory.setUsername(capIQEnv.getProperty("capiq.ftp.user"));
 		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;
+	}
+	
+	@Bean
+	public IndexBuilderService indexBuilderService(){		
+		return new IndexBuilderServiceImpl();
+	}
+	
+	@Bean
+	public IndexerService indexerService(){
+		IndexerServiceImpl service = new IndexerServiceImpl();
+		service.setRestTemplate(esRestTemplate());
+		return service;
 	}
 	
 	@Bean

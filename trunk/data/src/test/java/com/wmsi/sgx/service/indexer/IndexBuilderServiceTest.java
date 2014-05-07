@@ -14,9 +14,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 
 @SuppressWarnings("unchecked")
