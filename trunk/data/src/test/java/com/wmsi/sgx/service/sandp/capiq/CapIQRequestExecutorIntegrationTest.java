@@ -7,32 +7,22 @@ import java.util.Map;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
-import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes={HttpConfig.class})
 public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringContextTests{
-
-	@Configuration
-	//@ComponentScan(basePackageClasses = { CapIQServiceImpl.class})
-	@Import(HttpConfig.class)
-	static class CapIqServiceTestConfig{}
 	
 	@Autowired
-	CapIQRequestExecutor capIqRequestExecutor;
+	private CapIQRequestExecutor capIqRequestExecutor;
 	
 	@Test(groups={"functional", "integration"})
 	public void testValidRequest() throws CapIQRequestException{

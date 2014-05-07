@@ -1,7 +1,7 @@
 package com.wmsi.sgx.model;
 
 import com.google.common.base.Objects;
-import com.wmsi.sgx.conversion.dozer.ConversionAnnotation;
+import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 
 public class Holder{
 

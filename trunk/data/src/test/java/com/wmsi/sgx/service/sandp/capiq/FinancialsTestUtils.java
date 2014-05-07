@@ -14,8 +14,8 @@ import org.springframework.core.io.Resource;
 import org.testng.TestException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.util.test.TestUtils;
 

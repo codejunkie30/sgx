@@ -3,13 +3,14 @@ package com.wmsi.sgx.service.sandp.capiq;
 import java.util.List;
 
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.PriceHistory;
 
 public interface CapIQService{
-	List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException;
+	PriceHistory getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException;
 
 	Company getCompanyInfo(String id, String startDate) throws ResponseParserException, CapIQRequestException;
 

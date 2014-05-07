@@ -1,54 +1,142 @@
-package com.wmsi.sgx.model.financials;
+package com.wmsi.sgx.model;
 
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 
-public class CompanyFinancial{
+public class Financial{
 
+	@ConversionAnnotation(name = "IQ_ABS_PERIOD")
 	private String absPeriod;
+	
+	@ConversionAnnotation(name = "IQ_ASSET_TURNS")
 	private Double assetTurns;
+	
+	@ConversionAnnotation(name = "IQ_DAYS_INVENTORY_OUT")
 	private Double avgDaysInventory;
+	
+	@ConversionAnnotation(name = "IQ_DAYS_PAYABLE_OUT")
 	private Double avgDaysPayable;
+	
+	@ConversionAnnotation(name = "IQ_CASH_CONVERSION")
 	private Double cashConversion;
+	
+	@ConversionAnnotation(name = "IQ_CASH_FINAN")
 	private Double cashFinancing;
+	
+	@ConversionAnnotation(name = "IQ_CASH_INVEST")
 	private Double cashInvesting;
+	
+	@ConversionAnnotation(name = "IQ_CASH_OPER")
 	private Double cashOperations;
+	
+	@ConversionAnnotation(name = "IQ_COMMON_EQUITY_1YR_ANN_GROWTH")
 	private Double commonEquity1YrAnnGrowth;
+	
+	@ConversionAnnotation(name = "IQ_COMMON")
 	private Double commonStock;
+	
+	@ConversionAnnotation(name = "IQ_CURRENT_RATIO")
 	private Double currentRatio;
+	
+	@ConversionAnnotation(name = "IQ_DIV_SHARE")
 	private Double dividendsPerShare;
+	
+	@ConversionAnnotation(name = "IQ_EBITDA")
 	private Double ebitda;
+	
+	@ConversionAnnotation(name = "IQ_EBITDA_1YR_ANN_GROWTH")
 	private Double ebitda1YrAnnGrowth;
+	
+	@ConversionAnnotation(name = "IQ_EBITDA_INT")
 	private Double ebitdaInterest;
+	
+	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
+	
+	@ConversionAnnotation(name = "IQ_DILUT_EPS_NORM")
 	private Double eps;
+	
+	@ConversionAnnotation(name = "IQ_EPS_1YR_ANN_GROWTH")
 	private Double eps1YrAnnGrowth;
+	
+	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
+	
+	@ConversionAnnotation(name = "IQ_GROSS_MARGIN")
 	private Double grossMargin;
+	
+	@ConversionAnnotation(name = "IQ_GP")
 	private Double grossProfit;
+	
+	@ConversionAnnotation(name = "IQ_LT_DEBT")
 	private Double longTermDebt;
+	
+	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
 	private Double minorityInterest;
+	
+	@ConversionAnnotation(name = "IQ_NET_CHANGE")
 	private Double netChange;
+	
+	@ConversionAnnotation(name = "IQ_NI")
 	private Double netIncome;
+	
+	@ConversionAnnotation(name = "IQ_NI_1YR_ANN_GROWTH")
 	private Double netIncome1YrAnnGrowth;
+	
+	@ConversionAnnotation(name = "IQ_NI_MARGIN")
 	private Double netIncomeMargin;
+	
+	@ConversionAnnotation(name = "IQ_NPPE")
 	private Double netPpe;
+	
+	@ConversionAnnotation(name = "IQ_PAYOUT_RATIO")
 	private Double payoutRatio;
+	
+	@ConversionAnnotation(name = "IQ_PERIODDATE_IS")
 	private Date periodDate;
+	
+	@ConversionAnnotation(name = "IQ_QUICK_RATIO")
 	private Double quickRatio;
+	
+	@ConversionAnnotation(name = "IQ_RE")
 	private Double retainedEarnings;
+	
+	@ConversionAnnotation(name = "IQ_RETURN_ASSETS")
 	private Double returnAssets;
+	
+	@ConversionAnnotation(name = "IQ_RETURN_CAPITAL")
 	private Double returnCapital;
+	
+	@ConversionAnnotation(name = "IQ_RETURN_EQUITY")
 	private Double returnEquity;
+	
+	@ConversionAnnotation(name = "IQ_COMPANY_TICKER_NO_EXCH")
 	private String tickerCode;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_CA")
 	private Double totalCurrentAssets;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_CL")
 	private Double totalCurrentLiabily;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_EQUITY")
 	private Double totalEquity;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_LIAB")
 	private Double totalLiability;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_REV")
 	private Double totalRevenue;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_REV_1YR_ANN_GROWTH")
 	private Double totalRevenue1YrAnnGrowth;
 
 	public String getAbsPeriod() {

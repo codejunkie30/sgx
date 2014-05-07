@@ -14,7 +14,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wmsi.sgx.conversion.dozer.ConversionAnnotation;
+import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 

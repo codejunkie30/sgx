@@ -3,7 +3,6 @@ package com.wmsi.sgx.service.indexer;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,19 +22,19 @@ import org.springframework.util.StringUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
@@ -161,16 +160,16 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			indexerService.save("financial", id, c, index);
 		}
 
-		List<List<HistoricalValue>> historicalData = capIQService.getHistoricalData(ticker, date);
+		PriceHistory historicalData = capIQService.getHistoricalData(ticker, date);
 		
-		List<HistoricalValue> price = historicalData.get(0);
+		List<HistoricalValue> price = historicalData.getPrice();
 
 		for(HistoricalValue data : price){
 			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
 
-		List<HistoricalValue> volume = historicalData.get(1);
+		List<HistoricalValue> volume = historicalData.getVolume();
 
 		for(HistoricalValue data : volume){
 			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());

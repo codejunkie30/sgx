@@ -14,9 +14,23 @@ public class CapIQRow{
 	public void setValues(List<String> v){values = v;}
 	
 	@Override
-	public String toString(){
+	public int hashCode(){
+		return Objects.hashCode(values);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof CapIQRow) {
+			CapIQRow that = (CapIQRow) object;
+			return Objects.equal(this.values, that.values);
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
 		return Objects.toStringHelper(this)
-				.add("values", values)
-				.toString();
+			.add("values", values)
+			.toString();
 	}
 }

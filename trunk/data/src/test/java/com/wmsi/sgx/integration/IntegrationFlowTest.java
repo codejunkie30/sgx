@@ -1,49 +1,10 @@
 package com.wmsi.sgx.integration;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
-
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageChannel;
-import org.springframework.integration.MessagingException;
-import org.springframework.integration.channel.PublishSubscribeChannel;
-import org.springframework.integration.core.MessageHandler;
-import org.springframework.integration.core.SubscribableChannel;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.Test;
-
-import com.wmsi.sgx.config.AppConfig;
-import com.wmsi.sgx.model.CompanyInfo;
-import com.wmsi.sgx.model.integration.CompanyInputRecord;
-import com.wmsi.sgx.service.indexer.IndexBuilderService;
-import com.wmsi.sgx.service.indexer.IndexBuilderServiceImpl;
-import com.wmsi.sgx.service.indexer.IndexerService;
-import com.wmsi.sgx.service.indexer.IndexerServiceException;
-import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
-import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)

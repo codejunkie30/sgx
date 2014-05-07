@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.indexer;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 import java.util.Date;
 
@@ -15,8 +16,10 @@ import org.testng.annotations.Test;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 
+@SuppressWarnings("unchecked")
 public class IndexBuilderServiceTest{
 
 	private CapIQServiceImpl capIQService;
@@ -42,14 +45,13 @@ public class IndexBuilderServiceTest{
 	}
 	
 	@Test
-	public void testIndex() throws CapIQRequestException{
+	public void testIndex() throws CapIQRequestException, IndexerServiceException, ResponseParserException{
 		
 		when(restTemplate.exchange(any(String.class), any(HttpMethod.class), any(HttpEntity.class), any(Class.class) ))
 			.thenThrow(new RestClientException("Test Rest Client Exception"));
 		
-				
-		//CompanyInputRecord rec = indexBuilderService.index("test_index", new Date(), new CompanyInputRecord());
-		
+		CompanyInputRecord rec = indexBuilderService.index("test_index", new Date(), new CompanyInputRecord());
+		assertNotNull(rec);
 	}
 
 }

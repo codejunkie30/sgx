@@ -53,6 +53,27 @@ public class CapIQResult{
 	public void setFunction(String f){function = f;}
 	
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(headers, rows, mnemonic, properties, errorMsg, identifier, numCols, numRows, function);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof CapIQResult) {
+			CapIQResult that = (CapIQResult) object;
+			return Objects.equal(this.headers, that.headers)
+				&& Objects.equal(this.rows, that.rows)
+				&& Objects.equal(this.mnemonic, that.mnemonic)
+				&& Objects.equal(this.properties, that.properties)
+				&& Objects.equal(this.errorMsg, that.errorMsg)
+				&& Objects.equal(this.identifier, that.identifier)
+				&& Objects.equal(this.numCols, that.numCols)
+				&& Objects.equal(this.numRows, that.numRows)
+				&& Objects.equal(this.function, that.function);
+		}
+		return false;
+	}
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("headers", headers)
@@ -66,5 +87,6 @@ public class CapIQResult{
 			.add("function", function)
 			.toString();
 	}
-
+	
+	
 }

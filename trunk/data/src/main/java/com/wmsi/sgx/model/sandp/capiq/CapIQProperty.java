@@ -31,6 +31,23 @@ public class CapIQProperty{
 	public void setFrequency(String f){frequency = f;}
 	
 	@Override
+	public int hashCode(){
+		return Objects.hashCode(periodType, startDate, endDate, rank, frequency);
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof CapIQProperty) {
+			CapIQProperty that = (CapIQProperty) object;
+			return Objects.equal(this.periodType, that.periodType)
+				&& Objects.equal(this.startDate, that.startDate)
+				&& Objects.equal(this.endDate, that.endDate)
+				&& Objects.equal(this.rank, that.rank)
+				&& Objects.equal(this.frequency, that.frequency);
+		}
+		return false;
+	}
+	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("periodType", periodType)

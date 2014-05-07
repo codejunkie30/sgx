@@ -1,4 +1,4 @@
-package com.wmsi.sgx.conversion.dozer;
+package com.wmsi.sgx.model.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

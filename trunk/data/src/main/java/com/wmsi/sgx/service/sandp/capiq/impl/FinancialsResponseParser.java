@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.wmsi.sgx.model.financials.Financial;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;

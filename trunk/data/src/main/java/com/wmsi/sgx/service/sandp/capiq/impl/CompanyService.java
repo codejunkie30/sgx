@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
+import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
@@ -62,10 +63,10 @@ public class CompanyService extends AbstractDataService{
 	private Company loadHistorical(Company comp, final String startDate) throws ResponseParserException, CapIQRequestException {
 
 		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-		List<List<HistoricalValue>> historicalData = historicalService.load(comp.getTickerCode(), yearAgo);
+		PriceHistory historicalData = historicalService.load(comp.getTickerCode(), yearAgo);
 
-		List<HistoricalValue> lastYearPrice = historicalData.get(0);
-		List<HistoricalValue> lastYearVolume = historicalData.get(1);
+		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
+		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
 
 		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
 		comp.setPriceHistory(lastYearPrice);

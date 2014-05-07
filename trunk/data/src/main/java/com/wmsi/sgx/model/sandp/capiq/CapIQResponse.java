@@ -18,12 +18,27 @@ public class CapIQResponse{
 	
 	public String getErrorMsg(){return errorMsg;}
 	public void setErrorMsg(String e){errorMsg = e;}
+
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(results, errorMsg);
+	}
 	
 	@Override
-	public String toString(){
-		return Objects.toStringHelper(this)
-				.add("results", results)
-				.add("errorMsg", errorMsg)
-				.toString();
+	public boolean equals(Object object){
+		if (object instanceof CapIQResponse) {
+			CapIQResponse that = (CapIQResponse) object;
+			return Objects.equal(this.results, that.results)
+				&& Objects.equal(this.errorMsg, that.errorMsg);
+		}
+		return false;
 	}
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("results", results)
+			.add("errorMsg", errorMsg)
+			.toString();
+	}
+
 }

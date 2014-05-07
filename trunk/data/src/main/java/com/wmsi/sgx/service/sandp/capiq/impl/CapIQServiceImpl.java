@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
@@ -58,7 +59,7 @@ public class CapIQServiceImpl implements CapIQService{
 	private HistoricalService historicalService;
 	
 	@Override
-	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
+	public PriceHistory getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
 		String startDate = DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5);
 		return historicalService.load(id, startDate);
 	}
