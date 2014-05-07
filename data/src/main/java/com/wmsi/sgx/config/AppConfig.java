@@ -1,6 +1,5 @@
 package com.wmsi.sgx.config;
 
-import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 
 @Configuration
 @PropertySources(value = {
@@ -32,16 +28,5 @@ public class AppConfig{
 		ppc.setIgnoreUnresolvablePlaceholders(true);
 		return ppc;
 	}
-	
-	@Bean
-	public DozerBeanMapperFactoryBean dozerMappingBean() throws Exception{
-
-		DozerBeanMapperFactoryBean factory = new DozerBeanMapperFactoryBean();
-		factory.setMappingFiles( 
-				new PathMatchingResourcePatternResolver()
-					.getResources("classpath*:META-INF/mappings/dozer/*.xml"));
-		
-		return factory; 
-	}	
 	
 }

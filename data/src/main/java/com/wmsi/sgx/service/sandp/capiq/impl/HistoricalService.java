@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.HistoricalValue;
+import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
@@ -24,7 +25,8 @@ public class HistoricalService extends AbstractDataService {
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");		
 	
 	@Override
-	public List<List<HistoricalValue>> load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
+	@SuppressWarnings("unchecked")
+	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
 
 		Assert.notEmpty(parms);
 		
@@ -39,20 +41,22 @@ public class HistoricalService extends AbstractDataService {
 		List<HistoricalValue> price = getHistory(prices, id);
 		List<HistoricalValue> volume = getHistory(volumes, id);
 
-		List<List<HistoricalValue>> ret = new ArrayList<List<HistoricalValue>>();
-		ret.add(price);
-		ret.add(volume);
-		return ret;
+		PriceHistory history = new PriceHistory();
+		history.setPrice(price);
+		history.setVolume(volume);
+		return history;
 	}
 
-	private List<HistoricalValue> getHistory(CapIQResult res, String id) {
+	private List<HistoricalValue> getHistory(CapIQResult res, String id) throws CapIQRequestException {
 
 		List<HistoricalValue> results = new ArrayList<HistoricalValue>();
 
-		// TODO sanity check headers for index of Date
 		for(CapIQRow row : res.getRows()){
 			List<String> values = row.getValues();
 
+			if(values.size() < 2)
+				throw new CapIQRequestException("Historical data response is missing fields");
+			
 			String v = values.get(0);
 			if(NumberUtils.isNumber(v)){
 

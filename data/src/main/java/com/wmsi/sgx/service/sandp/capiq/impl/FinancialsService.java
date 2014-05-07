@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;

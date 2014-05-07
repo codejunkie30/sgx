@@ -15,7 +15,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsService;
 
@@ -33,7 +33,7 @@ public class FinancialsServiceTest extends AbstractTestNGSpringContextTests{
 	}
 	
 	@Configuration
-	static class CompanyServiceTestConfig{
+	static class FinancialsServiceTestConfig{
 		
 		@Bean
 		public FinancialsService financialsService () throws CapIQRequestException{

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.wmsi.sgx.model.sandp.alpha.AlphaFactor;
+import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 

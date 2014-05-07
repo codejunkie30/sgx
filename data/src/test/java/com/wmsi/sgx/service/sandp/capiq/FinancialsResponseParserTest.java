@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.wmsi.sgx.model.financials.Financials;
+import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
 
 public class FinancialsResponseParserTest {

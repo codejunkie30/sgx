@@ -4,35 +4,19 @@ import static org.testng.Assert.*;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader=AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes={HttpConfig.class})
 public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 
-
-	@Configuration
-	@Import(HttpConfig.class)
-	static class CapIQServiceTestConfig{
-		
-		@Bean
-		public CapIQService capIQService(){
-			return new CapIQServiceImpl();
-		}
-	}
-	
 	@Autowired
 	public CapIQService capIQService;
 	
@@ -51,7 +35,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompanyInfo(ticker, date);
 	}
 	
-	//@Test(dataProvider="testTickers")
+	@Test(dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		capIQService.getCompanyFinancials(ticker, "SGD");
 	}

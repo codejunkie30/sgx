@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
-import com.wmsi.sgx.conversion.dozer.ConversionAnnotation;
+import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 
 @JsonRootName("company")
 public class Company{
