@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,9 +15,8 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.financials.Financials;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQServiceException;
-import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
+import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class CapIQServiceImpl implements CapIQService{
@@ -28,7 +28,7 @@ public class CapIQServiceImpl implements CapIQService{
 
 	@Override
 	public Company getCompanyInfo(String id, String startDate) throws ResponseParserException, CapIQRequestException{
-		return companyService.loadCompany(id,  startDate);	
+		return companyService.load(id,  startDate);	
 	}
 
 	@Autowired
@@ -36,7 +36,7 @@ public class CapIQServiceImpl implements CapIQService{
 
 	@Override
 	public Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException{
-		return financialsService.loadFinancials(id, currency);		
+		return financialsService.load(id, currency);		
 	}
 
 	@Autowired
@@ -44,14 +44,14 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException{		
-		return keyDevsService.loadKeyDevelopments(id, asOfDate);
+		return keyDevsService.load(id, asOfDate);
 	}
 	
 	@Autowired
 	private HoldersService holdersService;
 	
 	public Holders getHolderDetails(String id) throws ResponseParserException, CapIQRequestException {
-		return holdersService.loadHolders(id);
+		return holdersService.load(id);
 	}
 
 	@Autowired
@@ -59,6 +59,7 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
-		return historicalService.getHistoricalData(id, asOfDate);
+		String startDate = DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5);
+		return historicalService.load(id, startDate);
 	}
 }

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
 import com.wmsi.sgx.util.test.TestUtils;
@@ -38,7 +39,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 	@Test
 	public void testLoadCompany() throws ResponseParserException, CapIQRequestException, ParseException{
 
-		Company company = companyService.loadCompany("A7S", "05/06/2014");
+		Company company = companyService.load("A7S", "05/06/2014");
 		CompanyTestUtils.verify(company);
 		
 		// Test additional derived fields
@@ -53,8 +54,11 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 		private ObjectMapper mapper = TestUtils.getObjectMapper();
 		
 		@Bean
-		public CompanyService companyService(){
-			return new CompanyService();
+		public CompanyService companyService() throws CapIQRequestException{
+			CompanyService service = new CompanyService();
+			service.setRequestExecutor(requestExecutor());
+			service.setResponseParser(new CompanyResponseParser());
+			return service;
 		}
 		
 		@Bean

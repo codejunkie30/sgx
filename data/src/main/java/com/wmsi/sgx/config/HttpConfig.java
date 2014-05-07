@@ -32,8 +32,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsService;
+import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
+import com.wmsi.sgx.service.sandp.capiq.impl.HoldersResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.HoldersService;
 import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
 @Configuration
 @ComponentScan(basePackages="com.wmsi.sgx.service")
@@ -133,4 +139,44 @@ public class HttpConfig{
 		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;
 	}
+	
+	@Bean
+	public CompanyService companyService(){
+		CompanyService service = new CompanyService();
+		service.setRequestExecutor(capIqRequestExecutor());
+		service.setResponseParser(new CompanyResponseParser());
+		return service;
+	}
+
+	@Bean
+	public FinancialsService financialsService(){
+		FinancialsService  service = new FinancialsService();
+		service.setRequestExecutor(capIqRequestExecutor());
+		service.setResponseParser(new FinancialsResponseParser());
+		return service;
+	}
+
+	@Bean
+	public HistoricalService historicalService(){
+		HistoricalService service = new HistoricalService();
+		service.setRequestExecutor(capIqRequestExecutor());
+		return service;
+	}
+
+	@Bean
+	public KeyDevsService keyDevsService(){
+		KeyDevsService service = new KeyDevsService();
+		service.setRequestExecutor(capIqRequestExecutor());
+		service.setResponseParser(new KeyDevResponseParser());
+		return service;
+	}
+
+	@Bean
+	public HoldersService holdersService(){
+		HoldersService service = new HoldersService ();
+		service.setRequestExecutor(capIqRequestExecutor());
+		service.setResponseParser(new HoldersResponseParser());
+		return service;
+	}
+
 }

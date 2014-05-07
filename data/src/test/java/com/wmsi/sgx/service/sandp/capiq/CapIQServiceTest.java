@@ -4,7 +4,7 @@ import static org.testng.Assert.*;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,9 +24,14 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 
 
 	@Configuration
-	@ComponentScan(basePackageClasses = {CapIQServiceImpl.class})
 	@Import(HttpConfig.class)
-	static class CapIQServiceTestConfig{}
+	static class CapIQServiceTestConfig{
+		
+		@Bean
+		public CapIQService capIQService(){
+			return new CapIQServiceImpl();
+		}
+	}
 	
 	@Autowired
 	public CapIQService capIQService;
@@ -46,7 +51,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompanyInfo(ticker, date);
 	}
 	
-	@Test(dataProvider="testTickers")
+	//@Test(dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		capIQService.getCompanyFinancials(ticker, "SGD");
 	}

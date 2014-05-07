@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.HoldersResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.HoldersService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,7 +28,7 @@ public class HoldersServiceTest extends AbstractTestNGSpringContextTests{
 	@Test
 	public void testHolders() throws CapIQRequestException, ResponseParserException{
 
-		Holders holders = holdersService.loadHolders("A7S");
+		Holders holders = holdersService.load("A7S");
 		HoldersTestUtils.verify(holders);
 		
 	}
@@ -36,8 +37,11 @@ public class HoldersServiceTest extends AbstractTestNGSpringContextTests{
 	static class HoldersServiceTestConfig{
 
 		@Bean
-		public HoldersService keyDevsService() {
-			return new HoldersService();
+		public HoldersService keyDevsService() throws CapIQRequestException {
+			HoldersService service = new HoldersService();
+			service.setRequestExecutor(requestExecutor());
+			service.setResponseParser(new HoldersResponseParser());
+			return service;
 		}
 
 		@Bean
@@ -51,7 +55,5 @@ public class HoldersServiceTest extends AbstractTestNGSpringContextTests{
 
 			return mock;
 		}
-
 	}
-
 }
