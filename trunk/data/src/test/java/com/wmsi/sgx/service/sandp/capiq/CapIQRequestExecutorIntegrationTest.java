@@ -27,12 +27,12 @@ import com.wmsi.sgx.service.sandp.capiq.impl.CapIQServiceImpl;
 public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringContextTests{
 
 	@Configuration
-	@ComponentScan(basePackageClasses = { CapIQServiceImpl.class})
+	//@ComponentScan(basePackageClasses = { CapIQServiceImpl.class})
 	@Import(HttpConfig.class)
 	static class CapIqServiceTestConfig{}
 	
 	@Autowired
-	CapIQRequestExecutor executor;
+	CapIQRequestExecutor capIqRequestExecutor;
 	
 	@Test(groups={"functional", "integration"})
 	public void testValidRequest() throws CapIQRequestException{
@@ -43,7 +43,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		ctx.put("id", "IBM");
 		Resource template = new ByteArrayResource(validQuery.getBytes());
 		
-		CapIQResponse response = executor.execute(new CapIQRequest(template), ctx);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), ctx);
 		
 		assertNotNull(response);
 		assertEquals(response.getResults().size(), 1);
@@ -61,7 +61,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		ctx.put("id", "ffffffffff");
 		Resource template = new ByteArrayResource(invalidQuery.getBytes());
 		
-		CapIQResponse response = executor.execute(new CapIQRequest(template), ctx);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), ctx);
 		
 		assertNotNull(response);
 		assertNull(response.getErrorMsg());
@@ -73,7 +73,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 	public void testErrorMsgResponse() throws CapIQRequestException{
 		
 		Resource template = new ByteArrayResource(new byte[]{});
-		CapIQResponse response = executor.execute(new CapIQRequest(template), null);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), null);
 		assertNotNull(response);
 		assertNotNull(response.getErrorMsg());
 		assertNull(response.getResults());

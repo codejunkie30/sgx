@@ -24,7 +24,7 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
  * Class for handling requests to the Capital IQ API Rest Service
  * @author Justin Lee
  */
-public class CapIQRequestExecutor{
+public class CapIQRequestExecutor implements RequestExecutor{
 
 	private Logger log = LoggerFactory.getLogger(CapIQRequestExecutor.class);
 
@@ -40,11 +40,13 @@ public class CapIQRequestExecutor{
 	private static final String PARAM_INPUTS = "inputRequests";
 	private static final String PARAM_USERID = "userId";
 	
+	@Override
 	public CapIQResponse execute(CapIQRequest req, Map<String, Object> ctx) throws CapIQRequestException {
 		String query = req.buildQuery(ctx);
 		return execute(query);
 	}
 	
+	@Override
 	public CapIQResponse execute(String query) throws CapIQRequestException {
 		
 		log.debug("Executing request to capital iq api");

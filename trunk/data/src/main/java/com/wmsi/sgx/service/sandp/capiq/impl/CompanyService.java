@@ -11,34 +11,32 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
-import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
-@Service
-public class CompanyService{
+public class CompanyService extends AbstractDataService{
 
 	@Autowired
 	private HistoricalService historicalService;
 
-	@Autowired
-	private CapIQRequestExecutor requestExecutor;
-
-	private CompanyResponseParser companyResponseParser = new CompanyResponseParser();
-
 	private CapIQRequest companyRequest() {
 		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException{
 
-	public Company loadCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException{
-
+		Assert.notEmpty(parms);
+		
+		String startDate = parms[0];
 		Company company = executeRequest(id, startDate);
 
 		loadPreviousClose(company);
@@ -60,18 +58,11 @@ public class CompanyService{
 
 		return comp;
 	}
-
-	private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
-		Map<String, Object> ctx = buildContext(id, startDate);
-		CapIQResponse response = requestExecutor.execute(companyRequest(), ctx);
-
-		return companyResponseParser.convert(response);
-	}
 	
 	private Company loadHistorical(Company comp, final String startDate) throws ResponseParserException, CapIQRequestException {
 
 		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-		List<List<HistoricalValue>> historicalData = historicalService.loadHistoricaData(comp.getTickerCode(), yearAgo);
+		List<List<HistoricalValue>> historicalData = historicalService.load(comp.getTickerCode(), yearAgo);
 
 		List<HistoricalValue> lastYearPrice = historicalData.get(0);
 		List<HistoricalValue> lastYearVolume = historicalData.get(1);
@@ -119,6 +110,11 @@ public class CompanyService{
 		ctx.put("startDate", startDate);
 		ctx.put("previousDate", previousDate);
 		return ctx;
+	}
+
+	private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
+		Map<String, Object> ctx = buildContext(id, startDate);
+		return executeRequest(companyRequest(), ctx);
 	}
 
 	private Double avg(Double sum, Integer total, int scale) {

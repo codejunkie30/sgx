@@ -10,9 +10,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
+import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,39 +22,34 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
+import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 import com.wmsi.sgx.util.TemplateUtil;
 
-@Service
-public class KeyDevsService{
+public class KeyDevsService extends AbstractDataService {
 
-	private static final Logger log = LoggerFactory.getLogger(KeyDevsService.class);
+	private ClassPathResource keyDevsIdsTemplate = new ClassPathResource("META-INF/query/capiq/keyDevs.json");
+	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
+	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
 
-	private CapIQRequestExecutor requestExecutor;
-
-	@Autowired
-	public void setRequestExecutor(CapIQRequestExecutor e) {
-		requestExecutor = e;
-	}
-
-	KeyDevResponseParser keyDevResponseParser = new KeyDevResponseParser();
-
-	public KeyDevs loadKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {
-		List<String> ids = getKeyDevelopmentIds(id, asOfDate);
+	@Override
+	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
+		
+		Assert.notEmpty(parms);
+		
+		List<String> ids = getKeyDevelopmentIds(id, parms[0]);
 
 		String json = getQuery(ids);
-		CapIQResponse response = requestExecutor.execute(json);
-		KeyDevs devs =  keyDevResponseParser.convert(response);
+		
+		Resource template = new ByteArrayResource(json.getBytes());
+		KeyDevs devs =  executeRequest(new CapIQRequest(template), null);
+		
 		devs.setTickerCode(id);
 		return devs;
 	}
-
-	ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
-	ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
 
 	private String getQuery(List<String> ids) throws CapIQRequestException{
 
@@ -84,17 +80,13 @@ public class KeyDevsService{
 		return json;
 	}
 
-	private CapIQRequest keyDevsIdsRequest() {
-		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/keyDevs.json"));
-	}
-
 	private List<String> getKeyDevelopmentIds(String id, String asOfDate) throws CapIQRequestException {
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
 		ctx.put("startDate", DateUtil.adjustDate(asOfDate, Calendar.MONTH, -1));
 
-		CapIQResponse response = requestExecutor.execute(keyDevsIdsRequest(), ctx);
+		CapIQResponse response = requestExecutor.execute(new CapIQRequest(keyDevsIdsTemplate), ctx);
 
 		String err = response.getErrorMsg();
 		if(StringUtils.isNotEmpty(err)){

@@ -1,49 +1,38 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
+import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
-@Service
-public class HistoricalService{
+public class HistoricalService extends AbstractDataService {
 	
-	private CapIQRequestExecutor requestExecutor;
+	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");		
+	
+	@Override
+	public List<List<HistoricalValue>> load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
 
-	public void setRequestExecutor(CapIQRequestExecutor requestExecutor) {
-		this.requestExecutor = requestExecutor;
-	}
-
-	public List<List<HistoricalValue>> getHistoricalData(String id, String asOfDate) throws CapIQRequestException {
-		String sDate = DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5);
-		return loadHistoricaData(id, sDate);
-	}
-
-	private CapIQRequest priceRequest(){
-		return new CapIQRequest(new ClassPathResource("META-INF/query/capiq/priceHistory.json"));		
-	}
-
-	public List<List<HistoricalValue>> loadHistoricaData(String id, String startDate) throws CapIQRequestException {
-
+		Assert.notEmpty(parms);
+		
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
-		ctx.put("startDate", startDate);
+		ctx.put("startDate", parms[0]);
 
-		CapIQResponse response = requestExecutor.execute(priceRequest(), ctx);
+		CapIQResponse response = requestExecutor.execute(new CapIQRequest(template), ctx);
 
 		CapIQResult prices = response.getResults().get(0);
 		CapIQResult volumes = response.getResults().get(1);

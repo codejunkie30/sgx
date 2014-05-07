@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,7 +30,7 @@ public class KeyDevsServiceTest extends AbstractTestNGSpringContextTests{
 	@Test
 	public void testLoadKeyDevs() throws ResponseParserException, CapIQRequestException, ParseException {
 
-		KeyDevs devs = keyDevsService.loadKeyDevelopments("A7S", "05/06/2014");
+		KeyDevs devs = keyDevsService.load("A7S", "05/06/2014");
 		KeyDevsTestUtils.verify(devs);
 		
 	}
@@ -38,8 +39,11 @@ public class KeyDevsServiceTest extends AbstractTestNGSpringContextTests{
 	static class KeyDevsServiceTestConfig{
 
 		@Bean
-		public KeyDevsService keyDevsService() {
-			return new KeyDevsService();
+		public KeyDevsService keyDevsService() throws CapIQRequestException {
+			KeyDevsService service = new KeyDevsService();
+			service.setRequestExecutor(requestExecutor());
+			service.setResponseParser(new KeyDevResponseParser());
+			return service;
 		}
 
 		@Bean
