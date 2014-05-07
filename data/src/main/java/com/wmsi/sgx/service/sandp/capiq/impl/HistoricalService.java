@@ -15,17 +15,16 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
+@SuppressWarnings("unchecked")
 public class HistoricalService extends AbstractDataService {
 	
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");		
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
 
 		Assert.notEmpty(parms);
@@ -33,8 +32,9 @@ public class HistoricalService extends AbstractDataService {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
 		ctx.put("startDate", parms[0]);
+		ctx.put("endDate", parms[1]);
 
-		CapIQResponse response = requestExecutor.execute(new CapIQRequest(template), ctx);
+		CapIQResponse response = requestExecutor.execute(new CapIQRequestImpl(template), ctx);
 
 		CapIQResult prices = response.getResults().get(0);
 		CapIQResult volumes = response.getResults().get(1);

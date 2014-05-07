@@ -7,10 +7,10 @@ import org.springframework.core.io.ClassPathResource;
 
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
-import com.wmsi.sgx.service.sandp.capiq.CapIQRequest;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
+@SuppressWarnings("unchecked")
 public class HoldersService extends AbstractDataService {
 
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/holderDetails.json");
@@ -20,6 +20,6 @@ public class HoldersService extends AbstractDataService {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
 
-		return executeRequest(new CapIQRequest(template), ctx);
+		return executeRequest(new CapIQRequestImpl(template), ctx);
 	}
 }

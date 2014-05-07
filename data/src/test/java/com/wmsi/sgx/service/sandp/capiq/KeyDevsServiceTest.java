@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
@@ -53,9 +55,7 @@ public class KeyDevsServiceTest extends AbstractTestNGSpringContextTests{
 			CapIQResponse response = KeyDevsTestUtils.getResponse();
 
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
-			when(mock.execute(any(CapIQRequest.class), anyMap())).thenReturn(response);
-
-			when(mock.execute(any(String.class))).thenReturn(response);
+			when(mock.execute(any(CapIQRequestImpl.class), anyMap())).thenReturn(response);
 
 			return mock;
 		}

@@ -16,6 +16,8 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={HttpConfig.class})
@@ -33,7 +35,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		ctx.put("id", "IBM");
 		Resource template = new ByteArrayResource(validQuery.getBytes());
 		
-		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), ctx);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequestImpl(template), ctx);
 		
 		assertNotNull(response);
 		assertEquals(response.getResults().size(), 1);
@@ -51,7 +53,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		ctx.put("id", "ffffffffff");
 		Resource template = new ByteArrayResource(invalidQuery.getBytes());
 		
-		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), ctx);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequestImpl(template), ctx);
 		
 		assertNotNull(response);
 		assertNull(response.getErrorMsg());
@@ -63,7 +65,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 	public void testErrorMsgResponse() throws CapIQRequestException{
 		
 		Resource template = new ByteArrayResource(new byte[]{});
-		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequest(template), null);
+		CapIQResponse response = capIqRequestExecutor.execute(new CapIQRequestImpl(template), null);
 		assertNotNull(response);
 		assertNotNull(response.getErrorMsg());
 		assertNull(response.getResults());

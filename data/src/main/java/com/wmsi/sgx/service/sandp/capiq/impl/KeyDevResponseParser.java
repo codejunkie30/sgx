@@ -14,16 +14,15 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
+@SuppressWarnings("unchecked")
 public class KeyDevResponseParser extends AbstractResponseParser{
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class<KeyDev> getType() {
 		return KeyDev.class;
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public KeyDevs convert(CapIQResponse response) throws ResponseParserException {
 
 		List<KeyDev> ret = new ArrayList<KeyDev>();

@@ -14,6 +14,7 @@ import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
+@SuppressWarnings("unchecked")
 public class FinancialsResponseParser extends AbstractResponseParser{
 
 	@Override
@@ -22,7 +23,6 @@ public class FinancialsResponseParser extends AbstractResponseParser{
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Financials convert(CapIQResponse response) throws ResponseParserException {
 
 		List<Financial> ret = new ArrayList<Financial>();

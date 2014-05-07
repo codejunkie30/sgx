@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
@@ -69,7 +71,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
 			
-			when(mock.execute( any(CapIQRequest.class), anyMap()) )
+			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(response);
 
 			 HistoricalService serv = new HistoricalService();
@@ -84,7 +86,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 			CapIQResponse response = CompanyTestUtils.getCompanyResponse();
 
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
-			when(mock.execute( any(CapIQRequest.class), anyMap()) )
+			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(response);
 			
 			return mock;

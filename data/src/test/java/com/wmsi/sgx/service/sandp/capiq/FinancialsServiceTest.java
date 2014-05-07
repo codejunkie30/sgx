@@ -16,6 +16,8 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.Financials;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsService;
 
@@ -49,7 +51,7 @@ public class FinancialsServiceTest extends AbstractTestNGSpringContextTests{
 		public CapIQRequestExecutor requestExecutor() throws CapIQRequestException {
 			
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
-			when(mock.execute( any(CapIQRequest.class), anyMap()) )
+			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(FinancialsTestUtils.getFinancialsResponse());
 			
 			return mock;

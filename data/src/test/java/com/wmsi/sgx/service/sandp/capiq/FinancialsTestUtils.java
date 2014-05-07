@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.testng.TestException;

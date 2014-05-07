@@ -3,6 +3,7 @@ package com.wmsi.sgx.service.sandp.capiq;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
+import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 
 public abstract class AbstractResponseParser implements ResponseParser{
 	
@@ -78,6 +80,22 @@ public abstract class AbstractResponseParser implements ResponseParser{
 	}
 
 	protected String getResultValue(CapIQResult res) throws ResponseParserException{
+		List<String> values = getResultValues(res);
+		
+		String value = null;
+		if(values != null && !values.isEmpty()){
+			
+			String val = values.get(0);
+			
+			if(val != null && !val.toLowerCase().startsWith("data unavailable")){
+				value = val;
+			}
+		}
+		
+		return value;
+	}
+	
+	protected List<String> getResultValues(CapIQResult res) throws ResponseParserException{
 		String err = res.getErrorMsg();
 
 		if(StringUtils.isNotEmpty(err)){
@@ -89,21 +107,20 @@ public abstract class AbstractResponseParser implements ResponseParser{
 			throw new ResponseParserException("Error result in capIq request " + err);
 		}
 
-		String val = null;
+		List<String> values = new ArrayList<String>();
 
 		if(res.getRows() != null && !res.getRows().isEmpty()){
-
-			List<String> values = res.getRows().get(0).getValues();
-
-			if(values != null && !values.isEmpty())
-				val = values.get(0);
+			for(CapIQRow row : res.getRows()){
+				String str = row.getValues().get(0);
+				//for(String str : row.getValues()){
+					if(StringUtils.isNotEmpty(str) && !str.toLowerCase().startsWith("data unavailable")){
+						values.add(str);
+					}
+				//}
+			}
 		}
 
-		if(val != null && val.toLowerCase().startsWith("data unavailable")){
-			return null;
-		}
-
-		return val;
+		return values;
 	}
 	
 	protected Object convertValue(String value, Field f) throws ParseException {
@@ -111,7 +128,7 @@ public abstract class AbstractResponseParser implements ResponseParser{
 			
 		if(f.getType().equals(Date.class)){
 			// Convert dates
-			obj = DateUtils.parseDate((String) value, DEFAULT_DATE_FORMATS);	
+			obj = DateUtils.parseDate(value, DEFAULT_DATE_FORMATS);	
 		}
 
 		return obj;

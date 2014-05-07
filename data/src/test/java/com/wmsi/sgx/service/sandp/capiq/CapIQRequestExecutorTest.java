@@ -27,6 +27,8 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.util.test.TestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +56,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 				.andRespond(withSuccess("{\"test\":2}", MediaType.APPLICATION_JSON));
 
 		Resource template = new ByteArrayResource(new byte[] {});
-		executor.execute(new CapIQRequest(template), null);
+		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
 	@Test(expectedExceptions = { CapIQRequestException.class })
@@ -64,7 +66,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andRespond(withBadRequest());
 
 		Resource template = new ByteArrayResource(new byte[] {});
-		executor.execute(new CapIQRequest(template), null);
+		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
 	@Test(expectedExceptions = { CapIQRequestException.class })
@@ -74,7 +76,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andRespond(withServerError());
 
 		Resource template = new ByteArrayResource(new byte[] {});
-		executor.execute(new CapIQRequest(template), null);
+		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
 	/**
@@ -89,7 +91,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		.andRespond(withSuccess(goodResponse, MediaType.APPLICATION_JSON));
 
 		Resource template = new ByteArrayResource(new byte[] {});
-		executor.execute(new CapIQRequest(template), null);
+		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 				.andRespond(withSuccess(validButUnexpectedResponse, MediaType.APPLICATION_JSON));
 
 		Resource template = new ByteArrayResource(new byte[] {});
-		executor.execute(new CapIQRequest(template), null);
+		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
 	@Configuration

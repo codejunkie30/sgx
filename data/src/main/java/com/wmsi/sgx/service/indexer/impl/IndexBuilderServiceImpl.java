@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service.indexer;
+package com.wmsi.sgx.service.indexer.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.integration.Message;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,9 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.indexer.IndexBuilderService;
+import com.wmsi.sgx.service.indexer.IndexerService;
+import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
@@ -98,7 +100,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 		String date = fmt.format(jobDate);
-
 		
 		try{
 			index(indexName, date, input.getTicker());
@@ -109,11 +110,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		input.setIndexed(true);
 		return input;
-	}
-	
-	public boolean aggregation(Message msg){
-			System.out.println(msg.getHeaders());
-			return true;
 	}
 
 	@Override

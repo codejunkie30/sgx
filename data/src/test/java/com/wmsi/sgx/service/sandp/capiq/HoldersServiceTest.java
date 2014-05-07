@@ -15,6 +15,8 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 import com.wmsi.sgx.service.sandp.capiq.impl.HoldersResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.HoldersService;
 
@@ -51,7 +53,7 @@ public class HoldersServiceTest extends AbstractTestNGSpringContextTests{
 			CapIQResponse response = HoldersTestUtils.getResponse();
 
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
-			when(mock.execute(any(CapIQRequest.class), anyMap())).thenReturn(response);
+			when(mock.execute(any(CapIQRequestImpl.class), anyMap())).thenReturn(response);
 
 			return mock;
 		}
