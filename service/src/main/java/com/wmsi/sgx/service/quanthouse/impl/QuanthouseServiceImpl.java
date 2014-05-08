@@ -1,7 +1,5 @@
 package com.wmsi.sgx.service.quanthouse.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,8 +13,6 @@ import com.wmsi.sgx.service.quanthouse.feedos.FeedOSService;
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
 
-	private Logger log = LoggerFactory.getLogger(QuanthouseServiceImpl.class);
-			
 	@Autowired
 	private FeedOSService feedOSService;
 	
