@@ -55,7 +55,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	@Autowired
 	private AlphaFactorIndexerService alphaFactorService;
 
-	private Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
+	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 
 	@Autowired
 	private IndexerService indexerService;
@@ -127,7 +127,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	
 	private void index(String index, String date, String ticker) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
-		Company companyInfo = capIQService.getCompanyInfo(ticker, date);
+		Company companyInfo = capIQService.getCompany(ticker, date);
 
 		if(companyInfo == null)
 			return;

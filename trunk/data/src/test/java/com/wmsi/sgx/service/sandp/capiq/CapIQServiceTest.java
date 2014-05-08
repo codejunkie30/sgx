@@ -32,7 +32,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@Test(dataProvider="testTickers")
 	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, ResponseParserException{
-		capIQService.getCompanyInfo(ticker, date);
+		capIQService.getCompany(ticker, date);
 	}
 	
 	@Test(dataProvider="testTickers")
