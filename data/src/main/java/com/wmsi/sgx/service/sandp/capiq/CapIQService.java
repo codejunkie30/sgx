@@ -7,9 +7,10 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 
 public interface CapIQService{
+	
 	PriceHistory getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException;
 
-	Company getCompanyInfo(String id, String startDate) throws ResponseParserException, CapIQRequestException;
+	Company getCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException;
 
 	Holders getHolderDetails(String ticker) throws ResponseParserException, CapIQRequestException;
 

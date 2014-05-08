@@ -22,7 +22,7 @@ public class CapIQServiceImpl implements CapIQService{
 	private CompanyService companyService;
 
 	@Override
-	public Company getCompanyInfo(String id, String startDate) throws ResponseParserException, CapIQRequestException{
+	public Company getCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException{
 		return companyService.load(id,  startDate);	
 	}
 
