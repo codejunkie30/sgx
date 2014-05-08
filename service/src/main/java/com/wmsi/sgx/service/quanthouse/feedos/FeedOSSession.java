@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.quanthouse.feedos;
 
+import javax.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,19 @@ public class FeedOSSession{
 	private Logger log = LoggerFactory.getLogger(FeedOSSession.class);
 	
 	private Session session;
-	public Session getSession(){return session;}
 	
 	@Autowired
 	private FeedOSConfig feedOSConfig;
 	public void setFeedOSconfig(FeedOSConfig c){feedOSConfig = c;}
 	
-	public Session open() throws QuanthouseServiceException{
+	public synchronized Session getSession() throws QuanthouseServiceException{
+		if(session == null || !session.isOpened())
+			session = open();
+		
+		return session;
+	}
+	
+	public synchronized Session open() throws QuanthouseServiceException{
 
 		// Get connection settings from config
 		String sessionName = feedOSConfig.getSessionName();
@@ -56,7 +64,8 @@ public class FeedOSSession{
 		return session;
 	}
 
-	public void close() {
+	@PreDestroy
+	public synchronized void close() {
 		log.debug("Shutting down api");
 		session.close();
 		Session.shutdown_api();		

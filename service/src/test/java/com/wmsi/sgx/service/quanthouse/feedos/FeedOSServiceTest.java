@@ -70,5 +70,4 @@ public class FeedOSServiceTest extends AbstractTestNGSpringContextTests{
 		assertNotNull(priceData.getCurrentBusinessDay());
 		assertNotNull(priceData.getPreviousBusinessDay());
 	}
-
 }

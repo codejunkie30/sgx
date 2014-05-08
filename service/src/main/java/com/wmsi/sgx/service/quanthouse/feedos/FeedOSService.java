@@ -41,7 +41,7 @@ public class FeedOSService {
 		
 		InstrumentQuotationData snapshot = null;
 		
-		Session ses = session.open();		
+		Session ses = session.getSession();		
 		SyncRequestSender sender = new SyncRequestSender(ses,0);
 		
 		try{
@@ -65,9 +65,6 @@ public class FeedOSService {
 			}
 			
 			throw new QuanthouseServiceException("Error retrieving last price", e);
-		}
-		finally{
-			ses.close();
 		}
 
 		return snapshot;

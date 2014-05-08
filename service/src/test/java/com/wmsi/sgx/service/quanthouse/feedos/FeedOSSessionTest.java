@@ -81,4 +81,19 @@ public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 		feedOSSession.close();
 		assertFalse(ses.isOpened());
 	}
+	
+	@Test(groups = { "functional", "integration" })
+	@DirtiesContext
+	public void testCloseReopenSession() throws QuanthouseServiceException{
+		Session ses = feedOSSession.getSession();
+		assertTrue(ses.isOpened());
+		
+		feedOSSession.close();
+		assertFalse(ses.isOpened());
+		
+		ses = feedOSSession.getSession();
+		assertTrue(ses.isOpened());
+		
+	}
+
 }
