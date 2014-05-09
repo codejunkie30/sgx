@@ -1641,8 +1641,18 @@ td .info {
   height: 14px;
 }
 
+.tooltip-left .tooltip-arrow {
+  left: 90%;
+  margin-left: -7px;
+  margin-top: -4px;
+}
+
 .alphas-page .tooltip {
 	width: 390px;
+}
+
+.company-tearsheet-page .tooltip {
+	width: 240px;
 } 
 
 .alphas-page .factors-wrapper {
