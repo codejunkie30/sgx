@@ -42,7 +42,6 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 		for(String field : fields){
 
-			// TODO Disallow tickerCode
 			if(!Util.isNumberField(SearchCompany.class, field)){
 				query.aggregation(AggregationBuilders.terms(field).field(field).size(2000));
 			}
@@ -76,9 +75,9 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 			double to = i + interval;
 			
 			if(to > max){			
-				// Hack to return make 'to' inclusive for last range so max value is returned
+				// Hack to make 'to' inclusive for last range so max value is returned.
 				// Elasticsearch is as of version 1.1 sorely missing a way to do this with aggregations
-				// other using unbounded 'from' which won't return the max value in the results.
+				// other than using unbounded 'from' which won't return the max value in the results.
 				to = max + 0.000000001;
 			}
 			
