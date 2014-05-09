@@ -48,7 +48,6 @@ public class StatsQueryBuilder extends AbstractQueryBuilder{
 	}
 	
 
-	// TODO Move logic to common place
 	private AbstractAggregationBuilder getAggregationFilter(String field, AbstractAggregationBuilder agg){
 
 		AbstractAggregationBuilder builder = agg;
