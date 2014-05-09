@@ -4,22 +4,6 @@ var app = express();
 var phantom = null, attempts = 0;
 
 /**
- * initialize phantom
- * @returns
- */
-function getPhantom(fn) {
-	if (phantom == null || attempts >= 50) {
-		attempts = 0;
-		if (phantom != null) phantom.close();
-		nodePhantom.create(function(err,ph) { 
-			phantom = ph; 
-			phantom.createPage(fn);
-		});	
-	}
-	return phantom;
-}
-
-/**
  * start getting requests
  */
 app.get("/", function(req, res) {
@@ -35,6 +19,26 @@ app.get("/", function(req, res) {
 	if (ph != null) ph.createPage(retFN);
 	    
 });
+
+//start listening
+app.listen(3000);
+
+/**
+ * initialize phantom
+ * @returns
+ */
+function getPhantom(fn) {
+	if (phantom == null || attempts >= 50) {
+		attempts = 0;
+		if (phantom != null) phantom.close();
+		nodePhantom.create(function(err,ph) { 
+			phantom = ph; 
+			phantom.createPage(fn);
+		});	
+	}
+	return phantom;
+}
+
 
 /**
  * handle rendering
@@ -101,8 +105,8 @@ function drawPage(url, response, err, page) {
         		    			}
     							
     							page.set('paperSize', paperSize, function(result) {
-            		    			page.render(pageProps.outputName, function(err, data) {
-        								response.download(pageProps.outputName);
+            		    			page.render("pdfcache/" + pageProps.outputName, function(err, data) {
+        								response.download("pdfcache/" + pageProps.outputName);
                 		    			page.close();
         							});
     							});
@@ -113,8 +117,10 @@ function drawPage(url, response, err, page) {
     			500
     			);
     });
+   
+    /** handle logging */
+    page.onConsoleMessage = function(msg) {
+        console.log(msg);
+    };    
     
 }
-
-// start listening
-app.listen(3000);

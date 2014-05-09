@@ -7,7 +7,7 @@ define(deps, function($, _, SGX) {
     		
     		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
-    		pqdn : "http://54.254.195.85/pdfx/",
+    		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
     		resultSize: 25,
     		
@@ -252,9 +252,7 @@ define(deps, function($, _, SGX) {
                     	data.distributions.sort(function(a, b) {
                     		var a = parseInt($(".editSearchB [data-name='" + a.field + "']").attr("data-order"));
                     		var b = parseInt($(".editSearchB [data-name='" + b.field + "']").attr("data-order"));
-                        	if (a < b) return -1;
-                        	if (a > b) return 1;
-                        	return 0;
+                    		return a - b;
                     	});
                 	}
                 	
@@ -383,12 +381,7 @@ define(deps, function($, _, SGX) {
                 		distribution.buckets.push({ "data-name": "industry", count: 0, key: "Real Estate Investment Trusts (REITs)" });
                 	}
 
-                	distribution.buckets.sort(function(a, b) {
-                		var a = a.key, b = b.key;
-                    	if (a < b) return -1;
-                    	if (a > b) return 1;
-                    	return 0;
-                	});
+                	distribution.buckets.sort(function(a, b) { return a.key - b.key; });
                 	
                 	$.each(distribution.buckets, function(idx, bucket) {
                 		var li = $("<li />").text(bucket.key).appendTo(dd);
@@ -1274,10 +1267,16 @@ define(deps, function($, _, SGX) {
             		$(".tooltip-content", template).text($(el).attr("glossary-copy"));
             		
                     var height = $(template).height(), width = $(template).width();
+                    var left = $(el).offset().left - (width/2) + 10;
+                    
+                    if ($(el).hasClass("glossary-left")) left = $(el).offset().left - width + 25;
+                    
                     $(template).css({
                         'top': $(el).offset().top - height - 12,
-                        'left': $(el).offset().left - (width/2) + 10
+                        'left': left
                     });
+                    
+                    if ($(el).hasClass("glossary-left")) $(template).addClass("tooltip-left");
                     
                     $(template).fadeIn();
             		
@@ -1561,12 +1560,7 @@ define(deps, function($, _, SGX) {
         			
             		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0 && !$.isEmptyObject(data.keyDevs[0])) {
             			
-            			data.keyDevs.sort(function(a, b) {
-                    		a = a.date, b = b.date
-                        	if (a < b) return -1;
-                        	if (a > b) return 1;
-                        	return 0;            				
-            			});
+            			data.keyDevs.sort(function(a, b) { return a.date - b.date; });
             			
             			$.each(data.keyDevs, function(idx, keyDev) {
             				
@@ -1661,9 +1655,7 @@ define(deps, function($, _, SGX) {
             		// holders
             		if (data.hasOwnProperty("holders") && data.holders.hasOwnProperty("holders") && data.holders.holders.length > 0) {
             			
-            			data.holders.holders.sort(function(a, b) {
-            				return (a.shares - b.shares) > 0;
-            			});
+            			data.holders.holders.sort(function(a, b) { return a.shares - b.shares; });
             			
             			$(".panel .owners tr:first").hide();
             			var percent = 0;
@@ -2010,9 +2002,7 @@ define(deps, function($, _, SGX) {
                 	financials.sort(function(a, b) {
                 		var a = parseInt(a.absPeriod.replace("FY", "").replace("LTM", ""));
                 		var b = parseInt(b.absPeriod.replace("FY", "").replace("LTM", ""));
-                    	if (a < b) return -1;
-                    	if (a > b) return 1;
-                    	return 0;
+                		return a - b;
                 	});          		
                 	
                 	if (financials.length == 5) return financials;
