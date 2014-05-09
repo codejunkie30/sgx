@@ -9,6 +9,8 @@ import com.wmsi.sgx.model.Company;
 
 public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 	
+	private static final int MAX_COMPANIES = 10;
+	
 	private Company company;
 
 	public RelatedCompaniesQueryBuilder(Company company) {
@@ -33,6 +35,7 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 					))							
 				.add(ScoreFunctionBuilders
 					.linearDecayFunction("marketCap", mk, mk)))
+			.size(MAX_COMPANIES)
 			.toString();
 	}	
 }
