@@ -124,8 +124,12 @@ public abstract class AbstractResponseParser implements ResponseParser{
 	}
 	
 	protected Object convertValue(String value, Field f) throws ParseException {
+	
+		if(value != null && value.equalsIgnoreCase("nan"))
+			return null;
+	
 		Object obj = value;
-			
+		
 		if(f.getType().equals(Date.class)){
 			// Convert dates
 			obj = DateUtils.parseDate(value, DEFAULT_DATE_FORMATS);	

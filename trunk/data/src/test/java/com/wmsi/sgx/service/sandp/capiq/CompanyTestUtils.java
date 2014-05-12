@@ -40,6 +40,7 @@ public class CompanyTestUtils{
 		assertEquals(company.getYearFounded(), new Integer(2004));
 		assertNull(company.getDividendYield());
 		assertNull(company.getAvgBrokerReq());	
+		assertNull(company.getCashInvestments());
 	}
 
 }
