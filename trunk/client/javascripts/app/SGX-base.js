@@ -1786,7 +1786,9 @@ define(deps, function($, _, SGX) {
                             	data: priceData,
                             	type: 'area',
                             	id: 'priceData',
-                            	enableMouseTracking: false
+                            	enableMouseTracking: false,
+                            	threshold: null
+                            	
                             },
                             {
                             	data: volumeData,
