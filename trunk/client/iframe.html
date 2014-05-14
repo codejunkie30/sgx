@@ -7,19 +7,17 @@
     <script type="text/javascript" src="javascripts/app/XD.js"></script>		
     <script type="text/javascript" src="javascripts/vendor/jquery-modern/jquery.js"></script>		
     <script type="text/javascript">
-    
-    	var domain = window.location.hostname;
-    	var path = document.location.pathname;
-    	var folder = path.replace("/", "").split("/").length > 1 ? path.replace("/", "").split("/")[0] : "";
-    	if (folder.length > 0) folder = "/" + folder;
-    	
+
+    	var remoteDomain = "http://sgx.wealthmsi.com";
+    	var currentDomain = document.location.href;
+
     	$(document).ready(function() {
-    		var companyURL = "http://" + domain + folder + "/index.html#" + encodeURIComponent(document.location.href);
+    		var companyURL = remoteDomain + "/index.html#" + encodeURIComponent(currentDomain);
     		$("#company-info").attr("src", companyURL);
     	});
     
 	    // get height from remote content
-	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, 'http://' + domain );
+	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, remoteDomain );
 	    
 	    // resize the iframe and scroll based on response from remote iframe
 	    function resizeFrame(data) {
