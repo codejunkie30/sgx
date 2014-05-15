@@ -6,14 +6,55 @@
 		{
 			"analyzer": 
 			{
-				"sgx_text_ngram_analyzer": 
+				"full_name": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_name": 
 				{
 					"filter": 
 					[
 						"standard",
 						"lowercase",
 						"asciifolding",
-						"sgx_text_ngram_tokenizer"
+						"sgx_edgeNgram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_middle": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"sgx_ngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_back": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"sgx_edgeNgram_tokenizer_back"						
 					],
 
 					"type": "custom",
@@ -23,10 +64,26 @@
 
 			"filter": 
 			{
-				"sgx_text_ngram_tokenizer": 
+				"sgx_edgeNgram_tokenizer": 
 				{
-					"type": "edgeNGram",
-					"min_gram": "3",
+				"side":"front",
+					"type": "edgeNgram",
+					"min_gram": "2",
+					"max_gram": "20"
+				},
+
+				"sgx_edgeNgram_tokenizer_back": 
+				{
+				"side":"back",
+					"type": "edgeNgram",
+					"min_gram": "2",
+					"max_gram": "20"
+				},
+
+				"sgx_ngram_tokenizer": 
+				{
+					"type": "ngram",
+					"min_gram": "2",
 					"max_gram": "20"
 				}
 			}
@@ -59,8 +116,36 @@
 
 						"tickerSearch": 
 						{
-							"type": "string",
-							"analyzer": "sgx_text_ngram_analyzer"
+							"type": "multi_field",
+							"fields": 
+							{
+								"tickerSearch": 
+								{
+									"type": "string",
+									"analyzer": "full_name"
+								},
+
+								"partial": 
+								{
+									"type": "string",
+									"search_analyzer": "full_name",
+									"index_analyzer": "partial_name"
+								},
+
+								"partial_middle": 
+								{
+									"type": "string",
+									"search_analyzer": "full_name",
+									"index_analyzer": "partial_middle"
+								},
+
+								"partial_back": 
+								{
+									"type": "string",
+									"search_analyzer": "full_name",
+									"index_analyzer": "partial_back"
+								}
+							}
 						}
 					}
 				},
@@ -77,8 +162,36 @@
 
 				"companyName": 
 				{
-					"type": "string",
-					"analyzer": "sgx_text_ngram_analyzer"
+					"type": "multi_field",
+					"fields": 
+					{
+						"companyName": 
+						{
+							"type": "string",
+							"analyzer": "full_name"
+						},
+
+						"partial": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name"
+						},
+
+						"partial_middle": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_middle"
+						},
+
+						"partial_back": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_back"
+						}
+					}
 				},
 
 				"dividendYield": 

@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 
@@ -37,6 +38,12 @@ public class IndexerServiceImpl implements IndexerService{
 	
 	@Value("${elasticsearch.url}")
 	private String esUrl;
+	
+	@Value("${elasticsearch.index.prefix}")
+	private String indexPrefix;
+	
+	@Value("${elasticsearch.index.name}")
+	private String indexAlias;
 	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
@@ -86,7 +93,48 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		return true;
 	}
+
+	@Override
+	public Indexes getIndexes() throws IndexerServiceException {
+		URI indexUri = buildUri("/_aliases");		
+		return restTemplate.getForObject(indexUri, Indexes.class);
+	}
 	
+	@Override
+	@Transactional
+	public Boolean save(String type, String id, Object obj, String indexName) throws IndexerServiceException {
+		
+        UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/{id}?opt_type=create").build();
+        URI uri = uriComp.expand(indexName, type, id).toUri();
+        
+        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(obj), Object.class);
+        
+        int statusCode = res.getStatusCode().value();
+        
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+		}		
+        
+        return true;
+	}
+
+	@Override
+	@Transactional
+	public Boolean deleteIndex(String indexName) throws IndexerServiceException {
+		
+        UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}").build();
+        URI uri = uriComp.expand(indexName).toUri();
+
+        log.debug("Deleteing index {}", indexName);
+        
+        restTemplate.delete(uri);
+        
+        log.debug("Deleted index {} successfully", indexName);
+        
+        return true;
+	}
+
 	private URI buildUri(String path) throws IndexerServiceException{
 		try{
 			return new URI(esUrl + path);
@@ -95,12 +143,6 @@ public class IndexerServiceImpl implements IndexerService{
 			throw new IndexerServiceException("Invalid uri syntax for alaias request.", e);
 		}
 	}
-	
-	@Value("${elasticsearch.index.prefix}")
-	private String indexPrefix;
-	
-	@Value("${elasticsearch.index.name}")
-	private String indexAlias;
 	
 	private JsonNode buildAliasJson(String indexName){
 		ObjectMapper mapper = new ObjectMapper();
@@ -144,22 +186,4 @@ public class IndexerServiceImpl implements IndexerService{
 		return res.getStatusCode().value();		
 	}
 
-	@Override
-	@Transactional
-	public Boolean save(String type, String id, Object obj, String indexName) throws IndexerServiceException {
-		
-        UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/{id}?opt_type=create").build();
-        URI uri = uriComp.expand(indexName, type, id).toUri();
-        
-        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntity(obj), Object.class);
-        
-        int statusCode = res.getStatusCode().value();
-        
-		// Check for 200 range response code
-		if(statusCode / 100 != 2){	
-			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
-		}		
-        
-        return true;
-	}
 }

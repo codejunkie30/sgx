@@ -16,4 +16,8 @@ public interface IndexBuilderService{
 
 	Boolean buildAlphaFactors(String indexName) throws AlphaFactorServiceException, IndexerServiceException;
 
+	void deleteOldIndexes() throws IndexerServiceException;
+
+	Boolean isJobSuccessful(List<CompanyInputRecord> records);
+
 }

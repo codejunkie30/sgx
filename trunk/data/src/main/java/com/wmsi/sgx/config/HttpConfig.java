@@ -9,6 +9,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,7 @@ public class HttpConfig{
 		HttpClient httpClient = HttpClients.custom()
 				.setDefaultCredentialsProvider(credsProvider)
 				.setConnectionManager(new PoolingHttpClientConnectionManager())
+				.setRetryHandler(new DefaultHttpRequestRetryHandler())
 				.build();
 		
 		RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));

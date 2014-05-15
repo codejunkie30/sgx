@@ -2,7 +2,6 @@ package com.wmsi.sgx.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
 
 public class PriceHistory{

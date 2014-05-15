@@ -15,7 +15,8 @@
  */
 package com.wmsi.sgx;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -45,8 +46,9 @@ public final class Main{
 	 *
 	 * @param args
 	 *            - command line arguments
+	 * @throws ParseException 
 	 */
-	public static void main(final String... args) {
+	public static void main(final String... args) throws ParseException {
 
 		if(LOGGER.isInfoEnabled()){
 			LOGGER.info("\n========================================================="
@@ -66,23 +68,15 @@ public final class Main{
 
 		final Scanner scanner = new Scanner(System.in);
 
-		if(LOGGER.isInfoEnabled()){
-			LOGGER.info("\n========================================================="
-					+ "\n                                                         "
-					+ "\n    Please press 'q + Enter' to quit the application.    "
-					+ "\n                                                         "
-					+ "\n=========================================================");
-		}
-
-		System.out.print("Please enter a string and press <enter>: ");
-
 		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
 
 		Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
+
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 		
 		chan.send(MessageBuilder.withPayload(companyIds)
 				.setHeader("jobId", System.currentTimeMillis())
-				.setHeader("jobDate", new Date()).build());
+				.setHeader("jobDate", fmt.parse("20140422")).build());
 
 		try{
 			while(true){
