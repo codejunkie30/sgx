@@ -2355,6 +2355,7 @@ define(deps, function($, _, SGX) {
         			SGX.tooltip.init("body");
         			
         			if (doSearch) {
+        				$(".module-results").show();
                 		var endpoint = "/sgx/search/alphaFactors";
                 		var params = {};
                 		params[factor] = quintile;
