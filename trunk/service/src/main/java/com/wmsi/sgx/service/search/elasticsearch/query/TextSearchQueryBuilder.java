@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.search.elasticsearch.query;
 
 import org.elasticsearch.index.query.MatchQueryBuilder.Type;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.MatchQueryBuilder.Operator;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 public class TextSearchQueryBuilder extends AbstractQueryBuilder{
@@ -15,25 +14,47 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder{
 	
 	@Override
 	public String build(){
+		
 		return new SearchSourceBuilder()
+		
 			.query(QueryBuilders.boolQuery()
-				// Text search on company Name - boosted for importance
-				.should(QueryBuilders.matchQuery("companyName", text)
-						.analyzer("sgx_text_ngram_analyzer")
-						.operator(Operator.AND)
-						.boost(3))
-				// Text search for tickers
-				.should(QueryBuilders.matchQuery("tickerSearch", text)
-						.analyzer("standard")
-						.operator(Operator.AND)
-						.boost(2))
-				
-				// Text search for prefix if only partial characters entered
-				.should(QueryBuilders.multiMatchQuery(text, "companyName", "tickerSearch")
-						.analyzer("standard")
-						.operator(Operator.AND)
-						.type(Type.PHRASE_PREFIX)))
 
+				// Text search for full match
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName", 
+						"tickerSearch")
+					.type(Type.PHRASE)
+					.boost(5))
+
+				// Text search for full prefix match
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName", 
+						"tickerSearch")
+					.type(Type.PHRASE_PREFIX)
+					.boost(3))
+
+				// Search beginning of text
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName.partial", 
+						"tickerSearch.partial")					
+					.boost(1))
+
+				// Search middle of text
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName.partial_middle", 
+						"tickerSearch.partial_middle")				
+					.boost(1))
+
+				// Search end of text
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName.partial_back", 
+						"tickerSearch.partial_back")				
+					.boost(1)))
 				.size(MAX_RESULTS)
 				.toString();
 	}
