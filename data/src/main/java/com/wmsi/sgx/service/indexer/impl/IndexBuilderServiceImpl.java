@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Header;
@@ -29,6 +31,8 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.indexer.Index;
+import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
@@ -44,25 +48,36 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
+
+	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
+	
+	@Value("${elasticsearch.index.prefix}")
+	private String indexPrefix;
+	
+	@Value("${elasticsearch.index.name}")
+	private String indexAlias;
+
+	@Value("${indexer.failureThreshold}")
+	private int FAILURE_THRESHOLD;
 	
 	@Autowired
 	private CapIQService capIQService;
+
+	@Autowired
+	private AlphaFactorIndexerService alphaFactorService;
+
+	@Autowired
+	private IndexerService indexerService;
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
 	}
 
-	@Autowired
-	private AlphaFactorIndexerService alphaFactorService;
-
-	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
-
-	@Autowired
-	private IndexerService indexerService;
-
 	@Override
 	public List<CompanyInputRecord> getTickers(@Header String indexName) throws IndexerServiceException {
 
+		log.info("Reading tickers from input file...");
+		
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
 		
@@ -83,6 +98,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 				
 				ret.add(r);
 			}
+		
+			log.info("Found {} tickers to process", ret.size());
 			
 			return ret;
 		}
@@ -114,6 +131,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	@Override
 	public Boolean buildAlphaFactors(@Header String indexName) throws AlphaFactorServiceException, IndexerServiceException{
+		
+		log.info("Building alpha factors");
+		
 		File file = alphaFactorService.getLatestFile();
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
@@ -121,9 +141,73 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			indexerService.save("alphaFactor", f.getId(), f, indexName);
 		}
 		
+		log.info("Completed building of alpha factors");
+		
 		return true;
 	}
 	
+	/**
+	 * Determine if the index job succeded by checking the number of 
+	 * records that failed to index against a pre-determined threshold. 
+	 */
+	@Override
+	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records){
+		
+		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
+		
+		int failed = 0;
+		
+		for(CompanyInputRecord rec : records){
+			if(!rec.getIndexed())
+				failed++;
+		}
+		
+		boolean success = failed < FAILURE_THRESHOLD;
+		
+		log.info("Job status completed with {} failed records. Success: {}", failed, success);
+		
+		return success;
+	}
+	
+	private static final int INDEX_REMOVAL_THRESHOLD = 5;
+	
+	@Override
+	public void deleteOldIndexes() throws IndexerServiceException{
+		
+		log.info("Removing indexes greater than {} days old.", INDEX_REMOVAL_THRESHOLD);
+		
+		Indexes indexes = indexerService.getIndexes();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, INDEX_REMOVAL_THRESHOLD * -1);
+		Date fiveDaysAgo = cal.getTime();
+		
+		int removed = 0;
+		
+		for(Index index : indexes.getIndexes()){
+			String indexName = index.getName();
+			String date = index.getName().substring(indexPrefix.length(), indexName.length());
+
+			Date indexDate = new Date(Long.valueOf(date));
+			int dif = fiveDaysAgo.compareTo(indexDate);
+			
+			if(dif > 0){
+				// Make sure we don't delete the live index, even if it's older than the threshold
+				if(index.getAliases() != null && index.getAliases().contains(indexAlias)){
+					log.warn("Found alias on index older than {} days. Skipping deletion of this index {}", INDEX_REMOVAL_THRESHOLD, indexName);
+					continue;
+				}
+
+				log.info("Deleting index {}", indexName);
+				
+				indexerService.deleteIndex(indexName);
+				removed++;
+			}
+		}
+
+		log.info("Index cleanup complete. Removed {} old indexes", removed);
+	}
+
 	
 	private void index(String index, String date, String ticker) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 

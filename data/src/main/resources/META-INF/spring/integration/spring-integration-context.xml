@@ -55,28 +55,40 @@
 	</int:aggregator>
 	
 	<int:router	input-channel="aggregationCompleteChannel" 
-		expression="#this.payload.?[indexed == false].size() == 0">
-    	
+		ref="indexBuilderService"
+		method="isJobSuccessful">
+				
     	<int:mapping value="true" channel="createAlias"/>
     	<int:mapping value="false" channel="failedJobChannel"/>
     	    	
 	</int:router>
- 
- 	<int:service-activator input-channel="createAlias" output-channel="loggingChannel" ref="indexerService" method="createIndexAlias" />
+ 	
+ 	<!--  Job Completed successfully, create index and remove old indexes -->
+ 	<int:chain input-channel="createAlias" output-channel="loggingChannel">
+ 		<int:service-activator ref="indexerService" method="createIndexAlias" />
+ 		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" />
+ 	</int:chain>
+
+	<int:logging-channel-adapter channel="loggingChannel" level="ERROR" expression=" 'Job Complete ' + payload.toString()"/>
 	
+	<!-- Job failed -->
 	<int:header-enricher input-channel="failedJobChannel" output-channel="failedLogger">
 		<int:header name="failedJob" value="true"/>
 	</int:header-enricher>	
-	
-	<int:channel id="failedLogger"/>
-	
+		
 	<int:logging-channel-adapter channel="failedLogger" level="ERROR" expression=" 'Job Failed ' + payload.toString()"/>
-	
-	<int:logging-channel-adapter channel="loggingChannel" level="ERROR" expression=" 'Job Complete ' + payload.toString()"/>
 	
 	<!-- 
 	  Channel definitions
 	 -->
+	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
+	
+	<int:channel id="indexRequestChannel"/>		
+	<int:channel id="indexChannel"/>
+	<int:channel id="loggingChannel"/>
+	<int:channel id="failedLogger"/>
+	<int:publish-subscribe-channel id="aggregationCompleteChannel"/>
+
 	<int:channel id="indexTickerChannel" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">	
 		<int:dispatcher task-executor="indexerTaskExecutor" />
 	</int:channel>
@@ -90,10 +102,6 @@
 	<int:channel id="errorLoggerChannel"/>	
 	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
 	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
-	
-	<int:channel id="indexRequestChannel"/>		
-	<int:channel id="indexChannel"/>
-	<int:publish-subscribe-channel id="aggregationCompleteChannel"/>
 
 	<int:channel id="tickerAggregatorChannel">
 		<int:interceptors>
@@ -103,9 +111,6 @@
 	
 	<int:channel id="statusLoggingChannel"/>	
 	<int:logging-channel-adapter channel="statusLoggingChannel" level="ERROR" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
-	
-	<int:channel id="loggingChannel"/>
  	
-	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
  	
 </beans>
