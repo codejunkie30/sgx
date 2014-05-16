@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
+    		fqdn : "http://sgx-api.wealthmsi.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -1855,6 +1855,7 @@ define(deps, function($, _, SGX) {
                 	$.each(data, function(idx, row) {
                 		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
                 	});
+                	ret.sort(function(a, b) { return a[0] - b[0]; });
                 	return ret;
                 }
             	
@@ -2378,20 +2379,25 @@ define(deps, function($, _, SGX) {
         	print: {
         		
         		init: function() {
+        			
+        			$("body").attr("loaded-items", 0)
+        			
             		var code = SGX.getParameterByName("code");
             		var company = SGX.company.getCompany(code, SGX.print.loadedCompany);        			
         		},
         	
         		loadedCompany: function(data) {
         			
+        			// basic company data
         			SGX.company.initSimple(data, false);
 
+        			// news
         			var newsData = SGX.company.initNews(data);
 
             		// init charts
             		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
             		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData, SGX.print.finishedChart); });
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData, function() { SGX.print.loadedItems(data) }); });
         			
             		// all other sections
             		SGX.company.initHolders(data);
@@ -2401,18 +2407,24 @@ define(deps, function($, _, SGX) {
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
 
+            		// handle financials
             		var endpoint = SGX.fqdn + "/sgx/company/financials";
             		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, function(fData) { SGX.print.finishedPage(fData, data); });
+            		SGX.handleAjaxRequest(endpoint, params, function(fData) { SGX.print.loadFinancials(fData, data); });
             		
-            		SGX.formatter.formatElements("body");
+            		// handle TOS
+            		$(".terms").load("terms-conditions.html", function(html) {
+            			var html = $(".terms .terms-copy").html();
+            			$(".terms").html(html);
+            			SGX.print.loadedItems(data);
+            		});
         			
         		},
         		
-        		finishedPage: function(data, cData) {
+        		loadFinancials: function(data, cData) {
 
             		if (!data.hasOwnProperty("financials")  || data.financials.length == 0) return;
-            		
+
             		var financials = SGX.financials.cleanFinancials(data.financials); 
             		
             		// headings
@@ -2440,19 +2452,26 @@ define(deps, function($, _, SGX) {
             			
             		});
         			
-            		SGX.formatter.formatElements(".financials-section tbody");
             		$(".financials-section .statistics tbody tr:even").addClass("even");
             		$(".panel tbody tr").removeClass("even");
             		$(".panel tbody tr:even").addClass("even");
             		
-            		$("body").attr("pdf-name", cData.company.companyInfo.tickerCode + "-" + new Date().getTime() + ".pdf");
-            		
-        			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
-
+            		SGX.print.loadedItems(cData);
+        			
         		},
         		
-        		finishedChart: function() {
+        		loadedItems: function(cData) {
+        			
+        			$("body").attr("loaded-items", parseInt($("body").attr("loaded-items")) + 1);
+        			if ($("body").attr("loaded-items") != 3) return;
+        			
+            		SGX.formatter.formatElements("body");
+        			
+            		$("body").attr("pdf-name", cData.company.companyInfo.tickerCode + "-" + new Date().getTime() + ".pdf");
+        			SGX.trackPage("SGX Print Company Profile - " + cData.company.companyInfo.companyName);
+
         			setTimeout(function() { document["pdf-name"] = $("body").attr("pdf-name"); }, 100);
+        			
         		}
         		
         	}
