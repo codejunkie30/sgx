@@ -14,150 +14,153 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_AVG_BROKER_REC_NO_CIQ")
 	private Double avgBrokerReq;
-	
+
 	private Double avgVolumeM3;
-	
+
 	@ConversionAnnotation(name = "IQ_BETA_5YR")
 	private Double beta5Yr;
-	
+
 	@ConversionAnnotation(name = "IQ_BUSINESS_DESCRIPTION")
 	private String businessDescription;
-	
-	@ConversionAnnotation(name = "IQ_BV_SHARE")	
+
+	@ConversionAnnotation(name = "IQ_BV_SHARE")
 	private Double bvShare;
-	
+
 	@ConversionAnnotation(name = "IQ_CAPEX")
 	private Double capitalExpenditures;
-	
+
 	@ConversionAnnotation(name = "IQ_CASH_ST_INVEST")
 	private Double cashInvestments;
-	
+
 	@ConversionAnnotation(name = "IQ_CLOSEPRICE")
 	private Double closePrice;
-	
+
 	@ConversionAnnotation(name = "IQ_COMPANY_ADDRESS")
 	private String companyAddress;
-	
+
 	@ConversionAnnotation(name = "IQ_COMPANY_NAME")
 	private String companyName;
-	
+
 	@ConversionAnnotation(name = "IQ_COMPANY_WEBSITE")
 	private String companyWebsite;
-	
+
 	@ConversionAnnotation(name = "IQ_DIVIDEND_YIELD")
 	private Double dividendYield;
-	
+
 	@ConversionAnnotation(name = "IQ_EBIT")
 	private Double ebit;
-	
+
 	@ConversionAnnotation(name = "IQ_EBITDA")
 	private Double ebitda;
-	
+
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
-	
+
 	@ConversionAnnotation(name = "IQ_EMPLOYEES")
 	private Double employees;
-	
+
 	@ConversionAnnotation(name = "IQ_TEV")
 	private Double enterpriseValue;
-	
+
 	@ConversionAnnotation(name = "IQ_DILUT_EPS_NORM")
 	private Double eps;
-	
+
 	@ConversionAnnotation(name = "IQ_TEV_EBITDA")
 	private Double evEbitData;
-	
+
 	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
-	
+
 	@ConversionAnnotation(name = "IQ_PERIODDATE_IS")
-	private Date fiscalYearEnd;	
-	
+	private Date fiscalYearEnd;
+
 	@ConversionAnnotation(name = "IQ_FLOAT_PERCENT")
 	private Double floatPercentage;
-	
+
 	@ConversionAnnotation(name = "IQ_GVKEY")
 	private String gvKey;
-	
+
 	@ConversionAnnotation(name = "IQ_HIGHPRICE")
 	private Double highPrice;
-	
+
 	@ConversionAnnotation(name = "IQ_INDUSTRY")
 	private String industry;
-	
+
 	@ConversionAnnotation(name = "IQ_INDUSTRY_GROUP")
 	private String industryGroup;
-	
+
 	@ConversionAnnotation(name = "IQ_LOWPRICE")
 	private Double lowPrice;
-	
+
 	@ConversionAnnotation(name = "IQ_MARKETCAP")
 	private Double marketCap;
-	
+
 	@ConversionAnnotation(name = "IQ_NI")
 	private Double netIncome;
-	
+
 	@ConversionAnnotation(name = "IQ_NI_MARGIN")
 	private Double netProfitMargin;
-	
+
 	@ConversionAnnotation(name = "IQ_OPENPRICE")
 	private Double openPrice;
-	
-	@ConversionAnnotation(name = "IQ_PE_EXCL_FWD")
+
+	@ConversionAnnotation(name = "IQ_PE_EXCL")
 	private Double peRatio;
-	
+
 	@ConversionAnnotation(name = "IQ_PRICEDATE")
 	private Date previousCloseDate;
-	
-	@ConversionAnnotation(name = "IQ_CLOSE_PRICE")	
+
+	@ConversionAnnotation(name = "IQ_CLOSE_PRICE")
 	private Double previousClosePrice;
-	
+
+	@ConversionAnnotation(name = "IQ_PBV")
+	private Double priceToBookRatio;
+
 	@ConversionAnnotation(name = "IQ_SHARESOUTSTANDING")
 	private Double sharesOutstanding;
-	
+
 	@ConversionAnnotation(name = "IQ_SHORT_INTEREST")
 	private Double sharesSoldShort;
-	
+
 	@ConversionAnnotation(name = "IQ_TARGET_PRICE_NUM_CIQ")
 	private Double targetPriceNum;
-	
+
 	@ConversionAnnotation(name = "IQ_PRICE_TARGET_CIQ")
 	private Double targetPrice;
-	
+
 	@ConversionAnnotation(name = "IQ_COMPANY_TICKER_NO_EXCH")
 	private String tickerCode;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EBITDA")
 	private Double totalDebtEbitda;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_1YR_ANN_GROWTH")
 	private Double totalRev1YrAnnGrowth;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_3YR_ANN_GROWTH")
 	private Double totalRev3YrAnnGrowth;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_5YR_ANN_GROWTH")
 	private Double totalRev5YrAnnGrowth;
-	
+
 	@ConversionAnnotation(name = "IQ_TOTAL_REV")
 	private Double totalRevenue;
-	
+
 	@ConversionAnnotation(name = "IQ_VOLUME")
 	private Double volume;
-	
+
 	@ConversionAnnotation(name = "IQ_YEAR_FOUNDED")
 	private Integer yearFounded;
-	
+
 	@ConversionAnnotation(name = "IQ_YEARHIGH")
 	private Double yearHigh;
-	
+
 	@ConversionAnnotation(name = "IQ_YEARLOW")
 	private Double yearLow;
 
@@ -171,34 +174,24 @@ public class Company{
 		this.priceHistory = priceHistory;
 	}
 
-	public Double getPriceToBookRatio() {
-
-		if(closePrice == null || bvShare == null)
-			return null;
-
-		BigDecimal close = new BigDecimal(closePrice);
-		BigDecimal bv = new BigDecimal(bvShare);
-		return close.divide(bv, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
-	}
-
 	public Double getPriceVs52WeekHigh() {
 
-		if(closePrice == null || yearHigh == null)
+		if(closePrice == null || closePrice == 0 || yearHigh == null)
 			return null;
 
 		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal high = new BigDecimal(yearHigh);
-		return close.divide(high, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
+		return close.divide(high, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public Double getPriceVs52WeekLow() {
 
-		if(closePrice == null || yearLow == null)
+		if(closePrice == null || closePrice == 0 || yearLow == null)
 			return null;
 
 		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal low = new BigDecimal(yearLow);
-		return close.divide(low, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).doubleValue();
+		return close.divide(low, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public Double getAvgBrokerReq() {
@@ -473,6 +466,14 @@ public class Company{
 		this.previousClosePrice = previousClosePrice;
 	}
 
+	public Double getPriceToBookRatio() {
+		return priceToBookRatio;
+	}
+
+	public void setPriceToBookRatio(Double priceToBookRatio) {
+		this.priceToBookRatio = priceToBookRatio;
+	}
+
 	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
@@ -602,123 +603,87 @@ public class Company{
 	}
 
 	@Override
-	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, filingCurrency, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, sharesOutstanding, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, totalAssets, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow, priceHistory);
+	public int hashCode() {
+		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures,
+				cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda,
+				ebitdaMargin, employees, enterpriseValue, eps, evEbitData, filingCurrency, fiscalYearEnd,
+				floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome,
+				netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, sharesOutstanding,
+				sharesSoldShort, targetPriceNum, targetPrice, tickerCode, totalAssets, totalDebtEbitda,
+				totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue,
+				volume, yearFounded, yearHigh, yearLow, priceHistory);
 	}
-	
+
 	@Override
-	public boolean equals(Object object){
-		if (object instanceof Company) {
+	public boolean equals(Object object) {
+		if(object instanceof Company){
 			Company that = (Company) object;
 			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
-				&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
-				&& Objects.equal(this.beta5Yr, that.beta5Yr)
-				&& Objects.equal(this.businessDescription, that.businessDescription)
-				&& Objects.equal(this.bvShare, that.bvShare)
-				&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
-				&& Objects.equal(this.cashInvestments, that.cashInvestments)
-				&& Objects.equal(this.closePrice, that.closePrice)
-				&& Objects.equal(this.companyAddress, that.companyAddress)
-				&& Objects.equal(this.companyName, that.companyName)
-				&& Objects.equal(this.companyWebsite, that.companyWebsite)
-				&& Objects.equal(this.dividendYield, that.dividendYield)
-				&& Objects.equal(this.ebit, that.ebit)
-				&& Objects.equal(this.ebitda, that.ebitda)
-				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
-				&& Objects.equal(this.employees, that.employees)
-				&& Objects.equal(this.enterpriseValue, that.enterpriseValue)
-				&& Objects.equal(this.eps, that.eps)
-				&& Objects.equal(this.evEbitData, that.evEbitData)
-				&& Objects.equal(this.filingCurrency, that.filingCurrency)
-				&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
-				&& Objects.equal(this.floatPercentage, that.floatPercentage)
-				&& Objects.equal(this.gvKey, that.gvKey)
-				&& Objects.equal(this.highPrice, that.highPrice)
-				&& Objects.equal(this.industry, that.industry)
-				&& Objects.equal(this.industryGroup, that.industryGroup)
-				&& Objects.equal(this.lowPrice, that.lowPrice)
-				&& Objects.equal(this.marketCap, that.marketCap)
-				&& Objects.equal(this.netIncome, that.netIncome)
-				&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
-				&& Objects.equal(this.openPrice, that.openPrice)
-				&& Objects.equal(this.peRatio, that.peRatio)
-				&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
-				&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
-				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
-				&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
-				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
-				&& Objects.equal(this.targetPrice, that.targetPrice)
-				&& Objects.equal(this.tickerCode, that.tickerCode)
-				&& Objects.equal(this.totalAssets, that.totalAssets)
-				&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
-				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
-				&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
-				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
-				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
-				&& Objects.equal(this.totalRevenue, that.totalRevenue)
-				&& Objects.equal(this.volume, that.volume)
-				&& Objects.equal(this.yearFounded, that.yearFounded)
-				&& Objects.equal(this.yearHigh, that.yearHigh)
-				&& Objects.equal(this.yearLow, that.yearLow)
-				&& Objects.equal(this.priceHistory, that.priceHistory);
+					&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3) && Objects.equal(this.beta5Yr, that.beta5Yr)
+					&& Objects.equal(this.businessDescription, that.businessDescription)
+					&& Objects.equal(this.bvShare, that.bvShare)
+					&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
+					&& Objects.equal(this.cashInvestments, that.cashInvestments)
+					&& Objects.equal(this.closePrice, that.closePrice)
+					&& Objects.equal(this.companyAddress, that.companyAddress)
+					&& Objects.equal(this.companyName, that.companyName)
+					&& Objects.equal(this.companyWebsite, that.companyWebsite)
+					&& Objects.equal(this.dividendYield, that.dividendYield) && Objects.equal(this.ebit, that.ebit)
+					&& Objects.equal(this.ebitda, that.ebitda) && Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
+					&& Objects.equal(this.employees, that.employees)
+					&& Objects.equal(this.enterpriseValue, that.enterpriseValue) && Objects.equal(this.eps, that.eps)
+					&& Objects.equal(this.evEbitData, that.evEbitData)
+					&& Objects.equal(this.filingCurrency, that.filingCurrency)
+					&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
+					&& Objects.equal(this.floatPercentage, that.floatPercentage)
+					&& Objects.equal(this.gvKey, that.gvKey) && Objects.equal(this.highPrice, that.highPrice)
+					&& Objects.equal(this.industry, that.industry)
+					&& Objects.equal(this.industryGroup, that.industryGroup)
+					&& Objects.equal(this.lowPrice, that.lowPrice) && Objects.equal(this.marketCap, that.marketCap)
+					&& Objects.equal(this.netIncome, that.netIncome)
+					&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
+					&& Objects.equal(this.openPrice, that.openPrice) && Objects.equal(this.peRatio, that.peRatio)
+					&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
+					&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
+					&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
+					&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
+					&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
+					&& Objects.equal(this.targetPrice, that.targetPrice)
+					&& Objects.equal(this.tickerCode, that.tickerCode)
+					&& Objects.equal(this.totalAssets, that.totalAssets)
+					&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
+					&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+					&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+					&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+					&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
+					&& Objects.equal(this.totalRevenue, that.totalRevenue) && Objects.equal(this.volume, that.volume)
+					&& Objects.equal(this.yearFounded, that.yearFounded) && Objects.equal(this.yearHigh, that.yearHigh)
+					&& Objects.equal(this.yearLow, that.yearLow) && Objects.equal(this.priceHistory, that.priceHistory);
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("avgBrokerReq", avgBrokerReq)
-			.add("avgVolumeM3", avgVolumeM3)
-			.add("beta5Yr", beta5Yr)
-			.add("businessDescription", businessDescription)
-			.add("bvShare", bvShare)
-			.add("capitalExpenditures", capitalExpenditures)
-			.add("cashInvestments", cashInvestments)
-			.add("closePrice", closePrice)
-			.add("companyAddress", companyAddress)
-			.add("companyName", companyName)
-			.add("companyWebsite", companyWebsite)
-			.add("dividendYield", dividendYield)
-			.add("ebit", ebit)
-			.add("ebitda", ebitda)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("employees", employees)
-			.add("enterpriseValue", enterpriseValue)
-			.add("eps", eps)
-			.add("evEbitData", evEbitData)
-			.add("filingCurrency", filingCurrency)
-			.add("fiscalYearEnd", fiscalYearEnd)
-			.add("floatPercentage", floatPercentage)
-			.add("gvKey", gvKey)
-			.add("highPrice", highPrice)
-			.add("industry", industry)
-			.add("industryGroup", industryGroup)
-			.add("lowPrice", lowPrice)
-			.add("marketCap", marketCap)
-			.add("netIncome", netIncome)
-			.add("netProfitMargin", netProfitMargin)
-			.add("openPrice", openPrice)
-			.add("peRatio", peRatio)
-			.add("previousCloseDate", previousCloseDate)
-			.add("previousClosePrice", previousClosePrice)
-			.add("sharesOutstanding", sharesOutstanding)
-			.add("sharesSoldShort", sharesSoldShort)
-			.add("targetPriceNum", targetPriceNum)
-			.add("targetPrice", targetPrice)
-			.add("tickerCode", tickerCode)
-			.add("totalAssets", totalAssets)
-			.add("totalDebtEbitda", totalDebtEbitda)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
-			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-			.add("totalRevenue", totalRevenue)
-			.add("volume", volume)
-			.add("yearFounded", yearFounded)
-			.add("yearHigh", yearHigh)
-			.add("yearLow", yearLow)
-			.add("priceHistory", priceHistory)
-			.toString();
+		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("avgVolumeM3", avgVolumeM3)
+				.add("beta5Yr", beta5Yr).add("businessDescription", businessDescription).add("bvShare", bvShare)
+				.add("capitalExpenditures", capitalExpenditures).add("cashInvestments", cashInvestments)
+				.add("closePrice", closePrice).add("companyAddress", companyAddress).add("companyName", companyName)
+				.add("companyWebsite", companyWebsite).add("dividendYield", dividendYield).add("ebit", ebit)
+				.add("ebitda", ebitda).add("ebitdaMargin", ebitdaMargin).add("employees", employees)
+				.add("enterpriseValue", enterpriseValue).add("eps", eps).add("evEbitData", evEbitData)
+				.add("filingCurrency", filingCurrency).add("fiscalYearEnd", fiscalYearEnd)
+				.add("floatPercentage", floatPercentage).add("gvKey", gvKey).add("highPrice", highPrice)
+				.add("industry", industry).add("industryGroup", industryGroup).add("lowPrice", lowPrice)
+				.add("marketCap", marketCap).add("netIncome", netIncome).add("netProfitMargin", netProfitMargin)
+				.add("openPrice", openPrice).add("peRatio", peRatio).add("previousCloseDate", previousCloseDate)
+				.add("previousClosePrice", previousClosePrice).add("sharesOutstanding", sharesOutstanding)
+				.add("sharesSoldShort", sharesSoldShort).add("targetPriceNum", targetPriceNum)
+				.add("targetPrice", targetPrice).add("tickerCode", tickerCode).add("totalAssets", totalAssets)
+				.add("totalDebtEbitda", totalDebtEbitda).add("totalDebtEquity", totalDebtEquity)
+				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).add("totalRevenue", totalRevenue)
+				.add("volume", volume).add("yearFounded", yearFounded).add("yearHigh", yearHigh)
+				.add("yearLow", yearLow).add("priceHistory", priceHistory).toString();
 	}
 }

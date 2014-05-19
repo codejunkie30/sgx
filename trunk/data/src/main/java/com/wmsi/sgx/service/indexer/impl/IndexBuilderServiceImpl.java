@@ -49,7 +49,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
 
-	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
+	private Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
 	
 	@Value("${elasticsearch.index.prefix}")
 	private String indexPrefix;

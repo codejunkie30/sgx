@@ -38,14 +38,15 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private RestTemplate capIqRestTemplate;
 
-	private CapIQRequestExecutor executor;
+	private RequestExecutor executor;
 	private MockRestServiceServer mockServer;
 
 	@BeforeMethod
 	public void init() {
-		executor = new CapIQRequestExecutor();
-		executor.setRestTemplate(capIqRestTemplate);
-		executor.setUrl("/fakeSite");
+		CapIQRequestExecutor impl = new CapIQRequestExecutor();
+		impl.setRestTemplate(capIqRestTemplate);
+		impl.setUrl("/fakeSite");
+		executor = impl;
 		mockServer = MockRestServiceServer.createServer(capIqRestTemplate);
 	}
 

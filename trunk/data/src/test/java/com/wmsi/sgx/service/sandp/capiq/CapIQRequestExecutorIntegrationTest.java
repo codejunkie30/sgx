@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
-import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +23,7 @@ import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestImpl;
 public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringContextTests{
 	
 	@Autowired
-	private CapIQRequestExecutor capIqRequestExecutor;
+	private RequestExecutor capIqRequestExecutor;
 	
 	@Test(groups={"functional", "integration"})
 	public void testValidRequest() throws CapIQRequestException{

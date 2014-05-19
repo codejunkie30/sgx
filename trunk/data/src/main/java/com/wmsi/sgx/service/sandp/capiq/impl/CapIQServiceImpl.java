@@ -12,6 +12,7 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
+import com.wmsi.sgx.service.sandp.capiq.DataService;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
@@ -19,7 +20,7 @@ import com.wmsi.sgx.util.DateUtil;
 public class CapIQServiceImpl implements CapIQService{
 
 	@Autowired
-	private CompanyService companyService;
+	private DataService companyService;
 
 	@Override
 	public Company getCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException{
@@ -27,7 +28,7 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 
 	@Autowired
-	private FinancialsService financialsService;
+	private DataService financialsService;
 
 	@Override
 	public Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException{
@@ -35,7 +36,7 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 
 	@Autowired
-	private KeyDevsService keyDevsService;
+	private DataService keyDevsService;
 	
 	@Override
 	public KeyDevs getKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException{		
@@ -43,14 +44,14 @@ public class CapIQServiceImpl implements CapIQService{
 	}
 	
 	@Autowired
-	private HoldersService holdersService;
+	private DataService holdersService;
 	
 	public Holders getHolderDetails(String id) throws ResponseParserException, CapIQRequestException {
 		return holdersService.load(id);
 	}
 
 	@Autowired
-	private HistoricalService historicalService;
+	private DataService historicalService;
 	
 	@Override
 	public PriceHistory getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException {

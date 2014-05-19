@@ -17,6 +17,7 @@ package com.wmsi.sgx;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -76,7 +77,7 @@ public final class Main{
 		
 		chan.send(MessageBuilder.withPayload(companyIds)
 				.setHeader("jobId", System.currentTimeMillis())
-				.setHeader("jobDate", fmt.parse("20140422")).build());
+				.setHeader("jobDate", new Date()).build());
 
 		try{
 			while(true){

@@ -18,13 +18,16 @@
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" /> 
 	</int:chain>
 
-	<int:splitter id="tickerSplitter"
+	<int:splitter 
+		id="tickerSplitter"
 		input-channel="indexChannel" 
 		output-channel="indexTickerChannel"
-		ref="indexBuilderService" method="getTickers"/>
+		ref="indexBuilderService" 
+		method="getTickers"/>
 
  	<!-- Load Data -->
- 	<int:chain
+ 	<int:chain 
+ 		id="indexDataChain"
 		input-channel="indexTickerChannel"
 		output-channel="tickerAggregatorChannel">
 
@@ -32,11 +35,16 @@
 			<int:error-channel value="indexErrorChannel"/>
 		</int:header-enricher>	
 		
-	<int:service-activator ref="indexBuilderService" method="index"/>
+		<int:service-activator ref="indexBuilderService" method="index">
+			<int:request-handler-advice-chain >
+				<ref bean="retryAdvice"/>
+			</int:request-handler-advice-chain>
+		</int:service-activator>
 	</int:chain>
-
+		
 	<!-- Indexing Error Handling -->
 	<int:chain 
+		id="indexErrorHandlingChain"
 		input-channel="indexErrorChannel" 
 		output-channel="tickerAggregatorChannel">		
 			
@@ -82,8 +90,12 @@
 	  Channel definitions
 	 -->
 	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
+	<task:executor id="indexerRequestChannelExecutor" pool-size="1" queue-capacity="1" rejection-policy="DISCARD" />
 	
-	<int:channel id="indexRequestChannel"/>		
+	<int:channel id="indexRequestChannel">
+		<int:dispatcher task-executor="indexerRequestChannelExecutor" />
+	</int:channel>
+			
 	<int:channel id="indexChannel"/>
 	<int:channel id="loggingChannel"/>
 	<int:channel id="failedLogger"/>
@@ -95,13 +107,14 @@
 	
 	<int:channel id="indexErrorChannel">
 		<int:interceptors>
-		<int:wire-tap channel="errorLoggerChannel"/>
+			<int:wire-tap channel="errorLoggerChannel"/>
 		</int:interceptors>
 	</int:channel>
 	
-	<int:channel id="errorLoggerChannel"/>	
-	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
+	<!--  Error Logging -->
+	<int:channel id="errorLoggerChannel"/>		
 	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
+	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
 
 	<int:channel id="tickerAggregatorChannel">
 		<int:interceptors>
@@ -112,5 +125,23 @@
 	<int:channel id="statusLoggingChannel"/>	
 	<int:logging-channel-adapter channel="statusLoggingChannel" level="ERROR" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
  	
- 	
+
+	<!-- Retry Handler -->
+	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
+		<property name="retryTemplate">
+			<bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">	
+				<property name="retryPolicy">
+					<bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+						<property name="maxAttempts" value="4" />
+					</bean>
+				</property>
+				<property name="backOffPolicy">
+					<bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+						<property name="initialInterval" value="1000" />
+						<property name="multiplier" value="5" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean> 	
 </beans>
