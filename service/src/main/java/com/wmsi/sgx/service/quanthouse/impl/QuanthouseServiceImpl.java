@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.quanthouse.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,25 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		p.setClosePrice(data.getClosePrice());
 		p.setOpenPrice(data.getOpenPrice());
 		p.setCurrentDate(data.getCurrentBusinessDay());
-		p.setPreviousDate(data.getPreviousBusinessDay());		
+		p.setPreviousDate(data.getPreviousBusinessDay());
+		p.setLastTradeTimestamp(getLastTradeTimestamp(data));
+		
 		return p;		
+	}
+	
+	private Date getLastTradeTimestamp(FeedOSData data){
+		Date lastTrade = data.getLastTradeTimestamp();
+		Date lastOffBookTrade = data.getLastOffBookTradeTimestamp();
+		
+		if(lastTrade != null && lastOffBookTrade != null){
+			// Is the last off book trade date later than the lastTrade date?
+			if(lastOffBookTrade.compareTo(lastTrade) > 0)		
+				lastTrade = lastOffBookTrade;
+		}
+		else if(lastTrade == null && lastOffBookTrade != null)
+			// Sanity check, not sure if lastTrade can ever be null and lastOffBook non null.
+			lastTrade = lastOffBookTrade; 
+		
+		return lastTrade;		
 	}
 }
