@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -93,7 +94,8 @@ public class QuanthouseServiceTest extends AbstractTestNGSpringContextTests{
 		assertEquals(price.getChange(), -0.03D);
 	}
 
-	@Test 
+	@Test
+	@DirtiesContext
 	public void testLiquidatedTicker() throws ParseException, QuanthouseServiceException{
 		
 		// Expired tickers should still have a close price, but no last price or open price 
@@ -107,7 +109,97 @@ public class QuanthouseServiceTest extends AbstractTestNGSpringContextTests{
 		Price p = service.getPrice(market, "OldTicker");
 		assertNotNull(p);
 	}
-	
+
+	@Test 
+	@DirtiesContext
+	public void testLastTradeDate_offBookBefore() throws ParseException, QuanthouseServiceException{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		String lastTradeTime = "02/24/2014 09:16:13";
+		String offBookTime = "02/24/2014 14:22:42";
+		
+		FeedOSData data = new FeedOSData();
+		data.setClosePrice(10.17);
+		data.setLastTradeTimestamp(sdf.parse(lastTradeTime));
+		data.setLastOffBookTradeTimestamp(sdf.parse(offBookTime));
+		
+		stub(mockFeedOSService.getPriceData(anyString(), anyString())).toReturn(data);
+		
+		Price p = service.getPrice(market, id);		
+		assertNotNull(p);
+		assertEquals(p.getLastTradeTimestamp(), sdf.parse(offBookTime));		
+	}
+
+	@Test 
+	@DirtiesContext
+	public void testLastTradeDate_offBookAfter() throws ParseException, QuanthouseServiceException{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		String lastTradeTime = "02/24/2014 15:16:13";
+		String offBookTime = "02/24/2014 14:22:42";
+		
+		FeedOSData data = new FeedOSData();
+		data.setClosePrice(10.17);
+		data.setLastTradeTimestamp(sdf.parse(lastTradeTime));
+		data.setLastOffBookTradeTimestamp(sdf.parse(offBookTime));
+		
+		stub(mockFeedOSService.getPriceData(anyString(), anyString())).toReturn(data);
+		
+		Price p = service.getPrice(market, id);		
+		assertNotNull(p);
+		assertEquals(p.getLastTradeTimestamp(), sdf.parse(lastTradeTime));		
+	}
+
+	@Test 
+	@DirtiesContext
+	public void testLastTradeDate_offBookNull() throws ParseException, QuanthouseServiceException{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		String lastTradeTime = "02/24/2014 15:16:13";
+		
+		FeedOSData data = new FeedOSData();
+		data.setClosePrice(10.17);
+		data.setLastTradeTimestamp(sdf.parse(lastTradeTime));
+		
+		stub(mockFeedOSService.getPriceData(anyString(), anyString())).toReturn(data);
+		
+		Price p = service.getPrice(market, id);		
+		assertNotNull(p);
+		assertEquals(p.getLastTradeTimestamp(), sdf.parse(lastTradeTime));		
+	}
+
+	@Test 
+	@DirtiesContext
+	public void testLastTradeDate_lastTradeNull() throws ParseException, QuanthouseServiceException{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		String offBookTime = "02/24/2014 14:22:42";
+		
+		FeedOSData data = new FeedOSData();
+		data.setClosePrice(10.17);
+		data.setLastOffBookTradeTimestamp(sdf.parse(offBookTime));
+		
+		stub(mockFeedOSService.getPriceData(anyString(), anyString())).toReturn(data);
+		
+		Price p = service.getPrice(market, id);		
+		assertNotNull(p);
+		assertEquals(p.getLastTradeTimestamp(), sdf.parse(offBookTime));		
+	}
+
+	@Test 
+	@DirtiesContext
+	public void testLastTradeDate_lastTradeTimesNull() throws ParseException, QuanthouseServiceException{
+		
+		FeedOSData data = new FeedOSData();
+		data.setClosePrice(10.17);
+		
+		stub(mockFeedOSService.getPriceData(anyString(), anyString())).toReturn(data);
+		
+		Price p = service.getPrice(market, id);		
+		assertNotNull(p);
+		assertNull(p.getLastTradeTimestamp());
+	}
+
 	@Test(groups = { "functional" })
 	public void testPriceCache() throws QuanthouseServiceException {
 

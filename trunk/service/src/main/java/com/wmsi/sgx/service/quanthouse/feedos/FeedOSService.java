@@ -87,6 +87,8 @@ public class FeedOSService {
 		data.setClosePrice(getDouble(Constants.TAG_PreviousClosingPrice, quot));
 		data.setCurrentBusinessDay(toIsoDate(Constants.TAG_CurrentBusinessDay, quot ));
 		data.setPreviousBusinessDay(toIsoDate(Constants.TAG_PreviousBusinessDay, quot ));
+		data.setLastTradeTimestamp(toIsoDate(Constants.TAG_LastTradeTimestamp, quot));
+		data.setLastOffBookTradeTimestamp(toIsoDate(Constants.TAG_LastOffBookTradeTimestamp, quot));
 		
 		return data;
 	}
