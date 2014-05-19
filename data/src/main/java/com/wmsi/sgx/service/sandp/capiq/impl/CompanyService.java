@@ -18,6 +18,7 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.DataService;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
@@ -25,7 +26,7 @@ import com.wmsi.sgx.util.DateUtil;
 public class CompanyService extends AbstractDataService{
 
 	@Autowired
-	private HistoricalService historicalService;
+	private DataService historicalService;
 
 	private CapIQRequestImpl companyRequest() {
 		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));

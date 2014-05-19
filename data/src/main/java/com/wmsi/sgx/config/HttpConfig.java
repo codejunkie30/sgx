@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -31,10 +32,13 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.logging.LoggingAspect;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.indexer.impl.IndexerServiceImpl;
+import com.wmsi.sgx.service.sandp.capiq.DataService;
+import com.wmsi.sgx.service.sandp.capiq.RequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
@@ -47,7 +51,8 @@ import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
 @Configuration
-@ComponentScan(basePackages="com.wmsi.sgx.service")
+@EnableAspectJAutoProxy
+@ComponentScan(basePackages={"com.wmsi.sgx.service"})
 @PropertySources(value = {
 	@PropertySource("classpath:META-INF/properties/capiq.properties")
 })
@@ -57,6 +62,11 @@ public class HttpConfig{
 	@Autowired
 	public Environment capIQEnv;
 
+	@Bean()
+	public LoggingAspect loggingAspect(){
+		return new LoggingAspect();
+	}
+	
     @Bean(name="capIqJsonMessageConverter")
     public MappingJackson2HttpMessageConverter capIqJsonConverter() {
     	ObjectMapper mapper = new ObjectMapper();
@@ -95,7 +105,7 @@ public class HttpConfig{
 	}
 	
 	@Bean
-	public CapIQRequestExecutor capIqRequestExecutor(){
+	public RequestExecutor capIqRequestExecutor(){
 		CapIQRequestExecutor executor = new CapIQRequestExecutor();
 		executor.setRestTemplate(capIqRestTemplate());
 		executor.setUrl(capIQEnv.getProperty("capiq.api.url"));
@@ -159,7 +169,7 @@ public class HttpConfig{
 	}
 	
 	@Bean
-	public CompanyService companyService(){
+	public DataService companyService(){
 		CompanyService service = new CompanyService();
 		service.setRequestExecutor(capIqRequestExecutor());
 		service.setResponseParser(new CompanyResponseParser());
@@ -167,7 +177,7 @@ public class HttpConfig{
 	}
 
 	@Bean
-	public FinancialsService financialsService(){
+	public DataService financialsService(){
 		FinancialsService  service = new FinancialsService();
 		service.setRequestExecutor(capIqRequestExecutor());
 		service.setResponseParser(new FinancialsResponseParser());
@@ -175,14 +185,14 @@ public class HttpConfig{
 	}
 
 	@Bean
-	public HistoricalService historicalService(){
+	public DataService historicalService(){
 		HistoricalService service = new HistoricalService();
 		service.setRequestExecutor(capIqRequestExecutor());
 		return service;
 	}
 
 	@Bean
-	public KeyDevsService keyDevsService(){
+	public DataService keyDevsService(){
 		KeyDevsService service = new KeyDevsService();
 		service.setRequestExecutor(capIqRequestExecutor());
 		service.setResponseParser(new KeyDevResponseParser());
@@ -190,7 +200,7 @@ public class HttpConfig{
 	}
 
 	@Bean
-	public HoldersService holdersService(){
+	public DataService holdersService(){
 		HoldersService service = new HoldersService ();
 		service.setRequestExecutor(capIqRequestExecutor());
 		service.setResponseParser(new HoldersResponseParser());

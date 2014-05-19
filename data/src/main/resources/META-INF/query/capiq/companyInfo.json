@@ -53,6 +53,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PAYOUT_RATIO", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PERIODDATE_IS", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PE_EXCL_FWD", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PBV", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PRICEDATE", "properties":{"STARTDATE":"$previousDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PRICE_TARGET_CIQ", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_QUICK_RATIO", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},

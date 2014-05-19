@@ -28,15 +28,33 @@
 		</layout>
 	</appender>
 
+	<appender name="aspectLogging" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="/var/log/sgx/sgx-aop.log" />
+		<param name="MaxFileSize" value="20MB" />
+		<param name="MaxBackupIndex" value="100" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
+		</layout>
+	</appender>
+
 	<!-- Loggers -->
 	<logger name="org.springframework.integration">
 		<level value="error" />
 	</logger>
 
+	<logger name="com.wmsi.sgx.logging" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="aspectLogging"/>
+	</logger>
+	
 	<logger name="com.wmsi.sgx">
 		<level value="debug" /> 
 	</logger>
 
+	<logger name="com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor">
+		<level value="error" />
+	</logger>
+	
 	<logger name="org.apache.http" additivity="false">
 		<level value="info" />
 		<appender-ref ref="apache"/>
@@ -52,6 +70,7 @@
 		<priority value="warn" />
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
+		
 	</root>
 
 </log4j:configuration>
