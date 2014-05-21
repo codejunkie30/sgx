@@ -1590,7 +1590,7 @@ define(deps, function($, _, SGX) {
             			$(".stock-events").show();
 
             		}
-
+            		
             		return ret;
             	},
             	
@@ -1680,6 +1680,10 @@ define(deps, function($, _, SGX) {
             		
             		var priceData = SGX.company.toHighCharts(data.price);
             		var volumeData = SGX.company.toHighCharts(data.volume);
+            		
+            		// need to resort news
+            		var newsMarkers = newsData;
+            		newsMarkers.sort(function(a, b) { return a.x - b.x;  });
             		
             		Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
             		
@@ -1797,7 +1801,7 @@ define(deps, function($, _, SGX) {
                             },
                             {
                             	type: 'flags',
-                                data: newsData,
+                                data: newsMarkers,
                                 style: { 
                                 	color: 'black',
                                 	cursor: 'pointer'
