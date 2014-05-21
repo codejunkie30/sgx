@@ -47,6 +47,7 @@ public class Company{
 	private Double targetPriceNum;
 	private String tickerCode;
 	private Double totalAssets;
+	private Double totalDebt;
 	private Double totalDebtEbitda;
 	private Double totalDebtEquity;
 	private Double totalRev1YrAnnGrowth;
@@ -394,6 +395,14 @@ public class Company{
 		this.totalAssets = totalAssets;
 	}
 
+	public Double getTotalDebt() {
+		return totalDebt;
+	}
+
+	public void setTotalDebt(Double totalDebt) {
+		this.totalDebt = totalDebt;
+	}
+
 	public Double getTotalDebtEbitda() {
 		return totalDebtEbitda;
 	}
@@ -476,7 +485,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
 	}
 	
 	@Override
@@ -525,6 +534,7 @@ public class Company{
 				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
 				&& Objects.equal(this.tickerCode, that.tickerCode)
 				&& Objects.equal(this.totalAssets, that.totalAssets)
+				&& Objects.equal(this.totalDebt, that.totalDebt)
 				&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
 				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
 				&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
@@ -584,6 +594,7 @@ public class Company{
 			.add("targetPriceNum", targetPriceNum)
 			.add("tickerCode", tickerCode)
 			.add("totalAssets", totalAssets)
+			.add("totalDebt", totalDebt)
 			.add("totalDebtEbitda", totalDebtEbitda)
 			.add("totalDebtEquity", totalDebtEquity)
 			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)

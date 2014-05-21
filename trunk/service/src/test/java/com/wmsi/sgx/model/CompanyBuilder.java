@@ -329,6 +329,13 @@ class CompanyBuilderBase<GeneratorT extends CompanyBuilderBase<GeneratorT>> {
 	}
 
 	@SuppressWarnings("unchecked")
+	public GeneratorT withTotalDebt(Double aValue) {
+		instance.setTotalDebt(aValue);
+
+		return (GeneratorT) this;
+	}
+
+	@SuppressWarnings("unchecked")
 	public GeneratorT withTotalDebtEbitda(Double aValue) {
 		instance.setTotalDebtEbitda(aValue);
 
