@@ -775,6 +775,12 @@ define(deps, function($, _, SGX) {
                 				val = val | 0;
                 				val = field.formatter.values[val];
                 			}
+
+                			// needs a minimum value
+                			if (field.formatter.hasOwnProperty("minField") && company.hasOwnProperty(field.formatter.minField)) {
+                				if (company[field.formatter.minField] < field.formatter.minValue) val = null;
+                			}
+                			
                 		}
                 		
                 		return val == null ? "-" : val;
