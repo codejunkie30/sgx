@@ -37,7 +37,8 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 	public String build() {
 
 		SearchSourceBuilder query = new SearchSourceBuilder()
-				.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter())).fetchSource(false)
+				.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter()))
+				.fetchSource(fields.toArray(new String[0]), null)
 				.size(MAX_RESULTS);
 
 		for(String field : fields){
