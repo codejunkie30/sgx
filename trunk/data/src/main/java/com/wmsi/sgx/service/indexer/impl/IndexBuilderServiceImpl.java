@@ -122,6 +122,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			index(indexName, date, input.getTicker());
 		}
 		catch(InvalidIdentifierException e){
+			// Allow bad tickers to flow through ie. don't consider it an error
 			log.error("Invalid id " + input.getTicker());
 		}
 
@@ -211,24 +212,26 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	
 	private void index(String index, String date, String ticker) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
-		Company companyInfo = capIQService.getCompany(ticker, date);
-
-		if(companyInfo == null)
+		Company company = capIQService.getCompany(ticker, date);
+		
+		if(company == null)
 			return;
 		
-		indexerService.save("company", ticker, companyInfo, index);
+		String tickerNoExchange = company.getTickerCode();
+		
+		indexerService.save("company", tickerNoExchange, company, index);
 
 		Holders h = capIQService.getHolderDetails(ticker);
 
 		if(h != null)
-			indexerService.save("holders", ticker, h, index);
+			indexerService.save("holders", tickerNoExchange, h, index);
 
 		KeyDevs kd = capIQService.getKeyDevelopments(ticker, date);
 
 		if(kd != null)
-			indexerService.save("keyDevs", ticker, kd, index);
+			indexerService.save("keyDevs", tickerNoExchange, kd, index);
 
-		String currency = companyInfo.getFilingCurrency();
+		String currency = company.getFilingCurrency();
 		
 		if(StringUtils.isEmpty(currency))
 			currency = "SGD";

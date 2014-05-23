@@ -71,6 +71,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_CA","properties":{"PERIODTYPE":"IQ_FY-4", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_CL","properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_EQUITY", "properties":{"CURRENCYID":"SGD"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_DEBT", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_DEBT_EBITDA", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_DEBT_EQUITY", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_LIAB", "properties":{"CURRENCYID":"SGD"}},
