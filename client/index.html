@@ -163,7 +163,7 @@
                                 <div class="trigger">5-Year Beta</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="volume" data-name="volume"  data-display="true" data-short-name="Volume">
+                            <div class="checkbox" data-type="volume" data-name="volume"  data-display="true" data-short-name="Volume" distribution-buckets="4000">
                                 <div class="trigger">Volume</div>
                                 <input type="checkbox" />
                             </div>
@@ -179,7 +179,7 @@
                                 <div class="trigger">EBITDA Margin</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="percent" data-name="netProfitMargin"  data-display="true" data-short-name="Prof. Mrg.">
+                            <div class="checkbox" data-type="percent" data-name="netProfitMargin"  data-display="true" data-short-name="Prof. Mrg." distribution-buckets="120">
                                 <div class="trigger">Net Profit Margin</div>
                                 <input type="checkbox" />
                             </div>
@@ -187,19 +187,19 @@
                                 <div class="trigger">Earnings Per Share</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="percent" data-name="totalDebtEquity"  data-display="true" data-short-name="D/E">
+                            <div class="checkbox" data-type="percent" data-name="totalDebtEquity"  data-display="true" data-short-name="D/E" distribution-buckets="200">
                                 <div class="trigger">Debt/Equity Ratio</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="percent" data-name="totalRev1YrAnnGrowth"  data-display="true"  data-short-name="Growth 1y">
+                            <div class="checkbox" data-type="percent" data-name="totalRev1YrAnnGrowth"  data-display="true"  data-short-name="Growth 1y" distribution-buckets="400">
                                 <div class="trigger">1-year Revenue Growth</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="percent" data-name="totalRev3YrAnnGrowth"  data-display="true"  data-short-name="Growth 3y">
+                            <div class="checkbox" data-type="percent" data-name="totalRev3YrAnnGrowth"  data-display="true"  data-short-name="Growth 3y" distribution-buckets="400">
                                 <div class="trigger">3-year Revenue Growth</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="percent" data-name="totalRev5YrAnnGrowth"  data-display="true"  data-short-name="Growth 5y">
+                            <div class="checkbox" data-type="percent" data-name="totalRev5YrAnnGrowth"  data-display="true"  data-short-name="Growth 5y" distribution-buckets="400">
                                 <div class="trigger">5-year Revenue Growth</div>
                                 <input type="checkbox" />
                             </div>
@@ -211,7 +211,7 @@
                                 <div class="trigger">P/E Ratio</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox checked default" data-type="percent" data-name="dividendYield"  data-display="true" data-short-name="Div. Yld.">
+                            <div class="checkbox checked default" data-type="percent" data-name="dividendYield"  data-display="true" data-short-name="Div. Yld."  distribution-buckets="2000">
                                 <div class="trigger">Dividend Yield</div>
                                 <input type="checkbox" />
                             </div>
@@ -219,7 +219,7 @@
                                 <div class="trigger">P/BV</div>
                                 <input type="checkbox" />
                             </div>
-                            <div class="checkbox" data-type="lookup" data-name="avgBrokerReq" data-display="true" data-short-name="Consensus" data-min="Buy" data-max="Sell" data-formatter='{ "type": "round-list", "values": [ "", "Buy", "Overperform", "Hold", "Underperform", "Sell"  ], "minField": "targetPriceNum", "minValue": 3 }'>
+                            <div class="checkbox" data-type="lookup" data-name="avgBrokerReq" data-display="true" data-short-name="Consensus" data-min="Buy" data-max="Sell" data-formatter='{ "type": "round-list", "values": [ "", "Buy", "Overperform", "Hold", "Underperform", "Sell"  ], "minField": "targetPriceNum", "minValue": 3 }' distribution-type="histogram">
                                 <div class="trigger">Consensus Recommendation</div>
                                 <input type="checkbox" />
                             </div>
