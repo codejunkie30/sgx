@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com", //"http://sgx-api.wealthmsi.com",
+    		fqdn : "http://sgx-api.wealthmsi.com", //"http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -1607,7 +1607,7 @@ define(deps, function($, _, SGX) {
         			
             		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0 && !$.isEmptyObject(data.keyDevs[0])) {
             			
-            			data.keyDevs.sort(function(a, b) { return a.date - b.date; });
+            			data.keyDevs = data.keyDevs.sort(function(a, b) { return Date.fromISO(b.date) - Date.fromISO(a.date); });
             			
             			$.each(data.keyDevs, function(idx, keyDev) {
             				
