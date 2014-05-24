@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://sgx-api.wealthmsi.com",
+    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com", //"http://sgx-api.wealthmsi.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -246,6 +246,8 @@ define(deps, function($, _, SGX) {
                 
                 drawCriteria: function(data) {
                 	
+                	SGX.screener.handleDistributions(data);
+                	
                 	var runsearch = true;
                 	
                 	if (data.distributions.length > 1) {
@@ -308,6 +310,62 @@ define(deps, function($, _, SGX) {
                 	SGX.formatter.formatElements(".search-criteria");
                 	
                 	return runsearch;                	
+                },
+                
+                handleDistributions: function(data) {
+                	
+                	$.each(data.fieldValues, function(idx, field) {
+                		
+                		// force sort asc
+                		field.values.sort(function(a, b) { return a - b; });
+
+                		// type of algorithm for bucketing
+                		var type = $(".editSearchB [data-name='" + field.field + "']");
+                		if (typeof type.attr("distribution-type") !== "undefined") type = type.attr("distribution-type");
+                		else type = "normal";
+                		
+                		// number of buckets
+                		var bCount = $(".editSearchB [data-name='" + field.field + "']");
+                		if (typeof bCount.attr("distribution-buckets") !== "undefined") bCount = parseInt(bCount.attr("distribution-buckets"));
+                		else bCount = 75;
+
+                		// get the random distributions
+                		var buckets = {};
+                		$.each(field.values, function(vIdx, val) { SGX.screener.randomizeBucket(buckets, val, type, bCount); });
+                		
+                		// build the collection
+                		var arr = [], start = 0;
+                    	for (var prop in buckets) {
+                    		if (!buckets.hasOwnProperty(prop)) continue;
+                    		var bucket = {};
+                    		bucket.count = buckets[prop].length;
+                    		bucket.from = field.values[start];
+                    		bucket.to = field.values[(buckets[prop].length-1) + start];
+                    		arr.push(bucket);
+                    		start += buckets[prop].length;
+                    	}
+                    	
+                    	// replace the existing bucket
+                    	SGX.screener.replaceBucket(data, field.field, arr, type);
+                		
+                	});
+                	
+                	delete data.fieldValues;
+                	
+                },
+                
+                randomizeBucket: function(bucket, val, type, cnt) {
+                	var idx = (Math.round(val * 100000)%cnt);
+                	if (type == "log") idx = (Math.round(Math.log(val * 100000))%cnt);
+            		if (!bucket.hasOwnProperty(idx)) bucket[idx] = [];
+            		bucket[idx].push(val);
+                },
+                
+                replaceBucket: function(data, name, arr, type) {
+                	if (type == "histogram") return;
+                	$.each(data.distributions, function(idx, dist) {
+                		if (dist.field == name) dist.buckets = arr;
+                	});
                 },
                 
                 drawCriteriaChange: function(distribution) {
@@ -439,33 +497,18 @@ define(deps, function($, _, SGX) {
                     	
                     	var distribution = $(container).closest(".criteria").data();
 
+                    	console.log(distribution);
+                    	
                         $(container).find('.slider-bar').slider({
                             range: true,
-                            min: 0, //parseFloat(distribution.min, 10),
-                            max: distribution.buckets.length - 1, //parseFloat(distribution.max, 10),
+                            min: 0,
+                            max: distribution.buckets.length - 1,
                             values: [ 0, distribution.buckets.length - 1 ],
                             slide: SGX.screener.criteriaSlider.slide,
                             stop: SGX.screener.search.criteriaSearch,
                             step: 1
                         });
-                        
-                        /**
-                        var steps = parseInt($(".slider-bar", container ).slider( "option", "step" ));
-                        var left = $(".ui-slider-handle", container).first().position().left;
-                        var right = $(".ui-slider-handle", container).last().position().left;
-                        var bWidth = ((right - left) / steps) - 1;
-
-                        for (var i=0; i<steps; i++) {
-                        	
-                        	var matches = SGX.getDistributionMatches(distribution, i, i + bWidth + 1 );
-                        	var result = matches == 0 ? 4 : Math.round((matches / 100) * distribution.max) + 4;
-                        	result = (result / 100) * 16;
-                        	if (result > 16) result = 16;
-                        	var div = $("<span />").css( { "z-index": -100, "border-right": "1px solid #FFF", width: bWidth, height: result, background: "#1e2171", display: "inline-block" });
-                        	$('.stock-bar-container', container).append(div);
-                        }
-                        */
-                        
+                                                
                     },
                     
                     slide: function(event, ui) {
