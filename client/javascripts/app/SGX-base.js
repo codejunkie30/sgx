@@ -1591,7 +1591,7 @@ define(deps, function($, _, SGX) {
             		$(".stock-price .change").text(data.price.change);
             		$(".stock-price .lastPrice").text(price);
             		$(".stock-price .last-updated .day").text($.datepicker.formatDate( "dd/M/yy", date));
-            		$(".stock-price .last-updated .time").text(date.getHours() + ":" + String("00" + date.getMinutes()).slice(-2) + " SGT");
+            		$(".stock-price .last-updated .time").text(date.getHours() + ":" + String("00" + date.getMinutes()).slice(-2) + "");
             		
             		$(".stock-price").show();
             		
