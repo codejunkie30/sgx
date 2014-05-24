@@ -497,8 +497,6 @@ define(deps, function($, _, SGX) {
                     	
                     	var distribution = $(container).closest(".criteria").data();
 
-                    	console.log(distribution);
-                    	
                         $(container).find('.slider-bar').slider({
                             range: true,
                             min: 0,
