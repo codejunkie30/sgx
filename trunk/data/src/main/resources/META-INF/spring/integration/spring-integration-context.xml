@@ -77,14 +77,14 @@
  		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" />
  	</int:chain>
 
-	<int:logging-channel-adapter channel="loggingChannel" level="ERROR" expression=" 'Job Complete ' + payload.toString()"/>
+	<int:logging-channel-adapter channel="loggingChannel" level="INFO" expression=" 'Job Complete ' + payload.toString()"/>
 	
 	<!-- Job failed -->
 	<int:header-enricher input-channel="failedJobChannel" output-channel="failedLogger">
 		<int:header name="failedJob" value="true"/>
 	</int:header-enricher>	
 		
-	<int:logging-channel-adapter channel="failedLogger" level="ERROR" expression=" 'Job Failed ' + payload.toString()"/>
+	<int:logging-channel-adapter channel="failedLogger" level="INFO" expression=" 'Job Failed ' + payload.toString()"/>
 	
 	<!-- 
 	  Channel definitions
@@ -123,7 +123,7 @@
 	</int:channel>
 	
 	<int:channel id="statusLoggingChannel"/>	
-	<int:logging-channel-adapter channel="statusLoggingChannel" level="ERROR" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
+	<int:logging-channel-adapter channel="statusLoggingChannel" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
  	
 
 	<!-- Retry Handler -->

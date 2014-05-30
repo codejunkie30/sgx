@@ -34,14 +34,14 @@ public class LoggingAspect{
 		return retVal;
 	}
 	
-	@AfterThrowing(pointcut="execution( * com.wmsi.sgx.service.sandp.capiq.ResponseParser.*(..))", throwing = "e")
+	@AfterThrowing(pointcut="execution( * com.wmsi.sgx.service.sandp.capiq.ResponseParser+.convert(..))", throwing = "e")
 	public void responseParserConvertExceptionAdvice(JoinPoint jp, Throwable e) {
 
 		Signature signature = jp.getSignature();
 	    String methodName = signature.getName();
 	    String args = Arrays.toString(jp.getArgs());
 	    
-		log.debug("Exception throw from repsonse parser for method '{}' args: {}", methodName, args);		
+		log.error("Exception throw from repsonse parser for method '{}' args: {}", methodName, args);		
 
 	}
 	
@@ -56,13 +56,13 @@ public class LoggingAspect{
 	public Object requestExecutorAdivce(ProceedingJoinPoint pjp) throws Throwable{
 	    String args = Arrays.toString(pjp.getArgs());
 
-		log.debug("Executing dataService request");
-		log.debug("Args: {}", args);
+		log.trace("Executing dataService request");
+		log.trace("Args: {}", args);
 		
 		Object obj = pjp.proceed();
 		
 		if(obj != null)
-			log.debug("Response {}", obj.toString());
+			log.trace("Response {}", obj.toString());
 		
 		return obj;
 	}
