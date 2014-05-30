@@ -1585,7 +1585,9 @@ define(deps, function($, _, SGX) {
             	},
             	
             	initPrice: function(data) {
-            		var date = Date.fromISO(data.price.lastTradeTimestamp);
+            		
+            		var dateField = data.price.hasOwnProperty("lastTradeTimestamp") ? data.price.lastTradeTimestamp : data.price.previousDate;
+            		var date = Date.fromISO(dateField);
             		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
             		
             		$(".stock-price .change").text(data.price.change);
