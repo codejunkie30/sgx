@@ -100,7 +100,6 @@ public class DistributionServiceImpl implements DistributionService{
 						fv.addValue(Double.valueOf(value));
 				}
 
-				//fv.sort();
 				Collections.sort(fv.getValues());
 				values.add(fv);
 
@@ -112,11 +111,7 @@ public class DistributionServiceImpl implements DistributionService{
 
 		return values;
 	}
-	
-	private Aggregations getAggregations(List<DistributionRequestField> fields, Map<String, StatAggregation> intervals) throws ServiceException {
-		return loadAggregations(new DistributionsQueryBuilder(fields, intervals));		
-	}
-	
+		
 	private Aggregations getStatsAggregations(List<DistributionRequestField> fields) throws ServiceException{
 		return loadAggregations(new StatsQueryBuilder(fields));
 	}

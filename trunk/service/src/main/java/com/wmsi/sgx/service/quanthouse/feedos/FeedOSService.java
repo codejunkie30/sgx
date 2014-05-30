@@ -16,6 +16,7 @@ import com.feedos.api.core.PDU;
 import com.feedos.api.core.PolymorphicInstrumentCode;
 import com.feedos.api.core.Session;
 import com.feedos.api.requests.Constants;
+import com.feedos.api.requests.InstrumentCharacteristics;
 import com.feedos.api.requests.InstrumentQuotationData;
 import com.feedos.api.requests.SyncRequestSender;
 import com.feedos.api.tools.Verbosity;
@@ -33,28 +34,24 @@ public class FeedOSService {
 	
 	public FeedOSData getPriceData(String market, String id) throws QuanthouseServiceException {
 		PolymorphicInstrumentCode instr = getInstrumentCode(market, id);
-		InstrumentQuotationData quot = getSnapshotInstrumentsL1(instr);
-		return bind(quot);
+		return loadFeedOSData(instr);
 	}
 
-	private InstrumentQuotationData getSnapshotInstrumentsL1(PolymorphicInstrumentCode instr) throws QuanthouseServiceException{
+	private FeedOSData loadFeedOSData(PolymorphicInstrumentCode instr) throws QuanthouseServiceException{
 		
-		InstrumentQuotationData snapshot = null;
+		FeedOSData feedOSData = null;
 		
 		Session ses = session.getSession();		
 		SyncRequestSender sender = new SyncRequestSender(ses,0);
 		
 		try{
 			PolymorphicInstrumentCode[] instrs = new PolymorphicInstrumentCode[]{instr};
-			InstrumentQuotationData[] data = sender.syncQuotSnapshotInstrumentsL1(instrs, null);
 			
-			if(data != null){
-				
-				if(data.length != instrs.length)
-					throw new QuanthouseServiceException("FeedOS results size mismatch, expected " + instrs.length + " results got " + data.length);
-				
-				snapshot = data[0];				
-			}
+			InstrumentQuotationData quote = getSnapshotInstrumentsL1(sender, instrs);
+			InstrumentCharacteristics chara = getReferenceInstruments(sender, instrs);
+			
+			// Bind to pojo
+			feedOSData = bind(quote, chara);			
 		}
 		catch(FeedOSException e) {
 
@@ -67,7 +64,40 @@ public class FeedOSService {
 			throw new QuanthouseServiceException("Error retrieving last price", e);
 		}
 
+		return feedOSData;
+	}
+	
+	private InstrumentQuotationData getSnapshotInstrumentsL1(SyncRequestSender sender, PolymorphicInstrumentCode[] instrs) throws QuanthouseServiceException, FeedOSException{
+		
+		InstrumentQuotationData snapshot = null;		
+		InstrumentQuotationData[] quote = sender.syncQuotSnapshotInstrumentsL1(instrs, null);
+		
+		if(quote != null){
+			
+			if(quote.length != instrs.length)
+				throw new QuanthouseServiceException("FeedOS results size mismatch, expected " + instrs.length + " results got " + quote.length);
+			
+			snapshot = quote[0];
+		}
+		
 		return snapshot;
+	}
+
+	private InstrumentCharacteristics getReferenceInstruments(SyncRequestSender sender, PolymorphicInstrumentCode[] instrs) throws QuanthouseServiceException, FeedOSException{
+
+		// Get reference instrument for meta data about market and id
+		InstrumentCharacteristics chara = null;		
+		InstrumentCharacteristics[] refInstr = sender.syncRefGetInstruments(instrs, null);
+
+		if(refInstr != null){
+			
+			if(refInstr.length != instrs.length)
+				throw new QuanthouseServiceException("FeedOS results size mismatch, expected " + instrs.length + " results got " + refInstr.length);
+			
+			chara = refInstr[0];
+		}
+		
+		return chara;
 	}
 
 	/**
@@ -79,7 +109,7 @@ public class FeedOSService {
 		return new PolymorphicInstrumentCode(marketId, id);
 	}
 
-	private FeedOSData bind(InstrumentQuotationData quot) throws QuanthouseServiceException{
+	private FeedOSData bind(InstrumentQuotationData quot, InstrumentCharacteristics chara ) throws QuanthouseServiceException{
 		
 		FeedOSData data = new FeedOSData();		
 		data.setLastPrice(getDouble(Constants.TAG_LastPrice, quot));
@@ -89,6 +119,10 @@ public class FeedOSService {
 		data.setPreviousBusinessDay(toIsoDate(Constants.TAG_PreviousBusinessDay, quot ));
 		data.setLastTradeTimestamp(toIsoDate(Constants.TAG_LastTradeTimestamp, quot));
 		data.setLastOffBookTradeTimestamp(toIsoDate(Constants.TAG_LastOffBookTradeTimestamp, quot));
+		
+		// Get trading currency from ref instruments
+		Any curr = chara.getRef_values().getTagByNumber(Constants.TAG_PriceCurrency);
+		data.setTradingCurrency(curr.get_string());
 		
 		return data;
 	}
