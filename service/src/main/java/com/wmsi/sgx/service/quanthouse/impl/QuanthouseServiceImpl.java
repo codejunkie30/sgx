@@ -42,6 +42,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		p.setCurrentDate(data.getCurrentBusinessDay());
 		p.setPreviousDate(data.getPreviousBusinessDay());
 		p.setLastTradeTimestamp(getLastTradeTimestamp(data));
+		p.setTradingCurrency(data.getTradingCurrency());
 		
 		return p;		
 	}

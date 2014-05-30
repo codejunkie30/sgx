@@ -12,6 +12,7 @@ public class FeedOSData{
 	private Date previousBusinessDay;
 	private Date lastTradeTimestamp;
 	private Date lastOffBookTradeTimestamp;	
+	private String tradingCurrency;
 	
 	public Double getLastPrice() {
 		return lastPrice;
@@ -69,9 +70,17 @@ public class FeedOSData{
 		lastOffBookTradeTimestamp = l;
 	}
 
+	public String getTradingCurrency() {
+		return tradingCurrency;
+	}
+
+	public void setTradingCurrency(String tradingCurrency) {
+		this.tradingCurrency = tradingCurrency;
+	}
+
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(lastPrice, openPrice, closePrice, previousBusinessDay, lastTradeTimestamp, lastOffBookTradeTimestamp, currentBusinessDay);
+		return Objects.hashCode(lastPrice, openPrice, closePrice, currentBusinessDay, previousBusinessDay, lastTradeTimestamp, lastOffBookTradeTimestamp, tradingCurrency);
 	}
 	
 	@Override
@@ -81,10 +90,11 @@ public class FeedOSData{
 			return Objects.equal(this.lastPrice, that.lastPrice)
 				&& Objects.equal(this.openPrice, that.openPrice)
 				&& Objects.equal(this.closePrice, that.closePrice)
+				&& Objects.equal(this.currentBusinessDay, that.currentBusinessDay)
 				&& Objects.equal(this.previousBusinessDay, that.previousBusinessDay)
 				&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp)
 				&& Objects.equal(this.lastOffBookTradeTimestamp, that.lastOffBookTradeTimestamp)
-				&& Objects.equal(this.currentBusinessDay, that.currentBusinessDay);
+				&& Objects.equal(this.tradingCurrency, that.tradingCurrency);
 		}
 		return false;
 	}
@@ -95,10 +105,12 @@ public class FeedOSData{
 			.add("lastPrice", lastPrice)
 			.add("openPrice", openPrice)
 			.add("closePrice", closePrice)
+			.add("currentBusinessDay", currentBusinessDay)
 			.add("previousBusinessDay", previousBusinessDay)
 			.add("lastTradeTimestamp", lastTradeTimestamp)
 			.add("lastOffBookTradeTimestamp", lastOffBookTradeTimestamp)
-			.add("currentBusinessDay", currentBusinessDay)
+			.add("tradingCurrency", tradingCurrency)
 			.toString();
 	}
+
 }

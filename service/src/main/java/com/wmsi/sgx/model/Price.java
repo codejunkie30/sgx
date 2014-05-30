@@ -15,6 +15,7 @@ public class Price{
 	private Date previousDate;
 	private Date currentDate;
 	private Date lastTradeTimestamp;
+	private String tradingCurrency;
 	
 	public Double getLastPrice() {
 		return lastPrice;
@@ -64,6 +65,14 @@ public class Price{
 		lastTradeTimestamp = t;
 	}
 
+	public String getTradingCurrency() {
+		return tradingCurrency;
+	}
+
+	public void setTradingCurrency(String tradingCurrency) {
+		this.tradingCurrency = tradingCurrency;
+	}
+
 	public Double getChange() {
 		Double change = 0.0D;
 
@@ -86,7 +95,7 @@ public class Price{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(lastPrice, openPrice, closePrice, previousDate, currentDate, lastTradeTimestamp);
+		return Objects.hashCode(lastPrice, openPrice, closePrice, previousDate, currentDate, lastTradeTimestamp, tradingCurrency);
 	}
 	
 	@Override
@@ -98,7 +107,8 @@ public class Price{
 				&& Objects.equal(this.closePrice, that.closePrice)
 				&& Objects.equal(this.previousDate, that.previousDate)
 				&& Objects.equal(this.currentDate, that.currentDate)
-				&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp);
+				&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp)
+				&& Objects.equal(this.tradingCurrency, that.tradingCurrency);
 		}
 		return false;
 	}
@@ -113,7 +123,7 @@ public class Price{
 			.add("previousDate", previousDate)
 			.add("currentDate", currentDate)
 			.add("lastTradeTimestamp", lastTradeTimestamp)
+			.add("tradingCurrency", tradingCurrency)
 			.toString();
 	}
-
 }
