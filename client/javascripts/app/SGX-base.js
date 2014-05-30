@@ -1488,7 +1488,7 @@ define(deps, function($, _, SGX) {
             		companyHeader += "<td valign=\"bottom\">";
             		companyHeader += "<span class=\"stock-price\">";
             		companyHeader += "<div class=\"main\">";
-            		companyHeader += "S$ <span class=\"lastPrice formattable\" data-format=\"number\">--<\/span>";
+            		companyHeader += "<span class=\"currency\"></span>$ <span class=\"lastPrice formattable\" data-format=\"number\">--<\/span>";
             		companyHeader += "&nbsp;";
             		companyHeader += "<span class=\"change\">--<\/span>";
             		companyHeader += "<\/div>";
@@ -1590,6 +1590,7 @@ define(deps, function($, _, SGX) {
             		var date = Date.fromISO(dateField);
             		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
             		
+            		$(".stock-price .currency").text(data.price.tradingCurrency);
             		$(".stock-price .change").text(data.price.change);
             		$(".stock-price .lastPrice").text(price);
             		$(".stock-price .last-updated .day").text($.datepicker.formatDate( "dd/M/yy", date));
