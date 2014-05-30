@@ -126,7 +126,7 @@ public class IndexerServiceImpl implements IndexerService{
         UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}").build();
         URI uri = uriComp.expand(indexName).toUri();
 
-        log.debug("Deleteing index {}", indexName);
+        log.debug("Deleting index {}", indexName);
         
         restTemplate.delete(uri);
         
