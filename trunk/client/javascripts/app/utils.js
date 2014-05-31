@@ -1,14 +1,16 @@
 var D= new Date('2011-06-02T09:34:29+02:00');
 if(!D || +D!== 1307000069000){
     Date.fromISO= function(s){
-    	return fixIEDate(s);
+    	var ret = fixIEDate(s);
+    	return toSGT(ret);
     }
 }
 else{
     Date.fromISO= function(s){
     	var ret = new Date(s);
     	if (!isValidDate(ret)) ret = fixIEDate(s);
-        return ret;
+    	ret = new Date();
+        return toSGT(ret);
     }
 }
 
@@ -31,6 +33,14 @@ var getPropIE = function ( name ) {
         document.body["scroll" + name]
     );
 
+}
+
+function toSGT(dt) {
+	var lt = dt.getTime();
+	var lo = dt.getTimezoneOffset() * 60000;
+	var utc = lt + lo;
+	var sgt = utc + (3600000*8);
+	return new Date(sgt);
 }
 
 function fixIEDate(s) {
