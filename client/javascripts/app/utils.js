@@ -9,7 +9,6 @@ else{
     Date.fromISO= function(s){
     	var ret = new Date(s);
     	if (!isValidDate(ret)) ret = fixIEDate(s);
-    	ret = new Date();
         return toSGT(ret);
     }
 }
