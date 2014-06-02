@@ -248,14 +248,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		List<HistoricalValue> price = historicalData.getPrice();
 
 		for(HistoricalValue data : price){
-			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
 
 		List<HistoricalValue> volume = historicalData.getVolume();
 
 		for(HistoricalValue data : volume){
-			String id = data.getTickerCode().concat(Long.valueOf(data.getDate().getTime()).toString());
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}
 
