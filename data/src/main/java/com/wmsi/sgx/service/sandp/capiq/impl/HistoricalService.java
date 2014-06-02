@@ -38,6 +38,13 @@ public class HistoricalService extends AbstractDataService {
 
 		CapIQResult prices = response.getResults().get(0);
 		CapIQResult volumes = response.getResults().get(1);
+		
+		// Strip exchange extension from ticker if present
+		int exIndex = id.indexOf(':');
+		
+		if(exIndex >= 0)
+			id = id.substring(0, exIndex );
+			
 		List<HistoricalValue> price = getHistory(prices, id);
 		List<HistoricalValue> volume = getHistory(volumes, id);
 
@@ -58,8 +65,9 @@ public class HistoricalService extends AbstractDataService {
 				throw new CapIQRequestException("Historical data response is missing fields");
 			
 			String v = values.get(0);
+			
 			if(NumberUtils.isNumber(v)){
-
+				
 				HistoricalValue val = new HistoricalValue();
 				val.setTickerCode(id);
 				val.setValue(Double.valueOf(v));
