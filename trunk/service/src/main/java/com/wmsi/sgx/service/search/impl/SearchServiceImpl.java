@@ -47,6 +47,10 @@ public class SearchServiceImpl implements SearchService{
 	@Override
 	public <T> SearchResult<T>  search(QueryBuilder builder, Class<T> clz) throws SearchServiceException {
 		String query = builder.build();
+		
+		if(query == null)
+			return null;
+		
 		return search(query, clz);		
 	}
 }

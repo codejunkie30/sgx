@@ -141,14 +141,20 @@ public class CompanyServiceImpl implements CompanyService{
 	@Override
 	@Cacheable(value = "relatedCompanies")
 	public List<Company> loadRelatedCompanies(String id) throws CompanyServiceException{
-
+		List<Company> companies = null;
+		
 		try{
 			Company company = getById(id);
 			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company);
-			return companySearch.search(query, Company.class).getHits();
+			SearchResult<Company> results = companySearch.search(query, Company.class);
+			
+			if(results != null)
+				companies =  results.getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Could not load related companies", e);
 		}		
+		
+		return companies;
 	}
 }
