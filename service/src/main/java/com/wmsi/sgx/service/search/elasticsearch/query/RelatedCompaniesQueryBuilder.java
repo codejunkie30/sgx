@@ -21,6 +21,9 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 	public String build(){
 		Double mk = company.getMarketCap();
 		
+		if(mk == null)
+			return null; // Can't compare without it. 
+		
 		return new SearchSourceBuilder()
 			.query(QueryBuilders
 				.functionScoreQuery(

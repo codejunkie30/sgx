@@ -1,5 +1,6 @@
 package com.wmsi.sgx.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +91,17 @@ public class CompanyController{
 	@RequestMapping(value="company/relatedCompanies")
 	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
 		
+		SearchResults searchResults = new SearchResults();
+		List<SearchCompany> searchCompanies = new ArrayList<SearchCompany>();
+
 		// Get related companies
 		List<Company> companies = companyService.loadRelatedCompanies(search.getId());
-
-		// Convert to correct response type
-		List<SearchCompany> searchCompanies = mapper.mapList(companies, SearchCompany.class);
 		
-		SearchResults searchResults = new SearchResults();
+		if(companies != null){
+			// Convert to correct response type
+			searchCompanies = mapper.mapList(companies, SearchCompany.class);			
+		}
+		
 		searchResults.setCompanies(searchCompanies);
 		return searchResults;		
 	}
