@@ -2012,6 +2012,7 @@ define(deps, function($, _, SGX) {
             		$(".financials-viewport thead").each(function() {
             			
             			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
+            				if (idx >= financials.length) return;
             				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending" : financials[idx].absPeriod;
             				$(this).html(txt + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
             				$(".currency").text(financials[idx].filingCurrency);
@@ -2031,7 +2032,8 @@ define(deps, function($, _, SGX) {
             			
             			// now get the siblings
             			$(el).siblings().not(".unchart").each(function(idx, td) {
-            				var cur = financials[idx];
+               				if (idx >= financials.length) return;
+               				var cur = financials[idx];
             				if (cur.hasOwnProperty(name)) $(td).text(cur[name]).attr("data-value", cur[name]).addClass("formattable").attr("data-format", "number");
             			});
             			
@@ -2055,22 +2057,26 @@ define(deps, function($, _, SGX) {
             	},
             	
             	cleanFinancials: function(financials) {
-
+            		
+            		var nancials = financials.slice();
+            		
             		// let's make sure they're sorted
-                	financials.sort(function(a, b) {
+            		nancials.sort(function(a, b) {
                 		var a = parseInt(a.absPeriod.replace("FY", "").replace("LTM", ""));
                 		var b = parseInt(b.absPeriod.replace("FY", "").replace("LTM", ""));
                 		return a - b;
                 	});          		
                 	
-                	if (financials.length == 5) return financials;
+                	if (nancials.length == 5) return nancials;
 
             		// we need to decide whether to use the latest year end
             		// or quarter data
-            		var isQ4 = financials[financials.length - 1].absPeriod.indexOf("LTM4") != -1;
-            		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
+            		var isQ4 = nancials[nancials.length - 1].absPeriod.indexOf("LTM4") != -1;
+            		nancials.splice(isQ4 ? nancials.length - 1 : 0, 1);  
             		
-            		return financials;
+            		financials = nancials;
+            		
+            		return nancials;
             		
             	},
             	
@@ -2206,7 +2212,9 @@ define(deps, function($, _, SGX) {
             	initChart: function(el, seriesData) {
             		
         			var categories = [];
-            		$(".financials-viewport thead:first th").not(".title").each(function() { categories.push($(this).html()); });
+            		$(".financials-viewport thead:first th").not(".title").each(function() { 
+            			categories.push($(this).html()); 
+            		});
 
             		$(".chart-row").show();
             		
@@ -2485,6 +2493,7 @@ define(deps, function($, _, SGX) {
             		$(".financials-section thead").each(function() {
             			
             			$("th", this).not(".unchart").not(":first").each(function(idx, item) {
+            				if (idx >= financials.length) return;            				
             				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)) : financials[idx].absPeriod.replace("FY", "FY  ");
             				$(this).html(txt);
             				$(".currency").text(financials[idx].filingCurrency);
@@ -2500,6 +2509,7 @@ define(deps, function($, _, SGX) {
             			if (typeof name === "undefined") return;
             			
             			$("td", el).not(":first").each(function(i, td) {
+            				if (i >= financials.length) return;            				
             				var cur = financials[i];
             				if (cur.hasOwnProperty(name)) $(td).text(cur[name]).attr("data-value", cur[name]).addClass("formattable").attr("data-format", "number");
             			});
