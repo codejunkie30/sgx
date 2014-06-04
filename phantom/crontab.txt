@@ -1,0 +1,2 @@
+0 */5 * * * /phantom/clean-pdf.sh >> /phantom/clean-pdf.log 2>&1
+0 * * * * /phantom/phantom-restart.sh >> /phantom/phantom-restart 2>&1
