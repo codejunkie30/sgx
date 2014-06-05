@@ -74,7 +74,7 @@ var GLOSSARY =
 		},
 		{
 			id: "avgBrokerReq",
-			definition: "Consensus Recommendation is the average numerical rating given to the stock by the investment analysts who follow the company. The scale runs from one (for sell) to five (for buy). Companies with fewer than three analysts reporting are not tallied for a consensus rating."
+			definition: "Consensus Recommendation is the average numerical rating given to the stock by the investment analysts who follow the company. The scale runs from one (for buy) to five (for sell). Companies with fewer than three analysts reporting are not tallied for a consensus rating."
 		},
 		{
 			id: "industryGroup",
