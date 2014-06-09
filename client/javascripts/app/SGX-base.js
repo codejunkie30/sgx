@@ -2015,7 +2015,7 @@ define(deps, function($, _, SGX) {
             				if (idx >= financials.length) return;
             				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending" : financials[idx].absPeriod;
             				$(this).html(txt + "<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)));
-            				$(".currency").text(financials[idx].filingCurrency);
+            				$(".data-point-container .currency").text(financials[idx].filingCurrency);
             			});
             			
             		});
