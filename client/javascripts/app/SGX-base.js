@@ -245,7 +245,7 @@ define(deps, function($, _, SGX) {
                 },
                 
                 drawCriteria: function(data) {
-                	
+
                 	SGX.screener.handleDistributions(data);
                 	
                 	var runsearch = true;
@@ -313,6 +313,8 @@ define(deps, function($, _, SGX) {
                 },
                 
                 handleDistributions: function(data) {
+                	
+                	if (typeof data.fieldValues === "undefined") return;
                 	
                 	$.each(data.fieldValues, function(idx, field) {
                 		
@@ -412,11 +414,14 @@ define(deps, function($, _, SGX) {
                         	$(".search-criteria tbody").append(template);
                         	
                         	SGX.tooltip.init(template);
-                        	
+
+                        	$(".search-criteria .criteria").removeClass("even");
+                        	$(".search-criteria .criteria:even").addClass("even");
+
                     		SGX.modal.close(); 
                     		
                 			SGX.screener.search.criteriaSearch();
-                    		
+                			
                         }
                         
                     });            			
