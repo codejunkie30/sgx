@@ -160,10 +160,11 @@ define(deps, function($, _, SGX) {
         			});
 
         			$(".screener-header .search-submit").click(function(e) {
-        				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.nameSearch($(".searchbar input").val()); });
+        				var fn = function() { SGX.screener.search.nameSearch($(".searchbar input").val()); };
+        				if ($.trim($(".searchbar input").val()) == "") fn = function() { SGX.screener.search.showAll(); };
+        				SGX.screener.criteriaChange.reset(fn);
         			});
 
-        			
         			$(".screener-header .button.all-companies").click(function(e) {
         				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
         			});
