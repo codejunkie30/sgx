@@ -754,10 +754,13 @@ td .page-title {
   min-height: 34px;
 }
 
-.tabbed-content .panel tr td {
-  padding: 10px;
+.tabbed-content .panel tr td, .tabbed-content .panel tr td span  {
   line-height: 14px;
   font-size: 12px;
+}
+
+.tabbed-content .panel tr td {
+  padding: 10px;
   font-weight: bold;
 }
 
