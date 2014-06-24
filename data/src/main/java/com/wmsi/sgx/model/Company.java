@@ -184,7 +184,7 @@ public class Company{
 
 		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal high = new BigDecimal(yearHigh);
-		return close.divide(high, RoundingMode.HALF_UP).doubleValue();
+		return close.divide(high, RoundingMode.HALF_UP).doubleValue() - 1;
 	}
 
 	public Double getPriceVs52WeekLow() {
@@ -194,7 +194,7 @@ public class Company{
 
 		BigDecimal close = new BigDecimal(closePrice);
 		BigDecimal low = new BigDecimal(yearLow);
-		return close.divide(low, RoundingMode.HALF_UP).doubleValue();
+		return close.divide(low, RoundingMode.HALF_UP).doubleValue() - 1;
 	}
 
 	public Double getAvgBrokerReq() {
