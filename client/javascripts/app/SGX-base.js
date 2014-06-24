@@ -2146,7 +2146,7 @@ define(deps, function($, _, SGX) {
 	                            	else if ($(".trigger", el).attr("data-format") == "percent") {
 	                            		return this.value + "%";
 	                            	}
-	                                return this.value;
+	                                return Highcharts.numberFormat(this.value, 3);
 	                            }
         					}    				    			
             			});
@@ -2251,7 +2251,7 @@ define(deps, function($, _, SGX) {
 		                            	else if ($(".trigger", el).attr("data-format") == "percent") {
 		                            		return this.value + "%";
 		                            	}
-		                                return this.value;
+		                                return Highcharts.numberFormat(this.value, 3);
 		                            }
             					}
             				}
