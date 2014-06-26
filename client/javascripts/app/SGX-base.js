@@ -1814,7 +1814,11 @@ define(deps, function($, _, SGX) {
 	            		        animation: false,
 	            		        labels: {
 		                            formatter: function() {
-		                                return "S$ " + Highcharts.numberFormat(this.value, 2);
+		                            	var val = (+Highcharts.numberFormat(this.value, 3)) + "";
+		                            	if (val.indexOf(".") == -1) val += ".00"
+		                            	else if (val.split(".")[1].length < 2) val += "0";
+		                            	if (val.split(".")[0] > 0) val = Highcharts.numberFormat(val, 2);
+		                                return "S$ " + val;
 		                            },
 		                            style: {
 		                            	color: "#000000",
@@ -1831,12 +1835,14 @@ define(deps, function($, _, SGX) {
 	            		        animation: false,
 	            		        labels: {
 		                            formatter: function() {
-		                                return Highcharts.numberFormat(this.value, 2) + " mm";
+		                                return Highcharts.numberFormat(this.chart.yAxis[1].max, 2) + " mm";
 		                            },
 		                            style: {
 		                            	color: "#000000",
 		                            	fontWeight: "bold"
-		                            }
+		                            },
+		                            y: -45,
+		                            x: 5
 	            		        }
                             }
                         ],
