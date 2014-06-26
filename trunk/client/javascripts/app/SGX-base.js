@@ -1762,10 +1762,6 @@ define(deps, function($, _, SGX) {
             		        selected: 4,
                             buttons: [{
                                 type: 'day',
-                                count: 1,
-                                text: '1d'
-                            }, {
-                                type: 'day',
                                 count: 5,
                                 text: '5d'
                             }, {
@@ -1805,7 +1801,15 @@ define(deps, function($, _, SGX) {
             	        tooltip: {
             	        	enabled: false
             	        },
-
+            	        
+            	        xAxis: {
+	        		        labels: {
+	                            formatter: function() {
+	                                return Highcharts.dateFormat("%e. %b", this.value);
+	                            }
+	        		        }
+                    	},
+                    	
                         yAxis: [
                             {
 	            		        title: undefined,
