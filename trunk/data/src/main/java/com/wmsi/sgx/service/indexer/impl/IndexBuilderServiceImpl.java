@@ -74,7 +74,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public List<CompanyInputRecord> getTickers(@Header String indexName) throws IndexerServiceException {
+	public List<CompanyInputRecord> getTickers(@Header String indexName, @Header Date jobDate) throws IndexerServiceException {
 
 		log.info("Reading tickers from input file...");
 		
@@ -82,20 +82,24 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		InputStreamReader reader = null;
 		
 		try{
+			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
+			String date = fmt.format(jobDate);
+
 			reader = new InputStreamReader(companyIds.getInputStream());
-			csvReader = new CSVReader(reader, '\t');
+			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext(); // skip header
 
 			String[] record = null;
-
+			
 			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
 			
 			while((record = csvReader.readNext()) != null){
 				
 				CompanyInputRecord r = new CompanyInputRecord();
-				r.setId(record[0]);
-				r.setTicker(record[1]);				
-				
+				r.setId(record[0].trim());
+				r.setTicker(record[1].trim());
+				r.setTradeName(record[3].trim());
+				r.setDate(date);				
 				ret.add(r);
 			}
 		
@@ -113,13 +117,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public CompanyInputRecord index(@Header String indexName, @Header Date jobDate, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
-		
-		SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
-		String date = fmt.format(jobDate);
+	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
 		
 		try{
-			index(indexName, date, input.getTicker());
+			indexRecord(indexName, input);
 		}
 		catch(InvalidIdentifierException e){
 			// Allow bad tickers to flow through ie. don't consider it an error
@@ -148,7 +149,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	/**
-	 * Determine if the index job succeded by checking the number of 
+	 * Determine if the index job succeeded by checking the number of 
 	 * records that failed to index against a pre-determined threshold. 
 	 */
 	@Override
@@ -210,9 +211,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	
-	private void index(String index, String date, String ticker) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
+	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
-		Company company = capIQService.getCompany(ticker, date);
+		Company company = capIQService.getCompany(input);
 		
 		if(company == null)
 			return;
@@ -221,12 +222,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		indexerService.save("company", tickerNoExchange, company, index);
 
-		Holders h = capIQService.getHolderDetails(ticker);
+		Holders h = capIQService.getHolderDetails(input);
 
 		if(h != null)
 			indexerService.save("holders", tickerNoExchange, h, index);
 
-		KeyDevs kd = capIQService.getKeyDevelopments(ticker, date);
+		KeyDevs kd = capIQService.getKeyDevelopments(input);
 
 		if(kd != null)
 			indexerService.save("keyDevs", tickerNoExchange, kd, index);
@@ -236,14 +237,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(StringUtils.isEmpty(currency))
 			currency = "SGD";
 		
-		Financials financials = capIQService.getCompanyFinancials(ticker, currency);
+		Financials financials = capIQService.getCompanyFinancials(input, currency);
 
 		for(Financial c : financials.getFinancials()){
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
 			indexerService.save("financial", id, c, index);
 		}
 
-		PriceHistory historicalData = capIQService.getHistoricalData(ticker, date);
+		PriceHistory historicalData = capIQService.getHistoricalData(input);
 		
 		List<HistoricalValue> price = historicalData.getPrice();
 

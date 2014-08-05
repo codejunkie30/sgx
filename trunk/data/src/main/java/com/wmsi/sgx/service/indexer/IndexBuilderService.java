@@ -10,14 +10,14 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 public interface IndexBuilderService{
 
-	List<CompanyInputRecord> getTickers(String indexName) throws IndexerServiceException;
-
-	CompanyInputRecord index(String indexName, Date jobDate, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException;
+	CompanyInputRecord index(String indexName, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException;
 
 	Boolean buildAlphaFactors(String indexName) throws AlphaFactorServiceException, IndexerServiceException;
 
 	void deleteOldIndexes() throws IndexerServiceException;
 
 	Boolean isJobSuccessful(List<CompanyInputRecord> records);
+
+	List<CompanyInputRecord> getTickers(String indexName, Date jobDate) throws IndexerServiceException;
 
 }

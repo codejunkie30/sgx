@@ -12,6 +12,8 @@ import org.testng.annotations.Test;
 
 import com.wmsi.sgx.config.HttpConfig;
 import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.model.integration.CompanyInputRecordBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={HttpConfig.class})
@@ -22,7 +24,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@DataProvider
 	Object[][] testTickers(){
-		String date = "03/10/2014";
+		String date = "07/31/2014";
 		
 		return new Object[][]{
 				{"C6L", date}, 
@@ -32,22 +34,46 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 	
 	@Test(dataProvider="testTickers")
 	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, ResponseParserException{
-		capIQService.getCompany(ticker, date);
+		CompanyInputRecord rec = CompanyInputRecordBuilder
+				.companyInputRecord()
+				.withDate(date)
+				.withTicker(ticker)
+				.build();
+		
+		capIQService.getCompany(rec);
 	}
 	
 	@Test(dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
-		capIQService.getCompanyFinancials(ticker, "SGD");
+		CompanyInputRecord rec = CompanyInputRecordBuilder
+				.companyInputRecord()
+				.withDate(date)
+				.withTicker(ticker)
+				.build();
+
+		capIQService.getCompanyFinancials(rec, "SGD");
 	}
 	
 	@Test(dataProvider="testTickers")
 	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException, ResponseParserException{
-		capIQService.getHistoricalData(ticker, date);
+		CompanyInputRecord rec = CompanyInputRecordBuilder
+				.companyInputRecord()
+				.withDate(date)
+				.withTicker(ticker)
+				.build();
+
+		capIQService.getHistoricalData(rec);
 	}
 
 	@Test(dataProvider="testTickers")
 	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException, ResponseParserException{
-		KeyDevs keyDevs = capIQService.getKeyDevelopments(ticker, date);
+		CompanyInputRecord rec = CompanyInputRecordBuilder
+				.companyInputRecord()
+				.withDate(date)
+				.withTicker(ticker)
+				.build();
+
+		KeyDevs keyDevs = capIQService.getKeyDevelopments(rec);
 		assertNotNull(keyDevs);		
 		assertNotNull(keyDevs.getKeyDevs());		
 	}
