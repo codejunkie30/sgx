@@ -114,7 +114,7 @@
 	<!--  Error Logging -->
 	<int:channel id="errorLoggerChannel"/>		
 	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
-	<bean id="loggerAdapter" class="com.wmsi.sgx.model.integration.IntegrationLoggerAdapter"/>
+	<bean id="loggerAdapter" class="com.wmsi.sgx.logging.integration.IntegrationLoggerAdapter"/>
 
 	<int:channel id="tickerAggregatorChannel">
 		<int:interceptors>

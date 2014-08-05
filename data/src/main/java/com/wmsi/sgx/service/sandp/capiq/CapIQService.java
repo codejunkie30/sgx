@@ -5,16 +5,18 @@ import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.integration.CompanyInputRecord;
 
 public interface CapIQService{
 	
-	PriceHistory getHistoricalData(String id, String asOfDate) throws ResponseParserException, CapIQRequestException;
+	PriceHistory getHistoricalData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
-	Company getCompany(String id, String startDate) throws ResponseParserException, CapIQRequestException;
+	Company getCompany(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
-	Holders getHolderDetails(String ticker) throws ResponseParserException, CapIQRequestException;
+	Holders getHolderDetails(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
-	KeyDevs getKeyDevelopments(String id, String asOfDate) throws ResponseParserException, CapIQRequestException;
+	KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
-	Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException;
+	Financials getCompanyFinancials(CompanyInputRecord input, String currency) throws ResponseParserException, CapIQRequestException;
+
 }

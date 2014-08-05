@@ -155,6 +155,8 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_TOTAL_REV")
 	private Double totalRevenue;
 
+	private String tradeName;
+
 	@ConversionAnnotation(name = "IQ_VOLUME")
 	private Double volume;
 
@@ -589,6 +591,14 @@ public class Company{
 		this.totalRevenue = totalRevenue;
 	}
 
+	public String getTradeName() {
+		return tradeName;
+	}
+
+	public void setTradeName(String tradeName) {
+		this.tradeName = tradeName;
+	}
+
 	public Double getVolume() {
 		return volume;
 	}
@@ -623,7 +633,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, filingCurrency, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, sharesOutstanding, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow, priceHistory);
+		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, filingCurrency, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, sharesOutstanding, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, yearFounded, yearHigh, yearLow, priceHistory);
 	}
 	
 	@Override
@@ -678,6 +688,7 @@ public class Company{
 				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
 				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
 				&& Objects.equal(this.totalRevenue, that.totalRevenue)
+				&& Objects.equal(this.tradeName, that.tradeName)
 				&& Objects.equal(this.volume, that.volume)
 				&& Objects.equal(this.yearFounded, that.yearFounded)
 				&& Objects.equal(this.yearHigh, that.yearHigh)
@@ -738,6 +749,7 @@ public class Company{
 			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
 			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
 			.add("totalRevenue", totalRevenue)
+			.add("tradeName", tradeName)
 			.add("volume", volume)
 			.add("yearFounded", yearFounded)
 			.add("yearHigh", yearHigh)
@@ -745,4 +757,5 @@ public class Company{
 			.add("priceHistory", priceHistory)
 			.toString();
 	}
+
 }

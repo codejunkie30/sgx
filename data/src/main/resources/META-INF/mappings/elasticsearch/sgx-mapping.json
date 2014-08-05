@@ -19,6 +19,29 @@
 					"tokenizer": "standard"
 				},
 
+				"syn_indexer": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"sgx_synonyms"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+				"starts_with": 
+				{
+					"filter": 
+					[
+						"lowercase"
+					],
+
+					"tokenizer": "keyword"
+				},
+
 				"partial_name": 
 				{
 					"filter": 
@@ -54,7 +77,7 @@
 						"standard",
 						"lowercase",
 						"asciifolding",
-						"sgx_edgeNgram_tokenizer_back"						
+						"sgx_edgeNgram_tokenizer_back"
 					],
 
 					"type": "custom",
@@ -66,7 +89,7 @@
 			{
 				"sgx_edgeNgram_tokenizer": 
 				{
-				"side":"front",
+					"side": "front",
 					"type": "edgeNgram",
 					"min_gram": "2",
 					"max_gram": "20"
@@ -74,17 +97,33 @@
 
 				"sgx_edgeNgram_tokenizer_back": 
 				{
-				"side":"back",
+					"side": "back",
 					"type": "edgeNgram",
-					"min_gram": "2",
+					"min_gram": "3",
 					"max_gram": "20"
 				},
 
 				"sgx_ngram_tokenizer": 
 				{
 					"type": "ngram",
-					"min_gram": "2",
+					"min_gram": "3",
 					"max_gram": "20"
+				},
+
+				"sgx_synonyms": 
+				{
+					"type": "synonym",
+					"synonyms": 
+					[
+						"reit, real estate inv trust, real estate investment trust, reits",
+						"ltd, limited",
+						"hldg, hldgs, holdings",
+						"corp, cor, corporation",
+						"mfg, manufacturing",
+						"grp, group",
+						"co, company",
+						"intl, int'l, international"
+					]
 				}
 			}
 		}
@@ -168,7 +207,14 @@
 						"companyName": 
 						{
 							"type": "string",
-							"analyzer": "full_name"
+							"search_analyzer": "full_name",
+							"index_analyzer": "syn_indexer"
+						},
+
+						"startsWith": 
+						{
+							"type": "string",
+							"analyzer": "starts_with"
 						},
 
 						"partial": 
@@ -302,6 +348,47 @@
 				"totalRevenue": 
 				{
 					"type": "double"
+				},
+
+				"tradeName": 
+				{
+					"type": "multi_field",
+					"fields": 
+					{
+						"tradeName": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "syn_indexer"							
+						},
+
+						"startsWith": 
+						{
+							"type": "string",
+							"analyzer": "starts_with"
+						},
+
+						"partial": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name"
+						},
+
+						"partial_middle": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_middle"
+						},
+
+						"partial_back": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_back"
+						}
+					}
 				},
 
 				"volume": 

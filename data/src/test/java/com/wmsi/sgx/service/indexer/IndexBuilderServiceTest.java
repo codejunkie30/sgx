@@ -51,7 +51,7 @@ public class IndexBuilderServiceTest{
 		when(restTemplate.exchange(any(String.class), any(HttpMethod.class), any(HttpEntity.class), any(Class.class) ))
 			.thenThrow(new RestClientException("Test Rest Client Exception"));
 		
-		CompanyInputRecord rec = indexBuilderService.index("test_index", new Date(), new CompanyInputRecord());
+		CompanyInputRecord rec = indexBuilderService.index("test_index", new CompanyInputRecord());
 		assertNotNull(rec);
 	}
 
