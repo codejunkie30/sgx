@@ -19,42 +19,42 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder{
 		
 			.query(QueryBuilders.boolQuery()
 
-				// Text search for full match
-				.should(QueryBuilders
-					.multiMatchQuery(text, 
-						"companyName", 
-						"tickerSearch")
-					.type(Type.PHRASE)
-					.boost(5))
-
 				// Text search for full prefix match
 				.should(QueryBuilders
 					.multiMatchQuery(text, 
-						"companyName", 
-						"tickerSearch")
+						"companyName",
+						"tradeName")						
+					.type(Type.PHRASE)
+					.boost(5))
+
+				// Text search for prefix match
+				.should(QueryBuilders
+					.multiMatchQuery(text, 
+						"companyName.startsWith",
+						"tradeName.startsWith")
 					.type(Type.PHRASE_PREFIX)
-					.boost(3))
+					.boost(4))
 
 				// Search beginning of text
 				.should(QueryBuilders
 					.multiMatchQuery(text, 
-						"companyName.partial", 
-						"tickerSearch.partial")					
-					.boost(1))
+						"companyName.partial",
+						"tradeName.partial")					
+					.boost(3))
 
 				// Search middle of text
 				.should(QueryBuilders
 					.multiMatchQuery(text, 
-						"companyName.partial_middle", 
-						"tickerSearch.partial_middle")				
+						"companyName.partial_middle",
+						"tradeName.partial_middle")				
 					.boost(1))
 
 				// Search end of text
 				.should(QueryBuilders
 					.multiMatchQuery(text, 
-						"companyName.partial_back", 
-						"tickerSearch.partial_back")				
-					.boost(1)))
+						"companyName.partial_back",
+						"tradeName.partial_back")				
+					.boost(1)))				
 				.size(MAX_RESULTS)
 				.toString();
 	}
