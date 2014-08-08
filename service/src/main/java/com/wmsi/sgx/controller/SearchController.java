@@ -31,4 +31,9 @@ public class SearchController{
 		return companySearchService.searchCompaniesByName(req);
 	}
 
+	@RequestMapping("search/ticker")
+	public SearchResults searchTicker(@Valid @RequestBody CompanySearchRequest req) throws ServiceException{		
+		return companySearchService.searchTicker(req);
+	}
+
 }

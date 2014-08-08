@@ -16,6 +16,7 @@ import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.service.search.elasticsearch.query.CompanyQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.TextSearchQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.TickerSearchQueryBuilder;
 
 @Service
 public class CompanySearchServiceImpl implements CompanySearchService{
@@ -46,7 +47,19 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 			throw new ServiceException("Query execution failed", e);
 		}
 	}
-	
+
+	@Override
+	@Cacheable("search")
+	public SearchResults searchTicker(CompanySearchRequest req) throws ServiceException{		
+
+		try{
+			return search(new TickerSearchQueryBuilder(req.getSearch()));
+		}
+		catch(SearchServiceException e){
+			throw new ServiceException("Query execution failed", e);
+		}
+	}
+
 	private SearchResults search(QueryBuilder query) throws SearchServiceException{
 		SearchResult<SearchCompany> result = companySearch.search(query, SearchCompany.class);
 		
