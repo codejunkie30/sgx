@@ -32,6 +32,7 @@
 					"type": "custom",
 					"tokenizer": "standard"
 				},
+
 				"starts_with": 
 				{
 					"filter": 
@@ -50,6 +51,50 @@
 						"lowercase",
 						"asciifolding",
 						"sgx_edgeNgram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_ticker": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"ticker_edgeNngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_ticker_middle": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"ticker_ngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_ticker_back": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"reverse",
+						"ticker_edgeNngram_tokenizer",
+						"reverse"
 					],
 
 					"type": "custom",
@@ -77,7 +122,9 @@
 						"standard",
 						"lowercase",
 						"asciifolding",
-						"sgx_edgeNgram_tokenizer_back"
+						"reverse",
+						"sgx_edgeNgram_tokenizer",
+						"reverse"
 					],
 
 					"type": "custom",
@@ -89,17 +136,8 @@
 			{
 				"sgx_edgeNgram_tokenizer": 
 				{
-					"side": "front",
 					"type": "edgeNgram",
 					"min_gram": "2",
-					"max_gram": "20"
-				},
-
-				"sgx_edgeNgram_tokenizer_back": 
-				{
-					"side": "back",
-					"type": "edgeNgram",
-					"min_gram": "3",
 					"max_gram": "20"
 				},
 
@@ -110,6 +148,20 @@
 					"max_gram": "20"
 				},
 
+				"ticker_edgeNngram_tokenizer": 
+				{
+					"type": "edgeNgram",
+					"min_gram": "1",
+					"max_gram": "5"
+				},
+
+				"ticker_ngram_tokenizer": 
+				{
+					"type": "ngram",
+					"min_gram": "1",
+					"max_gram": "5"
+				},
+
 				"sgx_synonyms": 
 				{
 					"type": "synonym",
@@ -117,7 +169,7 @@
 					[
 						"reit, real estate inv trust, real estate investment trust, reits",
 						"ltd, limited",
-						"hldg, hldgs, holdings",
+						"hldg, hldgs, holding, holdings",
 						"corp, cor, corporation",
 						"mfg, manufacturing",
 						"grp, group",
@@ -150,12 +202,14 @@
 						"tickerCode": 
 						{
 							"type": "string",
+							"path": "just_name",
 							"index": "not_analyzed"
 						},
 
 						"tickerSearch": 
 						{
 							"type": "multi_field",
+							"path": "just_name",
 							"fields": 
 							{
 								"tickerSearch": 
@@ -168,21 +222,7 @@
 								{
 									"type": "string",
 									"search_analyzer": "full_name",
-									"index_analyzer": "partial_name"
-								},
-
-								"partial_middle": 
-								{
-									"type": "string",
-									"search_analyzer": "full_name",
-									"index_analyzer": "partial_middle"
-								},
-
-								"partial_back": 
-								{
-									"type": "string",
-									"search_analyzer": "full_name",
-									"index_analyzer": "partial_back"
+									"index_analyzer": "partial_ticker_middle"
 								}
 							}
 						}
@@ -359,7 +399,7 @@
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
-							"index_analyzer": "syn_indexer"							
+							"index_analyzer": "syn_indexer"
 						},
 
 						"startsWith": 
