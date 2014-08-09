@@ -1067,11 +1067,11 @@ table.search-criteria .remove {
 }
 
 .module-results th.asc {
-  background: url("../img/sort_ascending.png") no-repeat right;
+  background: url("../img/sort_ascending.png") no-repeat right 5px center;
 }
 
 .module-results th.desc {
-  background: url("../img/sort_descending.png") no-repeat right;
+  background: url("../img/sort_descending.png") no-repeat right 5px center;
 }
 
 .module-results td {
