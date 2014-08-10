@@ -151,6 +151,10 @@ table.panel td.property, .general-info td.property {
 	font-weight: normal;
 }
 
+table.panel td.property {
+	text-align: right;
+}
+
 .general-info td {
 	padding: 0;
 	padding: 3px;
