@@ -1719,15 +1719,19 @@ define(deps, function($, _, SGX) {
              			$.each(data.holders.holders, function(idx, owner) {
             				var tr = $("<tr />").prependTo(".panel .owners");
             				if (idx%2 == 0) $(tr).addClass("even");
-            				$("<td />").text(owner.name).addClass("property").appendTo(tr);
-            				$("<td />").text(owner.shares).addClass("property formattable").attr("data-format", "number").appendTo(tr);
-            				$("<td />").text(owner.percent).addClass("property formattable").attr("data-format", "percent").appendTo(tr);
+            				$("<td />").text(owner.name).addClass("property left").appendTo(tr);
+            				$("<td />").text(owner.shares).addClass("property formattable right").attr("data-format", "number").appendTo(tr);
+            				$("<td />").text(owner.percent).addClass("property formattable right").attr("data-format", "percent").appendTo(tr);
             				percent += owner.percent;
             			});
              			
              			$("[data-name='percentCommonStock']").text(percent);
             			
             		}
+            		
+            		$(".panel tr").each(function(idx, el) {
+            			$("td:last", this).css("border", "0");
+            		});
             		
             		
             	},

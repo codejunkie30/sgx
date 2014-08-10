@@ -764,8 +764,22 @@ td .page-title {
   font-weight: bold;
 }
 
-.tabbed-content .panel .property {
+.panel .property {
 	font-weight: normal;
+	text-align: right;
+	border-right:2px solid #FFF;
+}
+
+.panel span.property {
+	border: 0px;
+}
+
+.panel .property.left {
+	text-align: left;
+}
+
+.panel .property.center {
+	text-align: center;
 }
 
 .tabbed-content .view-more {
