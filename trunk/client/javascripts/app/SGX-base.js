@@ -638,7 +638,7 @@ define(deps, function($, _, SGX) {
                 	
                 	nameSearch: function(val) {
                 		var endpoint = SGX.fqdn + "/sgx/search/name";
-                		SGX.screener.search.simpleSearch(endpoint, { search: val });
+                		SGX.screener.search.simpleSearch(endpoint, { search: val }, val);
                 	},
                 
                 	showAll: function() {
@@ -646,11 +646,11 @@ define(deps, function($, _, SGX) {
                 		SGX.screener.search.simpleSearch(endpoint, { criteria: [] });
                 	},
                 	
-                	simpleSearch: function(endpoint, params) {
+                	simpleSearch: function(endpoint, params, keyword) {
                 		SGX.showLoading();
                 		$(".advanced-criteria").hide();
                 		$(".expand-criteria").show();
-                		SGX.handleAjaxRequest(endpoint, params, function(data) { SGX.screener.search.renderResults(data); SGX.hideLoading(); }, SGX.screener.search.fail);
+                		SGX.handleAjaxRequest(endpoint, params, function(data) { if (typeof keyword !== "undefined") data.keywords = keyword; SGX.screener.search.renderResults(data); SGX.hideLoading(); }, SGX.screener.search.fail);
                 	},
                 	
                 	addtlCritSearch: function() {
@@ -725,20 +725,23 @@ define(deps, function($, _, SGX) {
                         if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
                         	window.location = SGX.getCompanyPage(data.companies[0].tickerCode);
                         }
-                		
+                        
                 		// reset name input
                 		$(".searchbar input").val("");
                 		
                 		if (data.companies.length == 0) {
                     		$(".no-results-display").show();
+                    		$(".module-results .results").show();
                     		$(".results-display").hide();
                 		}
                 		else {
                     		$(".results-display").show();
                     		$(".no-results-display").hide();
                 		}
-
-                		$(".module-results .results").text(data.companies.length + " results");
+                		
+                		var resultsCopy = data.companies.length + " results";
+                		if (data.hasOwnProperty("keywords")) resultsCopy += " for " + data.keywords;
+                		$(".module-results .label").text(resultsCopy);
                 		$(".module-results tbody").children().remove();
                 		
                 		// all other fields
