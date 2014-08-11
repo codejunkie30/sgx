@@ -1361,7 +1361,7 @@ define(deps, function($, _, SGX) {
                 	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return;
                 	
             		var val = value;
-            		if (val == "" || val == "-") return;
+            		if (val === "" || val === "-") return;
             		
             		var formatter = SGX.numberFormats.hasOwnProperty(fmt) ? SGX.numberFormats[fmt] : {};
             		
