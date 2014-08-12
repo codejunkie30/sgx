@@ -40,7 +40,7 @@
         	$("body, head").scrollTop();
     		$("#search-block").show();
     		$("#intermediate-block").hide();
-    		$("#results-block").append("<p>Found " + data.companies.length + " matches for " + $(".sType:checked").attr("data-type") + " " + $(".sName").val());
+    		$("#results-block").append("<p>Found " + data.companies.length + " matches for " + $(".sType:checked").attr("data-type") + " <em>\"" + $(".sName").val() + "\"</em>");
         	$(".sName").val("");
 
 			var ul = $("<ul />");
