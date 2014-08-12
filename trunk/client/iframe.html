@@ -8,18 +8,46 @@
     <script type="text/javascript" src="javascripts/vendor/jquery-modern/jquery.js"></script>		
     <script type="text/javascript">
 
-    	var remoteDomain = "http://sgx.wealthmsi.com";
-    	var currentDomain = document.location.href;
-
-    	$(document).ready(function() {
-    		var companyURL = remoteDomain + "/index.html#" + encodeURIComponent(currentDomain);
-    		$("#company-info").attr("src", companyURL);
-    	});
+    	/**
+    	 * base variables for domain, pages and defaults
+    	 */
+     	var currentDomain = document.location.href;
+		var remoteDomain = "http://sgx.wealthmsi.com";
+    	var remotePages = [ "index", "company-tearsheet", "financials", "related", "alpha-factor" ];
+    	var defaultSection = 0;
     
-	    // get height from remote content
+    	/**
+    	 * Register the resize event function
+    	 */
 	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, remoteDomain );
-	    
-	    // resize the iframe and scroll based on response from remote iframe
+
+    	/**
+    	 * get a querystring parameter by name
+    	 * @param name the name of the querystring parameter
+    	 * @return the value of the querystring parameter or null if it doesn't exist
+    	 */
+        function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    	}
+
+    	/**
+    	 * get the page name from the remotePages variable based on an id
+    	 * @param id the position of the page in the array
+    	 * @return the name for the HTML page
+    	 */
+	    function getPageBase(id) {
+    		try { id = parseInt(id); } catch(err) { id = defaultSection };
+	    	if (isNaN(id) || id >= remotePages.length) id = defaultSection;
+	    	return "/" + remotePages[id] + ".html" + location.search;
+	    }
+
+    	/**
+    	 * handle the resize of the iframe
+    	 * @param data a tokenized string of height and scroll position (e.g. the place to start the page view)
+    	 */
 	    function resizeFrame(data) {
 	    	
 	    	// page objects 
@@ -41,6 +69,19 @@
 	        window.scrollTo(0, scrollPos);
 	    	
 		}
+    	
+
+    	/**
+    	 * load the page dynamically
+    	 */
+    	$(document).ready(function() {
+    		var curId = getParameterByName("page");
+    		var curPage = getPageBase(curId);
+    		var companyURL = remoteDomain + curPage + "#" + encodeURIComponent(currentDomain);
+    		console.log(companyURL);
+    		$("#company-info").attr("src", companyURL);
+    	});
+    	
     </script>
     
     <style>
