@@ -22,8 +22,8 @@ public class TextSearchQueryBuilder extends AbstractQueryBuilder{
 				// Text search for full prefix match
 				.should(QueryBuilders
 					.multiMatchQuery(text, 
-						"companyName",
-						"tradeName")						
+						"companyName.full",
+						"tradeName.full")						
 					.type(Type.PHRASE)
 					.boost(5))
 

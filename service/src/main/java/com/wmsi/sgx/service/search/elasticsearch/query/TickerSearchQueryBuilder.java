@@ -20,29 +20,20 @@ public class TickerSearchQueryBuilder extends AbstractQueryBuilder{
 
 				// Text search for full phrase match
 				.should(QueryBuilders
-					.matchPhraseQuery("tickerCode.tickerSearch", text)
+					.matchPhraseQuery("tickerCode.full", text)
 					.boost(5))
 					
 				// Text search for prefix match
 				.should(QueryBuilders
-					.matchPhrasePrefixQuery("tickerCode.tickerSearch", text)
+					.matchPhrasePrefixQuery("tickerCode.full", text)
 					.boost(4))
-/*
-				// Search beginning of text
-				.should(QueryBuilders
-					.matchQuery("tickerCode.tickerSearch.partial", text)
-					.boost(3))
 
-*/				// Search middle of text
+				// Search partial matches
 				.should(QueryBuilders
-					.matchQuery("tickerCode.tickerSearch.partial", text)
-					.boost(1))
-
-/*				// Search end of text
-				.should(QueryBuilders
-					.matchQuery("tickerCode.tickerSearch.partial_back", text)
-					.boost(1)))			
-*/				).size(MAX_RESULTS)
+					.matchQuery("tickerCode.partial", text)
+					.boost(2)))
+				
+				.size(MAX_RESULTS)
 				.toString();
 	}
 }
