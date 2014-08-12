@@ -28,10 +28,11 @@ public class ESQueryExecutor implements QueryExecutor{
 			log.debug("Executing query on {}", indexUrl);
 			
 			JsonNode query = q.toJson();
+			String url = indexUrl.concat(q.getURI().toString());
 			
+			log.debug("URI: {}", q.getURI());
 			log.debug("Query: {}", query);
 			
-			String url = indexUrl.concat(q.getURI().toString());			
 			JsonNode res = restTemplate.postForObject(url, query, JsonNode.class);
 			
 			log.debug("Query returned successfully");

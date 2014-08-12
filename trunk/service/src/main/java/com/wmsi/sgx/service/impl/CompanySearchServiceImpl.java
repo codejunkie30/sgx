@@ -25,7 +25,7 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 	private SearchService companySearch;
 	
 	@Override
-	@Cacheable("search")
+	@Cacheable("searchCompany")
 	public SearchResults search(SearchRequest req) throws ServiceException {
 
 		try{
@@ -37,7 +37,7 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 	}
 	
 	@Override
-	@Cacheable("search")
+	@Cacheable("searchName")
 	public SearchResults searchCompaniesByName(CompanySearchRequest req) throws ServiceException{		
 
 		try{
@@ -49,7 +49,7 @@ public class CompanySearchServiceImpl implements CompanySearchService{
 	}
 
 	@Override
-	@Cacheable("search")
+	@Cacheable("searchTicker")
 	public SearchResults searchTicker(CompanySearchRequest req) throws ServiceException{		
 
 		try{

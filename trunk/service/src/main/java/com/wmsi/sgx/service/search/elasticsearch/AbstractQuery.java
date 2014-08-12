@@ -16,7 +16,14 @@ public abstract class AbstractQuery implements Query{
 		@Override 
 		public String toString(){return "_".concat(super.toString().toLowerCase());}
 	}
-	
+
+	public enum SearchType{
+		QUERY_THEN_FETCH, DFS_QUERY_THEN_FETCH;
+		
+		@Override 
+		public String toString(){return super.toString().toLowerCase();}
+	}
+
 	private String index;
 	public String getIndex(){return index;}
 	public void setIndex(String i){index = i;}
@@ -31,7 +38,11 @@ public abstract class AbstractQuery implements Query{
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
-
+	
+	private SearchType searchType = SearchType.DFS_QUERY_THEN_FETCH;
+	public SearchType getSearchType(){return searchType;}
+	public void setSearchType(SearchType t){searchType = t;}
+	
 	public abstract EndPoint getEndPoint();
 	
 	@Override
@@ -47,6 +58,8 @@ public abstract class AbstractQuery implements Query{
 			
 		if(getEndPoint() != null)
 			builder.pathSegment(getEndPoint().toString());
+	
+		//builder.queryParam("search_type", getSearchType());
 		
 		return builder.build().toUri();		
 	}
