@@ -23,17 +23,17 @@ define(deps, function($, _, SGX) {
     			dividendYield: true
     		},
     		
-    		screenerPage: "index.html",
+    		screenerPage: { id: "0", file: "index.html" },
     		
-    		companyPage: "company-tearsheet.html",
+    		companyPage: { id: "1", file: "company-tearsheet.html" },
     		
-    		financialsPage: "financials.html",
+    		financialsPage: { id: "2", file: "financials.html" },
     		
-    		relatedPage: "related.html",
+    		relatedPage: { id: "3", file: "related.html" },
     		
-    		alphasPage: "alpha-factor.html",
+    		alphasPage: { id: "4", file: "alpha-factor.html" },
 
-    		printPage: "print.html",
+    		printPage: { id: "5", file: "print.html" },
 
             parentURL: null,
             
@@ -57,34 +57,38 @@ define(deps, function($, _, SGX) {
             	if (SGX.parentURL != null) return SGX.parentURL;
              	if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
                 	SGX.parentURL = decodeURIComponent(document.location.hash.replace(/^#/, ''));
+                	SGX.parentURL = SGX.parentURL.split("?")[0].split("#")[0];
             	}
+             	else {
+             		SGX.parentURL = window.location.pathname;
+             	}
             	return SGX.parentURL;
             },
 
             getPage: function(page) {
             	var parentURL = SGX.getParentURL();
             	if (parentURL == null) return page;
-            	return page + "#" + SGX.getParentURL();
+            	return parentURL + "?page=" + page + "#" + SGX.getParentURL();
             },
                         
             getCompanyPage: function(code, extra) {
-            	return SGX.getPage(SGX.companyPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.companyPage.id + "&code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
             
             getFinancialsPage: function(code, extra) {
-            	return SGX.getPage(SGX.financialsPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.financialsPage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
             getRelatedPage: function(code, extra) {
-            	return SGX.getPage(SGX.relatedPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.relatedPage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
             
             getAlphasPage: function(factor, quintile, extra) {
-            	return SGX.getPage(SGX.alphasPage + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.alphasPage.id + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
             },
             
             getPrintPage: function(code, extra) {
-            	return SGX.getPage(SGX.printPage + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.printPage.file + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
             resizeIframe: function(height, scroll) {
@@ -723,7 +727,7 @@ define(deps, function($, _, SGX) {
 
                 		// one match, redirect
                         if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
-                        	window.location = SGX.getCompanyPage(data.companies[0].tickerCode);
+                        	window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
                         }
                         
                 		// reset name input
@@ -965,7 +969,7 @@ define(deps, function($, _, SGX) {
                 			
                 			// company td
                 			var td = $("<td />").addClass("companyName").attr("data-name", "companyName").appendTo(tr);
-                			$(td).append('<a href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>');
+                			$(td).append('<a target="_parent" href="' + SGX.getCompanyPage(company.tickerCode) + '">' + company.companyName + '</a>');
                 			
                 			// rest of the rows
                 			$.each(fields, function(fIdx, field) {
@@ -1414,11 +1418,11 @@ define(deps, function($, _, SGX) {
             	
             	// the page
             	var page = location.pathname;
-            	if (page.indexOf(SGX.companyPage) != -1) SGX.company.init();
-            	else if (page.indexOf(SGX.financialsPage) != -1) SGX.financials.init();
-            	else if (page.indexOf(SGX.relatedPage) != -1) SGX.related.init();
-            	else if (page.indexOf(SGX.alphasPage) != -1) SGX.alphas.init();
-            	else if (page.indexOf(SGX.printPage) != -1) SGX.print.init();
+            	if (page.indexOf(SGX.companyPage.file) != -1) SGX.company.init();
+            	else if (page.indexOf(SGX.financialsPage.file) != -1) SGX.financials.init();
+            	else if (page.indexOf(SGX.relatedPage.file) != -1) SGX.related.init();
+            	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
+            	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else SGX.screener.init();
             },
             
@@ -1558,23 +1562,25 @@ define(deps, function($, _, SGX) {
             		if (data.company.companyInfo.hasOwnProperty("industryGroup")) tree.push({ type: "industryGroup", value: data.company.companyInfo.industryGroup });
             		if (data.company.companyInfo.hasOwnProperty("industry")) tree.push({ type: "industry", value: data.company.companyInfo.industry });
             		$.each(tree, function(idx, item) {
-            			var a = $("<a href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value)) + "'>" + item.value + "</a>");
+            			var a = $("<a target='_parent' href='" + SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=industry&field=" + item.type + "&value=" + encodeURIComponent(item.value)) + "'>" + item.value + "</a>");
             			if (idx > 0) $(".breadcrumb-tree .dynamic").append($("<span />").html("&nbsp;>&nbsp;"));
             			$(".breadcrumb-tree .dynamic").append(a);
             		});
 
             		// screener
-            		$(".screener-link").attr("href", SGX.getPage(SGX.screenerPage));
+            		$(".screener-link").attr("target", "_parent").attr("href", SGX.getPage(SGX.screenerPage.id));
             		
             		// financials
-            		$(".view-financials").click(function(e) { window.location = SGX.getFinancialsPage(data.company.companyInfo.tickerCode); });
+            		$(".view-financials").click(function(e) { 
+            			window.top.location.href = SGX.getFinancialsPage(data.company.companyInfo.tickerCode);
+            		});
             		
             		// company profile
-            		$(".back-company-profile").attr("href", SGX.getCompanyPage(data.company.companyInfo.tickerCode));
+            		$(".back-company-profile").attr("target", "_parent").attr("href", SGX.getCompanyPage(data.company.companyInfo.tickerCode));
             		
             		// comparable 
             		$(".comparable-button").click(function(e) {  
-            			window.location = SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=related");
+            			window.top.location.href = SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=related");
             		});
             		
             		$(".print-button").click(function(e) {
@@ -1675,7 +1681,7 @@ define(deps, function($, _, SGX) {
             			}
             			
             			$(this).click(function(el) {
-            				window.location = SGX.getAlphasPage(name, factors[name], "&code=" + data.company.companyInfo.tickerCode);
+            				window.top.location.href = SGX.getAlphasPage(name, factors[name], "&code=" + data.company.companyInfo.tickerCode);
             			});
             			
             			$(".bar-progress", this).addClass("per-" + (factors[name]*20));
@@ -2428,7 +2434,7 @@ define(deps, function($, _, SGX) {
         					});
         					
         					$(span).click(function(e) {
-        						window.location = SGX.getAlphasPage($(this).closest(".slider").attr("data-name"), $(this).attr("data-quintile"));
+        						window.top.location.href = SGX.getAlphasPage($(this).closest(".slider").attr("data-name"), $(this).attr("data-quintile"));
         					});
         					
         				});
@@ -2458,7 +2464,7 @@ define(deps, function($, _, SGX) {
             },
             
         	failed: function() {
-        		window.location = SGX.getPage(SGX.screenerPage);
+        		window.top.location.href = SGX.getPage(SGX.screenerPage);
         	},
         	
         	print: {
