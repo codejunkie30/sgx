@@ -43,20 +43,6 @@
 					"tokenizer": "keyword"
 				},
 
-				"partial_name": 
-				{
-					"filter": 
-					[
-						"standard",
-						"lowercase",
-						"asciifolding",
-						"sgx_edgeNgram_tokenizer"
-					],
-
-					"type": "custom",
-					"tokenizer": "standard"
-				},
-
 				"partial_ticker": 
 				{
 					"filter": 
@@ -101,21 +87,35 @@
 					"tokenizer": "standard"
 				},
 
-				"partial_middle": 
+				"partial_name": 
 				{
 					"filter": 
 					[
 						"standard",
 						"lowercase",
 						"asciifolding",
-						"sgx_ngram_tokenizer"
+						"name_edgeNgram_tokenizer"
 					],
 
 					"type": "custom",
 					"tokenizer": "standard"
 				},
 
-				"partial_back": 
+				"partial_name_middle": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"name_ngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_name_back": 
 				{
 					"filter": 
 					[
@@ -123,7 +123,7 @@
 						"lowercase",
 						"asciifolding",
 						"reverse",
-						"sgx_edgeNgram_tokenizer",
+						"name_edgeNgram_tokenizer",
 						"reverse"
 					],
 
@@ -134,14 +134,14 @@
 
 			"filter": 
 			{
-				"sgx_edgeNgram_tokenizer": 
+				"name_edgeNgram_tokenizer": 
 				{
 					"type": "edgeNgram",
 					"min_gram": "2",
 					"max_gram": "20"
 				},
 
-				"sgx_ngram_tokenizer": 
+				"name_ngram_tokenizer": 
 				{
 					"type": "ngram",
 					"min_gram": "3",
@@ -195,36 +195,21 @@
 			{
 				"tickerCode": 
 				{
-					"type": "multi_field",
-					"path": "just_name",
+					"type": "string",
+					"index": "not_analyzed",
 					"fields": 
 					{
-						"tickerCode": 
+						"full": 
 						{
 							"type": "string",
-							"path": "just_name",
-							"index": "not_analyzed"
+							"analyzer": "full_name"
 						},
 
-						"tickerSearch": 
+						"partial": 
 						{
-							"type": "multi_field",
-							"path": "just_name",
-							"fields": 
-							{
-								"tickerSearch": 
-								{
-									"type": "string",
-									"analyzer": "full_name"
-								},
-
-								"partial": 
-								{
-									"type": "string",
-									"search_analyzer": "full_name",
-									"index_analyzer": "partial_ticker_middle"
-								}
-							}
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_ticker_middle"
 						}
 					}
 				},
@@ -241,10 +226,11 @@
 
 				"companyName": 
 				{
-					"type": "multi_field",
+					"type": "string",
+					"index": "not_analyzed",
 					"fields": 
 					{
-						"companyName": 
+						"full": 
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
@@ -268,14 +254,14 @@
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
-							"index_analyzer": "partial_middle"
+							"index_analyzer": "partial_name_middle"
 						},
 
 						"partial_back": 
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
-							"index_analyzer": "partial_back"
+							"index_analyzer": "partial_name_back"
 						}
 					}
 				},
@@ -392,10 +378,10 @@
 
 				"tradeName": 
 				{
-					"type": "multi_field",
+					"type": "string",
 					"fields": 
 					{
-						"tradeName": 
+						"full": 
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
@@ -419,14 +405,14 @@
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
-							"index_analyzer": "partial_middle"
+							"index_analyzer": "partial_name_middle"
 						},
 
 						"partial_back": 
 						{
 							"type": "string",
 							"search_analyzer": "full_name",
-							"index_analyzer": "partial_back"
+							"index_analyzer": "partial_name_back"
 						}
 					}
 				},
@@ -574,82 +560,82 @@
 					}
 				}
 			}
+		}
+	},
+
+	"alphaFactor": 
+	{
+		"dynamic": false,
+		"_id": 
+		{
+			"path": "id"
 		},
 
-		"alphaFactor": 
+		"properties": 
 		{
-			"dynamic": false,
-			"_id": 
+			"id": 
 			{
-				"path": "id"
+				"type": "string",
+				"index": "not_analyzed"
 			},
 
-			"properties": 
+			"date": 
 			{
-				"id": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
+				"type": "date"
+			},
 
-				"date": 
-				{
-					"type": "date"
-				},
+			"analystExpectations": 
+			{
+				"type": "integer"
+			},
 
-				"analystExpectations": 
-				{
-					"type": "integer"
-				},
+			"capitalEfficiency": 
+			{
+				"type": "integer"
+			},
 
-				"capitalEfficiency": 
-				{
-					"type": "integer"
-				},
+			"earningsQuality": 
+			{
+				"type": "integer"
+			},
 
-				"earningsQuality": 
-				{
-					"type": "integer"
-				},
+			"historicalGrowth": 
+			{
+				"type": "integer"
+			},
 
-				"historicalGrowth": 
-				{
-					"type": "integer"
-				},
+			"priceMomentum": 
+			{
+				"type": "integer"
+			},
 
-				"priceMomentum": 
-				{
-					"type": "integer"
-				},
+			"valuation": 
+			{
+				"type": "integer"
+			},
 
-				"valuation": 
-				{
-					"type": "integer"
-				},
+			"volatility": 
+			{
+				"type": "integer"
+			},
 
-				"volatility": 
-				{
-					"type": "integer"
-				},
-
-				"size": 
-				{
-					"type": "integer"
-				}
+			"size": 
+			{
+				"type": "integer"
 			}
-		},
+		}
+	},
 
-		"_default_": 
+	"_default_": 
+	{
+		"dynamic": false,
+		"properties": 
 		{
-			"dynamic": false,
-			"properties": 
+			"id": 
 			{
-				"id": 
-				{
-					"type": "string",
-					"index": "not_analyzed",
-					"index_name": "id"
-				}
+				"type": "string",
+				"index": "not_analyzed",
+				"index_name": "id"
 			}
 		}
 	}
