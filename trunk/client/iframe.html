@@ -12,7 +12,7 @@
     	 * base variables for domain, pages and defaults
     	 */
      	var currentDomain = document.location.href;
-		var remoteDomain = "http://walgreens.ntrdf.com";
+		var remoteDomain = "http://sgx.wealthmsi.com";
     	var remotePages = [ "index", "company-tearsheet", "financials", "related", "alpha-factor" ];
     	var defaultSection = 0;
     
@@ -97,11 +97,6 @@
 			width: 1008px;
     	}
     	
-    	.header, .footer {
-    		background-color: #CCC;
-    		height: 80px;
-    	}
-    	
     	.header {
     		height: 300px;
     	}
@@ -117,16 +112,16 @@
 
 <body>
 
-<div class="container header">
-<p>HEADER GOES HERE</p>
+<div class="container">
+	<img src="/img/sgx-iframe-header.jpg" />
 </div>
 
 <div class="container">
-	<iframe id="company-info" style="overflow: hidden; padding: 0px; margin:0px;" allowTransparency="true" frameborder="0" width="1008" height="1" scrolling="no"></iframe>
+	<iframe id="company-info" style="overflow: hidden; padding: 0px; margin:0px;" allowTransparency="true" frameborder="0" width="1008" height="800" scrolling="no"></iframe>
 </div>
 
-<div class="container footer">
-<p>FOOTER GOES HERE</p>
+<div class="container">
+	<img src="/img/sgx-iframe-footer.jpg" />
 </div>
 
 </body>
