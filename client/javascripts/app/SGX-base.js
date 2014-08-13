@@ -88,7 +88,7 @@ define(deps, function($, _, SGX) {
             },
             
             getPrintPage: function(code, extra) {
-            	return SGX.getPage(SGX.printPage.file + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return location.protocol + "//" + window.location.hostname + "/" +  SGX.printPage.file + "?code=" + code + (typeof extra === "undefined" ? "" : extra);
             },
 
             resizeIframe: function(height, scroll) {
@@ -1636,11 +1636,7 @@ define(deps, function($, _, SGX) {
             		
             		$(".print-button").click(function(e) {
             			var page = SGX.getPrintPage(data.company.companyInfo.tickerCode);
-            	    	var domain = window.location.hostname;
-            	    	var path = document.location.pathname;
-            	    	var folder = path.replace("/", "").split("/").length > 1 ? path.replace("/", "").split("/")[0] : "";
-            	    	if (folder.length > 0) folder = "/" + folder;
-            			window.open(SGX.pqdn + encodeURIComponent(location.protocol + "//" + domain + folder + "/" + page));
+            			window.open(SGX.pqdn + encodeURIComponent(page));
             		});
             		
             		// init pricing
