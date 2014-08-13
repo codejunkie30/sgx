@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://sgx-api.wealthmsi.com", //"http://ec2-54-82-16-73.compute-1.amazonaws.com",
+    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -162,6 +162,14 @@ define(deps, function($, _, SGX) {
         			$(".searchbar input").keypress(function(e) {
         				if (e.which == 13) SGX.screener.criteriaChange.reset(function() { SGX.screener.search.nameSearch($(".searchbar input").val()); });
         			});
+        			
+        			$(".searchtoggle .toggle, .searchtoggle .arrow").click(function() {
+        				$(".searchtoggle .toggle, .searchtoggle .arrow").removeClass("selected");
+        				$(".searchtoggle .s" + $(this).attr("data-name")).addClass("selected");
+        				$(".searchbar input").attr("placeholder", $(this).attr("data-placeholder"));
+        			});
+        			
+        			$(".searchtoggle .toggle:first").click();
 
         			$(".screener-header .search-submit").click(function(e) {
         				var fn = function() { SGX.screener.search.nameSearch($(".searchbar input").val()); };
@@ -173,7 +181,6 @@ define(deps, function($, _, SGX) {
         				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
         			});
         			
-            		
             		$(".expand-criteria").click(function(e) {
             			$(".advanced-criteria").show();
             			$(".expand-criteria").hide();
@@ -641,8 +648,9 @@ define(deps, function($, _, SGX) {
                 search: {
                 	
                 	nameSearch: function(val) {
-                		var endpoint = SGX.fqdn + "/sgx/search/name";
-                		SGX.screener.search.simpleSearch(endpoint, { search: val }, val);
+                		var endpoint = "/sgx/search/name";
+                		if ($(".searchtoggle .selected").attr("data-name") == "code") endpoint = "/sgx/search/ticker";
+                		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, { search: val }, val);
                 	},
                 
                 	showAll: function() {
@@ -758,7 +766,10 @@ define(deps, function($, _, SGX) {
             			if ($(".module-results thead th").length == 0) {
             				
                     		var header = $(".module-results thead");
-                    		$("<th data-name='companyName' data-sort='string'><span>Company Name</span></th>").addClass("sort").addClass("asc").addClass("companyName").appendTo(header);
+                    		var thName = $("<th data-name='companyName' data-sort='string'><span>Company Name</span></th>").addClass("companyName").appendTo(header);
+                    		
+                    		// default sort, unless keyword search than use natural search ranking
+                    		if (!data.hasOwnProperty("keywords")) $(thName).addClass("sort").addClass("asc");
                     		
                     		$.each(fields, function(idx, field) {
                     			var title = field.shortName;
@@ -772,6 +783,10 @@ define(deps, function($, _, SGX) {
                     		});
                     		
                     		$(".module-results thead th").click(function(e) {
+                    			
+                    			// remove keywords if they exist
+                    			var tData = $(".module-results").data();
+                    			delete tData.keywords;
                     			
                 				var table = $(".module-results table");
                 				$("th", table).removeClass("sort");
@@ -790,9 +805,13 @@ define(deps, function($, _, SGX) {
                 			});
 
             			}
-            			else {
+            			else if (!data.hasOwnProperty("keywords")) {
             				sort = $("th.sort").attr("data-name");
             				direction = $("th.sort").hasClass("desc") ? "desc" : "asc";
+            			}
+            			else if (data.hasOwnProperty("keywords")) {
+            				var table = $(".module-results table");
+            				$("th", table).removeClass("sort").removeClass("asc").removeClass("desc");
             			}
             			
                 		// add to the element
@@ -910,23 +929,30 @@ define(deps, function($, _, SGX) {
                         	SGX.screener.populateField(field, $(".editSearchB .checkbox[data-name='" + sort + "']"));
                     	}
                     	
-                    	// sort
-                    	data.companies.sort(function(a, b) {
-                    		
-                    		var a1 = "asc" == direction ? a[sort] : b[sort];
-                    		var b1 = "asc" == direction ? b[sort] : a[sort];
-                    		if ("number" == sortType) {
-                    			if (typeof b1 === "undefined") b1 = "-99999999999999";
-                    			if (typeof a1 === "undefined") a1 = "-99999999999999";
-                    			return b1-a1;
-                    		}
-                    		else if ("lookup" == sortType && field != null) {
-                				a1 = "asc" == direction ? field.formatter.values[a[sort]|0].toLowerCase() : field.formatter.values[b[sort]|0].toLowerCase();
-                				b1 = "asc" == direction ? field.formatter.values[b[sort]|0].toLowerCase() : field.formatter.values[a[sort]|0].toLowerCase();
-                    		}
-                    		
-                    		return a1.localeCompare(b1);
-                    	});
+                    	console.log(data.hasOwnProperty("keywords"));
+                    	
+                    	if (!data.hasOwnProperty("keywords")) {
+
+                        	// sort
+                        	data.companies.sort(function(a, b) {
+                        		
+                        		var a1 = "asc" == direction ? a[sort] : b[sort];
+                        		var b1 = "asc" == direction ? b[sort] : a[sort];
+                        		if ("number" == sortType) {
+                        			if (typeof b1 === "undefined") b1 = "-99999999999999";
+                        			if (typeof a1 === "undefined") a1 = "-99999999999999";
+                        			return b1-a1;
+                        		}
+                        		else if ("lookup" == sortType && field != null) {
+                    				a1 = "asc" == direction ? field.formatter.values[a[sort]|0].toLowerCase() : field.formatter.values[b[sort]|0].toLowerCase();
+                    				b1 = "asc" == direction ? field.formatter.values[b[sort]|0].toLowerCase() : field.formatter.values[a[sort]|0].toLowerCase();
+                        		}
+                        		
+                        		return a1.localeCompare(b1);
+                        	});
+
+                    	}
+                    	
                     	
                     	// break into pages
                     	var i, j, page = 1;
