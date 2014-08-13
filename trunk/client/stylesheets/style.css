@@ -1517,12 +1517,12 @@ table.search-criteria .remove {
 .screener-header .intro-headline {
   font: bold 18px Arial, Helvetica, sans-serif;
   color: #1e2171;
-  margin: 20px 27px 10px;
+  margin: 10px 27px 10px;
 }
 .screener-header .description {
   position: absolute;
   top: 38px;
-  height: 130px;
+  height: 150px;
   width: 100%;
   background: -moz--webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
   background: -moz--moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
@@ -1562,12 +1562,76 @@ table.search-criteria .remove {
 /* W3C */
 /* IE9 SVG, needs conditional override of 'filter' to 'none' */
 }
+
 .screener-header .description p {
   margin: 0 27px;
   color: #000;
   font: bold 12px Arial, Helvetica, sans-serif;
   width: 460px;
 }
+
+.screener-header .searchtoggle {
+	margin-top: 12px;
+	margin-left: 27px;
+}
+
+.screener-header .button {
+	padding-top: 2px;
+}
+
+.screener-header .searchtoggle .toggle {
+	display: inline-block;
+	margin: 0px;
+	padding-left: 15px; 
+	padding-right: 15px;
+	background-color: #666aa8;
+}
+
+.screener-header .searchtoggle .toggle.sname {
+	-webkit-border-bottom-right-radius: 0;
+	-moz-border-radius-bottomright: 0;
+	border-bottom-right-radius: 0;
+	-webkit-border-top-right-radius: 0;
+	-moz-border-radius-topright: 0;
+	border-top-right-radius: 0;
+}
+
+.screener-header .searchtoggle .arrows {
+	margin-top: -10px;
+	height: 4px;
+	margin-bottom: 3px;
+}
+
+.screener-header .searchtoggle .arrow {
+	display: inline-block;
+	height: 4px;
+}
+
+.screener-header .searchtoggle .arrow.sname {
+	width: 116px;
+}
+
+.screener-header .searchtoggle .arrow.scode {
+	width: 93px;
+}
+
+.screener-header .searchtoggle .arrow.selected {
+	background: transparent url('../img/down-arrow.png') no-repeat center center;
+}
+
+.screener-header .searchtoggle .toggle.scode {
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-radius-bottomleft: 0;
+	border-bottom-left-radius: 0;
+	-webkit-border-top-left-radius: 0;
+	-moz-border-radius-topleft: 0;
+	border-top-left-radius: 0;
+}
+
+.screener-header .searchtoggle .selected {
+	background-color: #1e2171;
+}
+
 .screener-header .searchbar {
   margin: 10px 27px;
   border: 1px solid #1e2171;
@@ -1605,12 +1669,16 @@ table.search-criteria .remove {
   cursor: pointer;
 }
 .screener-header .button {
-  margin-left: 127px;
   font-size: 12px;
   font-weight: bold;
   color: #fff;
   height: 24px;
 }
+
+.all-companies {
+	margin-left: 0px;
+}
+
 
 .advanced-criteria {
 	margin-top: 20px !important;
