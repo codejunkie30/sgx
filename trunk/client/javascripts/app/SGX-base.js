@@ -158,7 +158,7 @@ define(deps, function($, _, SGX) {
         			$(".editSearchB .button-reset").click(function(e) {
         				SGX.screener.criteriaChange.reset(SGX.screener.search.criteriaSearch);
         			});
-        			
+
         			$(".searchbar input").keypress(function(e) {
         				if (e.which == 13) SGX.screener.criteriaChange.reset(function() { SGX.screener.search.nameSearch($(".searchbar input").val()); });
         			});
@@ -190,6 +190,15 @@ define(deps, function($, _, SGX) {
 
         			SGX.screener.initCriteria();
         			
+        		},
+        		
+        		isValidTicker: function(str) {
+        			if (/^\w+$/.test(str) && str.indexOf("_") == -1) return null;
+        			return "Only letters and numbers allowed in stock code search.";
+        		},
+        		
+        		isValidName: function(str) {
+        			return null;
         		},
         		
         		finalize: function(data) {
@@ -648,9 +657,27 @@ define(deps, function($, _, SGX) {
                 search: {
                 	
                 	nameSearch: function(val) {
+                		
+                		val = $.trim(val);
+                		var msg = null;
+
+                		// nothing typed if, show all
+                		if (val === "undefined" || val.length == 0) {
+                			SGX.screener.search.showAll();
+                			return;
+                		}
+                		
+                		// validate string input
+        				var msg = executeFunctionByName($(".searchtoggle .toggle.selected").attr("data-validator"), SGX, val);
+        				if (msg != null) {
+        					SGX.modal.open({ content: "<p>" + msg + "</p>", type: 'alert', maxWidth: 1000 });
+        					return;
+        				}
+                		
                 		var endpoint = "/sgx/search/name";
                 		if ($(".searchtoggle .selected").attr("data-name") == "code") endpoint = "/sgx/search/ticker";
                 		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, { search: val }, val);
+                		
                 	},
                 
                 	showAll: function() {
@@ -928,8 +955,6 @@ define(deps, function($, _, SGX) {
                         	field = {};
                         	SGX.screener.populateField(field, $(".editSearchB .checkbox[data-name='" + sort + "']"));
                     	}
-                    	
-                    	console.log(data.hasOwnProperty("keywords"));
                     	
                     	if (!data.hasOwnProperty("keywords")) {
 
