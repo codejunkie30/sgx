@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
+    		fqdn : "http://sgx-api.wealthmsi.com/",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -1057,13 +1057,13 @@ define(deps, function($, _, SGX) {
                     	// by indsutry
                     	else if ($(".related-page").length > 0) scroll = 30;
                     	// screener with advanced criteria being displayed
-                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 540;
+                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 600;
                     	// screener with advanced criteria hidden
-                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 210;
+                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 240;
                     	// alpha factors (company version)
                     	else if ($(".alphas-page").length > 0 && $(".company-header").is(":visible")) scroll = 480;
                     	// alpha factors (no company)
-                    	else if ($(".alphas-page").length > 0) scroll = 330;
+                    	else if ($(".alphas-page").length > 0) scroll = 370;
                     	
         	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
