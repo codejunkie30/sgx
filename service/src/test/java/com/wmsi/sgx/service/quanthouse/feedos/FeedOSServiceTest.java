@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.quanthouse.feedos;
 
 import static org.testng.Assert.*;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
@@ -19,7 +17,6 @@ import org.testng.annotations.Test;
 import com.wmsi.sgx.service.quanthouse.InvalidInstrumentException;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class FeedOSServiceTest extends AbstractTestNGSpringContextTests{
 
@@ -46,7 +43,7 @@ public class FeedOSServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	FeedOSService feedOSService;
 
-	@Test(groups = { "functional", "integration" })
+	@Test(groups = { "integration" })
 	public void getPriceDataTest() throws QuanthouseServiceException {
 		FeedOSData data = feedOSService.getPriceData("XSES", "C6L_RY");
 		assertNotNull(data);
@@ -57,12 +54,14 @@ public class FeedOSServiceTest extends AbstractTestNGSpringContextTests{
 		assertNotNull(data.getCurrentBusinessDay());
 	}
 
-	@Test(expectedExceptions = { InvalidInstrumentException.class })
+	@Test(
+		groups={"integration"},
+		expectedExceptions = { InvalidInstrumentException.class })
 	public void testBadInstrumentCode() throws QuanthouseServiceException {
 		feedOSService.getPriceData("XSES", "aa");
 	}
 	
-	@Test(groups = { "functional", "integration" })
+	@Test(groups = { "integration" })
 	public void testExpiredInstrument() throws QuanthouseServiceException {
 		FeedOSData priceData = feedOSService.getPriceData("XSES", "E25_RY");
 		assertNotNull(priceData);

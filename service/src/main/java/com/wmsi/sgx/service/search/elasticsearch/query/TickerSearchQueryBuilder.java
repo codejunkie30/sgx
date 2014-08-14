@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.search.elasticsearch.query;
 
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
 
 public class TickerSearchQueryBuilder extends AbstractQueryBuilder{
 	
