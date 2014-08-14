@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.search.elasticsearch.query;
 
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 
 public class TickerSearchQueryBuilder extends AbstractQueryBuilder{
 	
@@ -18,21 +19,20 @@ public class TickerSearchQueryBuilder extends AbstractQueryBuilder{
 		
 			.query(QueryBuilders.boolQuery()
 
-				// Text search for full phrase match
-				.should(QueryBuilders
-					.matchPhraseQuery("tickerCode.full", text)
-					.boost(5))
-					
 				// Text search for prefix match
 				.should(QueryBuilders
-					.matchPhrasePrefixQuery("tickerCode.full", text)
+						.constantScoreQuery(QueryBuilders
+					.matchPhrasePrefixQuery("tickerCode.full", text))
 					.boost(4))
 
 				// Search partial matches
 				.should(QueryBuilders
-					.matchQuery("tickerCode.partial", text)
+						.constantScoreQuery(QueryBuilders
+					.matchQuery("tickerCode.partial", text))
 					.boost(2)))
-				
+					
+				.sort("_score")
+				.sort("tickerCode")				
 				.size(MAX_RESULTS)
 				.toString();
 	}
