@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://sgx-api.wealthmsi.com/",
+    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
