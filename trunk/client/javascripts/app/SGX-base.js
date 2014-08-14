@@ -682,6 +682,7 @@ define(deps, function($, _, SGX) {
                 
                 	showAll: function() {
                 		var endpoint = SGX.fqdn + "/sgx/search/";
+                		if (!$(".module-results thead th:first").hasClass("asc")) $(".module-results thead th:first").click();
                 		SGX.screener.search.simpleSearch(endpoint, { criteria: [] });
                 	},
                 	
@@ -1878,10 +1879,20 @@ define(deps, function($, _, SGX) {
 	            		        animation: false,
 	            		        labels: {
 		                            formatter: function() {
-		                            	var val = (+Highcharts.numberFormat(this.value, 3)) + "";
+		                            	
+		                            	// let's get a normal decimal
+		                            	var val = this.value + "";
 		                            	if (val.indexOf(".") == -1) val += ".00"
 		                            	else if (val.split(".")[1].length < 2) val += "0";
-		                            	if (val.split(".")[0] > 0) val = Highcharts.numberFormat(val, 2);
+		                            	
+		                            	// now let's determine the whole number
+		                            	// if it's > 0 (e.g. a dollar or more) only show two decimals
+		                            	var max = 3;
+		                            	if (parseInt(val.split(".")[0]) > 0) max = 2;
+		                            	
+		                            	// if it's greater than the max, don't show
+		                            	if (val.split(".")[1].length > max) return null;
+		                            	
 		                                return "S$ " + val;
 		                            },
 		                            style: {
