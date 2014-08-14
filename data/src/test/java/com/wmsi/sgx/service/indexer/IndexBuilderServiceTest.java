@@ -4,8 +4,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-import java.util.Date;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestClientException;
@@ -36,8 +34,6 @@ public class IndexBuilderServiceTest{
 		executor.setRestTemplate(restTemplate);
 		
 		capIQService = mock(CapIQServiceImpl.class);
-		//capIQService.setRequestExecutor(executor);
-		
 		
 		IndexBuilderServiceImpl impl = new IndexBuilderServiceImpl();
 		impl.setCapIQService(capIQService);

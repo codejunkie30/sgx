@@ -190,7 +190,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			String indexName = index.getName();
 			String date = index.getName().substring(indexPrefix.length(), indexName.length());
 
-			Date indexDate = new Date(Long.valueOf(date));
+			Date indexDate = new Date(Long.parseLong(date));
 			int dif = fiveDaysAgo.compareTo(indexDate);
 			
 			if(dif > 0){

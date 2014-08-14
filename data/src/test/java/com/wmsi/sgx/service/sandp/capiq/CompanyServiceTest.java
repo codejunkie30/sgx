@@ -7,14 +7,12 @@ import static org.testng.Assert.*;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
@@ -31,7 +29,6 @@ import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
 import com.wmsi.sgx.util.test.TestUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class)
 public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 

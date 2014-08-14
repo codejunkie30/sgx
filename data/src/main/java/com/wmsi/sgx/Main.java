@@ -16,7 +16,6 @@
 package com.wmsi.sgx;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -29,7 +28,7 @@ import org.springframework.integration.MessageChannel;
 import org.springframework.integration.support.MessageBuilder;
 
 /**
- * Starts the Spring Context and will initialize the Spring Integration routes.
+ * This is just a test class for easily running the indexer
  *
  * @author JLee
  * @since 1.0
@@ -51,17 +50,6 @@ public final class Main{
 	 */
 	public static void main(final String... args) throws ParseException {
 
-		if(LOGGER.isInfoEnabled()){
-			LOGGER.info("\n========================================================="
-					+ "\n                                                         "
-					+ "\n          Welcome to Spring Integration!                 "
-					+ "\n                                                         "
-					+ "\n    For more information please visit:                   "
-					+ "\n    http://www.springsource.org/spring-integration       "
-					+ "\n                                                         "
-					+ "\n=========================================================");
-		}
-
 		final AbstractApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:META-INF/spring/integration/*-context.xml");
 
@@ -73,8 +61,6 @@ public final class Main{
 
 		Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
 
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
-		
 		chan.send(MessageBuilder.withPayload(companyIds)
 				.setHeader("jobId", System.currentTimeMillis())
 				.setHeader("jobDate", new Date()).build());
