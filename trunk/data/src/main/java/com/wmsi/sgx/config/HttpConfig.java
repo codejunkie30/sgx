@@ -150,7 +150,7 @@ public class HttpConfig{
 		DefaultFtpSessionFactory factory = new DefaultFtpSessionFactory();
 		factory.setClientMode(2);
 		factory.setHost(capIQEnv.getProperty("capiq.ftp.url"));
-		factory.setPort(Integer.valueOf(capIQEnv.getProperty("capiq.ftp.port")));
+		factory.setPort(Integer.parseInt(capIQEnv.getProperty("capiq.ftp.port")));
 		factory.setUsername(capIQEnv.getProperty("capiq.ftp.user"));
 		factory.setPassword(capIQEnv.getProperty("capiq.ftp.pass"));		
 		return factory;

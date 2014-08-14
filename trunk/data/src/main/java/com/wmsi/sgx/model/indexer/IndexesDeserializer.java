@@ -28,7 +28,7 @@ public class IndexesDeserializer extends JsonDeserializer<Object>{
 			Entry<String, JsonNode> field = i.next();			
 			JsonNode fieldNode = field.getValue();	
 			
-			List<String> aliases = new ArrayList<String>();
+			List<String> aliases = null;
 			JsonNode aliasNode = fieldNode.get("aliases");
 
 			Index idx = new Index();

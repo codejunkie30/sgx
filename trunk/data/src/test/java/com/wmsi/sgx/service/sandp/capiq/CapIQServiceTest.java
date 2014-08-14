@@ -2,10 +2,8 @@ package com.wmsi.sgx.service.sandp.capiq;
 
 import static org.testng.Assert.*;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -15,7 +13,6 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.model.integration.CompanyInputRecordBuilder;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={HttpConfig.class})
 public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 
@@ -32,7 +29,9 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		};
 	}
 	
-	@Test(dataProvider="testTickers")
+	@Test(
+		groups = {"integration"},
+		dataProvider="testTickers")
 	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -43,7 +42,9 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompany(rec);
 	}
 	
-	@Test(dataProvider="testTickers")
+	@Test(
+		groups = {"integration"},
+		dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -54,7 +55,9 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompanyFinancials(rec, "SGD");
 	}
 	
-	@Test(dataProvider="testTickers")
+	@Test(
+		groups = {"integration"},
+		dataProvider="testTickers")
 	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -65,7 +68,9 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getHistoricalData(rec);
 	}
 
-	@Test(dataProvider="testTickers")
+	@Test(
+		groups = {"integration"},
+		dataProvider="testTickers")
 	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
