@@ -7,7 +7,6 @@ import static org.testng.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
@@ -30,7 +28,6 @@ import com.wmsi.sgx.service.quanthouse.feedos.FeedOSSession;
 import com.wmsi.sgx.service.quanthouse.impl.QuanthouseServiceImpl;
 import com.wmsi.sgx.test.TestUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class QuanthouseServiceTest extends AbstractTestNGSpringContextTests{
 

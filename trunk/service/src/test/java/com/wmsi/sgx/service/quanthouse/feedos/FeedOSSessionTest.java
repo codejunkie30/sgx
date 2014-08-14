@@ -2,7 +2,6 @@ package com.wmsi.sgx.service.quanthouse.feedos;
 
 import static org.testng.Assert.*;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
@@ -20,7 +18,6 @@ import org.testng.annotations.Test;
 import com.feedos.api.core.Session;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 
@@ -47,7 +44,7 @@ public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 	@Autowired 
 	FeedOSSession feedOSSession;
 	
-	@Test(groups = { "functional", "integration" })
+	@Test(groups = { "integration" })
 	@DirtiesContext
 	public void getPriceDataTest() throws QuanthouseServiceException{
 		Session sess = feedOSSession.open();
@@ -55,7 +52,7 @@ public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 	}
 
 	@Test(
-		groups = { "functional", "integration" },
+		groups = { "integration" },
 		expectedExceptions={QuanthouseServiceException.class}
 	)
 	@DirtiesContext
@@ -72,7 +69,7 @@ public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 		session.open();
 	}
 	
-	@Test(groups = { "functional", "integration" })
+	@Test(groups = { "integration" })
 	@DirtiesContext
 	public void testCloseSession() throws QuanthouseServiceException{
 		Session ses = feedOSSession.open();
@@ -82,7 +79,7 @@ public class FeedOSSessionTest extends AbstractTestNGSpringContextTests{
 		assertFalse(ses.isOpened());
 	}
 	
-	@Test(groups = { "functional", "integration" })
+	@Test(groups = { "integration" })
 	@DirtiesContext
 	public void testCloseReopenSession() throws QuanthouseServiceException{
 		Session ses = feedOSSession.getSession();
