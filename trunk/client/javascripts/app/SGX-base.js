@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://ec2-54-82-16-73.compute-1.amazonaws.com",
+    		fqdn : "http://sgx-api.wealthmsi.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -369,7 +369,7 @@ define(deps, function($, _, SGX) {
                     	}
                     	
                     	// replace the existing bucket
-                    	SGX.screener.replaceBucket(data, field.field, arr, type);
+                    	SGX.screener.replaceBucket(data, field.field, arr, field.values, type);
                 		
                 	});
                 	
@@ -384,10 +384,13 @@ define(deps, function($, _, SGX) {
             		bucket[idx].push(val);
                 },
                 
-                replaceBucket: function(data, name, arr, type) {
+                replaceBucket: function(data, name, arr, vals, type) {
                 	if (type == "histogram") return;
                 	$.each(data.distributions, function(idx, dist) {
-                		if (dist.field == name) dist.buckets = arr;
+                		if (dist.field == name) {
+                			dist.buckets = arr;
+                			dist.values = vals;
+                		}
                 	});
                 },
                 
@@ -504,8 +507,11 @@ define(deps, function($, _, SGX) {
                 },
                 
                 getDistributionMatches: function(distribution, startVal, endVal) {
+                	var sVal = distribution.buckets[startVal].from, eVal = distribution.buckets[endVal].to;
                 	var ret = 0;
-                	for (i = startVal; i<=endVal; i++) ret += distribution.buckets[i].count;
+                	$.each(distribution.values, function(idx, val) {
+                		if (val >= sVal && val <= eVal) ret++;
+                	});
                 	return ret;
                 },
                 
