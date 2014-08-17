@@ -40,18 +40,18 @@ public class CompanyService extends AbstractDataService{
 		String startDate = parms[0];
 		Company company = executeRequest(id, startDate);
 
-		loadPreviousClose(company);
-		loadHistorical(company, startDate);
+		loadPreviousClose(company, id);
+		loadHistorical(company, id, startDate);
 
 		return company;
 	}
 
-	private Company loadPreviousClose(Company comp) throws ResponseParserException, CapIQRequestException {
+	private Company loadPreviousClose(Company comp, String id) throws ResponseParserException, CapIQRequestException {
 
 		Date d = comp.getPreviousCloseDate();
 
 		if(d != null){
-			Company previousDay = executeRequest(comp.getTickerCode(), DateUtil.fromDate(d));
+			Company previousDay = executeRequest(id, DateUtil.fromDate(d));
 
 			if(previousDay != null)
 				comp.setPreviousClosePrice(previousDay.getClosePrice());
@@ -60,10 +60,10 @@ public class CompanyService extends AbstractDataService{
 		return comp;
 	}
 	
-	private Company loadHistorical(Company comp, final String startDate) throws ResponseParserException, CapIQRequestException {
+	private Company loadHistorical(Company comp, final String id, final String startDate) throws ResponseParserException, CapIQRequestException {
 
 		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-		PriceHistory historicalData = historicalService.load(comp.getTickerCode(), yearAgo, startDate);
+		PriceHistory historicalData = historicalService.load(id, yearAgo, startDate);
 
 		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
 		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
