@@ -502,7 +502,7 @@ td .page-title {
 	margin: 20px 0;
 }
 
-.terms-copy li {
+.terms-copy li,  .terms-copy p {
 	font-size: 11px !important;
 }
 
@@ -764,7 +764,7 @@ td .page-title {
   font-weight: bold;
 }
 
-.panel .property {
+.panel tr td.property, .panel .property {
 	font-weight: normal;
 	text-align: right;
 	border-right:2px solid #FFF;
