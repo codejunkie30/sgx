@@ -103,7 +103,7 @@ define(deps, function($, _, SGX) {
             
             showTerms: function() {
             	
-            	$.get("terms-conditions.html", function(data) {
+            	$.get("terms-conditions.html?" + new Date().getTime(), function(data) {
             		try {
                         SGX.modal.open({ content: data, type: 'alert', maxWidth: 1000 });            		
             		}
