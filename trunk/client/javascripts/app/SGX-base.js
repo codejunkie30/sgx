@@ -167,6 +167,7 @@ define(deps, function($, _, SGX) {
         				$(".searchtoggle .toggle, .searchtoggle .arrow").removeClass("selected");
         				$(".searchtoggle .s" + $(this).attr("data-name")).addClass("selected");
         				$(".searchbar input").attr("placeholder", $(this).attr("data-placeholder"));
+            			$.placeholder.shim();
         			});
         			
         			$(".searchtoggle .toggle:first").click();
@@ -185,8 +186,6 @@ define(deps, function($, _, SGX) {
             			$(".advanced-criteria").show();
             			$(".expand-criteria").hide();
             		});
-
-        			$.placeholder.shim();
 
         			SGX.screener.initCriteria();
         			
