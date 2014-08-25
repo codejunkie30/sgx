@@ -507,12 +507,20 @@ define(deps, function($, _, SGX) {
                 },
                 
                 getDistributionMatches: function(distribution, startVal, endVal) {
-                	var sVal = distribution.buckets[startVal].from, eVal = distribution.buckets[endVal].to;
                 	var ret = 0;
+                	
+                	// primarily for consensus
+                	if (!distribution.hasOwnProperty("values")) {
+                		for (i = startVal; i <= endVal; i++) ret += distribution.buckets[i].count;
+                		return ret;
+                	}
+                	
+                	var sVal = distribution.buckets[startVal].from, eVal = distribution.buckets[endVal].to;
                 	$.each(distribution.values, function(idx, val) {
                 		if (val >= sVal && val <= eVal) ret++;
                 	});
                 	return ret;
+                	
                 },
                 
                 getDistributionValues: function(distribution) {
