@@ -700,6 +700,7 @@ define(deps, function($, _, SGX) {
                 		SGX.showLoading();
                 		$(".advanced-criteria").hide();
                 		$(".expand-criteria").show();
+                		SGX.screener.criteriaChange.resetAdditionalCriteria();
                 		SGX.handleAjaxRequest(endpoint, params, function(data) { if (typeof keyword !== "undefined") data.keywords = keyword; SGX.screener.search.renderResults(data); SGX.hideLoading(); }, SGX.screener.search.fail);
                 	},
                 	
@@ -790,7 +791,7 @@ define(deps, function($, _, SGX) {
                 		}
                 		
                 		var resultsCopy = data.companies.length + " results";
-                		if (data.hasOwnProperty("keywords")) resultsCopy += " for " + data.keywords;
+                		if (data.hasOwnProperty("keywords")) resultsCopy += " for \"" + data.keywords + "\"";
                 		$(".module-results .label").text(resultsCopy);
                 		$(".module-results tbody").children().remove();
                 		
@@ -1540,6 +1541,9 @@ define(deps, function($, _, SGX) {
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
+            		
+            		// hide/show
+            		if (!data.company.companyInfo.hasOwnProperty("companyWebsite")) $(".companyWebsite").hide();
             		
             		SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
