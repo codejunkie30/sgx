@@ -679,9 +679,12 @@ define(deps, function($, _, SGX) {
         					SGX.modal.open({ content: "<p>" + msg + "</p>", type: 'alert', maxWidth: 1000 });
         					return;
         				}
-                		
+        				
                 		var endpoint = "/sgx/search/name";
                 		if ($(".searchtoggle .selected").attr("data-name") == "code") endpoint = "/sgx/search/ticker";
+                		
+                		SGX.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + ") - " + val);
+                		
                 		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, { search: val }, val);
                 		
                 	},
@@ -689,6 +692,7 @@ define(deps, function($, _, SGX) {
                 	showAll: function() {
                 		var endpoint = SGX.fqdn + "/sgx/search/";
                 		if (!$(".module-results thead th:first").hasClass("asc")) $(".module-results thead th:first").click();
+                		SGX.trackPage("SGX Show All Companies");
                 		SGX.screener.search.simpleSearch(endpoint, { criteria: [] });
                 	},
                 	
@@ -976,8 +980,8 @@ define(deps, function($, _, SGX) {
                         			return b1-a1;
                         		}
                         		else if ("lookup" == sortType && field != null) {
-                    				a1 = "asc" == direction ? field.formatter.values[a[sort]|0].toLowerCase() : field.formatter.values[b[sort]|0].toLowerCase();
-                    				b1 = "asc" == direction ? field.formatter.values[b[sort]|0].toLowerCase() : field.formatter.values[a[sort]|0].toLowerCase();
+                    				a1 = "asc" == direction ? SGX.screener.search.getColumnValue(a, field).toLowerCase() : SGX.screener.search.getColumnValue(b, field).toLowerCase();
+                    				b1 = "asc" == direction ? SGX.screener.search.getColumnValue(b, field).toLowerCase() : SGX.screener.search.getColumnValue(a, field).toLowerCase();
                         		}
                         		
                         		return a1.localeCompare(b1);
