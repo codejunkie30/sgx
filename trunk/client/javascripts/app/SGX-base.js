@@ -167,7 +167,8 @@ define(deps, function($, _, SGX) {
         				$(".searchtoggle .toggle, .searchtoggle .arrow").removeClass("selected");
         				$(".searchtoggle .s" + $(this).attr("data-name")).addClass("selected");
         				$(".searchbar input").attr("placeholder", $(this).attr("data-placeholder"));
-            			$.placeholder.shim();
+        				$('.searchbar input').placeholder();
+        				$('.searchbar input').val("");
         			});
         			
         			$(".searchtoggle .toggle:first").click();
