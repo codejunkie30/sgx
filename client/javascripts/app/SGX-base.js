@@ -1448,7 +1448,7 @@ define(deps, function($, _, SGX) {
             			// give some commas
             			var parts = val.split(".");
             		    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            		    if (parts.length > 1 && parseInt(parts[1]) > 0) val = parts.join(".");
+            		    if (parts.length > 1 && parseInt(parts[1], 10) > 0) val = parts.join(".");
             		    else val = parts[0];
 
             		    // negative numbers
