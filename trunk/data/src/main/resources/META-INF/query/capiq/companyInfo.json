@@ -45,7 +45,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_MARKETCAP", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_MINORITY_INTEREST", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NET_CHANGE", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
-{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NI", "properties":{"PERIODTYPE":"IQ_LTM"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NI", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NI_1YR_ANN_GROWTH", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NI_MARGIN", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_NPPE", "properties":{"CURRENCYID":"SGD"}},
