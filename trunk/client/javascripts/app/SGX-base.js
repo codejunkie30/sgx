@@ -2594,7 +2594,10 @@ define(deps, function($, _, SGX) {
         		
         		loadFinancials: function(data, cData) {
 
-            		if (!data.hasOwnProperty("financials")  || data.financials.length == 0) return;
+            		if (!data.hasOwnProperty("financials")  || data.financials.length == 0) {
+                		SGX.print.loadedItems(cData);
+            			return;
+            		}
 
             		var financials = SGX.financials.cleanFinancials(data.financials); 
             		
