@@ -48,12 +48,15 @@ h1, h1.title {
 }
 
 td .page-title {
-  width: 75%;
   padding-right: 10px;
 }
 
 .company-header {
 	margin: 10px 0 10px 0;
+}
+
+.company-header .page-title {
+	width: 780px;
 }
 
 .page-title, .page-title span {
