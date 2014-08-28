@@ -1575,7 +1575,7 @@ define(deps, function($, _, SGX) {
             		companyHeader += "<td valign=\"bottom\">";
             		companyHeader += "<span class=\"stock-price\">";
             		companyHeader += "<div class=\"main\">";
-            		companyHeader += "<span class=\"currency\"></span>$ <span class=\"lastPrice formattable\" data-format=\"number\">--<\/span>";
+            		companyHeader += "<span class=\"currency\"></span> <span class=\"lastPrice formattable\" data-format=\"number\">--<\/span>";
             		companyHeader += "&nbsp;";
             		companyHeader += "<span class=\"change\">--<\/span>";
             		companyHeader += "<\/div>";
