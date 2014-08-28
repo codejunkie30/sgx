@@ -1772,7 +1772,7 @@ define(deps, function($, _, SGX) {
             		
             		$(".progress-estimate").show();
             		
-            		$(".theme-three-bubble-progress").addClass("opt-" + (company.avgBrokerReq | 0));
+            		$(".theme-three-bubble-progress").addClass("opt-" + Math.round(company.avgBrokerReq));
             		
             		// no estimate to display
             		if (!company.hasOwnProperty("targetPriceNum")  || company.targetPriceNum < 3) {
