@@ -2608,7 +2608,7 @@ define(deps, function($, _, SGX) {
             				if (idx >= financials.length) return;            				
             				var txt = financials[idx].absPeriod.indexOf("LTM") != -1 ? "LTM Ending<br />" + $.datepicker.formatDate("dd/M/yy", Date.fromISO(financials[idx].periodDate)) : financials[idx].absPeriod.replace("FY", "FY  ");
             				$(this).html(txt);
-            				$(".currency").text(financials[idx].filingCurrency);
+            				$(".financials-section .currency").text(financials[idx].filingCurrency);
             			});
             			
             		});
