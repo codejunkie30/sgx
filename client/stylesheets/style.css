@@ -1477,8 +1477,6 @@ table.search-criteria .remove {
 }
 .data-point-container .financials-viewport {
 	margin-top: 15px;
-	height: 400px;
-	overflow-y: scroll;
 }
 .chart-row {
 	display: none;
