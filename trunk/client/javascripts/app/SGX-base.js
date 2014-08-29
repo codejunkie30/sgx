@@ -2161,7 +2161,7 @@ define(deps, function($, _, SGX) {
 
         			SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
-            		SGX.resizeIframe(650, 0);
+            		SGX.resizeIframe(1730, 0);
             		
             	},
             	
@@ -2269,7 +2269,7 @@ define(deps, function($, _, SGX) {
 
                 	// resize
     	            var curHeight = SGX.getTrueContentHeight();
-    	            if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight, 10);
+    	            SGX.resizeIframe(curHeight, 10);
             		
             	},
             	
@@ -2303,7 +2303,7 @@ define(deps, function($, _, SGX) {
             			$(".chart-row").hide();
             			
                     	// resize
-                		SGX.resizeIframe(650, 0);
+            			SGX.resizeIframe(1730, 0);
             			
             			return;
             		}
