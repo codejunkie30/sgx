@@ -138,6 +138,11 @@ td {
 	border: 0;	
 }
 
+.stock-events {
+	max-height: 560px;
+	overflow: hidden;
+}
+
 table.panel {
 	width: 600px;
 }
