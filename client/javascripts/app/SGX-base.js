@@ -681,8 +681,6 @@ define(deps, function($, _, SGX) {
                 			return;
                 		}
                 		
-                		
-                		
                 		// validate string input
         				var msg = executeFunctionByName($(".searchtoggle .toggle.selected").attr("data-validator"), SGX, val);
         				if (msg != null) {
@@ -691,11 +689,12 @@ define(deps, function($, _, SGX) {
         				}
         				
         				// set the keyword search
-                		if (typeof params === "undefined") params = {};
-        				params.search = val;
+                		if (typeof params === "undefined") params = { criteria: [] };
         				
-                		var endpoint = "/sgx/search/name";
-                		if ($(".searchtoggle .selected").attr("data-name") == "code") endpoint = "/sgx/search/ticker";
+                		var endpoint = "/sgx/search";
+                		var cName = "companyName";
+                		if ($(".searchtoggle .selected").attr("data-name") == "code") cName = "tickerCode";
+                		params.criteria.push({ field: cName, value: val });
                 		
                 		SGX.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + ") - " + val);
                 		
@@ -705,7 +704,7 @@ define(deps, function($, _, SGX) {
                 
                 	showAll: function(params) {
                 		if (typeof params === "undefined") params = { criteria: [] };
-                		var endpoint = SGX.fqdn + "/sgx/search/";
+                		var endpoint = SGX.fqdn + "/sgx/search";
                 		if (!$(".module-results thead th:first").hasClass("asc")) $(".module-results thead th:first").click();
                 		SGX.trackPage("SGX Show All Companies");
                 		SGX.screener.search.simpleSearch(endpoint, params);
