@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wmsi.sgx.model.search.CompanySearchRequest;
 import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.CompanySearchService;
@@ -24,16 +23,5 @@ public class SearchController{
 	@RequestMapping("search")
 	public SearchResults search(@Valid @RequestBody SearchRequest req) throws ServiceException{
 		return companySearchService.search(req);
-	}	
-	
-	@RequestMapping("search/name")
-	public SearchResults searchCompaniesByName(@Valid @RequestBody CompanySearchRequest req) throws ServiceException{		
-		return companySearchService.searchCompaniesByName(req);
 	}
-
-	@RequestMapping("search/ticker")
-	public SearchResults searchTicker(@Valid @RequestBody CompanySearchRequest req) throws ServiceException{		
-		return companySearchService.searchTicker(req);
-	}
-
 }

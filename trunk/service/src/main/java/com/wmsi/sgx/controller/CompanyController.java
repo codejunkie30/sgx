@@ -48,11 +48,7 @@ public class CompanyController{
 	@RequestMapping(value="company/info")
 	public Map<String, Company> getCompany(@RequestBody IdSearch search) throws CompanyServiceException{
 		Map<String, Company> ret = new HashMap<String, Company>();
-		
-		Company company = companyService.getById(search.getId());
- 		company.setPriceHistory(null); // Remove price history from json response
-		
-		ret.put("companyInfo", company);
+		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;
 	}
 	

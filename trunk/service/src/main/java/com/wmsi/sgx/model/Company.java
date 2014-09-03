@@ -1,8 +1,6 @@
 package com.wmsi.sgx.model;
 
 import java.util.Date;
-import java.util.List;
-
 import com.google.common.base.Objects;
 
 public class Company{
@@ -61,16 +59,6 @@ public class Company{
 	private Double yearHigh;
 	private Double yearLow;
 
-	private List<HistoricalValue> priceHistory;
-	
-	public List<HistoricalValue> getPriceHistory() {
-		return priceHistory;
-	}
-
-	public void setPriceHistory(List<HistoricalValue> priceHistory) {
-		this.priceHistory = priceHistory;
-	}
-	
 	public Double getAvgBrokerReq() {
 		return avgBrokerReq;
 	}

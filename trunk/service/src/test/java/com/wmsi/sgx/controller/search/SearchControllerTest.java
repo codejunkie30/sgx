@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wmsi.sgx.controller.SearchController;
-import com.wmsi.sgx.model.search.CompanySearchRequest;
-import com.wmsi.sgx.model.search.CompanySearchRequestBuilder;
 import com.wmsi.sgx.model.search.CriteriaBuilder;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchCompanyBuilder;
@@ -43,10 +41,6 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 
 	@Test	
 	public void testGetNotAllowed() throws Exception{		
-		mockMvc.perform(get("/search/name")
-			.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isMethodNotAllowed());
-		
 		mockMvc.perform(get("/search")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isMethodNotAllowed());
@@ -91,40 +85,6 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	     verifyNoMoreInteractions(companySearchService);
 	}
 	
-	@Test
-	public void testCompanySearchByName() throws Exception{
-		
-		CompanySearchRequest request = new CompanySearchRequestBuilder()
-			.withSearch("China")
-			.build();
-		
-		SearchCompany company = new SearchCompanyBuilder()
-			.withCompanyName("Fab chem China Limited")
-			.withBeta5Yr(0.182D)
-			.withDividendYield(5.7851D)
-			.build();
-		
-		when(companySearchService.searchCompaniesByName(
-					any(CompanySearchRequest.class)))
-				.thenReturn(
-					SearchResultsBuilder.searchResults()
-					.withAddedCompany(company)
-					.build());
-		
-		mockMvc.perform(post("/search/name")
-				.content(TestUtils.objectToJson(request))
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.companies", Matchers.hasSize(1)))
-			.andExpect(jsonPath("$.companies[0].companyName", Matchers.is("Fab chem China Limited")))
-			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
-			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
-		
-		 verify(companySearchService, times(1)).searchCompaniesByName(any(CompanySearchRequest.class));
-	     verifyNoMoreInteractions(companySearchService);
-	}
-	
 	@Test(dataProvider="invalidSearchCriteria")
 	public void testSearch_FailValidation(String json) throws Exception{
 		mockMvc.perform(post("/search")
@@ -143,7 +103,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 
 	@Test(dataProvider="invalidSearchString")
 	public void testSearchCompany_FailValidation(String json) throws Exception{
-		mockMvc.perform(post("/search/name")
+		mockMvc.perform(post("/search")
 				.content(json)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
