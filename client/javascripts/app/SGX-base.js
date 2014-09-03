@@ -670,7 +670,7 @@ define(deps, function($, _, SGX) {
                 
                 search: {
                 	
-                	nameSearch: function(val) {
+                	nameSearch: function(val, params) {
                 		
                 		val = $.trim(val);
                 		var msg = null;
@@ -681,6 +681,8 @@ define(deps, function($, _, SGX) {
                 			return;
                 		}
                 		
+                		
+                		
                 		// validate string input
         				var msg = executeFunctionByName($(".searchtoggle .toggle.selected").attr("data-validator"), SGX, val);
         				if (msg != null) {
@@ -688,20 +690,25 @@ define(deps, function($, _, SGX) {
         					return;
         				}
         				
+        				// set the keyword search
+                		if (typeof params === "undefined") params = {};
+        				params.search = val;
+        				
                 		var endpoint = "/sgx/search/name";
                 		if ($(".searchtoggle .selected").attr("data-name") == "code") endpoint = "/sgx/search/ticker";
                 		
                 		SGX.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + ") - " + val);
                 		
-                		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, { search: val }, val);
+                		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, params, val);
                 		
                 	},
                 
-                	showAll: function() {
+                	showAll: function(params) {
+                		if (typeof params === "undefined") params = { criteria: [] };
                 		var endpoint = SGX.fqdn + "/sgx/search/";
                 		if (!$(".module-results thead th:first").hasClass("asc")) $(".module-results thead th:first").click();
                 		SGX.trackPage("SGX Show All Companies");
-                		SGX.screener.search.simpleSearch(endpoint, { criteria: [] });
+                		SGX.screener.search.simpleSearch(endpoint, params);
                 	},
                 	
                 	simpleSearch: function(endpoint, params, keyword) {
@@ -713,7 +720,28 @@ define(deps, function($, _, SGX) {
                 	},
                 	
                 	addtlCritSearch: function() {
+                		
+                		// it's all search/name search
+                		if ($(".expand-criteria").is(":visible")) {
+                			
+                			var crit = $(".additional-criteria .button-dropdown");
+                			var ind = $(".copy", crit).text();
+                			if ($(crit).attr("data-label") == ind) ind = null;
+                			var sData = $(".module-results").data();
+
+                			// additional crit
+                			var params = {};
+                			if (ind != null) params.criteria = [ { field: "industry", value: ind } ];
+
+                			if (sData.hasOwnProperty("keywords")) SGX.screener.search.nameSearch(sData.keywords, params);
+                			else SGX.screener.search.showAll(params);
+                			
+                			return;
+                		}
+                		
+                		// normal search
                 		SGX.screener.search.fullSearch(false);
+                		
                 	},
                 	
                 	criteriaSearch: function() {
@@ -781,9 +809,9 @@ define(deps, function($, _, SGX) {
                 	renderResults: function(data) {
 
                 		// one match, redirect
-                        if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
-                        	window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
-                        }
+                        //if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
+                        	//window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
+                        //}
                         
                 		// reset name input
                 		$(".searchbar input").val("");
