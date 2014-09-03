@@ -45,6 +45,10 @@ var GLOSSARY =
 			definition: "EPS, or earnings per share, is the company's total earnings for the year, divided by its total number of shares outstanding."
 		},
 		{
+			id: "ndeps",
+			definition: "Normalized diluted earnings per share (EPS) is the company's normalized net income divided by the diluted weighted average shares outstanding."
+		},
+		{
 			id: "totalDebtEquity",
 			definition: "Debt/Equity Ratio is the total amount of debt on the company's books divided by its total shareholder equity."
 		},
