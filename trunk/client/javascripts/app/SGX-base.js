@@ -101,6 +101,10 @@ define(deps, function($, _, SGX) {
             	setTimeout(fn, 10);
             },
             
+            showUserGuide: function() {
+            	window.open("http://www.sgx.com/wps/wcm/connect/f912408c-fc27-4cfa-ac02-90970dc6fd30/StockFacts-User-Guide.pdf?MOD=AJPERES");
+            },
+            
             showTerms: function() {
             	
             	$.get("terms-conditions.html?" + new Date().getTime(), function(data) {
@@ -808,9 +812,9 @@ define(deps, function($, _, SGX) {
                 	renderResults: function(data) {
 
                 		// one match, redirect
-                        //if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
-                        	//window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
-                        //}
+                        if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
+                        	window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
+                        }
                         
                 		// reset name input
                 		$(".searchbar input").val("");
@@ -1512,6 +1516,12 @@ define(deps, function($, _, SGX) {
             		e.preventDefault();
             		e.stopPropagation();
             		SGX.showTerms();  
+            	});
+            	
+            	$(".user-guide").click(function(e) {
+            		e.preventDefault();
+            		e.stopPropagation();
+            		SGX.showUserGuide();
             	});
             	
             	// the page
