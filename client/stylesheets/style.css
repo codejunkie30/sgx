@@ -1679,6 +1679,14 @@ table.search-criteria .remove {
 	margin-left: 0px;
 }
 
+.user-guide {
+	margin-left: 190px;
+	background-color: #565a5c;
+}
+
+.user-guide img {
+	vertical-align: middle;
+}
 
 .advanced-criteria {
 	margin-top: 20px !important;
