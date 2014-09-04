@@ -812,7 +812,7 @@ define(deps, function($, _, SGX) {
                 	renderResults: function(data) {
 
                 		// one match, redirect
-                        if (data.companies.length == 1 && $(".expand-criteria").is(":visible")) {
+                        if (data.companies.length == 1) {
                         	window.top.location.href = SGX.getCompanyPage(data.companies[0].tickerCode);
                         }
                         
