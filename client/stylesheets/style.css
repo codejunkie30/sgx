@@ -812,7 +812,6 @@ td .page-title {
   border: 1px solid #ccc;
   border-bottom: none;
   background: url("../img/sprite-accordion.jpg") no-repeat 98% -3px !important;
-  background-position: 0px -20px;
   height: 27px;
   padding: 0px;
 }
