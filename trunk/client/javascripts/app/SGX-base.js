@@ -696,7 +696,7 @@ define(deps, function($, _, SGX) {
                 		if ($(".searchtoggle .selected").attr("data-name") == "code") cName = "tickerCode";
                 		params.criteria.push({ field: cName, value: val });
                 		
-                		SGX.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + ") - " + val);
+                		SGX.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + " - " + val);
                 		
                 		SGX.screener.search.simpleSearch(SGX.fqdn + endpoint, params, val);
                 		
