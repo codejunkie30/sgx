@@ -3,6 +3,7 @@ package com.wmsi.sgx.web.filter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -48,6 +49,10 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 			
 			String callback = parms.get(JSONP_CALLBACK_PARAM)[0];
 			
+			// Make sure callback parameter hasn't been compromised.  
+			if(!validateJson(callback))
+				throw new ServletException("Invalid characters found in jsonP callback parmameter. Possible XSS attempt");
+			
 			// Wrap json with jsonp callback
 			OutputStream out = response.getOutputStream();
 			
@@ -67,4 +72,13 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 		}
 	}
 
+	// Regex to check json for any non word characters or javascript keywords
+	private Pattern validJsonPattern = Pattern.compile("[^\\w\\$]|(alert|abstract|boolean|break|byte|case|catch|char|class|const|continue|debugger|default|delete|do|double|else|enum|export|extends|false|final|finally|float|for|function|goto|if|implements|import|in|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|throws|transient|true|try|typeof|var|volatile|void|while|with|NaN|Infinity|undefined)");
+	
+	/**
+	 * Validate json against injection attacks
+	 */
+	private boolean validateJson(String json){
+		return !validJsonPattern.matcher(json).find();
+	}
 }
