@@ -55,7 +55,7 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
 	
-	@ConversionAnnotation(name = "IQ_DILUT_EPS_NORM")
+	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
 	
 	@ConversionAnnotation(name = "IQ_EPS_1YR_ANN_GROWTH")
