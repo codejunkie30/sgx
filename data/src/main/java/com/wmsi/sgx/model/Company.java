@@ -62,7 +62,7 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_TEV")
 	private Double enterpriseValue;
 
-	@ConversionAnnotation(name = "IQ_DILUT_EPS_NORM")
+	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
 
 	@ConversionAnnotation(name = "IQ_TEV_EBITDA")

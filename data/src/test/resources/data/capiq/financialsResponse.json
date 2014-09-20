@@ -226,7 +226,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -237,7 +237,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
@@ -1457,7 +1457,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -1468,7 +1468,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
@@ -2688,7 +2688,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -2699,7 +2699,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
@@ -3919,7 +3919,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -3930,7 +3930,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
@@ -5150,7 +5150,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -5161,7 +5161,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
@@ -6381,7 +6381,7 @@
         },
         {
             "Headers": [
-                "IQ_DILUT_EPS_NORM"
+                "IQ_DILUT_EPS_EXCL"
             ],
             "Rows": [
                 {
@@ -6392,7 +6392,7 @@
             ],
             "NumCols": 1,
             "Seniority": "",
-            "Mnemonic": "IQ_DILUT_EPS_NORM",
+            "Mnemonic": "IQ_DILUT_EPS_EXCL",
             "Function": "GDSP",
             "ErrMsg": null,
             "Properties": {
