@@ -4,7 +4,9 @@
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
 	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation="http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-3.0.xsd
+		http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
@@ -14,16 +16,29 @@
 			<int:header name="indexName" expression="'${elasticsearch.index.prefix}' + headers.jobId" />
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
-		<int:service-activator ref="indexerService" method="createIndex"/>		
-		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" /> 
+		<int:service-activator ref="indexerService" method="createIndex"/>
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />		
+		<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" />
 	</int:chain>
 
+	<!-- Http gateway to request latest ticker from SGX web service -->
+	<int-http:outbound-gateway 
+		request-channel="httpTickerRequestChannel" 
+		http-method="GET"
+		url="${loader.tickers.url}"
+		expected-response-type="org.springframework.core.io.Resource"		
+		request-factory="clientHttpRequestFactory"/>    
+	
+	<!-- Error handler, if http outbound gateway throws and exception default to local copy of ticker file -->
+	<int:service-activator input-channel="httpTickerErrorChannel" expression="@tickerFileResource" />
+
+	<!-- Split on tickers for multi-threading -->
 	<int:splitter 
 		id="tickerSplitter"
 		input-channel="indexChannel" 
 		output-channel="indexTickerChannel"
 		ref="indexBuilderService" 
-		method="getTickers"/>
+		method="readTickers"/>
 
  	<!-- Load Data -->
  	<int:chain 
@@ -125,7 +140,6 @@
 	<int:channel id="statusLoggingChannel"/>	
 	<int:logging-channel-adapter channel="statusLoggingChannel" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
  	
-
 	<!-- Retry Handler -->
 	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
 		<property name="retryTemplate">
@@ -143,5 +157,14 @@
 				</property>
 			</bean>
 		</property>
-	</bean> 	
+	</bean>
+	
+	<!-- Simple http client bean -->
+	<bean id="clientHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"/>
+	
+	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
+	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="data/sgx_companies.txt"/>
+	</bean>
+	 	
 </beans>

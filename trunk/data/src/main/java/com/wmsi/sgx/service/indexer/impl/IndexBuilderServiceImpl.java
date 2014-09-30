@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
@@ -49,8 +48,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
 
-	private Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
-	
 	@Value("${elasticsearch.index.prefix}")
 	private String indexPrefix;
 	
@@ -74,9 +71,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public List<CompanyInputRecord> getTickers(@Header String indexName, @Header Date jobDate) throws IndexerServiceException {
+	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate, Resource tickers) throws IndexerServiceException {
 
 		log.info("Reading tickers from input file...");
+		log.info("Tickers loaded from: {}", tickers.getDescription());
 		
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
@@ -85,21 +83,29 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 			String date = fmt.format(jobDate);
 
-			reader = new InputStreamReader(companyIds.getInputStream());
+			reader = new InputStreamReader(tickers.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext(); // skip header
 
-			String[] record = null;
-			
+			String[] record = null;			
 			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
 			
 			while((record = csvReader.readNext()) != null){
 				
 				CompanyInputRecord r = new CompanyInputRecord();
 				r.setId(record[0].trim());
-				r.setTicker(record[1].trim());
+				
+				String ticker = record[1].trim();
+				
+				if(record[1].indexOf(' ') > 0){
+					// Remove junk from end of ticker string
+					ticker = record[1].trim().split(" ")[0];
+				}
+				
+				r.setTicker(ticker);
+				
 				r.setTradeName(record[3].trim());
-				r.setDate(date);				
+				r.setDate(date);
 				ret.add(r);
 			}
 		
@@ -115,7 +121,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			IOUtils.closeQuietly(reader);
 		}
 	}
-
+	
 	@Override
 	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
 		
