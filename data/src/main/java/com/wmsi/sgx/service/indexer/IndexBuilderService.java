@@ -3,6 +3,8 @@ package com.wmsi.sgx.service.indexer;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
@@ -18,6 +20,6 @@ public interface IndexBuilderService{
 
 	Boolean isJobSuccessful(List<CompanyInputRecord> records);
 
-	List<CompanyInputRecord> getTickers(String indexName, Date jobDate) throws IndexerServiceException;
+	List<CompanyInputRecord> readTickers(String indexName, Date jobDate, Resource tickers) throws IndexerServiceException;
 
 }
