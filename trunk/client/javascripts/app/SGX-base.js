@@ -34,6 +34,8 @@ define(deps, function($, _, SGX) {
     		alphasPage: { id: "4", file: "alpha-factor.html" },
 
     		printPage: { id: "5", file: "print.html" },
+    		
+    		tradePage: { id: "6", file: "trade.html" },
 
             parentURL: null,
             
@@ -83,6 +85,10 @@ define(deps, function($, _, SGX) {
             	return SGX.getPage(SGX.relatedPage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
             
+            getTradePage: function(code, extra) {
+            	return SGX.getPage(SGX.tradePage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            },
+
             getAlphasPage: function(factor, quintile, extra) {
             	return SGX.getPage(SGX.alphasPage.id + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
             },
@@ -1531,6 +1537,8 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.relatedPage.file) != -1) SGX.related.init();
             	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
+            	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
+            	
             	else SGX.screener.init();
             },
             
@@ -1693,7 +1701,13 @@ define(deps, function($, _, SGX) {
             		$(".comparable-button").click(function(e) {  
             			window.top.location.href = SGX.getRelatedPage(data.company.companyInfo.tickerCode, "&action=related");
             		});
-            		
+
+            		// comparable 
+            		$(".trade-button").click(function(e) {  
+            			window.top.location.href = SGX.getTradePage(data.company.companyInfo.tickerCode);
+            		});
+
+            		// print
             		$(".print-button").click(function(e) {
             			var page = SGX.getPrintPage(data.company.companyInfo.tickerCode);
             			window.open(SGX.pqdn + encodeURIComponent(page));
@@ -2584,12 +2598,29 @@ define(deps, function($, _, SGX) {
         		window.top.location.href = SGX.getPage(SGX.screenerPage);
         	},
         	
+            trade: {
+            	
+            	init: function() {
+            		var code = SGX.getParameterByName("code");
+        			SGX.company.getCompany(code, SGX.trade.companyLoaded);
+            	},
+            	
+            	companyLoaded: function(data) {
+
+        			SGX.trackPage("SGX Go To Trade (" + data.company.companyInfo.companyName + ")");
+            		$(".company-row").show();
+            		SGX.company.initSimple(data, true);
+            		$(".back-company-profile").show();            		
+            		SGX.resizeIframe(620, 0);
+            		
+            	}
+            	
+            },        	
+        	
         	print: {
         		
         		init: function() {
-        			
         			$("body").attr("loaded-items", 0)
-        			
             		var code = SGX.getParameterByName("code");
             		var company = SGX.company.getCompany(code, SGX.print.loadedCompany);        			
         		},
