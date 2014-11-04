@@ -171,6 +171,11 @@ var GLOSSARY =
 		{
 			id: "ebitdaIntExp",
 			definition: "Total EBITDA/Int Exp is a measure of a company's ability to produce Earnings Before Interest, Taxes, Depreciation, and Amortization to cover its Interest Expense."
+		},
+		{
+			id: "consensusRec",
+			definition: "S&P Capital IQ Consensus Estimates represents the aggregation of individual estimates provided by analysts that are covering a public company. Estimates typically represent an opinion of an analyst of company performance for the next 0-18 months. The size of the company and the amount of analyst coverage will determine the size of the group from which the Consensus is derived.<br /><br />Note: Companies with less than three analysts in the consensus will not be displayed."
+			
 		}
 		
 ];

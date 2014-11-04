@@ -655,12 +655,21 @@ td .page-title {
 
 .module-info .col-1,
 .module-info .col-2,
-.module-info .col-3 {
+.module-info .col-3,
+.module-info .col-4 {
   display: inline-block;
   width: 30%;
   vertical-align: top;
   padding-right: 10px;
 }
+
+.module-info .col-2,
+.module-info .col-3,
+.module-info .col-4 {
+  width: 20%;
+}
+
+
 .icon {
   margin: 0 10px 0 0;
   background: #565a5c;

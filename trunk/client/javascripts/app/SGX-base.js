@@ -311,25 +311,10 @@ define(deps, function($, _, SGX) {
                     	$(template).attr("data-name", distribution.id);
 
                 		$("td.remove", template).click(function(e) {
-                			
                             e.stopPropagation();
                             e.preventDefault();
-
-                            var criteria = $(this).closest(".criteria");
-                            var cName = $(".info", criteria).text();
-                            
-                            SGX.modal.open({
-                                content: '<p>Do you want to remove ' + cName + ' from your search?</p>',
-                                type: 'prompt',
-                                target: criteria,
-                                confirm: function(options) {
-                                    var target = options.target;
-                                    var finished = function() { SGX.modal.close(); }
-                                    SGX.screener.criteriaChange.removeCriteria(options.target, finished);
-                                }
-                            });
-                            
-                            
+                            SGX.tooltip.close();
+                            SGX.screener.criteriaChange.removeCriteria($(this).closest(".criteria"), function() {});
                 		});
                 		
                 		SGX.tooltip.init(template);
@@ -656,6 +641,8 @@ define(deps, function($, _, SGX) {
                 	reset: function(finished) {
                 		
                     	$(".search-criteria tbody").children().remove();
+                    	
+                    	$(".module-results thead th.companyName").click();
                         
                     	// load up all fields for distributions
                     	var allFields = SGX.screener.getAllCriteria();
@@ -1432,7 +1419,7 @@ define(deps, function($, _, SGX) {
             		var template = $(".tooltip").clone(true);
             		$(template).addClass("current");
             		$(template).appendTo("body");
-            		$(".tooltip-content", template).text($(el).attr("glossary-copy"));
+            		$(".tooltip-content", template).html($(el).attr("glossary-copy"));
             		
                     var height = $(template).height(), width = $(template).width();
                     var left = $(el).offset().left - (width/2) + 10;
@@ -1637,10 +1624,10 @@ define(deps, function($, _, SGX) {
             		companyHeader += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" class=\"company-header\">";
             		companyHeader += "<tr>";
             		companyHeader += "<td class=\"breadcrumb\">";
-            		companyHeader += "<span class=\"button back-button\"><a href=\"index.html\" class=\"screener-link\">Back to Stock Screener<\/a><\/span>";
+            		companyHeader += "<span class=\"button back-button\"><a href=\"index.html\" class=\"screener-link\">Back to StockFacts<\/a><\/span>";
             		companyHeader += "<\/td>";
             		companyHeader += "<td class=\"breadcrumb right\">";
-            		companyHeader += "<div class=\"print-button\">Print<\/div>";
+            		companyHeader += "<div class=\"print-button\">Download/Print<\/div>";
             		companyHeader += "<div class=\"button comparable-button\">Find comparable companies<\/div>";
             		companyHeader += "<\/td>";
             		companyHeader += "<\/tr>";
@@ -1879,7 +1866,7 @@ define(deps, function($, _, SGX) {
             		
                     $('#area-chart').highcharts('StockChart', {
                     	
-                        colors: [ '#363473', '#BFCE00' ],
+                        colors: [ 'rgb(206, 217, 236)', '#BFCE00' ],
                         
                         chart: {
                         	backgroundColor:'rgba(255, 255, 255, 0.1)'
@@ -1888,6 +1875,9 @@ define(deps, function($, _, SGX) {
                         plotOptions: {
                             series: {
                                 animation: false
+                            },
+                            area: {
+                            	lineColor: 'rgb(10, 63, 160)'
                             }
                         },                        
                         
@@ -2002,6 +1992,7 @@ define(deps, function($, _, SGX) {
                             	id: 'priceData',
                             	enableMouseTracking: false,
                             	threshold: null
+                            	
                             	
                             },
                             {
