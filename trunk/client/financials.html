@@ -28,12 +28,12 @@
 
         <div class="row chart-row">
             <div class="grid_3">
+                <div id="large-bar-chart" series-increment="50" default-width="600" default-height="400"></div>
                 <div class="legend-note">
-                	<div class="items"></div>
-                    <p>Note: The left and right axes may use different scales.</p>
+	               	<div class="items"></div>
+					<p>Note: The left and right axes may use different scales.</p>
                 </div>
-                <div id="large-bar-chart" style="width:650px; height:400px;"></div>
-            </div>
+             </div>
         </div>
         
         <div class="row">
@@ -41,8 +41,8 @@
 
                 <div class="data-point-container">
                     <div class="table-info">
-                        <div class="table-info-tab">Select up to two options to chart the data points.</div>
-                        <p>In millions <span class="currency"></span>, except per-share items.</p>
+                        <div class="table-info-tab">Select up to five options to chart the data points.</div>
+                        <p>In millions <span class="currency"></span>, except per items.</p>
                     </div>
 
                     <div class="financials-viewport">
@@ -60,7 +60,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalRevenue" data-format="cash">Total Revenue <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalRevenue" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="totalRevenue" data-format="cash" data-group="pure">Total Revenue <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalRevenue" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -70,7 +70,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="grossProfit" data-format="cash">Gross Profit</div>
+                                                <div class="trigger" data-name="grossProfit" data-format="cash" data-group="pure">Gross Profit</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -80,7 +80,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="netIncome" data-format="cash">Net Income</div>
+                                                <div class="trigger" data-name="netIncome" data-format="cash" data-group="pure">Net Income</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -90,7 +90,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="ebitda" data-format="cash">EBITDA</div>
+                                                <div class="trigger" data-name="ebitda" data-format="cash" data-group="pure">EBITDA</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -100,7 +100,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="eps">Normalized Diluted EPS <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="eps" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="eps"  data-group="per">Normalized Diluted EPS <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="eps" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -110,7 +110,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="payoutRatio" data-format="percent">Payout Ratio</div>
+                                                <div class="trigger" data-name="payoutRatio" data-format="percent"  data-group="ratio">Payout Ratio</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -120,7 +120,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="dividendsPerShare">Dividends (per share)</div>
+                                                <div class="trigger" data-name="dividendsPerShare"  data-group="per">Dividends (per share)</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -140,7 +140,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalAssets" data-format="cash">Total Assets</div>
+                                                <div class="trigger" data-name="totalAssets" data-format="cash" data-group="pure">Total Assets</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -150,7 +150,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalCurrentAssets" data-format="cash">Total Current Assets</div>
+                                                <div class="trigger" data-name="totalCurrentAssets" data-format="cash" data-group="pure">Total Current Assets</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -160,7 +160,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="netPpe" data-format="cash">Net PP&amp;E</div>
+                                                <div class="trigger" data-name="netPpe" data-format="cash" data-group="per">Net PP&amp;E</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -170,7 +170,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalCurrentLiabily" data-format="cash">Total Current Liabilities</div>
+                                                <div class="trigger" data-name="totalCurrentLiabily" data-format="cash" data-group="pure">Total Current Liabilities</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -180,7 +180,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="longTermDebt" data-format="cash">Long-Term Debt</div>
+                                                <div class="trigger" data-name="longTermDebt" data-format="cash" data-group="pure">Long-Term Debt</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -190,7 +190,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalLiability" data-format="cash">Total Liabilities</div>
+                                                <div class="trigger" data-name="totalLiability" data-format="cash" data-group="pure">Total Liabilities</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -200,7 +200,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="retainedEarnings" data-format="cash">Retained Earnings</div>
+                                                <div class="trigger" data-name="retainedEarnings" data-format="cash" data-group="pure">Retained Earnings</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -211,7 +211,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="commonStock" data-format="cash">Common Stock</div>
+                                                <div class="trigger" data-name="commonStock" data-format="cash" data-group="pure">Common Stock</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -221,7 +221,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalEquity" data-format="cash">Total Equity</div>
+                                                <div class="trigger" data-name="totalEquity" data-format="cash" data-group="pure">Total Equity</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -231,7 +231,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="minorityInterest" data-format="cash">Minority Interest</div>
+                                                <div class="trigger" data-name="minorityInterest" data-format="cash" data-group="pure">Minority Interest</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -252,7 +252,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="cashOperations" data-format="cash">Operations</div>
+                                                <div class="trigger" data-name="cashOperations" data-format="cash" data-group="pure">Operations</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -262,7 +262,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="cashInvesting" data-format="cash">Investing</div>
+                                                <div class="trigger" data-name="cashInvesting" data-format="cash" data-group="pure">Investing</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -272,7 +272,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="cashFinancing" data-format="cash">Financing</div>
+                                                <div class="trigger" data-name="cashFinancing" data-format="cash" data-group="pure">Financing</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -282,7 +282,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="netChange" data-format="cash">Net Change in Cash</div>
+                                                <div class="trigger" data-name="netChange" data-format="cash" data-group="pure">Net Change in Cash</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -302,7 +302,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="returnAssets" data-format="percent">Return on Assets <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roa" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="returnAssets" data-format="percent" data-group="ratio">Return on Assets <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roa" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -312,7 +312,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="returnCapital" data-format="percent">Return on Capital <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roc" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="returnCapital" data-format="percent" data-group="ratio">Return on Capital <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roc" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -322,7 +322,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="returnEquity" data-format="percent">Return on Equity <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roe" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="returnEquity" data-format="percent"  data-group="ratio">Return on Equity <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="roe" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -332,7 +332,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="grossMargin" data-format="percent">Gross Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="grossMargin" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="grossMargin" data-format="percent" data-group="ratio">Gross Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="grossMargin" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -342,7 +342,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="ebitdaMargin" data-format="percent">EBITDA Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ebitdaMargin" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="ebitdaMargin" data-format="percent" data-group="ratio">EBITDA Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ebitdaMargin" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -352,7 +352,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="netIncomeMargin" data-format="percent">Net Income Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="netIncomeMargin" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="netIncomeMargin" data-format="percent" data-group="ratio">Net Income Margin <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="netIncomeMargin" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -362,7 +362,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="assetTurns">Total Asset Turnover <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalAssetTurnover" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="assetTurns" data-group="ratio">Total Asset Turnover <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalAssetTurnover" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -372,7 +372,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="currentRatio">Current Ratio <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="currentRatio" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="currentRatio" data-group="ratio">Current Ratio <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="currentRatio" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -382,7 +382,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="quickRatio">Quick Ratio <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="quickRatio" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="quickRatio" data-group="ratio">Quick Ratio <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="quickRatio" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -392,7 +392,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="avgDaysInventory">Avg Days Inventory <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgDaysInventory" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="avgDaysInventory" data-group="ratio">Avg Days Inventory <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgDaysInventory" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -402,7 +402,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="avgDaysPayable">Avg Days Payable <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgDaysPayable" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="avgDaysPayable" data-group="ratio">Avg Days Payable <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgDaysPayable" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -412,7 +412,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="cashConversion">Avg Cash Conversion <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgCashConversion" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="cashConversion" data-group="ratio">Avg Cash Conversion <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="avgCashConversion" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -422,7 +422,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalDebtEquity" data-format="percent">Total Debt/Equity <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalDebtEquityFinancial" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="totalDebtEquity" data-format="percent" data-group="ratio">Total Debt/Equity <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalDebtEquityFinancial" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -432,7 +432,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="ebitdaInterest">EBITDA/Interest Expense <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ebitdaIntExp" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="ebitdaInterest" data-group="ratio">EBITDA/Interest Expense <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ebitdaIntExp" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -452,7 +452,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="totalRevenue1YrAnnGrowth" data-format="percent">Total Revenue <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalRev1YrAnnGrowth" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="totalRevenue1YrAnnGrowth" data-format="percent" data-group="pure">Total Revenue <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="totalRev1YrAnnGrowth" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -462,7 +462,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="ebitda1YrAnnGrowth" data-format="percent">EBITDA</div>
+                                                <div class="trigger" data-name="ebitda1YrAnnGrowth" data-format="percent" data-group="pure">EBITDA</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -472,7 +472,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="netIncome1YrAnnGrowth" data-format="percent">Net Income</div>
+                                                <div class="trigger" data-name="netIncome1YrAnnGrowth" data-format="percent" data-group="pure">Net Income</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -482,7 +482,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="eps1YrAnnGrowth" data-format="percent">Normalized Diluted EPS <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ndeps" width="11" height="11" /></div>
+                                                <div class="trigger" data-name="eps1YrAnnGrowth" data-format="percent" data-group="per">Normalized Diluted EPS <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="ndeps" width="11" height="11" /></div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>
@@ -492,7 +492,7 @@
                                     <tr>
                                         <td>
                                             <div class="checkbox">
-                                                <div class="trigger" data-name="commonEquity1YrAnnGrowth" data-format="percent">Common Equity</div>
+                                                <div class="trigger" data-name="commonEquity1YrAnnGrowth" data-format="percent" data-group="per">Common Equity</div>
                                                 <input type="checkbox">
                                             </div>
                                         </td>

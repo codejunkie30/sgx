@@ -2225,7 +2225,7 @@ define(deps, function($, _, SGX) {
 
         			SGX.tooltip.init("body");
             		SGX.formatter.formatElements("body");
-            		SGX.resizeIframe(1730, 0);
+            		SGX.resizeIframe(1760, 0);
             		
             	},
             	
@@ -2255,10 +2255,10 @@ define(deps, function($, _, SGX) {
             	
             	addSeries: function(el) {
             		
-            		if ($(".checked").length >= 2) {
+            		if ($(".checked").length >= 5) {
             			
                         SGX.modal.open({
-                            content: '<h4>Chart Company Financials <span>(Select up to 2)</h4><p>Only two data points can be charted at a time. Remove a data point before selecting a new one.</p>',
+                            content: '<h4>Chart Company Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>',
                             type: 'alert'
                         });
                         
@@ -2304,7 +2304,7 @@ define(deps, function($, _, SGX) {
     				    	title: {
     				    		text: $(".trigger", el).text()
     				    	},
-    				    	opposite: !chart.yAxis[0].opposite,
+    				    	opposite: SGX.financials.hasLeftYAxis(),
         					labels: {
 	                            formatter: function() {
 	                            	if ($(".trigger", el).attr("data-format") == "cash") {
@@ -2322,11 +2322,14 @@ define(deps, function($, _, SGX) {
             			
             			chart.addSeries({
     	                    name: $(".trigger", el).text(),
-    	                    
+            				type: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")),
     	                    data: seriesData,
     				    	color: SGX.financials.getNextColor(chart.series),
-    	                    yAxis: name
+    	                    yAxis: name,
+                            zIndex: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")) == "line" ? 50 : 1
             			});
+            			
+                		chart.setSize(SGX.financials.getChartWidth(chart.series.length), SGX.financials.getChartHeight(), true);
 
         			}
         			
@@ -2355,9 +2358,10 @@ define(deps, function($, _, SGX) {
         			
             		$.each(chart.series, function(idx, s) {
             			
-            			var div = $("<div />").addClass("item");
+            			var div = $("<span />").addClass("item");
             			$("<span />").addClass("color").css({ "background-color": chart.series[idx].color }).appendTo(div);
-            			$("<span />").addClass("label").html(chart.series[idx].name + " <span class='parent'>[ " + $(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text() + " ]</span>").appendTo(div);
+            			$("<span />").addClass("label").html(chart.series[idx].name).appendTo(div);
+            			$("<span />").addClass("parent").html($(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text()).appendTo(div);
             			$(div).appendTo(".legend-note .items");
 
             		});
@@ -2383,9 +2387,10 @@ define(deps, function($, _, SGX) {
             			
             			return;
             		}
-            
+            		
             		// remove the series
             		chart.get(name).remove();
+            		chart.setSize(SGX.financials.getChartWidth(chart.series.length - 1), SGX.financials.getChartHeight(), true);
 
         			// draw legend
         			SGX.financials.drawLegend();
@@ -2406,8 +2411,9 @@ define(deps, function($, _, SGX) {
             		var chart = $('#large-bar-chart').highcharts({
             			
             			chart: {
-            				type: 'column',
-            				alignThresholds: true
+            				alignThresholds: true,
+            				width: SGX.financials.getChartWidth(1),
+            				height: SGX.financials.getChartHeight()
             			},
             			legend: {
             				enabled: false
@@ -2437,10 +2443,12 @@ define(deps, function($, _, SGX) {
             			],
             			series: [
             			    {
+                				type: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")),
             			    	id: $(".trigger", el).attr("data-name"),
                                 name: $(".trigger", el).text(),
             					color: '#565b5c',
-                                data: seriesData
+                                data: seriesData,
+                                zIndex: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")) == "line" ? 50 : 1
                             }
                         ],
                         xAxis: {
@@ -2460,6 +2468,35 @@ define(deps, function($, _, SGX) {
             		});
             			
             		return chart;
+            	},
+            	
+            	getChartWidth: function(seriesCount) {
+            		var div = $("#large-bar-chart");
+            		var width = (seriesCount * parseInt($(div).attr("series-increment"))) + parseInt($(div).attr("default-width"));
+            		return width;
+            	},
+            	
+            	getChartHeight: function() {
+            		var height = parseInt($("#large-bar-chart").attr("default-height"));
+            		return height;
+            	},
+            	
+            	getSeriesType: function(group) {
+            		var groups = [];
+            		groups["pure"] = "column";
+            		groups["per"] = "line";
+            		groups["ratio"] = "column";
+            		return groups[group];
+            	},
+            	
+            	hasLeftYAxis: function() {
+            		var chart = $('#large-bar-chart').highcharts();
+            		if (!chart.hasOwnProperty("yAxis")) return false;
+            		var ret = false;
+            		$.each(chart.yAxis, function(idx, axis) {
+            			if (!axis.opposite) ret = true;
+            		});
+            		return ret;
             	}
             	
             },
