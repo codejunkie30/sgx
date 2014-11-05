@@ -54,15 +54,15 @@
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
-                                        <td width="25%">Open Price</td>
+                                        <td width="25%">Previous Open Price</td>
                                         <td width="25%" class="property formattable" data-format="dollars" data-name="openPrice">-</td>
-                                        <td width="25%">Day High/Low</td>
+                                        <td width="25%">Previous Day High/Low</td>
                                         <td width="25%" class="right">
                                             <span class="property formattable" data-format="dollars" data-name="highPrice">-</span>-<span class="property formattable" data-format="dollars" data-name="lowPrice">-</span>
                                         </td>
                                     </tr>
                                     <tr class="even">
-                                        <td>Volume</td>
+                                        <td>Previous Day Volume</td>
                                         <td class="property formattable" data-name="volume" data-format="volume">-</td>
                                         <td>Previous Close</td>
                                         <td class="property formattable" data-format="number" data-name="previousClosePrice">-</td>
@@ -100,17 +100,19 @@
                             <table cellspacing="0">
                                 <tbody>
                                     <tr>
-                                        <td width="25%">Price/Book Value</td>
+                                        <td width="25%">Price/Book Value*</td>
                                         <td width="25%" class="property formattable" data-format="number" data-name="priceToBookRatio">-</td>
-                                        <td width="25%">P/E Ratio</td>
+                                        <td width="25%">P/E Ratio*</td>
                                         <td width="25%" class="property formattable" data-format="number" data-name="peRatio">-</td>
                                     </tr>
                                     <tr class="even">
-                                        <td>Dividend Yield</td>
+                                        <td>Dividend Yield*</td>
                                         <td class="property formattable" data-format="percent" data-name="dividendYield" data-unit="percent">-</td>
-                                        <td>EV/EBITDA</td>
+                                        <td>EV/EBITDA*</td>
                                         <td class="property formattable" data-format="number" data-name="evEbitData">-</td>
                                     </tr>
+                                    <tr>
+                                    	<td colspan="4" class="right note">* based on previous day information</td>
                                     </tbody>
                             </table>
                         </div>
