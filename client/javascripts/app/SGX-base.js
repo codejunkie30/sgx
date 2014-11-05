@@ -2343,7 +2343,7 @@ define(deps, function($, _, SGX) {
             	},
             	
             	getNextColor: function(series) {
-            		var colors = [ '#565b5c', '#1e2070', 'red', 'purple', 'orange' ];
+            		var colors = [ '#565b5c', '#1e2070', '#6a8802', '#d5e4eb', '#ecf1c4' ];
             		$.each(series, function(idx, s) {
             			colors = _.without(colors, s.color);
             		});
