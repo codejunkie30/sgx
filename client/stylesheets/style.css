@@ -1384,20 +1384,20 @@ table.search-criteria .remove {
 }
 
 .legend-note {
-  position: absolute;
-  right: 10px;
-  bottom: 120px;
-  width: 300px;
-  z-index: 10;
+	margin-bottom: 15px;
+}
+
+.legend-note p {
+	font-size: smaller;
+}
+
+.legend-note span {
+	display: inline-block;
+	font-weight: bold;
 }
 
 .legend-note .item {
-	margin-bottom: 8px;
-}
-
-.legend-note .item span {
-	display: inline-block;
-	font-weight: bold;
+	margin-right: 20px;	
 }
 
 .legend-note .item span.color {
@@ -1408,9 +1408,10 @@ table.search-criteria .remove {
 }
 
 .legend-note .item span.parent {
+	display: block;
 	font-weight: normal;
 	font-size: 11px;
-	margin-left: 10px;
+	margin-left: 14px;
 }
 
 .back-button {
@@ -1495,6 +1496,7 @@ table.search-criteria .remove {
 	margin-top: 15px;
 }
 .chart-row {
+	margin-top: 15px;
 	display: none;
 }
 
