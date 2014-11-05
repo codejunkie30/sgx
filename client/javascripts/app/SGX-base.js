@@ -36,6 +36,8 @@ define(deps, function($, _, SGX) {
     		printPage: { id: "5", file: "print.html" },
     		
     		tradePage: { id: "6", file: "trade.html" },
+    		
+    		termsPage: { id: "7", file: "terms-conditions.html" },
 
             parentURL: null,
             
@@ -97,6 +99,10 @@ define(deps, function($, _, SGX) {
             	return location.protocol + "//" + window.location.hostname + "/" +  SGX.printPage.file + "?code=" + code + (typeof extra === "undefined" ? "" : extra);
             },
 
+            getTermsPage: function(extra) {
+            	return SGX.getPage(SGX.termsPage.id + (typeof extra === "undefined" ? "" : extra));
+            },
+
             resizeIframe: function(height, scroll) {
             	if (SGX.getParentURL() == null) return;
             	var fn = function() {
@@ -112,16 +118,7 @@ define(deps, function($, _, SGX) {
             },
             
             showTerms: function() {
-            	
-            	$.get("terms-conditions.html?" + new Date().getTime(), function(data) {
-            		try {
-                        SGX.modal.open({ content: data, type: 'alert', maxWidth: 1000 });            		
-            		}
-            		catch(err) {
-            			console.log(err);
-            		}
-            	});
-            	
+            	window.top.location.href = SGX.getTermsPage();
             },
     		
     		screener: {
@@ -1525,6 +1522,7 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
+            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(950, 0);
             	
             	else SGX.screener.init();
             },
@@ -1879,7 +1877,7 @@ define(deps, function($, _, SGX) {
                             area: {
                             	lineColor: 'rgb(10, 63, 160)'
                             }
-                        },                        
+                        },
                         
             		    rangeSelector: {
             				inputEnabled: false,
@@ -1923,7 +1921,11 @@ define(deps, function($, _, SGX) {
             	        },
             	        
             	        tooltip: {
-            	        	enabled: false
+            	        	enabled: true,
+            	        	formatter: SGX.company.getPointHTML,
+                            useHTML: true,
+                            crosshairs: [ true, true ],
+                            shared: true
             	        },
             	        
             	        xAxis: {
@@ -1940,28 +1942,19 @@ define(deps, function($, _, SGX) {
 	            		        height: 170,
 	            		        lineWidth: 2,
 	            		        animation: false,
+	            		        minRange: .001,
 	            		        labels: {
 		                            formatter: function() {
-		                            	
-		                            	// let's get a normal decimal
-		                            	var val = this.value + "";
-		                            	if (val.indexOf(".") == -1) val += ".00"
-		                            	else if (val.split(".")[1].length < 2) val += "0";
-		                            	
-		                            	// now let's determine the whole number
-		                            	// if it's > 0 (e.g. a dollar or more) only show two decimals
-		                            	var max = 3;
-		                            	if (parseInt(val.split(".")[0]) > 0) max = 2;
-		                            	
-		                            	// if it's greater than the max, don't show
-		                            	if (val.split(".")[1].length > max) return null;
-		                            	
-		                                return "S$ " + val;
+		                            	if (this.value == 0) return;
+		                                return "S$ " + this.value;
 		                            },
 		                            style: {
 		                            	color: "#000000",
 		                            	fontWeight: "bold"
-		                            }
+		                            },
+		                            align: 'right',
+		                            y: -3,
+		                            x: -10
 	            		        }
                             },
                             {
@@ -1971,31 +1964,32 @@ define(deps, function($, _, SGX) {
                 		        offset: 0,
                 		        lineWidth: 2,
 	            		        animation: false,
+	            		        minRange: .01,
 	            		        labels: {
 		                            formatter: function() {
-		                                return Highcharts.numberFormat(this.chart.yAxis[1].max, 2) + " mm";
+		                                return this.chart.yAxis[1].max + " mm";
 		                            },
 		                            style: {
 		                            	color: "#000000",
 		                            	fontWeight: "bold"
 		                            },
 		                            y: -45,
-		                            x: 5
+		                            x: -10
 	            		        }
                             }
                         ],
                         
                         series: [
                             {
+                            	name: 'Price',
                             	data: priceData,
                             	type: 'area',
                             	id: 'priceData',
-                            	enableMouseTracking: false,
                             	threshold: null
-                            	
                             	
                             },
                             {
+                            	name: 'Volume',
                             	data: volumeData,
                             	type: 'column',
             		        	yAxis: 1
@@ -2029,14 +2023,14 @@ define(deps, function($, _, SGX) {
                                 	html: "Price",
                                 	style: {
                                     	top: '-22px',
-                                    	left: '550px'
+                                    	left: '596px'
                                 	}
                         	    },
                         	    {
                                 	html: "Volume",
                                 	style: {
-                                    	top: '190px',
-                                    	left: '550px'
+                                    	top: '185px',
+                                    	left: '582px'
                                 	}
                         	    }
                         	],
@@ -2061,6 +2055,34 @@ define(deps, function($, _, SGX) {
                 		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
                 	});
                 	ret.sort(function(a, b) { return a[0] - b[0]; });
+                	return ret;
+                },
+                
+                getPointHTML: function() {
+                	
+                	if (!this.hasOwnProperty("points")) return;
+                	
+                	var pricing = this.points[0];
+                	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", pricing.x) + "</b>";
+                	ret += "<span class='chart-mouseover'>";
+                	ret += "<br />";
+                	ret += "<span>Open</span>: TODO";
+                	ret += "<br />";
+                	ret += "<span>Close</span>: S$ " + pricing.y;
+                	ret += "<br />";
+                	ret += "<span>Low</span>: TODO";
+                	ret += "<br />";
+                	ret += "<span>High</span>: TODO";
+                	ret += "<br />";
+
+                	// no volume for this period
+                	if (this.points.length <= 1) return ret;
+
+                	// has volume too
+                	pricing = this.points[1];
+                	ret += "<span>Volume</span>: " + pricing.y;
+                	ret += "</span>";
+                	
                 	return ret;
                 }
             	
@@ -2295,12 +2317,14 @@ define(deps, function($, _, SGX) {
 	                            }
         					}    				    			
             			});
+
+            			SGX.financials.getNextColor(chart.series);
             			
             			chart.addSeries({
     	                    name: $(".trigger", el).text(),
     	                    
     	                    data: seriesData,
-    				    	color: '#565b5c' == chart.series[0].color ? '#1e2070' : '#565b5c',
+    				    	color: SGX.financials.getNextColor(chart.series),
     	                    yAxis: name
             			});
 
@@ -2315,18 +2339,28 @@ define(deps, function($, _, SGX) {
             		
             	},
             	
+            	getNextColor: function(series) {
+            		var colors = [ '#565b5c', '#1e2070', 'red', 'purple', 'orange' ];
+            		$.each(series, function(idx, s) {
+            			colors = _.without(colors, s.color);
+            		});
+            		return colors[0];
+            	},
+            	
             	drawLegend: function() {
 
         			var chart = $('#large-bar-chart').highcharts();
 
-        			$(".legend-note .item").hide();
-            		
-        			$(".legend-note .item").each(function(idx, item) {
-        				if (idx >= chart.series.length) return;
-        				$(".color", this).css({ "background-color": chart.series[idx].color  });
-        				$(".label", this).html(chart.series[idx].name + " <span class='parent'>[ " + $(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text() + " ]</span>");
-        				$(this).show();
-        			});
+        			$(".legend-note .items .item").remove();
+        			
+            		$.each(chart.series, function(idx, s) {
+            			
+            			var div = $("<div />").addClass("item");
+            			$("<span />").addClass("color").css({ "background-color": chart.series[idx].color }).appendTo(div);
+            			$("<span />").addClass("label").html(chart.series[idx].name + " <span class='parent'>[ " + $(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text() + " ]</span>").appendTo(div);
+            			$(div).appendTo(".legend-note .items");
+
+            		});
             		
             	},
             	

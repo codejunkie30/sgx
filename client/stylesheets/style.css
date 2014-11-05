@@ -360,6 +360,17 @@ td .page-title {
   min-height: 420px;
 }
 
+#area-chart .chart-mouseover {
+	font-size: 10px;
+	line-height: 10px;
+}
+
+#area-chart .chart-mouseover span {
+	color: #1e2171;
+	font-size: 10px;
+	line-height: 10px;
+}
+
 .chart-header {
 	color: #666;
 	font-size: 12pt;
@@ -496,18 +507,7 @@ td .page-title {
   text-align: left;
 }
 
-.module a.link, .terms-conditions {
-  font-weight: bold;
-  color: #1e2171;
-  text-decoration: none;
-}
-.terms-conditions {
-	margin: 20px 0;
-}
 
-.terms-copy li,  .terms-copy p {
-	font-size: 11px !important;
-}
 
 .module .toolbar {
   height: 39px;
@@ -792,6 +792,14 @@ td .page-title {
 
 .panel .property.center {
 	text-align: center;
+}
+
+.panel .right {
+	text-align: right;
+}
+
+.tabbed-content .panel tr td.note {
+	font-weight: normal;
 }
 
 .tabbed-content .view-more {
@@ -1396,7 +1404,7 @@ table.search-criteria .remove {
 	height: 10px;
 	width: 10px;
 	background-color: red;
-	margin-right: 2px;
+	margin-right: 4px;
 }
 
 .legend-note .item span.parent {
@@ -1767,10 +1775,6 @@ td .info {
 .alphas-page .company-row, .alphas-page .no-company-row {
 	display: none;
 } 
-
-.terms-copy {
-	width: 800px;
-}
 
 .modal-container {
 	padding: 0 20px 20px 20px;
