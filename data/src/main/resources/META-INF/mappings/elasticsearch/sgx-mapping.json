@@ -465,7 +465,76 @@
 				}
 			}
 		},
+		
+		"highPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
 
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+		
+		"lowPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+		
+		"openPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},		
+		
 		"volume": 
 		{
 			"dynamic": false,
