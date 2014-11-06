@@ -39,6 +39,7 @@ public class Company{
 	private Date previousCloseDate;
 	private Double previousClosePrice;
 	private Double priceToBookRatio;
+	private Double priceVolHistYr;
 	private Double priceVs52WeekHigh;
 	private Double priceVs52WeekLow;
 	private Double sharesOutstanding;
@@ -331,6 +332,14 @@ public class Company{
 		this.priceToBookRatio = priceToBookRatio;
 	}
 
+	public Double getPriceVolHistYr() {
+		return priceVolHistYr;
+	}
+
+	public void setPriceVolHistYr(Double priceVolHistYr) {
+		this.priceVolHistYr = priceVolHistYr;
+	}
+	
 	public Double getPriceVs52WeekHigh() {
 		return priceVs52WeekHigh;
 	}
@@ -481,11 +490,11 @@ public class Company{
 
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
-	}
-
+	}	
+	
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
 	}
 	
 	@Override
@@ -526,6 +535,7 @@ public class Company{
 				&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
 				&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
 				&& Objects.equal(this.priceToBookRatio, that.priceToBookRatio)
+				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
 				&& Objects.equal(this.priceVs52WeekHigh, that.priceVs52WeekHigh)
 				&& Objects.equal(this.priceVs52WeekLow, that.priceVs52WeekLow)
 				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
@@ -548,63 +558,4 @@ public class Company{
 		}
 		return false;
 	}
-
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("avgBrokerReq", avgBrokerReq)
-			.add("avgVolumeM3", avgVolumeM3)
-			.add("beta5Yr", beta5Yr)
-			.add("businessDescription", businessDescription)
-			.add("bvShare", bvShare)
-			.add("capitalExpenditures", capitalExpenditures)
-			.add("cashInvestments", cashInvestments)
-			.add("closePrice", closePrice)
-			.add("companyAddress", companyAddress)
-			.add("companyName", companyName)
-			.add("companyWebsite", companyWebsite)
-			.add("dividendYield", dividendYield)
-			.add("ebit", ebit)
-			.add("ebitda", ebitda)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("employees", employees)
-			.add("enterpriseValue", enterpriseValue)
-			.add("eps", eps)
-			.add("evEbitData", evEbitData)
-			.add("fiscalYearEnd", fiscalYearEnd)
-			.add("floatPercentage", floatPercentage)
-			.add("gvKey", gvKey)
-			.add("highPrice", highPrice)
-			.add("industry", industry)
-			.add("industryGroup", industryGroup)
-			.add("lowPrice", lowPrice)
-			.add("marketCap", marketCap)
-			.add("netIncome", netIncome)
-			.add("netProfitMargin", netProfitMargin)
-			.add("openPrice", openPrice)
-			.add("peRatio", peRatio)
-			.add("previousCloseDate", previousCloseDate)
-			.add("previousClosePrice", previousClosePrice)
-			.add("priceToBookRatio", priceToBookRatio)
-			.add("priceVs52WeekHigh", priceVs52WeekHigh)
-			.add("priceVs52WeekLow", priceVs52WeekLow)
-			.add("sharesOutstanding", sharesOutstanding)
-			.add("sharesSoldShort", sharesSoldShort)
-			.add("targetPrice", targetPrice)
-			.add("targetPriceNum", targetPriceNum)
-			.add("tickerCode", tickerCode)
-			.add("totalAssets", totalAssets)
-			.add("totalDebt", totalDebt)
-			.add("totalDebtEbitda", totalDebtEbitda)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
-			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-			.add("totalRevenue", totalRevenue)
-			.add("volume", volume)
-			.add("yearFounded", yearFounded)
-			.add("yearHigh", yearHigh)
-			.add("yearLow", yearLow)
-			.toString();
-	}	
 }

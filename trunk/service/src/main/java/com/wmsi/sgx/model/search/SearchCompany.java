@@ -17,6 +17,7 @@ public class SearchCompany{
 	private Double peRatio;
 	private Double percentChange;
 	private Double priceToBookRatio;
+	private Double priceVolHistYr;
 	private Double priceVs52WeekHigh;
 	private Double priceVs52WeekLow;
 	private Double targetPriceNum;
@@ -167,6 +168,14 @@ public class SearchCompany{
 	public void setPercentChange(Double percentChange) {
 		this.percentChange = percentChange;
 	}
+	
+	public Double getPriceVolHistYr() {
+		return priceVolHistYr;
+	}
+
+	public void setPriceVolHistYr(Double priceVolHistYr) {
+		this.priceVolHistYr = priceVolHistYr;
+	}
 
 	public void setPriceToBookRatio(Double priceToBookRatio) {
 		this.priceToBookRatio = priceToBookRatio;
@@ -210,11 +219,11 @@ public class SearchCompany{
 
 	public void setVolume(Double volume) {
 		this.volume = volume;
-	}
+	}	
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
 	@Override
@@ -234,6 +243,7 @@ public class SearchCompany{
 				&& Objects.equal(this.peRatio, that.peRatio)
 				&& Objects.equal(this.percentChange, that.percentChange)
 				&& Objects.equal(this.priceToBookRatio, that.priceToBookRatio)
+				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
 				&& Objects.equal(this.priceVs52WeekHigh, that.priceVs52WeekHigh)
 				&& Objects.equal(this.priceVs52WeekLow, that.priceVs52WeekLow)
 				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
@@ -247,7 +257,7 @@ public class SearchCompany{
 		}
 		return false;
 	}
-
+	
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
@@ -264,6 +274,7 @@ public class SearchCompany{
 			.add("peRatio", peRatio)
 			.add("percentChange", percentChange)
 			.add("priceToBookRatio", priceToBookRatio)
+			.add("priceVolHistYr", priceVolHistYr)
 			.add("priceVs52WeekHigh", priceVs52WeekHigh)
 			.add("priceVs52WeekLow", priceVs52WeekLow)
 			.add("targetPriceNum", targetPriceNum)

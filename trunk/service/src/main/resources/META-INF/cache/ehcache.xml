@@ -64,6 +64,36 @@
 		diskExpiryThreadIntervalSeconds="60"
 		memoryStoreEvictionPolicy="LRU"/>
 		
+	<cache name="highPriceHistory"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="lowPriceHistory"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="openPriceHistory"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
 	<cache name="volumeHistory"
 		maxElementsInMemory="1000"
 		eternal="false"

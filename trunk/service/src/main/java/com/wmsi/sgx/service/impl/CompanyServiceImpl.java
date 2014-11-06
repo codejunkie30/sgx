@@ -93,9 +93,55 @@ public class CompanyServiceImpl implements CompanyService{
 			return priceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading price history", e);
+			throw new CompanyServiceException("Exception loading closed price history", e);
 		}
 	}
+	
+	@Autowired
+	private SearchService highPriceHistorySearch;
+
+	@Override
+	@Cacheable(value = "highPriceHistory")
+	public List<HistoricalValue> loadHighPriceHistory(String id) throws CompanyServiceException {
+		try{
+			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
+			return highPriceHistorySearch.search(query, HistoricalValue.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading high price history", e);
+		}
+	}
+	
+	@Autowired
+	private SearchService lowPriceHistorySearch;
+
+	@Override
+	@Cacheable(value = "lowPriceHistory")
+	public List<HistoricalValue> loadLowPriceHistory(String id) throws CompanyServiceException {
+		try{
+			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
+			return lowPriceHistorySearch.search(query, HistoricalValue.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading low price history", e);
+		}
+	}
+	
+	@Autowired
+	private SearchService openPriceHistorySearch;
+
+	@Override
+	@Cacheable(value = "openPriceHistory")
+	public List<HistoricalValue> loadOpenPriceHistory(String id) throws CompanyServiceException {
+		try{
+			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
+			return openPriceHistorySearch.search(query, HistoricalValue.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading open price history", e);
+		}
+	}
+	
 
 	@Autowired
 	private SearchService volumeHistorySearch;

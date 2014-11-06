@@ -24,6 +24,12 @@ public interface CompanyService{
 	List<HistoricalValue> loadVolumeHistory(String search) throws CompanyServiceException;
 
 	List<HistoricalValue> loadPriceHistory(String search) throws CompanyServiceException;
+	
+	List<HistoricalValue> loadHighPriceHistory(String search) throws CompanyServiceException;
+	
+	List<HistoricalValue> loadLowPriceHistory(String search) throws CompanyServiceException;
+	
+	List<HistoricalValue> loadOpenPriceHistory(String search) throws CompanyServiceException;
 
 	List<Financial> loadFinancials(String id) throws CompanyServiceException;
 

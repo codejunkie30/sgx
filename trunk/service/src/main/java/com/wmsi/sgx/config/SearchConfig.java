@@ -53,6 +53,21 @@ public class SearchConfig{
 	public SearchService priceHistorySearch(){
 		return searchService("price");		
 	}
+	
+	@Bean 
+	public SearchService highPriceHistorySearch(){
+		return searchService("highPrice");		
+	}
+	
+	@Bean 
+	public SearchService lowPriceHistorySearch(){
+		return searchService("lowPrice");		
+	}
+	
+	@Bean 
+	public SearchService openPriceHistorySearch(){
+		return searchService("openPrice");		
+	}
 
 	@Bean
 	public SearchService volumeHistorySearch(){
