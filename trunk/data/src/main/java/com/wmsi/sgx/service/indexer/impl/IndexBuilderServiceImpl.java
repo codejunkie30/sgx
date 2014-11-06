@@ -264,6 +264,27 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
+		
+		List<HistoricalValue> highPrice = historicalData.getHighPrice();
+
+		for(HistoricalValue data : highPrice){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save("highPrice", id, data, index);
+		}
+		
+		List<HistoricalValue> lowPrice = historicalData.getLowPrice();
+
+		for(HistoricalValue data : lowPrice){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save("lowPrice", id, data, index);
+		}
+		
+		List<HistoricalValue> openPrice = historicalData.getOpenPrice();
+
+		for(HistoricalValue data : openPrice){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save("openPrice", id, data, index);
+		}
 
 		List<HistoricalValue> volume = historicalData.getVolume();
 

@@ -56,6 +56,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PBV", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PRICEDATE", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PRICE_TARGET_CIQ", "properties":{"CURRENCYID":"SGD"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PRICE_VOL_HIST_YR", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_QUICK_RATIO", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RE", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RETURN_ASSETS", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
