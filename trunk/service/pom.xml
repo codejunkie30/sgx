@@ -67,8 +67,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
 				<configuration>
-                    <excludedGroups>integration</excludedGroups>
-                </configuration>
+					<excludedGroups>integration</excludedGroups>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -304,4 +304,16 @@
 
 	</dependencies>
 
+	<distributionManagement>
+		<repository>
+			<id>wmsi-repo</id>
+			<name>Internal Releases</name>
+			<url>http://maven-1.wealthmsi.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>wmsi-repo</id>
+			<name>Internal Snapshots</name>
+			<url>http://maven-1.wealthmsi.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
