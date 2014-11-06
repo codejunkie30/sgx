@@ -79,6 +79,9 @@ public class CompanyController{
 	public PriceHistory getHistory(@RequestBody IdSearch search) throws CompanyServiceException {
 		PriceHistory ret = new PriceHistory();
 		ret.setPrice(companyService.loadPriceHistory(search.getId()));
+		ret.setHighPrice(companyService.loadHighPriceHistory(search.getId()));
+		ret.setLowPrice(companyService.loadLowPriceHistory(search.getId()));
+		ret.setOpenPrice(companyService.loadOpenPriceHistory(search.getId()));
 		ret.setVolume(companyService.loadVolumeHistory(search.getId()));
 		return ret;
 	}
