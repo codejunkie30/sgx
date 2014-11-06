@@ -22,9 +22,7 @@ import com.wmsi.sgx.util.DateUtil;
 @SuppressWarnings("unchecked")
 public class HistoricalService extends AbstractDataService {
 	
-	private ClassPathResource template1 = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
-	private ClassPathResource template2 = new ClassPathResource("META-INF/query/capiq/priceHistory2.json");	
-	private ClassPathResource template3 = new ClassPathResource("META-INF/query/capiq/priceHistory3.json");	
+	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 	
 	@Override
 	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
@@ -36,15 +34,13 @@ public class HistoricalService extends AbstractDataService {
 		ctx.put("startDate", parms[0]);
 		ctx.put("endDate", parms[1]);
 
-		CapIQResponse response1 = requestExecutor.execute(new CapIQRequestImpl(template1), ctx);
-		CapIQResponse response2 = requestExecutor.execute(new CapIQRequestImpl(template2), ctx);
-		CapIQResponse response3 = requestExecutor.execute(new CapIQRequestImpl(template3), ctx);
+		CapIQResponse response = requestExecutor.execute(new CapIQRequestImpl(template), ctx);
 
-		CapIQResult prices = response1.getResults().get(0);
-		CapIQResult highprices = response1.getResults().get(1);
-		CapIQResult lowprices = response2.getResults().get(0);
-		CapIQResult openprices = response2.getResults().get(1);
-		CapIQResult volumes = response3.getResults().get(0);
+		CapIQResult prices = response.getResults().get(0);
+		CapIQResult highprices = response.getResults().get(1);
+		CapIQResult lowprices = response.getResults().get(2);
+		CapIQResult openprices = response.getResults().get(3);
+		CapIQResult volumes = response.getResults().get(4);
 		
 		// Strip exchange extension from ticker if present
 		int exIndex = id.indexOf(':');
