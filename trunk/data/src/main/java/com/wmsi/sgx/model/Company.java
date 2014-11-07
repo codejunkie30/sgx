@@ -15,6 +15,8 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_AVG_BROKER_REC_NO_CIQ")
 	private Double avgBrokerReq;
 
+	private Double avgTradedVolM3;
+	
 	private Double avgVolumeM3;
 
 	@ConversionAnnotation(name = "IQ_BETA_5YR")
@@ -216,6 +218,14 @@ public class Company{
 
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
+	}
+	
+	public Double getAvgTradedVolM3() {
+		return avgTradedVolM3;
+	}
+
+	public void setAvgTradedVolM3(Double avgTradedVolM3) {
+		this.avgTradedVolM3 = avgTradedVolM3;
 	}
 
 	public Double getAvgVolumeM3() {
@@ -640,12 +650,12 @@ public class Company{
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
 	}
-	
 
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)
+			.add("avgTradedVolM3", avgTradedVolM3)
 			.add("avgVolumeM3", avgVolumeM3)
 			.add("beta5Yr", beta5Yr)
 			.add("businessDescription", businessDescription)
@@ -680,6 +690,7 @@ public class Company{
 			.add("previousCloseDate", previousCloseDate)
 			.add("previousClosePrice", previousClosePrice)
 			.add("priceToBookRatio", priceToBookRatio)
+			.add("priceVolHistYr", priceVolHistYr)
 			.add("sharesOutstanding", sharesOutstanding)
 			.add("sharesSoldShort", sharesSoldShort)
 			.add("targetPriceNum", targetPriceNum)
@@ -699,7 +710,6 @@ public class Company{
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
 			.add("priceHistory", priceHistory)
-			.add("priceVolHistYr", priceVolHistYr)
 			.toString();
 	}
 

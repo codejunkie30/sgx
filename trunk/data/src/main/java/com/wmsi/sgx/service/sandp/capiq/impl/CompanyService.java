@@ -70,8 +70,28 @@ public class CompanyService extends AbstractDataService{
 
 		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
 		comp.setPriceHistory(lastYearPrice);
+		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume,lastYearPrice, startDate));
 
 		return comp;
+	}
+	
+	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice, String startDate){
+		List<HistoricalValue> volume = getLastThreeMonths(lastYearVol, startDate);
+		List<HistoricalValue> price = getLastThreeMonths(lastYearPrice, startDate);
+		
+		Double sum = 0.0;
+		
+		for(int i = 0; i < price.size(); i++){
+			HistoricalValue vol = volume.get(i);
+			HistoricalValue pri = price.get(i);			
+			sum += vol.getValue() * pri.getValue();
+		}
+		
+		if(sum == 0)
+			return 0.0;
+		
+		return avg(sum, volume.size(), 4);
+		
 	}
 
 	private Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws ResponseParserException {
