@@ -6,6 +6,7 @@ import com.google.common.base.Objects;
 public class Company{
 
 	private Double avgBrokerReq;
+	private Double avgTradedVolM3;
 	private Double avgVolumeM3;
 	private Double beta5Yr;
 	private String businessDescription;
@@ -66,6 +67,14 @@ public class Company{
 
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
+	}
+	
+	public Double getAvgTradedVolM3() {
+		return avgTradedVolM3;
+	}
+
+	public void setAvgTradedVolM3(Double avgTradedVolM3) {
+		this.avgTradedVolM3 = avgTradedVolM3;
 	}
 
 	public Double getAvgVolumeM3() {
@@ -487,14 +496,14 @@ public class Company{
 	public Double getYearLow() {
 		return yearLow;
 	}
-
+	
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
-	}	
-	
+	}
+
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
 	}
 	
 	@Override
@@ -502,6 +511,7 @@ public class Company{
 		if (object instanceof Company) {
 			Company that = (Company) object;
 			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
+				&& Objects.equal(this.avgTradedVolM3, that.avgTradedVolM3)
 				&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
 				&& Objects.equal(this.beta5Yr, that.beta5Yr)
 				&& Objects.equal(this.businessDescription, that.businessDescription)
@@ -558,4 +568,5 @@ public class Company{
 		}
 		return false;
 	}
+
 }
