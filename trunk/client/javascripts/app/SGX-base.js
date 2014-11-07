@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://sgx-api.wealthmsi.com",
+    		fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com",
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -1853,7 +1853,11 @@ define(deps, function($, _, SGX) {
             	
             	initStockCharts: function(data, newsData, finishedDrawing) {
             		
+            		// let's get all the data set up
             		var priceData = SGX.company.toHighCharts(data.price);
+            		var lowPrice = SGX.company.toHighCharts(data.lowPrice);
+            		var openPrice = SGX.company.toHighCharts(data.openPrice);
+            		var highPrice = SGX.company.toHighCharts(data.highPrice);
             		var volumeData = SGX.company.toHighCharts(data.volume);
             		
             		// need to resort news
@@ -1985,7 +1989,8 @@ define(deps, function($, _, SGX) {
                             	data: priceData,
                             	type: 'area',
                             	id: 'priceData',
-                            	threshold: null
+                            	threshold: null,
+                            	turboThreshold: 5000
                             	
                             },
                             {
@@ -2039,14 +2044,21 @@ define(deps, function($, _, SGX) {
             	        		fontWeight: "bold"
             	        	}
                         }
-
                         
                     }, 
                     function() {
+                    	
+                		// add in the additional data, only way it stays with large data sets
+                		$.each(this.series[0].points, function(idx, point) {
+                			point.low = lowPrice[idx][1];
+                			point.open = openPrice[idx][1];
+                			point.high = highPrice[idx][1];
+                		});
+                    	
                     	if (typeof finishedDrawing !== "undefined") finishedDrawing();
                     }
                     );
-            		
+                    
             	},
             	
                 toHighCharts: function(data) {
@@ -2063,21 +2075,22 @@ define(deps, function($, _, SGX) {
                 	if (!this.hasOwnProperty("points")) return;
                 	
                 	var pricing = this.points[0];
+
                 	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", pricing.x) + "</b>";
                 	ret += "<span class='chart-mouseover'>";
                 	ret += "<br />";
-                	ret += "<span>Open</span>: TODO";
+                	ret += "<span>Open</span>: S$ " + pricing.point.open;
                 	ret += "<br />";
                 	ret += "<span>Close</span>: S$ " + pricing.y;
                 	ret += "<br />";
-                	ret += "<span>Low</span>: TODO";
+                	ret += "<span>Low</span>: S$ " + pricing.point.low;
                 	ret += "<br />";
-                	ret += "<span>High</span>: TODO";
+                	ret += "<span>High</span>: S$ " + pricing.point.high;
                 	ret += "<br />";
 
                 	// no volume for this period
                 	if (this.points.length <= 1) return ret;
-
+ 
                 	// has volume too
                 	pricing = this.points[1];
                 	ret += "<span>Volume</span>: " + pricing.y;
