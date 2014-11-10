@@ -218,6 +218,11 @@
 				{
 					"type": "double"
 				},
+				
+				"avgTradedVolM3": 
+				{
+					"type": "double"
+				},
 
 				"beta5Yr": 
 				{
