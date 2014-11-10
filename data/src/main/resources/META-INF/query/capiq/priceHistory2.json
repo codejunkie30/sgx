@@ -1,4 +1,4 @@
 {"inputRequests": [ 	
-	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_LOWPRICE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}},
-	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_OPENPRICE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}}
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_HIGHPRICE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}},
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_LOWPRICE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}}
 ]}
