@@ -2304,11 +2304,19 @@ define(deps, function($, _, SGX) {
         			
         			// get the series data
         			var seriesData = [], empty = 0;
+        			var eventsConfig = { 
+        					mouseOver: function() {
+        						this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } });
+        					}, 
+        					mouseOut: function() {
+        						this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } });
+        					} 
+        			};
         			$(el).closest("tr").children().not(".unchart").each(function(idx, td) {
         				if (idx == 0) return;
         				if (typeof $(td).attr("data-value") === "undefined") empty++;
         				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
-        				seriesData.push(val); 
+        				seriesData.push({ y: val, events: eventsConfig });
         			});
         			
         			// no data to plot
@@ -2357,6 +2365,7 @@ define(deps, function($, _, SGX) {
             			
             			chart.addSeries({
     	                    name: $(".trigger", el).text(),
+    	                    id: $(".trigger", el).attr("data-name") + "-series",
             				type: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")),
     	                    data: seriesData,
     				    	color: SGX.financials.getNextColor(chart.series),
@@ -2365,12 +2374,12 @@ define(deps, function($, _, SGX) {
             			});
             			
                 		chart.setSize(SGX.financials.getChartWidth(chart.series.length), SGX.financials.getChartHeight(), true);
-
+                		
         			}
         			
         			// draw legend
         			SGX.financials.drawLegend();
-
+        			
                 	// resize
     	            var curHeight = SGX.getTrueContentHeight();
     	            SGX.resizeIframe(curHeight, 10);
@@ -2433,7 +2442,6 @@ define(deps, function($, _, SGX) {
             		
             	},
             	
-            	
             	initChart: function(el, seriesData) {
             		
         			var categories = [];
@@ -2487,6 +2495,7 @@ define(deps, function($, _, SGX) {
                             }
                         ],
                         xAxis: {
+                        	id: $(".trigger", el).attr("data-name") + "-axis",
                             gridLineColor: 'none',
                             categories: categories,
                             plotBands: {
