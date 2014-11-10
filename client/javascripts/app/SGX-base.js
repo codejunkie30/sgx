@@ -1851,13 +1851,25 @@ define(deps, function($, _, SGX) {
             		
             	},
             	
+            	chartData: [],
+            	
             	initStockCharts: function(data, newsData, finishedDrawing) {
             		
-            		// let's get all the data set up
+            		// let's get all the price data set up
             		var priceData = SGX.company.toHighCharts(data.price);
             		var lowPrice = SGX.company.toHighCharts(data.lowPrice);
             		var openPrice = SGX.company.toHighCharts(data.openPrice);
             		var highPrice = SGX.company.toHighCharts(data.highPrice);
+            		$.each(priceData, function(idx, point) {
+            			var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
+            			SGX.company.chartData[key] = {}
+            			SGX.company.chartData[key].close = point.y;
+            			SGX.company.chartData[key].low = lowPrice[idx].y;
+            			SGX.company.chartData[key].open = openPrice[idx].y;
+            			SGX.company.chartData[key].high = highPrice[idx].y;
+            		});
+            		
+            		// all the volume data
             		var volumeData = SGX.company.toHighCharts(data.volume);
             		
             		// need to resort news
@@ -1933,11 +1945,19 @@ define(deps, function($, _, SGX) {
             	        },
             	        
             	        xAxis: {
+            	        	
 	        		        labels: {
 	                            formatter: function() {
 	                                return Highcharts.dateFormat("%e. %b", this.value);
 	                            }
-	        		        }
+	        		        },
+	        		        
+		    		        events: {
+		    		        	afterSetExtremes: function(e) {
+				                	SGX.company.handleNewsChange(e, this);
+		    		        	}
+		    		        }
+	        		        
                     	},
                     	
                         yAxis: [
@@ -1997,7 +2017,8 @@ define(deps, function($, _, SGX) {
                             	name: 'Volume',
                             	data: volumeData,
                             	type: 'column',
-            		        	yAxis: 1
+            		        	yAxis: 1,
+                            	turboThreshold: 5000
                             },
                             {
                             	type: 'flags',
@@ -2047,26 +2068,27 @@ define(deps, function($, _, SGX) {
                         
                     }, 
                     function() {
-                    	
-                		// add in the additional data, only way it stays with large data sets
-                		$.each(this.series[0].points, function(idx, point) {
-                			point.low = lowPrice[idx][1];
-                			point.open = openPrice[idx][1];
-                			point.high = highPrice[idx][1];
-                		});
-                    	
                     	if (typeof finishedDrawing !== "undefined") finishedDrawing();
                     }
                     );
                     
             	},
             	
+				handleNewsChange: function(e, obj) {
+	        		var start = e.min == null ? obj.dataMin : e.min;
+	        		start = Highcharts.dateFormat("%e/%b/%Y", start);
+	        		var end = e.max == null ? obj.dataMax : e.max;
+	        		end = Highcharts.dateFormat("%e/%b/%Y", end);
+	        		// TODO update news with API call from results
+	        		console.log(start + ":" + end);
+            	},
+            	
                 toHighCharts: function(data) {
                 	var ret = [];
                 	$.each(data, function(idx, row) {
-                		ret.push([ Date.fromISO(row.date).getTime(), row.value ]);
+                		ret.push({ x: Date.fromISO(row.date).getTime(), y: row.value });
                 	});
-                	ret.sort(function(a, b) { return a[0] - b[0]; });
+                	ret.sort(function(a, b) { return a.x - b.x; });
                 	return ret;
                 },
                 
@@ -2074,26 +2096,26 @@ define(deps, function($, _, SGX) {
                 	
                 	if (!this.hasOwnProperty("points")) return;
                 	
-                	var pricing = this.points[0];
+                	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
+                	var point = SGX.company.chartData[key];
 
-                	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", pricing.x) + "</b>";
+                	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", point.close) + "</b>";
                 	ret += "<span class='chart-mouseover'>";
                 	ret += "<br />";
-                	ret += "<span>Open</span>: S$ " + pricing.point.open;
+                	ret += "<span>Open</span>: S$ " + point.open;
                 	ret += "<br />";
-                	ret += "<span>Close</span>: S$ " + pricing.y;
+                	ret += "<span>Close</span>: S$ " + point.close;
                 	ret += "<br />";
-                	ret += "<span>Low</span>: S$ " + pricing.point.low;
+                	ret += "<span>Low</span>: S$ " + point.low;
                 	ret += "<br />";
-                	ret += "<span>High</span>: S$ " + pricing.point.high;
+                	ret += "<span>High</span>: S$ " + point.high;
                 	ret += "<br />";
 
                 	// no volume for this period
                 	if (this.points.length <= 1) return ret;
  
                 	// has volume too
-                	pricing = this.points[1];
-                	ret += "<span>Volume</span>: " + pricing.y;
+                	ret += "<span>Volume</span>: " + this.points[1].y;
                 	ret += "</span>";
                 	
                 	return ret;
