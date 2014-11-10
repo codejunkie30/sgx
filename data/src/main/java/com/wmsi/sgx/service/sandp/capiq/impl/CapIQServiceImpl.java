@@ -62,7 +62,7 @@ public class CapIQServiceImpl implements CapIQService{
 	@Override
 	public PriceHistory getHistoricalData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {
 		String asOfDate = input.getDate();
-		String startDate = DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5);
+		String startDate = DateUtil.adjustDate(asOfDate, Calendar.DAY_OF_MONTH, -1835);
 		return historicalService.load(input.getTicker(), startDate, asOfDate);
 	}
 }
