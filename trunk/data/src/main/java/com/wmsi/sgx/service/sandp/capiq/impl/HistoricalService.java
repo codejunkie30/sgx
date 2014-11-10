@@ -41,10 +41,11 @@ public class HistoricalService extends AbstractDataService {
 		CapIQResponse response3 = requestExecutor.execute(new CapIQRequestImpl(template3), ctx);
 
 		CapIQResult prices = response1.getResults().get(0);
-		CapIQResult highprices = response1.getResults().get(1);
-		CapIQResult lowprices = response2.getResults().get(0);
-		CapIQResult openprices = response2.getResults().get(1);
-		CapIQResult volumes = response3.getResults().get(0);
+		CapIQResult volumes = response1.getResults().get(1);
+		CapIQResult highprices = response2.getResults().get(0);
+		CapIQResult lowprices = response2.getResults().get(1);
+		CapIQResult openprices = response3.getResults().get(0);
+		
 		
 		// Strip exchange extension from ticker if present
 		int exIndex = id.indexOf(':');
