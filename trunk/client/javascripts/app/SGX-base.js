@@ -1235,7 +1235,7 @@ define(deps, function($, _, SGX) {
             },
             
             genericAjaxError: function(data, status, er) {
-            	alert("NO error method provided");
+            	//alert("NO error method provided");
             	debug.log(status);
             	debug.log(data);
             	debug.log(er);
