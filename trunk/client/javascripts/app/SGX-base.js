@@ -2489,7 +2489,7 @@ define(deps, function($, _, SGX) {
                 				type: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")),
             			    	id: $(".trigger", el).attr("data-name"),
                                 name: $(".trigger", el).text(),
-            					color: '#565b5c',
+            					color: SGX.financials.getNextColor([]),
                                 data: seriesData,
                                 zIndex: SGX.financials.getSeriesType($(".trigger", el).attr("data-group")) == "line" ? 50 : 1
                             }
