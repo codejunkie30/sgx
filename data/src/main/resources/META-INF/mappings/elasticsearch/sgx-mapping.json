@@ -610,7 +610,7 @@
 					"index": "not_analyzed"
 				},
 
-				"keyDev": 
+				"keyDevs": 
 				{
 					"type": "object",
 					"properties": 
