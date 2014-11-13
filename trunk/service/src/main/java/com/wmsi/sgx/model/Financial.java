@@ -25,6 +25,7 @@ public class Financial{
 	private Double eps;
 	private Double eps1YrAnnGrowth;
 	private String filingCurrency;
+	private String filingDate;
 	private Double grossMargin;
 	private Double grossProfit;
 	private Double longTermDebt;
@@ -201,6 +202,14 @@ public class Financial{
 
 	public void setFilingCurrency(String filingCurrency) {
 		this.filingCurrency = filingCurrency;
+	}
+
+	public String getFilingDate() {
+		return filingDate;
+	}
+
+	public void setFilingDate(String filingDate) {
+		this.filingDate = filingDate;
 	}
 
 	public Double getGrossMargin() {
@@ -405,7 +414,7 @@ public class Financial{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(absPeriod, assetTurns, avgDaysInventory, avgDaysPayable, cashConversion, cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio, dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth, filingCurrency, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange, netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets, totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue, totalRevenue1YrAnnGrowth);
+		return Objects.hashCode(absPeriod, assetTurns, avgDaysInventory, avgDaysPayable, cashConversion, cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio, dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth, filingCurrency, filingDate, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange, netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets, totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue, totalRevenue1YrAnnGrowth);
 	}
 	
 	@Override
@@ -431,6 +440,7 @@ public class Financial{
 				&& Objects.equal(this.eps, that.eps)
 				&& Objects.equal(this.eps1YrAnnGrowth, that.eps1YrAnnGrowth)
 				&& Objects.equal(this.filingCurrency, that.filingCurrency)
+				&& Objects.equal(this.filingDate, that.filingDate)
 				&& Objects.equal(this.grossMargin, that.grossMargin)
 				&& Objects.equal(this.grossProfit, that.grossProfit)
 				&& Objects.equal(this.longTermDebt, that.longTermDebt)
@@ -482,6 +492,7 @@ public class Financial{
 			.add("eps", eps)
 			.add("eps1YrAnnGrowth", eps1YrAnnGrowth)
 			.add("filingCurrency", filingCurrency)
+			.add("filingDate", filingDate)
 			.add("grossMargin", grossMargin)
 			.add("grossProfit", grossProfit)
 			.add("longTermDebt", longTermDebt)
