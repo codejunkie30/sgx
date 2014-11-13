@@ -1,6 +1,10 @@
 package com.wmsi.sgx.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +37,15 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 			for(KeyDev dev : keyDevs.getKeyDevs()){
 				Long devDate = dev.getDate().getTime();
 				
-				if(devDate.compareTo(Long.valueOf(req.getFrom().toString())) > 0 
-					&& devDate.compareTo(Long.valueOf(req.getTo().toString())) < 0){
+				if(req.getTo() == null){
+					DateFormat dF = new SimpleDateFormat("yyyy-MM-dd");
+					Date date = new Date();
+					req.setTo(dF.format(date));
+				}
+				if (req.getFrom() == null)
+					filtered.add(dev);
+				else if(devDate.compareTo(getTime(req.getFrom())) > 0 
+					&& devDate.compareTo(getTime(req.getTo())) < 0){
 					
 					filtered.add(dev);
 				}		
@@ -46,6 +57,17 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 		}
 		catch(SearchServiceException e){
 			throw new ServiceException("Query execution failed", e);
+		}
+	}
+	
+	private long getTime(Object object){
+		try{
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			return fmt.parse(object.toString()).getTime();
+		}
+		catch(ParseException e){
+			
+			return 0;
 		}
 	}
 
