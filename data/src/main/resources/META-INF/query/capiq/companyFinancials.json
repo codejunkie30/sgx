@@ -1,4 +1,10 @@
 {"inputRequests": [ 
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"$currency$"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"$currency$"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_FY-1", "CURRENCYID":"$currency$"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_FY-2", "CURRENCYID":"$currency$"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_FY-3", "CURRENCYID":"$currency$"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_FY-4", "CURRENCYID":"$currency$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_COMPANY_TICKER_NO_EXCH", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"$currency$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_ABS_PERIOD", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"$currency$"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_PERIODDATE_IS", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"$currency$"}},

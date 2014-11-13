@@ -61,6 +61,9 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_EPS_1YR_ANN_GROWTH")
 	private Double eps1YrAnnGrowth;
 	
+	@ConversionAnnotation(name = "IQ_FILINGDATE_IS")
+	private String filingDate;
+	
 	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
 	
@@ -291,6 +294,14 @@ public class Financial{
 		this.filingCurrency = filingCurrency;
 	}
 
+	public String getFilingDate() {
+		return filingDate;
+	}
+
+	public void setFilingDate(String filingDate) {
+		this.filingDate = filingDate;
+	}
+
 	public Double getGrossMargin() {
 		return grossMargin;
 	}
@@ -486,10 +497,10 @@ public class Financial{
 	public Double getTotalRevenue1YrAnnGrowth() {
 		return totalRevenue1YrAnnGrowth;
 	}
-
+	
 	public void setTotalRevenue1YrAnnGrowth(Double totalRevenue1YrAnnGrowth) {
 		this.totalRevenue1YrAnnGrowth = totalRevenue1YrAnnGrowth;
-	}
+	}	
 
 	@Override
 	public String toString() {
@@ -512,6 +523,7 @@ public class Financial{
 			.add("ebitdaMargin", ebitdaMargin)
 			.add("eps", eps)
 			.add("eps1YrAnnGrowth", eps1YrAnnGrowth)
+			.add("filingDate", filingDate)
 			.add("filingCurrency", filingCurrency)
 			.add("grossMargin", grossMargin)
 			.add("grossProfit", grossProfit)
@@ -539,5 +551,7 @@ public class Financial{
 			.add("totalRevenue", totalRevenue)
 			.add("totalRevenue1YrAnnGrowth", totalRevenue1YrAnnGrowth)
 			.toString();
-	}	
+	}
+
+
 }
