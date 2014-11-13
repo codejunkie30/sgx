@@ -82,7 +82,7 @@ public class KeyDevsService extends AbstractDataService {
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("id", id);
-		ctx.put("startDate", DateUtil.adjustDate(asOfDate, Calendar.MONTH, -1));
+		ctx.put("startDate", DateUtil.adjustDate(asOfDate, Calendar.YEAR, -5));
 
 		CapIQResponse response = requestExecutor.execute(new CapIQRequestImpl(keyDevsIdsTemplate), ctx);
 
