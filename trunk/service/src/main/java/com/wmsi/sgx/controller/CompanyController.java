@@ -54,7 +54,11 @@ public class CompanyController{
 	
 	@RequestMapping(value="company/keyDevs")
 	public KeyDevs getKeyDevs(@RequestBody IdSearch search) throws CompanyServiceException{
-		return companyService.loadKeyDevs(search.getId());
+		KeyDevs keydevs = companyService.loadKeyDevs(search.getId());
+		
+		if(keydevs.getKeyDevs() != null && keydevs.getKeyDevs().size() > 10)
+			keydevs.setKeyDevs(keydevs.getKeyDevs().subList(keydevs.getKeyDevs().size() - 10, keydevs.getKeyDevs().size()));
+		return keydevs;
 	}
 
 	@RequestMapping(value="company/holders")

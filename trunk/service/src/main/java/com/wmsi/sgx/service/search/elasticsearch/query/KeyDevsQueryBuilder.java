@@ -28,7 +28,7 @@ public class KeyDevsQueryBuilder extends AbstractQueryBuilder{
 		    .query(QueryBuilders
 		    	.termQuery("_id", req.getTickerCode()))
 		    	.size(MAX_RESULTS)
-		    	.sort("date", SortOrder.DESC);
+		    	.sort("keyDevs.date", SortOrder.DESC);
 			
 		
 
