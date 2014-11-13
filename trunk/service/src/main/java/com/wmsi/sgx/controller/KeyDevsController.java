@@ -11,7 +11,6 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.keydevs.KeyDevsRequest;
 import com.wmsi.sgx.service.KeyDevsService;
 import com.wmsi.sgx.service.ServiceException;
-import com.wmsi.sgx.service.search.SearchResult;
 
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
@@ -21,7 +20,7 @@ public class KeyDevsController{
 	private KeyDevsService keyDevsService;
 	
 	@RequestMapping("search/keydevs")
-	public SearchResult<KeyDevs> searchKeyDevs(@RequestBody KeyDevsRequest search) throws ServiceException{
+	public KeyDevs searchKeyDevs(@RequestBody KeyDevsRequest search) throws ServiceException{
 
 		return keyDevsService.search(search);
 	}
