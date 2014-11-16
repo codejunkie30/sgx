@@ -794,9 +794,9 @@ define(deps, function($, _, SGX) {
                 	},
                 
                 	fail: function(xhr, ajaxOptions, thrownErr) {
-                		debug.log(xhr);
-                		debug.log(ajaxOptions);
-                		debug.log(thrownErr);
+                		console.log(xhr);
+                		console.log(ajaxOptions);
+                		console.log(thrownErr);
                 	},
                 	
                 	renderResults: function(data) {
@@ -1728,7 +1728,6 @@ define(deps, function($, _, SGX) {
             	
             	initNews: function(finished) {
             		
-            		$('#area-chart').mouseup(function(e) { SGX.company.loadNews() });
             		SGX.company.loadNews(finished);
 
             	},
@@ -1979,7 +1978,7 @@ define(deps, function($, _, SGX) {
             	        	enabled: true,
             	        	formatter: SGX.company.getPointHTML,
                             useHTML: true,
-                            crosshairs: [ true, false ],
+                            crosshairs: [ true, true ],
                             shared: true
             	        },
             	        
@@ -1989,7 +1988,12 @@ define(deps, function($, _, SGX) {
 	                            formatter: function() {
 	                                return Highcharts.dateFormat("%e. %b", this.value);
 	                            }
-	        		        }
+	        		        },
+		    		        events: {
+		    		        	afterSetExtremes: function(e) {
+				                	SGX.company.loadNews(SGX.company.defaultResize);
+		    		        	}
+		    		        }
 	        		        
                     	},
                     	
