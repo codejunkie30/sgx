@@ -72,7 +72,7 @@ define(deps, function($, _, SGX) {
             getPage: function(page) {
             	var parentURL = SGX.getParentURL();
             	if (parentURL == null) return page;
-            	return parentURL + "?page=" + page + "#" + SGX.getParentURL();
+            	return parentURL + "?page=" + page;
             },
                         
             getCompanyPage: function(code, extra) {
