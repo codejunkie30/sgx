@@ -1564,13 +1564,10 @@ define(deps, function($, _, SGX) {
             		
             		SGX.company.initSimple(data, true);
 
-            		// news
-            		var newsData = SGX.company.initNews(data);
-
             		// init charts
             		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
             		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData); });
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, SGX.company.defaultResize); });
             		
             		// all other sections
             		SGX.company.initHolders(data);
@@ -1590,6 +1587,10 @@ define(deps, function($, _, SGX) {
             		// resize/scroll
             		SGX.resizeIframe(SGX.getTrueContentHeight() + 50, 0);
             		
+            	},
+            	
+            	defaultResize: function() {
+            		SGX.resizeIframe(SGX.getTrueContentHeight() + 50, 0);
             	},
             	
             	installCompanyHeader: function() {
@@ -1725,44 +1726,86 @@ define(deps, function($, _, SGX) {
 
             	},
             	
-            	initNews: function(data) {
+            	initNews: function(finished) {
+            		
+            		$('#area-chart').mouseup(function(e) { SGX.company.loadNews() });
+            		SGX.company.loadNews(finished);
 
-        			var ret = [];
-        			
-            		if (data.hasOwnProperty("keyDevs") && data.keyDevs.length > 0 && !$.isEmptyObject(data.keyDevs[0])) {
-            			
-            			data.keyDevs = data.keyDevs.sort(function(a, b) { return Date.fromISO(b.date) - Date.fromISO(a.date); });
-            			
-            			$.each(data.keyDevs, function(idx, keyDev) {
-            				
-            				// sidebar display
-            				var letter = SGX.letters.substring(idx, idx+1);
-            				var nId = 'keyDev-' + letter;
-            				var icon = $("<div />").addClass("icon").text(letter); 
-            				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId).attr("data-dt", SGX.formatter.getFormatted("date", keyDev.date));
-            				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
-            				$(link).click(function(e) {
-            					var copy = "<h4>" + $(this).text() + "</h4><p class='bold'>From " + $(this).attr("data-dt") + "</p><div class='news'>" + $(this).attr("data-content") + "</div>";
-                                SGX.modal.open({ content: copy, type: 'alert' });
-            				});
-            				
-            				// for chart
-            				var chartData = {
-            					x: Date.fromISO(keyDev.date),
-            					title: letter,
-            					text: keyDev.headline,
-            					shape: 'url(img/stock-marker.png)',
-            					id: nId
-            				};
-            				ret.push(chartData);
-            				
-            			});
-            			
-            			$(".stock-events").show();
+            	},
+            	
+            	loadNews: function(finished) {
+            		
+            		var chart = $('#area-chart').highcharts();
+            		var start = new Date(chart.xAxis[0].min);
+            		var end = new Date(chart.xAxis[0].max);
+            		var div = $(".stock-events");
+            		
+            		var curStart = typeof $(div).attr("start-dt") === "undefined" ? new Date() : $(div).attr("start-dt");
+            		var curEnd = typeof $(div).attr("end-dt") === "undefined" ? new Date() : $(div).attr("end-dt");
+            		
+            		if (start == curStart && end == curEnd) return;
+            		
+            		$(div).attr("start-dt", start).attr("end-dt", end);
+            		var endpoint = SGX.fqdn + "/sgx/search/keydevs";
+            		var params = { tickerCode: $("[data-name='tickerCode']").text(), from: Highcharts.dateFormat("%Y-%m-%e", start), to: Highcharts.dateFormat("%Y-%m-%e", end) };
+            		
+            		SGX.handleAjaxRequest(endpoint, params, function(data) { SGX.company.displayNews(chart, data, finished); });
+            		
+            		
+            	},
+            	
+            	displayNews: function(chart, data, finished) {
+            		
+            		// just make it an empty array
+            		if (!data.hasOwnProperty("keyDevs")) data.keyDevs = [];
+            		
+           			data.keyDevs = data.keyDevs.sort(function(a, b) { return Date.fromISO(b.date) - Date.fromISO(a.date); });
+           			var seriesData = [];
+           			
+           			$(".stock-events ul li").remove();
 
+           			// handle the HTML
+           			$.each(data.keyDevs, function(idx, keyDev) {
+           				
+           				if (idx >= 10) return;
+            				
+        				// sidebar display
+        				var letter = SGX.letters.substring(idx, idx+1);
+        				var nId = 'keyDev-' + letter;
+        				var icon = $("<div />").addClass("icon").text(letter); 
+        				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId).attr("data-dt", SGX.formatter.getFormatted("date", keyDev.date));
+        				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
+        				$(link).click(function(e) {
+        					var copy = "<h4>" + $(this).text() + "</h4><p class='bold'>From " + $(this).attr("data-dt") + "</p><div class='news'>" + $(this).attr("data-content") + "</div>";
+                            SGX.modal.open({ content: copy, type: 'alert' });
+        				});
+        				
+        				// for chart
+        				var point = {
+        					x: Date.fromISO(keyDev.date),
+        					title: letter,
+        					text: keyDev.headline,
+        					shape: 'url(img/stock-marker.png)',
+        					id: nId
+        				};
+        				seriesData.push(point);
+        				
+        			});
+
+           			// now the chart
+            		seriesData.sort(function(a, b) { return a.x - b.x;  });
+            		chart.series[2].update({ data: seriesData });
+            	
+            		$(".stock-events").show();
+            		
+            		if (seriesData.length == 0) {
+            			$("<li />").html($(".stock-events .no-data").html()).appendTo($(".stock-events ul")); 
+            			
             		}
             		
-            		return ret;
+            		
+            		if (typeof finished !== "undefined") finished();
+            		
             	},
             	
             	initAlphaFactors: function(data) {
@@ -1853,7 +1896,7 @@ define(deps, function($, _, SGX) {
             	
             	chartData: [],
             	
-            	initStockCharts: function(data, newsData, finishedDrawing) {
+            	initStockCharts: function(data, finishedDrawing) {
             		
             		// let's get all the price data set up
             		var priceData = SGX.company.toHighCharts(data.price);
@@ -1871,10 +1914,6 @@ define(deps, function($, _, SGX) {
             		
             		// all the volume data
             		var volumeData = SGX.company.toHighCharts(data.volume);
-            		
-            		// need to resort news
-            		var newsMarkers = newsData;
-            		newsMarkers.sort(function(a, b) { return a.x - b.x;  });
             		
             		Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
             		
@@ -1940,7 +1979,7 @@ define(deps, function($, _, SGX) {
             	        	enabled: true,
             	        	formatter: SGX.company.getPointHTML,
                             useHTML: true,
-                            crosshairs: [ true, true ],
+                            crosshairs: [ true, false ],
                             shared: true
             	        },
             	        
@@ -1950,13 +1989,7 @@ define(deps, function($, _, SGX) {
 	                            formatter: function() {
 	                                return Highcharts.dateFormat("%e. %b", this.value);
 	                            }
-	        		        },
-	        		        
-		    		        events: {
-		    		        	afterSetExtremes: function(e) {
-				                	SGX.company.handleNewsChange(e, this);
-		    		        	}
-		    		        }
+	        		        }
 	        		        
                     	},
                     	
@@ -2022,7 +2055,6 @@ define(deps, function($, _, SGX) {
                             },
                             {
                             	type: 'flags',
-                                data: newsMarkers,
                                 style: { 
                                 	color: 'black',
                                 	cursor: 'pointer'
@@ -2035,10 +2067,9 @@ define(deps, function($, _, SGX) {
                                 onSeries: 'priceData',
                                 shape: 'circlepin',
                                 width: 16,
-                                y: -26
-                            }
-
-                                 
+                                y: -26,
+                                data: []
+                            }    
                         ],
                         
                         title: undefined,
@@ -2068,19 +2099,10 @@ define(deps, function($, _, SGX) {
                         
                     }, 
                     function() {
-                    	if (typeof finishedDrawing !== "undefined") finishedDrawing();
+                    	SGX.company.initNews(finishedDrawing);
                     }
                     );
                     
-            	},
-            	
-				handleNewsChange: function(e, obj) {
-	        		var start = e.min == null ? obj.dataMin : e.min;
-	        		start = Highcharts.dateFormat("%e/%b/%Y", start);
-	        		var end = e.max == null ? obj.dataMax : e.max;
-	        		end = Highcharts.dateFormat("%e/%b/%Y", end);
-	        		// TODO update news with API call from results
-	        		console.log(start + ":" + end);
             	},
             	
                 toHighCharts: function(data) {
@@ -2098,8 +2120,17 @@ define(deps, function($, _, SGX) {
                 	
                 	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
                 	var point = SGX.company.chartData[key];
+                	
+                	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
 
-                	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", point.close) + "</b>";
+                	// not a trading day
+                	if (point == undefined) {
+                		ret += "<br />";
+                		ret += "No trading data available.";
+                		return ret;
+                	}
+                	
+                	// is a trading day
                 	ret += "<span class='chart-mouseover'>";
                 	ret += "<br />";
                 	ret += "<span>Open</span>: S$ " + point.open;
@@ -2736,13 +2767,10 @@ define(deps, function($, _, SGX) {
         			// basic company data
         			SGX.company.initSimple(data, false);
 
-        			// news
-        			var newsData = SGX.company.initNews(data);
-
             		// init charts
             		var endpoint = SGX.fqdn + "/sgx/company/priceHistory";
             		var params = { id: data.company.companyInfo.tickerCode };
-            		SGX.handleAjaxRequest(endpoint, params, function(sData) { SGX.company.initStockCharts(sData, newsData, function() { SGX.print.loadedItems(data) }); });
+            		SGX.handleAjaxRequest(endpoint, params, function(sData) {  SGX.company.initStockCharts(sData, function() { SGX.print.loadedItems(data); }); });
         			
             		// all other sections
             		SGX.company.initHolders(data);

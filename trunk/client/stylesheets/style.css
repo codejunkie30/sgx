@@ -557,6 +557,10 @@ td .page-title {
   text-decoration: underline;
 }
 
+.stock-events .no-data {
+	display: none;
+}
+
 .news {
 	margin-bottom: 10px;
 }
