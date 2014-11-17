@@ -33,6 +33,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_EMPLOYEES"},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_EPS_1YR_ANN_GROWTH", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILING_CURRENCY"},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FILINGDATE_IS", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_FLOAT_PERCENT", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_GP", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_GROSS_MARGIN", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
