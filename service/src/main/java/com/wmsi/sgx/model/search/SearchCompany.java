@@ -11,6 +11,7 @@ public class SearchCompany{
 	private Double dividendYield;
 	private Double ebitdaMargin;
 	private Double eps;
+	private String filingDate;
 	private String industry;
 	private String industryGroup;
 	private Double marketCap;
@@ -154,6 +155,14 @@ public class SearchCompany{
 		this.eps = eps;
 	}
 
+	public String getFilingDate() {
+		return filingDate;
+	}
+
+	public void setFilingDate(String filingDate) {
+		this.filingDate = filingDate;
+	}
+
 	public void setIndustry(String industry) {
 		this.industry = industry;
 	}
@@ -232,40 +241,9 @@ public class SearchCompany{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("avgBrokerReq", avgBrokerReq)
-			.add("avgTradedVolM3", avgTradedVolM3)
-			.add("beta5Yr", beta5Yr)
-			.add("companyName", companyName)
-			.add("dividendYield", dividendYield)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("eps", eps)
-			.add("industry", industry)
-			.add("industryGroup", industryGroup)
-			.add("marketCap", marketCap)
-			.add("netProfitMargin", netProfitMargin)
-			.add("peRatio", peRatio)
-			.add("percentChange", percentChange)
-			.add("priceToBookRatio", priceToBookRatio)
-			.add("priceVolHistYr", priceVolHistYr)
-			.add("priceVs52WeekHigh", priceVs52WeekHigh)
-			.add("priceVs52WeekLow", priceVs52WeekLow)
-			.add("targetPriceNum", targetPriceNum)
-			.add("tickerCode", tickerCode)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
-			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-			.add("totalRevenue", totalRevenue)
-			.add("volume", volume)
-			.toString();
-	}
-
 	@Override
 	public boolean equals(Object object){
 		if (object instanceof SearchCompany) {
@@ -277,6 +255,7 @@ public class SearchCompany{
 				&& Objects.equal(this.dividendYield, that.dividendYield)
 				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
 				&& Objects.equal(this.eps, that.eps)
+				&& Objects.equal(this.filingDate, that.filingDate)
 				&& Objects.equal(this.industry, that.industry)
 				&& Objects.equal(this.industryGroup, that.industryGroup)
 				&& Objects.equal(this.marketCap, that.marketCap)
@@ -297,5 +276,37 @@ public class SearchCompany{
 				&& Objects.equal(this.volume, that.volume);
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("avgBrokerReq", avgBrokerReq)
+			.add("avgTradedVolM3", avgTradedVolM3)
+			.add("beta5Yr", beta5Yr)
+			.add("companyName", companyName)
+			.add("dividendYield", dividendYield)
+			.add("ebitdaMargin", ebitdaMargin)
+			.add("eps", eps)
+			.add("filingDate", filingDate)
+			.add("industry", industry)
+			.add("industryGroup", industryGroup)
+			.add("marketCap", marketCap)
+			.add("netProfitMargin", netProfitMargin)
+			.add("peRatio", peRatio)
+			.add("percentChange", percentChange)
+			.add("priceToBookRatio", priceToBookRatio)
+			.add("priceVolHistYr", priceVolHistYr)
+			.add("priceVs52WeekHigh", priceVs52WeekHigh)
+			.add("priceVs52WeekLow", priceVs52WeekLow)
+			.add("targetPriceNum", targetPriceNum)
+			.add("tickerCode", tickerCode)
+			.add("totalDebtEquity", totalDebtEquity)
+			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
+			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
+			.add("totalRevenue", totalRevenue)
+			.add("volume", volume)
+			.toString();
 	}
 }

@@ -72,6 +72,9 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
+	
+	@ConversionAnnotation(name = "IQ_FILINGDATE_IS")
+	private String filingDate;
 
 	@ConversionAnnotation(name = "IQ_PERIODDATE_IS")
 	private Date fiscalYearEnd;
@@ -380,6 +383,14 @@ public class Company{
 		this.filingCurrency = filingCurrency;
 	}
 
+	public String getFilingDate() {
+		return filingDate;
+	}
+
+	public void setFilingDate(String filingDate) {
+		this.filingDate = filingDate;
+	}
+
 	public Date getFiscalYearEnd() {
 		return fiscalYearEnd;
 	}
@@ -675,6 +686,7 @@ public class Company{
 			.add("eps", eps)
 			.add("evEbitData", evEbitData)
 			.add("filingCurrency", filingCurrency)
+			.add("filingDate", filingDate)
 			.add("fiscalYearEnd", fiscalYearEnd)
 			.add("floatPercentage", floatPercentage)
 			.add("gvKey", gvKey)
