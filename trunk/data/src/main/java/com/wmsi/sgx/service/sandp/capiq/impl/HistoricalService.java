@@ -45,7 +45,6 @@ public class HistoricalService extends AbstractDataService {
 		ctx.put("id", id);
 		ctx.put("startDate", parms[0]);
 		ctx.put("endDate", parms[1]);
-		
 		// Strip exchange extension from ticker if present
 		int exIndex = id.indexOf(':');
 		
@@ -60,19 +59,20 @@ public class HistoricalService extends AbstractDataService {
 		String lastUpdated = null;
 
 		//Checks if cached file for yesterday exists
+		String yearAgo = DateUtil.adjustDate(parms[1], Calendar.YEAR, -1);
 		String yesterday = getTime(DateUtil.adjustDate(parms[1], Calendar.DAY_OF_MONTH, -1));
 		String today = getTime(parms[1]);
 		for(File file : listOfFiles){
 			if (file.getName().startsWith("pricehistory_"+id+"_"+today)){
 				lastUpdated = today;
 			}
-			if (file.getName().startsWith("pricehistory_"+id+"_"+yesterday) && lastUpdated != today){
+			if (file.getName().startsWith("pricehistory_"+id+"_"+yesterday) && parms[0] != yearAgo){
 				lastUpdated = yesterday;
 				//Sets start point to today
 				ctx.put("startDate", parms[1]);
 			}
 		}
-		if(lastUpdated != today){
+		
 			CapIQResponse response = requestExecutor.execute(new CapIQRequestImpl(template), ctx);
 			
 			//Writes todays file
@@ -87,7 +87,7 @@ public class HistoricalService extends AbstractDataService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		
 		
 		//Gets all files associated with ticket code
 		listOfFiles = folder.listFiles();
