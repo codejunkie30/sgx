@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
@@ -33,6 +34,9 @@ import com.wmsi.sgx.util.DateUtil;
 @SuppressWarnings("unchecked")
 public class HistoricalService extends AbstractDataService {
 	
+	@Value ("${loader.dir.cache}")
+	private String cachePath;
+	
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 	private ClassPathResource template2 = new ClassPathResource("META-INF/query/capiq/priceHistory2.json");
 	
@@ -52,7 +56,7 @@ public class HistoricalService extends AbstractDataService {
 			id = id.substring(0, exIndex );
 		ObjectMapper mapper = new ObjectMapper();
 		
-		File folder = new File("/mnt/cache/");
+		File folder = new File(cachePath);
 		File[] listOfFiles = folder.listFiles();
 		List<String> matches = new ArrayList<String>();
 
@@ -74,7 +78,7 @@ public class HistoricalService extends AbstractDataService {
 			}
 			//Writes todays file
 			String dateString = getTime(parms[1]);
-			String path2 = "/mnt/cache/pricehistory_" + id + "_" + dateString + ".json";
+			String path2 = cachePath + "pricehistory_" + id + "_" + dateString + ".json";
 
 			try {
 				mapper.writeValue(new File(path2), response);
@@ -110,7 +114,7 @@ public class HistoricalService extends AbstractDataService {
 		//Reads File
 		CapIQResponse resp = null;
 		for(String currentFile: matches){
-			String path = "/mnt/cache/" + currentFile;
+			String path = cachePath + currentFile;
 			try {
 				resp = mapper.readValue(new File(path), CapIQResponse.class);
 				
