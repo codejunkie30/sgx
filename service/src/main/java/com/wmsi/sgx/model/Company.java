@@ -26,7 +26,7 @@ public class Company{
 	private Double eps;
 	private Double evEbitData;
 	private Date fiscalYearEnd;
-	private String filingDate;
+	private Date filingDate;
 	private Double floatPercentage;
 	private String gvKey;
 	private Double highPrice;
@@ -230,11 +230,11 @@ public class Company{
 		this.fiscalYearEnd = fiscalYearEnd;
 	}
 
-	public String getFilingDate() {
+	public Date getFilingDate() {
 		return filingDate;
 	}
 
-	public void setFilingDate(String filingDate) {
+	public void setFilingDate(Date filingDate) {
 		this.filingDate = filingDate;
 	}
 

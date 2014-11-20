@@ -74,7 +74,7 @@ public class Company{
 	private String filingCurrency;
 	
 	@ConversionAnnotation(name = "IQ_FILINGDATE_IS")
-	private String filingDate;
+	private Date filingDate;
 
 	@ConversionAnnotation(name = "IQ_PERIODDATE_IS")
 	private Date fiscalYearEnd;
@@ -383,11 +383,11 @@ public class Company{
 		this.filingCurrency = filingCurrency;
 	}
 
-	public String getFilingDate() {
+	public Date getFilingDate() {
 		return filingDate;
 	}
 
-	public void setFilingDate(String filingDate) {
+	public void setFilingDate(Date filingDate) {
 		this.filingDate = filingDate;
 	}
 

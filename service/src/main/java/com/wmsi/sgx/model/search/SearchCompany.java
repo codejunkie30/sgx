@@ -1,5 +1,7 @@
 package com.wmsi.sgx.model.search;
 
+import java.util.Date;
+
 import com.google.common.base.Objects;
 
 public class SearchCompany{
@@ -11,7 +13,7 @@ public class SearchCompany{
 	private Double dividendYield;
 	private Double ebitdaMargin;
 	private Double eps;
-	private String filingDate;
+	private Date filingDate;
 	private String industry;
 	private String industryGroup;
 	private Double marketCap;
@@ -155,11 +157,11 @@ public class SearchCompany{
 		this.eps = eps;
 	}
 
-	public String getFilingDate() {
+	public Date getFilingDate() {
 		return filingDate;
 	}
 
-	public void setFilingDate(String filingDate) {
+	public void setFilingDate(Date filingDate) {
 		this.filingDate = filingDate;
 	}
 
