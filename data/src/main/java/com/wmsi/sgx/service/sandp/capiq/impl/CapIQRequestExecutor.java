@@ -1,6 +1,11 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.protocol.HTTP;
@@ -18,6 +23,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQResponseConversionException;
@@ -30,6 +39,7 @@ import com.wmsi.sgx.service.sandp.capiq.RequestExecutor;
 public class CapIQRequestExecutor implements RequestExecutor{
 
 	private Logger log = LoggerFactory.getLogger(CapIQRequestExecutor.class);
+	private ObjectMapper mapper = new ObjectMapper();
 
 	private RestTemplate restTemplate;
 	public void setRestTemplate(RestTemplate t){restTemplate = t;}
@@ -102,5 +112,45 @@ public class CapIQRequestExecutor implements RequestExecutor{
 		body.add(PARAM_USERID, userId);
 
 		return new HttpEntity<MultiValueMap<String, String>>(body, buildHeaders());
+	}
+	
+	public List<String> loadFiles(String beginsWith, String path) {
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		List<String> matches = new ArrayList<String>();
+		for(File file: listOfFiles){
+			if (file.getName().startsWith(beginsWith)){
+				matches.add(file.getName());
+			}		
+		}
+		Collections.sort(matches);
+		return matches;
+	}
+	
+	public CapIQResponse readFile(String path){
+		try {
+			return mapper.readValue(new File(path), CapIQResponse.class);
+	
+		} catch (JsonParseException e1) {
+			e1.printStackTrace();
+		} catch (JsonMappingException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void writeFile(String path2, CapIQResponse response){
+		//System.out.println(response);
+		try {
+			mapper.writeValue(new File(path2), response);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

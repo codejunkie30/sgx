@@ -6,6 +6,8 @@ import static org.testng.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,6 +72,10 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 			
 			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(response);
+			when(mock.loadFiles(anyString(), anyString()))
+			.thenReturn(new ArrayList<String>(Arrays.asList("pricehistory_A7S_05-06-2014.json")));
+			when(mock.readFile(anyString()))
+			.thenReturn(response);
 
 			 HistoricalService serv = new HistoricalService();
 			 serv.setRequestExecutor(mock);
@@ -85,6 +91,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 			CapIQRequestExecutor mock = mock(CapIQRequestExecutor.class);
 			when(mock.execute( any(CapIQRequestImpl.class), anyMap()) )
 				.thenReturn(response);
+			
 			
 			return mock;
 		}
