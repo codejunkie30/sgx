@@ -1,7 +1,5 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
@@ -39,6 +33,7 @@ public class HistoricalService extends AbstractDataService {
 	
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 	private ClassPathResource template2 = new ClassPathResource("META-INF/query/capiq/priceHistory2.json");
+	//private DataLoadService dataLoad = new DataLoadService(cachePath);
 	
 	@Override
 	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
@@ -51,21 +46,19 @@ public class HistoricalService extends AbstractDataService {
 		ctx.put("endDate", parms[1]);
 		// Strip exchange extension from ticker if present
 		int exIndex = id.indexOf(':');
-		
 		if(exIndex >= 0)
 			id = id.substring(0, exIndex );
-		ObjectMapper mapper = new ObjectMapper();
 		
-		File folder = new File(cachePath);
-		File[] listOfFiles = folder.listFiles();
-		List<String> matches = new ArrayList<String>();
+		
+		String fileStart = "pricehistory_"+id;
+		List<String>listOfFiles = requestExecutor.loadFiles(fileStart, cachePath);
 
 		//Checks if cached file for yesterday exists
 		String startDate = getTime(parms[0]).trim();
 		String yearAgo = getTime(DateUtil.adjustDate(parms[1], Calendar.YEAR, -1)).trim();
 		String yesterday = getTime(DateUtil.adjustDate(parms[1], Calendar.DAY_OF_MONTH, -1));
-		for(File file : listOfFiles){
-			if (file.getName().startsWith("pricehistory_"+id+"_"+yesterday) && !startDate.equals(yearAgo)){
+		for(String file : listOfFiles){
+			if (file.startsWith("pricehistory_"+id+"_"+yesterday) && !startDate.equals(yearAgo)){
 				//Sets start point to today
 				ctx.put("startDate", parms[1]);
 			}
@@ -79,25 +72,17 @@ public class HistoricalService extends AbstractDataService {
 			//Writes todays file
 			String dateString = getTime(parms[1]);
 			String path2 = cachePath + "pricehistory_" + id + "_" + dateString + ".json";
-
-			try {
-				mapper.writeValue(new File(path2), response);
-			} catch (JsonGenerationException e) {
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			requestExecutor.writeFile(path2, response);
 		
 		
 		//Gets all files associated with ticket code
-		listOfFiles = folder.listFiles();
-		for(File file: listOfFiles){
-			if (file.getName().startsWith("pricehistory_"+id) && !startDate.equals(yearAgo)){
-				matches.add(file.getName());
-			}else if(file.getName().startsWith("pricehistory_" + id + "_" + getTime(parms[1])+".json") && startDate.equals(yearAgo)){
-				matches.add(file.getName());
+		listOfFiles =	requestExecutor.loadFiles(fileStart, cachePath);
+		List<String> matches = new ArrayList<String>();
+		for(String file: listOfFiles){
+			if (file.startsWith("pricehistory_"+id) && !startDate.equals(yearAgo)){
+				matches.add(file);
+			}else if(file.startsWith("pricehistory_" + id + "_" + getTime(parms[1])+".json") && startDate.equals(yearAgo)){
+				matches.add(file);
 			}
 		}
 		//Orders list by name
@@ -115,9 +100,7 @@ public class HistoricalService extends AbstractDataService {
 		CapIQResponse resp = null;
 		for(String currentFile: matches){
 			String path = cachePath + currentFile;
-			try {
-				resp = mapper.readValue(new File(path), CapIQResponse.class);
-				
+			resp = requestExecutor.readFile(path);
 				//Reads file data
 				CapIQResult prices = resp.getResults().get(0);
 				CapIQResult volumes = resp.getResults().get(1);
@@ -135,15 +118,6 @@ public class HistoricalService extends AbstractDataService {
 					lowPrice.addAll(getHistory(lowprices, id));
 					openPrice.addAll(getHistory(openprices, id));
 				}
-				
-				
-			} catch (JsonParseException e1) {
-				e1.printStackTrace();
-			} catch (JsonMappingException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 		}
 
 		//Loads data lists into PriceHistory
