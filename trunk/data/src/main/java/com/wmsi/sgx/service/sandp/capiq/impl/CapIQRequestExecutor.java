@@ -132,25 +132,24 @@ public class CapIQRequestExecutor implements RequestExecutor{
 			return mapper.readValue(new File(path), CapIQResponse.class);
 	
 		} catch (JsonParseException e1) {
-			e1.printStackTrace();
+			log.error("Failed to read " + e1);
 		} catch (JsonMappingException e1) {
-			e1.printStackTrace();
+			log.error("Failed to map file " + e1);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			log.error("Failed IO " + e1);
 		}
 		return null;
 	}
 	
 	public void writeFile(String path2, CapIQResponse response){
-		//System.out.println(response);
 		try {
 			mapper.writeValue(new File(path2), response);
 		} catch (JsonGenerationException e) {
-			e.printStackTrace();
+			log.error("Failed to write: " + e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			log.error("Failed to map file: " + e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Failed IO " + e);
 		}
 	}
 }
