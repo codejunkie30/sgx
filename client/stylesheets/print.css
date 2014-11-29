@@ -152,7 +152,7 @@ table.panel td, .general-info td {
 	font-weight: bold;
 }
 
-table.panel td.property, .general-info td.property {
+table.panel td.property, .general-info td.property, table.panel td.note, .general-info td.note {
 	font-weight: normal;
 }
 
