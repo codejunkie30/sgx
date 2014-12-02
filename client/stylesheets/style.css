@@ -99,6 +99,8 @@ td .page-title {
 	margin-left: 2px;
 }
 
+.highcharts-tooltip span { z-index: 9999!important; }
+
 /*!
  * jQuery UI Tabs @VERSION
  * http://jqueryui.com

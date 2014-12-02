@@ -639,7 +639,8 @@ define(deps, function($, _, SGX) {
                 		
                     	$(".search-criteria tbody").children().remove();
                     	
-                    	$(".module-results thead th.companyName").click();
+                    	var sorter = $(".module-results thead th.companyName");
+                    	if (!$(sorter).hasClass("sort") && !$(sorter).hasClass("asc")) $(sorter).click();
                         
                     	// load up all fields for distributions
                     	var allFields = SGX.screener.getAllCriteria();
@@ -1522,7 +1523,7 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
-            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(950, 0);
+            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1050, 0);
             	
             	else SGX.screener.init();
             },
@@ -2150,7 +2151,7 @@ define(deps, function($, _, SGX) {
                 	if (this.points.length <= 1) return ret;
  
                 	// has volume too
-                	ret += "<span>Volume</span>: " + this.points[1].y;
+                	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(2) + " mm";
                 	ret += "</span>";
                 	
                 	return ret;
@@ -2393,7 +2394,7 @@ define(deps, function($, _, SGX) {
 	                            	}
 	                                return Highcharts.numberFormat(this.value, 3);
 	                            }
-        					}    				    			
+        					}
             			});
 
             			SGX.financials.getNextColor(chart.series);
@@ -2500,6 +2501,10 @@ define(deps, function($, _, SGX) {
             			credits: {
             	            enabled: false
             	        },
+    					tooltip: {
+    						useHTML: true,
+    						backgroundColor: "rgba(255, 255, 255, 1)"
+    					},
             			yAxis: [
             			    {
         						id: $(".trigger", el).attr("data-name"),
@@ -2783,6 +2788,9 @@ define(deps, function($, _, SGX) {
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
+            		
+            		// hide/show
+            		if (!data.company.companyInfo.hasOwnProperty("companyWebsite")) $(".companyWebsite").hide();
 
             		// handle financials
             		var endpoint = SGX.fqdn + "/sgx/company/financials";

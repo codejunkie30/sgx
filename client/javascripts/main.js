@@ -1,7 +1,7 @@
 (function() {
 
     require({
-        urlArgs: "v=2.1.17" + new Date().getTime(),
+        urlArgs: "v=2.1.18" + new Date().getTime(),
         paths: {
             jquery: 'vendor/jquery-modern/jquery',
             jquicore: 'vendor/jquery.ui/ui/jquery.ui.core',
