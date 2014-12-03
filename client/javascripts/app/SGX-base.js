@@ -2494,6 +2494,22 @@ define(deps, function($, _, SGX) {
             				width: SGX.financials.getChartWidth(1),
             				height: SGX.financials.getChartHeight()
             			},
+            			plotOptions: {
+            				allowPointSelect: true,
+            				line: {
+                				marker: {
+                                    enabled: true,
+                					states: {
+                						hover: {
+                							enabled: false
+                						},
+                						select: {
+                							enabled: false
+                                        }
+                					}
+                				}
+            				}
+            			},
             			legend: {
             				enabled: false
             			},
