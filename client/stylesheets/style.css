@@ -99,7 +99,17 @@ td .page-title {
 	margin-left: 2px;
 }
 
-.highcharts-tooltip span { z-index: 9999!important; }
+.large-bar-chart .label {
+	z-index: 1 !important;
+	text-align: center;
+ }
+ 
+.highcharts-tooltip span {
+ 	padding: 4px;
+	background-color: #FFFFFF;
+    opacity:1;
+    z-index:9999 !important;
+}
 
 /*!
  * jQuery UI Tabs @VERSION

@@ -2151,7 +2151,7 @@ define(deps, function($, _, SGX) {
                 	if (this.points.length <= 1) return ret;
  
                 	// has volume too
-                	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(2) + " mm";
+                	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(3) + " mm";
                 	ret += "</span>";
                 	
                 	return ret;
@@ -2518,8 +2518,7 @@ define(deps, function($, _, SGX) {
             	            enabled: false
             	        },
     					tooltip: {
-    						useHTML: true,
-    						backgroundColor: "rgba(255, 255, 255, 1)"
+    						useHTML: true
     					},
             			yAxis: [
             			    {
@@ -2559,10 +2558,7 @@ define(deps, function($, _, SGX) {
                                 from: 0
                             },
             	        	labels: {
-            	        		useHTML: true,
-            	        		style: {
-            	        			textAlign: "center"
-            	        		}
+            	        		useHTML: true
             	        	}
                         }
             		});
