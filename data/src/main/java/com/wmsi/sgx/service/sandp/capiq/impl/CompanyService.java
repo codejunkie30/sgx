@@ -78,12 +78,29 @@ public class CompanyService extends AbstractDataService{
 	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice, String startDate){
 		List<HistoricalValue> volume = getLastThreeMonths(lastYearVol, startDate);
 		List<HistoricalValue> price = getLastThreeMonths(lastYearPrice, startDate);
+		List<HistoricalValue> price2 = getLastThreeMonths(lastYearPrice, startDate);
+		
+		//Checks for matching price volume size/dates and removes unmatching entries.
+		if(volume.size() != price.size()){
+			for(HistoricalValue currPrice : price){
+				Boolean isFound = false;
+				for(HistoricalValue currVol : volume){
+					if(currPrice.getDate() == currVol.getDate()){
+						isFound = true;
+						break;
+					}
+				}
+				if(isFound == false){
+					price2.remove(currPrice);
+				}
+			}
+		}
 		
 		Double sum = 0.0;
 		
-		for(int i = 0; i < price.size(); i++){
+		for(int i = 0; i < price2.size(); i++){
 			HistoricalValue vol = volume.get(i);
-			HistoricalValue pri = price.get(i);			
+			HistoricalValue pri = price2.get(i);			
 			sum += vol.getValue() * pri.getValue();
 		}
 		
