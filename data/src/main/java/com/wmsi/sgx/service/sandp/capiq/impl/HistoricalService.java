@@ -127,6 +127,12 @@ public class HistoricalService extends AbstractDataService {
 		history.setLowPrice(lowPrice);
 		history.setOpenPrice(openPrice);
 		history.setVolume(volume);
+		
+		if(history.getPrice().size() != history.getHighPrice().size() || history.getPrice().size() != history.getLowPrice().size() || history.getPrice().size() != history.getOpenPrice().size()){
+			HistoryProcess process = new HistoryProcess();
+			history = process.processHistory(history);
+		}
+		
 		return history;
 	}
 
