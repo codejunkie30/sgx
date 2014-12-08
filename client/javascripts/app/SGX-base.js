@@ -1509,11 +1509,15 @@ define(deps, function($, _, SGX) {
             		SGX.showTerms();  
             	});
             	
+            	// user guide
             	$(".user-guide").click(function(e) {
             		e.preventDefault();
             		e.stopPropagation();
             		SGX.showUserGuide();
             	});
+            	
+        		// screener
+        		$(".screener-link").attr("target", "_parent").attr("href", SGX.getPage(SGX.screenerPage.id));
             	
             	// the page
             	var page = location.pathname;
@@ -1523,9 +1527,9 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
-            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1050, 0);
-            	
+            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1000, 0);
             	else SGX.screener.init();
+            	
             },
             
 
@@ -1647,6 +1651,9 @@ define(deps, function($, _, SGX) {
             		
             		$(".container_3:first").prepend($(companyHeader));
             		
+            		// screener
+            		$(".screener-link").attr("target", "_parent").attr("href", SGX.getPage(SGX.screenerPage.id));
+            		
             	},
             	
             	initSimple: function(data, addHeader) {
@@ -1673,9 +1680,6 @@ define(deps, function($, _, SGX) {
             			$(".breadcrumb-tree .dynamic").append(a);
             		});
 
-            		// screener
-            		$(".screener-link").attr("target", "_parent").attr("href", SGX.getPage(SGX.screenerPage.id));
-            		
             		// financials
             		$(".view-financials").click(function(e) { 
             			window.top.location.href = SGX.getFinancialsPage(data.company.companyInfo.tickerCode);

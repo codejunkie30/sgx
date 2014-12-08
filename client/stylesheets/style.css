@@ -1432,15 +1432,21 @@ table.search-criteria .remove {
 }
 
 .back-button {
-  float: left;
   margin: 0;
   padding-left: 32px !important;
   background: #1e2171 url("../img/back-button.jpg") no-repeat 8px 4px !important;
 }
+
+.standalone.back-button {
+	margin: 10px 0;
+}
+
 .back-button a {
   color: #fff;
   text-decoration: none;
 }
+
+
 .comparable-button {
   display: inline;
   position: relative;
