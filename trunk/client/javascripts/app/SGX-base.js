@@ -2814,11 +2814,9 @@ define(deps, function($, _, SGX) {
             		SGX.handleAjaxRequest(endpoint, params, function(fData) { SGX.print.loadFinancials(fData, data); });
             		
             		// handle TOS
-            		$(".terms").load("terms-conditions.html", function(html) {
-            			var html = $(".terms .terms-copy").html();
-            			$(".terms").html(html);
+            		$(".terms").load("terms-conditions.html .grid_3", function(x, y, z) {
             			SGX.print.loadedItems(data);
-            		});
+            		})
         			
         		},
         		
