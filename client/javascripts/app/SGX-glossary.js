@@ -178,7 +178,11 @@ var GLOSSARY =
 		},
 		{
 			id: "avgTradedVolM3",
-			definition: "Average 3 Month Traded Value is the average price per share at which shares were traded during the preceding three months."
+			definition: "Average 3 Month Traded Value is the average value of shares traded during the preceding three months."
+		},
+		{
+			id: "keyDevs",
+			definition: "Use Key Developments to understand the impact of news and events on market price. S&P Capital IQ monitors, aggregates and tag Key Developments from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations and company websites."
 		}
 		
 ];
