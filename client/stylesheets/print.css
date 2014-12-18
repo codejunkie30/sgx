@@ -211,15 +211,31 @@ td.right {
 	margin-bottom:0px;
 }
 
-
 .financials-section th {
 	font-size: 9px;
 	border-left: 4px solid #FFF;
 }
 
 .terms ul * {
-	font-size: 13px;
-	line-height: 18px;
+	font-size: 12px;
+	line-height: 14px;
+	width: 90%;
+}
+
+.back-button {
+	display: none;
+}
+
+.terms .page-title {
+	margin-bottom: 10px;
+	font-size: 22px;
+	font-weight: normal;
+}
+
+.terms h4 {
+	margin-bottom: 15px;
+	font-size: 16px;
+	font-weight: normal;
 }
 
 .terms ul li {
