@@ -241,3 +241,9 @@ td.right {
 .terms ul li {
 	margin-bottom: 10px;
 }
+
+/** hide some stuff */
+.right .left hr, .glossary-item, .has-factors .left {
+	display: none;
+}
+
