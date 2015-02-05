@@ -110,13 +110,13 @@ public abstract class AbstractResponseParser implements ResponseParser{
 		List<String> values = new ArrayList<String>();
 
 		if(res.getRows() != null && !res.getRows().isEmpty()){
+			
 			for(CapIQRow row : res.getRows()){
 				String str = row.getValues().get(0);
-				//for(String str : row.getValues()){
-					if(StringUtils.isNotEmpty(str) && !str.toLowerCase().startsWith("data unavailable")){
-						values.add(str);
-					}
-				//}
+
+				if(StringUtils.isNotEmpty(str) && !str.toLowerCase().startsWith("data unavailable")){
+					values.add(str);
+				}
 			}
 		}
 

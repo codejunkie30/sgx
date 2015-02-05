@@ -12,8 +12,8 @@
 
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">
 		<param name="file" value="/var/log/sgx/sgx-loader.log" />
-		<param name="MaxFileSize" value="1MB" />
-		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="5MB" />
+		<param name="MaxBackupIndex" value="20" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{MM-dd-yyyy HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
 		</layout>
@@ -21,8 +21,8 @@
 
 	<appender name="apache" class="org.apache.log4j.RollingFileAppender">
 		<param name="file" value="/var/log/sgx/sgx-http.log" />
-		<param name="MaxFileSize" value="20MB" />
-		<param name="MaxBackupIndex" value="100" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="20" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
 		</layout>
@@ -30,8 +30,8 @@
 
 	<appender name="aspectLogging" class="org.apache.log4j.RollingFileAppender">
 		<param name="file" value="/var/log/sgx/sgx-aop.log" />
-		<param name="MaxFileSize" value="20MB" />
-		<param name="MaxBackupIndex" value="100" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="20" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{MM-dd-yyyy HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
 		</layout>

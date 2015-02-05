@@ -39,6 +39,7 @@ import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.indexer.impl.IndexerServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.DataService;
 import com.wmsi.sgx.service.sandp.capiq.RequestExecutor;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
@@ -69,17 +70,25 @@ public class HttpConfig{
 	
     @Bean(name="capIqJsonMessageConverter")
     public MappingJackson2HttpMessageConverter capIqJsonConverter() {
+    	
+    	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
+    	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
+    	jackson.setObjectMapper(capIqObjectmapper());
+    	
+    	return jackson;
+    }
+
+    @Bean(name= "capIqObjectMapper")
+    public ObjectMapper capIqObjectmapper(){
+    	
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     	mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-    	MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
-    	jackson.setSupportedMediaTypes(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON}));
-    	jackson.setObjectMapper(mapper);
     	
-    	return jackson;
+    	return mapper;
     }
-    
+
 	@Bean(name = "capIqRestTemplate")	
 	public RestTemplate capIqRestTemplate() {
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -172,16 +181,26 @@ public class HttpConfig{
 	public DataService companyService(){
 		CompanyService service = new CompanyService();
 		service.setRequestExecutor(capIqRequestExecutor());
-		service.setResponseParser(new CompanyResponseParser());
+		service.setResponseParser(companyResponseParser());
 		return service;
 	}
 
 	@Bean
+	public ResponseParser companyResponseParser(){
+		return new CompanyResponseParser();
+	}
+	
+	@Bean
 	public DataService financialsService(){
 		FinancialsService  service = new FinancialsService();
 		service.setRequestExecutor(capIqRequestExecutor());
-		service.setResponseParser(new FinancialsResponseParser());
+		service.setResponseParser(financialsResponseParser());
 		return service;
+	}
+
+	@Bean
+	public ResponseParser financialsResponseParser(){
+		return new FinancialsResponseParser();
 	}
 
 	@Bean
@@ -195,16 +214,26 @@ public class HttpConfig{
 	public DataService keyDevsService(){
 		KeyDevsService service = new KeyDevsService();
 		service.setRequestExecutor(capIqRequestExecutor());
-		service.setResponseParser(new KeyDevResponseParser());
+		service.setResponseParser(keyDevResponseParser());
 		return service;
+	}
+
+	@Bean
+	public ResponseParser keyDevResponseParser(){
+		return new KeyDevResponseParser();
 	}
 
 	@Bean
 	public DataService holdersService(){
 		HoldersService service = new HoldersService ();
 		service.setRequestExecutor(capIqRequestExecutor());
-		service.setResponseParser(new HoldersResponseParser());
+		service.setResponseParser(holdersResponseParser());
 		return service;
+	}
+
+	@Bean
+	public ResponseParser holdersResponseParser(){
+		return new HoldersResponseParser();
 	}
 
 }

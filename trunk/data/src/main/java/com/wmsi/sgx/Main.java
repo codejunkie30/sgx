@@ -59,7 +59,7 @@ public final class Main{
 
 		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
 
-		Resource companyIds = new ClassPathResource("data/sgx_companies_short.txt");
+		Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 
 		chan.send(MessageBuilder.withPayload(companyIds)
 				.setHeader("jobId", System.currentTimeMillis())

@@ -57,11 +57,15 @@ public class CapIQRequestExecutor implements RequestExecutor{
 	public CapIQResponse execute(CapIQRequestImpl req, Map<String, Object> ctx) throws CapIQRequestException {
 
 		log.debug("Executing request to capital iq api");
+
 		ResponseEntity<CapIQResponse> res = null;
-		
+
+		String query = req.buildQuery(ctx);
+		HttpEntity<MultiValueMap<String, String>> entity = buildEntity(query);
+
 		try{
-			String query = req.buildQuery(ctx);
-			res = restTemplate.exchange(url, HttpMethod.POST, buildEntity(query), CapIQResponse.class);
+			
+			res = restTemplate.exchange(url, HttpMethod.POST, entity, CapIQResponse.class);
 			
 			if(res == null)
 				throw new CapIQRequestException("Null response received from capitalIQ api");
@@ -73,13 +77,20 @@ public class CapIQRequestExecutor implements RequestExecutor{
 			// are affected, we'll simply throw an exception as something has already gone wrong.
 			throw new CapIQResponseConversionException("Could not convert response from api", ex);
 		}
-		catch(HttpClientErrorException ex){
-			log.error("CapIQ Api returned client error {}", ex.getMessage());
-			throw new CapIQRequestException("Recieved client error code response from api server", ex);
-		}
-		catch(HttpServerErrorException ex){			
-			log.error("CapIQ Api returned server error {}", ex.getMessage());
-			throw new CapIQRequestException("Recieved server error response from api server", ex);
+		catch(HttpClientErrorException | HttpServerErrorException ex){
+			
+			CapIQRequestException exception = new CapIQRequestException("Recieved error code response from api server", ex);			
+			
+			exception.setStatusCode(ex.getStatusCode().toString());
+			exception.setStatusText(ex.getStatusText());
+			
+			exception.setRequestHeaders(entity.getHeaders().toString());
+			exception.setRequestBody(entity.getBody().toString());
+			
+			exception.setResponseHeaders(ex.getResponseHeaders().toString());
+			exception.setResponseBody(ex.getResponseBodyAsString());			
+			
+			throw exception;
 		}
 		
 		int statusCode = res.getStatusCode().value();
