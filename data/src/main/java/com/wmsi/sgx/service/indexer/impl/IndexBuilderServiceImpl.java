@@ -126,6 +126,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
 		
 		try{
+			log.debug("Indexing record: {}", input.getTicker());
 			indexRecord(indexName, input);
 		}
 		catch(InvalidIdentifierException e){
@@ -163,16 +164,21 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
 		
-		int failed = 0;
+		List<CompanyInputRecord> failedRecords = new ArrayList<CompanyInputRecord>();
 		
 		for(CompanyInputRecord rec : records){
 			if(!rec.getIndexed())
-				failed++;
+				failedRecords.add(rec);				
 		}
 		
+		int failed = failedRecords.size();
 		boolean success = failed < FAILURE_THRESHOLD;
 		
 		log.info("Job status completed with {} failed records. Success: {}", failed, success);
+		
+		if(log.isDebugEnabled()){			
+			log.debug("Failed records:\n{}", StringUtils.collectionToDelimitedString(failedRecords, "\n"));
+		}
 		
 		return success;
 	}
