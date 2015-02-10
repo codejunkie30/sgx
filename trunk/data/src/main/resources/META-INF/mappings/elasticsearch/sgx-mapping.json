@@ -285,6 +285,11 @@
 				{
 					"type": "double"
 				},
+				
+				"floatPercentage": 
+				{
+					"type": "double"
+				},
 
 				"gvKey": 
 				{
