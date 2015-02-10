@@ -338,6 +338,11 @@
 				{
 					"type": "double"
 				},
+				
+				"priceVolHistYr": 
+				{
+					"type": "double"
+				},
 
 				"priceHistory": 
 				{
