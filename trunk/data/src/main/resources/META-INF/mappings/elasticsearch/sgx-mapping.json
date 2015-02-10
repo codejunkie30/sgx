@@ -223,6 +223,11 @@
 				{
 					"type": "double"
 				},
+				
+				"avgVolumeM3": 
+				{
+					"type": "double"
+				},
 
 				"beta5Yr": 
 				{

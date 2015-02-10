@@ -8,6 +8,7 @@ public class SearchCompany{
 
 	private Double avgBrokerReq;
 	private Double avgTradedVolM3;
+	private Double avgVolumeM3;
 	private Double beta5Yr;
 	private String companyName;
 	private Double dividendYield;
@@ -48,6 +49,14 @@ public class SearchCompany{
 
 	public void setAvgTradedVolM3(Double avgTradedVolM3) {
 		this.avgTradedVolM3 = avgTradedVolM3;
+	}
+
+	public Double getAvgVolumeM3() {
+		return avgVolumeM3;
+	}
+
+	public void setAvgVolumeM3(Double avgVolumeM3) {
+		this.avgVolumeM3 = avgVolumeM3;
 	}
 
 	public Double getBeta5Yr() {
@@ -252,7 +261,7 @@ public class SearchCompany{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
 	@Override
@@ -261,6 +270,7 @@ public class SearchCompany{
 			SearchCompany that = (SearchCompany) object;
 			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
 				&& Objects.equal(this.avgTradedVolM3, that.avgTradedVolM3)
+				&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
 				&& Objects.equal(this.beta5Yr, that.beta5Yr)
 				&& Objects.equal(this.companyName, that.companyName)
 				&& Objects.equal(this.dividendYield, that.dividendYield)
@@ -295,6 +305,7 @@ public class SearchCompany{
 		return Objects.toStringHelper(this)
 			.add("avgBrokerReq", avgBrokerReq)
 			.add("avgTradedVolM3", avgTradedVolM3)
+			.add("avgVolumeM3", avgVolumeM3)
 			.add("beta5Yr", beta5Yr)
 			.add("companyName", companyName)
 			.add("dividendYield", dividendYield)
