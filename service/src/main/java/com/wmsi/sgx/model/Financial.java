@@ -8,6 +8,7 @@ public class Financial{
 
 	private String absPeriod;
 	private Double assetTurns;
+	private Double basicEpsIncl;
 	private Double avgDaysInventory;
 	private Double avgDaysPayable;
 	private Double cashConversion;
@@ -66,6 +67,14 @@ public class Financial{
 
 	public void setAssetTurns(Double assetTurns) {
 		this.assetTurns = assetTurns;
+	}
+
+	public Double getBasicEpsIncl() {
+		return basicEpsIncl;
+	}
+
+	public void setBasicEpsIncl(Double basicEpsIncl) {
+		this.basicEpsIncl = basicEpsIncl;
 	}
 
 	public Double getAvgDaysInventory() {
@@ -414,7 +423,7 @@ public class Financial{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(absPeriod, assetTurns, avgDaysInventory, avgDaysPayable, cashConversion, cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio, dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth, filingCurrency, filingDate, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange, netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets, totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue, totalRevenue1YrAnnGrowth);
+		return Objects.hashCode(absPeriod, assetTurns, basicEpsIncl, avgDaysInventory, avgDaysPayable, cashConversion, cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio, dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth, filingCurrency, filingDate, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange, netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets, totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue, totalRevenue1YrAnnGrowth);
 	}
 	
 	@Override
@@ -423,6 +432,7 @@ public class Financial{
 			Financial that = (Financial) object;
 			return Objects.equal(this.absPeriod, that.absPeriod)
 				&& Objects.equal(this.assetTurns, that.assetTurns)
+				&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl)
 				&& Objects.equal(this.avgDaysInventory, that.avgDaysInventory)
 				&& Objects.equal(this.avgDaysPayable, that.avgDaysPayable)
 				&& Objects.equal(this.cashConversion, that.cashConversion)
@@ -475,6 +485,7 @@ public class Financial{
 		return Objects.toStringHelper(this)
 			.add("absPeriod", absPeriod)
 			.add("assetTurns", assetTurns)
+			.add("basicEpsIncl", basicEpsIncl)
 			.add("avgDaysInventory", avgDaysInventory)
 			.add("avgDaysPayable", avgDaysPayable)
 			.add("cashConversion", cashConversion)

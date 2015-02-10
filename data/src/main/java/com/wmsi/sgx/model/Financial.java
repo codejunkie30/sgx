@@ -13,6 +13,9 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_ASSET_TURNS")
 	private Double assetTurns;
 	
+	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
+	private Double basicEpsIncl;
+	
 	@ConversionAnnotation(name = "IQ_DAYS_INVENTORY_OUT")
 	private Double avgDaysInventory;
 	
@@ -156,6 +159,14 @@ public class Financial{
 
 	public void setAssetTurns(Double assetTurns) {
 		this.assetTurns = assetTurns;
+	}
+
+	public Double getBasicEpsIncl() {
+		return basicEpsIncl;
+	}
+
+	public void setBasicEpsIncl(Double basicEpsIncl) {
+		this.basicEpsIncl = basicEpsIncl;
 	}
 
 	public Double getAvgDaysInventory() {
@@ -500,13 +511,14 @@ public class Financial{
 	
 	public void setTotalRevenue1YrAnnGrowth(Double totalRevenue1YrAnnGrowth) {
 		this.totalRevenue1YrAnnGrowth = totalRevenue1YrAnnGrowth;
-	}	
+	}
 
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 			.add("absPeriod", absPeriod)
 			.add("assetTurns", assetTurns)
+			.add("basicEpsIncl", basicEpsIncl)
 			.add("avgDaysInventory", avgDaysInventory)
 			.add("avgDaysPayable", avgDaysPayable)
 			.add("cashConversion", cashConversion)

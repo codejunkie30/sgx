@@ -14,6 +14,7 @@ public class SearchCompany{
 	private Double ebitdaMargin;
 	private Double eps;
 	private Date filingDate;
+	private Double floatPercentage;
 	private String industry;
 	private String industryGroup;
 	private Double marketCap;
@@ -67,6 +68,14 @@ public class SearchCompany{
 
 	public Double getEps() {
 		return eps;
+	}
+
+	public Double getFloatPercentage() {
+		return floatPercentage;
+	}
+
+	public void setFloatPercentage(Double floatPercentage) {
+		this.floatPercentage = floatPercentage;
 	}
 
 	public String getIndustry() {
@@ -243,7 +252,7 @@ public class SearchCompany{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
 	@Override
@@ -258,6 +267,7 @@ public class SearchCompany{
 				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
 				&& Objects.equal(this.eps, that.eps)
 				&& Objects.equal(this.filingDate, that.filingDate)
+				&& Objects.equal(this.floatPercentage, that.floatPercentage)
 				&& Objects.equal(this.industry, that.industry)
 				&& Objects.equal(this.industryGroup, that.industryGroup)
 				&& Objects.equal(this.marketCap, that.marketCap)
@@ -291,6 +301,7 @@ public class SearchCompany{
 			.add("ebitdaMargin", ebitdaMargin)
 			.add("eps", eps)
 			.add("filingDate", filingDate)
+			.add("floatPercentage", floatPercentage)
 			.add("industry", industry)
 			.add("industryGroup", industryGroup)
 			.add("marketCap", marketCap)
