@@ -19,6 +19,9 @@ public class Company{
 	
 	private Double avgVolumeM3;
 
+	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
+	private Double basicEpsIncl;
+	
 	@ConversionAnnotation(name = "IQ_BETA_5YR")
 	private Double beta5Yr;
 
@@ -237,6 +240,14 @@ public class Company{
 
 	public void setAvgVolumeM3(Double avgVolumeM3) {
 		this.avgVolumeM3 = avgVolumeM3;
+	}
+
+	public Double getBasicEpsIncl() {
+		return basicEpsIncl;
+	}
+
+	public void setBasicEpsIncl(Double basicEpsIncl) {
+		this.basicEpsIncl = basicEpsIncl;
 	}
 
 	public Double getBeta5Yr() {
@@ -668,6 +679,7 @@ public class Company{
 			.add("avgBrokerReq", avgBrokerReq)
 			.add("avgTradedVolM3", avgTradedVolM3)
 			.add("avgVolumeM3", avgVolumeM3)
+			.add("basicEpsIncl", basicEpsIncl)
 			.add("beta5Yr", beta5Yr)
 			.add("businessDescription", businessDescription)
 			.add("bvShare", bvShare)
