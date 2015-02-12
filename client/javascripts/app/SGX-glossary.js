@@ -82,39 +82,39 @@ var GLOSSARY =
 		},
 		{
 			id: "priceMomentum",
-			definition: "Price Momentum generally is an appraisal of how quickly a share's price is moving in a particular direction. To develop a complete picture of momentum, the indicator looks at nine-month, one-month, and five-day price momentum statistics. It also weighs the one-year to one-month price momentum ratio and one-month price high to one-month price low ratio."
+			definition: "Price Momentum is an assessment of share price changes in a particular direction (negative or positive). The indicators are five-day, one-month, nine-month price movements, as well as 12-1 month price momentum and one-month price high to one-month price low ratio.<br />A 'HIGH' score represents companies that have a higher rate or momentum at which the stock price is rising, and a 'LOW' score represents companies that have a higher rate or momentum at which the stock price is falling."
 		},
 		{
 			id: "analystExpectations",
-			definition: "Analyst Expectations for a company reflect the average assessments of the professional analysts who follow that company. Specific performance indicators for this factor include expected long-term earnings growth, analyst earnings estimate diffusion (the proportion of analysts changing their opinions), number of one-year earnings per share revisions, and standardized unexpected earnings (a measure of the market's surprise about announcements)."
+			definition: "Analyst Expectations of a company provides a consensus assessment by analysts who follow that company. It is derived from an equal weighted combination of analyst earnings forecasts, analyst earnings revisions, and earnings surprise. <br /><br />A 'HIGH' score represents companies that are likely to experience a positive price response due to favourable consensus analyst outlook, and a 'LOW' score represents companies that are likely to experience a negative price response due to less favourable consensus analyst outlook.<br /><br />Companies with at least 1 analyst covering the company will have a rating, as opposed to the S&P Capital IQ Consensus Estimates which requires 3 or more analysts covering the company to have a rating."
 		},
 		{
 			id: "historicalGrowth",
-			definition: "Historical Growth is generally looked on as a potential indicator of future growth. The specific indicators in this factor are one-year change in asset-adjusted free cash flow, one-year change in asset-adjusted operating cash flow, one-year change in sales turnover, sustainable growth rate, and one-year change in earnings per share. "
+			definition: "Historical Growth is often used to forecast a company's future growth potential. The indicators are year-over-year earnings growth, cash flow growth, and sales growth.<br /><br />A 'HIGH' score represents companies that have strong historical growth, and a 'LOW' score represents companies that have weak historical growth."
 		},
 		{
 			id: "valuation",
-			definition: "Valuation is the measurement of a company's worth. Five ratios are used in this factor: book value to share price, free cash flow to share price, EBITDA (earnings before interest, taxes, depreciation, and amortization) to enterprise value (net worth), sales to enterprise value, and earnings to share price."
+			definition: "Valuation involves identifying the relative value of stocks compared with their peers. Undervalued stocks are currently not favored by the market, although possessing strong profitability or cash flows. An equal weighted combination of ratios used in assessing a company's valuation score are price-to-book, price-to-earnings, price-to-free cash flow, dividend yield, enterprise value-to-EBITDA, and enterprise value-to-sales. <br /><br />An 'UNDER' represents companies currently undervalued, and an 'OVER' represents companies currently overvalued."
 		},
 		{
 			id: "capitalEfficiency",
-			definition: "Capital Efficiency gauges how well a company uses its capital to generate returns for shareholders. Detailed indicators that help determine overall efficiency include return on equity, cash flow return on invested capital, long-term debt-to-equity ratio, capital acquisition ratio, and one-year change in shares outstanding. "
+			definition: "Capital Efficiency gauges how well a company uses its capital to generate returns for shareholders. Indicators used are return on equity, cash flow return on invested capital, long-term debt-to-equity ratio, capital acquisition ratio, and one year change in shares outstanding. <br /><br />A 'HIGH' score represents companies that are more capital efficient, and a 'LOW' score represents companies that are less capital efficient."
 		},
 		{
 			id: "earningsQuality",
-			definition: "Earnings Quality combines indications of operational efficiency, financial consistency, and accounting quality. The specific indicators of earnings quality include the company's cash conversion cycle, its net profit margin, its working capital accruals, its accrual ratio for cash flows, and its net income stability. "
+			definition: "Earnings Quality reflects a company's operating capabilities and competitiveness reflected through profitability, operational efficiency, and earnings quality. The indicators are profitability, cash conversion cycle, accounting quality and earnings stability.<br /><br />A 'HIGH' score represents companies that have strong earnings quality, and a 'LOW' score represents companies that have weak earnings quality."
 		},
 		{
 			id: "size",
-			definition: "Size is measured here by market capitalization (log market cap) and by annual revenue (log sales cap). "
+			definition: "Size of a company is measured by market capitalisation and sales in a year. <br /><br />A 'LARGE' company has a higher Size score, and a 'SMALL' company has a lower score."
 		},
 		{
 			id: "volatility",
-			definition: "Volatility is a measure of market price variability that is widely used as a measure of stock-specific risk. Indicators include one-year realized price volatility (long-term volatility) and one-month realized price volatility (short-term). Also considered are comparative statistics: five-year beta and the three-month coefficient of variation. "
+			definition: "Price Volatility is a measure of price fluctuations, and is widely used to identify stock specific risk.  The indicators used are one-month price volatility, one-year price volatility, five-year beta, and three-month coefficient of variation<br /><br />A 'LOW' volatility score represents companies with low price fluctuations, and a 'HIGH' volatility score represents companies with high price fluctuations."
 		},
 		{
 			id: "alphaFactors",
-			definition: "You can use the S&P Capital IQ Alpha Factor Composites to differentiate between companies. They show the company's ranking in eight categories that are likely to affect the stock's price."
+			definition: "S&P Capital IQ's Alpha Factor Library (AFL) style classifications provide an easy way to filter for companies that could be targets using institutional investment ideas.<br /><br />The style profile of the selected company is displayed with green bars representing this company's quintile rank for each style. <br /><br />Within each style, we create a quintile group by ranking all companies by their style composite score and grouping according to their quintile membership, i.e., the top 20% of companies are ranked in the 1st quintile, and the lowest 20% of companies are ranked in the 5th quintile."
 		},
 		{
 			id: "roa",
