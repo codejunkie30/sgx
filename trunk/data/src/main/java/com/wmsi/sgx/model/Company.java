@@ -126,6 +126,9 @@ public class Company{
 	
 	@ConversionAnnotation(name = "IQ_PRICE_VOL_HIST_YR")
 	private Double priceVolHistYr;
+	
+	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
+	private Double returnOnEquity;
 
 	@ConversionAnnotation(name = "IQ_SHARESOUTSTANDING")
 	private Double sharesOutstanding;
@@ -529,6 +532,14 @@ public class Company{
 		this.priceVolHistYr = priceVolHistYr;
 	}
 
+	public Double getReturnOnEquity() {
+		return returnOnEquity;
+	}
+
+	public void setReturnOnEquity(Double returnOnEquity) {
+		this.returnOnEquity = returnOnEquity;
+	}
+
 	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
@@ -715,6 +726,7 @@ public class Company{
 			.add("previousClosePrice", previousClosePrice)
 			.add("priceToBookRatio", priceToBookRatio)
 			.add("priceVolHistYr", priceVolHistYr)
+			.add("returnOnEquity", returnOnEquity)
 			.add("sharesOutstanding", sharesOutstanding)
 			.add("sharesSoldShort", sharesSoldShort)
 			.add("targetPriceNum", targetPriceNum)
