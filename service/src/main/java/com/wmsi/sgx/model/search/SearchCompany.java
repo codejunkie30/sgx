@@ -27,6 +27,7 @@ public class SearchCompany{
 	private Double priceVolHistYr;
 	private Double priceVs52WeekHigh;
 	private Double priceVs52WeekLow;
+	private Double returnOnEquity;
 	private Double targetPriceNum;
 	private String tickerCode;
 	private Double totalDebtEquity;
@@ -236,6 +237,14 @@ public class SearchCompany{
 		this.priceVs52WeekLow = priceVs52WeekLow;
 	}
 
+	public Double getReturnOnEquity() {
+		return returnOnEquity;
+	}
+
+	public void setReturnOnEquity(Double returnOnEquity) {
+		this.returnOnEquity = returnOnEquity;
+	}
+
 	public void setTargetPriceNum(Double targetPriceNum) {
 		this.targetPriceNum = targetPriceNum;
 	}
@@ -270,7 +279,7 @@ public class SearchCompany{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
 	@Override
@@ -298,6 +307,7 @@ public class SearchCompany{
 				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
 				&& Objects.equal(this.priceVs52WeekHigh, that.priceVs52WeekHigh)
 				&& Objects.equal(this.priceVs52WeekLow, that.priceVs52WeekLow)
+				&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
 				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
 				&& Objects.equal(this.tickerCode, that.tickerCode)
 				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
@@ -334,6 +344,7 @@ public class SearchCompany{
 			.add("priceVolHistYr", priceVolHistYr)
 			.add("priceVs52WeekHigh", priceVs52WeekHigh)
 			.add("priceVs52WeekLow", priceVs52WeekLow)
+			.add("returnOnEquity", returnOnEquity)
 			.add("targetPriceNum", targetPriceNum)
 			.add("tickerCode", tickerCode)
 			.add("totalDebtEquity", totalDebtEquity)

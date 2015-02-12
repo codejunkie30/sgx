@@ -82,6 +82,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_REV_1YR_ANN_GROWTH", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_REV_3YR_ANN_GROWTH", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_REV_5YR_ANN_GROWTH", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TOTAL_OUTSTANDING_FILING_DATE", "properties":{"PERIODTYPE":"IQ_LTM", "RESTATEMENTTYPEID":"LFR"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_VOLUME", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_YEAR_FOUNDED", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_YEARHIGH", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},

@@ -370,6 +370,11 @@
 						}
 					}
 				},
+				
+				"returnOnEquity": 
+				{
+					"type": "double"
+				},
 
 				"targetPriceNum": 
 				{
