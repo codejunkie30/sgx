@@ -1760,6 +1760,7 @@ td .info {
   -moz-background-clip: padding;
   background-clip: padding-box;
   width: 160px;
+  z-index: 3;
 }
 .tooltip-content {
   background: #ecf1c4;
