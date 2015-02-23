@@ -1591,7 +1591,7 @@ table.search-criteria .remove {
   color: #1e2171;
 }
 
-.screener-header .message .intro-headline, .screener-header .message p {
+.screener-header .message div {
 	color: #FFF;
 }
 
