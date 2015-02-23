@@ -32,7 +32,7 @@ define(deps, function($, _, SGX) {
     		
     		relatedPage: { id: "3", file: "related.html" },
     		
-    		alphasPage: { id: "4", file: "alpha-factor.html" },
+    		alphasPage: { id: "0", file: "index.html" },
 
     		printPage: { id: "5", file: "print.html" },
     		
@@ -81,19 +81,19 @@ define(deps, function($, _, SGX) {
             },
             
             getFinancialsPage: function(code, extra) {
-            	return SGX.getPage(SGX.financialsPage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.financialsPage.id + "&code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
             getRelatedPage: function(code, extra) {
-            	return SGX.getPage(SGX.relatedPage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.relatedPage.id + "&code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
             
             getTradePage: function(code, extra) {
-            	return SGX.getPage(SGX.tradePage.id + "?code=" + code + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.tradePage.id + "&code=" + code + (typeof extra === "undefined" ? "" : extra));
             },
 
             getAlphasPage: function(factor, quintile, extra) {
-            	return SGX.getPage(SGX.alphasPage.id + "?factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
+            	return SGX.getPage(SGX.alphasPage.id + "&type=alpha-factors&factor=" + factor + "&quintile=" + quintile + (typeof extra === "undefined" ? "" : extra));
             },
             
             getPrintPage: function(code, extra) {
@@ -126,21 +126,32 @@ define(deps, function($, _, SGX) {
 
     			changeSearchToggle: function(name) {
     				
+    				// toggle tabs
     				$(".screener-toggles .button, .screener-toggles .arrow").removeClass("selected");
     				$(".screener-toggles span[data-name='" + name + "']").addClass("selected");
+
+    				// hide/show options
+    				$(".search-options").hide();
+    				$("[data-section='" + name + "']").show();
+    				
+        			SGX.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
     				
     			},
 
         		init: function() {
-        			
-        			SGX.trackPage("SGX - Screener");
-        			
-        			// choose which tab we're showing
-        			SGX.screener.changeSearchToggle($(".screener-toggles .button:first").attr("data-name"));
-        			
+
+        			// some base variables
+        			var searchType = SGX.getParameterByName("type") == "" ? "advanced-screener" : SGX.getParameterByName("type");
+            		var factor = SGX.getParameterByName("factor");
+            		var quintile = parseInt(SGX.getParameterByName("quintile"));
+            		
+            		// handle toggle
+            		SGX.screener.changeSearchToggle(searchType);
+            		
+        			// init general criteria
         			$(".editSearchB .checkbox").each(function(idx, el) {
         				
-        				
+
         				// set up glossary terms
         				$(".trigger", this).addClass("glossary-item");
         				$(".trigger", this).attr("glossary-key", $(this).attr("data-name"));
@@ -173,6 +184,48 @@ define(deps, function($, _, SGX) {
         				
         			});
         			
+        			// init alpha factors
+            		$(".alpha-factor .slider").each(function(idx, el) {
+            			
+            			var name = $(this).attr("data-name");
+            			
+        				// add in spans
+        				$.each(new Array(5), function(quint) {
+        					
+        					var span = $("<span />").attr("data-quintile", quint + 1).appendTo($(".bar-progress", el));
+        					
+        					$(span).hover(
+        							function(e) {
+        								var mine = $(this).attr("data-quintile");
+        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
+        								$(this).parent().addClass("per-" + (mine*20));
+        							},
+        							function(e) {
+        								var mine = $(this).attr("data-quintile");
+        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
+        								if (typeof $(this).parent().attr("data-class") !== "undefined") $(this).parent().addClass($(this).parent().attr("data-class"));
+        					});
+        					
+        					$(span).click(function(e) {
+								var mine = $(this).attr("data-quintile");
+								$(this).closest(".bar-progress").addClass("per-" + (mine*20)).attr("data-class", "per-" + (mine*20));
+								$(this).closest(".slider").attr("data-value", mine);
+								SGX.screener.search.alphaSearch();
+        					});
+        					
+        				});
+        				
+            			// set up glossary terms
+            			$(".glossary-item", this).attr("glossary-key", name);
+
+						// select the current one
+						if (name == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
+							$(".bar-progress", el).addClass("per-" + (quintile*20)).attr("data-class", "per-" + (quintile*20));
+							$(this).attr("data-value", quintile);
+						}
+						
+            		});
+        			
         			$(".editSearchB .button-reset").click(function(e) {
         				SGX.screener.criteriaChange.reset(SGX.screener.search.criteriaSearch);
         			});
@@ -197,17 +250,21 @@ define(deps, function($, _, SGX) {
         				SGX.screener.criteriaChange.reset(fn);
         			});
         			
-        			$(".screener-header .button[data-name='advanced-screener']").click(function(e) {
+        			$(".screener-toggles .button[data-name='advanced-screener']").click(function(e) {
             			SGX.screener.criteriaChange.reset(SGX.screener.search.criteriaSearch);
         				SGX.screener.changeSearchToggle("advanced-screener");
-            			$(".advanced-criteria").show();
             		});
-
-        			$(".screener-header .button[data-name='all-companies']").click(function(e) {
-        				SGX.screener.changeSearchToggle("all-companies");
-        				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
+        			
+        			$(".screener-toggles .button[data-name='alpha-factors']").click(function(e) {
+        				SGX.screener.changeSearchToggle("alpha-factors");
+        				SGX.screener.search.criteriaSearch();
         			});
 
+        			$(".screener-toggles .button[data-name='all-companies']").click(function(e) {
+        				SGX.screener.changeSearchToggle("all-companies");
+        				SGX.screener.search.criteriaSearch();
+        			});
+        			
         			SGX.screener.initCriteria();
         			
         		},
@@ -683,6 +740,8 @@ define(deps, function($, _, SGX) {
                 		val = $.trim(val);
                 		var msg = null;
 
+                		SGX.screener.changeSearchToggle("all-companies");
+
                 		// nothing typed if, show all
                 		if (val === "undefined" || val.length == 0) {
                 			SGX.screener.search.showAll();
@@ -714,14 +773,11 @@ define(deps, function($, _, SGX) {
                 		if (typeof params === "undefined") params = { criteria: [] };
                 		var endpoint = SGX.fqdn + "/sgx/search";
                 		if (!$(".module-results thead th:first").hasClass("asc")) $(".module-results thead th:first").click();
-                		SGX.trackPage("SGX Show All Companies");
                 		SGX.screener.search.simpleSearch(endpoint, params);
                 	},
                 	
                 	simpleSearch: function(endpoint, params, keyword) {
                 		SGX.showLoading();
-                		$(".advanced-criteria").hide();
-                		$(".expand-criteria").show();
                 		SGX.screener.criteriaChange.resetAdditionalCriteria();
                 		SGX.handleAjaxRequest(endpoint, params, function(data) { if (typeof keyword !== "undefined") data.keywords = keyword; SGX.screener.search.renderResults(data); SGX.hideLoading(); }, SGX.screener.search.fail);
                 	},
@@ -752,7 +808,28 @@ define(deps, function($, _, SGX) {
                 	},
                 	
                 	criteriaSearch: function() {
-                		SGX.screener.search.fullSearch(true);
+                		
+                		var type = $(".screener-toggles .button.selected").attr("data-name");
+                		
+                		if (type == "alpha-factors") SGX.screener.search.alphaSearch();
+                		else if (type == "all-companies") SGX.screener.search.showAll();
+                		else SGX.screener.search.fullSearch(true);
+                		
+                	},
+                	
+                	alphaSearch: function() {
+
+                   		var endpoint = "/sgx/search/alphaFactors", params = {}, hasCrit = false;
+                   		
+                   		$(".alpha-factor .slider[data-value]").each(function(idx, el) {
+                   			hasCrit = true;
+                   			params[$(this).attr("data-name")] = parseInt($(this).attr("data-value"));
+                   		});
+                   		
+                   		if (hasCrit) SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, SGX.screener.search.renderResults, SGX.screener.search.fail); 
+                   		else SGX.screener.search.showAll();
+
+                		
                 	},
                 	
                 	fullSearch: function(resetAddtl, finalize) {
@@ -1112,15 +1189,11 @@ define(deps, function($, _, SGX) {
                     	// by indsutry
                     	else if ($(".related-page").length > 0) scroll = 30;
                     	// screener with advanced criteria being displayed
-                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 600;
-                    	// screener with advanced criteria hidden
-                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 240;
+                    	else if ($(".screener-page").length > 0) scroll = 0;
                     	// alpha factors (company version)
                     	else if ($(".alphas-page").length > 0 && $(".company-header").is(":visible")) scroll = 480;
                     	// alpha factors (no company)
                     	else if ($(".alphas-page").length > 0) scroll = 370;
-                    	
-                    	console.log(scroll);
                     	
         	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
@@ -1516,7 +1589,7 @@ define(deps, function($, _, SGX) {
           		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           		  })(window,document,'script','//www.google-analytics.com/analytics.js','_gaTracker');
           		  _gaTracker('create', 'UA-50238919-1', { 'cookieDomain': 'none' });
-            	
+
           		// terms and conditions
             	$(".terms-conditions").click(function(e) { 
             		e.preventDefault();
@@ -1539,7 +1612,6 @@ define(deps, function($, _, SGX) {
             	if (page.indexOf(SGX.companyPage.file) != -1) SGX.company.init();
             	else if (page.indexOf(SGX.financialsPage.file) != -1) SGX.financials.init();
             	else if (page.indexOf(SGX.relatedPage.file) != -1) SGX.related.init();
-            	else if (page.indexOf(SGX.alphasPage.file) != -1) SGX.alphas.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
             	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1000, 0);
@@ -2680,94 +2752,6 @@ define(deps, function($, _, SGX) {
             		SGX.handleAjaxRequest(endpoint, qs, function(data) { SGX.screener.search.renderResults(data); SGX.resizeIframe(SGX.getTrueContentHeight(), 0);   }, SGX.screener.search.fail);
             		
             	}
-            	
-            },
-            
-            alphas: {
-            	
-            	init: function() {
-            		var code = SGX.getParameterByName("code");
-            		if (code != "") {
-            			SGX.company.getCompany(code, SGX.alphas.companyLoaded);
-            			return;
-            		}
-
-        			SGX.trackPage("SGX Alpha Factor Libraries");
-            		$(".no-company-row").show();
-            		SGX.alphas.loadAlphas();
-            	},
-            	
-            	companyLoaded: function(data) {
-
-        			SGX.trackPage("SGX Alpha Factor Libraries (" + data.company.companyInfo.companyName + ")");
-
-            		$(".company-row").show();
-            		SGX.company.initSimple(data, true);
-            		$(".back-company-profile").show();            		
-            		SGX.alphas.loadAlphas();
-            		
-            	},
-            	
-            	loadAlphas: function() {
-            		
-            		var factor = SGX.getParameterByName("factor");
-            		var quintile = parseInt(SGX.getParameterByName("quintile"));
-            		var doSearch = false;
-            		
-            		$(".alpha-factor .slider").each(function(idx, el) {
-            			
-            			var name = $(this).attr("data-name");
-            			
-            			// select the current one
-            			if (name == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
-            				$(".bar-progress", this).addClass("per-" + (quintile*20)).attr("data-class", "per-" + (quintile*20));
-            				doSearch = true;
-            			}
-        				
-        				// add in spans
-        				$.each(new Array(5), function(quint) {
-        					
-        					var span = $("<span />").attr("data-quintile", quint + 1).appendTo(".bar-progress", this);
-        					
-        					$(span).hover(
-        							function(e) {
-        								var mine = $(this).attr("data-quintile");
-        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
-        								$(this).parent().addClass("per-" + (mine*20));
-        							},
-        							function(e) {
-        								var mine = $(this).attr("data-quintile");
-        								$(this).parent().removeClass(function(pos, css) { return (css.match(/(^|\s)per-\S+/g) || []).join(' '); });
-        								if (typeof $(this).parent().attr("data-class") !== "undefined") $(this).parent().addClass($(this).parent().attr("data-class"));
-        					});
-        					
-        					$(span).click(function(e) {
-        						window.top.location.href = SGX.getAlphasPage($(this).closest(".slider").attr("data-name"), $(this).attr("data-quintile"));
-        					});
-        					
-        				});
-        				
-            			// set up glossary terms
-            			$(".glossary-item", this).attr("glossary-key", name);
-            			
-            		});
-
-        			SGX.tooltip.init("body");
-        			
-        			if (doSearch) {
-        				$(".module-results").show();
-                		var endpoint = "/sgx/search/alphaFactors";
-                		var params = {};
-                		params[factor] = quintile;
-                		SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, SGX.screener.search.renderResults, SGX.screener.search.fail);
-        			}
-        			else {
-        	           // var curHeight = SGX.getTrueContentHeight();
-        	           // if (SGX.pageHeight !== curHeight) SGX.resizeIframe(curHeight);
-        			}
-
-            	}
-            	
             	
             },
             

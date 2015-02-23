@@ -365,7 +365,7 @@ td .page-title {
 }
 .slider .slider-right-label {
   position: absolute;
-  margin-left: 3px;
+  margin-left: 10px;
 }
 #area-chart {
   width: 660px;
@@ -1715,6 +1715,10 @@ table.search-criteria .remove {
 	background: transparent url('../img/down-arrow.png') no-repeat center center;
 }
 
+.screener-page .alpha-factors {
+	display: none;
+}
+
 td .info {
   cursor: pointer;
 }
@@ -1754,20 +1758,8 @@ td .info {
   margin-top: -4px;
 }
 
-.alphas-page .tooltip {
-	width: 390px;
-}
-
 .company-tearsheet-page .tooltip {
 	width: 260px;
-} 
-
-.alphas-page .factors-wrapper {
-	margin-top: 20px;
-} 
-
-.alphas-page .company-row, .alphas-page .no-company-row {
-	display: none;
 } 
 
 .modal-container {
@@ -1798,20 +1790,36 @@ td .info {
 	display: inline-block;
 }
 
-.alphas-page .module-results {
-	margin-top: 20px !important;
-}
-
 .alpha-factor {
   background: #f2f2f2;
   border: 1px solid #c1c1c1;
   overflow: hidden;
   margin-left: 18px;
 }
+
 .alpha-factor .slider {
   display: inline-block;
   width: 45%;
 }
+
+.screener-page .alpha-factor {
+	margin: 20px 0; 
+}
+
+.screener-page .alpha-factor .slider-label {
+	width: 150px;
+	padding-right: 0px;
+}
+
+.screener-page .alpha-factor .slider-right-label {
+	top: -2px;
+	margin-left: 3px;
+}
+
+.screener-page .alpha-factor .tooltip {
+	width: 390px;
+}
+
 
 .alpha-factors .has-factors {
 	display: none;
