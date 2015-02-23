@@ -8,12 +8,12 @@ public class GovTransparencyIndex{
 
 	private Integer adjustment;
 	private Integer baseScore;
-	private Integer change;
 	private String companyName;
 	private Date date;
 	private String isin;
 	private String issue;
 	private Integer rank;
+	private Integer rankChange;
 	private String ticker;
 	private Integer totalScore;
 
@@ -23,10 +23,6 @@ public class GovTransparencyIndex{
 
 	public Integer getBaseScore() {
 		return baseScore;
-	}
-
-	public Integer getChange() {
-		return change;
 	}
 
 	public String getCompanyName() {
@@ -49,6 +45,10 @@ public class GovTransparencyIndex{
 		return rank;
 	}
 
+	public Integer getRankChange() {
+		return rankChange;
+	}
+
 	public String getTicker() {
 		return ticker;
 	}
@@ -63,10 +63,6 @@ public class GovTransparencyIndex{
 
 	public void setBaseScore(Integer baseScore) {
 		this.baseScore = baseScore;
-	}
-
-	public void setChange(Integer change) {
-		this.change = change;
 	}
 
 	public void setCompanyName(String companyName) {
@@ -89,6 +85,10 @@ public class GovTransparencyIndex{
 		this.rank = rank;
 	}
 
+	public void setRankChange(Integer change) {
+		this.rankChange = change;
+	}
+
 	public void setTicker(String ticker) {
 		this.ticker = ticker;
 	}
@@ -99,7 +99,7 @@ public class GovTransparencyIndex{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(adjustment, baseScore, change, companyName, date, isin, issue, rank, ticker, totalScore);
+		return Objects.hashCode(adjustment, baseScore, rankChange, companyName, date, isin, issue, rank, ticker, totalScore);
 	}
 	
 	@Override
@@ -108,7 +108,7 @@ public class GovTransparencyIndex{
 			GovTransparencyIndex that = (GovTransparencyIndex) object;
 			return Objects.equal(this.adjustment, that.adjustment)
 				&& Objects.equal(this.baseScore, that.baseScore)
-				&& Objects.equal(this.change, that.change)
+				&& Objects.equal(this.rankChange, that.rankChange)
 				&& Objects.equal(this.companyName, that.companyName)
 				&& Objects.equal(this.date, that.date)
 				&& Objects.equal(this.isin, that.isin)
@@ -125,7 +125,7 @@ public class GovTransparencyIndex{
 		return Objects.toStringHelper(this)
 			.add("adjustment", adjustment)
 			.add("baseScore", baseScore)
-			.add("change", change)
+			.add("change", rankChange)
 			.add("companyName", companyName)
 			.add("date", date)
 			.add("isin", isin)
