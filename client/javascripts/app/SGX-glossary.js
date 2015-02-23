@@ -183,6 +183,26 @@ var GLOSSARY =
 		{
 			id: "keyDevs",
 			definition: "Use Key Developments to understand the impact of news and events on market price. S&P Capital IQ monitors, aggregates and tag Key Developments from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations and company websites."
+		},
+		{
+			id: "avgVolumeM3",
+			definition: "Average 3 month traded volume is the average volume of shares traded during the preceding three months."				
+		},
+		{
+			id: "floatPercentage",
+			definition: "Free float represents the percentage of shares outstanding excluding shares held by strategic investors (holdings greater than 5%), company insiders, pensions and ESOP plans, endowments, foundations, and state owned shares."
+		},
+		{
+			id: "priceVolHistYr",
+			definition: "1 year volatility is the standard deviation of weekly log-normal price returns over the past year, annualized by a factor of 52 for the 52 trading weeks in a year."
+		},
+		{
+			id: "basicEpsIncl",
+			definition: "Basic earnings per share is the net income minus preferred dividend and adjustments, divided by the weighted average shares outstanding."
+		},
+		{
+			id: "returnOnEquity",
+			definition: ""
 		}
 		
 ];
