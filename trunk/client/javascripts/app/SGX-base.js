@@ -1208,10 +1208,6 @@ define(deps, function($, _, SGX) {
                     	else if ($(".related-page").length > 0) scroll = 30;
                     	// screener with advanced criteria being displayed
                     	else if ($(".screener-page").length > 0) scroll = 0;
-                    	// alpha factors (company version)
-                    	else if ($(".alphas-page").length > 0 && $(".company-header").is(":visible")) scroll = 480;
-                    	// alpha factors (no company)
-                    	else if ($(".alphas-page").length > 0) scroll = 370;
                     	
         	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
