@@ -49,7 +49,9 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_COMPANY_WEBSITE")
 	private String companyWebsite;
 
-	@ConversionAnnotation(name = "IQ_DIVIDEND_YIELD")
+	@ConversionAnnotation(name = "IQ_DIV_SHARE")
+	private Double divShare;
+	
 	private Double dividendYield;
 
 	@ConversionAnnotation(name = "IQ_EBIT")
@@ -102,6 +104,12 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_MARKETCAP")
 	private Double marketCap;
+	
+	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
+	private Double minorityInterest;
+	
+	@ConversionAnnotation(name = "IQ_NET_DEBT")
+	private Double netDebt;
 
 	@ConversionAnnotation(name = "IQ_NI")
 	private Double netIncome;
@@ -112,7 +120,6 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_OPENPRICE")
 	private Double openPrice;
 
-	@ConversionAnnotation(name = "IQ_PE_EXCL")
 	private Double peRatio;
 
 	@ConversionAnnotation(name = "IQ_PRICEDATE")
@@ -121,7 +128,6 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_CLOSE_PRICE")
 	private Double previousClosePrice;
 
-	@ConversionAnnotation(name = "IQ_PBV")
 	private Double priceToBookRatio;
 	
 	@ConversionAnnotation(name = "IQ_PRICE_VOL_HIST_YR")
@@ -130,7 +136,6 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
 	private Double returnOnEquity;
 
-	@ConversionAnnotation(name = "IQ_SHARESOUTSTANDING")
 	private Double sharesOutstanding;
 
 	@ConversionAnnotation(name = "IQ_SHORT_INTEREST")
@@ -144,6 +149,9 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_COMPANY_TICKER_NO_EXCH")
 	private String tickerCode;
+	
+	@ConversionAnnotation(name = "IQ_TBV")
+	private Double tbv;
 
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
@@ -333,6 +341,14 @@ public class Company{
 		this.dividendYield = dividendYield;
 	}
 
+	public Double getDivShare() {
+		return divShare;
+	}
+
+	public void setDivShare(Double divShare) {
+		this.divShare = divShare;
+	}
+
 	public Double getEbit() {
 		return ebit;
 	}
@@ -469,6 +485,22 @@ public class Company{
 		this.marketCap = marketCap;
 	}
 
+	public Double getMinorityInterest() {
+		return minorityInterest;
+	}
+
+	public void setMinorityInterest(Double minorityInterest) {
+		this.minorityInterest = minorityInterest;
+	}
+
+	public Double getNetDebt() {
+		return netDebt;
+	}
+
+	public void setNetDebt(Double netDebt) {
+		this.netDebt = netDebt;
+	}
+
 	public Double getNetIncome() {
 		return netIncome;
 	}
@@ -578,6 +610,14 @@ public class Company{
 
 	public void setTickerCode(String tickerCode) {
 		this.tickerCode = tickerCode;
+	}
+
+	public Double getTbv() {
+		return tbv;
+	}
+
+	public void setTbv(Double tbv) {
+		this.tbv = tbv;
 	}
 
 	public Double getTotalAssets() {
@@ -700,6 +740,7 @@ public class Company{
 			.add("companyAddress", companyAddress)
 			.add("companyName", companyName)
 			.add("companyWebsite", companyWebsite)
+			.add("divShare", divShare)
 			.add("dividendYield", dividendYield)
 			.add("ebit", ebit)
 			.add("ebitda", ebitda)
@@ -718,6 +759,8 @@ public class Company{
 			.add("industryGroup", industryGroup)
 			.add("lowPrice", lowPrice)
 			.add("marketCap", marketCap)
+			.add("minorityInterest", minorityInterest)
+			.add("netDebt", netDebt)
 			.add("netIncome", netIncome)
 			.add("netProfitMargin", netProfitMargin)
 			.add("openPrice", openPrice)
@@ -732,6 +775,7 @@ public class Company{
 			.add("targetPriceNum", targetPriceNum)
 			.add("targetPrice", targetPrice)
 			.add("tickerCode", tickerCode)
+			.add("tbv", tbv)
 			.add("totalAssets", totalAssets)
 			.add("totalDebt", totalDebt)
 			.add("totalDebtEbitda", totalDebtEbitda)
