@@ -6,11 +6,11 @@ public class CompanyInputRecord{
 
 	private String id;
 	private String ticker;
+	private String isin;
 	private String date;
 	private String tradeName;
+	private Boolean indexed = false;
 
-	private Boolean indexed = false; 
-	
 	public Boolean getIndexed() {
 		return indexed;
 	}
@@ -35,6 +35,14 @@ public class CompanyInputRecord{
 		this.ticker = ticker;
 	}
 
+	public String getIsin() {
+		return isin;
+	}
+
+	public void setIsin(String isin) {
+		this.isin = isin;
+	}
+
 	public String getDate() {
 		return date;
 	}
@@ -53,7 +61,7 @@ public class CompanyInputRecord{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(id, ticker, date, tradeName, indexed);
+		return Objects.hashCode(id, ticker, isin, date, tradeName, indexed);
 	}
 	
 	@Override
@@ -62,6 +70,7 @@ public class CompanyInputRecord{
 			CompanyInputRecord that = (CompanyInputRecord) object;
 			return Objects.equal(this.id, that.id)
 				&& Objects.equal(this.ticker, that.ticker)
+				&& Objects.equal(this.isin, that.isin)
 				&& Objects.equal(this.date, that.date)
 				&& Objects.equal(this.tradeName, that.tradeName)
 				&& Objects.equal(this.indexed, that.indexed);
@@ -74,9 +83,11 @@ public class CompanyInputRecord{
 		return Objects.toStringHelper(this)
 			.add("id", id)
 			.add("ticker", ticker)
+			.add("isin", isin)
 			.add("date", date)
 			.add("tradeName", tradeName)
 			.add("indexed", indexed)
 			.toString();
 	}
+
 }

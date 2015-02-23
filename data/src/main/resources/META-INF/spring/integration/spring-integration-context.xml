@@ -172,5 +172,13 @@
 	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="data/sgx_companies.txt"/>
 	</bean>
+
+	<bean id="gtiFileResource" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="data/gti.csv"/>
+	</bean>
+	
+	<bean id="gtiService" class="com.wmsi.sgx.service.gti.impl.GtiServiceImpl">
+		<property name="gtiData" ref="gtiFileResource"/>
+	</bean>
 	 	
 </beans>
