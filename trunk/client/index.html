@@ -36,27 +36,48 @@
         <div class="row">
         
             <div class="grid_3">
-                <div class="page-title">Find a Company</div>
+                <div class="button user-guide"><img src="img/pdf.png" width="16" height="16" /> View User Guide</div>
+                <div class="page-title">StockFacts</div>
             </div>
     
 	        <div class="grid_3 screener-header">
 	
-	            <div class="description">
-	                <div class="intro-headline">Your search for investment opportunity begins here.</div>
-	                <p>Whether you seek new or established companies, we can help you identify the stocks that best fit your investment strategy.</p>
-					<div class="searchtoggle">
-						<span class="toggle button sname" data-name="name" data-placeholder="Search by company name" data-validator="screener.isValidName">Company Name</span><span class="toggle button scode" data-name="code" data-placeholder="Search by stock code" data-validator="screener.isValidTicker">Stock Code</span>
-						<div class="arrows">
-							<span class="arrow sname" data-name="name" ></span><span class="arrow scode" data-name="code"></span>
-						</div>
-					</div>
-	                <div class="searchbar">
-	                    <input type="text" />
-	                    <div class="search-submit" class="button" value="" alt="Search Submit"></div>
-	                </div>
-	                <div class="button all-companies">View All Companies</div>
-	                <div class="button user-guide"><img src="img/pdf.png" width="16" height="16" /> View User Guide</div>
-	            </div>
+				<table>
+					<tbody>
+						<tr>
+							<td class="description">
+
+								<div class="screener-basic">
+								
+					                <div class="intro-headline">Your search for investment opportunity begins here.</div>
+					                
+					                <div class="searchtoggle">
+					                	<span class="toggle button sname" data-name="name" data-placeholder="Search by company name" data-validator="screener.isValidName">Company Name</span><span class="toggle button scode" data-name="code" data-placeholder="Search by stock code" data-validator="screener.isValidTicker">Stock Code</span>
+					                	<span class="searchbar">
+						                    <input type="text" />
+						                    <span class="search-submit" class="button" value="" alt="Search Submit"></span>
+					                	</span>
+					                </div>
+								
+								</div>
+
+					            <div class="screener-toggles">
+					                <div class="buttons">
+						            	<span class="button" data-name="advanced-screener">Search by Screener</span><span class="button" data-name="alpha-factors">Search by Alpha Factors</span><span class="button" data-name="all-companies">View All Companies</span>
+					                </div>
+									<div class="arrows">
+										<span data-name="advanced-screener" class="arrow"></span><span data-name="alpha-factors" class="arrow"></span><span data-name="all-companies" class="arrow"></span>
+									</div>
+					            </div>
+							
+							</td>						
+							<td class="message">
+								<div class="intro-headline">Hello</div>
+								<p>I am some test copy.</p>
+							</td>	
+						</tr>
+					</tbody>
+				</table>
 	
 	        </div>
 	        
@@ -64,7 +85,6 @@
 
         <div class="row advanced-criteria">
         
-    		<p>&nbsp;</p>
             <div class="grid_2">
                 <div class="module edit">
                     <div class="title">
@@ -270,13 +290,6 @@
             </div>
         </div>
     </div>
-    
-    <div class="container_3">
-		<div class="grid_3 expand-criteria">
-			<div>Show advanced search criteria.</div>
-		</div>
-    </div>
-
     
     <div class="container_3">
     

@@ -124,9 +124,19 @@ define(deps, function($, _, SGX) {
     		
     		screener: {
 
+    			changeSearchToggle: function(name) {
+    				
+    				$(".screener-toggles .button, .screener-toggles .arrow").removeClass("selected");
+    				$(".screener-toggles span[data-name='" + name + "']").addClass("selected");
+    				
+    			},
+
         		init: function() {
         			
         			SGX.trackPage("SGX - Screener");
+        			
+        			// choose which tab we're showing
+        			SGX.screener.changeSearchToggle($(".screener-toggles .button:first").attr("data-name"));
         			
         			$(".editSearchB .checkbox").each(function(idx, el) {
         				
@@ -172,7 +182,7 @@ define(deps, function($, _, SGX) {
         			});
         			
         			$(".searchtoggle .toggle, .searchtoggle .arrow").click(function() {
-        				$(".searchtoggle .toggle, .searchtoggle .arrow").removeClass("selected");
+        				$(".searchtoggle .toggle").removeClass("selected");
         				$(".searchtoggle .s" + $(this).attr("data-name")).addClass("selected");
         				$(".searchbar input").attr("placeholder", $(this).attr("data-placeholder"));
         				$('.searchbar input').placeholder();
@@ -186,15 +196,17 @@ define(deps, function($, _, SGX) {
         				if ($.trim($(".searchbar input").val()) == "") fn = function() { SGX.screener.search.showAll(); };
         				SGX.screener.criteriaChange.reset(fn);
         			});
+        			
+        			$(".screener-header .button[data-name='advanced-screener']").click(function(e) {
+            			SGX.screener.criteriaChange.reset(SGX.screener.search.criteriaSearch);
+        				SGX.screener.changeSearchToggle("advanced-screener");
+            			$(".advanced-criteria").show();
+            		});
 
-        			$(".screener-header .button.all-companies").click(function(e) {
+        			$(".screener-header .button[data-name='all-companies']").click(function(e) {
+        				SGX.screener.changeSearchToggle("all-companies");
         				SGX.screener.criteriaChange.reset(function() { SGX.screener.search.showAll(); });
         			});
-        			
-            		$(".expand-criteria").click(function(e) {
-            			$(".advanced-criteria").show();
-            			$(".expand-criteria").hide();
-            		});
 
         			SGX.screener.initCriteria();
         			
@@ -1100,13 +1112,15 @@ define(deps, function($, _, SGX) {
                     	// by indsutry
                     	else if ($(".related-page").length > 0) scroll = 30;
                     	// screener with advanced criteria being displayed
-                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 600;
+                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 600;
                     	// screener with advanced criteria hidden
-                    	else if ($(".screener-page").length > 0 && $(".expand-criteria").is(":visible")) scroll = 240;
+                    	else if ($(".screener-page").length > 0 && !$(".expand-criteria").is(":visible")) scroll = 240;
                     	// alpha factors (company version)
                     	else if ($(".alphas-page").length > 0 && $(".company-header").is(":visible")) scroll = 480;
                     	// alpha factors (no company)
                     	else if ($(".alphas-page").length > 0) scroll = 370;
+                    	
+                    	console.log(scroll);
                     	
         	            SGX.resizeIframe(SGX.getTrueContentHeight(), scroll);
         	            
