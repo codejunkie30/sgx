@@ -1551,74 +1551,62 @@ table.search-criteria .remove {
 .source {
   font-size: 11px;
 }
-.screener-header {
-  background: url("../img/header-screener.jpg") no-repeat;
-  height: 200px;
-  margin-bottom: 0;
+
+.user-guide {
+	float: right;
+	background-color: #565a5c;
+	margin-top: 17px;
 }
+
+.user-guide img {
+	vertical-align: middle;
+}
+
+.screener-header {
+  margin-bottom: 20px;
+}
+
+.screener-header table {
+	width: 100%;
+}
+
+.screener-header table td {
+	vertical-align: top;
+}
+
+.screener-header .description {
+	background-color: #f3f3f3;
+	width: 70%;
+}
+
+.screener-header .message {
+	width: 30%;
+	background-color: #1e2171;
+	font-color: #FFF;
+	padding: 20px;
+}
+
 .screener-header .intro-headline {
   font: bold 18px Arial, Helvetica, sans-serif;
   color: #1e2171;
-  margin: 10px 27px 10px;
-}
-.screener-header .description {
-  position: absolute;
-  top: 38px;
-  height: 150px;
-  width: 100%;
-  background: -moz--webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -moz--moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -moz--o-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -moz--ms-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -moz-linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-/* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0,0,0,0.1)), color-stop(80%, rgba(0,0,0,0)));
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0,0,0,0.1)), color-stop(80%, rgba(0,0,0,0)));
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0,0,0,0.1)), color-stop(80%, rgba(0,0,0,0)));
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0,0,0,0.1)), color-stop(80%, rgba(0,0,0,0)));
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0,0,0,0.1)), color-stop(80%, rgba(0,0,0,0)));
-/* Chrome,Safari4+ */
-  background: -webkit--webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -webkit--moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -webkit--o-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -webkit--ms-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -webkit-linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-/* Chrome10+,Safari5.1+ */
-  background: -o--webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -o--moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -o--o-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -o--ms-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -o-linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-/* Opera 11.10+ */
-  background: -ms--webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -ms--moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -ms--o-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -ms--ms-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -ms-linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-/* IE10+ */
-  background: -webkit-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -moz-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -o-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: -ms-linear-gradient(left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-  background: linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 80%);
-/* W3C */
-/* IE9 SVG, needs conditional override of 'filter' to 'none' */
 }
 
-.screener-header .description p {
-  margin: 0 27px;
-  color: #000;
-  font: bold 12px Arial, Helvetica, sans-serif;
-  width: 460px;
+.screener-header .message .intro-headline, .screener-header .message p {
+	color: #FFF;
+}
+
+.screener-header .message p {
+	margin: 3px 0;
+}
+
+.screener-header .description .screener-basic, .screener-header .description .screener-toggles {
+	margin-top: 20px;
+	background-color: #e8e8e8;
+	padding: 12px 25px;
 }
 
 .screener-header .searchtoggle {
-	margin-top: 12px;
-	margin-left: 27px;
-}
-
-.screener-header .button {
-	padding-top: 2px;
+	margin: 10px 0;
 }
 
 .screener-header .searchtoggle .toggle {
@@ -1626,7 +1614,7 @@ table.search-criteria .remove {
 	margin: 0px;
 	padding-left: 15px; 
 	padding-right: 15px;
-	background-color: #666aa8;
+	background-color: #565a5c;
 }
 
 .screener-header .searchtoggle .toggle.sname {
@@ -1636,29 +1624,6 @@ table.search-criteria .remove {
 	-webkit-border-top-right-radius: 0;
 	-moz-border-radius-topright: 0;
 	border-top-right-radius: 0;
-}
-
-.screener-header .searchtoggle .arrows {
-	margin-top: -10px;
-	height: 4px;
-	margin-bottom: 3px;
-}
-
-.screener-header .searchtoggle .arrow {
-	display: inline-block;
-	height: 4px;
-}
-
-.screener-header .searchtoggle .arrow.sname {
-	width: 116px;
-}
-
-.screener-header .searchtoggle .arrow.scode {
-	width: 93px;
-}
-
-.screener-header .searchtoggle .arrow.selected {
-	background: transparent url('../img/down-arrow.png') no-repeat center center;
 }
 
 .screener-header .searchtoggle .toggle.scode {
@@ -1675,7 +1640,7 @@ table.search-criteria .remove {
 }
 
 .screener-header .searchbar {
-  margin: 10px 27px;
+  margin: 0 20px;
   border: 1px solid #1e2171;
   display: inline-block;
   -webkit-border-radius: 4px;
@@ -1715,36 +1680,39 @@ table.search-criteria .remove {
   font-weight: bold;
   color: #fff;
   height: 24px;
+  margin-right: 2px;
 }
 
-.all-companies {
-	margin-left: 0px;
+.screener-header .description .screener-toggles {
+	margin-top: 0;	
+	margin-bottom: 10px;
+	border-bottom: 6px solid #d9d9d9; 
+	background-color: #bebebe;
 }
 
-.user-guide {
-	margin-left: 190px;
-	background-color: #565a5c;
+.screener-header .description .screener-toggles .button {
+	background-color: #666aa8;	
 }
 
-.user-guide img {
-	vertical-align: middle;
+.screener-header .screener-toggles .arrows {
+	margin-top: -10px;
+	height: 4px;
+	margin-bottom: 3px;
 }
 
-.advanced-criteria {
-	margin-top: 20px !important;
+.screener-header .screener-toggles .arrow {
+	display: inline-block;
+	height: 4px;
+	margin-right: 2px;
+	width: 140px;
 }
 
-.expand-criteria {
-  	display: none;
+.screener-header .screener-toggles .button.selected {
+	background-color: #1e2171;
 }
 
-.expand-criteria div {
-  background: url("../img/table-info-tab.png") no-repeat center;
-  height: 26px;
-  line-height: 26px;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
+.screener-header .screener-toggles .arrow.selected {
+	background: transparent url('../img/down-arrow.png') no-repeat center center;
 }
 
 td .info {

@@ -125,10 +125,6 @@ var GLOSSARY =
 			definition: "Return on Capital is a measure of company profitability relative to total capitals. It is calculated by dividing tax-effective EBIT (Earnings before Interest and Tax) by Average Total Capital over a 12-months period."
 		},
 		{
-			id: "roe",
-			definition: "Return on Equity is a measure of company profitability relative to its total equity. It is calculated by dividing tax-effective EBIT (Earnings before Interest and tax) by Average Total Equity over a 12-months period."
-		},
-		{
 			id: "grossMargin",
 			definition: "Gross Margin is difference between Revenue and COGS (Cost of Goods Sold)."
 		},
@@ -202,7 +198,7 @@ var GLOSSARY =
 		},
 		{
 			id: "returnOnEquity",
-			definition: ""
+			definition: "Return on Equity is a measure of company profitability relative to its total equity. It is calculated by dividing tax-effective EBIT (Earnings before Interest and tax) by Average Total Equity over a 12-months period."
 		}
 		
 ];
