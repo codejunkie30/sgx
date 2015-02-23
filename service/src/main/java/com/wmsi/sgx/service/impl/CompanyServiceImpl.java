@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -81,7 +82,21 @@ public class CompanyServiceImpl implements CompanyService{
 			throw new CompanyServiceException("Exception loading financials", e);
 		}
 	}
+
+	@Autowired
+	private SearchService gtiSearch;
 	
+	@Override
+	@Cacheable(value = "gtis")
+	public GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException {
+		try{
+			return gtiSearch.getById(id, GovTransparencyIndexes.class);
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading key devs", e);
+		}
+	}	
+
 	@Autowired
 	private SearchService priceHistorySearch;
 

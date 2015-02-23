@@ -17,6 +17,8 @@ public class SearchCompany{
 	private Double eps;
 	private Date filingDate;
 	private Double floatPercentage;
+	private Integer gtiScore;
+	private Integer gtiRankChange;
 	private String industry;
 	private String industryGroup;
 	private Double marketCap;
@@ -44,7 +46,7 @@ public class SearchCompany{
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
 	}
-	
+
 	public Double getAvgTradedVolM3() {
 		return avgTradedVolM3;
 	}
@@ -95,6 +97,22 @@ public class SearchCompany{
 
 	public void setFloatPercentage(Double floatPercentage) {
 		this.floatPercentage = floatPercentage;
+	}
+
+	public Integer getGtiScore() {
+		return gtiScore;
+	}
+
+	public Integer getGtiRankChange() {
+		return gtiRankChange;
+	}
+
+	public void setGtiScore(Integer gtiScore) {
+		this.gtiScore = gtiScore;
+	}
+
+	public void setGtiRankChange(Integer gtiRankChange) {
+		this.gtiRankChange = gtiRankChange;
 	}
 
 	public String getIndustry() {
@@ -216,7 +234,7 @@ public class SearchCompany{
 	public void setPercentChange(Double percentChange) {
 		this.percentChange = percentChange;
 	}
-	
+
 	public Double getPriceVolHistYr() {
 		return priceVolHistYr;
 	}
@@ -275,11 +293,11 @@ public class SearchCompany{
 
 	public void setVolume(Double volume) {
 		this.volume = volume;
-	}	
+	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, gtiScore, gtiRankChange, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
 	}
 	
 	@Override
@@ -297,6 +315,8 @@ public class SearchCompany{
 				&& Objects.equal(this.eps, that.eps)
 				&& Objects.equal(this.filingDate, that.filingDate)
 				&& Objects.equal(this.floatPercentage, that.floatPercentage)
+				&& Objects.equal(this.gtiScore, that.gtiScore)
+				&& Objects.equal(this.gtiRankChange, that.gtiRankChange)
 				&& Objects.equal(this.industry, that.industry)
 				&& Objects.equal(this.industryGroup, that.industryGroup)
 				&& Objects.equal(this.marketCap, that.marketCap)
@@ -334,6 +354,8 @@ public class SearchCompany{
 			.add("eps", eps)
 			.add("filingDate", filingDate)
 			.add("floatPercentage", floatPercentage)
+			.add("gtiScore", gtiScore)
+			.add("gtiRankChange", gtiRankChange)
 			.add("industry", industry)
 			.add("industryGroup", industryGroup)
 			.add("marketCap", marketCap)
@@ -354,5 +376,5 @@ public class SearchCompany{
 			.add("totalRevenue", totalRevenue)
 			.add("volume", volume)
 			.toString();
-	}
+	}	
 }

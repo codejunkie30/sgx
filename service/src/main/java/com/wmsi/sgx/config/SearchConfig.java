@@ -80,6 +80,11 @@ public class SearchConfig{
 	}
 
 	@Bean 
+	public SearchService gtiSearch(){
+		return searchService("gtis");
+	}
+
+	@Bean 
 	public SearchService holdersSearch(){
 		return searchService("holders");		
 	}

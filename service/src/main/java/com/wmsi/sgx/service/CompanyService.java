@@ -5,6 +5,7 @@ import java.util.List;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -32,5 +33,7 @@ public interface CompanyService{
 	List<HistoricalValue> loadOpenPriceHistory(String search) throws CompanyServiceException;
 
 	List<Financial> loadFinancials(String id) throws CompanyServiceException;
+
+	GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException;
 
 }
