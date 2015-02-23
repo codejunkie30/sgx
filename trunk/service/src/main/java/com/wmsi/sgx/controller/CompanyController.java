@@ -15,6 +15,7 @@ import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
+import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
@@ -77,6 +78,11 @@ public class CompanyController{
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;
+	}
+
+	@RequestMapping(value="company/gtis")
+	public GovTransparencyIndexes getGtis(@RequestBody IdSearch search) throws CompanyServiceException {		
+		return companyService.loadGtis(search.getId());
 	}
 
 	@RequestMapping("company/priceHistory")

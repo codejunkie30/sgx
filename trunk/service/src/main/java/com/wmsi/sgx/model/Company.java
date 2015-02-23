@@ -1,6 +1,7 @@
 package com.wmsi.sgx.model;
 
 import java.util.Date;
+
 import com.google.common.base.Objects;
 
 public class Company{
@@ -29,6 +30,8 @@ public class Company{
 	private Date fiscalYearEnd;
 	private Date filingDate;
 	private Double floatPercentage;
+	private Integer gtiScore;
+	private Integer gtiRankChange;
 	private String gvKey;
 	private Double highPrice;
 	private String industry;
@@ -71,7 +74,7 @@ public class Company{
 	public void setAvgBrokerReq(Double avgBrokerReq) {
 		this.avgBrokerReq = avgBrokerReq;
 	}
-	
+
 	public Double getAvgTradedVolM3() {
 		return avgTradedVolM3;
 	}
@@ -256,6 +259,22 @@ public class Company{
 		this.floatPercentage = floatPercentage;
 	}
 
+	public Integer getGtiScore() {
+		return gtiScore;
+	}
+
+	public Integer getGtiRankChange() {
+		return gtiRankChange;
+	}
+
+	public void setGtiScore(Integer gtiScore) {
+		this.gtiScore = gtiScore;
+	}
+
+	public void setGtiRankChange(Integer gtiRankChange) {
+		this.gtiRankChange = gtiRankChange;
+	}
+
 	public String getGvKey() {
 		return gvKey;
 	}
@@ -367,7 +386,7 @@ public class Company{
 	public void setPriceVolHistYr(Double priceVolHistYr) {
 		this.priceVolHistYr = priceVolHistYr;
 	}
-	
+
 	public Double getPriceVs52WeekHigh() {
 		return priceVs52WeekHigh;
 	}
@@ -523,14 +542,14 @@ public class Company{
 	public Double getYearLow() {
 		return yearLow;
 	}
-	
+
 	public void setYearLow(Double yearLow) {
 		this.yearLow = yearLow;
 	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, floatPercentage, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
 	}
 	
 	@Override
@@ -561,6 +580,8 @@ public class Company{
 				&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
 				&& Objects.equal(this.filingDate, that.filingDate)
 				&& Objects.equal(this.floatPercentage, that.floatPercentage)
+				&& Objects.equal(this.gtiScore, that.gtiScore)
+				&& Objects.equal(this.gtiRankChange, that.gtiRankChange)
 				&& Objects.equal(this.gvKey, that.gvKey)
 				&& Objects.equal(this.highPrice, that.highPrice)
 				&& Objects.equal(this.industry, that.industry)
@@ -599,4 +620,70 @@ public class Company{
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("avgBrokerReq", avgBrokerReq)
+			.add("avgTradedVolM3", avgTradedVolM3)
+			.add("avgVolumeM3", avgVolumeM3)
+			.add("basicEpsIncl", basicEpsIncl)
+			.add("beta5Yr", beta5Yr)
+			.add("businessDescription", businessDescription)
+			.add("bvShare", bvShare)
+			.add("capitalExpenditures", capitalExpenditures)
+			.add("cashInvestments", cashInvestments)
+			.add("closePrice", closePrice)
+			.add("companyAddress", companyAddress)
+			.add("companyName", companyName)
+			.add("companyWebsite", companyWebsite)
+			.add("dividendYield", dividendYield)
+			.add("ebit", ebit)
+			.add("ebitda", ebitda)
+			.add("ebitdaMargin", ebitdaMargin)
+			.add("employees", employees)
+			.add("enterpriseValue", enterpriseValue)
+			.add("eps", eps)
+			.add("evEbitData", evEbitData)
+			.add("fiscalYearEnd", fiscalYearEnd)
+			.add("filingDate", filingDate)
+			.add("floatPercentage", floatPercentage)
+			.add("gtiScore", gtiScore)
+			.add("gtiRankChange", gtiRankChange)
+			.add("gvKey", gvKey)
+			.add("highPrice", highPrice)
+			.add("industry", industry)
+			.add("industryGroup", industryGroup)
+			.add("lowPrice", lowPrice)
+			.add("marketCap", marketCap)
+			.add("netIncome", netIncome)
+			.add("netProfitMargin", netProfitMargin)
+			.add("openPrice", openPrice)
+			.add("peRatio", peRatio)
+			.add("previousCloseDate", previousCloseDate)
+			.add("previousClosePrice", previousClosePrice)
+			.add("priceToBookRatio", priceToBookRatio)
+			.add("priceVolHistYr", priceVolHistYr)
+			.add("priceVs52WeekHigh", priceVs52WeekHigh)
+			.add("priceVs52WeekLow", priceVs52WeekLow)
+			.add("returnOnEquity", returnOnEquity)
+			.add("sharesOutstanding", sharesOutstanding)
+			.add("sharesSoldShort", sharesSoldShort)
+			.add("targetPrice", targetPrice)
+			.add("targetPriceNum", targetPriceNum)
+			.add("tickerCode", tickerCode)
+			.add("totalAssets", totalAssets)
+			.add("totalDebt", totalDebt)
+			.add("totalDebtEbitda", totalDebtEbitda)
+			.add("totalDebtEquity", totalDebtEquity)
+			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
+			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
+			.add("totalRevenue", totalRevenue)
+			.add("volume", volume)
+			.add("yearFounded", yearFounded)
+			.add("yearHigh", yearHigh)
+			.add("yearLow", yearLow)
+			.toString();
+	}
+	
 }
