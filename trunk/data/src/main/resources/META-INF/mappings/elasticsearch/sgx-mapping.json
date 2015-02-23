@@ -218,17 +218,17 @@
 				{
 					"type": "double"
 				},
-				
+
 				"avgTradedVolM3": 
 				{
 					"type": "double"
 				},
-				
+
 				"avgVolumeM3": 
 				{
 					"type": "double"
 				},
-				
+
 				"basicEpsIncl": 
 				{
 					"type": "double"
@@ -295,10 +295,20 @@
 				{
 					"type": "double"
 				},
-				
+
 				"floatPercentage": 
 				{
 					"type": "double"
+				},
+
+				"gtiScore": 
+				{
+					"type": "integer"
+				},
+
+				"gtiRankChange": 
+				{
+					"type": "integer"
 				},
 
 				"gvKey": 
@@ -348,7 +358,7 @@
 				{
 					"type": "double"
 				},
-				
+
 				"priceVolHistYr": 
 				{
 					"type": "double"
@@ -370,7 +380,7 @@
 						}
 					}
 				},
-				
+
 				"returnOnEquity": 
 				{
 					"type": "double"
@@ -454,6 +464,46 @@
 			}
 		},
 
+		"gtis": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"gtis": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"date": 
+						{
+							"type": "date"
+						},
+
+						"totalScore": 
+						{
+							"type": "integer"
+						},
+
+						"rankChange": 
+						{
+							"type": "integer"
+						},
+
+						"rank": 
+						{
+							"type": "integer"
+						}
+					}
+				}
+			}
+		},
+
 		"financial": 
 		{
 			"dynamic": false,
@@ -495,7 +545,7 @@
 				}
 			}
 		},
-		
+
 		"highPrice": 
 		{
 			"dynamic": false,
@@ -518,7 +568,7 @@
 				}
 			}
 		},
-		
+
 		"lowPrice": 
 		{
 			"dynamic": false,
@@ -541,7 +591,7 @@
 				}
 			}
 		},
-		
+
 		"openPrice": 
 		{
 			"dynamic": false,
@@ -563,8 +613,8 @@
 					"type": "double"
 				}
 			}
-		},		
-		
+		},
+
 		"volume": 
 		{
 			"dynamic": false,

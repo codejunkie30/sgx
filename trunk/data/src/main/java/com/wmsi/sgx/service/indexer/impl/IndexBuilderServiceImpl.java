@@ -26,6 +26,8 @@ import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
+import com.wmsi.sgx.model.GovTransparencyIndex;
+import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -33,6 +35,7 @@ import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.indexer.Index;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.gti.GtiService;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
@@ -45,7 +48,6 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
-
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
 
 	@Value("${elasticsearch.index.prefix}")
@@ -62,6 +64,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	@Autowired
 	private AlphaFactorIndexerService alphaFactorService;
+
+	@Autowired
+	private GtiService gtiService;
 
 	@Autowired
 	private IndexerService indexerService;
@@ -103,7 +108,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 				}
 				
 				r.setTicker(ticker);
-				
+				r.setIsin(record[2].trim());
 				r.setTradeName(record[3].trim());
 				r.setDate(date);
 				ret.add(r);
@@ -176,8 +181,11 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		log.info("Job status completed with {} failed records. Success: {}", failed, success);
 		
-		if(log.isDebugEnabled()){			
-			log.debug("Failed records:\n{}", StringUtils.collectionToDelimitedString(failedRecords, "\n"));
+		if(log.isDebugEnabled()){
+			
+			if(failed > 0)
+				log.debug("Failed records:\n{}", StringUtils.collectionToDelimitedString(failedRecords, "\n"));
+			
 		}
 		
 		return success;
@@ -221,7 +229,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		log.info("Index cleanup complete. Removed {} old indexes", removed);
 	}
-
 	
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
@@ -238,13 +245,21 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			throw new InvalidIdentifierException("Ticker not found " + input.getTicker());
 		}
 		
+		loadCompanyGTI(company);
+		
 		indexerService.save("company", tickerNoExchange, company, index);
+		
+		GovTransparencyIndexes gtis = gtiService.getForTicker(tickerNoExchange);
+
+		if(gtis != null)
+			indexerService.save("gtis", tickerNoExchange, gtis, index);
+
 
 		Holders h = capIQService.getHolderDetails(input);
 
 		if(h != null)
 			indexerService.save("holders", tickerNoExchange, h, index);
-
+		
 		KeyDevs kd = capIQService.getKeyDevelopments(input);
 
 		if(kd != null)
@@ -298,7 +313,15 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}
-
 	}
 
+	private void loadCompanyGTI(Company company){
+		GovTransparencyIndex gti = gtiService.getLatest(company.getTickerCode());
+		
+		if(gti == null)
+			return;
+		
+		company.setGtiScore(gti.getTotalScore());
+		company.setGtiRankChange(gti.getRankChange());
+	}
 }
