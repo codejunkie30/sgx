@@ -1,0 +1,12 @@
+{
+	"promos": [
+		{
+			"title": "Test Promo 1",
+			"copy": "<p>I am some HTML copy</p>"
+		},
+		{
+			"title": "Test Promo 2",
+			"copy": "<p>I am some more HTML copy</p>"
+		}
+	]
+}

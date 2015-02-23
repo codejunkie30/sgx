@@ -137,6 +137,22 @@ define(deps, function($, _, SGX) {
         			SGX.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
     				
     			},
+    			
+    			loadMarketingCopy: function() {
+    				
+                	$.ajax({
+                        url: "data/homepage.json",
+                        type: 'GET',
+                        success: function(data) {
+                        	var promo = Math.floor(Math.random() * data.promos.length) + 1;
+                        	promo = data.promos[promo-1];
+                        	$(".screener-header .message .intro-headline").html(promo.title);
+                        	$(".screener-header .message .copy").html(promo.copy);
+                        }
+                	});
+    				
+    				
+    			},
 
         		init: function() {
 
@@ -144,6 +160,8 @@ define(deps, function($, _, SGX) {
         			var searchType = SGX.getParameterByName("type") == "" ? "advanced-screener" : SGX.getParameterByName("type");
             		var factor = SGX.getParameterByName("factor");
             		var quintile = parseInt(SGX.getParameterByName("quintile"));
+            		
+            		SGX.screener.loadMarketingCopy();
             		
             		// handle toggle
             		SGX.screener.changeSearchToggle(searchType);
