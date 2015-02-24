@@ -1679,6 +1679,7 @@ define(deps, function($, _, SGX) {
             		SGX.company.initHolders(data);
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
+            		SGX.company.initGTI(data);
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
@@ -1996,6 +1997,27 @@ define(deps, function($, _, SGX) {
             			$("td:last", this).css("border", "0");
             		});
             		
+            		
+            	},
+            	
+            	initGTI: function(data) {
+            		
+            		var length = 0;
+            		try { length = data.gtis.gtis.length; } catch(err) {}
+            		
+            		if (length == 0) {
+            			$(".gti-block").hide();
+            			return;
+            		}
+            		
+            		$.each(data.gtis.gtis, function(idx, gti) {
+            			var div = $("<div />").addClass("row");
+            			if (idx%2 == 0) $(div).addClass("odd");
+            			$("<span />").text(gti.date.substring(0, 4)).appendTo(div);
+            			$("<span />").text(gti.rank).appendTo(div);
+            			$("<span />").text(gti.totalScore).appendTo(div);
+            			$(div).appendTo(".gti-table");
+            		});
             		
             	},
             	

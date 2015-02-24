@@ -669,6 +669,45 @@ td .page-title {
 	text-align: center;
 }
 
+.gti-block {
+	overflow: hidden;
+}
+
+.gti-block .gti-table {
+	margin-top: 10px;
+	display: table;
+	width: 100%;
+}
+
+.gti-block .gti-table .row {
+	display: table-row;
+}
+
+.gti-block .gti-table .row.header {
+	font-weight: bold;
+}
+
+.gti-block .gti-table .row.odd {
+	background-color: #FFF;
+}
+
+.gti-block .gti-table span {
+	display: table-cell;
+	width: 30%;	
+	padding: 5px 10px;
+}
+
+.gti-link {
+	padding: 10px 10px;
+}
+
+
+.gti-link a {
+	font-weight: bold;
+	color: #1e2171;
+	text-decoration: none;
+}
+
 .module-info .col-1,
 .module-info .col-2,
 .module-info .col-3,
