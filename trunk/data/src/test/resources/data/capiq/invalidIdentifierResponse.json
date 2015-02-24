@@ -3,7 +3,7 @@
         {
             "Seniority": "",
             "StartDate": "",
-            "Mnemonic": "IQ_MARKETCAP",
+            "Mnemonic": "IQ_CLOSEPRICE",
             "SnapType": "",
             "ErrMsg": "InvalidIdentifier",
             "Function": "GDSP",
