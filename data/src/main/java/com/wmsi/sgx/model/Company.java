@@ -52,8 +52,6 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_DIV_SHARE")
 	private Double divShare;
 
-	private Double dividendYield;
-
 	@ConversionAnnotation(name = "IQ_EBIT")
 	private Double ebit;
 
@@ -66,14 +64,8 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_EMPLOYEES")
 	private Double employees;
 
-	@ConversionAnnotation(name = "IQ_TEV")
-	private Double enterpriseValue;
-
 	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
-
-	@ConversionAnnotation(name = "IQ_TEV_EBITDA")
-	private Double evEbitData;
 
 	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
@@ -106,9 +98,6 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_LOWPRICE")
 	private Double lowPrice;
 
-	@ConversionAnnotation(name = "IQ_MARKETCAP")
-	private Double marketCap;
-
 	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
 	private Double minorityInterest;
 
@@ -124,23 +113,17 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_OPENPRICE")
 	private Double openPrice;
 
-	private Double peRatio;
-
 	@ConversionAnnotation(name = "IQ_PRICEDATE")
 	private Date previousCloseDate;
 
 	@ConversionAnnotation(name = "IQ_CLOSE_PRICE")
 	private Double previousClosePrice;
 
-	private Double priceToBookRatio;
-
 	@ConversionAnnotation(name = "IQ_PRICE_VOL_HIST_YR")
 	private Double priceVolHistYr;
 
 	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
 	private Double returnOnEquity;
-
-	private Double sharesOutstanding;
 
 	@ConversionAnnotation(name = "IQ_SHORT_INTEREST")
 	private Double sharesSoldShort;
@@ -333,12 +316,16 @@ public class Company{
 		this.companyWebsite = companyWebsite;
 	}
 
-	public Double getDividendYield() {
-		return dividendYield;
-	}
-
-	public void setDividendYield(Double dividendYield) {
-		this.dividendYield = dividendYield;
+	public Double getDividendYield() {		
+		
+		if(divShare == null || previousClosePrice == null || divShare == 0 || previousClosePrice == 0){
+			return null;
+		}
+		else{
+			BigDecimal share = new BigDecimal(divShare);
+			BigDecimal close = new BigDecimal(previousClosePrice);
+			return share.divide(close, RoundingMode.HALF_UP).doubleValue();
+		}
 	}
 
 	public Double getDivShare() {
@@ -382,11 +369,10 @@ public class Company{
 	}
 
 	public Double getEnterpriseValue() {
-		return enterpriseValue;
-	}
-
-	public void setEnterpriseValue(Double enterpriseValue) {
-		this.enterpriseValue = enterpriseValue;
+		Double cap = (getMarketCap() != null) ? getMarketCap() : 0;
+		Double debt = (netDebt != null) ? netDebt : 0;
+		Double interest = (minorityInterest != null) ? minorityInterest : 0;
+		return cap + debt + interest;
 	}
 
 	public Double getEps() {
@@ -398,11 +384,12 @@ public class Company{
 	}
 
 	public Double getEvEbitData() {
-		return evEbitData;
-	}
-
-	public void setEvEbitData(Double evEbitData) {
-		this.evEbitData = evEbitData;
+		if(getEnterpriseValue() == null || ebitda == null || ebitda == 0){
+			return null;
+		}
+		BigDecimal ev = new BigDecimal(getEnterpriseValue() != null ? getEnterpriseValue() : 0);
+		BigDecimal ebitdata = new BigDecimal(ebitda);
+		return ev.divide(ebitdata, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public String getFilingCurrency() {
@@ -494,11 +481,15 @@ public class Company{
 	}
 
 	public Double getMarketCap() {
-		return marketCap;
-	}
-
-	public void setMarketCap(Double marketCap) {
-		this.marketCap = marketCap;
+		if(getSharesOutstanding() == null || previousClosePrice == null || previousClosePrice == 0){
+			return null;
+		}else{
+			BigDecimal shares = new BigDecimal(getSharesOutstanding());
+			BigDecimal price = new BigDecimal(previousClosePrice);
+			return shares.multiply(price).doubleValue();
+		}
+		
+		
 	}
 
 	public Double getMinorityInterest() {
@@ -542,11 +533,13 @@ public class Company{
 	}
 
 	public Double getPeRatio() {
-		return peRatio;
-	}
-
-	public void setPeRatio(Double peRatio) {
-		this.peRatio = peRatio;
+		if(previousClosePrice == null || eps == null || eps == 0){
+			return null;
+		}else{
+			BigDecimal price = new BigDecimal (previousClosePrice);
+			BigDecimal dilutedEps = new BigDecimal(eps);
+			return price.divide(dilutedEps, RoundingMode.HALF_UP).doubleValue();			
+		}		
 	}
 
 	public Date getPreviousCloseDate() {
@@ -566,11 +559,14 @@ public class Company{
 	}
 
 	public Double getPriceToBookRatio() {
-		return priceToBookRatio;
-	}
-
-	public void setPriceToBookRatio(Double priceToBookRatio) {
-		this.priceToBookRatio = priceToBookRatio;
+		if(previousClosePrice == null || tbv == null || tbv == 0){
+			return null;
+		}else{
+			BigDecimal price = new BigDecimal(previousClosePrice);
+			BigDecimal bookValue = new BigDecimal(tbv);
+			return price.divide(bookValue, RoundingMode.HALF_UP).doubleValue();
+		}
+		
 	}
 
 	public Double getPriceVolHistYr() {
@@ -590,11 +586,7 @@ public class Company{
 	}
 
 	public Double getSharesOutstanding() {
-		return sharesOutstanding;
-	}
-
-	public void setSharesOutstanding(Double sharesOutstanding) {
-		this.sharesOutstanding = sharesOutstanding;
+		return returnOnEquity;
 	}
 
 	public Double getSharesSoldShort() {
@@ -743,7 +735,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, yearFounded, yearHigh, yearLow, priceHistory);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, yearFounded, yearHigh, yearLow, priceHistory);
 	}
 	
 	@Override
@@ -764,14 +756,11 @@ public class Company{
 				&& Objects.equal(this.companyName, that.companyName)
 				&& Objects.equal(this.companyWebsite, that.companyWebsite)
 				&& Objects.equal(this.divShare, that.divShare)
-				&& Objects.equal(this.dividendYield, that.dividendYield)
 				&& Objects.equal(this.ebit, that.ebit)
 				&& Objects.equal(this.ebitda, that.ebitda)
 				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
 				&& Objects.equal(this.employees, that.employees)
-				&& Objects.equal(this.enterpriseValue, that.enterpriseValue)
 				&& Objects.equal(this.eps, that.eps)
-				&& Objects.equal(this.evEbitData, that.evEbitData)
 				&& Objects.equal(this.filingCurrency, that.filingCurrency)
 				&& Objects.equal(this.filingDate, that.filingDate)
 				&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
@@ -783,19 +772,15 @@ public class Company{
 				&& Objects.equal(this.industry, that.industry)
 				&& Objects.equal(this.industryGroup, that.industryGroup)
 				&& Objects.equal(this.lowPrice, that.lowPrice)
-				&& Objects.equal(this.marketCap, that.marketCap)
 				&& Objects.equal(this.minorityInterest, that.minorityInterest)
 				&& Objects.equal(this.netDebt, that.netDebt)
 				&& Objects.equal(this.netIncome, that.netIncome)
 				&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
 				&& Objects.equal(this.openPrice, that.openPrice)
-				&& Objects.equal(this.peRatio, that.peRatio)
 				&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
 				&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
-				&& Objects.equal(this.priceToBookRatio, that.priceToBookRatio)
 				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
 				&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
-				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
 				&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
 				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
 				&& Objects.equal(this.targetPrice, that.targetPrice)
@@ -836,14 +821,11 @@ public class Company{
 			.add("companyName", companyName)
 			.add("companyWebsite", companyWebsite)
 			.add("divShare", divShare)
-			.add("dividendYield", dividendYield)
 			.add("ebit", ebit)
 			.add("ebitda", ebitda)
 			.add("ebitdaMargin", ebitdaMargin)
 			.add("employees", employees)
-			.add("enterpriseValue", enterpriseValue)
 			.add("eps", eps)
-			.add("evEbitData", evEbitData)
 			.add("filingCurrency", filingCurrency)
 			.add("filingDate", filingDate)
 			.add("fiscalYearEnd", fiscalYearEnd)
@@ -855,19 +837,15 @@ public class Company{
 			.add("industry", industry)
 			.add("industryGroup", industryGroup)
 			.add("lowPrice", lowPrice)
-			.add("marketCap", marketCap)
 			.add("minorityInterest", minorityInterest)
 			.add("netDebt", netDebt)
 			.add("netIncome", netIncome)
 			.add("netProfitMargin", netProfitMargin)
 			.add("openPrice", openPrice)
-			.add("peRatio", peRatio)
 			.add("previousCloseDate", previousCloseDate)
 			.add("previousClosePrice", previousClosePrice)
-			.add("priceToBookRatio", priceToBookRatio)
 			.add("priceVolHistYr", priceVolHistYr)
 			.add("returnOnEquity", returnOnEquity)
-			.add("sharesOutstanding", sharesOutstanding)
 			.add("sharesSoldShort", sharesSoldShort)
 			.add("targetPriceNum", targetPriceNum)
 			.add("targetPrice", targetPrice)

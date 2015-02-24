@@ -71,12 +71,6 @@ public class CompanyService extends AbstractDataService{
 		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
 		comp.setPriceHistory(lastYearPrice);
 		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume,lastYearPrice, startDate));
-		comp.setSharesOutstanding(comp.getReturnOnEquity());
-		comp.setPriceToBookRatio(getPriceBookValue(comp));
-		comp.setDividendYield(getDividendYield(comp));
-		comp.setPeRatio(getPeRatio(comp));
-		comp.setEnterpriseValue(getEv(comp));
-		comp.setEvEbitData(getEvEbitda(comp));
 		
 		return comp;
 	}
@@ -115,43 +109,6 @@ public class CompanyService extends AbstractDataService{
 		
 		return avg(sum, volume.size(), 4);
 		
-	}
-	
-	private Double getLastCloseMarketCap(Company comp){
-		Double sharesOutstanding = (comp.getSharesOutstanding() != null) ? comp.getSharesOutstanding() : 0;
-		Double previousClosePrice = (comp.getPreviousClosePrice() != null) ? comp.getPreviousClosePrice() : 0;
-		return sharesOutstanding * previousClosePrice;		
-	}
-	
-	private Double getPriceBookValue(Company comp){
-		Double previousClosePrice = (comp.getPreviousClosePrice() != null) ? comp.getPreviousClosePrice() : 0;
-		Double tbv = (comp.getTbv() != null) ? comp.getTbv() : 0;
-		return previousClosePrice / tbv;
-	}
-	
-	private Double getDividendYield(Company comp){
-		Double divShare = (comp.getDivShare() != null) ? comp.getDivShare() : 0;
-		Double previousClosePrice = (comp.getPreviousClosePrice() != null) ? comp.getPreviousClosePrice() : 0;
-		return (divShare / previousClosePrice != 0) ? divShare / previousClosePrice : null;
-	}
-	
-	private Double getPeRatio(Company comp){
-		Double previousClosePrice = (comp.getPreviousClosePrice() != null) ? comp.getPreviousClosePrice() : 0;
-		Double eps = (comp.getEps() != null) ? comp.getEps() : 0;
-		return previousClosePrice / eps;
-	}
-	
-	private Double getEv(Company comp){
-		Double marketCap = (getLastCloseMarketCap(comp) != null) ? getLastCloseMarketCap(comp) : 0;
-		Double netDebt = (comp.getNetDebt() != null) ? comp.getNetDebt() : 0;
-		Double minorityInterest = (comp.getMinorityInterest() != null) ? comp.getMinorityInterest() : 0;
-		return marketCap + netDebt + minorityInterest;
-	}
-	
-	private Double getEvEbitda(Company comp){
-		Double ev = (getEv(comp) != null) ? getEv(comp) : 0;
-		Double ebitda = (comp.getEbitda() != null) ? comp.getEbitda() : 0;
-		return ev / ebitda;
 	}
 
 	private Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws ResponseParserException {
