@@ -224,6 +224,8 @@ define(deps, function($, _, SGX) {
 								var mine = $(this).attr("data-quintile");
 								$(this).closest(".bar-progress").addClass("per-" + (mine*20)).attr("data-class", "per-" + (mine*20));
 								$(this).closest(".slider").attr("data-value", mine);
+								$(".slider-right-label", $(this).closest(".slider")).addClass("selected")
+								SGX.showLoading();
 								SGX.screener.search.alphaSearch();
         					});
         					
@@ -236,7 +238,19 @@ define(deps, function($, _, SGX) {
 						if (name == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
 							$(".bar-progress", el).addClass("per-" + (quintile*20)).attr("data-class", "per-" + (quintile*20));
 							$(this).attr("data-value", quintile);
+							$(".slider-right-label", this).addClass("selected")
 						}
+						
+						// clicking the high label turns this off
+						$(".slider-right-label", this).click(function() {
+							if (!$(this).hasClass("selected")) return;
+							SGX.showLoading();
+							$(this).removeClass("selected");
+							var prg = $(".bar-progress", el);
+							$(prg).removeClass($(prg).attr("data-class")).removeAttr("data-class")
+							$(el).removeAttr("data-value");
+							SGX.screener.search.alphaSearch();
+						});
 						
             		});
         			
@@ -840,7 +854,9 @@ define(deps, function($, _, SGX) {
                    			params[$(this).attr("data-name")] = parseInt($(this).attr("data-value"));
                    		});
                    		
-                   		if (hasCrit) SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, SGX.screener.search.renderResults, SGX.screener.search.fail); 
+                   		var done = function(data) { SGX.hideLoading(); SGX.screener.search.renderResults(data); };
+                   		
+                   		if (hasCrit) SGX.handleAjaxRequest(SGX.fqdn + endpoint, params, done, SGX.screener.search.fail); 
                    		else SGX.screener.search.showAll();
 
                 		

@@ -1844,21 +1844,50 @@ td .info {
 
 .alpha-factor .slider {
   display: inline-block;
-  width: 45%;
+  width: 48%;
+}
+
+.screener-page .alpha-factor .row {
+	background-color: #e8e8e8;
+}
+
+.screener-page .alpha-factor .row.odd {
+  background: #f2f2f2;
 }
 
 .screener-page .alpha-factor {
 	margin: 20px 0; 
 }
 
+.screener-page .alpha-factor .slider {
+	padding:12px 0;
+	margin: 0;
+	margin-left: 12px;
+}
+
+.screener-page .alpha-factor .slider.rt {
+  border-left: 1px solid #c1c1c1;
+  padding-left: 7px;
+}
+
 .screener-page .alpha-factor .slider-label {
 	width: 150px;
 	padding-right: 0px;
+	vertical-align: top;
+	padding-top: 2px;
 }
 
 .screener-page .alpha-factor .slider-right-label {
-	top: -2px;
+	top: -6px;
 	margin-left: 3px;
+	padding-top: 3px;
+	width: 80px;
+	height: 20px;
+}
+
+.screener-page .alpha-factor .slider-right-label.selected {
+	background: transparent url('../img/ico-clear_text.png') no-repeat right 1px;
+	cursor: pointer;
 }
 
 .screener-page .alpha-factor .tooltip {
