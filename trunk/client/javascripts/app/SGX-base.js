@@ -140,16 +140,12 @@ define(deps, function($, _, SGX) {
     			
     			loadMarketingCopy: function() {
     				
-                	$.ajax({
-                        url: "data/homepage.json",
-                        type: 'GET',
-                        success: function(data) {
+    				$.getJSON( "data/homepage.json?time=" + new Date().getMilliseconds(), function(data) {
                         	var promo = Math.floor(Math.random() * data.promos.length) + 1;
                         	promo = data.promos[promo-1];
                         	$(".screener-header .message .intro-headline").html(promo.title);
                         	$(".screener-header .message .copy").html(promo.copy);
-                        }
-                	});
+    				});
     				
     				
     			},

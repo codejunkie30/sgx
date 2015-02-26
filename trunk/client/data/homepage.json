@@ -1,12 +1,12 @@
 {
 	"promos": [
 		{
-			"title": "Test Promo 1",
-			"copy": "<p>I am some HTML copy</p>"
+			"title": "Lorem Ipsum Dolor Sit Amet Tristique Ultricies",
+			"copy": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt elit sed tristique ultricies. Nulla.</p><p><a target='_blank' href='http://yahoo.com'>Go to yahoo</a></p>"
 		},
 		{
-			"title": "Test Promo 2",
-			"copy": "<p>I am some more HTML copy</p>"
+			"title": "Lorem Ipsum Dolor Sit",
+			"copy": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt elit sed tristique ultricies. Nulla.</p><p>Mauris malesuada diam id pretium. Suspendisse potenti. Vivamus ultrices, est.</p>"
 		}
 	]
 }
