@@ -1615,19 +1615,25 @@ table.search-criteria .remove {
 
 .screener-header .description {
 	background-color: #f3f3f3;
-	width: 70%;
+	width: 68%;
 }
 
 .screener-header .message {
-	width: 30%;
+	width: 32%;
 	background-color: #1e2171;
 	font-color: #FFF;
 	padding: 20px;
+	line-height: 150% !important;
+}
+
+.screener-header .message a {
+	font-weight: bold;
+	color: #CCC;
 }
 
 .screener-header .intro-headline {
-  font: bold 18px Arial, Helvetica, sans-serif;
-  color: #1e2171;
+	font: bold 18px Arial, Helvetica, sans-serif;
+	color: #1e2171;
 }
 
 .screener-header .message div {
