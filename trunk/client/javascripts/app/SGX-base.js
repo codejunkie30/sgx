@@ -2832,6 +2832,7 @@ define(deps, function($, _, SGX) {
             		SGX.company.initHolders(data);
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
+            		SGX.company.initGTI(data);
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
