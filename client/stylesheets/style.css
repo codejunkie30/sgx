@@ -276,7 +276,7 @@ td .page-title {
   height: 555px;
 }
 .slider {
-  margin: 15px;
+  margin: 15px 0;
 }
 .slider .info {
   position: absolute;
@@ -296,11 +296,12 @@ td .page-title {
   font-weight: bold;
   font-size: 13px;
   line-height: 16px;
+  
 }
 .slider .bar-progress {
   position: absolute;
   display: inline-block;
-  width: 1px;
+  width: 0;
   height: 11px;
   background: url("../img/slider-full.png") no-repeat;
   margin: 4px auto;
@@ -345,7 +346,7 @@ td .page-title {
   margin: 4px auto;
 }
 .slider .bar-container {
-  position: relative;
+  
 }
 .slider .slider-left-label,
 .slider .slider-right-label {
@@ -364,7 +365,7 @@ td .page-title {
   text-align: right;
 }
 .slider .slider-right-label {
-  position: absolute;
+  position: relative;
   margin-left: 10px;
 }
 #area-chart {
@@ -519,7 +520,7 @@ td .page-title {
   text-align: left;
 }
 
-
+.search-options p { padding: 0 13px; margin: 0 0 13px 0 !important; }
 
 .module .toolbar {
   height: 39px;
@@ -1739,25 +1740,20 @@ table.search-criteria .remove {
 	background-color: #666aa8;	
 }
 
-.screener-header .screener-toggles .arrows {
-	margin-top: -10px;
-	height: 4px;
-	margin-bottom: 3px;
-}
-
-.screener-header .screener-toggles .arrow {
-	display: inline-block;
-	height: 4px;
-	margin-right: 2px;
-	width: 140px;
+.screener-header .screener-toggles .button .arrow { 
+	display: none;
 }
 
 .screener-header .screener-toggles .button.selected {
 	background-color: #1e2171;
 }
 
-.screener-header .screener-toggles .arrow.selected {
+.screener-header .screener-toggles .button.selected .arrow {
 	background: transparent url('../img/down-arrow.png') no-repeat center center;
+	display: block;
+	height: 4px;
+	position:relative;
+	top: 2px;
 }
 
 .screener-page .alpha-factors {
@@ -1878,7 +1874,7 @@ td .info {
 }
 
 .screener-page .alpha-factor .slider-right-label {
-	top: -6px;
+	top: 3px;
 	margin-left: 3px;
 	padding-top: 3px;
 	width: 80px;
@@ -1902,6 +1898,8 @@ td .info {
 .alpha-factors .no-factors {
 	display: none;
 }
+
+.alpha-factors .has-factors .slider-label { margin: 0 15px; }
 
 .alpha-factors .slider-label img {
 	cursor: pointer;
