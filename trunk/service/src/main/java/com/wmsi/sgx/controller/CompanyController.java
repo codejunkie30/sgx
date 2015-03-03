@@ -43,6 +43,7 @@ public class CompanyController{
 		ret.put("holders", getHolders(search));
 		ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 		ret.put("alphaFactors", getAlphas(search));
+		ret.put("gtis", getGtis(search));
 		return ret;
 	}
 	
