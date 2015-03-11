@@ -82,7 +82,7 @@ var GLOSSARY =
 		},
 		{
 			id: "priceMomentum",
-			definition: "Price Momentum is an assessment of share price changes in a particular direction (negative or positive). The indicators are five-day, one-month, nine-month price movements, as well as 12-1 month price momentum and one-month price high to one-month price low ratio.<br />A 'HIGH' score represents companies that have a higher rate or momentum at which the stock price is rising, and a 'LOW' score represents companies that have a higher rate or momentum at which the stock price is falling."
+			definition: "Price Momentum is an assessment of share price changes in a particular direction (negative or positive). The indicators are five-day, one-month, nine-month price movements, as well as 12-1 month price momentum and one-month price high to one-month price low ratio.<br /><br />A 'HIGH' score represents companies that have a higher rate or momentum at which the stock price is rising, and a 'LOW' score represents companies that have a higher rate or momentum at which the stock price is falling."
 		},
 		{
 			id: "analystExpectations",
