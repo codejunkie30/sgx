@@ -6,7 +6,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BETA_5YR", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BUSINESS_DESCRIPTION"},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BASIC_EPS_INCL", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}}, 
-{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BV_SHARE", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}}, 
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_BV_SHARE", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD", "RESTATEMENTTYPEID":"LFR"}}, 
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CAPEX", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CASH_CONVERSION", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_CASH_INVEST", "properties":{"CURRENCYID":"SGD"}},
