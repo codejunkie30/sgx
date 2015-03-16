@@ -324,7 +324,7 @@ public class Company{
 		else{
 			BigDecimal share = new BigDecimal(divShare);
 			BigDecimal close = new BigDecimal(previousClosePrice);
-			return share.divide(close, RoundingMode.HALF_UP).doubleValue();
+			return share.divide(close, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 		}
 	}
 
@@ -559,11 +559,11 @@ public class Company{
 	}
 
 	public Double getPriceToBookRatio() {
-		if(previousClosePrice == null || tbv == null || tbv == 0){
+		if(previousClosePrice == null || bvShare == null || bvShare == 0){
 			return null;
 		}else{
 			BigDecimal price = new BigDecimal(previousClosePrice);
-			BigDecimal bookValue = new BigDecimal(tbv);
+			BigDecimal bookValue = new BigDecimal(bvShare);
 			return price.divide(bookValue, RoundingMode.HALF_UP).doubleValue();
 		}
 		
