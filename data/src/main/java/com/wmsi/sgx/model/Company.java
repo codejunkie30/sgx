@@ -538,7 +538,12 @@ public class Company{
 		}else{
 			BigDecimal price = new BigDecimal (previousClosePrice);
 			BigDecimal dilutedEps = new BigDecimal(eps);
-			return price.divide(dilutedEps, RoundingMode.HALF_UP).doubleValue();			
+			BigDecimal peratio = price.divide(dilutedEps, RoundingMode.HALF_UP);
+			if(peratio.compareTo(BigDecimal.ZERO) == -1){
+				return null;
+			}else{
+				return peratio.doubleValue();
+			}
 		}		
 	}
 
