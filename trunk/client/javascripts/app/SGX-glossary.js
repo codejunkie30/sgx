@@ -209,6 +209,10 @@ var GLOSSARY =
 			definition: "Shows the latest Governance & Transparency Index (GTI) rank for companies. GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement."
 		},
 		{
+			id: "gtiRankChange",
+			definition: "Shows the latest Governance & Transparency Index (GTI) rank for companies. GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement."
+		},
+		{
 			id: "gtiAbout",
 			definition: "The GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement. The index is divided into two broad sections: governance and transparency (including investor relations). The governance section covers board matters, remuneration, accountability and audit whereas the transparency section focuses on how companies communicate with their shareholders.<br /><br />In addition, the index includes a \"bonus and penalty\" system where companies that go beyond the requirements of the code (e.g., by including limits on directorships held by the their directors) will be awarded additional points while negative events (e.g., directors or management resigning and raising corporate governance concerns) will lead to a deduction in the company's GTI score."
 		}
