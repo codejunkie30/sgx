@@ -125,11 +125,15 @@ define(deps, function($, _, SGX) {
     		screener: {
 
     			changeSearchToggle: function(name) {
-    				
+
+    				// remove all classes and add current class to results table
+    				$(".screener-toggles .button").each(function(idx, el) { $(".module-results").removeClass($(this).attr("data-name") + "-clz"); });
+    				$(".module-results").addClass(name + "-clz");
+
     				// toggle tabs
     				$(".screener-toggles .button, .screener-toggles .arrow").removeClass("selected");
     				$(".screener-toggles span[data-name='" + name + "']").addClass("selected");
-
+    				
     				// hide/show options
     				$(".search-options").hide();
     				$("[data-section='" + name + "']").show();
