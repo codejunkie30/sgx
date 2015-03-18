@@ -1115,6 +1115,10 @@ table.search-criteria .remove {
   margin-bottom: 10px;
 }
 
+.module-results.alpha-factors-clz .toolbar .button-dropdown {
+	display: none;
+}
+
 .column {
 	display: inline-block;
 }
@@ -1635,6 +1639,7 @@ table.search-criteria .remove {
 .screener-header .intro-headline {
 	font: bold 18px Arial, Helvetica, sans-serif;
 	color: #1e2171;
+	margin-bottom: 20px;
 }
 
 .screener-header .message div {
@@ -1647,12 +1652,11 @@ table.search-criteria .remove {
 
 .screener-header .description .screener-basic, .screener-header .description .screener-toggles {
 	margin-top: 20px;
-	background-color: #e8e8e8;
-	padding: 12px 25px;
+	padding: 18px 25px 8px 25px;
 }
 
 .screener-header .searchtoggle {
-	margin: 10px 0;
+	margin: 0 0 16px 0;
 }
 
 .screener-header .searchtoggle .toggle {
@@ -1731,9 +1735,7 @@ table.search-criteria .remove {
 
 .screener-header .description .screener-toggles {
 	margin-top: 0;	
-	margin-bottom: 10px;
-	border-bottom: 6px solid #d9d9d9; 
-	background-color: #bebebe;
+	margin-bottom: 16px;
 }
 
 .screener-header .description .screener-toggles .button {
