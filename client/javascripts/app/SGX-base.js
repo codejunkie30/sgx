@@ -2029,7 +2029,7 @@ define(deps, function($, _, SGX) {
             		$.each(data.gtis.gtis, function(idx, gti) {
             			var div = $("<div />").addClass("row");
             			if (idx%2 == 0) $(div).addClass("odd");
-            			$("<span />").text(gti.date.substring(0, 4)).appendTo(div);
+            			$("<span />").text(gti.issue.substring(3, 7)).appendTo(div);
             			$("<span />").text(gti.rank).appendTo(div);
             			$("<span />").text(gti.totalScore).appendTo(div);
             			$(div).appendTo(".gti-table");
