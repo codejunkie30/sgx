@@ -1736,6 +1736,7 @@ table.search-criteria .remove {
 .screener-header .description .screener-toggles {
 	margin-top: 0;	
 	margin-bottom: 16px;
+	background-color: #bebebe;
 }
 
 .screener-header .description .screener-toggles .button {
