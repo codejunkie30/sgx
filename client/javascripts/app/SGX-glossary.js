@@ -210,7 +210,7 @@ var GLOSSARY =
 		},
 		{
 			id: "gtiRankChange",
-			definition: "Shows the latest Governance & Transparency Index (GTI) rank for companies. GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement."
+			definition: "Shows the latest Governance & Transparency Index (GTI) change in rank for companies. GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement."
 		},
 		{
 			id: "gtiAbout",
