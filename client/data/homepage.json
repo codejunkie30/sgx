@@ -1,12 +1,8 @@
 {
 	"promos": [
 		{
-			"title": "Lorem Ipsum Dolor Sit Amet Tristique Ultricies",
-			"copy": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt elit sed tristique ultricies. Nulla.</p><p><a target='_blank' href='http://yahoo.com'>Go to yahoo</a></p>"
-		},
-		{
-			"title": "Lorem Ipsum Dolor Sit",
-			"copy": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt elit sed tristique ultricies. Nulla.</p><p>Mauris malesuada diam id pretium. Suspendisse potenti. Vivamus ultrices, est.</p>"
+			"title": "StockFacts enhanced with new features",
+			"copy": "<p>Screen with new content such as Governance and Transparency Index (GTI) scores and updated Alpha Factor investment tool.</p>"
 		}
 	]
 }
