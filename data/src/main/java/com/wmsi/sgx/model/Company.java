@@ -95,6 +95,9 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_INDUSTRY_GROUP")
 	private String industryGroup;
 
+	@ConversionAnnotation(name = "IQ_LASTSALEPRICE")
+	private Double lastSalePrice;
+	
 	@ConversionAnnotation(name = "IQ_LOWPRICE")
 	private Double lowPrice;
 
@@ -318,12 +321,12 @@ public class Company{
 
 	public Double getDividendYield() {		
 		
-		if(divShare == null || previousClosePrice == null || divShare == 0 || previousClosePrice == 0){
+		if(divShare == null || lastSalePrice == null || divShare == 0 || lastSalePrice == 0){
 			return null;
 		}
 		else{
 			BigDecimal share = new BigDecimal(divShare);
-			BigDecimal close = new BigDecimal(previousClosePrice);
+			BigDecimal close = new BigDecimal(lastSalePrice);
 			return share.divide(close, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 		}
 	}
@@ -472,6 +475,14 @@ public class Company{
 		this.industryGroup = industryGroup;
 	}
 
+	public Double getLastSalePrice() {
+		return lastSalePrice;
+	}
+
+	public void setLastSalePrice(Double lastSalePrice) {
+		this.lastSalePrice = lastSalePrice;
+	}
+
 	public Double getLowPrice() {
 		return lowPrice;
 	}
@@ -481,11 +492,11 @@ public class Company{
 	}
 
 	public Double getMarketCap() {
-		if(getSharesOutstanding() == null || previousClosePrice == null || previousClosePrice == 0){
+		if(getSharesOutstanding() == null || lastSalePrice == null || lastSalePrice == 0){
 			return null;
 		}else{
 			BigDecimal shares = new BigDecimal(getSharesOutstanding());
-			BigDecimal price = new BigDecimal(previousClosePrice);
+			BigDecimal price = new BigDecimal(lastSalePrice);
 			return shares.multiply(price).doubleValue();
 		}
 		
@@ -533,10 +544,10 @@ public class Company{
 	}
 
 	public Double getPeRatio() {
-		if(previousClosePrice == null || eps == null || eps == 0){
+		if(lastSalePrice == null || eps == null || eps == 0){
 			return null;
 		}else{
-			BigDecimal price = new BigDecimal (previousClosePrice);
+			BigDecimal price = new BigDecimal (lastSalePrice);
 			BigDecimal dilutedEps = new BigDecimal(eps);
 			BigDecimal peratio = price.divide(dilutedEps, RoundingMode.HALF_UP);
 			if(peratio.compareTo(BigDecimal.ZERO) == -1){
@@ -564,10 +575,10 @@ public class Company{
 	}
 
 	public Double getPriceToBookRatio() {
-		if(previousClosePrice == null || bvShare == null || bvShare == 0){
+		if(lastSalePrice == null || bvShare == null || bvShare == 0){
 			return null;
 		}else{
-			BigDecimal price = new BigDecimal(previousClosePrice);
+			BigDecimal price = new BigDecimal(lastSalePrice);
 			BigDecimal bookValue = new BigDecimal(bvShare);
 			return price.divide(bookValue, RoundingMode.HALF_UP).doubleValue();
 		}
@@ -740,7 +751,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, yearFounded, yearHigh, yearLow, priceHistory);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, yearFounded, yearHigh, yearLow, priceHistory);
 	}
 	
 	@Override
@@ -776,6 +787,7 @@ public class Company{
 				&& Objects.equal(this.highPrice, that.highPrice)
 				&& Objects.equal(this.industry, that.industry)
 				&& Objects.equal(this.industryGroup, that.industryGroup)
+				&& Objects.equal(this.lastSalePrice, that.lastSalePrice)
 				&& Objects.equal(this.lowPrice, that.lowPrice)
 				&& Objects.equal(this.minorityInterest, that.minorityInterest)
 				&& Objects.equal(this.netDebt, that.netDebt)
@@ -841,6 +853,7 @@ public class Company{
 			.add("highPrice", highPrice)
 			.add("industry", industry)
 			.add("industryGroup", industryGroup)
+			.add("lastSalePrice", lastSalePrice)
 			.add("lowPrice", lowPrice)
 			.add("minorityInterest", minorityInterest)
 			.add("netDebt", netDebt)
