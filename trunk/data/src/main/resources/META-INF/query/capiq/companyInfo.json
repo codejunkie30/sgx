@@ -42,6 +42,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_HIGHPRICE", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_INDUSTRY"},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_INDUSTRY_GROUP"},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_LASTSALEPRICE", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_LOWPRICE", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_LT_DEBT", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_MARKETCAP", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
