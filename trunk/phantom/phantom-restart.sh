@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /phantom/
-forever restart server.js
+/usr/local/bin/forever restart server.js
