@@ -1,8 +1,14 @@
 {
 	"promos": [
 		{
+			"type": "text",
 			"title": "StockFacts enhanced with new features",
 			"copy": "<p>Screen with new content such as Governance and Transparency Index (GTI) scores and updated Alpha Factor investment tool.</p>"
+		},
+		{
+			"type": "image",
+			"src": "img/promos/sgxnet.gif",
+			"href": "http:/yahoo.com"
 		}
 	]
 }

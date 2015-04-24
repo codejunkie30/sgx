@@ -147,6 +147,22 @@ define(deps, function($, _, SGX) {
     				$.getJSON( "data/homepage.json?time=" + new Date().getMilliseconds(), function(data) {
                         	var promo = Math.floor(Math.random() * data.promos.length) + 1;
                         	promo = data.promos[promo-1];
+                        	
+                        	var remove = promo.type == "image" ? "text" : "image";
+                        	$(".screener-header .message .promo-" + remove).remove();
+                        	
+                        	if (promo.type == "image") {
+                        		
+                        		$(".screener-header .message .promo-image img").attr("src", promo.src);
+                        		if (promo.hasOwnProperty("href")) {
+                        			$(".screener-header .message .promo-image a").attr("href", promo.href);
+                        		}
+                        		
+                        		return;
+                        	}
+                        	
+                        	
+                        	// otherwise promo is text
                         	$(".screener-header .message .intro-headline").html(promo.title);
                         	$(".screener-header .message .copy").html(promo.copy);
     				});
