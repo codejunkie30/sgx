@@ -9,6 +9,8 @@ public class KeyDev{
 	private String headline;
 	private String situation;
 	private String time;
+	private String type;
+	private String source;
 
 	public Date getDate() {
 		return date;
@@ -42,9 +44,25 @@ public class KeyDev{
 		this.time = time;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(date, headline, situation, time);
+		return Objects.hashCode(date, headline, situation, time, type, source);
 	}
 	
 	@Override
@@ -54,7 +72,9 @@ public class KeyDev{
 			return Objects.equal(this.date, that.date)
 				&& Objects.equal(this.headline, that.headline)
 				&& Objects.equal(this.situation, that.situation)
-				&& Objects.equal(this.time, that.time);
+				&& Objects.equal(this.time, that.time)
+				&& Objects.equal(this.type, that.type)
+				&& Objects.equal(this.source, that.source);
 		}
 		return false;
 	}
@@ -66,6 +86,8 @@ public class KeyDev{
 			.add("headline", headline)
 			.add("situation", situation)
 			.add("time", time)
+			.add("type", type)
+			.add("source", source)
 			.toString();
 	}
 }
