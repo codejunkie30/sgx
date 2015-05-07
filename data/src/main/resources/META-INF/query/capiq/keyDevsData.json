@@ -17,6 +17,16 @@
 			"function": "GDSP",
 			"identifier": "$id$",
 			"mnemonic": "IQ_KEY_DEV_SITUATION"
+		},
+		{
+			"function": "GDSP",
+			"identifier": "$id$",
+			"mnemonic": "IQ_KEY_DEV_TYPE"
+		},
+		{
+			"function": "GDSP",
+			"identifier": "$id$",
+			"mnemonic": "IQ_KEY_DEV_SOURCE"
 		}
 	]
 }
