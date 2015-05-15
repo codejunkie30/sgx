@@ -37,6 +37,9 @@ public class SearchCompany{
 	private Double totalRev3YrAnnGrowth;
 	private Double totalRev5YrAnnGrowth;
 	private Double totalRevenue;
+	private Double volWeightedAvgPrice;
+	private String vwapCurrency;
+	private Date vwapAsOfDate;
 	private Double volume;
 
 	public Double getAvgBrokerReq() {
@@ -291,13 +294,37 @@ public class SearchCompany{
 		this.totalRevenue = totalRevenue;
 	}
 
+	public String getVwapCurrency() {
+		return vwapCurrency;
+	}
+
+	public void setVwapCurrency(String vwapCurrency) {
+		this.vwapCurrency = vwapCurrency;
+	}
+
+	public Date getVwapAsOfDate() {
+		return vwapAsOfDate;
+	}
+
+	public void setVwapAsOfDate(Date vwapAsOfDate) {
+		this.vwapAsOfDate = vwapAsOfDate;
+	}
+
+	public Double getVolWeightedAvgPrice() {
+		return volWeightedAvgPrice;
+	}
+
+	public void setVolWeightedAvgPrice(Double volWeightedAvgPrice) {
+		this.volWeightedAvgPrice = volWeightedAvgPrice;
+	}
+
 	public void setVolume(Double volume) {
 		this.volume = volume;
 	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, gtiScore, gtiRankChange, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, companyName, dividendYield, ebitdaMargin, eps, filingDate, floatPercentage, gtiScore, gtiRankChange, industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volWeightedAvgPrice, vwapCurrency, vwapAsOfDate, volume);
 	}
 	
 	@Override
@@ -335,6 +362,9 @@ public class SearchCompany{
 				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
 				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
 				&& Objects.equal(this.totalRevenue, that.totalRevenue)
+				&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
+				&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
+				&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate)
 				&& Objects.equal(this.volume, that.volume);
 		}
 		return false;
@@ -374,6 +404,9 @@ public class SearchCompany{
 			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
 			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
 			.add("totalRevenue", totalRevenue)
+			.add("volWeightedAvgPrice", volWeightedAvgPrice)
+			.add("vwapCurrency", vwapCurrency)
+			.add("vwapAsOfDate", vwapAsOfDate)
 			.add("volume", volume)
 			.toString();
 	}	

@@ -63,6 +63,9 @@ public class Company{
 	private Double totalRev5YrAnnGrowth;
 	private Double totalRevenue;
 	private Double volume;
+	private Double volWeightedAvgPrice;
+	private Date vwapAsOfDate;
+	private String vwapCurrency;
 	private Integer yearFounded;
 	private Double yearHigh;
 	private Double yearLow;
@@ -515,6 +518,32 @@ public class Company{
 		this.totalRevenue = totalRevenue;
 	}
 
+	public Date getVwapAsOfDate() {
+		return vwapAsOfDate;
+	}
+
+	public void setVwapAsOfDate(Date vwapAsOfDate) {
+		this.vwapAsOfDate = vwapAsOfDate;
+	}
+
+	public String getVwapCurrency() {
+		return vwapCurrency;
+	}
+
+	public void setVwapCurrency(String vwapCurrency) {
+		this.vwapCurrency = vwapCurrency;
+	}
+
+	public Double getVolWeightedAvgPrice() {
+		return volWeightedAvgPrice;
+	}
+
+	public void setVolWeightedAvgPrice(Double volWeightedAvgPrice) {
+		this.volWeightedAvgPrice = volWeightedAvgPrice;
+	}
+
+
+
 	public Double getVolume() {
 		return volume;
 	}
@@ -549,7 +578,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, volWeightedAvgPrice, vwapAsOfDate, vwapCurrency, yearFounded, yearHigh, yearLow);
 	}
 	
 	@Override
@@ -613,6 +642,9 @@ public class Company{
 				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
 				&& Objects.equal(this.totalRevenue, that.totalRevenue)
 				&& Objects.equal(this.volume, that.volume)
+				&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
+				&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate)
+				&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
 				&& Objects.equal(this.yearFounded, that.yearFounded)
 				&& Objects.equal(this.yearHigh, that.yearHigh)
 				&& Objects.equal(this.yearLow, that.yearLow);
@@ -680,6 +712,9 @@ public class Company{
 			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
 			.add("totalRevenue", totalRevenue)
 			.add("volume", volume)
+			.add("volWeightedAvgPrice", volWeightedAvgPrice)
+			.add("vwapAsOfDate", vwapAsOfDate)
+			.add("vwapCurrency", vwapCurrency)
 			.add("yearFounded", yearFounded)
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
