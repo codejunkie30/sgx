@@ -456,6 +456,21 @@
 						}
 					}
 				},
+				
+				"volWeightedAvgPrice": 
+				{
+					"type": "double"
+				},
+				
+				"vwapCurrency": 
+				{
+					"type": "string"
+				},
+				
+				"vwapAsOfDate": 
+				{
+					"type": "date"
+				},
 
 				"volume": 
 				{

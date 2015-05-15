@@ -32,6 +32,8 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.VolWeightedAvgPrice;
+import com.wmsi.sgx.model.VolWeightedAvgPrices;
 import com.wmsi.sgx.model.indexer.Index;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
@@ -45,6 +47,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
+import com.wmsi.sgx.service.vwap.VwapService;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -70,6 +73,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	@Autowired
 	private IndexerService indexerService;
+	
+	@Autowired
+	private VwapService vwapService;
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
@@ -246,6 +252,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		}
 		
 		loadCompanyGTI(company);
+		loadCompanyVWAP(company);
 		
 		indexerService.save("company", tickerNoExchange, company, index);
 		
@@ -314,6 +321,30 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			indexerService.save("volume", id, data, index);
 		}
 	}
+	
+	private void loadCompanyVWAP(Company company){
+		Double value = 0.0;
+		Double volume = 0.0;
+		Double vwapValue;
+		String exchange = null;
+		VolWeightedAvgPrices vwap = vwapService.getForTicker(company.getTickerCode());
+		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
+		
+		for(int i=0; i < indexes.size() -1; i++){
+			value += indexes.get(i).getValue();
+			volume += indexes.get(i).getVolume();
+			exchange = indexes.get(i).getExchange();
+		}
+		if(volume == 0.0){
+			vwapValue = 0.0;
+		}else{
+			vwapValue = value/volume;
+		}
+		company.setVolWeightedAvgPrice(vwapValue);
+		company.setVwapAsOfDate(vwap.getVwaps().get(0).getDate());
+		company.setVwapCurrency(vwap.getVwaps().get(0).getCurrency());
+		
+	}
 
 	private void loadCompanyGTI(Company company){
 		GovTransparencyIndex gti = gtiService.getLatest(company.getTickerCode());
@@ -324,4 +355,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		company.setGtiScore(gti.getTotalScore());
 		company.setGtiRankChange(gti.getRankChange());
 	}
+	
+	
 }

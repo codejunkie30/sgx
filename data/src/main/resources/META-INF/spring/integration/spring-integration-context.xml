@@ -17,7 +17,7 @@
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>
-		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />		
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />	
 		<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" />
 	</int:chain>
 
@@ -168,6 +168,10 @@
 	<!-- Simple http client bean -->
 	<bean id="clientHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"/>
 	
+	<bean id="vwapFileResource" class="org.springframework.core.io.UrlResource">
+		<constructor-arg value="${loader.vwap.url}"/>
+	</bean>
+	
 	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
 	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="data/sgx_companies.txt"/>
@@ -179,6 +183,10 @@
 	
 	<bean id="gtiService" class="com.wmsi.sgx.service.gti.impl.GtiServiceImpl">
 		<property name="gtiData" ref="gtiFileResource"/>
+	</bean>
+	
+	<bean id="vwapService" class="com.wmsi.sgx.service.vwap.impl.VwapServiceImpl">
+		<property name="vwapData" ref="vwapFileResource"/>
 	</bean>
 	 	
 </beans>
