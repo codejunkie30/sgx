@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendDate;
+import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendPrice;
 import com.wmsi.sgx.model.DividendType;
+import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
@@ -23,9 +25,7 @@ import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.DividendDateQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.DividendPriceQueryBuilder;
-import com.wmsi.sgx.service.search.elasticsearch.query.DividendTypeQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.DividendValueQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
@@ -204,56 +204,15 @@ public class CompanyServiceImpl implements CompanyService{
 
 		return hits != null && hits.size() > 0 ? hits.get(0) : null;
 	}
-	@Autowired
-	private SearchService dividendExDateSearch;
-	@Override
-	@Cacheable(value = "dividendExDate")
-	public List<DividendDate> loadDividendExDate(String id) throws CompanyServiceException {
-		try{
-			DividendDateQueryBuilder query = new DividendDateQueryBuilder(id);
-			return dividendExDateSearch.search(query, DividendDate.class).getHits();
-		}
-		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading dividend history", e);
-		}
-	}
 	
 	@Autowired
-	private SearchService dividendPayDateSearch;
+	private SearchService dividendHistorySearch;
 	@Override
-	@Cacheable(value = "dividendPayDate")
-	public List<DividendDate> loadDividendPayDate(String id) throws CompanyServiceException {
+	@Cacheable(value = "dividendHistory")
+	public DividendHistory loadDividendHistory(String id) throws CompanyServiceException {
 		try{
-			DividendDateQueryBuilder query = new DividendDateQueryBuilder(id);
-			return dividendPayDateSearch.search(query, DividendDate.class).getHits();
-		}
-		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading dividend history", e);
-		}
-	}
-	
-	@Autowired
-	private SearchService dividendPriceSearch;
-	@Override
-	@Cacheable(value = "dividendPrice")
-	public List<DividendPrice> loadDividendPrice(String id) throws CompanyServiceException {
-		try{
-			DividendPriceQueryBuilder query = new DividendPriceQueryBuilder(id);
-			return dividendPriceSearch.search(query, DividendPrice.class).getHits();
-		}
-		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading dividend history", e);
-		}
-	}
-	
-	@Autowired
-	private SearchService dividendTypeSearch;
-	@Override
-	@Cacheable(value = "dividendType")
-	public List<DividendType> loadDividendType(String id) throws CompanyServiceException {
-		try{
-			DividendTypeQueryBuilder query = new DividendTypeQueryBuilder(id);
-			return dividendTypeSearch.search(query, DividendType.class).getHits();
+			DividendValueQueryBuilder query = new DividendValueQueryBuilder(id);
+			return dividendHistorySearch.getById(id, DividendHistory.class);
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading dividend history", e);

@@ -45,6 +45,7 @@ public class CompanyController{
 		ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 		ret.put("alphaFactors", getAlphas(search));
 		ret.put("gtis", getGtis(search));
+		ret.put("dividendHistory", getDividendHistory(search));
 		return ret;
 	}
 	
@@ -101,11 +102,7 @@ public class CompanyController{
 	@RequestMapping("company/dividendHistory")
 	public DividendHistory getDividendHistory(@RequestBody IdSearch search) throws CompanyServiceException {
 		DividendHistory ret = new DividendHistory();
-		ret.setDividendExDate(companyService.loadDividendExDate(search.getId()));
-		ret.setDividendPayDate(companyService.loadDividendPayDate(search.getId()));
-		ret.setDividendPrice(companyService.loadDividendPrice(search.getId()));
-		ret.setDividendType(companyService.loadDividendType(search.getId()));
-		return ret;
+		return companyService.loadDividendHistory(search.getId());
 	}
 
 	@RequestMapping(value="company/alphaFactor")
