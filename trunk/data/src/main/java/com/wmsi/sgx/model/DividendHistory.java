@@ -7,68 +7,40 @@ import com.google.common.base.Objects;
 
 public class DividendHistory{
 
-	private List<DividendDate> dividendExDate;
-	private List<DividendDate> dividendPayDate;
-	private List<DividendType> dividendType;
-	private List<DividendPrice> dividendPrice;
-	
-	public List<DividendDate> getDividendExDate() {
-		return dividendExDate;
+	private String tickerCode;
+	private List<DividendValue> dividendValues;
+	public String getTickerCode() {
+		return tickerCode;
 	}
-
-	public void setDividendExDate(List<DividendDate> dividendExDate) {
-		this.dividendExDate = dividendExDate;
+	public void setTickerCode(String tickerCode) {
+		this.tickerCode = tickerCode;
 	}
-
-	public List<DividendDate> getDividendPayDate() {
-		return dividendPayDate;
+	public List<DividendValue> getDividendValues() {
+		return dividendValues;
 	}
-
-	public void setDividendPayDate(List<DividendDate> dividendPayDate) {
-		this.dividendPayDate = dividendPayDate;
+	public void setDividendValues(List<DividendValue> dividendValues) {
+		this.dividendValues = dividendValues;
 	}
-
-	public List<DividendType> getDividendType() {
-		return dividendType;
-	}
-
-	public void setDividendType(List<DividendType> dividendType) {
-		this.dividendType = dividendType;
-	}
-
-	public List<DividendPrice> getDividendPrice() {
-		return dividendPrice;
-	}
-
-	public void setDividendPrice(List<DividendPrice> dividendPrice) {
-		this.dividendPrice = dividendPrice;
-	}
-
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(dividendExDate, dividendPayDate, dividendType, dividendPrice);
+		return Objects.hashCode(tickerCode, dividendValues);
 	}
 	
 	@Override
 	public boolean equals(Object object){
 		if (object instanceof DividendHistory) {
 			DividendHistory that = (DividendHistory) object;
-			return Objects.equal(this.dividendExDate, that.dividendExDate)
-				&& Objects.equal(this.dividendPayDate, that.dividendPayDate)
-				&& Objects.equal(this.dividendType, that.dividendType)
-				&& Objects.equal(this.dividendPrice, that.dividendPrice);
+			return Objects.equal(this.tickerCode, that.tickerCode)
+				&& Objects.equal(this.dividendValues, that.dividendValues);
 		}
 		return false;
 	}
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
-			.add("dividendExDate", dividendExDate)
-			.add("dividendPayDate", dividendPayDate)
-			.add("dividendType", dividendType)
-			.add("dividendPrice", dividendPrice)
+			.add("tickerCode", tickerCode)
+			.add("dividendValues", dividendValues)
 			.toString();
 	}
 	
-
 }

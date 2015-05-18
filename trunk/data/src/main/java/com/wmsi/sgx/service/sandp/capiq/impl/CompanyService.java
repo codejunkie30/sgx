@@ -67,10 +67,7 @@ public class CompanyService extends AbstractDataService{
 	private Company loadDividend(Company comp, final String id, final String startDate) throws ResponseParserException, CapIQRequestException{
 		String fiveYearsAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -5);
 		DividendHistory dividendData = dividendService.load(id, fiveYearsAgo, startDate);
-		comp.setDividendExDate(dividendData.getDividendExDate());
-		comp.setDividendPayDate(dividendData.getDividendPayDate());
-		comp.setDividendPrice(dividendData.getDividendPrice());
-		comp.setDividendType(dividendData.getDividendType());
+		comp.setDividendHistory(dividendData.getDividendValues());
 		return comp;
 	}
 	

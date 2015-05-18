@@ -518,6 +518,46 @@
 				}
 			}
 		},
+		
+		"dividendHistory": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"dividendValue": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"dividendExDate": 
+						{
+							"type": "date"
+						},
+						
+						"dividendPayDate": 
+						{
+							"type": "date"
+						},
+
+						"dividendPrice": 
+						{
+							"type": "double"
+						},
+
+						"dividendType": 
+						{
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
 
 		"financial": 
 		{
@@ -651,99 +691,7 @@
 					"type": "double"
 				}
 			}
-		},
-		
-		"dividendExDate": 
-		{
-			"dynamic": false,
-			"properties": 
-			{
-				"tickerCode": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
-
-				"dateValue": 
-				{
-					"type": "date"
-				},
-
-				"asOfDate": 
-				{
-					"type": "date"
-				}
-			}
-		},
-		"dividendPayDate": 
-		{
-			"dynamic": false,
-			"properties": 
-			{
-				"tickerCode": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
-
-				"dateValue": 
-				{
-					"type": "date"
-				},
-
-				"asOfDate": 
-				{
-					"type": "date"
-				}
-			}
-		},
-		
-		"dividendPrice": 
-		{
-			"dynamic": false,
-			"properties": 
-			{
-				"tickerCode": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
-
-				"price": 
-				{
-					"type": "double"
-				},
-
-				"asOfDate": 
-				{
-					"type": "date"
-				}
-			}
-		},
-		
-		"dividendType": 
-		{
-			"dynamic": false,
-			"properties": 
-			{
-				"tickerCode": 
-				{
-					"type": "string",
-					"index": "not_analyzed"
-				},
-
-				"divType": 
-				{
-					"type": "string"
-				},
-
-				"asOfDate": 
-				{
-					"type": "date"
-				}
-			}
-		},
-		
+		},		
 
 		"holders": 
 		{

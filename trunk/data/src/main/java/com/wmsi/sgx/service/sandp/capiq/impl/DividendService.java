@@ -19,6 +19,7 @@ import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendDate;
 import com.wmsi.sgx.model.DividendPrice;
 import com.wmsi.sgx.model.DividendType;
+import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
@@ -60,13 +61,26 @@ public class DividendService extends AbstractDataService{
 		price.addAll(getPrice(prices, id));
 		type.addAll(getType(types, id));
 		
-		List<DividendDate> removedDuplicates = dateDuplicate(exDate);
+		exDate = dateDuplicate(exDate);
+		payDate = payDuplicates(payDate, exDate);
+		price = priceDuplicates(price, exDate);
+		type = typeDuplicates(type, exDate);
+		
 		
 		DividendHistory history = new DividendHistory();
-		history.setDividendExDate(removedDuplicates);
-		history.setDividendPayDate(payDuplicates(payDate, removedDuplicates));
-		history.setDividendPrice(priceDuplicates(price, removedDuplicates));
-		history.setDividendType(typeDuplicates(type, removedDuplicates));
+		history.setTickerCode(id);
+		List<DividendValue> ret = new ArrayList<DividendValue>();
+		
+		for(int i = 0; i < exDate.size(); i++){
+			DividendValue value = new DividendValue();
+			value.setDividendExDate(exDate.get(i).getDateValue());
+			value.setDividendPayDate(payDate.get(i).getDateValue());
+			value.setDividendPrice(price.get(i).getPrice());
+			value.setDividendType(type.get(i).getDivType());
+			ret.add(value);
+			
+		}
+		history.setDividendValues(ret);
 		
 		return history;
 	}

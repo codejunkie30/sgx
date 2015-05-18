@@ -28,6 +28,7 @@ import com.wmsi.sgx.model.DividendDate;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendPrice;
 import com.wmsi.sgx.model.DividendType;
+import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndex;
@@ -330,28 +331,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			indexerService.save("volume", id, data, index);
 		}
 		
-		List<DividendDate> dividendExDate = dividendData.getDividendExDate();
-		for(DividendDate data : dividendExDate){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
-			indexerService.save("dividendExDate", id, data, index);
-		}
-		
-		List<DividendDate> dividendPayDate = dividendData.getDividendPayDate();
-		for(DividendDate data : dividendPayDate){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
-			indexerService.save("dividendPayDate", id, data, index);
-		}
-		
-		List<DividendPrice> dividendPrice = dividendData.getDividendPrice();
-		for(DividendPrice data : dividendPrice){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
-			indexerService.save("dividendPrice", id, data, index);
-		}
-		
-		List<DividendType> dividendType = dividendData.getDividendType();
-		for(DividendType data : dividendType){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
-			indexerService.save("dividendType", id, data, index);
+		List<DividendValue> dividendValue = dividendData.getDividendValues();
+		for(DividendValue data : dividendValue){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getDividendExDate().getTime()).toString());
+			indexerService.save("dividendValue", id, data, index);
 		}
 	}
 	

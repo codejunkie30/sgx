@@ -189,42 +189,15 @@ public class Company{
 
 	private List<HistoricalValue> priceHistory;
 	
-	private List<DividendDate> dividendExDate;
-	private List<DividendDate> dividendPayDate;
-	private List<DividendPrice> dividendPrice;
-	private List<DividendType> dividendType;
+	private List<DividendValue> dividendHistory;
 	
 
-	public List<DividendDate> getDividendExDate() {
-		return dividendExDate;
+	public List<DividendValue> getDividendHistory() {
+		return dividendHistory;
 	}
 
-	public void setDividendExDate(List<DividendDate> dividendExDate) {
-		this.dividendExDate = dividendExDate;
-	}
-
-	public List<DividendDate> getDividendPayDate() {
-		return dividendPayDate;
-	}
-
-	public void setDividendPayDate(List<DividendDate> dividendPayDate) {
-		this.dividendPayDate = dividendPayDate;
-	}
-
-	public List<DividendPrice> getDividendPrice() {
-		return dividendPrice;
-	}
-
-	public void setDividendPrice(List<DividendPrice> dividendPrice) {
-		this.dividendPrice = dividendPrice;
-	}
-
-	public List<DividendType> getDividendType() {
-		return dividendType;
-	}
-
-	public void setDividendType(List<DividendType> dividendType) {
-		this.dividendType = dividendType;
+	public void setDividendHistory(List<DividendValue> dividendHistory) {
+		this.dividendHistory = dividendHistory;
 	}
 
 	public List<HistoricalValue> getPriceHistory() {
@@ -819,7 +792,7 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory, dividendExDate, dividendPayDate, dividendPrice, dividendType);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory, dividendHistory);
 	}
 	
 	@Override
@@ -888,10 +861,7 @@ public class Company{
 				&& Objects.equal(this.yearHigh, that.yearHigh)
 				&& Objects.equal(this.yearLow, that.yearLow)
 				&& Objects.equal(this.priceHistory, that.priceHistory)
-				&& Objects.equal(this.dividendExDate, that.dividendExDate)
-				&& Objects.equal(this.dividendPayDate, that.dividendPayDate)
-				&& Objects.equal(this.dividendPrice, that.dividendPrice)
-				&& Objects.equal(this.dividendType, that.dividendType);
+				&& Objects.equal(this.dividendHistory, that.dividendHistory);
 		}
 		return false;
 	}
@@ -961,10 +931,7 @@ public class Company{
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
 			.add("priceHistory", priceHistory)
-			.add("dividendExDate", dividendExDate)
-			.add("dividendPayDate", dividendPayDate)
-			.add("dividendPrice", dividendPrice)
-			.add("dividendType", dividendType)
+			.add("dividendHistory", dividendHistory)
 			.toString();
 	}
 
