@@ -59,7 +59,7 @@ public class VwapServiceImpl implements VwapService{
 		InputStreamReader reader = null;
 		
 		try{
-			DateFormat df = new SimpleDateFormat("dd MMM yyyy");
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 			reader = new InputStreamReader(vwapData.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext();

@@ -24,6 +24,10 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.DividendDate;
+import com.wmsi.sgx.model.DividendHistory;
+import com.wmsi.sgx.model.DividendPrice;
+import com.wmsi.sgx.model.DividendType;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndex;
@@ -271,6 +275,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		if(kd != null)
 			indexerService.save("keyDevs", tickerNoExchange, kd, index);
+		
+		DividendHistory dH = capIQService.getDividendData(input);
+		if(dH != null)
+			indexerService.save("dividendHistory", tickerNoExchange, dH, index);
 
 		String currency = company.getFilingCurrency();
 		
@@ -285,6 +293,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		}
 
 		PriceHistory historicalData = capIQService.getHistoricalData(input);
+		DividendHistory dividendData = capIQService.getDividendData(input);
 		
 		List<HistoricalValue> price = historicalData.getPrice();
 
@@ -319,6 +328,30 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		for(HistoricalValue data : volume){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
+		}
+		
+		List<DividendDate> dividendExDate = dividendData.getDividendExDate();
+		for(DividendDate data : dividendExDate){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
+			indexerService.save("dividendExDate", id, data, index);
+		}
+		
+		List<DividendDate> dividendPayDate = dividendData.getDividendPayDate();
+		for(DividendDate data : dividendPayDate){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
+			indexerService.save("dividendPayDate", id, data, index);
+		}
+		
+		List<DividendPrice> dividendPrice = dividendData.getDividendPrice();
+		for(DividendPrice data : dividendPrice){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
+			indexerService.save("dividendPrice", id, data, index);
+		}
+		
+		List<DividendType> dividendType = dividendData.getDividendType();
+		for(DividendType data : dividendType){
+			String id = tickerNoExchange.concat(Long.valueOf(data.getAsOfDate().getTime()).toString());
+			indexerService.save("dividendType", id, data, index);
 		}
 	}
 	

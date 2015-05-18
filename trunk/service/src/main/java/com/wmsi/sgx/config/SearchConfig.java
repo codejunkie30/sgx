@@ -73,6 +73,26 @@ public class SearchConfig{
 	public SearchService volumeHistorySearch(){
 		return searchService("volume");
 	}
+	
+	@Bean
+	public SearchService dividendExDateSearch(){
+		return searchService("dividendExDate");
+	}
+	
+	@Bean
+	public SearchService dividendPayDateSearch(){
+		return searchService("dividendPayDate");
+	}
+	
+	@Bean
+	public SearchService dividendPriceSearch(){
+		return searchService("dividendPrice");
+	}
+	
+	@Bean
+	public SearchService dividendTypeSearch(){
+		return searchService("dividendType");
+	}
 
 	@Bean 
 	public SearchService financialSearch(){

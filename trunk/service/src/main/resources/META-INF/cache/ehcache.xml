@@ -113,6 +113,46 @@
 		diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="60"
 		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="dividendExDate"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="dividendPayDate"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="dividendPrice"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="dividendType"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToLiveSeconds="300"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="60"
+		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="alphaFactor"
 		maxElementsInMemory="1000"

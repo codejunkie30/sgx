@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
@@ -27,6 +28,8 @@ public class CompanyService extends AbstractDataService{
 
 	@Autowired
 	private DataService historicalService;
+	@Autowired
+	private DataService dividendService;
 
 	private CapIQRequestImpl companyRequest() {
 		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
@@ -42,6 +45,7 @@ public class CompanyService extends AbstractDataService{
 
 		loadPreviousClose(company, id);
 		loadHistorical(company, id, startDate);
+		loadDividend(company, id, startDate);
 
 		return company;
 	}
@@ -57,6 +61,16 @@ public class CompanyService extends AbstractDataService{
 				comp.setPreviousClosePrice(previousDay.getClosePrice());
 		}
 
+		return comp;
+	}
+	
+	private Company loadDividend(Company comp, final String id, final String startDate) throws ResponseParserException, CapIQRequestException{
+		String fiveYearsAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -5);
+		DividendHistory dividendData = dividendService.load(id, fiveYearsAgo, startDate);
+		comp.setDividendExDate(dividendData.getDividendExDate());
+		comp.setDividendPayDate(dividendData.getDividendPayDate());
+		comp.setDividendPrice(dividendData.getDividendPrice());
+		comp.setDividendType(dividendData.getDividendType());
 		return comp;
 	}
 	

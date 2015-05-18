@@ -652,6 +652,98 @@
 				}
 			}
 		},
+		
+		"dividendExDate": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"dateValue": 
+				{
+					"type": "date"
+				},
+
+				"asOfDate": 
+				{
+					"type": "date"
+				}
+			}
+		},
+		"dividendPayDate": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"dateValue": 
+				{
+					"type": "date"
+				},
+
+				"asOfDate": 
+				{
+					"type": "date"
+				}
+			}
+		},
+		
+		"dividendPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"price": 
+				{
+					"type": "double"
+				},
+
+				"asOfDate": 
+				{
+					"type": "date"
+				}
+			}
+		},
+		
+		"dividendType": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"divType": 
+				{
+					"type": "string"
+				},
+
+				"asOfDate": 
+				{
+					"type": "date"
+				}
+			}
+		},
+		
 
 		"holders": 
 		{
