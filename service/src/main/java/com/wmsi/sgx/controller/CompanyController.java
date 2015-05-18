@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
@@ -94,6 +95,16 @@ public class CompanyController{
 		ret.setLowPrice(companyService.loadLowPriceHistory(search.getId()));
 		ret.setOpenPrice(companyService.loadOpenPriceHistory(search.getId()));
 		ret.setVolume(companyService.loadVolumeHistory(search.getId()));
+		return ret;
+	}
+	
+	@RequestMapping("company/dividendHistory")
+	public DividendHistory getDividendHistory(@RequestBody IdSearch search) throws CompanyServiceException {
+		DividendHistory ret = new DividendHistory();
+		ret.setDividendExDate(companyService.loadDividendExDate(search.getId()));
+		ret.setDividendPayDate(companyService.loadDividendPayDate(search.getId()));
+		ret.setDividendPrice(companyService.loadDividendPrice(search.getId()));
+		ret.setDividendType(companyService.loadDividendType(search.getId()));
 		return ret;
 	}
 

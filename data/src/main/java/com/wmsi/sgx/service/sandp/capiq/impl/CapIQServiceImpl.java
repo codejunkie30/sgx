@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
@@ -64,5 +65,15 @@ public class CapIQServiceImpl implements CapIQService{
 		String asOfDate = input.getDate();
 		String startDate = DateUtil.adjustDate(asOfDate, Calendar.DAY_OF_MONTH, -1835);
 		return historicalService.load(input.getTicker(), startDate, asOfDate);
+	}
+	
+	@Autowired
+	private DataService dividendService;
+	
+	@Override
+	public DividendHistory getDividendData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {
+		String asOfDate = input.getDate();
+		String startDate = DateUtil.adjustDate(asOfDate, Calendar.DAY_OF_MONTH, -1835);
+		return dividendService.load(input.getTicker(), startDate, asOfDate);
 	}
 }

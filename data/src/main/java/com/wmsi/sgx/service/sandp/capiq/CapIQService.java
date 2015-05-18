@@ -6,6 +6,7 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.model.DividendHistory;
 
 public interface CapIQService{
 	
@@ -18,5 +19,8 @@ public interface CapIQService{
 	KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
 	Financials getCompanyFinancials(CompanyInputRecord input, String currency) throws ResponseParserException, CapIQRequestException;
+
+	DividendHistory getDividendData(CompanyInputRecord input)
+			throws ResponseParserException, CapIQRequestException;
 
 }
