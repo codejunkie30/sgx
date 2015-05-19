@@ -45,7 +45,6 @@ public class CompanyService extends AbstractDataService{
 
 		loadPreviousClose(company, id);
 		loadHistorical(company, id, startDate);
-		loadDividend(company, id, startDate);
 
 		return company;
 	}
@@ -61,13 +60,6 @@ public class CompanyService extends AbstractDataService{
 				comp.setPreviousClosePrice(previousDay.getClosePrice());
 		}
 
-		return comp;
-	}
-	
-	private Company loadDividend(Company comp, final String id, final String startDate) throws ResponseParserException, CapIQRequestException{
-		String fiveYearsAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -5);
-		DividendHistory dividendData = dividendService.load(id, fiveYearsAgo, startDate);
-		comp.setDividendHistory(dividendData.getDividendValues());
 		return comp;
 	}
 	
