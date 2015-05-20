@@ -3,6 +3,8 @@ package com.wmsi.sgx.service.indexer.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -339,22 +341,22 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	private void loadCompanyVWAP(Company company){
-		Double value = 0.0;
-		Double volume = 0.0;
+		BigDecimal value = new BigDecimal(0);
+		BigDecimal volume = new BigDecimal(0);
 		Double vwapValue;
 		String exchange = null;
 		VolWeightedAvgPrices vwap = vwapService.getForTicker(company.getTickerCode());
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
 		
 		for(int i=0; i < indexes.size() -1; i++){
-			value += indexes.get(i).getValue();
-			volume += indexes.get(i).getVolume();
+			value.add(new BigDecimal(indexes.get(i).getValue()));
+			volume.add(new BigDecimal(indexes.get(i).getVolume()));
 			exchange = indexes.get(i).getExchange();
 		}
-		if(volume == 0.0){
+		if(volume.compareTo(BigDecimal.ZERO) == 0){
 			vwapValue = 0.0;
 		}else{
-			vwapValue = value/volume;
+			vwapValue = value.divide(volume, RoundingMode.HALF_UP).doubleValue();
 		}
 		company.setVolWeightedAvgPrice(vwapValue);
 		company.setVwapAsOfDate(vwap.getVwaps().get(0).getDate());
