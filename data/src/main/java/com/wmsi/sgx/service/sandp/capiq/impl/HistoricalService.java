@@ -138,15 +138,14 @@ public class HistoricalService extends AbstractDataService {
 		return results;
 	}
 	
-	private String getTime(String object){
+	private String getTime(String object) throws CapIQRequestException{
 		Date date;
 		try {
 			date = new SimpleDateFormat("MM/dd/yyyy").parse(object);
 			return new SimpleDateFormat("MM-dd-yyyy").format(date);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new CapIQRequestException("Invalid Date format or data.", e);
 		}
-		return null;
 	}
 
 }

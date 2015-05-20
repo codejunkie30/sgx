@@ -176,15 +176,14 @@ public class DividendService extends AbstractDataService{
 	
 	
 	
-	private String getTime(String object){
+	private String getTime(String object) throws CapIQRequestException{
 		Date date;
 		try {
 			date = new SimpleDateFormat("MMM dd yyyy hh:mma").parse(object);
 			return new SimpleDateFormat("MM/dd/yyyy").format(date);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new CapIQRequestException("Invalid Date format or data.", e);
 		}
-		return null;
 	}
 	
 	
