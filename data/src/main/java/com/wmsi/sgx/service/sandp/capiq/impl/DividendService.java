@@ -56,6 +56,15 @@ public class DividendService extends AbstractDataService{
 		CapIQResult prices = response.getResults().get(2);
 		CapIQResult types = response.getResults().get(3);
 		
+		DividendHistory history = new DividendHistory();
+		List<DividendValue> ret = new ArrayList<DividendValue>();
+		history.setTickerCode(id);
+		
+		if(unavailableData(exDates)){			
+			history.setDividendValues(ret);
+			return history;
+		}
+			
 		exDate.addAll(getDate(exDates, id));
 		payDate.addAll(getDate(payDates, id));
 		price.addAll(getPrice(prices, id));
@@ -64,12 +73,7 @@ public class DividendService extends AbstractDataService{
 		exDate = dateDuplicate(exDate);
 		payDate = payDuplicates(payDate, exDate);
 		price = priceDuplicates(price, exDate);
-		type = typeDuplicates(type, exDate);
-		
-		
-		DividendHistory history = new DividendHistory();
-		history.setTickerCode(id);
-		List<DividendValue> ret = new ArrayList<DividendValue>();
+		type = typeDuplicates(type, exDate);		
 		
 		for(int i = 0; i < exDate.size(); i++){
 			DividendValue value = new DividendValue();
@@ -83,6 +87,21 @@ public class DividendService extends AbstractDataService{
 		history.setDividendValues(ret);
 		
 		return history;
+	}
+	
+	private Boolean unavailableData(CapIQResult exDates){
+		List<CapIQRow> rows = exDates.getRows();
+		if(rows.size() != 0){
+			//Gets first query, exchange date
+			CapIQRow value = rows.get(0);
+			//Gets value in exchange date query
+			String data = value.getValues().get(0);
+			if(data.toLowerCase().startsWith("data unavailable"))
+				return true;
+			else
+				return false;			
+		}else
+			return true;		
 	}
 	
 	private List<DividendDate> dateDuplicate(List<DividendDate> dates){
