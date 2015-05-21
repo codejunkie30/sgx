@@ -341,25 +341,33 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	private void loadCompanyVWAP(Company company){
-		BigDecimal value = new BigDecimal("0.0");
-		BigDecimal volume = new BigDecimal("0.0");
-		Double vwapValue;
+		
+		BigDecimal value = BigDecimal.ZERO;
+		BigDecimal volume = BigDecimal.ZERO;
+		Double vwapValue = null;
+		
 		VolWeightedAvgPrices vwap = vwapService.getForTicker(company.getTickerCode());
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
 		Date date = null;
 		String currency = null;
 		
-		for(int i=0; i < indexes.size(); i++){
+		if(indexes.size() > 0){
 			date = indexes.get(0).getDate();
 			currency = indexes.get(0).getCurrency();
-			value = value.add(new BigDecimal(indexes.get(i).getValue()));			
-			volume = volume.add(new BigDecimal(indexes.get(i).getVolume()));
 		}
-		if(volume.compareTo(BigDecimal.ZERO) == 0){
-			vwapValue = null;
-		}else{
-			vwapValue = value.divide(volume, RoundingMode.HALF_UP).doubleValue();
+		
+		for(int i=0; i < indexes.size(); i++){		
+			
+			String val = indexes.get(i).getValue();
+			String vol = indexes.get(i).getVolume(); 			
+			
+			value = value.add(new BigDecimal(val));			
+			volume = volume.add(new BigDecimal(vol));
+			
 		}
+		if(volume.compareTo(BigDecimal.ZERO) != 0)
+			vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
+		
 		company.setVolWeightedAvgPrice(vwapValue);
 		company.setVwapAsOfDate(date);
 		company.setVwapCurrency(currency);
