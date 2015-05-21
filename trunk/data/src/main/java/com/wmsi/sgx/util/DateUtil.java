@@ -28,7 +28,12 @@ public class DateUtil{
 	}
 
 	public static Date toDate(String d){
-		SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATE_FMT);
+		return toDate(d, DEFAULT_DATE_FMT);
+	}
+
+	public static Date toDate(String d, String fmt){
+		SimpleDateFormat df = new SimpleDateFormat(fmt);
+		
 		try{
 			return df.parse(d);
 		}
