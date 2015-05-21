@@ -341,26 +341,28 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	private void loadCompanyVWAP(Company company){
-		BigDecimal value = new BigDecimal(0);
-		BigDecimal volume = new BigDecimal(0);
+		BigDecimal value = new BigDecimal("0.0");
+		BigDecimal volume = new BigDecimal("0.0");
 		Double vwapValue;
-		String exchange = null;
 		VolWeightedAvgPrices vwap = vwapService.getForTicker(company.getTickerCode());
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
+		Date date = null;
+		String currency = null;
 		
-		for(int i=0; i < indexes.size() -1; i++){
-			value.add(new BigDecimal(indexes.get(i).getValue()));
-			volume.add(new BigDecimal(indexes.get(i).getVolume()));
-			exchange = indexes.get(i).getExchange();
+		for(int i=0; i < indexes.size(); i++){
+			date = indexes.get(0).getDate();
+			currency = indexes.get(0).getCurrency();
+			value = value.add(new BigDecimal(indexes.get(i).getValue()));			
+			volume = volume.add(new BigDecimal(indexes.get(i).getVolume()));
 		}
 		if(volume.compareTo(BigDecimal.ZERO) == 0){
-			vwapValue = 0.0;
+			vwapValue = null;
 		}else{
 			vwapValue = value.divide(volume, RoundingMode.HALF_UP).doubleValue();
 		}
 		company.setVolWeightedAvgPrice(vwapValue);
-		company.setVwapAsOfDate(vwap.getVwaps().get(0).getDate());
-		company.setVwapCurrency(vwap.getVwaps().get(0).getCurrency());
+		company.setVwapAsOfDate(date);
+		company.setVwapCurrency(currency);
 		
 	}
 
