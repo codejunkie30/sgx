@@ -25,6 +25,7 @@ import com.wmsi.sgx.model.VolWeightedAvgPrice;
 import com.wmsi.sgx.model.VolWeightedAvgPrices;
 import com.wmsi.sgx.service.vwap.VWAPServiceException;
 import com.wmsi.sgx.service.vwap.VwapService;
+import com.wmsi.sgx.util.DateUtil;
 
 public class VwapServiceImpl implements VwapService{
 	private static final Logger log = LoggerFactory.getLogger(VwapServiceImpl.class);
@@ -34,6 +35,7 @@ public class VwapServiceImpl implements VwapService{
 	public void setVwapData(Resource d){vwapData = d;}
 	
 	private VolWeightedAvgPrices vwaps;
+	private final String fmt = "dd/MM/yyyy";
 	
 	@Override
 	public VolWeightedAvgPrices getForTicker(String ticker){
@@ -59,7 +61,6 @@ public class VwapServiceImpl implements VwapService{
 		InputStreamReader reader = null;
 		
 		try{
-			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 			reader = new InputStreamReader(vwapData.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext();
@@ -68,31 +69,10 @@ public class VwapServiceImpl implements VwapService{
 			List<VolWeightedAvgPrice> ret = new ArrayList<VolWeightedAvgPrice>();
 			
 			while((record = csvReader.readNext()) != null){
-				VolWeightedAvgPrice r = new VolWeightedAvgPrice();
-				r.setExchange(record[0].trim());
-				r.setTickerCode(record[1].trim());
-				try{
-					r.setDate(df.parse(record[2]));
-				}
-				catch(ParseException e){
-					log.warn("Error parsing VWAP date for ticker {}", r.getTickerCode());
-					log.warn("Date: {}", record[2]);
-					continue;
-				}
-				try{
-					r.setValue(Double.parseDouble(record[3].trim()));
-					r.setVolume(Double.parseDouble(record[4].trim()));
-				}
-				catch(NumberFormatException nfe){
-					log.warn("Unable to parse VWAP data for ticker {}", r.getTickerCode());
-					log.warn("Date: {}", record[2]);
-					r.setValue(0.0);
-					r.setVolume(0.0);
-				}
-				r.setCurrency(record[5].trim());
-				ret.add(r);
+				ret.add(getRec(record));
 				
 			}
+			
 			log.info("Loaded {} VWAP records", ret.size());
 			vwaps = new VolWeightedAvgPrices();
 			vwaps.setVwaps(ret);
@@ -104,6 +84,20 @@ public class VwapServiceImpl implements VwapService{
 			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
 		}
+	}
+	
+	public VolWeightedAvgPrice getRec(String[] record){
+		
+		VolWeightedAvgPrice r = new VolWeightedAvgPrice();
+		
+		r.setExchange(record[0].trim());
+		r.setTickerCode(record[1].trim());
+		r.setDate(DateUtil.toDate(record[2], fmt));
+		r.setValue(record[3].trim());
+		r.setVolume(record[4].trim());				
+		r.setCurrency(record[5].trim());
+		return r;
+		
 	}
 	
 	private void sortVwap(VolWeightedAvgPrices vwap){

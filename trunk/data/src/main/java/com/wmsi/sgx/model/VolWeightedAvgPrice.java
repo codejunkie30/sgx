@@ -9,45 +9,57 @@ public class VolWeightedAvgPrice{
 	private String currency;
 	private String exchange;
 	private String tickerCode;
-	private Double value;
-	private Double volume;
+	private String value;
+	private String volume;	
 	
-	public String getCurrency() {
-		return currency;
-	}
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
 	public Date getDate() {
 		return date;
 	}
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
 	public String getExchange() {
 		return exchange;
 	}
+
 	public void setExchange(String exchange) {
 		this.exchange = exchange;
 	}
+
 	public String getTickerCode() {
 		return tickerCode;
 	}
+
 	public void setTickerCode(String tickerCode) {
 		this.tickerCode = tickerCode;
 	}
-	public Double getValue() {
+
+	public String getValue() {
 		return value;
 	}
-	public void setValue(Double value) {
+
+	public void setValue(String value) {
 		this.value = value;
 	}
-	public Double getVolume() {
+
+	public String getVolume() {
 		return volume;
 	}
-	public void setVolume(Double volume) {
+
+	public void setVolume(String volume) {
 		this.volume = volume;
 	}
+
 	@Override
 	public int hashCode(){
 		return Objects.hashCode(date, currency, exchange, tickerCode, value, volume);
