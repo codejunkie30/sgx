@@ -79,9 +79,16 @@ public class VwapServiceImpl implements VwapService{
 					log.warn("Date: {}", record[2]);
 					continue;
 				}
-				
-				r.setValue(Double.parseDouble(record[3].trim()));
-				r.setVolume(Double.parseDouble(record[4].trim()));
+				try{
+					r.setValue(Double.parseDouble(record[3].trim()));
+					r.setVolume(Double.parseDouble(record[4].trim()));
+				}
+				catch(NumberFormatException nfe){
+					log.warn("Unable to parse VWAP data for ticker {}", r.getTickerCode());
+					log.warn("Date: {}", record[2]);
+					r.setValue(0.0);
+					r.setVolume(0.0);
+				}
 				r.setCurrency(record[5].trim());
 				ret.add(r);
 				
