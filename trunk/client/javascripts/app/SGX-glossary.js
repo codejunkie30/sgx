@@ -178,7 +178,7 @@ var GLOSSARY =
 		},
 		{
 			id: "keyDevs",
-			definition: "Use Key Developments to understand the impact of news and events on market price. S&P Capital IQ monitors, aggregates and tag Key Developments from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations and company websites."
+			definition: "Use In The News to understand the impact of news and events on market price. In the news is sourced from S&P Capital IQ's Key Developments database. S&P Capitail IQ monitors, aggregates and tags items from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations, market rumors and company websites."
 		},
 		{
 			id: "avgVolumeM3",
@@ -214,7 +214,11 @@ var GLOSSARY =
 		},
 		{
 			id: "gtiAbout",
-			definition: "The GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement. The index is divided into two broad sections: governance and transparency (including investor relations). The governance section covers board matters, remuneration, accountability and audit whereas the transparency section focuses on how companies communicate with their shareholders.<br /><br />In addition, the index includes a \"bonus and penalty\" system where companies that go beyond the requirements of the code (e.g., by including limits on directorships held by the their directors) will be awarded additional points while negative events (e.g., directors or management resigning and raising corporate governance concerns) will lead to a deduction in the company's GTI score."
+			definition: "The Governance and Transparency Index (GTI) is a tripartite collaboration between CPA Australia, NUS Business School's Centre for Governance, Institutions and Organisations (CGIO) and The Business Times.<br /><br />The GTI assesses companies on their corporate governance disclosure and practices, as well as the timeliness, accessibility and transparency of their financial results announcement. The index is divided into two broad sections: governance and transparency (including investor relations). The governance section covers board matters, remuneration, accountability and audit whereas the transparency section focuses on how companies communicate with their shareholders.<br /><br />In addition, the index includes a \"bonus and penalty\" system where companies that go beyond the requirements of the code (e.g., by including limits on directorships held by the their directors) will be awarded additional points while negative events (e.g., directors or management resigning and raising corporate governance concerns) will lead to a deduction in the company's GTI score."
+		},
+		{
+			id: "vwap",
+			definition: "VWAP is calculated as total trading value for last 6 months divided by total trading volume for last 6 months. VWAP is sourced from SGX."
 		}
 		
 ];
