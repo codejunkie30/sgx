@@ -5,8 +5,8 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://54.254.221.141", /** PROD */
-    		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
+    		//fqdn : "http://54.254.221.141", /** PROD */
+    		fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
@@ -155,7 +155,7 @@ define(deps, function($, _, SGX) {
                         		
                         		$(".screener-header .message .promo-image img").attr("src", promo.src);
                         		if (promo.hasOwnProperty("href")) {
-                        			$(".screener-header .message .promo-image a").attr("href", promo.href);
+                        			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("src", promo.src);
                         		}
                         		
                         		return;
@@ -1709,6 +1709,7 @@ define(deps, function($, _, SGX) {
             		
             		// all other sections
             		SGX.company.initHolders(data);
+            		SGX.company.initDividends(data);
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
             		SGX.company.initGTI(data);
@@ -1911,10 +1912,16 @@ define(deps, function($, _, SGX) {
         				var letter = SGX.letters.substring(idx, idx+1);
         				var nId = 'keyDev-' + letter;
         				var icon = $("<div />").addClass("icon").text(letter); 
-        				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId).attr("data-dt", SGX.formatter.getFormatted("date", keyDev.date));
+        				var link = $("<span />").text(keyDev.headline).attr("data-name", keyDev.date).attr("data-content", keyDev.situation).attr("data-name", nId).attr("data-dt", SGX.formatter.getFormatted("date", keyDev.date)).attr("data-type", keyDev.type).attr("data-source", keyDev.source);;
         				$("<li />").append(icon).append(link).appendTo(".stock-events ul");
         				$(link).click(function(e) {
-        					var copy = "<h4>" + $(this).text() + "</h4><p class='bold'>From " + $(this).attr("data-dt") + "</p><div class='news'>" + $(this).attr("data-content") + "</div>";
+        					var copy = "<h4>" + $(this).text() + "</h4>" + 
+        							   "<p class='bold'>" + 
+        							   "Source: " + $(this).attr("data-source") + "<br />" +
+        							   "Type: " + $(this).attr("data-type") + "<br />" +
+        							   "From: " + $(this).attr("data-dt") + 
+        							   "</p>" +
+        							   "<div class='news'>" + $(this).attr("data-content") + "</div>"
                             SGX.modal.open({ content: copy, type: 'alert' });
         				});
         				
@@ -2029,6 +2036,33 @@ define(deps, function($, _, SGX) {
             			$("td:last", this).css("border", "0");
             		});
             		
+            		
+            	},
+            	
+            	initDividends: function(data) {
+            		
+            		// holders
+            		if (data.hasOwnProperty("dividendHistory") && data.dividendHistory.hasOwnProperty("dividendValues") && data.dividendHistory.dividendValues.length > 0) {
+            			
+            			//data.holders.holders.sort(function(a, b) { return a.shares - b.shares; });
+            			
+            			$(".panel .no-dividend-hist").hide();
+            			$(".panel .has-dividend-hist").show();
+            			
+             			$.each(data.dividendHistory.dividendValues, function(idx, dividend) {
+            				var tr = $("<tr />").prependTo(".panel .dividend-hist");
+            				if (idx%2 == 0) $(tr).addClass("even");
+            				$("<td />").text(dividend.dividendExDate).addClass("property formattable left").attr("data-format", "date").appendTo(tr);
+            				$("<td />").text(dividend.dividendPayDate).addClass("property formattable left").attr("data-format", "date").appendTo(tr);
+            				$("<td />").text(dividend.dividendType).addClass("property left").appendTo(tr);
+            				$("<td />").text(dividend.dividendPrice).addClass("property formattable left").attr("data-format", "number").appendTo(tr);
+            			});
+            			
+            		}
+            		else {
+            			$(".panel .no-dividend-hist").show();
+            			$(".panel .has-dividend-hist").hide();
+            		}
             		
             	},
             	
@@ -2866,6 +2900,7 @@ define(deps, function($, _, SGX) {
         			
             		// all other sections
             		SGX.company.initHolders(data);
+            		SGX.company.initDividends(data);
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
             		SGX.company.initGTI(data);
