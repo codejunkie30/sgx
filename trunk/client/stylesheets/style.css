@@ -37,6 +37,10 @@ a img {
 	font-weight: bold;
 }
 
+.normal {
+	font-weight: normal !important;
+}
+
 .no-results-display {
 	margin: 10px 0 20px 0;
 	padding: 15px;
@@ -849,6 +853,10 @@ td .page-title {
 
 .panel .right {
 	text-align: right;
+}
+
+.panel .no-vwap, .panel .has-vwap {
+	display: none;
 }
 
 .tabbed-content .panel tr td.note {

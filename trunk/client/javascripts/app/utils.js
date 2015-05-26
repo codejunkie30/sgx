@@ -43,6 +43,7 @@ function toSGT(dt) {
 }
 
 function fixIEDate(s) {
+	if (typeof s === "undefined") return new Date();
 	s = s.split(/\D/);
 	return new Date(Date.UTC(s[0], --s[1]||'', s[2]||'', s[3]||'', s[4]||''));
 }
