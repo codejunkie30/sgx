@@ -1699,7 +1699,8 @@ define(deps, function($, _, SGX) {
             	loaded: function(data) {
             		
         			SGX.trackPage("SGX Company Profile - " + data.company.companyInfo.companyName);
-            		
+
+            		// simplpe stuff
             		SGX.company.initSimple(data, true);
 
             		// init charts
@@ -1713,6 +1714,10 @@ define(deps, function($, _, SGX) {
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
             		SGX.company.initGTI(data);
+
+            		// hide/show
+            		if (data.company.companyInfo.hasOwnProperty("volWeightedAvgPrice")) $(".has-vwap").show();
+            		else $(".no-vwap").show();
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();
@@ -2904,6 +2909,10 @@ define(deps, function($, _, SGX) {
             		SGX.company.initConsensus(data);
             		SGX.company.initAlphaFactors(data);
             		SGX.company.initGTI(data);
+            		
+            		// hide/show
+            		if (!data.company.companyInfo.hasOwnProperty("volWeightedAvgPrice")) $(".has-vwap").remove();
+            		else $(".no-vwap").show();
             		
             		// hide/show
             		if (!data.company.companyInfo.hasOwnProperty("businessDescription")) $(".businessDescription").hide();

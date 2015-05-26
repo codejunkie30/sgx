@@ -178,7 +178,7 @@ var GLOSSARY =
 		},
 		{
 			id: "keyDevs",
-			definition: "Use In The News to understand the impact of news and events on market price. In the news is sourced from S&P Capital IQ's Key Developments database. S&P Capitail IQ monitors, aggregates and tags items from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations, market rumors and company websites."
+			definition: "Use In The News to understand the impact of news and events on market price. In the news is sourced from S&P Capital IQ's Key Developments database. S&P Capital IQ monitors, aggregates and tags items from over 20,000 sources in addition to regulatory filings, call transcripts, investor presentations, M&A rumors and company websites."
 		},
 		{
 			id: "avgVolumeM3",
