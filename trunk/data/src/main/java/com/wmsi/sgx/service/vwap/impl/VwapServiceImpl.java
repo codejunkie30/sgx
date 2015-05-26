@@ -53,8 +53,8 @@ public class VwapServiceImpl implements VwapService{
 		return ret;
 	}
 	
-	@PostConstruct
-	private void loadData() throws VWAPServiceException{
+	
+	public Boolean init() throws VWAPServiceException{
 		log.info("Reading data from VWAP file...");
 		
 		CSVReader csvReader = null;
@@ -84,6 +84,8 @@ public class VwapServiceImpl implements VwapService{
 			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
 		}
+		
+		return true;
 	}
 	
 	public VolWeightedAvgPrice getRec(String[] record){
