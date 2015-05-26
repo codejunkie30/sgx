@@ -253,7 +253,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		String tickerNoExchange = company.getTickerCode();
 		
 		if(tickerNoExchange == null){
-			// This seems to happen if a ticker if valid but the company merged. 
+			// This seems to happen if a ticker is valid but the company merged. 
 			log.warn("Warning: CapIQService returned company with null ticker"); 
 			throw new InvalidIdentifierException("Ticker not found " + input.getTicker());
 		}
