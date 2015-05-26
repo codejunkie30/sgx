@@ -155,7 +155,8 @@ define(deps, function($, _, SGX) {
                         		
                         		$(".screener-header .message .promo-image img").attr("src", promo.src);
                         		if (promo.hasOwnProperty("href")) {
-                        			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("src", promo.src);
+                        			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("target", "_top");
+                        			
                         		}
                         		
                         		return;
