@@ -55,6 +55,7 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.service.vwap.VwapService;
+import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -350,23 +351,37 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
 		Date date = null;
 		String currency = null;
+		Boolean sixMonths = false;
 		
-		if(indexes.size() > 0){
-			date = indexes.get(0).getDate();
-			currency = indexes.get(0).getCurrency();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -6);
+		Date sixMonthsAgo = cal.getTime();
+		
+		if(indexes.size() > 0){			
+			Date earliestDate = indexes.get(indexes.size() - 1).getDate();
+			sixMonths = earliestDate.before(sixMonthsAgo);
+			
+			if(sixMonths){
+				date = indexes.get(0).getDate();
+				currency = indexes.get(0).getCurrency();
+			}
+			
 		}
 		
-		for(int i=0; i < indexes.size(); i++){		
-			
-			String val = indexes.get(i).getValue();
-			String vol = indexes.get(i).getVolume(); 			
-			
-			value = value.add(new BigDecimal(val));			
-			volume = volume.add(new BigDecimal(vol));
+		if(sixMonths){
+			for(int i=0; i < indexes.size(); i++){		
+				
+				String val = indexes.get(i).getValue();
+				String vol = indexes.get(i).getVolume(); 			
+				
+				value = value.add(new BigDecimal(val));			
+				volume = volume.add(new BigDecimal(vol));
+				
+			}
+			if(volume.compareTo(BigDecimal.ZERO) != 0)
+				vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
 			
 		}
-		if(volume.compareTo(BigDecimal.ZERO) != 0)
-			vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
 		
 		company.setVolWeightedAvgPrice(vwapValue);
 		company.setVwapAsOfDate(date);
