@@ -4,7 +4,7 @@
 
 	<groupId>com.wmsi</groupId>
 	<artifactId>sgx-data</artifactId>
-	<version>1.2.2.RELEASE</version>
+	<version>1.2.3.BUILD-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>sgx-data</name>
