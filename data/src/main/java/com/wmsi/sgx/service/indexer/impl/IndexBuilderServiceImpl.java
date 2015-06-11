@@ -351,37 +351,38 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
 		Date date = null;
 		String currency = null;
+		/*
 		Boolean sixMonths = false;
 		
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -6);
 		Date sixMonthsAgo = cal.getTime();
-		
+		*/
 		if(indexes.size() > 0){			
-			Date earliestDate = indexes.get(indexes.size() - 1).getDate();
-			sixMonths = earliestDate.before(sixMonthsAgo);
+			//Date earliestDate = indexes.get(indexes.size() - 1).getDate();
+			//sixMonths = earliestDate.before(sixMonthsAgo);
 			
-			if(sixMonths){
-				date = indexes.get(0).getDate();
-				currency = indexes.get(0).getCurrency();
-			}
+			
+			date = indexes.get(0).getDate();
+			currency = indexes.get(0).getCurrency();
+			
 			
 		}
 		
-		if(sixMonths){
-			for(int i=0; i < indexes.size(); i++){		
-				
-				String val = indexes.get(i).getValue();
-				String vol = indexes.get(i).getVolume(); 			
-				
-				value = value.add(new BigDecimal(val));			
-				volume = volume.add(new BigDecimal(vol));
-				
-			}
-			if(volume.compareTo(BigDecimal.ZERO) != 0)
-				vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
+		
+		for(int i=0; i < indexes.size(); i++){		
+			
+			String val = indexes.get(i).getValue();
+			String vol = indexes.get(i).getVolume(); 			
+			
+			value = value.add(new BigDecimal(val));			
+			volume = volume.add(new BigDecimal(vol));
 			
 		}
+		if(volume.compareTo(BigDecimal.ZERO) != 0)
+			vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
+		
+	
 		
 		company.setVolWeightedAvgPrice(vwapValue);
 		company.setVwapAsOfDate(date);
