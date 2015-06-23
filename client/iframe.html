@@ -93,6 +93,15 @@
     	}
     	
     	/**
+    	 * returns a unique string every hours, allowing for some caching
+    	 * @return the ISO string up until the hour
+    	 */
+    	function getCacheParam() {
+    		var cacheTime = new Date();
+    		return cacheTime.toISOString().slice(0,13).replace(/-/g,"");
+    	}
+    	
+    	/**
     	 * load the page dynamically
     	 */
     	$(document).ready(function() {
@@ -101,6 +110,8 @@
         	$.ajax({
                 url: remoteDomain + "/data/pages.jsonp",
                 type: 'GET',
+                cache: true,
+                data: { 'cache': getCacheParam() },
                 dataType: 'jsonp',
                 jsonpCallback: 'configuration',
                 success: _finishSFLoad,
