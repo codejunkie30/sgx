@@ -218,7 +218,7 @@ var GLOSSARY =
 		},
 		{
 			id: "vwap",
-			definition: "VWAP is calculated as total trading value for last 6 months divided by total trading volume for last 6 months. VWAP is sourced from SGX."
+			definition: "The volume-weighted average price (VWAP) is computed based on total value of securities traded for the 6 months under review divided by the total volume traded for the 6 months. This applies regardless of the number of trading days during the 6-month review period (i.e. where the securities are thinly traded or trading is halted / suspended for a period of time). VWAP is source from SGX."
 		}
 		
 ];
