@@ -13,7 +13,7 @@
     	 */
      	var currentDomain = document.location.href;
 		var remoteDomain = "http://" +  window.location.hostname;
-    	var remotePages = [ "index", "company-tearsheet", "financials", "related", "alpha-factor", "", "trade", "terms-conditions" ];
+    	var remotePages = [];
     	var defaultSection = 0;
     
     	/**
@@ -70,15 +70,43 @@
 	    	
 		}
     	
-
+    	//////////////////////////////////////////////////////////////////////////////
+    	//// new for premium
+    	///////
+    	
     	/**
-    	 * load the page dynamically
+    	 * if it has a configuration object, reset the pages variable
+    	 * otherwise just use whatever was set by default
+    	 * @param configuration remotely hosted array of page names
     	 */
-    	$(document).ready(function() {
+    	function _finishSFLoad(configuration) {
+    		 
+     		// reset pages to whatever is in current release
+    		if (typeof configuration !== "undefined" && configuration.hasOwnProperty("pages")) remotePages = configuration.pages;
+    		
+    		// load the page
     		var curId = getParameterByName("page");
     		var curPage = getPageBase(curId);
     		var companyURL = remoteDomain + curPage + "#" + encodeURIComponent(currentDomain);
     		$("#company-info").attr("src", companyURL);
+    		
+    	}
+    	
+    	/**
+    	 * load the page dynamically
+    	 */
+    	$(document).ready(function() {
+    		
+    		// load remote page configuration
+        	$.ajax({
+                url: remoteDomain + "/data/pages.jsonp",
+                type: 'GET',
+                dataType: 'jsonp',
+                jsonpCallback: 'configuration',
+                success: _finishSFLoad,
+                error: _finishSFLoad
+        	});
+
     	});
     	
     </script>

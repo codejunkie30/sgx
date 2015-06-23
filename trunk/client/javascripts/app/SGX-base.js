@@ -1559,12 +1559,15 @@ define(deps, function($, _, SGX) {
                     
                     if ($(el).hasClass("glossary-left")) left = $(el).offset().left - width + 25;
                     
+                    else if ($(el).hasClass("glossary-right")) left = $(el).offset().left - 25;
+                    
                     $(template).css({
                         'top': $(el).offset().top - height - 12,
                         'left': left
                     });
                     
                     if ($(el).hasClass("glossary-left")) $(template).addClass("tooltip-left");
+                    else if ($(el).hasClass("glossary-right")) $(template).addClass("tooltip-right");
                     
                     $(template).fadeIn();
             		
