@@ -13,7 +13,7 @@
     	 */
      	var currentDomain = document.location.href;
 		var remoteDomain = "http://" +  window.location.hostname;
-    	var remotePages = [];
+		var remotePages = [ "index", "company-tearsheet", "financials", "related", "alpha-factor", "", "trade", "terms-conditions" ];
     	var defaultSection = 0;
     
     	/**
@@ -83,7 +83,7 @@
     		 
      		// reset pages to whatever is in current release
     		if (typeof configuration !== "undefined" && configuration.hasOwnProperty("pages")) remotePages = configuration.pages;
-    		
+     		
     		// load the page
     		var curId = getParameterByName("page");
     		var curPage = getPageBase(curId);
