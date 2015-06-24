@@ -9,8 +9,8 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 		initPage: function() {
 			
 			// set the page objects
-			SCREENER.criteria = CRITERIA.init(this);
-			SCREENER.search = SEARCH;
+			this.criteria = CRITERIA.init(this);
+			this.search = SEARCH;
 
 			// some base variables
 			var searchType = UTIL.getParameterByName("type") == "" ? "advanced-screener" : UTIL.getParameterByName("type");
@@ -18,22 +18,35 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
     		var quintile = parseInt(UTIL.getParameterByName("quintile"));
 
     		// load the marketing copy
-    		SCREENER.loadMarketingCopy();
+    		this.loadMarketingCopy();
     		
     		// load the default keyword/screener toggle
-    		SCREENER.changeScreenerToggle(searchType);
-
+    		this.changeScreenerToggle(searchType);
+    		
     		// apply bindings
-    		ko.applyBindings(SCREENER);
+    		ko.applyBindings(this);
     		
     		// now finish setting up page
     		$(".searchtoggle .toggle:first").click();
     		
-    		this.tooltips.init("body");
+    		// finalize all this
+    		this.criteria.getDistributions(this.criteria.getSelectedFields(), this.finalize);
+    		
+    		return this;
+		},
+		
+		finalize: function(data) {
+			
+			// clear than draw the inputs
+			$(".search-criteria tbody").children().remove();
+			PAGE.criteria.renderInputs(data);
+			
+			// initialize the tooltips
+			PAGE.tooltips.init("body");
     		
     		// show page
-    		this.hideLoading();
-    		
+			PAGE.hideLoading();
+
 		},
 		
 		/**

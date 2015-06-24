@@ -46,7 +46,8 @@
 			      "format":"volume",
 			      "name":"Volume",
 			      "template":"number",
-			      "shortName":"Volume"
+			      "shortName":"Volume",
+			      "distribution-buckets":4000
 			   },
 			   {
 			      "id":"avgTradedVolM3",
@@ -102,7 +103,8 @@
 			      "format":"percent",
 			      "name":"Net Profit Margin",
 			      "template":"number",
-			      "shortName":"Prof. Mrg."
+			      "shortName":"Prof. Mrg.",
+			      "distribution-buckets":120
 			   },
 			   {
 			      "id":"eps",
@@ -116,28 +118,32 @@
 			      "format":"percent",
 			      "name":"Debt/Equity Ratio",
 			      "template":"number",
-			      "shortName":"D/E"
+			      "shortName":"D/E",
+			      "distribution-buckets":200
 			   },
 			   {
 			      "id":"totalRev1YrAnnGrowth",
 			      "format":"percent",
 			      "name":"1-Year Revenue Growth",
 			      "template":"number",
-			      "shortName":"Growth 1y"
+			      "shortName":"Growth 1y",
+				  "distribution-buckets":400
 			   },
 			   {
 			      "id":"totalRev3YrAnnGrowth",
 			      "format":"percent",
 			      "name":"3-Year Revenue Growth",
 			      "template":"number",
-			      "shortName":"Growth 3y"
+			      "shortName":"Growth 3y",
+				  "distribution-buckets":400
 			   },
 			   {
 			      "id":"totalRev5YrAnnGrowth",
 			      "format":"percent",
 			      "name":"5-Year Revenue Growth",
 			      "template":"number",
-			      "shortName":"Growth 5y"
+			      "shortName":"Growth 5y",
+				  "distribution-buckets":400
 			   },
 			   {
 			      "id":"basicEpsIncl",
@@ -173,7 +179,8 @@
 			      "name":"Dividend Yield",
 			      "template":"number",
 			      "isDefault":true,
-			      "shortName":"Div. Yld."
+			      "shortName":"Div. Yld.",
+				  "distribution-buckets":700
 			   },
 			   {
 			      "id":"priceToBookRatio",
@@ -211,14 +218,16 @@
 			      "format":"number",
 			      "name":"GTI Score",
 			      "template":"number",
-			      "shortName":"GTI Score"
+			      "shortName":"GTI Score",
+				  "distribution-buckets":680
 			   },
 			   {
 			      "id":"gtiRankChange",
 			      "format":"number",
 			      "name":"GTI Change In Rank",
 			      "template":"number",
-			      "shortName":"GTI Chg. Rank"
+			      "shortName":"GTI Chg. Rank",
+				  "distribution-buckets":680
 			   }			
 			]
 		},
