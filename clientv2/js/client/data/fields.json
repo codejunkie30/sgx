@@ -1,0 +1,241 @@
+{ 
+	"fieldGroups": [
+		{
+			"name": "Market Data",
+			"customizeDisplay": true,
+			"fields": [
+			   {
+			      "id":"marketCap",
+			      "format":"millions",
+			      "name":"Total Market Cap",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"Mkt. Cap."
+			   },
+			   {
+			      "id":"percentChange",
+			      "format":"percent",
+			      "name":"% Change over date range up to 1 year",
+			      "template":"number",
+			      "shortName":"% Change"
+			   },
+			   {
+			      "id":"priceVs52WeekHigh",
+			      "format":"percent",
+			      "name":"Current Stock Price vs 52 week high",
+			      "template":"number",
+			      "shortName":"Price vs. High"
+			   },
+			   {
+			      "id":"priceVs52WeekLow",
+			      "format":"percent",
+			      "name":"Current Stock Price vs 52 week low",
+			      "selected":false,
+			      "template":"number",
+			      "shortName":"Price vs. Low"
+			   },
+			   {
+			      "id":"beta5Yr",
+			      "format":"number",
+			      "name":"5-Year Beta",
+			      "template":"number",
+			      "shortName":"Beta"
+			   },
+			   {
+			      "id":"volume",
+			      "format":"volume",
+			      "name":"Volume",
+			      "template":"number",
+			      "shortName":"Volume"
+			   },
+			   {
+			      "id":"avgTradedVolM3",
+			      "format":"millions",
+			      "name":"Average 3 Month Traded Value",
+			      "template":"number",
+			      "shortName":"3M Trd. Val."
+			   },
+			   {
+			      "id":"avgVolumeM3",
+			      "format":"volume",
+			      "name":"Average 3 Month Traded Volume",
+			      "template":"number",
+			      "shortName":"3M Trd. Vol."
+			   },
+			   {
+			      "id":"floatPercentage",
+			      "format":"percent",
+			      "name":"Free Float",
+			      "template":"number",
+			      "shortName":"Free Float"
+			   },
+			   {
+			      "id":"priceVolHistYr",
+			      "format":"percent",
+			      "name":"1-Year Volatility",
+			      "template":"number",
+			      "shortName":"1YR Volatility"
+			   }	
+			]
+		},
+		{
+			"name": "Financials",
+			"customizeDisplay": true,
+			"fields": [
+			   {
+			      "id":"totalRevenue",
+			      "format":"millions",
+			      "name":"Total Revenue",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"Tot. Rev."
+			   },
+			   {
+			      "id":"ebitdaMargin",
+			      "format":"percent",
+			      "name":"EBITDA Margin",
+			      "template":"number",
+			      "shortName":"EBITDA Mrg."
+			   },
+			   {
+			      "id":"netProfitMargin",
+			      "format":"percent",
+			      "name":"Net Profit Margin",
+			      "template":"number",
+			      "shortName":"Prof. Mrg."
+			   },
+			   {
+			      "id":"eps",
+			      "format":"dollars",
+			      "name":"Normalized Diluted EPS",
+			      "template":"number",
+			      "shortName":"EPS"
+			   },
+			   {
+			      "id":"totalDebtEquity",
+			      "format":"percent",
+			      "name":"Debt/Equity Ratio",
+			      "template":"number",
+			      "shortName":"D/E"
+			   },
+			   {
+			      "id":"totalRev1YrAnnGrowth",
+			      "format":"percent",
+			      "name":"1-Year Revenue Growth",
+			      "template":"number",
+			      "shortName":"Growth 1y"
+			   },
+			   {
+			      "id":"totalRev3YrAnnGrowth",
+			      "format":"percent",
+			      "name":"3-Year Revenue Growth",
+			      "template":"number",
+			      "shortName":"Growth 3y"
+			   },
+			   {
+			      "id":"totalRev5YrAnnGrowth",
+			      "format":"percent",
+			      "name":"5-Year Revenue Growth",
+			      "template":"number",
+			      "shortName":"Growth 5y"
+			   },
+			   {
+			      "id":"basicEpsIncl",
+			      "format":"percent",
+			      "name":"Basic EPS",
+			      "template":"number",
+			      "shortName":"Basic EPS"
+			   },
+			   {
+			      "id":"returnOnEquity",
+			      "format":"percent",
+			      "name":"Return on Equity",
+			      "template":"number",
+			      "shortName":"ROE"
+			   }
+			]
+		},
+		{
+			"name": "Valuation",
+			"customizeDisplay": true,
+			"fields": [
+			   {
+			      "id":"peRatio",
+			      "format":"number",
+			      "name":"P/E Ratio",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"P/E"
+			   },
+			   {
+			      "id":"dividendYield",
+			      "format":"percent",
+			      "name":"Dividend Yield",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"Div. Yld."
+			   },
+			   {
+			      "id":"priceToBookRatio",
+			      "format":"number",
+			      "name":"P/BV",
+			      "template":"number",
+			      "shortName":"P/BV"
+			   },
+			   {
+			      "id":"avgBrokerReq",
+			      "format":"lookup",
+			      "name":"Consensus Recommendation",
+			      "template":"number",
+			      "shortName":"Consensus",
+			      "minLabel":"Buy",
+			      "maxLabel":"Sell",
+			      "dataSort":"string",
+			      "formatter":{
+			         "type":"round-list",
+			         "values":[
+			            "",
+			            "Buy",
+			            "Overperform",
+			            "Hold",
+			            "Underperform",
+			            "Sell"
+			         ],
+			         "minField":"targetPriceNum",
+			         "minValue":3
+			      },
+			      "distribution-type": "histogram"
+			   },
+			   {
+			      "id":"gtiScore",
+			      "format":"number",
+			      "name":"GTI Score",
+			      "template":"number",
+			      "shortName":"GTI Score"
+			   },
+			   {
+			      "id":"gtiRankChange",
+			      "format":"number",
+			      "name":"GTI Change In Rank",
+			      "template":"number",
+			      "shortName":"GTI Chg. Rank"
+			   }			
+			]
+		},
+		{
+			"name": "Industry",
+			"customizeDisplay": false,
+			"fields": [
+			   {
+			      "id":"industryGroup",
+			      "name":"Industry",
+			      "template":"select",
+			      "label":"Select Industry",
+			      "isDefault":true,
+			      "shortName":"Industry",
+			      "dataSort":"string"
+			   }
+			]		
+		}
+	]
+}
