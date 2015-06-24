@@ -1,0 +1,57 @@
+(function() {
+
+    require({
+        urlArgs: "v=1.0",
+        paths: {
+            "jquery": 'vendor/jquery/jquery.1.11.3.min',
+            "jquery-ui": 'vendor/jquery/jquery-ui-1.11.4/jquery-ui.min',
+            "jquery-placeholder": 'vendor/jquery/jquery.placeholder',
+            "jquery-validate": 'vendor/jquery/jquery.validate.min',
+            "knockout": "vendor/knockout/knockout-3.3.0-min",
+            "knockout-amd-helpers": "vendor/knockout/knockout-amd-helpers",
+	    	"text": "vendor/text",
+            "highstock": 'vendor/highstock/highstock',
+            "underscore": 'vendor/underscore',
+            "colorbox": 'vendor/colorbox',
+            "json2": 'vendor/json2',
+        },
+        
+        waitSeconds: 10,
+        
+        shim: {
+            "jquery": {
+                exports: '$'
+            },
+            "knockout": {
+            	exports: "ko"
+            },
+            "jquery-ui": {
+                deps: ['jquery']
+            },
+            "jquery-placeholder": {
+                deps: ['jquery']
+            },
+            "jquery-validate": {
+                deps: ['jquery']
+            },
+            "highstock": {
+                "exports": "StockChart",
+                "deps": ["jquery"]
+            },
+            "underscore": {
+                "exports": "_"
+            },
+            "colorbox": {
+            	deps: ['jquery']
+            },
+            'json2': { 
+            	exports: 'JSON' 
+            }
+            
+        }
+        
+    });
+    
+    loadPage();
+
+}).call(this);

@@ -1,0 +1,15 @@
+configuration(
+	{
+		"pages": [
+			"index", 
+			"company-tearsheet", 
+			"financials", 
+			"related", 
+			"alpha-factor", 
+			"", 
+			"trade", 
+			"terms-conditions"
+		]
+	
+	}
+);
