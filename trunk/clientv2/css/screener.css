@@ -197,7 +197,6 @@ table.search-criteria tr.criteria .dropdown {
 }
 
 table.search-criteria td:first-child {
-  color: #1e2171;
   text-align: left;
 }
 
@@ -217,7 +216,8 @@ table.search-criteria .label {
 	padding-top: 7px;
 }
 
-table.search-criteria .info {
+table.search-criteria .label span {
+  color: #1e2171;
   display: inline-block;
   padding-top: 3px;
   width: 80px;
@@ -230,7 +230,7 @@ table.search-criteria .label img {
 }
 
 table.search-criteria .remove {
-	text-align: center;
+	vertical-align:middle;
 	cursor: pointer;
 }
 

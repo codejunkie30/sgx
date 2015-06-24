@@ -1,14 +1,18 @@
-define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UTIL, ko, fieldData) {
+define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/templates/criteria-number.tmpl.html", "text!client/templates/criteria-select.tmpl.html" ], function(UTIL, ko, fieldData, nTemplate, sTemplate) {
 	
 	var CRITERIA = {
 			
 		screener: null,
+		numberTemplate: null,
+		selectTemplate: null,
 			
 		init: function(screener) {
 			
 			// parse in JSON field configuration
 			$.extend(true, this, JSON.parse(fieldData));
 			
+			this.numberTemplate = nTemplate;
+			this.selectTemplate = sTemplate;
 			this.screener = screener;
 			
 			return this;
@@ -16,29 +20,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UT
 
     	reset: function(finished) {
         	
-    		/**
         	$(".search-criteria tbody").children().remove();
         	
+        	/** handle sorting
         	var sorter = $(".module-results thead th.companyName");
         	if (!$(sorter).hasClass("sort") && !$(sorter).hasClass("asc")) $(sorter).click();
-            
-        	// load up all fields for distributions
-        	var allFields = SGX.screener.getAllCriteria();
-        	var data = { "fields" : [] };
-        	$.each(allFields, function(idx, field) { 
-        		if (field.isDefault) data.fields.push(field.id); 
-        	});
+        	*/
         	
-        	SGX.showLoading();
+        	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
+        	this.getDistributions(this.getSelectedFields(), this.screener.finalize);
         	
-        	SGX.screener.criteriaChange.getDistributions(data, function(data) { 
-        		$(".editSearchB .checkbox").removeClass("checked");
-        		$(".editSearchB .checkbox.default").addClass("checked");
-        		SGX.screener.drawCriteria(data); 
-        		SGX.hideLoading(); 
-        		if (finished) finished(data);
-        	});
-    		*/
     	},
     	
     	getDistributions: function(data, finished) {
@@ -99,6 +90,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UT
             	}
             	
             	fieldData.buckets = arr;
+            	fieldData.min = field.values[0];
+            	fieldData.max = field.values[field.values.length];
         		
         	});
         	
@@ -161,43 +154,45 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UT
         		
         		if (field == null) return;
         		
-        		var el = $("<tr >").attr("data-bind", "template: 'criteria-" + field.template + "'").addClass("criteria");
+        		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
         		$(el).appendTo(".search-criteria tbody");
-        		ko.applyBindings(field, $(el)[0]);
-
-        		/**
-        		// draw the appropriate input
-        		if (distribution.template == "select") template = SGX.screener.drawCriteriaSelect(distribution);
-        		else if (distribution.template == "change") {
-        			template = SGX.screener.drawCriteriaChange(distribution);
-        			runsearch = false;
-        		}
-        		else template = SGX.screener.drawCriteriaSlider(distribution);
+        		$(el).data(field);
         		
-            	$(".label .glossary-item", template).attr("glossary-key", distribution.id);
-            	$(template).attr("data-name", distribution.id);
-
-        		$("td.remove", template).click(function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    SGX.tooltip.close();
-                    SGX.screener.criteriaChange.removeCriteria($(this).closest(".criteria"), function() {});
-        		});
-        		
-        		SGX.tooltip.init(template);
-        		*/
-        		
+        		ko.applyBindings({ 'criteria': CRITERIA, 'field': field }, $(el)[0]);
         		
         	});
         	
-        	/**
         	$(".search-criteria .criteria").removeClass("even");
         	$(".search-criteria .criteria:even").addClass("even");
-        	SGX.formatter.formatElements(".search-criteria");
-        	*/
+        	//SGX.formatter.formatElements(".search-criteria");
         	
         	return runsearch;                	
         },
+        
+        addCriteria: function(data, finished) {
+        	
+    		var run = CRITERIA.renderInputs(data);
+    		$.each(data.distributions, function(idx, distribution) {
+    			CRITERIA.clickEvents.checkCriteriaItem($(".search-criteria [data-id='" + distribution.field + "']"));
+    		});
+    		
+    		CRITERIA.screener.hideLoading();
+
+    		//if (run) SGX.screener.search.criteriaSearch();
+        	
+        },
+        
+    	removeCriteria: function(target, finished) {
+    		
+    		this.clickEvents.uncheckCriteriaItem(target);
+    		this.screener.tooltips.close();
+            $(target).remove();
+            
+        	$(".search-criteria .criteria").removeClass("even");
+        	$(".search-criteria .criteria:even").addClass("even");
+            if (typeof finished !== "undefined") finished();
+            
+    	},
     	
     	clickEvents: {
     		
@@ -207,8 +202,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UT
 				
 				// remove this field
 				if ($(mainEl).hasClass("checked")) {
-					var target = $(".search-criteria [data-name='" + $(mainEl).attr("data-name") + "']");
-					$("td.remove", target).click();
+					event.currentTarget = $(".search-criteria [data-id='" + $(mainEl).attr("data-id") + "'] td.remove img")[0];
+					CRITERIA.clickEvents.removeCriteria(data, event);
 					return;
 				}
 				
@@ -218,13 +213,46 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json" ], function(UT
         			return;
         		}
         		
-        		/*
-				// add in the field
-				CRITERIA.screener.showLoading();        		
-				//var data = { "fields" : [ $(this).attr("data-name") ] };
-				//SGX.screener.criteriaChange.getDistributions(data, SGX.screener.criteriaChange.addCriteria);
-    			*/
-    		}
+        		// let's show loading
+        		var data = { "fields" : [ $(mainEl).attr("data-id") ] };
+        		CRITERIA.screener.showLoading();
+        		CRITERIA.getDistributions(data, CRITERIA.addCriteria);
+        		
+    		},
+    		
+        	removeCriteria: function(data, event) {
+                event.stopPropagation();
+                event.preventDefault();
+        		CRITERIA.removeCriteria($(event.currentTarget).closest(".criteria"));
+        	},
+        	
+        	checkCriteriaItem: function(criteria) {
+        		var name = $(criteria).attr("data-id");
+        		var checkEl = $(".criteria-select [data-id='" + name + "']");
+                $(checkEl).addClass('checked');
+                $(checkEl).find('input[type="checkbox"]').attr("checked", "checked");            		
+        	},
+        	
+        	uncheckCriteriaItem: function(criteria) {
+        		var name = $(criteria).attr("data-id");
+        		var checkEl = $(".criteria-select [data-id='" + name + "']");
+                $(checkEl).removeClass('checked');
+                $(checkEl).find('input[type="checkbox"]').removeAttr("checked");            		
+        	},
+        	
+        	reset: function(data, event) {
+
+        		$(".search-criteria tbody").children().remove();
+                	
+            	/** handle sorting
+            	var sorter = $(".module-results thead th.companyName");
+            	if (!$(sorter).hasClass("sort") && !$(sorter).hasClass("asc")) $(sorter).click();
+            	*/
+            	
+            	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
+            	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
+
+        	}
     		
     	}
 		
