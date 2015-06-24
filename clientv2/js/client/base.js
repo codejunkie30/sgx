@@ -48,6 +48,26 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		}
 	};
 	
+	KO.bindingHandlers.slider = {
+		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			
+			$(element).slider({
+		        range: true,
+		        min: 0,
+		        max: viewModel.field.buckets.length - 1,
+		        values: [ 0, viewModel.field.buckets.length - 1 ],
+		        slide: function(event, ui) {
+		        	var template = $(event.target).closest(".criteria");
+		        	var vm = $(template).data();
+		        	viewModel.min(vm.buckets[ui.values[0]].from);
+		        	viewModel.max(vm.buckets[ui.values[1]].to);
+		        },
+		        //stop: SGX.screener.search.criteriaSearch,
+		        step: 1
+			});
+		}
+	};
+	
 	PAGE = {
 
 		//fqdn : "http://54.254.221.141", /** PROD */

@@ -91,7 +91,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	
             	fieldData.buckets = arr;
             	fieldData.min = field.values[0];
-            	fieldData.max = field.values[field.values.length];
+            	fieldData.max = field.values[field.values.length-1];
         		
         	});
         	
@@ -104,6 +104,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	if (type == "log") idx = (Math.round(Math.log(val * 100000))%cnt);
     		if (!bucket.hasOwnProperty(idx)) bucket[idx] = [];
     		bucket[idx].push(val);
+        },
+        
+        getDistributionMatches: function(field, startVal, endVal) {
+        	
+        	var ret = 0;
+        	
+        	// primarily for consensus
+        	if (!field.hasOwnProperty("values")) {
+        		for (i = startVal; i <= endVal; i++) ret += field.buckets[i].count;
+        		return ret;
+        	}
+        	
+        	var sVal = field.buckets[startVal].from, eVal = field.buckets[endVal].to;
+        	$.each(field.values, function(idx, val) {
+        		if (val >= sVal && val <= eVal) ret++;
+        	});
+        	
+        	return ret;
+        	
         },
         
     	getSelectedFields: function() {
@@ -158,7 +177,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		$(el).appendTo(".search-criteria tbody");
         		$(el).data(field);
         		
-        		ko.applyBindings({ 'criteria': CRITERIA, 'field': field }, $(el)[0]);
+        		var mdl = {
+        			'criteria': CRITERIA, 
+        			'field': field,
+        			'min': ko.observable(field.min),
+        			'max': ko.observable(field.max)
+        		};
+        		
+    			mdl.matches = ko.computed(function() { 
+    				this.min(); this.max();
+    				if (this.field.hasOwnProperty("buckets")) {
+        				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
+        				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
+        				var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
+        				return this.criteria.getDistributionMatches(this.field, min, max);
+    				}
+    				return 0;
+    			}, mdl);
+        		
+        		ko.applyBindings(mdl, $(el)[0]);
         		
         	});
         	
