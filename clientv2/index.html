@@ -105,13 +105,13 @@
 	
 		<div class="title">
 			<h3>Edit Search Criteria</h3>
-			<div class="button button-reset">Reset</div>
+			<div data-bind="click: criteria.clickEvents.reset" class="button button-reset">Reset</div>
 		</div>
 		
     	<div data-bind="foreach: criteria.fieldGroups, accordian">
 			<h3 data-bind="text: name, attr: { 'customize-display': '' + customizeDisplay }"></h3>
 			<div class="panel" data-bind="foreach: fields">
-				<div class="checkbox" data-bind="css: { 'tooltip-item': true, 'checked': typeof isDefault !== 'undefined' && isDefault }, attr: { 'data-id': id, 'tooltip-key': id }, click: $root.criteria.clickEvents.criteriaClick  ">
+				<div class="checkbox" data-bind="click: $parent.clickEvents.criteriaClick, css: { 'tooltip-item': true, 'checked': typeof isDefault !== 'undefined' && isDefault }, attr: { 'data-id': id, 'tooltip-key': id, 'data-default': typeof isDefault !== 'undefined' && isDefault }, click: $root.criteria.clickEvents.criteriaClick  ">
 					<div class="trigger" data-bind="text: name"></div>
 					<input type="checkbox" />
 				</div>

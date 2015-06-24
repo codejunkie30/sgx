@@ -1,0 +1,15 @@
+<td class="label">
+	<span data-bind="text: field.name"></span>
+	<img data-bind="attr: { 'tooltip-key': field.id }" src="img/info-tab-large.png" alt="" class="tooltip-item" width="20" height="20" />
+</td>
+<td colspan="3">
+	<div class="button-dropdown">
+		<div class="trigger"><span class="copy"></span>
+			<span class="arrow"></span>
+		</div>
+		<div class="dropdown">
+			<ul></ul>
+		</div>
+	</div>
+</td>
+<td class="remove"><img data-bind="click: criteria.clickEvents.removeCriteria" src="img/x-button.png" alt="" class="tooltip-item" tooltip-key="criteriaRemove" /></td>

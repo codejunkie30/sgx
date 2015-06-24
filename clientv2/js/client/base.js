@@ -143,6 +143,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         			
         			var id = $(el).attr("tooltip-key");
         			$.each(PAGE.glossary.terms, function(idx, term) {
+        				
         				if (term.id == id) {
         					$(el).attr("tooltip-copy", term.definition);
         				}

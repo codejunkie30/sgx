@@ -100,12 +100,6 @@ p {
     width:320px;
 }
 
-/** templates */
-
-.template, .hidden {
-	display: none;
-}
-
 /** buttons */
 
 .button {
@@ -389,4 +383,10 @@ background: url("../img/title-back.png");
   left: 10%;
   margin-left: -6px;
   margin-top: -4px;
+}
+
+/** misc */
+
+.even {
+  background-color: #e8e8e8;
 }
