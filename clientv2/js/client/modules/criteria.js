@@ -1,10 +1,12 @@
-define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/templates/criteria-number.tmpl.html", "text!client/templates/criteria-select.tmpl.html" ], function(UTIL, ko, fieldData, nTemplate, sTemplate) {
+define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/templates/criteria-number.html", "text!client/templates/criteria-select.html", "text!client/templates/criteria-change.html" ], function(UTIL, ko, fieldData, nTemplate, sTemplate, cTemplate) {
 	
 	var CRITERIA = {
 			
 		screener: null,
 		numberTemplate: null,
 		selectTemplate: null,
+		changeTemplate: null,
+		textDistributions: [ "industryGroup" ],
 			
 		init: function(screener) {
 			
@@ -13,6 +15,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			this.numberTemplate = nTemplate;
 			this.selectTemplate = sTemplate;
+			this.changeTemplate = cTemplate;
 			this.screener = screener;
 			
 			return this;
@@ -42,14 +45,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		// change the function
     		if (hasPercentChange != -1) {
     			tmpF = function(data) { 
-    				data.distributions.push({ "field": "percentChange", buckets: [], template: "change" }); 
+    				data.distributions.push({ "field": "percentChange", buckets: [], template: "change" });
+    				data.fieldValues = [];
     				finished(data);
     			};
     		}
     		
     		// do something else
     		if (data.fields.length == 0) { 
-    			data = { distributions: [] }; 
+    			data = { distributions: [] };
     			tmpF(data);
     			return;
     		}
@@ -60,19 +64,38 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	
         handleDistributions: function(data) {
         	
-        	if (typeof data.fieldValues === "undefined") return;
+        	var textFields = [];
         	
+        	// text ranges
+        	$.each(data.distributions, function(idx, dist) {
+        		
+        		// let's get the fielded data as is (no need to calculate text)
+        		var name = dist.field;
+        		if ($.grep(data.fieldValues, function(val) { return val.field == name; }).length > 0) return;
+        		var fieldData = CRITERIA.getFieldById(name);
+        		fieldData.buckets = dist.buckets;
+        		textFields.push(fieldData);
+        		
+        		// hack for industry groups
+            	if (name == "industryGroup") fieldData.buckets.push({ "data-name": "industry", count: 0, key: "Real Estate Investment Trusts (REITs)" });
+            	
+            	// now sort the values
+            	fieldData.buckets.sort(function(a,b) { return a.key.localeCompare(b.key); });
+        		
+        	});
+
+        	// numeric ranges
         	$.each(data.fieldValues, function(idx, field) {
-
+        		
         		var fieldData = CRITERIA.getFieldById(field.field);
-
+        		
         		// force sort asc
         		field.values.sort(function(a, b) { return a - b; });
-
+        		
         		// get the type and count
         		var type = fieldData.hasOwnProperty("distribution-type") ? fieldData["distribution-type"] : "normal";
         		var bCount = fieldData.hasOwnProperty("distribution-buckets") ? fieldData["distribution-buckets"] : 75;
-
+        		
         		// get the random distributions
         		var buckets = {};
         		$.each(field.values, function(vIdx, val) { CRITERIA.randomizeBucket(buckets, val, type, bCount); });
@@ -156,7 +179,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	},
     	
         renderInputs: function(data) {
-
+        	
         	this.handleDistributions(data);
         	
         	var runsearch = true;
@@ -201,7 +224,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	
         	$(".search-criteria .criteria").removeClass("even");
         	$(".search-criteria .criteria:even").addClass("even");
-        	//SGX.formatter.formatElements(".search-criteria");
+        	
+        	this.screener.dropdowns.init(".search-criteria");
         	
         	return runsearch;                	
         },
@@ -213,8 +237,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     			CRITERIA.clickEvents.checkCriteriaItem($(".search-criteria [data-id='" + distribution.field + "']"));
     		});
     		
-    		CRITERIA.screener.hideLoading();
-
     		//if (run) SGX.screener.search.criteriaSearch();
         	
         },
@@ -227,6 +249,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             
         	$(".search-criteria .criteria").removeClass("even");
         	$(".search-criteria .criteria:even").addClass("even");
+        	
+        	CRITERIA.screener.hideLoading();
+        	
             if (typeof finished !== "undefined") finished();
             
     	},
@@ -252,7 +277,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		
         		// let's show loading
         		var data = { "fields" : [ $(mainEl).attr("data-id") ] };
-        		CRITERIA.screener.showLoading();
         		CRITERIA.getDistributions(data, CRITERIA.addCriteria);
         		
     		},
