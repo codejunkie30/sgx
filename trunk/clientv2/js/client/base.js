@@ -2,12 +2,22 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
+
+	KO.bindingHandlers.format = {
+		update: function(element, valueAccessor, allBindings) {
+	        return KO.bindingHandlers.text.update(element,function(){
+	            return PAGE.getFormatted(KO.unwrap(valueAccessor()), allBindings().text);
+	        });
+				
+		}
+	}
+	
 	
 	KO.bindingHandlers.precision = {
 		update: function(element, valueAccessor, allBindings) {
-	        return ko.bindingHandlers.text.update(element,function(){
+	        return KO.bindingHandlers.text.update(element,function(){
 	        	var value = parseInt(allBindings().text);
-	            var decimals = +(ko.unwrap(valueAccessor()) || 0);
+	            var decimals = +(KO.unwrap(valueAccessor()) || 0);
 	            return decimals == 0 ? value||0 : value.toFixed(decimals);
 	        });
 				
@@ -16,9 +26,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
 	KO.bindingHandlers.prepend = {
 			update: function(element, valueAccessor, allBindings) {
-		        return ko.bindingHandlers.text.update(element,function(){
+		        return KO.bindingHandlers.text.update(element,function(){
 		        	var value = parseInt(allBindings().text);
-		            var prep = ko.unwrap(valueAccessor());
+		            var prep = KO.unwrap(valueAccessor());
 		            return typeof prep !== "undefined" ? prep + value : value;
 		        });
 			}
@@ -50,7 +60,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	
 	KO.bindingHandlers.slider = {
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-			
 			$(element).slider({
 		        range: true,
 		        min: 0,
@@ -62,11 +71,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		        	viewModel.min(vm.buckets[ui.values[0]].from);
 		        	viewModel.max(vm.buckets[ui.values[1]].to);
 		        },
-		        //stop: SGX.screener.search.criteriaSearch,
 		        step: 1
 			});
 		}
 	};
+		
 	
 	PAGE = {
 
@@ -81,7 +90,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		tooltipHTML: TOOLTIP,
 		
+		currentFormats: null, 
+		
+        "numberFormats-SGD": {
+        	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
+        	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+        	dollars: { header: "in S$", decimals: 3 },
+        	percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { decimals: 1 }
+        },
+		
 		init: function(child) {
+			
+			this.currentFormats = PAGE["numberFormats-SGD"];
 			
 			// extend parent
 			$.extend(true, this, PAGEIMPL);
@@ -95,6 +117,43 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			return this;
 			
 		},
+		
+        getFormatted: function(fmt, value) {
+        	
+        	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return;
+        	
+    		var val = value;
+    		if (val === "" || val === "-") return;
+    		
+    		var formatter = this.currentFormats.hasOwnProperty(fmt) ? this.currentFormats[fmt] : {};
+    		
+    		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent" || fmt =="dollars" || fmt == "volume") {
+
+    			// round
+    			val = parseFloat(val).toFixed(formatter.decimals).replace(/(\.\d*[1-9])0+$/,'$1').replace(/\.0*$/,'');
+
+    			// give some commas
+    			var parts = val.split(".");
+    		    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    		    if (parts.length > 1 && parseInt(parts[1], 10) > 0) val = parts.join(".");
+    		    else val = parts[0];
+
+    		    // negative numbers
+    		    if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
+    		    
+    		    // make it pretty
+    		    if (formatter.hasOwnProperty("format")) val = formatter.format.replace(new RegExp("\\$VALUE","gm"), val);
+    		    
+    		}
+    		else if (fmt == "date") {
+    			val = $.datepicker.formatDate("dd/M/yy", Date.fromISO(val));
+    		}
+    		else {
+    			console.log(fmt);
+    		}
+        	
+    		return val;
+        },
     	
         modal: {
         	
@@ -152,6 +211,71 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             		$(confirm).click(function(e) { settings.confirm($(this).data()); });
             	}
 
+            }
+        },
+        
+        dropdowns: {
+        	
+            open: function(selector) {
+            	$('.dropdown').closest(".button-dropdown").removeClass("open");
+            	$(selector).addClass("open");
+            	$("html").bind("click", PAGE.dropdowns.close);
+            },
+
+            close: function(selector) {
+            	$("html").unbind("click", PAGE.dropdowns.close);
+            	$('.dropdown').closest(".button-dropdown").removeClass("open");
+            },
+            
+            init: function(selector, finished) {
+            	
+            	$('.button-dropdown', selector).unbind("click");
+            	
+            	$('.button-dropdown', selector).click(function(e) {
+
+                	e.preventDefault();
+                	e.stopPropagation()
+
+            		var isOpen = $(this).hasClass("open");
+
+            		if (isOpen) {
+            			PAGE.dropdowns.close('.button-dropdown');
+            			return;
+            		}
+            		
+            		PAGE.dropdowns.open(this);
+            		
+            	});
+            	
+                $('.button-dropdown li', selector).click(function(e) {
+                	
+                	e.preventDefault();
+                	e.stopPropagation()
+                	
+                	var dd = $(this).closest(".button-dropdown");
+                	var def = typeof $(dd).attr("data-label") !== "undefined" ? $(dd).attr("data-label") : "";
+                	var text = $(this).text();
+                	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name"); 
+                	
+                	if ($("ul li", dd).first().text() != def && text != def) {
+                		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
+                        	e.preventDefault();
+                        	e.stopPropagation()
+                			$(dd).find(".copy").text($(e.target).text());
+                			$(e.target).remove();
+                			PAGE.dropdowns.close();
+                			if (typeof finished !== "undefined") finished();
+                		});
+                	}
+                	
+                	$(".copy", dd).text(text).attr("data-name", dataName);
+                	
+                	if (typeof finished !== "undefined") finished();
+                	
+                	dd.click();
+                	
+                });
+                
             }
         },
         

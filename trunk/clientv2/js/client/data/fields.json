@@ -16,7 +16,7 @@
 			      "id":"percentChange",
 			      "format":"percent",
 			      "name":"% Change over date range up to 1 year",
-			      "template":"number",
+			      "template":"change",
 			      "shortName":"% Change"
 			   },
 			   {
