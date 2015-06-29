@@ -11,18 +11,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				
 		}
 	}
-	
-	
-	KO.bindingHandlers.precision = {
-		update: function(element, valueAccessor, allBindings) {
-	        return KO.bindingHandlers.text.update(element,function(){
-	        	var value = parseInt(allBindings().text);
-	            var decimals = +(KO.unwrap(valueAccessor()) || 0);
-	            return decimals == 0 ? value||0 : value.toFixed(decimals);
-	        });
-				
-		}
-	};
 
 	KO.bindingHandlers.prepend = {
 			update: function(element, valueAccessor, allBindings) {
@@ -75,7 +63,19 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			});
 		}
 	};
-		
+	
+	KO.bindingHandlers.tooltip = {
+		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			var id = KO.unwrap(valueAccessor());
+			$.each(PAGE.glossary.terms, function(idx, term) {
+				if (term.id == id) {
+					$(element).attr("tooltip-copy", term.definition);
+				}
+			});
+			
+			$(element).hover(PAGE.tooltips.open, PAGE.tooltips.close);
+		}
+	};
 	
 	PAGE = {
 
@@ -172,7 +172,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             open: function(settings) {
 
             	var container = this.container();
-            	$(".content", container).html(settings.content);
+            	$(settings.content).appendTo($(".content", container));
             	$(container).addClass(settings.type);
             	
             	var cboxSettings = {
@@ -183,7 +183,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             		onComplete: function() {
             			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
             			if (PAGE.getParentURL() != null) {
-            				PAGE.resizeIframe(PAGE.pageHeight, 10);
+            				//PAGE.resizeIframe(PAGE.pageHeight, 10); TODO make work
             				$("#colorbox").position();
             			}
             		},
@@ -210,7 +210,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             		confirm.data(settings);
             		$(confirm).click(function(e) { settings.confirm($(this).data()); });
             	}
-
+            	
+            	return container;
             }
         },
         
@@ -280,24 +281,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
         
         tooltips: {
-        	
-        	init: function(selector) {
-        		
-        		$(".tooltip-item", selector).each(function(idx, el) {
-        			
-        			var id = $(el).attr("tooltip-key");
-        			$.each(PAGE.glossary.terms, function(idx, term) {
-        				
-        				if (term.id == id) {
-        					$(el).attr("tooltip-copy", term.definition);
-        				}
-        			});
-        			
-					$(el).hover(PAGE.tooltips.open, PAGE.tooltips.close);
-        			
-        		});
-        		
-        	},
         	
         	open: function(event) {
         		

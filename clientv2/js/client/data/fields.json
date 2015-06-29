@@ -17,7 +17,8 @@
 			      "format":"percent",
 			      "name":"% Change over date range up to 1 year",
 			      "template":"change",
-			      "shortName":"% Change"
+			      "shortName":"% Change",
+			      "customDistribution": true
 			   },
 			   {
 			      "id":"priceVs52WeekHigh",

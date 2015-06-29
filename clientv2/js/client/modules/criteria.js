@@ -1,4 +1,30 @@
-define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/templates/criteria-number.html", "text!client/templates/criteria-select.html", "text!client/templates/criteria-change.html" ], function(UTIL, ko, fieldData, nTemplate, sTemplate, cTemplate) {
+define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/templates/criteria-number.html", "text!client/templates/criteria-select.html", "text!client/templates/criteria-change.html", "jquery-ui" ], function(UTIL, ko, fieldData, nTemplate, sTemplate, cTemplate) {
+
+	/**
+	 * allows us to customize particular criteria
+	 * assumes working with criteria object for model
+	 */
+	ko.bindingHandlers.configureAdditionalCriteria = {
+	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	    	var template = ko.utils.unwrapObservable(valueAccessor());
+	        var el = $("<div />").appendTo("body");
+	    	ko.renderTemplate(
+	    		template, 
+	    		viewModel,
+	    		{
+	    			afterRender: function(nodes) {
+	    				var settings = viewModel.criteria.additionalConfiguration[template];
+	    				settings.content = $(el);
+	    				settings.model = viewModel;
+	    				var container = viewModel.criteria.screener.modal.open(settings);
+	    				//ko.applyBindings(viewModel, $(container)[0]);
+	    			}
+	    		},
+	    		el[0],
+	    		"replaceChildren"
+	    	);
+	    }
+	};
 	
 	var CRITERIA = {
 			
@@ -39,14 +65,32 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     		var tmpF = finished;
     		var endpoint = this.screener.fqdn + "/sgx/search/distributions";
-    		var hasPercentChange = $.inArray("percentChange", data.fields);
-    		if (hasPercentChange != -1) data.fields.splice(hasPercentChange, 1);
+    		var processFields = [], ignoreFields = []; 
+
+    		// some fields require additional steps, remove these from this service
+    		$.each(data.fields, function(idx, name) {
+    			
+    			var field = CRITERIA.getFieldById(name);
+    			
+    			// we can process it in the service
+    			if (!field.hasOwnProperty("customDistribution") || !field.customDistribution) {
+    				processFields.push(name);
+    				return;
+    			}
+    			
+    			// we need to do something else
+    			ignoreFields.push({ "field": name, "buckets": [], "template": field.template  });
+    			
+    		});
+    		
+    		// reset the field list
+    		data.fields = processFields;
     		
     		// change the function
-    		if (hasPercentChange != -1) {
+    		if (ignoreFields.length > 0) {
     			tmpF = function(data) { 
-    				data.distributions.push({ "field": "percentChange", buckets: [], template: "change" });
-    				data.fieldValues = [];
+    				data.distributions = data.distributions.concat(ignoreFields);
+    				if (!data.hasOwnProperty("fieldValues")) data.fieldValues = [];
     				finished(data);
     			};
     		}
@@ -204,7 +248,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         			'criteria': CRITERIA, 
         			'field': field,
         			'min': ko.observable(field.min),
-        			'max': ko.observable(field.max)
+        			'max': ko.observable(field.max),
+        			'val': ko.observable(field.value)
         		};
         		
     			mdl.matches = ko.computed(function() { 
@@ -217,7 +262,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				}
     				return 0;
     			}, mdl);
-        		
+    			
         		ko.applyBindings(mdl, $(el)[0]);
         		
         	});
@@ -314,6 +359,54 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
 
         	}
+    		
+    	},
+
+    	/**
+    	 * settings
+    	 */
+    	additionalConfiguration: {
+    		
+    		'criteria-change-configure': {
+    			
+                type: 'prompt',
+                
+                maxWidth: 650,
+                
+                postLoad: function(options) {
+
+                	$(".picker").each(function(idx, el) {
+                		var data = $(el).data("config");
+                		data.onSelect = function(date) { options.model[$(this).attr("id")]($(this).datepicker("getDate")); };
+                		$(el).datepicker(data);
+                		options.model[$(el).attr("id")]($(el).datepicker("getDate"));
+                	});
+                	
+                },
+                
+                cancel: function(options) {
+                	CRITERIA.removeCriteria($(".search-criteria [data-id='percentChange']"))
+                },
+                
+                confirm: function(options) {
+                	
+                	
+                	var model = options.model;
+                	var percent = parseInt(model.val());
+                	
+                	if (isNaN(percent) || typeof percent === "undefined" || percent <= 0 || percent >= 100) {
+                		alert("Percent Change must be between 1 and 100");
+                		model.val("");
+                		return;
+                	}
+                	
+                   	CRITERIA.screener.modal.close();
+                	
+                }
+    			
+    			
+    		}
+    		
     		
     	}
 		

@@ -1,5 +1,6 @@
 define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/criteria", "jquery-placeholder" ], function(UTIL, ko, SEARCH, CRITERIA) {
 	
+	
 	var SCREENER = {
 			
 		criteria: null,
@@ -41,9 +42,6 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 			$(".search-criteria tbody").children().remove();
 			PAGE.criteria.renderInputs(data);
 			
-			// initialize the tooltips
-			PAGE.tooltips.init("body");
-    		
     		// show page
 			PAGE.hideLoading();
 

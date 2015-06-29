@@ -6,9 +6,11 @@
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.0" />
     <link rel="stylesheet" href="css/screener.css?v=1.0" />
-	<link rel="stylesheet" href="css/vendor/colorbox/colorbox.css" />
+    
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
     	<script type="text/javascript" src="js/wmsi/html5.js"></script>
@@ -111,7 +113,7 @@
     	<div data-bind="foreach: criteria.fieldGroups, accordian">
 			<h3 data-bind="text: name, attr: { 'customize-display': '' + customizeDisplay }"></h3>
 			<div class="panel" data-bind="foreach: fields">
-				<div class="checkbox" data-bind="click: $parent.clickEvents.criteriaClick, css: { 'tooltip-item': true, 'checked': typeof isDefault !== 'undefined' && isDefault }, attr: { 'data-id': id, 'tooltip-key': id, 'data-default': typeof isDefault !== 'undefined' && isDefault }, click: $root.criteria.clickEvents.criteriaClick  ">
+				<div class="checkbox" data-bind="tooltip: id, click: $parent.clickEvents.criteriaClick, css: { 'checked': typeof isDefault !== 'undefined' && isDefault }, attr: { 'data-id': id, 'data-default': typeof isDefault !== 'undefined' && isDefault }, click: $root.criteria.clickEvents.criteriaClick  ">
 					<div class="trigger" data-bind="text: name"></div>
 					<input type="checkbox" />
 				</div>
