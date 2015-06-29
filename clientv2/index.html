@@ -124,6 +124,31 @@
 
 </div>
 
+<div class="grid search-options" data-section="alpha-factors">
+
+	<div class="title">
+		<h3>S&P Capital IQ Alpha Factor Library</h3>
+	</div>
+	
+	<p>S&P Capital IQ Alpha Factor Library will help you filter for stocks based on commonly used institutional investment ideas, or styles. Each of the 8 styles created by S&P Capital IQ's research team represents a unique strategy or perspective, and is formed by taking a composite of several factor signals chosen for their ability to approximate these strategies by S&P Capital IQ's research team.</p>
+
+	<p>S&P Capital IQ's Alpha Factor Library style classifications provide an easy way to filter for companies that could be targets using institutional investment ideas. Within each style, we create a quintile group by ranking all companies by their style composite score and grouping according to their quintile membership, i.e., the top 20% of companies are ranked in the 1st quintile, and the lowest 20% of companies are ranked in the 5th quintile.</p>
+	
+	<div class="alpha-factors">
+	
+		<span class="column" data-bind="foreach: factors.slice(0, 4)">
+			<span data-bind="template: 'alpha-factor'"></span>
+		</span>
+		
+		<span class="column rt" data-bind="foreach: factors.slice(4, 8)">
+			<span data-bind="template: 'alpha-factor'"></span>
+		</span>
+	
+	</div>
+
+
+</div>
+
 <!-- goes at bottom for faster page load -->
 <script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
 <script type="text/javascript">
