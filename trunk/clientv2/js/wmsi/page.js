@@ -49,7 +49,8 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
 		 */
 		trackView: function(type, title) {
         	window.document.title = this.getPageTitle(title);
-        	_gaTracker('send', type, { 'title': title });
+        	console.log(window.document.title);
+        	//_gaTracker('send', type, { 'title': title });
 		},
 		
 		/**
