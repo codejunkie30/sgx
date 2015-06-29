@@ -17,7 +17,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	    				settings.content = $(el);
 	    				settings.model = viewModel;
 	    				var container = viewModel.criteria.screener.modal.open(settings);
-	    				//ko.applyBindings(viewModel, $(container)[0]);
 	    			}
 	    		},
 	    		el[0],
@@ -34,7 +33,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		changeTemplate: null,
 		textDistributions: [ "industryGroup" ],
 			
-		init: function(screener) {
+		init: function(screener, finalize) {
 			
 			// parse in JSON field configuration
 			$.extend(true, this, JSON.parse(fieldData));
@@ -43,8 +42,18 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			this.selectTemplate = sTemplate;
 			this.changeTemplate = cTemplate;
 			this.screener = screener;
+			screener.criteria = this;
+
+			// only apply bindings first time
+			if ($(".search-options[data-section='advanced-screener'] .criteria-select[data-init='true']").length == 0) {
+				ko.applyBindings(screener, $(".search-options[data-section='advanced-screener'] .criteria-select")[0]);
+				$(".search-options[data-section='advanced-screener'] .criteria-select").attr("data-init", "true");
+				this.getDistributions(this.getSelectedFields(), finalize);
+				return;
+			}
 			
-			return this;
+			this.reset(finalize);
+			
 		},
 
     	reset: function(finished) {
@@ -56,6 +65,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	if (!$(sorter).hasClass("sort") && !$(sorter).hasClass("asc")) $(sorter).click();
         	*/
         	
+        	$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
         	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
         	this.getDistributions(this.getSelectedFields(), this.screener.finalize);
         	
@@ -277,12 +287,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         
         addCriteria: function(data, finished) {
         	
-    		var run = CRITERIA.renderInputs(data);
     		$.each(data.distributions, function(idx, distribution) {
     			CRITERIA.clickEvents.checkCriteriaItem($(".search-criteria [data-id='" + distribution.field + "']"));
     		});
     		
-    		//if (run) SGX.screener.search.criteriaSearch();
+    		CRITERIA.renderInputs(data);
         	
         },
         
@@ -399,6 +408,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                 		model.val("");
                 		return;
                 	}
+                	
+                	
+                	CRITERIA.clickEvents.checkCriteriaItem($(".criteria-select [data-id='percentChange']"));
                 	
                    	CRITERIA.screener.modal.close();
                 	

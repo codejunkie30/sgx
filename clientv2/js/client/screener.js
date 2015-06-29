@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/criteria", "jquery-placeholder" ], function(UTIL, ko, SEARCH, CRITERIA) {
+define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
 	
 	
 	var SCREENER = {
@@ -6,44 +6,43 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 		criteria: null,
 		
 		search: null,
+		
+		defaultSearch: "advanced-screener",
 
 		initPage: function() {
 			
-			// set the page objects
-			this.criteria = CRITERIA.init(this);
 			this.search = SEARCH;
 
 			// some base variables
-			var searchType = UTIL.getParameterByName("type") == "" ? "advanced-screener" : UTIL.getParameterByName("type");
+			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
     		var factor = UTIL.getParameterByName("factor");
     		var quintile = parseInt(UTIL.getParameterByName("quintile"));
 
     		// load the marketing copy
     		this.loadMarketingCopy();
+
+    		// apply bindings
+    		ko.applyBindings(this, $(".screener-header")[0]);
     		
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
-    		
-    		// apply bindings
-    		ko.applyBindings(this);
-    		
-    		// now finish setting up page
-    		$(".searchtoggle .toggle:first").click();
-    		
-    		// finalize all this
-    		this.criteria.getDistributions(this.criteria.getSelectedFields(), this.finalize);
-    		
+
     		return this;
 		},
 		
 		finalize: function(data) {
+
+			// get the current screener object
+			var screener = ko.dataFor($(".screener-header")[0]);
 			
 			// clear than draw the inputs
 			$(".search-criteria tbody").children().remove();
-			PAGE.criteria.renderInputs(data);
+
+			// render
+			screener.criteria.renderInputs(data);
 			
     		// show page
-			PAGE.hideLoading();
+			screener.hideLoading();
 
 		},
 		
@@ -82,7 +81,11 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 		 */
 		changeScreenerToggle: function(name) {
 			
+			// reset this
 			$(".searchtoggle .toggle:first").click();
+			
+			// confirm exists
+			if ($(".screener-toggles .button[data-name='" + name + "']").length == 0) name = this.defaultSearch; 
 
 			// remove all classes and add current class to results table
 			$(".screener-toggles .button").each(function(idx, el) { $(".module-results").removeClass($(this).attr("data-name") + "-clz"); });
@@ -95,6 +98,8 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 			// hide/show options
 			$(".search-options").hide();
 			$("[data-section='" + name + "']").show();
+			
+			this.searchEvents[name](this);
 			
 			//SGX.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
 			
@@ -130,9 +135,8 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 			 */
 			screenerToggle: function(data, event) {
 				var name = $(event.currentTarget).attr("data-name");
-				SCREENER.changeScreenerToggle(name);
-				if (name == "advanced-screener") SCREENER.criteria.reset(SCREENER.search.criteriaSearch); // returning to advanced means resetting search
-				else SCREENER.search.criteriaSearch(); // otherwise just use what's there
+				var screener = ko.dataFor($(".screener-header")[0]);
+				screener.changeScreenerToggle(name);
 			},
 			
 			/** 
@@ -141,8 +145,42 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "client/modules/crit
 			keywordSearch: function(data, event) {
 				var fn = function() { SCREENER.search.nameSearch($(".searchbar input").val()); };
 				if ($.trim($(".searchbar input").val()) == "") fn = function() { SCREENER.search.showAll(); };
-				SCREENER.criteria.reset(fn);
+				//SCREENER.criteria.reset(fn);
 			}
+			
+		},
+		
+		searchEvents: {
+			
+			"advanced-screener": function(screener) {
+				
+				
+				// initialize using advanced criteria object
+				require(["client/modules/advanced-criteria"], function(crit) {
+					crit.init(screener, screener.finalize);
+				});
+				
+			},
+			
+			"alpha-factors": function(screener) {
+
+				// initialize using advanced criteria object
+				require(["client/modules/alpha-criteria"], function(crit) {
+					crit.init(screener, screener.finalize);
+				});
+				
+			},
+			
+			"all-companies": function(screener) {
+				
+				// initialize using advanced criteria object
+				require(["client/modules/all-companies-criteria"], function(crit) {
+					crit.init(screener, screener.finalize);
+				});
+			
+			},
+			
+			
 			
 		}
 
