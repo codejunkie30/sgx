@@ -1,17 +1,17 @@
-define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
+define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
 	
 	
 	var SCREENER = {
 			
 		criteria: null,
 		
-		search: null,
+		results: null,
 		
 		defaultSearch: "advanced-screener",
 
 		initPage: function() {
 			
-			this.search = SEARCH;
+			this.results = SEARCH.init(this);
 
 			// some base variables
 			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
@@ -35,9 +35,6 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 			// get the current screener object
 			var screener = ko.dataFor($(".screener-header")[0]);
 			
-			// clear than draw the inputs
-			$(".search-criteria tbody").children().remove();
-
 			// render
 			screener.criteria.renderInputs(data);
 			
@@ -81,6 +78,9 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 		 */
 		changeScreenerToggle: function(name) {
 			
+			// loading thingy
+			this.showLoading();
+			
 			// reset this
 			$(".searchtoggle .toggle:first").click();
 			
@@ -99,9 +99,9 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 			$(".search-options").hide();
 			$("[data-section='" + name + "']").show();
 			
-			this.searchEvents[name](this);
+			this.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
 			
-			//SGX.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
+			this.searchEvents[name](this);
 			
 		},
 		
@@ -127,7 +127,6 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 				$(".searchtoggle .s" + $(me).attr("data-name")).addClass("selected");
 				$(".searchbar input").attr("placeholder", $(me).attr("data-placeholder"));
 				$('.searchbar input').placeholder();
-				$('.searchbar input').val("");
 			},
 			
 			/**
@@ -143,9 +142,8 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 			 * perform a keyword search
 			 */
 			keywordSearch: function(data, event) {
-				var fn = function() { SCREENER.search.nameSearch($(".searchbar input").val()); };
-				if ($.trim($(".searchbar input").val()) == "") fn = function() { SCREENER.search.showAll(); };
-				//SCREENER.criteria.reset(fn);
+				var screener = ko.dataFor($(".screener-header")[0]);
+				screener.changeScreenerToggle("all-companies");
 			}
 			
 		},
@@ -153,7 +151,6 @@ define([ "wmsi/utils", "knockout", "client/modules/search", "jquery-placeholder"
 		searchEvents: {
 			
 			"advanced-screener": function(screener) {
-				
 				
 				// initialize using advanced criteria object
 				require(["client/modules/advanced-criteria"], function(crit) {

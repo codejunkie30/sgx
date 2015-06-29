@@ -78,9 +78,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 			// NOTHING NEEDS TO HAPPEN
 		},
 
-    	reset: function(finished) {
+    	reset: function(finalize) {
 
     		$(".alpha-factors .right-label").click();
+    		finalize(undefined);
     		
     	}
 		

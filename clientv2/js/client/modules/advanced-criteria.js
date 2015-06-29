@@ -43,6 +43,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			this.changeTemplate = cTemplate;
 			this.screener = screener;
 			screener.criteria = this;
+			
+			// clear the drawn the inputs
+			$(".search-criteria tbody").children().remove();
 
 			// only apply bindings first time
 			if ($(".search-options[data-section='advanced-screener'] .criteria-select[data-init='true']").length == 0) {
