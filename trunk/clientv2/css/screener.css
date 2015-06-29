@@ -162,7 +162,14 @@
 	overflow: hidden;
 }
 
+/** search options */
+
+.search-options {
+	display: none;
+}
+
 /** criteria */
+
 
 table.search-criteria {
   width: 100%;
