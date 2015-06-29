@@ -24,6 +24,9 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		// apply bindings
     		ko.applyBindings(this, $(".screener-header")[0]);
     		
+			// reset keyword
+			$(".searchtoggle .toggle:first").click();
+    		
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
 
@@ -80,9 +83,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
 			// loading thingy
 			this.showLoading();
-			
-			// reset this
-			$(".searchtoggle .toggle:first").click();
 			
 			// confirm exists
 			if ($(".screener-toggles .button[data-name='" + name + "']").length == 0) name = this.defaultSearch; 

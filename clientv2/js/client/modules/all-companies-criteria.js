@@ -19,9 +19,9 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			var val = $.trim($(".searchbar input").val());
 			
     		// validate string input
-			var msg = UTIL.executeFunctionByName($(".searchtoggle .toggle.selected").attr("data-validator"), this, val);
+			var msg = val != null && val != "" ? UTIL.executeFunctionByName($(".searchtoggle .toggle.selected").attr("data-validator"), this, val) : null;
 			if (msg != null) {
-				SGX.modal.open({ content: "<p>" + msg + "</p>", type: 'alert', maxWidth: 1000 });
+				this.screener.modal.open({ content: "<p>" + msg + "</p>", type: 'alert', maxWidth: 1000 });
 				val = null;
 			}
 			
@@ -36,7 +36,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
         		this.screener.trackPage("SGX Keyword Search by " + $(".searchtoggle .selected").attr("data-name") + " - " + val);
     		}
     		
-    		// reset the val
+    		// reset the val and the toggle
+			$(".searchtoggle .toggle:first").click();
     		$(".searchbar input").val("");
     		
     		// search

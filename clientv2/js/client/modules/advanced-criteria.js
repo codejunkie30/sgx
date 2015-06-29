@@ -35,6 +35,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 		init: function(screener, finalize) {
 			
+    		// reset the val and the toggle
+			$(".searchtoggle .toggle:first").click();
+    		$(".searchbar input").val("");
+			
 			// parse in JSON field configuration
 			$.extend(true, this, JSON.parse(fieldData));
 			
