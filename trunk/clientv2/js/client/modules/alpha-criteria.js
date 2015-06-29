@@ -51,6 +51,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 			
 		init: function(screener, finalize) {
 			
+    		// reset the val and the toggle
+			$(".searchtoggle .toggle:first").click();
+    		$(".searchbar input").val("");
+			
 			var tmp = JSON.parse(FACTORS);
 			$.each(tmp.factors, function(idx, field) {
 				var item = { "minLabel": "High", "maxLabel": "Low"  };
