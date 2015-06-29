@@ -15,8 +15,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 
 			// some base variables
 			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
-    		var factor = UTIL.getParameterByName("factor");
-    		var quintile = parseInt(UTIL.getParameterByName("quintile"));
 
     		// load the marketing copy
     		this.loadMarketingCopy();

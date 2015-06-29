@@ -9,7 +9,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 	    	
 	    	$.each(new Array(5), function(quint) {
 	    		
-	    		var span = $("<span />").attr("data-quintile", quint + 1).appendTo($(".quintiles", element));
+	    		var span = $("<span />").attr("data-quintile", quint + 1).appendTo($(".quintiles", element)); 
 	    		
 				$(span).hover(
 						function(e) {
@@ -25,9 +25,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 				
 				$(span).click(function(e) {
 					var mine = $(this).attr("data-quintile");
-					$(this).closest(".quintiles").addClass("per-" + (mine*20)).attr("data-class", "per-" + (mine*20));
-					$(this).closest(".factor").attr("data-value", mine);
+					$(this).closest(".quintiles").addClass("per-" + (mine*20)).attr("data-class", "per-" + (mine*20)).attr("data-value", mine);
 					$(".right-label", $(this).closest(".factor")).addClass("selected");
+					bindingContext.$parent.runSearch();
 				});
 				
 	    	});
@@ -37,8 +37,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 				$(this).removeClass("selected");
 				var prg = $(".quintiles", element);
 				$(prg).removeClass($(prg).attr("data-class")).removeAttr("data-class")
-				$(element).removeAttr("data-value");
+				$(prg).removeAttr("data-value");
+				bindingContext.$parent.runSearch();
 			});
+			
+			
 	    	
 	    }
 	};
@@ -47,8 +50,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 			
 		screener: null,
 		
-		factorDefaults: { "minLabel": "High", "maxLabel": "Low"  },
-			
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
@@ -79,13 +80,46 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 		},
 		
 		renderInputs: function(data) {
-			// NOTHING NEEDS TO HAPPEN
+			// DO NOTHING
 		},
 
     	reset: function(finalize) {
 
     		$(".alpha-factors .right-label").click();
-    		finalize(undefined);
+    		finalize(this.runSearch);
+    		
+    	},
+    	
+    	checkDefault: function(elements, data) {
+    		
+    		var factor = UTIL.getParameterByName("factor");
+    		var quintile = parseInt(UTIL.getParameterByName("quintile"));
+    		var curId = $(".quintiles", elements[0]).attr("data-id");
+    		
+    		if (curId == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
+    			$(".quintiles span:eq(" + (quintile-1) + ")", elements[0]).click();
+    		}
+
+    	},
+    	
+    	runSearch: function() {
+    		
+    		this.screener.showLoading();
+    		
+    		var endpoint = "/sgx/search/alphaFactors";
+    		var params = {};
+    		
+    		// collect criteria
+    		$(".alpha-factors .quintiles[data-value]").each(function(idx, el) { params[$(this).attr("data-id")] = parseInt($(this).attr("data-value")); });
+    		
+    		// just search all companies
+    		if ($.isEmptyObject(params)) {
+    			params.criteria = [];
+    			endpoint = "/sgx/search";
+    		}
+    		
+    		// search
+    		this.screener.results.retrieve(endpoint, params);
     		
     	}
 		
