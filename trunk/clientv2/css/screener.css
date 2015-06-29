@@ -219,8 +219,8 @@ table.search-criteria .label {
 table.search-criteria .label span {
   color: #1e2171;
   display: inline-block;
-  padding-top: 3px;
   width: 80px;
+  padding-bottom: 4px;
 }
 
 table.search-criteria .label img {
@@ -290,4 +290,33 @@ table.search-criteria .remove {
   height: 30px;
   top: 50%;
   margin-top: -15px;
+}
+
+/** percent change */
+
+.pchange-container {
+	width: 600px;
+	height: 330px;
+	overflow-x: hidden;
+}
+
+.pchange-container .column {
+	display: inline-block;
+}
+
+.pchange-container span div {
+	margin-top: 4px;
+}
+
+.pchange-container .column {
+	margin-right: 20px;
+	margin-bottom: 10px;
+}
+
+.pchange-container input {
+	width: 30px;
+}
+
+.pchange-container .ui-datepicker {
+	background-color: #eee;
 }
