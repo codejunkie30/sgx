@@ -168,6 +168,10 @@
 	display: none;
 }
 
+.search-options p {
+	padding: 0 10px;
+}
+
 /** criteria */
 
 
@@ -326,4 +330,60 @@ table.search-criteria .remove {
 
 .pchange-container .ui-datepicker {
 	background-color: #eee;
+}
+
+/** factors */
+
+.alpha-factors {
+	margin: 20px 0; 
+}
+
+.alpha-factors .column {
+	width: 49%;
+	display: inline-block;
+}
+
+.alpha-factors .column.rt {
+  border-left: 1px solid #c1c1c1;
+  padding-left: 7px;
+}
+
+
+.alpha-factors .row {
+	background-color: #e8e8e8;
+}
+
+.alpha-factors .row.odd {
+  background: #f2f2f2;
+}
+
+.factor {
+	padding:12px 0;
+	margin: 0;
+	margin-left: 12px;
+}
+
+.factor .label {
+	width: 150px;
+	padding-right: 0px;
+	vertical-align: top;
+	padding-top: 2px;
+}
+
+.factor .right-label {
+	top: 3px;
+	margin-left: 3px;
+	padding-top: 3px;
+	width: 80px;
+	height: 20px;
+	text-align: left;
+}
+
+.factor .right-label.selected {
+	background: transparent url('../img/ico-clear_text.png') no-repeat right 1px;
+	cursor: pointer;
+}
+
+.factor .tooltip {
+	width: 390px;
 }

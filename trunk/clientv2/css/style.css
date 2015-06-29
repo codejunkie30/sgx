@@ -729,6 +729,102 @@ background: url("../img/title-back.png");
   width: 337px;
 }
 
+/** alpha factors */
+
+.alpha-factors {
+  background: #f2f2f2;
+  border: 1px solid #c1c1c1;
+  overflow: hidden;
+  margin-left: 18px;
+}
+
+.factor {
+  margin: 15px 0;
+  display: inline-block;
+  width: 100%;
+}
+
+.factor .label {
+  position: relative;
+  display: inline-block;
+  padding-right: 24px;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  
+}
+
+.factor .label {
+	cursor: pointer;	
+}
+
+.factor .quintiles {
+  position: absolute;
+  display: inline-block;
+  width: 0;
+  height: 11px;
+  background: url("../img/slider-full.png") no-repeat;
+  margin: 4px auto;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 0px;
+}
+
+.factor .quintiles span {
+	display: inline-block;
+	width: 34px;
+	overflow: visible;
+	height: 11px;
+	margin-left: 1px;
+}
+
+.factor .per-100 {
+	width: 177px;
+}
+
+.factor .per-80 {
+  width: 143.6px;
+}
+
+.factor .per-60 {
+  width: 108.2px;
+}
+
+.factor .per-40 {
+  width: 72.8px;
+}
+
+.factor .per-20 {
+  width: 37.4px;
+}
+
+.factor .bar {
+  display: inline-block;
+  width: 177px;
+  height: 12px;
+  background: url("../img/slider-empty.png") no-repeat;
+  margin: 4px auto;
+}
+
+.factor .left-label, .factor .right-label {
+  display: inline-block;
+  color: gray5;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 10px;
+  text-transform: uppercase;
+  width: 54px;
+  vertical-align: top;
+  position: relative;
+  top: 6px;
+  text-align: right;
+}
+
+.factor .right-label {
+  position: relative;
+  margin-left: 10px;
+}
+
 /** misc */
 
 .even {
