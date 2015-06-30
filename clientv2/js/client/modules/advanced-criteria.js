@@ -261,7 +261,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         			'field': field,
         			'min': ko.observable(field.min),
         			'max': ko.observable(field.max),
-        			'val': ko.observable(field.value)
+        			'val': ko.observable(field.value),
+        			'updatesMin': ko.observable(field.min),
+    				'updatesMax': ko.observable(field.max)
         		};
         		
         		mdl.changes = ko.computed(function() {
