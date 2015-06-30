@@ -3,6 +3,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
 
+	KO.bindingHandlers.enterkey = {
+		init: function (element, valueAccessor, allBindings, viewModel) {
+			var callback = valueAccessor();
+			$(element).keypress(function (event) {
+				var keyCode = (event.which ? event.which : event.keyCode);
+				if (keyCode === 13) {
+					callback.call(viewModel);
+					return false;
+				}
+				return true;
+			});
+		}
+	};
+	
 	KO.bindingHandlers.format = {
 		update: function(element, valueAccessor, allBindings) {
 	        return KO.bindingHandlers.text.update(element,function(){
@@ -257,19 +271,22 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 	var def = typeof $(dd).attr("data-label") !== "undefined" ? $(dd).attr("data-label") : "";
                 	var text = $(this).text();
                 	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name"); 
+                	var viewModel = KO.dataFor($(dd).closest("tr")[0]);
                 	
                 	if ($("ul li", dd).first().text() != def && text != def) {
                 		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
                         	e.preventDefault();
                         	e.stopPropagation()
                 			$(dd).find(".copy").text($(e.target).text());
+                        	viewModel.val(undefined);
                 			$(e.target).remove();
                 			PAGE.dropdowns.close();
                 			if (typeof finished !== "undefined") finished();
                 		});
                 	}
                 	
-                	$(".copy", dd).text(text).attr("data-name", dataName);
+                	$(".copy", dd).text(text);
+                	viewModel.val(text);
                 	
                 	if (typeof finished !== "undefined") finished();
                 	

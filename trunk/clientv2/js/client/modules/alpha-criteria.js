@@ -50,20 +50,24 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 			
 		screener: null,
 		
+		factor: UTIL.getParameterByName("factor"),
+		quintile: parseInt(UTIL.getParameterByName("quintile")),
+		
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
 			$(".searchtoggle .toggle:first").click();
     		$(".searchbar input").val("");
-			
-			var tmp = JSON.parse(FACTORS);
-			$.each(tmp.factors, function(idx, field) {
-				var item = { "minLabel": "High", "maxLabel": "Low"  };
-				$.extend(item, field);
-				tmp.factors[idx] = item;
-			});
-			
-			$.extend(true, this, tmp);
+
+    		if (!this.hasOwnProperty("factors")) {
+    			var tmp = JSON.parse(FACTORS);
+    			$.each(tmp.factors, function(idx, field) {
+    				var item = { "minLabel": "High", "maxLabel": "Low"  };
+    				$.extend(item, field);
+    				tmp.factors[idx] = item;
+    			});
+    			$.extend(true, this, tmp);
+    		}
 			
 			this.screener = screener;
 			screener.criteria = this;
@@ -71,22 +75,24 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 			if ($(".search-options[data-section='alpha-factors'] .alpha-factors[data-init='true']").length == 0) {
 				ko.applyBindings(this, $(".search-options[data-section='alpha-factors']")[0]);
 				$(".search-options[data-section='alpha-factors'] .alpha-factors").attr("data-init", "true");
-				finalize(undefined);
-				return;
+				if (this.factor != "" && !isNaN(this.quintile) && this.quintile > 0 && this.quintile <= 5) return;
 			}
-			
-			this.reset(finalize);
-			
+
+			this.reset();
 		},
 		
 		renderInputs: function(data) {
 			// DO NOTHING
 		},
 
-    	reset: function(finalize) {
-
-    		$(".alpha-factors .right-label").click();
-    		finalize(this.runSearch);
+    	reset: function() {
+    		
+    		if ($(".alpha-factors .right-label.selected").length == 0) {
+    			this.runSearch();
+    			return;
+    		}
+    		
+    		$(".alpha-factors .right-label").first().click();
     		
     	},
     	
@@ -95,7 +101,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
     		var factor = UTIL.getParameterByName("factor");
     		var quintile = parseInt(UTIL.getParameterByName("quintile"));
     		var curId = $(".quintiles", elements[0]).attr("data-id");
-    		
     		if (curId == factor && !isNaN(quintile) && quintile > 0 && quintile <= 5) {
     			$(".quintiles span:eq(" + (quintile-1) + ")", elements[0]).click();
     		}
