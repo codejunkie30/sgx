@@ -32,6 +32,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		selectTemplate: null,
 		changeTemplate: null,
 		textDistributions: [ "industryGroup" ],
+		firstRun: true,
 			
 		init: function(screener, finalize) {
 			
@@ -242,8 +243,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         renderInputs: function(data) {
         	
         	this.handleDistributions(data);
-        	
-        	var runsearch = true;
+        	var criteriaThis = this;
         	
         	if (data.distributions.length > 1) {
             	data.distributions.sort(function(a, b) {
@@ -269,9 +269,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         			'val': ko.observable(field.value)
         		};
         		
-    			mdl.matches = ko.computed(function() { 
-    				this.min(); this.max();
-    				if (this.field.hasOwnProperty("buckets")) {
+        		mdl.changes = ko.computed(function() {
+        			return this.min() + "-" + this.max() + "-" + this.val();
+        		}, mdl);
+        		
+        		
+    			mdl.matches = ko.computed(function() {
+    				if (this.changes() != "" && this.field.hasOwnProperty("buckets")) {
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
         				var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
@@ -282,6 +286,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     			
         		ko.applyBindings(mdl, $(el)[0]);
         		
+        		if (typeof field.customDistribution === "undefined" || !field.customDistribution) {
+        			mdl.changes.subscribe(function(val) { mdl.criteria.runSearch(); });
+        		}
+        		
         	});
         	
         	$(".search-criteria .criteria").removeClass("even");
@@ -289,7 +297,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	
         	this.screener.dropdowns.init(".search-criteria");
         	
-        	return runsearch;                	
+        	if (this.firstRun) this.runSearch();
+               	
         },
         
         addCriteria: function(data, finished) {
@@ -303,18 +312,60 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         },
         
     	removeCriteria: function(target, finished) {
-    		
+
     		this.clickEvents.uncheckCriteriaItem(target);
     		this.screener.tooltips.close();
-            $(target).remove();
+    		
+    		var vm = ko.dataFor($(".criteria[data-id='" + $(target).attr("data-id") + "']")[0]);
+    		vm.val(null);
+    		
+    		$(target).remove();
             
         	$(".search-criteria .criteria").removeClass("even");
         	$(".search-criteria .criteria:even").addClass("even");
         	
-        	CRITERIA.screener.hideLoading();
-        	
             if (typeof finished !== "undefined") finished();
             
+    	},
+    	
+    	runSearch: function() {
+    		
+    		var endpoint = "/sgx/search";
+    		var params = [];
+    		
+    		$(".search-criteria .criteria").each(function(idx, el) {
+
+    			var vm = ko.dataFor(el);
+    			var name = vm.field.id;
+    			
+    			param = { 'field': name };
+    			
+    			if (vm.field.template == "select") {
+    				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) return;
+    				param.field =  vm.field.id;
+    				param.value = vm.val();
+    			}
+    			else if (vm.field.template == "change") {
+    				param.from = vm.min();
+    				param.to = vm.max();
+    				param.value = vm.val();
+    			}
+    			else {
+    				param.from = vm.min();
+    				param.to = vm.max();
+    			}
+
+    			// add to search
+    			params.push(param);
+
+    			// special case
+    			if (name == "avgBrokerReq") params.push({ field: "targetPriceNum", from: "3" });
+    			
+    		});
+    		
+    		// search
+    		this.screener.results.retrieve(endpoint, { 'criteria': params });
+    		
     	},
     	
     	clickEvents: {
@@ -415,6 +466,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                 		model.val("");
                 		return;
                 	}
+                	
+                	model.changes.subscribe(function(val) { model.criteria.runSearch(); });
+                	model.criteria.runSearch();
                 	
                 	
                 	CRITERIA.clickEvents.checkCriteriaItem($(".criteria-select [data-id='percentChange']"));
