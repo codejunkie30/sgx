@@ -238,6 +238,7 @@
 			"fields": [
 			   {
 			      "id":"industryGroup",
+			      "format": "string",
 			      "name":"Industry",
 			      "template":"select",
 			      "label":"Select Industry",

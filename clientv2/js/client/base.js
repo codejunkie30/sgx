@@ -128,12 +128,14 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		currentFormats: null, 
 		
         "numberFormats-SGD": {
+        	lookup: { header: "" },
+        	string: { header: "" },
         	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
         	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
         	dollars: { header: "in S$", decimals: 3 },
         	percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { decimals: 1 }
+        	number1: { header: "", decimals: 1 }
         },
 		
 		init: function(child) {
@@ -155,10 +157,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
         getFormatted: function(fmt, value) {
         	
-        	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return;
+        	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
+        	if (value === "" || value === "-") return value;
         	
     		var val = value;
-    		if (val === "" || val === "-") return;
     		
     		var formatter = this.currentFormats.hasOwnProperty(fmt) ? this.currentFormats[fmt] : {};
     		

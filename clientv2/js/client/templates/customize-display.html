@@ -1,0 +1,19 @@
+<div class="customize-display-modal">
+
+	<h4>Customize Results Display</h4>
+	
+	<!-- ko foreach: fieldGroups -->
+		<span class="inline-block top">
+		
+			<h5 data-bind="text: name"></h5>
+			<!-- ko foreach: fields -->
+				<div class="checkbox" data-bind="css: { 'checked': $data.hasOwnProperty('dataDisplay') && dataDisplay }">
+					<div class="trigger" data-bind="text: name"></div>
+					<input type="checkbox" />
+				</div>
+			<!-- /ko -->		
+			
+		</span>
+	<!-- /ko -->
+
+</div>
