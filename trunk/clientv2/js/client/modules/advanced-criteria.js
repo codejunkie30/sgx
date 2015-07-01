@@ -51,7 +51,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			// clear the drawn the inputs
 			$(".search-criteria tbody").children().remove();
-
+			
 			// only apply bindings first time
 			if ($(".search-options[data-section='advanced-screener'] .criteria-select[data-init='true']").length == 0) {
 				ko.applyBindings(screener, $(".search-options[data-section='advanced-screener'] .criteria-select")[0]);
@@ -313,9 +313,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		this.clickEvents.uncheckCriteriaItem(target);
     		this.screener.tooltips.close();
     		
+    		$(target).addClass("inactive");
+
     		var vm = ko.dataFor($(".criteria[data-id='" + $(target).attr("data-id") + "']")[0]);
     		vm.val(null);
-    		
+
     		$(target).remove();
             
         	$(".search-criteria .criteria").removeClass("even");
@@ -330,7 +332,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		var endpoint = "/sgx/search";
     		var params = [];
     		
-    		$(".search-criteria .criteria").each(function(idx, el) {
+    		$(".search-criteria .criteria:not(.inactive)").each(function(idx, el) {
 
     			var vm = ko.dataFor(el);
     			var name = vm.field.id;

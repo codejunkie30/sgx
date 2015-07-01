@@ -386,3 +386,81 @@ table.search-criteria .remove {
 .factor .tooltip {
 	width: 390px;
 }
+
+/** results */
+
+.search-results {
+	margin-top: 15px;
+	display: none;
+}
+
+.search-results table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.search-results table thead tr {
+  background: #eee;
+}
+
+.search-results table thead tr th {
+  color: #1e2171;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font: bold 14px/12px Arial, Helvetica, sans-serif;
+  text-align: left;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.search-results table thead tr th span {
+	color: #1e2171;
+	display: block;
+}
+
+.search-results table thead tr th span.fmt {
+	font-size: smaller;
+	font-weight: normal;
+	margin-top: 3px;
+}
+
+.search-results table thead tr th.asc {
+  background: url("../img/sort_ascending.png") no-repeat right 5px center;
+}
+
+.search-results table thead tr th.desc {
+  background: url("../img/sort_descending.png") no-repeat right 5px center;
+}
+
+
+.search-results table tbody td {
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font: normal 12px/12px Arial, Helvetica, sans-serif;
+  text-align: center;
+  line-height: 125%;
+  vertical-align: top;
+}
+
+.search-results table tbody td.industryGroup {
+  text-align: left;
+  width: 220px;
+}
+
+.search-results table tbody td.companyName {
+  text-align: left;
+  width: 220px;
+}
+
+.search-results table tbody td.tickerCode {
+  width: 50px;
+}
+
+.search-results table tbody td a {
+  color: #1e217c;
+}

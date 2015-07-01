@@ -144,6 +144,36 @@
 
 </div>
 
+<div class="grid search-results">
+
+	<div class="title">
+		<h3 data-bind="visible: viewModel.companies().length <= 0">No results found</h3>
+		<h3 data-bind="visible: viewModel.companies().length > 0"><span data-bind="text: viewModel.companies().length"></span> companies found</h3>
+	</div>
+
+ 
+	<table data-bind="visible: viewModel.companies().length > 0">
+		<thead>
+			<tr data-bind="foreach: viewModel.headers">
+				<th><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-bind="repeat: { foreach: viewModel.companies(), limit: 30 }" data-repeat-bind="css: { 'odd': ($index % 2 != 0) }">
+				<!-- ko foreach: viewModel.headers -->
+            		<td data-bind="text: $item().hasOwnProperty(id) ? $item()[id] : '-', css: id" ></td>
+            	<!-- /ko -->
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+
+
+<div class="grid disclosure">
+	Source: S&amp;P Capital IQ - <a href="terms-conditions.html" class="terms-conditions">Use of this information is subject to terms and conditions</a>
+</div>	
+
 <!-- goes at bottom for faster page load -->
 <script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
 <script type="text/javascript">
