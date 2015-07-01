@@ -20,7 +20,8 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		this.loadMarketingCopy();
 
     		// apply bindings
-    		ko.applyBindings(this, $(".screener-header")[0]);
+    		var scrnr = this;
+    		$(".screener-header").each(function(idx, el) { ko.applyBindings(scrnr, $(el)[0]); });
     		
 			// reset keyword
 			$(".searchtoggle .toggle:first").click();
@@ -41,6 +42,9 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
     		// show page
 			screener.hideLoading();
+			
+			// resize
+			screener.resizeIframeSimple();
 
 		},
 		

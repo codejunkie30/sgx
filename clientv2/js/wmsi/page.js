@@ -54,6 +54,13 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
 		},
 		
 		/**
+		 * default iframe
+		 */
+		resizeIframeSimple: function() {
+			this.resizeIframe(this.getTrueContentHeight(), -1);
+		},
+		
+		/**
 		 * send resize event to parent 
 		 * @param height the new height of frame
 		 * @param scroll the scroll position of the page (e.g. top for new pages, in page for page change events)

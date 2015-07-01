@@ -9,11 +9,13 @@
             "jquery-validate": 'vendor/jquery/jquery.validate.min',
             "knockout": "vendor/knockout/knockout-3.3.0-min",
             "knockout-amd-helpers": "vendor/knockout/knockout-amd-helpers",
+            "knockout-repeat": "vendor/knockout/knockout-repeat",
 	    	"text": "vendor/text",
             "highstock": 'vendor/highstock/highstock',
             "underscore": 'vendor/underscore',
             "colorbox": 'vendor/colorbox',
             "json2": 'vendor/json2',
+            
         },
         
         waitSeconds: 10,
