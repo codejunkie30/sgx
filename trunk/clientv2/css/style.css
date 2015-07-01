@@ -45,6 +45,12 @@ h4 {
     line-height: 30px;
 }
 
+h5 {
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 18px;
+}
+
 p {
 	margin: 15px 0;
 }
@@ -79,6 +85,11 @@ p {
 
 .normal {
 	font-weight: normal !important;
+}
+
+.inline-block {
+	display: inline-block;
+	margin-right: 10px;
 }
 
 /* Containers */
