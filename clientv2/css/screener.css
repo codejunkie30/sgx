@@ -464,3 +464,22 @@ table.search-criteria .remove {
 .search-results table tbody td a {
   color: #1e217c;
 }
+
+.search-results .pager {
+	font-weight: bold;
+	text-align: right;
+}
+
+.search-results .pager input {
+	width: 30px;
+	display: inline-block;
+	margin: 0 6px;
+}
+
+.search-results .pager .action-btn {
+	margin-left: 6px;	
+}
+
+.search-results .pager .action-btn.left {
+	margin-right: 6px;	
+}
