@@ -43,9 +43,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		// show page
 			screener.hideLoading();
 			
-			// resize
-			screener.resizeIframeSimple();
-
 		},
 		
 		/**

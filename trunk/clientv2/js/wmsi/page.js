@@ -57,7 +57,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
 		 * default iframe
 		 */
 		resizeIframeSimple: function() {
-			this.resizeIframe(this.getTrueContentHeight(), -1);
+			PAGE.resizeIframe(PAGE.getTrueContentHeight(), 0);
 		},
 		
 		/**

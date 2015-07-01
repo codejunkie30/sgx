@@ -144,14 +144,17 @@
 
 </div>
 
+<div class="grid search-options" data-section="all-companies"><!-- HERE TO HELP WITH SCROLLING --></div>
+
 <div class="grid search-results">
 
+	<!-- header -->
 	<div class="title">
 		<h3 data-bind="visible: viewModel.companies().length <= 0">No results found</h3>
 		<h3 data-bind="visible: viewModel.companies().length > 0"><span data-bind="text: viewModel.companies().length"></span> companies found</h3>
 	</div>
 
- 
+ 	<!--  results display -->
 	<table data-bind="visible: viewModel.companies().length > 0">
 		<thead>
 			<tr data-bind="foreach: viewModel.headers">
@@ -159,13 +162,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr data-bind="repeat: { foreach: viewModel.companies(), limit: 30 }" data-repeat-bind="css: { 'odd': ($index % 2 != 0) }">
+			<tr data-bind="repeat: { foreach: viewModel.currentCompanies(), limit: viewModel.resultSize }" data-repeat-bind="css: { 'odd': ($index % 2 != 0) }">
 				<!-- ko foreach: viewModel.headers -->
             		<td data-bind="text: $item().hasOwnProperty(id) ? $item()[id] : '-', css: id" ></td>
             	<!-- /ko -->
 			</tr>
 		</tbody>
 	</table>
+	
+	<!-- the results size -->
+	<input type="hidden" value="30" data-bind="value: viewModel.resultSize" />
+	
+	<!--  paging -->
+	<div class="pager">
+		<span class="action-btn right" data-bind="click: viewModel.page(viewModel.page()-1), visible: viewModel.page() > 1"><</span> Page <input type="text" value="1" data-bind="value: viewModel.page" /> of <span data-bind="text: viewModel.pages()"></span> <span class="action-btn" data-bind="visible: viewModel.page() < viewModel.pages(), click: viewModel.page(viewModel.page()+1), ">></span>
+	</div>
 
 </div>
 

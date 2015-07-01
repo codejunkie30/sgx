@@ -3,6 +3,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
 
+	KO.extenders.withPrevious = function (target) {
+	    // Define new properties for previous value and whether it's changed
+	    target.previous = KO.observable();
+	    target.changed = KO.computed(function () { return target() !== target.previous(); });
+
+	    // Subscribe to observable to update previous, before change.
+	    target.subscribe(function (v) {
+	        target.previous(v);
+	    }, null, 'beforeChange');
+
+	    // Return modified observable
+	    return target;
+	}
+	
 	KO.bindingHandlers.enterkey = {
 		init: function (element, valueAccessor, allBindings, viewModel) {
 			var callback = valueAccessor();
