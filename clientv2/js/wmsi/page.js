@@ -74,7 +74,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
         		curPage.pageHeight = height;
         		XD.postMessage(msg, url, parent); 
         	};
-        	setTimeout(fn, 10);
+        	setTimeout(fn, 50);
         },
 
         /**

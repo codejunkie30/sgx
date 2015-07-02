@@ -150,27 +150,41 @@
 
 	<!-- header -->
 	<div class="title">
-		<h3 data-bind="visible: viewModel.companies().length <= 0">No results found</h3>
-		<h3 data-bind="visible: viewModel.companies().length > 0"><span data-bind="text: viewModel.companies().length"></span> companies found</h3>
+		<h3 data-bind="visible: viewModel.refinedCompanies().length <= 0">No results found</h3>
+		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() == null"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found</h3>
+		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() != null"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found for "<span data-bind="text: viewModel.keywords"></span>"</h3>
 	</div>
 	
-	<div class="toolbar" data-bind="visible: viewModel.companies().length > 0">
+	<div class="toolbar" data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<span class="column results">Select a column header to change the sort order.</span>
-		<span class="column center"></span>
+		<span class="column center criteria">
+			<div class="button-dropdown" data-label="Select Sector">
+				<input class="copy" type="hidden" data-bind="value: viewModel.sectors.val" />
+				<div class="trigger">
+					<span class="copy" data-bind="text: viewModel.sectors.def"></span>
+					<span class="arrow"></span>
+				</div>
+				<div class="dropdown">
+					<ul data-bind="foreach: viewModel.sectors.values">
+						<li data-bind="text: $data"></li>
+					</ul>
+				</div>
+			</div>
+		</span>
 		<span class="column right"><span class="action-btn customize" data-bind="click: customizeDisplay">Customize Display</span></span>
 	</div>
 
  	<!--  results display -->
-	<table data-bind="visible: viewModel.companies().length > 0">
+	<table data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<thead>
 			<tr data-bind="foreach: viewModel.headers">
-				<th data-bind="attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.screener.currentFormats[format].header"></span></th>
+				<th data-bind="click: function(data, event) { $parent.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.screener.currentFormats[format].header"></span></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr data-bind="repeat: { foreach: viewModel.currentCompanies(), limit: viewModel.resultSize }" data-repeat-bind="css: { 'odd': ($index % 2 != 0) }">
 				<!-- ko foreach: viewModel.headers -->
-            		<td data-bind="text: $item().hasOwnProperty(id) && $item()[id] != null ? $item()[id] : '-', css: id, formatResultColumn: { row: $item(), prop: id }" ></td>
+            		<td data-bind="formatResultColumn: { row: $item(), prop: id }, css: id" ></td>
             	<!-- /ko -->
 			</tr>
 		</tbody>
@@ -181,7 +195,7 @@
 	
 	<!--  paging -->
 	<div class="pager">
-		<span class="action-btn right" data-bind="click: function() { viewModel.page(viewModel.page()-1) }, visible: viewModel.page() > 1"><</span> Page <input type="text" value="1" data-bind="value: viewModel.page" /> of <span data-bind="text: viewModel.pages()"></span> <span class="action-btn" data-bind="visible: viewModel.page() < viewModel.pages(), click: function() { viewModel.page(viewModel.page()+1) }, ">></span>
+		<span class="action-btn right" data-bind="click: function() { viewModel.changePage(-1); }, visible: viewModel.page() > 1"><</span> Page <input type="text" value="1" data-bind="value: viewModel.page" /> of <span data-bind="text: viewModel.pages()"></span> <span class="action-btn" data-bind="visible: viewModel.page() < viewModel.pages(), click: function() { viewModel.changePage(+1); }, ">></span>
 	</div>
 
 </div>

@@ -3,8 +3,8 @@
 	<img data-bind="tooltip: field.id" src="img/info-tab-large.png" alt="" width="20" height="20" />
 </td>
 <td colspan="3" class="middle">
-	<input type="hidden" data-bind="value: val">
 	<div class="button-dropdown" data-bind="attr: { 'data-label': field.label }">
+		<input class="copy" type="hidden" data-bind="value: val" />
 		<div class="trigger"><span class="copy" data-bind="text: field.label"></span>
 			<span class="arrow"></span>
 		</div>
