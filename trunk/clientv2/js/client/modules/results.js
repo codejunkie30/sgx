@@ -66,7 +66,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			this.viewModel.endpoint = data.endpoint;
 			this.viewModel.companies(data.companies);
 			this.viewModel.search = true;
-			this.viewModel.sectors.val("");
 			
 			var scroll = typeof data.scrollPos === "undefined" ? this.viewModel.criteriaTop() : data.scrollPos();
 			
@@ -202,7 +201,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			mdl.refinedCompanies = ko.computed(function() {
 				if (this.companies() == null) return null;
 				var companies = this.companies().slice();
-				if (mdl.sectors.val() == "") return companies; 
+				if (typeof mdl.sectors.val() === "undefined") return companies; 
 				return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
 			}, mdl);
 			
@@ -302,18 +301,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             		return industries;
             	}, mdl),
             	
-            	def: $(".search-results .button-dropdown").attr("data-label"),
-            	
-            	val: ko.observable("")            	
+            	val: ko.observable()
         			
         	};
-        	
-        	mdl.sectors.val.subscribe(function(change) { 
-        		console.log("CHANGE");
-        		if (change == "") $(".search-results .button-dropdown .copy").text(mdl.sectors.def); 
-        	}, mdl);
-        	
-        	$(".search-results .button-dropdown input").change(function(e) { mdl.page(1); mdl.companies.valueHasMutated();   });
 
 			return mdl;    		
 		}

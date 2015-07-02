@@ -163,18 +163,9 @@
 	<!-- results customization -->
 	<div class="toolbar" data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<span class="column results">Select a column header to change the sort order.</span>
-		<span class="column center criteria">
-			<div class="button-dropdown" data-label="Select Sector">
-				<input class="copy" type="hidden" data-bind="value: viewModel.sectors.val" />
-				<div class="trigger">
-					<span class="copy" data-bind="text: viewModel.sectors.def"></span>
-					<span class="arrow"></span>
-				</div>
-				<div class="dropdown">
-					<ul data-bind="foreach: viewModel.sectors.values">
-						<li data-bind="text: $data"></li>
-					</ul>
-				</div>
+		<span class="column center" style="padding-top:4px;">
+			<div class="custom-select">
+				<select data-bind="options: viewModel.sectors.values, optionsCaption: 'Select Sector', value: viewModel.sectors.val"></select>
 			</div>
 		</span>
 		<span class="column right"><span class="action-btn customize" data-bind="click: customizeDisplay">Customize Display</span></span>
