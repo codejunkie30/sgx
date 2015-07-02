@@ -5,6 +5,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 	 * assumes working with criteria object for model
 	 */
 	ko.bindingHandlers.createFactor = {
+			
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	
 	    	$.each(new Array(5), function(quint) {
@@ -38,7 +39,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 				var prg = $(".quintiles", element);
 				$(prg).removeClass($(prg).attr("data-class")).removeAttr("data-class")
 				$(prg).removeAttr("data-value");
-				bindingContext.$parent.runSearch();
+				if (!bindingContext.$parent.paused) bindingContext.$parent.runSearch();
 			});
 			
 			
@@ -52,6 +53,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 		
 		factor: UTIL.getParameterByName("factor"),
 		quintile: parseInt(UTIL.getParameterByName("quintile")),
+		paused: false,
 		
 		init: function(screener, finalize) {
 			
@@ -86,13 +88,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 		},
 
     	reset: function() {
-    		
-    		if ($(".alpha-factors .right-label.selected").length == 0) {
-    			this.runSearch();
-    			return;
-    		}
-    		
-    		$(".alpha-factors .right-label").first().click();
+
+    		// remove all selected values
+    		this.paused = true;
+    		$(".alpha-factors .right-label").click();
+    		this.pause = false;
+
+    		// run the search
+   			this.runSearch();
     		
     	},
     	

@@ -294,7 +294,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	
         	this.screener.dropdowns.init(".search-criteria");
         	
-        	if (this.firstRun) this.runSearch();
+        	if (this.firstRun) this.runSearch(function() { return 0; });
                	
         },
         
@@ -327,7 +327,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             
     	},
     	
-    	runSearch: function() {
+    	runSearch: function(scroll) {
     		
     		var endpoint = "/sgx/search";
     		var params = [];
@@ -364,7 +364,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		});
     		
     		// search
-    		this.screener.results.retrieve(endpoint, { 'criteria': params });
+    		this.screener.results.retrieve(endpoint, { 'criteria': params }, null, scroll);
     		
     	},
     	

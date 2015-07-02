@@ -220,7 +220,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             		onComplete: function() {
             			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
             			if (PAGE.getParentURL() != null) {
-            				//PAGE.resizeIframe(PAGE.pageHeight, 10); TODO make work
+            				PAGE.resizeIframe(PAGE.pageHeight, 10);
             				$("#colorbox").position();
             			}
             		},
@@ -293,23 +293,24 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 	var dd = $(this).closest(".button-dropdown");
                 	var def = typeof $(dd).attr("data-label") !== "undefined" ? $(dd).attr("data-label") : "";
                 	var text = $(this).text();
-                	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name"); 
-                	var viewModel = KO.dataFor($(dd).closest("tr")[0]);
+                	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name");
+                	var viewModel = KO.dataFor($(dd).closest(".criteria")[0]);
                 	
                 	if ($("ul li", dd).first().text() != def && text != def) {
                 		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
                         	e.preventDefault();
                         	e.stopPropagation()
-                			$(dd).find(".copy").text($(e.target).text());
                         	viewModel.val(undefined);
+                        	$(dd).find("span.copy").text($(e.target).text());
                 			$(e.target).remove();
                 			PAGE.dropdowns.close();
                 			if (typeof finished !== "undefined") finished();
                 		});
                 	}
                 	
-                	$(".copy", dd).text(text);
+                	//$(".copy", dd).text(text);
                 	viewModel.val(text);
+                	$("span.copy", dd).text(text);
                 	
                 	if (typeof finished !== "undefined") finished();
                 	

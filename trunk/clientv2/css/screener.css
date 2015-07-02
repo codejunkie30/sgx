@@ -504,9 +504,10 @@ table.search-criteria .remove {
 }
 
 .search-results .pager input {
-	width: 30px;
+	width: 25px;
 	display: inline-block;
 	margin: 0 6px;
+	text-align: center;
 }
 
 .search-results .pager .action-btn {

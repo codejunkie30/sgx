@@ -4,6 +4,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var models = ko.utils.unwrapObservable(valueAccessor());
 	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	if (val == null || val == "") val = "-";
+	    	$(element).text(val);
+	    },
+	    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	    	var models = ko.utils.unwrapObservable(valueAccessor());
+	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	if (val == null || val == "") val = "-";
 	    	$(element).text(val);
 	    }
 	};
@@ -22,13 +29,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			return this;
 		},
 		
-		retrieve: function(endpoint, params, keywords) {
+		retrieve: function(endpoint, params, keywords, scrollPos) {
 
 			var results = this;
 			results.screener.showLoading();
 			
 			var success = function(data) { 
-				if (typeof keyword !== "undefined") data.keywords = keyword;
+				data.scrollPos = scrollPos;
+				data.endpoint = endpoint;
+				data.params = params;
+				if (typeof keywords !== "undefined") data.keywords = keywords;
 				results.render(data); 
 				results.screener.hideLoading(); 
 			}
@@ -47,18 +57,29 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	
 		render: function(data) {
 
+			if (data.hasOwnProperty("keywords")) this.viewModel.keywords(data.keywords);
+			else this.viewModel.keywords(null);
+
+			this.viewModel.page(1);
+			this.viewModel.search = true;
+			this.viewModel.params = data.params;
+			this.viewModel.endpoint = data.endpoint;
 			this.viewModel.companies(data.companies);
 			this.viewModel.search = true;
+			this.viewModel.sectors.val("");
 			
-			var scroll = this.viewModel.criteriaTop();
-
+			var scroll = typeof data.scrollPos === "undefined" ? this.viewModel.criteriaTop() : data.scrollPos();
+			
 			// handle the display
 			var resultsBlock = $(".search-results")[0];
-			if (typeof ko.dataFor(resultsBlock) === "undefined") {
-				scroll = 0;
-				ko.applyBindings(this, resultsBlock); 
-			}
+			if (typeof ko.dataFor(resultsBlock) === "undefined") ko.applyBindings(this, resultsBlock);
 			$(resultsBlock).show();
+			
+			// remove sort options
+			$(".search-results th.asc, .search-results th.desc").removeClass("asc").removeClass("desc");
+
+			// default sort
+			if (this.viewModel.keywords() == null) $(".search-results th.companyName").click();
 			
 			// resize
 			PAGE.resizeIframe(PAGE.getTrueContentHeight(), scroll);
@@ -67,7 +88,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		
 		formatField: function(field, row, id) {
 			
-			if (!row.hasOwnProperty(id) || row[id] == null) return;
+			if (!row.hasOwnProperty(id) || row[id] == null) return "";
 			
 	    	var val = row[id];
 	    	
@@ -81,7 +102,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     			// needs a minimum value
     			if (field.formatter.hasOwnProperty("minField") && row.hasOwnProperty(field.formatter.minField)) {
-    				if (row[field.formatter.minField] < field.formatter.minValue) val = null;
+    				if (row[field.formatter.minField] < field.formatter.minValue) val = "";
     			}
     			
     		}
@@ -127,10 +148,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                     		
                     		var mdl = ko.dataFor($(this)[0]);
                     		mdl.dataDisplay = $(this).is(".checked");
-                    		settings.viewModel.headersChanged(true);                    		
+                    		settings.viewModel.headersChanged(true);
                     		
                     	});
                     	
+                    },
+                    
+                    confirm: function(settings) {
+                    	RESULTS.screener.modal.close();
                     }
 			};
 			
@@ -148,7 +173,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				resultSize: ko.observable(30),
 				search: false,
 				page: ko.observable(1).extend({ withPrevious: 1 }),
-				headersChanged: ko.observable(false)
+				headersChanged: ko.observable(false),
+				keywords: ko.observable(null)
 			};
 			
 			/**
@@ -173,14 +199,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			/**
 			 * actual results
 			 */
+			mdl.refinedCompanies = ko.computed(function() {
+				if (this.companies() == null) return null;
+				var companies = this.companies().slice();
+				if (mdl.sectors.val() == "") return companies; 
+				return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
+			}, mdl);
+			
 			mdl.currentCompanies = ko.computed(function() {
-				if (this.companies() == null) return;
+				if (this.refinedCompanies() == null) return;
 				var pg = this.page();
 				var resultSize = this.resultSize();
 				var startIdx = (pg-1)*resultSize;
-				return this.companies().slice(startIdx);
+				return this.refinedCompanies().slice(startIdx);
 			}, mdl);
-
+			
 			/**
 			 * paging
 			 * 
@@ -188,38 +221,99 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			mdl.changePage = function(i) { mdl.page(mdl.page() + i); }
 			
 			mdl.page.subscribe(function(change) {
-				console.log(change);
 				if (isNaN(change) || change <= 0 || change > mdl.pages()) { 
 					this.page(this.page.previous()); 
 					$(".pager input").focus();
 					return;
 				} 
-				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), mdl.resultsTop()); }, 50);
 			} , mdl);
 			
 			mdl.pages = ko.computed(function() { 
-				if (this.companies() == null) return 0;
-				if (this.resultSize().length > this.companies().length) return 1;
-				var ret = Math.ceil(this.companies().length / this.resultSize());
-				if (ret * this.resultSize() < this.companies().length) ret++;
+				if (this.refinedCompanies() == null) return 0;
+				if (this.resultSize().length > this.refinedCompanies().length) return 1;
+				var ret = Math.ceil(this.refinedCompanies().length / this.resultSize());
+				if (ret * this.resultSize() < this.refinedCompanies().length) ret++;
 				return ret;
 			}, mdl);
 			
 			/** 
 			 * resizing
 			 */
-			mdl.pageHeight = ko.computed(function() { this.currentCompanies(); this.page(); this.resultSize(); return $(".search-results tbody tr").length; }, mdl);
 			mdl.resultsTop = function() { return $(".search-results").offset().top - 15; }
 			mdl.criteriaTop = function() { return $(".screener-toggles").offset().top; }
-			mdl.pageHeight.subscribe(function(change) { 
-				var mdl = this; 
-				var top = mdl.resultsTop();
+			mdl.currentCompanies.subscribe(function(change) {
 				if (this.search) {
 					this.search = false;
-					top = mdl.criteriaTop();
+					return;
 				}
-				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), top); }, 50);
-			}, mdl);			
+				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), mdl.resultsTop()); }, 50);
+			}, mdl);
+			
+			/**
+			 * sorting
+			 */
+			mdl.sort = function(field, results) {
+				
+				var curField = $("th." + field.id);
+				var direction = $(curField).hasClass("asc") ? "desc" : "asc";
+				var companies = mdl.companies();
+				
+				$(".search-results th").removeClass("asc").removeClass("desc");
+				$(curField).addClass(direction);
+				
+            	// sort
+            	companies.sort(function(a, b) {
+            		
+            		var a1 = "asc" == direction ? a[field.id] : b[field.id];
+            		var b1 = "asc" == direction ? b[field.id] : a[field.id];
+            		
+            		if (field.format == "lookup") {
+        				a1 = "asc" == direction ? results.formatField(field, a, field.id).toLowerCase() : results.formatField(field, b, field.id).toLowerCase();
+        				b1 = "asc" == direction ? results.formatField(field, b, field.id).toLowerCase() : results.formatField(field, a, field.id).toLowerCase();
+            		}
+            		else if (field.format != "string") {
+            			if (typeof b1 === "undefined") b1 = -99999999999999;
+            			if (typeof a1 === "undefined") a1 = -99999999999999;
+            			return b1-a1;
+            		} 
+            		
+            		return a1.localeCompare(b1);
+            	});
+            	
+            	mdl.companies(companies);
+            	mdl.page(1);
+				
+			};
+			
+
+        	/**
+        	 * refining, whole thing a hack till I think of something better
+        	 */
+        	mdl.sectors = {
+
+                values: ko.computed(function() {
+                	if (this.refinedCompanies() == null) return;
+            		var industries = [];
+            		$.each(this.refinedCompanies(), function(idx, company) {
+            			if (!company.hasOwnProperty("industry") || $.inArray(company.industry, industries) != -1) return;
+            			industries.push(company.industry);
+            		});
+            		industries.sort(function(a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
+            		return industries;
+            	}, mdl),
+            	
+            	def: $(".search-results .button-dropdown").attr("data-label"),
+            	
+            	val: ko.observable("")            	
+        			
+        	};
+        	
+        	mdl.sectors.val.subscribe(function(change) { 
+        		console.log("CHANGE");
+        		if (change == "") $(".search-results .button-dropdown .copy").text(mdl.sectors.def); 
+        	}, mdl);
+        	
+        	$(".search-results .button-dropdown input").change(function(e) { mdl.page(1); mdl.companies.valueHasMutated();   });
 
 			return mdl;    		
 		}
