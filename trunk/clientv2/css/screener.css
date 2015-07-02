@@ -518,6 +518,13 @@ table.search-criteria .remove {
 	margin-right: 6px;	
 }
 
+.no-results {
+	margin: 10px 0 20px 0;
+	padding: 15px;
+	border: 1px solid #CCC;
+	font-weight: bold;
+}
+
 .customize-display-modal {
 	width: 700px;
 	height: 280px;
