@@ -529,3 +529,7 @@ table.search-criteria .remove {
 	width: 700px;
 	height: 280px;
 }
+
+select {
+	width: auto;
+}
