@@ -155,6 +155,12 @@
 		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() != null"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found for "<span data-bind="text: viewModel.keywords"></span>"</h3>
 	</div>
 	
+	<!-- no results -->
+	<div class="no-results" data-bind="visible: viewModel.refinedCompanies().length <= 0">
+		No companies matched your search. Try again.
+	</div>
+	
+	<!-- results customization -->
 	<div class="toolbar" data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<span class="column results">Select a column header to change the sort order.</span>
 		<span class="column center criteria">
@@ -194,7 +200,7 @@
 	<input type="hidden" value="30" data-bind="value: viewModel.resultSize" />
 	
 	<!--  paging -->
-	<div class="pager">
+	<div class="pager" data-bind="visible: viewModel.pages() > 0">
 		<span class="action-btn right" data-bind="click: function() { viewModel.changePage(-1); }, visible: viewModel.page() > 1"><</span> Page <input type="text" value="1" data-bind="value: viewModel.page" /> of <span data-bind="text: viewModel.pages()"></span> <span class="action-btn" data-bind="visible: viewModel.page() < viewModel.pages(), click: function() { viewModel.changePage(+1); }, ">></span>
 	</div>
 
