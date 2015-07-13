@@ -5,7 +5,7 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		fqdn : "http://54.254.221.141", /** PROD */
+    		fqdn : "http://SGX-API-LB-195267723.ap-southeast-1.elb.amazonaws.com", /** PROD */
     		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
     		
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
@@ -1860,14 +1860,16 @@ define(deps, function($, _, SGX) {
             		var dateField = data.price.hasOwnProperty("lastTradeTimestamp") ? data.price.lastTradeTimestamp : data.price.previousDate;
             		var date = Date.fromISO(dateField);
             		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
+            		//if (typeof price === "undefined" || price == null) price = 0;
             		
             		$(".stock-price .currency").text(data.price.tradingCurrency);
             		$(".stock-price .change").text(data.price.change);
+
             		$(".stock-price .lastPrice").text(price);
             		$(".stock-price .last-updated .day").text($.datepicker.formatDate( "dd/M/yy", date));
             		$(".stock-price .last-updated .time").text(date.getHours() + ":" + String("00" + date.getMinutes()).slice(-2) + "");
             		
-            		$(".stock-price").show();
+            		if (typeof price !== "undefined" && price != null) $(".stock-price").show();
             		
             		$(".stock-price span").removeAttr("formatted");
             		SGX.formatter.formatElements(".stock-price");
