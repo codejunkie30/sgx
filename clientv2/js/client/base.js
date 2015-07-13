@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "knockout-amd-helpers", "text", "jquery-ui", "colorbox"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "knockout-amd-helpers", "text", "jquery-ui", "colorbox"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -112,6 +112,25 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		}
 	};
 	
+	
+	KO.bindingHandlers.siteLink = {
+		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			var vals = KO.unwrap(valueAccessor());
+			var url = null;
+			console.log(vals.hasOwnProperty("id"));
+			if (vals.hasOwnProperty("id")) {
+				id = vals.id;
+				extra = vals.extra;
+				url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
+			}
+			else {
+				url = PAGE.getPage(PAGE.pageData.getPage(vals));
+			}
+
+			$(element).attr("href", url).attr("target", "_parent");
+		}
+	};
+	
 	PAGE = {
 
 		//fqdn : "http://54.254.221.141", /** PROD */
@@ -127,6 +146,34 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		currentFormats: null, 
 		
+		pageData: {
+			
+			pages: {}, 
+			
+			configuration: function(data) {
+
+				var prnt = this;
+				
+				$.each(data.pages, function(idx, nm) {
+					if (nm == "") return;
+					prnt.pages[nm] = {
+						file: nm + ".html",
+						id: idx
+					};
+				});
+				
+			},
+			
+			getPage: function(nm) {
+				return this.pages[nm];
+			},
+			
+            getCompanyPage: function(code, extra) {
+            	return PAGE.getPage(this.getPage("company-tearsheet"), "code=" + code + (typeof extra === "undefined" ? "" : extra));
+            }
+			
+		},
+		
         "numberFormats-SGD": {
         	lookup: { header: "" },
         	string: { header: "" },
@@ -141,6 +188,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(child) {
 			
 			this.currentFormats = PAGE["numberFormats-SGD"];
+
+			// set up the page mappings
+			eval("this.pageData." + PAGEINFO);
 			
 			// extend parent
 			$.extend(true, this, PAGEIMPL);

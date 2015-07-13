@@ -4,14 +4,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var models = ko.utils.unwrapObservable(valueAccessor());
 	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
 	    	if (val == null || val == "") val = "-";
-	    	$(element).text(val);
+	    	$(element).html(val);
 	    },
 	    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var models = ko.utils.unwrapObservable(valueAccessor());
 	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
 	    	if (val == null || val == "") val = "-";
-	    	$(element).text(val);
+	    	$(element).html(val);
 	    }
 	};
 	
@@ -111,6 +113,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		
     		return val;
 			
+		},
+		
+		companyLink: function(row) {
+			var url = this.screener.pageData.getCompanyPage(row.tickerCode);
+			return '<a target="_parent" href="' + url + '">' + row.companyName + '</a>' 
 		},
 		
 		customizeDisplay: function() {

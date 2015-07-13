@@ -28,6 +28,9 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
+    		
+    		// finish other page loading
+    		ko.applyBindings(this, $(".disclosure")[0]);
 
     		return this;
 		},
