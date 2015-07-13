@@ -1,0 +1,113 @@
+
+.profile .ui-tabs .ui-tabs-nav {
+  padding: 0px;
+  width: auto;
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+}
+
+.profile .ui-tabs .ui-tabs-nav li, .profile .ui-tabs .ui-tabs-nav li:focus {
+  list-style: none;
+  margin: 0 0 0 2px;
+  display: inline-block;
+  background: #1e2171;
+  outline: none;
+  padding: 0px;
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.profile .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.profile .ui-tabs .ui-tabs-nav li a, .profile .ui-tabs .ui-tabs-nav li a:focus {
+  color: #fff;
+  font-weight: 100;
+  font-size: 12px;
+  outline: none;
+  padding: 4px 10px !important;
+}
+
+.profile .ui-tabs .ui-state-active, .profile .ui-widget-content .ui-state-default {
+	color: #FFF;
+	border: 0;
+}
+
+.profile .ui-tabs .ui-tabs-nav li.ui-state-active a {
+  background: #008000;
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  background-color: #809800;
+  background-image: -webkit-gradient(linear, left top, right top, from(#809800), to(#bfce00));
+  background-image: -webkit-gradient(linear, left top, right top, from(#809800), to(#bfce00));
+  background-image: -webkit-gradient(linear, left top, right top, from(#809800), to(#bfce00));
+  background-image: -webkit-gradient(linear, left top, right top, from(#809800), to(#bfce00));
+  background-image: -webkit-gradient(linear, left top, right top, from(#809800), to(#bfce00));
+  background-image: -webkit--webkit-linear-gradient(right, #809800, #bfce00);
+  background-image: -webkit--moz-linear-gradient(right, #809800, #bfce00);
+  background-image: -webkit--o-linear-gradient(right, #809800, #bfce00);
+  background-image: -webkit--ms-linear-gradient(right, #809800, #bfce00);
+  background-image: -webkit-linear-gradient(to left, #809800, #bfce00);
+  background-image: -moz--webkit-linear-gradient(right, #809800, #bfce00);
+  background-image: -moz--moz-linear-gradient(right, #809800, #bfce00);
+  background-image: -moz--o-linear-gradient(right, #809800, #bfce00);
+  background-image: -moz--ms-linear-gradient(right, #809800, #bfce00);
+  background-image: -moz-linear-gradient(to left, #809800, #bfce00);
+  background-image: -o--webkit-linear-gradient(right, #809800, #bfce00);
+  background-image: -o--moz-linear-gradient(right, #809800, #bfce00);
+  background-image: -o--o-linear-gradient(right, #809800, #bfce00);
+  background-image: -o--ms-linear-gradient(right, #809800, #bfce00);
+  background-image: -o-linear-gradient(to left, #809800, #bfce00);
+  background-image: -webkit-linear-gradient(left, #809800, #bfce00);
+  background-image: -moz-linear-gradient(left, #809800, #bfce00);
+  background-image: -o-linear-gradient(left, #809800, #bfce00);
+  background-image: -ms-linear-gradient(left, #809800, #bfce00);
+  background-image: linear-gradient(to right, #809800, #bfce00);
+}
+
+.profile .tab-content {
+  clear: both;
+  width: 100%;
+}
+
+.profile .ui-tabs .ui-tabs-panel {
+  padding: 5px 0;
+  margin: 22px 0 0;
+  border: 1px solid #ccc;
+}
+
+.profile .ui-tabs .ui-tabs-panel table {
+  width: 100%;
+}
+
+.profile .ui-tabs .ui-tabs-panel tr {
+  min-height: 34px;
+}
+
+.profile .ui-tabs .ui-tabs-panel tr td, .profile .ui-tabs .ui-tabs-panel tr td span  {
+  line-height: 14px;
+  font-size: 12px;
+}
+
+.profile .ui-tabs .ui-tabs-panel tr td {
+  padding: 10px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+.profile .ui-tabs .ui-tabs-panel tr td.note {
+	font-weight: normal;
+}
+
+.general-info.gray {
+	padding: 10px;
+	padding-left: 0;
+}
+
+.general-info td {
+	padding: 5px 10px;
+	line-height: 125%;
+}

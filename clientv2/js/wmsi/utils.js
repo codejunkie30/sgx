@@ -10,6 +10,8 @@ define(["jquery"], function($) {
 		 */
 		init: function() {
 			
+			var self = this;
+			
 			// add remove function
 			Array.prototype.remove= function(){
 			    var what, a= arguments, L= a.length, ax;
@@ -26,18 +28,19 @@ define(["jquery"], function($) {
 			var D= new Date('2011-06-02T09:34:29+02:00');
 			if(!D || +D!== 1307000069000){
 			    Date.fromISO= function(s){
-			    	var ret = UTILS.fixIEDate(s);
-			    	return UTILS.toSGT(ret);
+			    	var ret = self.fixIEDate(s);
+			    	return self.toSGT(ret);
 			    }
 			}
 			else{
 			    Date.fromISO= function(s){
 			    	var ret = new Date(s);
-			    	if (!UTILS.isValidDate(ret)) ret = UTILS.fixIEDate(s);
-			        return toSGT(ret);
+			    	if (!self.isValidDate(ret)) ret = self.fixIEDate(s);
+			        return self.toSGT(ret);
 			    }
 			}
 			
+			return this;			
 		},
 		
 		/**
@@ -153,6 +156,11 @@ define(["jquery"], function($) {
     		var d = document,  b = d.body, s = b.style, ret = myNav.indexOf('msie') != -1;
     		$.each(UTILS.ie1011Styles, function(idx, property) { if (typeof s[property] !== "undefined") ret = true; });
     		return ret;
+    	},
+    	
+    	isValidDate: function(d) {
+    		if ( Object.prototype.toString.call(d) !== "[object Date]" ) return false;
+    		return !isNaN(d.getTime());
     	}
 		
 	}
