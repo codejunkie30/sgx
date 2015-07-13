@@ -124,6 +124,18 @@ ol ol ol ol {
 	margin-right: 10px;
 }
 
+.section-break {
+	margin-top: 15px;
+}
+
+.in-section-break {
+	margin-top: 8px;
+}
+
+.gray {
+	background-color: #f2f2f2;
+}
+
 /* Containers */
 
 .grid {
@@ -458,6 +470,19 @@ background: url("../img/title-back.png");
   left: 10%;
   margin-left: -6px;
   margin-top: -4px;
+}
+
+/** tabs */
+
+.ui-tabs .ui-tabs-panel {
+	background: #FFF;
+	padding: 0;
+}
+
+.ui-tabs.ui-widget-content, .ui-tabs .ui-tabs-nav {
+	border: 0;
+	color: #FFF;
+	background: #FFF;
 }
 
 /** date picker */

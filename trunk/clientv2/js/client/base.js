@@ -66,9 +66,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			$(element).tabs({
 	            active: 0,
-	            show: {
-	                effect: "blind",
-	                duration: 800
+	            load: function(event, ui) {
+	            	KO.cleanNode(ui.panel[0]);
+	            	try { KO.applyBindings(viewModel, ui.panel[0]); } catch(err) {}
+	            	PAGE.resizeIframeSimple();
 	            }
 			});
 		}
@@ -117,7 +118,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			var vals = KO.unwrap(valueAccessor());
 			var url = null;
-			console.log(vals.hasOwnProperty("id"));
 			if (vals.hasOwnProperty("id")) {
 				id = vals.id;
 				extra = vals.extra;
@@ -233,7 +233,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     		    
     		}
     		else if (fmt == "date") {
-    			val = $.datepicker.formatDate("dd/M/yy", Date.fromISO(val));
+    			try {
+    				val = $.datepicker.formatDate("dd/M/yy", Date.fromISO(val));
+    			}
+    			catch(err) {
+    				console.log(err);
+    			}
     		}
     		else {
     			console.log(fmt);

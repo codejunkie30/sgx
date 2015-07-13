@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.0" />
-    <link rel="stylesheet" href="css/screener.css?v=1.0" />
+    <link rel="stylesheet" href="css/profile.css?v=1.0" />
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -22,7 +22,24 @@
 
 	<div class="grid">
 	
-		<h1>Tearsheet</h1>
+		<div class="header">
+			<h1 data-bind="text: company.companyInfo.companyName"></h1>
+			<div>
+				<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'industry=' + encodeURIComponent(companyInfo.industry) }"></a> 
+				> 
+				<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'industry=' + encodeURIComponent(companyInfo.industry) + '&industryGroup=' + encodeURIComponent(companyInfo.industryGroup) }"></a>
+			</div>
+		</div>
+		
+		<div data-bind="tabs">
+			<ul>
+				<li><a href="modules/company-profile.html">Profile</a></li>
+				<li><a href="modules/company-financials.html">Financials</a></li>
+				<li><a href="modules/company-estimates.html">Estimates</a></li>
+				<li><a href="modules/company-tech-charting.html">Technical Charting</a></li>
+				<li><a href="modules/company-comparable.html">Comparable Companies</a></li>
+			</ul>
+		</div>
 		
 	</div>
 	
