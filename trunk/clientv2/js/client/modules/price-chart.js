@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highstock" ], function(UTIL, ko, CHART_DEFAULTS) {
+define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highstock" ], function(UTIL, ko, CHART_DEFAULTS) {
 	
 	var CHART = {
 		
@@ -6,7 +6,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highs
 		volumeData: [],
 		priceData: [],
 		
-		init(data, finished) {
+		init(element, data, finished, periodChange) {
 			
 			var self = this;
 		
@@ -31,7 +31,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highs
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
 			
 			// initialize the chart
-			this.initChart(data, finished);
+			this.initChart(element, data, finished, periodChange);
 			
 		},
 		
@@ -43,55 +43,53 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highs
 	    	ret.sort(function(a, b) { return a.x - b.x; });
 	    	return ret;
 	    },
-			
-	    getPointHTML: function() {
-	    	
-	    	if (!this.hasOwnProperty("points")) return;
-	    	
-	    	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
-	    	var point = this.chartData[key];
-	    	
-	    	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
 
-	    	// not a trading day
-	    	if (point == undefined) {
-	    		ret += "<br />";
-	    		ret += "No trading data available.";
-	    		return ret;
-	    	}
-	    	
-	    	// is a trading day
-	    	ret += "<span class='chart-mouseover'>";
-	    	ret += "<br />";
-	    	ret += "<span>Open</span>: S$ " + point.open;
-	    	ret += "<br />";
-	    	ret += "<span>Close</span>: S$ " + point.close;
-	    	ret += "<br />";
-	    	ret += "<span>Low</span>: S$ " + point.low;
-	    	ret += "<br />";
-	    	ret += "<span>High</span>: S$ " + point.high;
-	    	ret += "<br />";
-
-	    	// no volume for this period
-	    	if (this.points.length <= 1) return ret;
-
-	    	// has volume too
-	    	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(3) + " mm";
-	    	ret += "</span>";
-	    	
-	    	return ret;
-	    },
-
-		initChart: function(data, finishedDrawing) {
+		initChart: function(element, data, finished, periodChange) {
 			
 			var base = CHART_DEFAULTS;
+			var self = this;
 			
-			base.tooltip.formatter = this.getPointHTML();
+			base.tooltip.formatter = function() {
+		    	
+		    	if (!this.hasOwnProperty("points")) return;
+		    	
+		    	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
+		    	var point = self.chartData[key];
+		    	
+		    	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
+
+		    	// not a trading day
+		    	if (point == undefined) {
+		    		ret += "<br />";
+		    		ret += "No trading data available.";
+		    		return ret;
+		    	}
+		    	
+		    	// is a trading day
+		    	ret += "<span class='chart-mouseover'>";
+		    	ret += "<br />";
+		    	ret += "<span>Open</span>: S$ " + point.open;
+		    	ret += "<br />";
+		    	ret += "<span>Close</span>: S$ " + point.close;
+		    	ret += "<br />";
+		    	ret += "<span>Low</span>: S$ " + point.low;
+		    	ret += "<br />";
+		    	ret += "<span>High</span>: S$ " + point.high;
+		    	ret += "<br />";
+
+		    	// no volume for this period
+		    	if (this.points.length <= 1) return ret;
+
+		    	// has volume too
+		    	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(3) + " mm";
+		    	ret += "</span>";
+		    	
+		    	return ret;
+		    };			
 			
 			base.xAxis.events = {
 				afterSetExtremes: function(e) {
-					//alert("HERE");
-	                //SGX.company.loadNews(SGX.company.defaultResize);
+					if (typeof periodChange !== "undefined") periodChange();
 		        }
 			};
 			
@@ -120,8 +118,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highs
                     },
                     events: {
                     	click: function(e) {
-                    		$(".stock-events [data-name='" + e.point.id + "']").click();
-                    	},
+                    		$("#" + e.point.id).click();
+                    	}
                     },
                     onSeries: 'priceData',
                     shape: 'circlepin',
@@ -131,11 +129,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-defaults", "highs
                 }    
              ];
 			
-			console.log(base);
-			
-			$("#price-volume").highcharts('StockChart', base, function() {
-				//SGX.company.initNews(finishedDrawing);
-				finishedDrawing();
+			$(element).highcharts('StockChart', base, function() {
+				if (typeof finished !== "undefined") finished();
 			});
         
 		}
