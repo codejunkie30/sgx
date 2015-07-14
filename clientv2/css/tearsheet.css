@@ -159,6 +159,10 @@
   text-decoration: underline;
 }
 
+.no-devs {
+	padding: 10px;
+}
+
 div.news {
 	margin-bottom: 10px;
 }

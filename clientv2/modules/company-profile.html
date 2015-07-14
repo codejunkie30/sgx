@@ -236,17 +236,18 @@
 
 	<div class="column-two">
 	
-		<div data-bind="visible: keyDevs().length > 0">
+		<div>
 			<div class="title">
 				<h3>In The News <img width="11" height="11" data-bind="tooltip: 'keyDevs'" alt="" src="img/info.jpg" /></h3>
 			</div>
 			<div class="gray-border padded">
-				<ul class="key-devs" data-bind="foreach: keyDevs">
+				<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 					<li>
-						<div data-bind="text: $parent.getLetter($index())"></div>
-						<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }"></span>
+						<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
+						<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
 					</li>
 				</ul>
+				<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 			</div>
 		
 		</div>
