@@ -1,20 +1,22 @@
-define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
+define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL, ko, PRICE_CHART) {
 	
 	
 	var TEARSHEET = {
 			
+		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
+			
 		initPage: function() {
 
+			var self = this; 
+
+			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
 			var params = { id: UTIL.getParameterByName("code") };
-			var self = this; 
+			UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initCompanyData(data); }, undefined);
 			
-			var tmpF = function(data) {
-				var parent = self;
-				parent.initCompanyData(data);
-			}
-
-			UTIL.handleAjaxRequest(endpoint, params, tmpF, undefined);
+    		// init charts
+    		endpoint = this.fqdn + "/sgx/company/priceHistory";
+    		UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initStockCharts(parent, data); }, undefined);
 			
     		return this;
 		},
@@ -25,6 +27,9 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 			// too long a variable name
 			this.companyInfo = this.company.companyInfo;
+
+			// make keydevs observable
+			this.keyDevs = ko.observableArray(this.keyDevs);
 			
 			// set holders (too long) than sort
 			this.holders = this.hasOwnProperty("holders") && this.holders.hasOwnProperty("holders") ? this.holders.holders : [];
@@ -35,6 +40,30 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
     		// resize
     		this.resizeIframeSimple();
+			
+		},
+		
+		initStockCharts: function(parent, data) {
+			
+			PRICE_CHART.init(data, function() { parent.resizeIframeSimple(); });
+			
+		},
+		
+		getLetter: function(idx) {
+			return this.letters.substring(idx, idx+1);
+		},
+		
+		keyDevClick: function(model, data, event) {
+			
+			var copy = "<h4>" + data.headline + "</h4>" + 
+			   "<p class='bold'>" + 
+			   "Source: " + data.source + "<br />" +
+			   "Type: " + data.type + "<br />" +
+			   "From: " + model.getFormatted("date", data.date) +  
+			   "</p>" +
+			   "<div class='news'>" + data.situation + "</div>";
+			
+			model.modal.open({ content: copy, type: 'alert' });
 			
 		}
 

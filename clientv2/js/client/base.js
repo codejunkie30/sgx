@@ -105,7 +105,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			var id = KO.unwrap(valueAccessor());
 			$.each(PAGE.glossary.terms, function(idx, term) {
 				if (term.id == id) {
-					$(element).attr("tooltip-copy", term.definition);
+					$(element).attr("tooltip-copy", term.definition).addClass("tooltip-item");
 				}
 			});
 			
