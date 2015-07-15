@@ -1,3 +1,38 @@
+.company-title {
+	width: 780px;
+}
+
+.price {
+	width: 25%;
+	text-align: right;
+	vertical-align: bottom;
+}
+
+.price .pricing, .price .pricing * {
+  font: bold 25px Arial, Helvetica, sans-serif;
+}
+
+.price .change {
+  color: #b5cf34;
+  font-weight: normal;
+}
+
+.price .change.negative {
+  color: red;
+  font-weight: normal;
+}
+
+.price .as-of {
+  font-size: 12px;
+}
+
+.price .as-of .date, .price .as-of .time {
+  font-weight: bold;
+}
+
+.price .as-of .time {
+  color: #565a5c;
+}
 
 .profile .ui-tabs .ui-tabs-nav {
   padding: 0px;

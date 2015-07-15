@@ -102,6 +102,12 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			
 			model.modal.open({ content: copy, type: 'alert' });
 			
+		},
+		
+		hasGTIs: function(model) {
+			var ret = false;
+			try { ret = model.gtis.gtis.length > 0; } catch(err) {}
+			return ret;
 		}
 		
 	};
