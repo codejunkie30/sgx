@@ -46,6 +46,13 @@ h4 {
 }
 
 h5 {
+    color: #1e2171;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+h6 {
     font-size: 12px;
     font-weight: bold;
     line-height: 18px;
@@ -85,6 +92,10 @@ ol ol ol {
 
 ol ol ol ol {
 	list-style: lower-alpha;
+}
+
+table th, table td {
+	padding: 5px 10px;
 }
 
 .left {
@@ -145,7 +156,7 @@ ol ol ol ol {
 }
 
 .padded {
-	padding: 8px;
+	padding: 10px;
 }
 
 /* Containers */
@@ -281,7 +292,7 @@ background: url("../img/title-back.png");
   height: 25px;
 }
 
-.title h3 {
+.title h3, .title h5 {
 	display: inline-block;
 	margin-left: 10px;
 }
