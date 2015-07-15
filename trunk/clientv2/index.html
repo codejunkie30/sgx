@@ -151,8 +151,8 @@
 	<!-- header -->
 	<div class="title">
 		<h3 data-bind="visible: viewModel.refinedCompanies().length <= 0">No results found</h3>
-		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() == null"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found</h3>
-		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() != null"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found for "<span data-bind="text: viewModel.keywords"></span>"</h3>
+		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && (viewModel.keywords() == null || viewModel.keywords() == '')"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found</h3>
+		<h3 data-bind="visible: viewModel.refinedCompanies().length > 0 && viewModel.keywords() != null && viewModel.keywords() != ''"><span data-bind="text: viewModel.refinedCompanies().length"></span> companies found for "<span data-bind="text: viewModel.keywords"></span>"</h3>
 	</div>
 	
 	<!-- no results -->

@@ -243,14 +243,20 @@
 			<div class="gray-border padded">
 				<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 					<li>
-						<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
-						<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+						<div data-bind="text: $parent.profileTab.getKeyDevLetter($index())"></div>
+						<span data-bind="text: headline, click: function(data, event) { $parent.profileTab.keyDevClick($parent, data, event); }, attr: { id: $parent.profileTab.getKeyDevID($index()) }"></span>
 					</li>
 				</ul>
 				<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 			</div>
 		
 		</div>
+		
+		<!-- TODO: Consensus Estimates -->
+		
+		<!-- TODO: Alpha Factors -->
+		
+		<!-- TODO: GTI -->
 	
 	</div>
 
