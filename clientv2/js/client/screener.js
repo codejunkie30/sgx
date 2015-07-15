@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
+define([ "wmsi/utils", "knockout", "client/modules/screener/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
 	
 	
 	var SCREENER = {
@@ -155,7 +155,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			"advanced-screener": function(screener) {
 				
 				// initialize using advanced criteria object
-				require(["client/modules/advanced-criteria"], function(crit) {
+				require(["client/modules/screener/advanced-criteria"], function(crit) {
 					crit.init(screener, screener.finalize);
 				});
 				
@@ -164,7 +164,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			"alpha-factors": function(screener) {
 
 				// initialize using advanced criteria object
-				require(["client/modules/alpha-criteria"], function(crit) {
+				require(["client/modules/screener/alpha-criteria"], function(crit) {
 					crit.init(screener, screener.finalize);
 				});
 				
@@ -173,7 +173,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			"all-companies": function(screener) {
 				
 				// initialize using advanced criteria object
-				require(["client/modules/all-companies-criteria"], function(crit) {
+				require(["client/modules/screener/all-companies-criteria"], function(crit) {
 					crit.init(screener, screener.finalize);
 				});
 			

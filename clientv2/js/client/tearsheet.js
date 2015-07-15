@@ -1,12 +1,34 @@
 define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL, ko, PRICE_CHART) {
 	
+	ko.bindingHandlers.companyTabs = {
+		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			$(element).tabs({
+	            active: 0,
+	            load: function(event, ui) {
+	            	ko.cleanNode(ui.panel[0]);
+	            	var using = $(ui.tab[0]).attr("using");
+	            	if (typeof using !== "undefined" && using != "") {
+	            		viewModel.tabInit(using, viewModel, ui.panel[0]);
+	            		return;
+	            	}
+	            	try { ko.applyBindings(viewModel, ui.panel[0]); } catch(err) {}
+	            	PAGE.resizeIframeSimple();
+	            },
+	            beforeActivate: function(event, ui) {
+	            	$.each(Highcharts.charts, function(idx, chart) { if (typeof chart !== "undefined") { chart.destroy(); } });
+	            	ui.oldPanel.empty(); 
+	            }
+			});
+		}
+	};
+	
 	
 	var TEARSHEET = {
 			
-		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
-		
 		ticker: UTIL.getParameterByName("code"),
-			
+		
+		profileTab: null,
+		
 		initPage: function() {
 
 			var self = this; 
@@ -15,10 +37,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			var endpoint = this.fqdn + "/sgx/company";
 			var params = { id: this.ticker };
 			UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initCompanyData(data); }, undefined);
-			
-    		// init charts
-    		endpoint = this.fqdn + "/sgx/company/priceHistory";
-    		UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initStockCharts(parent, data); }, undefined);
 			
     		return this;
 		},
@@ -45,85 +63,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			
 		},
 		
-		initStockCharts: function(parent, data) {
-			
-			var finished = function() {
-				parent.resizeIframeSimple();
-				var myFin = function() { parent.resizeIframeSimple(); };
-				parent.initNews(parent, data, myFin); 
-			};
-			
-			PRICE_CHART.init("#price-volume", data, finished, finished);
-			
-		},
-		
-		initNews: function(parent, data, finishedDrawing) {
-			
-    		var chart = $('#price-volume').highcharts();
-    		var start = new Date(chart.xAxis[0].min);
-    		var end = new Date(chart.xAxis[0].max);
-    		var div = $(".stock-events");
-    		
-    		var curStart = typeof $(div).attr("start-dt") === "undefined" ? new Date() : $(div).attr("start-dt");
-    		var curEnd = typeof $(div).attr("end-dt") === "undefined" ? new Date() : $(div).attr("end-dt");
-    		
-    		if (start == curStart && end == curEnd) return;
-    		
-    		$(div).attr("start-dt", start).attr("end-dt", end);
-    		
-    		var endpoint = parent.fqdn + "/sgx/search/keydevs";
-    		var params = { tickerCode: parent.ticker, from: Highcharts.dateFormat("%Y-%m-%e", start), to: Highcharts.dateFormat("%Y-%m-%e", end) };
-    		
-    		UTIL.handleAjaxRequest(endpoint, params, function(data) {
-    			
-        		// just make it an empty array
-        		if (!data.hasOwnProperty("keyDevs")) data.keyDevs = [];
-        		
-        		// sort it
-       			data.keyDevs.sort(function(a, b) { return Date.fromISO(b.date) - Date.fromISO(a.date); });
-       			
-       			// restrict to no more then 10
-       			data.keyDevs = data.keyDevs.slice(0, 10);
-       			
-       			// display in panel
-       			parent.keyDevs(data.keyDevs);
-       			
-       			// add to chart
-       			var seriesData = [];
-       			$.each(parent.keyDevs(), function(idx, keyDev) {
-    				var point = { x: Date.fromISO(keyDev.date), title: parent.getKeyDevLetter(idx), shape: 'url(img/stock-marker.png)', id: parent.getKeyDevID(idx) };
-    				seriesData.push(point);
-       			});
-        		seriesData.sort(function(a, b) { return a.x - b.x;  });
-        		chart.series[2].update({ data: seriesData });
+		tabInit: function(name, parent, element) {
 
-        		// everything is done
-       			if (typeof finishedDrawing !== "undefined") finishedDrawing();
-    			
-    		});
-    		
-		},
-		
-		getKeyDevLetter: function(idx) {
-			return this.letters.substring(idx, idx+1);
-		},
-		
-		getKeyDevID: function(idx) {
-			return "keyDev-" + this.getKeyDevLetter(idx);
-		},
-		
-		keyDevClick: function(model, data, event) {
-			
-			var copy = "<h4>" + data.headline + "</h4>" + 
-			   "<p class='bold'>" + 
-			   "Source: " + data.source + "<br />" +
-			   "Type: " + data.type + "<br />" +
-			   "From: " + model.getFormatted("date", data.date) +  
-			   "</p>" +
-			   "<div class='news'>" + data.situation + "</div>";
-			
-			model.modal.open({ content: copy, type: 'alert' });
-			
+			// initialize using custom module, please note that applyBindings 
+			// will need to be called when initialization is done 
+			require(["client/modules/tearsheet/" + name], function(tab) {
+				parent.profileTab = tab.init(parent, element);
+            	try { ko.applyBindings(parent, element); } catch(err) {}
+            	PAGE.resizeIframeSimple();
+			});
+
 		}
 
 	};

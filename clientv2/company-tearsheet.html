@@ -25,15 +25,18 @@
 		<div class="header">
 			<h1 data-bind="text: company.companyInfo.companyName"></h1>
 			<div>
-				<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'industry=' + encodeURIComponent(companyInfo.industry) }"></a> 
+				<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'industryGroup=' + encodeURIComponent(companyInfo.industryGroup) }"></a> 
 				> 
-				<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'industry=' + encodeURIComponent(companyInfo.industry) + '&industryGroup=' + encodeURIComponent(companyInfo.industryGroup) }"></a>
+				<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'industryGroup=' + encodeURIComponent(companyInfo.industry) + '&industry=' + encodeURIComponent(companyInfo.industryGroup) }"></a>
 			</div>
+			
+			<!-- TODO: Current Price and a bunch of buttons -->
+			
 		</div>
 		
-		<div data-bind="tabs">
+		<div data-bind="companyTabs">
 			<ul>
-				<li><a href="modules/company-profile.html">Profile</a></li>
+				<li using="company-profile"><a href="modules/company-profile.html">Profile</a></li>
 				<li><a href="modules/company-financials.html">Financials</a></li>
 				<li><a href="modules/company-estimates.html">Estimates</a></li>
 				<li><a href="modules/company-tech-charting.html">Technical Charting</a></li>
@@ -42,6 +45,10 @@
 		</div>
 		
 	</div>
+	
+	<div class="grid disclosure">
+		Source: S&amp;P Capital IQ - <a data-bind="siteLink:'terms-conditions'">Use of this information is subject to terms and conditions</a>
+	</div>	
 	
 <!-- goes at bottom for faster page load -->
 <script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
