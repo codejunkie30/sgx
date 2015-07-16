@@ -1,16 +1,30 @@
-define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL, ko, PRICE_CHART) {
+define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/data/factors.json" ], function(UTIL, ko, PRICE_CHART, FACTORS) {
+	
+	/**
+	 * no op
+	 */
+	ko.bindingHandlers.createFactor = {};
 	
 	var CP = {
 			
 		tearsheet: null,
 		
 		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
-			
+		
 		init: function(tearsheet) {
 
-			
+			// set up some basics
 			this.tearsheet = tearsheet;
 			var self = this;
+
+			// alpha factors
+			var tmp = JSON.parse(FACTORS);
+			$.each(tmp.factors, function(idx, field) {
+				var item = { "minLabel": "High", "maxLabel": "Low"  };
+				$.extend(item, field);
+				tmp.factors[idx] = item;
+			});
+			$.extend(true, this, tmp);
 			
 			// init charts
 			var params = { id: tearsheet.ticker };
@@ -108,6 +122,25 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			var ret = false;
 			try { ret = model.gtis.gtis.length > 0; } catch(err) {}
 			return ret;
+		},
+		
+		handleFactor: function(tearsheet, elements, data) {
+
+			// id and matching value
+			var id = $("[data-id]", elements[0]).attr("data-id");
+			var factor = typeof id !== "undefined" && id != "" ? tearsheet.alphaFactors[id] : undefined;
+			
+			if (typeof factor === "undefined" || factor == 0) {
+				$(elements[0]).hide();
+				return;
+			}
+
+			// handle the click
+			var pg = tearsheet.getPage(tearsheet.pageData.getPage("index"), "type=alpha-factors&factor=" + id + "&quintile=" + factor);
+			$(".quintiles", elements[0]).addClass("per-" + (factor*20)).click(function() { window.top.location.href = pg; });
+			
+			
+			
 		}
 		
 	};

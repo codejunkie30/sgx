@@ -240,9 +240,9 @@
 
 	<div class="column-two">
 	
-		<div>
+		<div id="key-devs">
 			<div class="title">
-				<h3>In The News <img width="11" height="11" data-bind="tooltip: 'keyDevs'" alt="" src="img/info.jpg" /></h3>
+				<h3>In The News <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'keyDevs'" alt="" src="img/info.jpg" /></h3>
 			</div>
 			<div class="gray-border padded">
 				<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
@@ -255,9 +255,40 @@
 			</div>
 		</div>
 		
-		<!-- TODO: Consensus Estimates -->
+		<div class="section-break">
+			<div class="title">
+				<h5>S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.jpg" data-bind="tooltip: 'consensusRec'" width="11" height="11" /></h5>
+			</div>
+			<div class="gray padded">
+				<div data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum')  && companyInfo.targetPriceNum >= 3">
+               		<div class="center bold">Consensus Recommendation</div>
+					<div class="recommendation" data-bind="css: 'opt-' + Math.round(companyInfo.avgBrokerReq)">
+						<span class="inline-block">Sell</span>
+						<span class="inline-block center">Hold</span>
+						<span class="inline-block right">Buy</span>
+                	</div>
+                	<hr />
+                	<div class="center bold">Consensus Target Price</div>
+                	<div class="center consensus-price"><span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
+               	</div>
+				<div class="center" data-bind="visible: !companyInfo.hasOwnProperty('targetPriceNum') || companyInfo.targetPriceNum < 3">
+					<h4>No Recommendation</h4>
+				</div>
+			</div>
+		</div>
 		
-		<!-- TODO: Alpha Factors -->
+		<div class="section-break" data-bind="visible: $data.hasOwnProperty('alphaFactors') && $data.alphaFactors != null">
+			<div class="title">
+				<h5>S&P Capital IQ Alpha Factor Composites <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'alphaFactors'" alt="" src="img/info.jpg" /></h5>
+			</div>
+			<div class="gray padded">
+				<div class="bold">
+					Click on the composite to see companies with the same rank.
+					<hr />
+				</div>
+				<span class="column" data-bind="template: { name: 'alpha-factor', foreach: profileTab.factors, afterRender: function(el, data) { profileTab.handleFactor($root, el, data); } }"></span> 
+			</div>
+		</div>
 		
 		<div class="section-break" data-bind="visibility: $parent.profileTab.hasGTIs($parent)">
 			<div class="title">

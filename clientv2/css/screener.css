@@ -2,10 +2,15 @@
 
 .user-guide {
 	background-color: #565a5c;
+	float: right;
 }
 
 .screener-header {
   margin-bottom: 20px;
+}
+
+.screener-header table td {
+  padding: 0;
 }
 
 .screener-header .button {
