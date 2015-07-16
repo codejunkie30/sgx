@@ -125,6 +125,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		},
 		
 		handleFactor: function(tearsheet, elements, data) {
+			
+			// nothing to do
+			if (typeof tearsheet.alphaFactors === "undefined" || tearsheet.alphaFactors == null) return;
 
 			// id and matching value
 			var id = $("[data-id]", elements[0]).attr("data-id");
@@ -138,8 +141,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			// handle the click
 			var pg = tearsheet.getPage(tearsheet.pageData.getPage("index"), "type=alpha-factors&factor=" + id + "&quintile=" + factor);
 			$(".quintiles", elements[0]).addClass("per-" + (factor*20)).click(function() { window.top.location.href = pg; });
-			
-			
 			
 		}
 		
