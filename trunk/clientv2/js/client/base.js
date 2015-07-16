@@ -126,7 +126,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			else {
 				url = PAGE.getPage(PAGE.pageData.getPage(vals));
 			}
-
 			$(element).attr("href", url).attr("target", "_parent");
 		}
 	};
@@ -390,9 +389,14 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 var height = $(template).height(), width = $(template).width();
                 var left = $(el).offset().left - (width/2) + 10;
                 
-                if ($(el).hasClass("tooltip-left")) left = $(el).offset().left - width + 25;
-                
-                else if ($(el).hasClass("tooltip-right")) left = $(el).offset().left - 25;
+                if ($(el).hasClass("tooltip-left")) {
+                	$(template).addClass("tooltip-left");
+                	left = $(el).offset().left - width + 25;
+                }
+                else if ($(el).hasClass("tooltip-right")) {
+                	$(template).addClass("tooltip-right");
+                	left = $(el).offset().left - 25;
+                }
                 
                 $(template).css({
                     'top': $(el).offset().top - height - 12,

@@ -42,8 +42,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			http://sgx-api-lb-195267723.ap-southeast-1.elb.amazonaws.com
 			
     		// init real-time/delayed pricing data
-			endpoint = "http://sgx-api-lb-195267723.ap-southeast-1.elb.amazonaws.com/sgx/price"; 
-    		//endpoint = this.fqdn + "/sgx/price";
+    		endpoint = this.fqdn + "/sgx/price";
     		params = { id: this.ticker };
     		UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined);
 			
@@ -102,7 +101,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
             	PAGE.resizeIframeSimple();
 			});
 
+		},
+		
+		industry: function() {
+			return encodeURIComponent(this.companyInfo.industry);
+		},
+		
+		industryGroup: function() {
+			return encodeURIComponent(this.companyInfo.industryGroup);
 		}
+
 
 	};
 	

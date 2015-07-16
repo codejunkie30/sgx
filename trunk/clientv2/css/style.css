@@ -136,7 +136,6 @@ table th, table td {
 
 .inline-block {
 	display: inline-block;
-	margin-right: 10px;
 }
 
 .section-break {
@@ -158,6 +157,13 @@ table th, table td {
 .padded {
 	padding: 10px;
 }
+
+.gray hr {
+    background: #fff none repeat scroll 0 0;
+    border: medium none;
+    height: 3px;
+    margin: 10px 18px;
+} 
 
 /* Containers */
 
