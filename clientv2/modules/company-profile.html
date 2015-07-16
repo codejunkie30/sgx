@@ -277,20 +277,25 @@
 			</div>
 		</div>
 		
-		<div class="section-break" data-bind="visible: $data.hasOwnProperty('alphaFactors') && $data.alphaFactors != null">
+		<div class="section-break">
 			<div class="title">
 				<h5>S&P Capital IQ Alpha Factor Composites <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'alphaFactors'" alt="" src="img/info.jpg" /></h5>
 			</div>
 			<div class="gray padded">
-				<div class="bold">
-					Click on the composite to see companies with the same rank.
-					<hr />
+				<div data-bind="visible: profileTab.hasOwnProperty('alphaFactors') && profileTab.alphaFactors != null">
+					<div class="bold">
+						Click on the composite to see companies with the same rank.
+						<hr />
+					</div>
+					<span class="column" data-bind="template: { name: 'alpha-factor', foreach: profileTab.factors, afterRender: function(el, data) { profileTab.handleFactor($root, el, data); } }"></span> 
 				</div>
-				<span class="column" data-bind="template: { name: 'alpha-factor', foreach: profileTab.factors, afterRender: function(el, data) { profileTab.handleFactor($root, el, data); } }"></span> 
+				<div class="center" data-bind="visible: !profileTab.hasOwnProperty('alphaFactors') || profileTab.alphaFactors == null">
+					<h4>No Data Available</h4>
+				</div>
 			</div>
 		</div>
 		
-		<div class="section-break" data-bind="visibility: $parent.profileTab.hasGTIs($parent)">
+		<div class="section-break" data-bind="visible: profileTab.hasGTIs($root)">
 			<div class="title">
 				<h5>Governance & Transparency Index (GTI) <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'gtiAbout'" alt="" src="img/info.jpg" /></h5>
 			</div>
