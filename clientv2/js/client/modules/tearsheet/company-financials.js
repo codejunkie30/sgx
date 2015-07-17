@@ -7,6 +7,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json" ], functio
 		sections: null,
 		dataPoints: ko.observable([]),
 		currency: ko.observable(""),
+		legendItems: ko.observable([]),
+		hasChart: ko.observable(false),
+		colors: [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ],
 		
 		init: function(tearsheet) {
 
@@ -26,6 +29,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json" ], functio
 		initFinancials: function(tearsheet, data) {
 			
     		var financials = data.financials.slice();
+    		var currency = null;
     		
     		// let's make sure they're sorted
     		financials.sort(function(a, b) {
@@ -42,6 +46,23 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json" ], functio
     		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
 			
 			this.dataPoints(financials);
+			this.currency(financials[0].filingCurrency);
+			
+		},
+		
+		handleClick: function(model, data, event) {
+			
+			var el = $(event.currentTarget).closest(".checkbox");
+			
+			if ($(el).hasClass("checked")) $(el).removeClass("checked");
+			else $(el).addClass("checked");
+			
+			model.financialsTab.renderChart();
+			
+		},
+		
+		renderChart: function() {
+			
 			
 		}
 
