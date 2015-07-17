@@ -266,3 +266,97 @@ div.news {
 .factor.odd {
 	background-color: inherit;
 }
+
+.data-point-container {
+    border: 1px solid #ccc;
+    width: 97%;
+    padding: 0 0 20px 20px;
+}
+
+.data-point-container .header {
+	padding: 0 20px;
+}
+
+.data-point-container .header .tab {
+    background: rgba(0, 0, 0, 0) url("../img/table-info-tab.png") no-repeat scroll center center;
+    color: #fff;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+}
+
+.data-point-container .header .note {
+	position: absolute;
+	right: 50px;
+	text-align: right;
+	font-size: 11px;
+	padding-top: 5px;
+}
+
+.data-point-container table {
+	width: 98%;
+}
+
+.data-point-container table thead th {
+    border: medium none;
+    margin: 0;
+    padding: 20px 0 5px 0 !important;
+    text-align: center;
+}
+
+.data-point-container table thead th, .data-point-container table thead th span {
+    color: #000;
+    font: bold 14px/12px Arial,Helvetica,sans-serif;
+}
+
+.data-point-container .section {
+    border-bottom: 1px dotted #d6d6d6;
+    color: #4d4e50;
+    display: inline-block;
+    font: bold 18px/18px Arial,Helvetica,sans-serif;
+    margin: 0 0 10px;
+}
+
+.data-point-container tbody td {
+	text-align: center;
+}
+
+.data-point-container .trigger {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.data-point-container .checkbox {
+  height: 19px;
+}
+
+.data-point-container .checkbox .trigger {
+  padding-left: 32px;
+  color: #000;
+  font: bold 12px/18px Arial, Helvetica, sans-serif;
+  background: url("../img/sprite-checkbox.jpg") no-repeat 0 -18px;
+}
+
+.data-point-container .checkbox .trigger:hover {
+  background-position: 0 -36px;
+}
+
+.data-point-container .checkbox.checked {
+  background-position: 0 0;
+}
+
+.data-point-container .checkbox.checked .trigger, .data-point-container .checkbox.checked:hover {
+  background-position: 0 0;
+}
+
+.data-point-container .checkbox input {
+  display: none;
+}

@@ -34,6 +34,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	KO.bindingHandlers.format = {
 		update: function(element, valueAccessor, allBindings) {
 	        return KO.bindingHandlers.text.update(element,function(){
+	        	if (valueAccessor() == null) return $(element).html(); 
 	            return PAGE.getFormatted(KO.unwrap(valueAccessor()), allBindings().text);
 	        });
 				

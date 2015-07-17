@@ -15,6 +15,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 
 			// set up some basics
 			this.tearsheet = tearsheet;
+			this.tearsheet.profileTab = this;
 			var self = this;
 
 			// alpha factors
