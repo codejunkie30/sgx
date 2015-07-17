@@ -267,6 +267,38 @@ div.news {
 	background-color: inherit;
 }
 
+.legend-note {
+	margin-bottom: 10px;
+	margin-bottom: 15px;
+}
+
+.legend-note p {
+	font-size: smaller;
+}
+
+.legend-note span {
+	display: inline-block;
+	font-weight: bold;
+}
+
+.legend-note .item {
+	margin-right: 20px;	
+}
+
+.legend-note .item span.color {
+	height: 10px;
+	width: 10px;
+	background-color: red;
+	margin-right: 4px;
+}
+
+.legend-note .item span.parent {
+	display: block;
+	font-weight: normal;
+	font-size: 11px;
+	margin-left: 14px;
+}
+
 .data-point-container {
     border: 1px solid #ccc;
     width: 97%;
@@ -289,8 +321,11 @@ div.news {
 	position: absolute;
 	right: 50px;
 	text-align: right;
-	font-size: 11px;
 	padding-top: 5px;
+}
+
+.data-point-container .header .note, .data-point-container .header .note span {
+	font-size: 11px;
 }
 
 .data-point-container table {
@@ -317,8 +352,14 @@ div.news {
     margin: 0 0 10px;
 }
 
-.data-point-container tbody td {
+.data-point-container table tbody td {
 	text-align: center;
+	vertical-align: middle;
+	height: 22px;
+}
+
+.data-point-container table tbody td, .data-point-container table tbody td span {
+	font-size: 12px;
 }
 
 .data-point-container .trigger {
@@ -339,18 +380,15 @@ div.news {
 }
 
 .data-point-container .checkbox .trigger {
-  padding-left: 32px;
-  color: #000;
-  font: bold 12px/18px Arial, Helvetica, sans-serif;
-  background: url("../img/sprite-checkbox.jpg") no-repeat 0 -18px;
+	padding-left: 32px;
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	background: url("../img/sprite-checkbox.jpg") no-repeat 0 -18px;
 }
 
-.data-point-container .checkbox .trigger:hover {
+.data-point-container .checkbox .trigger:hover, .data-point-container .checkbox.checked {
   background-position: 0 -36px;
-}
-
-.data-point-container .checkbox.checked {
-  background-position: 0 0;
 }
 
 .data-point-container .checkbox.checked .trigger, .data-point-container .checkbox.checked:hover {

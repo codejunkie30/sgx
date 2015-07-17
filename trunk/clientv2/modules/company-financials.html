@@ -1,7 +1,11 @@
-<div class="chart-row">
+<div class="chart-container" data-bind="visible: financialsTab.hasChart()">
 	<div id="large-bar-chart" series-increment="50" default-width="600" default-height="400"></div>
 	<div class="legend-note">
-		<div class="items"></div>
+		<div class="items" data-bind="foreach: financialsTab.legendItems()">
+			<span class="color" data-bind="attr: { 'style': 'background-color:' + color }"></span>
+			<span class="label" data-bind="text: label"></span>
+			<span class="parent" data-bind="text: parentName"></span>
+		</div>
 		<p>Note: The left and right axes may use different scales.</p>
 	</div>
 </div>
@@ -31,7 +35,7 @@
 				<!-- ko foreach : dataPoints -->
 					<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 						<td class="checkbox left">
-							<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group  }">
+							<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group  }, click: function(data, event) { $root.financialsTab.handleClick($root, data, event); }">
 								<span data-bind="text: name"></span>
 								<!-- TODO <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="eps" width="11" height="11" /> -->
 							</div>
