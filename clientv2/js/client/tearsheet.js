@@ -28,6 +28,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 		ticker: UTIL.getParameterByName("code"),
 		
 		profileTab: null,
+		financialsTab: null,
 		priceData: ko.observable({}),
 		
 		initPage: function() {
@@ -96,7 +97,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			// initialize using custom module, please note that applyBindings 
 			// will need to be called when initialization is done 
 			require(["client/modules/tearsheet/" + name], function(tab) {
-				parent.profileTab = tab.init(parent, element);
+				tab.init(parent, element);
             	try { ko.applyBindings(parent, element); } catch(err) {}
             	PAGE.resizeIframeSimple();
 			});
