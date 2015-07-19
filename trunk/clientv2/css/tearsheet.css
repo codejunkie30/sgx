@@ -398,3 +398,9 @@ div.news {
 .data-point-container .checkbox input {
   display: none;
 }
+
+.data-point-container .uncheck {
+    cursor: pointer;
+    font-size: smaller;
+    text-decoration: none;	
+}
