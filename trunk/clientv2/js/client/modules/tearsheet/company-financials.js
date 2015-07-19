@@ -6,8 +6,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 		sections: null,
 		dataPoints: null,
 		currency: null,
-		legendItems: null,
 		series: null,
+		legendItems: null,
 		colors: [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ],
 		
 		init: function(tearsheet) {
@@ -19,7 +19,23 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 			this.series = ko.observable([]);
 			this.dataPoints = ko.observable([]);
 			this.currency = ko.observable("");
-			this.legendItems = ko.observable([]);
+			
+			// legend
+			this.legendItems = ko.computed(function() {
+				var ret = [];
+				if (this.series().length == 0) return ret;
+				$.each(this.series(), function(idx, series) {
+					var trigger = $(".trigger", series);
+					var name = $(trigger).text().trim();
+					var data = $(trigger).data();
+					var parent = $(".section", $(trigger).closest("tbody").prev()).text();
+					data.parent = parent;
+					data.label = name;
+					data.color = tearsheet.financialsTab.colors[idx];
+					ret.push(data);
+				});
+				return ret;
+			}, this);
 			
 			// watch series change events
 			this.series.subscribe(function() { tearsheet.financialsTab.renderChart(tearsheet); });
@@ -128,6 +144,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 			
 		},
 		
+		canUncheck: function(tearsheet, name) {
+			var ret = false;
+			$.each(tearsheet.financialsTab.series(), function(idx, series) {
+				if ($(".trigger", series).data().name == name) ret = true; 
+			});
+			return ret;
+		},
+		
 		chartData: function(model, el) {
 			
 			// already checked
@@ -149,7 +173,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 			
     		// build the new chart
 			var series = [];
-			$(".data-point-container .checked").each(function(idx, el) { series.push(el); });
+			$(".data-point-container .checked").each(function(idx, el) {
+				$("trigger", el).attr("data-color", model.financialsTab.colors[idx]);
+				series.push(el); 
+			});
 			this.series(series);
 			
 		},
