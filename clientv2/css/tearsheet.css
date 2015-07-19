@@ -399,7 +399,7 @@ div.news {
   display: none;
 }
 
-.data-point-container .uncheck {
+.data-point-container .uncheck span {
     cursor: pointer;
     font-size: smaller;
     text-decoration: none;	
