@@ -4,9 +4,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
 			
 		tearsheet: null,
 		sections: null,
-		dataPoints: null,
-		currency: null,
-		series: null,
+		dataPoints: ko.observable([]),
+		currency: ko.observable(""),
+		series: ko.observable([]),
 		legendItems: null,
 		
 		init: function(tearsheet) {
@@ -15,12 +15,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
 			this.tearsheet = tearsheet;
 			this.tearsheet.financialsTab = this;
 			this.sections = JSON.parse(FINANCIALS).financials;
-			this.series = ko.observable([]);
-			this.dataPoints = ko.observable([]);
-			this.currency = ko.observable("");
-			this.legendItems = ko.observable([]);
-			
-			
+			this.series([]);
+			this.dataPoints([]);
+			this.currency("");
+
+			this.legendItems = ko.computed(function() {
+				if (this.series().length == 0) return [];
+				var chart = $('#bar-chart').highcharts(), ret = [];
+				$.each(chart.series, function(idx, series) { ret.push(series.userOptions) });
+				return ret;
+			}, this);
+
 			var self = this;
 
     		var endpoint = tearsheet.fqdn + "/sgx/company/financials";
@@ -208,9 +213,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
                     }
 				}
 			});
-				
-			// ad the series data
-			chart.addSeries({
+			
+			var sData = {
                 name: name,
                 id: data.name + "-series",
 				type: tearsheet.financialsTab.getSeriesType(data.group),
@@ -219,12 +223,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
                 zIndex: tearsheet.financialsTab.getSeriesType(data.group) == "line" ? 50 : 1,
                 parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim(),
                 color: tearsheet.financialsTab.getColor(chart.series)
-			});
-
-			// set the chart size
+			};
+				
+			// add the series data
+			chart.addSeries(sData);
 			chart.setSize(tearsheet.financialsTab.getChartWidth(chart.series.length), tearsheet.financialsTab.getChartHeight(), true);
-			
-    		// resize
     		setTimeout(function() { tearsheet.resizeIframe(tearsheet.getTrueContentHeight(), $('#bar-chart').position().top); }, 100); 
     		
     		// latest series
@@ -241,7 +244,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
     	getColor: function(series) {
     		var colors = [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ];
     		$.each(series, function(idx, data) {  colors = $.grep(colors, function(val) { return data.color != val; }); });
-    		console.log(colors);
     		return colors[0];    		
     	},
     	
