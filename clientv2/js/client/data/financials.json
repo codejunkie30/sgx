@@ -4,6 +4,7 @@
 	      "dataPoints":[
 	         {
 	            "property":"totalRevenue",
+	            "glossaryTerm":"totalRevenue",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"Total Revenue"
@@ -28,6 +29,7 @@
 	         },
 	         {
 	            "property":"eps",
+	            "glossaryTerm":"eps",
 	            "group":"per",
 	            "name":"Normalized Diluted EPS"
 	         },
@@ -143,78 +145,92 @@
 	      "dataPoints":[
 	         {
 	            "property":"returnAssets",
+	            "glossaryTerm":"roa",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Return on Assets"
 	         },
 	         {
 	            "property":"returnCapital",
+	            "glossaryTerm":"roc",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Return on Capital"
 	         },
 	         {
 	            "property":"returnEquity",
+	            "glossaryTerm":"returnOnEquity",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Return on Equity"
 	         },
 	         {
 	            "property":"grossMargin",
+	            "glossaryTerm":"grossMargin",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Gross Margin"
 	         },
 	         {
 	            "property":"ebitdaMargin",
+	            "glossaryTerm":"ebitdaMargin",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"EBITDA Margin"
 	         },
 	         {
 	            "property":"netIncomeMargin",
+	            "glossaryTerm":"netIncomeMargin",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Net Income Margin"
 	         },
 	         {
 	            "property":"assetTurns",
+	            "glossaryTerm":"totalAssetTurnover",
 	            "group":"ratio",
 	            "name":"Total Asset Turnover"
 	         },
 	         {
 	            "property":"currentRatio",
+	            "glossaryTerm":"currentRatio",
 	            "group":"ratio",
 	            "name":"Current Ratio"
 	         },
 	         {
 	            "property":"quickRatio",
+	            "glossaryTerm":"quickRatio",
 	            "group":"ratio",
 	            "name":"Quick Ratio"
 	         },
 	         {
 	            "property":"avgDaysInventory",
+	            "glossaryTerm":"avgDaysInventory",
 	            "group":"ratio",
 	            "name":"Avg Days Inventory"
 	         },
 	         {
 	            "property":"avgDaysPayable",
+	            "glossaryTerm":"avgDaysPayable",
 	            "group":"ratio",
 	            "name":"Avg Days Payable"
 	         },
 	         {
 	            "property":"cashConversion",
+	            "glossaryTerm":"avgCashConversion",
 	            "group":"ratio",
 	            "name":"Avg Cash Conversion"
 	         },
 	         {
 	            "property":"totalDebtEquity",
+	            "glossaryTerm":"totalDebtEquityFinancial",
 	            "format":"ratio",
 	            "group":"ratio",
 	            "name":"Total Debt/Equity"
 	         },
 	         {
 	            "property":"ebitdaInterest",
+	            "glossaryTerm":"ebitdaIntExp",
 	            "group":"ratio",
 	            "name":"EBITDA/Interest Expense"
 	         }
@@ -225,6 +241,7 @@
 	      "dataPoints":[
 	         {
 	            "property":"totalRevenue1YrAnnGrowth",
+	            "glossaryTerm": "totalRev1YrAnnGrowth",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Total Revenue"
@@ -243,6 +260,7 @@
 	         },
 	         {
 	            "property":"eps1YrAnnGrowth",
+	            "glossaryTerm":"eps",
 	            "format":"percent",
 	            "group":"per",
 	            "name":"Normalized Diluted EPS"

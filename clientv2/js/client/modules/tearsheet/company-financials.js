@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstock" ], function(UTIL, ko, FINANCIALS) {
+define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!client/data/glossary.json", "highstock" ], function(UTIL, ko, FINANCIALS) {
 
 	var CF = {
 			
@@ -8,10 +8,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 		currency: null,
 		series: null,
 		legendItems: null,
-		colors: [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ],
 		
 		init: function(tearsheet) {
-
+			
 			// set up some basics
 			this.tearsheet = tearsheet;
 			this.tearsheet.financialsTab = this;
@@ -19,26 +18,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 			this.series = ko.observable([]);
 			this.dataPoints = ko.observable([]);
 			this.currency = ko.observable("");
+			this.legendItems = ko.observable([]);
 			
-			// legend
-			this.legendItems = ko.computed(function() {
-				var ret = [];
-				if (this.series().length == 0) return ret;
-				$.each(this.series(), function(idx, series) {
-					var trigger = $(".trigger", series);
-					var name = $(trigger).text().trim();
-					var data = $(trigger).data();
-					var parent = $(".section", $(trigger).closest("tbody").prev()).text();
-					data.parent = parent;
-					data.label = name;
-					data.color = tearsheet.financialsTab.colors[idx];
-					ret.push(data);
-				});
-				return ret;
-			}, this);
-			
-			// watch series change events
-			this.series.subscribe(function() { tearsheet.financialsTab.renderChart(tearsheet); });
 			
 			var self = this;
 
@@ -82,10 +63,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
 			
 			// categories
 			var categories = [];
-    		$(".data-point-container thead:first th").not(".section, .uncheck").each(function(idx, el) { categories.push($(this).html()); });
+    		$(".data-point-container thead:first th").not(".section, .uncheck").each(function(idx, el) {
+    			var txt = "";
+    			$("span", $(this)).each(function(i, e) {
+    				if (i > 0) txt += "<br />";
+    				txt += $(this).text();
+    			});
+    			categories.push(txt); 
+    		});
 
     		var chart = $('#bar-chart').highcharts({
-    			
+    			colors: [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ],
     			chart: {
     				alignThresholds: true,
     				width: tearsheet.financialsTab.getChartWidth(1),
@@ -124,134 +112,129 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
                         from: 0
                     },
     	        	labels: {
-    	        		useHTML: true
+    	        		useHTML: true,
+    	        		fontSize: '10px'
     	        	}
+                },
+                yAxis: {
+                	title: null
                 }
     		});
-    			
-    		return chart;
-			
+    		
 		},
 		
 		handleClick: function(model, data, event) {
-			
 			var el = $(".checkbox", $(event.currentTarget).closest("tr"));
-			
-			if ($(el).hasClass("checked")) $(el).removeClass("checked");
-			else $(el).addClass("checked");
-			
 			model.financialsTab.chartData(model, el);
-			
 		},
 		
 		canUncheck: function(tearsheet, name) {
 			var ret = false;
-			$.each(tearsheet.financialsTab.series(), function(idx, series) {
-				if ($(".trigger", series).data().name == name) ret = true; 
-			});
+			$.each(tearsheet.financialsTab.series(), function(idx, series) { if ($(".trigger", series).data().name == name) { ret = true; } });
 			return ret;
 		},
 		
 		chartData: function(model, el) {
 			
 			// already checked
-			if ($.grep(this.series(), function(e, i) { return e != el }) > 0) $(el).removeClass("checked");
+			if ($(el).hasClass("checked")) {
+				model.financialsTab.removeSeries(model, el);
+				return;
+			}
 			
 			// block it
-    		if ($(".checked").length > 5) {
-    			$(el).removeClass("checked");
+    		if ($(".checked").length >= 5) {
                 model.modal.open({ type: 'alert',  content: '<h4>Chart Company Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
     			return;
     		}
     		
     		// check for data in the row
     		if ($(el).siblings().filter(function() { return $(this).text() != "-"; }).length <= 0) {
-                $(el).removeClass("checked");
 				model.modal.open({ type: "alert", content: "<p>No data available for this series.</p>" });
     			return;
     		}
-			
-    		// build the new chart
-			var series = [];
-			$(".data-point-container .checked").each(function(idx, el) {
-				$("trigger", el).attr("data-color", model.financialsTab.colors[idx]);
-				series.push(el); 
-			});
-			this.series(series);
+    		
+			// render the chart 
+			this.renderChart(model, el);
 			
 		},
 		
-		renderChart: function(tearsheet) {
+    	removeSeries: function(model, el) {
+    		
+    		var name = $(".trigger", el).attr("data-name");
+    		var chart = $('#bar-chart').highcharts();
+
+    		// remove the series
+    		$(el).removeClass("checked");
+
+    		// remove the series from the chart
+    		chart.get(name).remove();
+    		chart.setSize(this.getChartWidth(chart.series.length - 1), this.getChartHeight(), true);
+    		
+    		// latest series
+    		this.series($(".checked"));
+    		
+    	},
+    	
+		renderChart: function(tearsheet, el) {
 			
+    		// check the box
+    		$(el).addClass("checked");
+    		
+    		// now update the chart
 			var chart = $('#bar-chart').highcharts();
+			var trigger = $(".trigger", el);
+			var data = $(trigger).data();
+			var name = $(trigger).text().trim();
 
-			// remove any items that exist in the chart but no the series
-			$.each(chart.series, function(idx, series) {
-				var matches = $.grep(tearsheet.financialsTab.series(), function(e, i) { return $(e).attr("data-name") == series.name });
-				if (matches.length > 0) chart.get($(matches[0]).attr("data-name")).remove();
+			// create series data
+			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
+			var seriesData = [];
+			$(el).siblings().not(".uncheck").each(function(idx, td) {
+				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
+				seriesData.push({ y: val, events: eventsConfig });
 			});
 			
-			// find any new ones
-			$.each(tearsheet.financialsTab.series(), function(idx, series) {
-
-				// data
-				var trigger = $(".trigger", series);
-				var data = $(trigger).data();
-				var name = $(trigger).text().trim();
-
-				// check to see if it exists
-				var matches = $.grep(chart.series, function(e, i) { return name == e.name; });
-				if (matches.length > 0) return;
-
-				// axis info
-				chart.addAxis({
-			    	id: data.name,
-			    	title: { text: $(trigger).text() },
-			    	opposite: tearsheet.financialsTab.hasLeftYAxis(),
-					labels: {
-	                    formatter: function() {
-	                    	var fmt = data.hasOwnProperty("format") ? data.format : ""; 
-	                    	if (fmt == "cash") return Highcharts.numberFormat(this.value);
-	                    	else if (fmt == "percent") return this.value + "%";
-	                        return Highcharts.numberFormat(this.value, 3);
-	                    }
-					}
-				});
-				
-				// create series data
-				var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
-				var seriesData = [];
-				$(series).siblings().not(".uncheck").each(function(idx, td) {
-					var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
-					seriesData.push({ y: val, events: eventsConfig });
-				});
-
-				// ad the series data
-				chart.addSeries({
-	                name: name,
-	                id: data.name + "-series",
-					type: tearsheet.financialsTab.getSeriesType(data.group),
-	                data: seriesData,
-			    	color: tearsheet.financialsTab.colors[idx],
-	                yAxis: data.name,
-	                zIndex: tearsheet.financialsTab.getSeriesType(data.group) == "line" ? 50 : 1
-				});
-				
-				// set the chart size
-				chart.setSize(tearsheet.financialsTab.getChartWidth(chart.series.length), tearsheet.financialsTab.getChartHeight(), true);
-				
+			// axis info
+			chart.addAxis({
+		    	id: data.name,
+		    	title: { text: name },
+		    	opposite: tearsheet.financialsTab.hasLeftYAxis(),
+				labels: {
+                    formatter: function() {
+                    	var fmt = data.hasOwnProperty("format") ? data.format : ""; 
+                    	if (fmt == "cash") return Highcharts.numberFormat(this.value);
+                    	else if (fmt == "percent") return this.value + "%";
+                        return Highcharts.numberFormat(this.value, 3);
+                    }
+				}
 			});
+				
+			// ad the series data
+			chart.addSeries({
+                name: name,
+                id: data.name + "-series",
+				type: tearsheet.financialsTab.getSeriesType(data.group),
+                data: seriesData,
+                yAxis: data.name,
+                zIndex: tearsheet.financialsTab.getSeriesType(data.group) == "line" ? 50 : 1,
+                parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim()
+			});
+
+			// set the chart size
+			chart.setSize(tearsheet.financialsTab.getChartWidth(chart.series.length), tearsheet.financialsTab.getChartHeight(), true);
 			
     		// resize
-    		setTimeout(function() { tearsheet.resizeIframeSimple(); }, 100); 
+    		setTimeout(function() { tearsheet.resizeIframe(tearsheet.getTrueContentHeight(), $('#bar-chart').position().top); }, 100); 
+    		
+    		// latest series
+    		this.series($(".checked"));
 
 		},
 		
     	hasLeftYAxis: function() {
-    		var chart = $('#bar-chart').highcharts();
-    		if (!chart.hasOwnProperty("yAxis")) { return false; }
-    		var ret = false;
-    		$.each(chart.yAxis, function(idx, axis) { if (!axis.opposite) ret = true; });
+    		var chart = $('#bar-chart').highcharts(), ret = false;
+    		if (chart.hasOwnProperty("yAxis")) { $.each(chart.yAxis, function(idx, axis) { if (typeof axis.opposite !== "undefined" && !axis.opposite) { ret = true; } }); }
     		return ret;
     	},
     	
@@ -281,29 +264,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "highstoc
     		groups["ratio"] = "column";
     		return groups[group];
     	}
-		
-		/**,
-		
-    	drawLegend: function() {
-
-			var chart = $('#large-bar-chart').highcharts();
-
-			$(".legend-note .items .item").remove();
-			
-    		$.each(chart.series, function(idx, s) {
-    			
-    			var div = $("<span />").addClass("item");
-    			$("<span />").addClass("color").css({ "background-color": chart.series[idx].color }).appendTo(div);
-    			$("<span />").addClass("label").html(chart.series[idx].name).appendTo(div);
-    			$("<span />").addClass("parent").html($(".financials-section [data-name='" + chart.series[idx].yAxis.userOptions.id + "']").closest("tbody").prev("thead").find("h4").text()).appendTo(div);
-    			$(div).appendTo(".legend-note .items");
-
-    		});
-    		
-    	},
-
-   
-    	*/
 
 	};
 
