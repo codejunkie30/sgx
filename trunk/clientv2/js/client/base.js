@@ -104,6 +104,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	KO.bindingHandlers.tooltip = {
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			var id = KO.unwrap(valueAccessor());
+			if (id == null) return;
 			$.each(PAGE.glossary.terms, function(idx, term) {
 				if (term.id == id) {
 					$(element).attr("tooltip-copy", term.definition).addClass("tooltip-item");
@@ -203,6 +204,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 			return this;
 			
+		},
+		
+		hasGlossaryTerm: function(name) {
+			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
 		},
 		
         getFormatted: function(fmt, value) {

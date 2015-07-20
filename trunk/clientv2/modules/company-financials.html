@@ -4,8 +4,8 @@
 		<div class="items" data-bind="foreach: financialsTab.legendItems()">
 			<span class="item">
 				<span class="color" data-bind="attr: { 'style': 'background-color:' + color }"></span>
-				<span class="label" data-bind="text: label"></span>
-				<span class="parent" data-bind="text: parent"></span>
+				<span class="label" data-bind="text: name"></span>
+				<span class="parent" data-bind="text: parentName"></span>
 			</span>
 		</div>
 		<p>Note: The left and right axes may use different scales.</p>
@@ -40,7 +40,9 @@
 						<td class="checkbox left">
 							<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.financialsTab.handleClick($root, data, event); }">
 								<span data-bind="text: name"></span>
-								<!-- TODO <img src="img/info.jpg" alt="" class="glossary-item" glossary-key="eps" width="11" height="11" /> -->
+								<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
+									<img src="img/info.jpg" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" width="11" height="11" />
+								</span>
 							</div>
 							<input type="checkbox">
 						</td>
