@@ -73,7 +73,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
     		});
 
     		var chart = $('#bar-chart').highcharts({
-    			colors: [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ],
     			chart: {
     				alignThresholds: true,
     				width: tearsheet.financialsTab.getChartWidth(1),
@@ -218,7 +217,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
                 data: seriesData,
                 yAxis: data.name,
                 zIndex: tearsheet.financialsTab.getSeriesType(data.group) == "line" ? 50 : 1,
-                parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim()
+                parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim(),
+                color: tearsheet.financialsTab.getColor(chart.series)
 			});
 
 			// set the chart size
@@ -236,6 +236,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "text!cli
     		var chart = $('#bar-chart').highcharts(), ret = false;
     		if (chart.hasOwnProperty("yAxis")) { $.each(chart.yAxis, function(idx, axis) { if (typeof axis.opposite !== "undefined" && !axis.opposite) { ret = true; } }); }
     		return ret;
+    	},
+    	
+    	getColor: function(series) {
+    		var colors = [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ];
+    		$.each(series, function(idx, data) {  colors = $.grep(colors, function(val) { return data.color != val; }); });
+    		console.log(colors);
+    		return colors[0];    		
     	},
     	
     	getSeriesType: function(group) {
