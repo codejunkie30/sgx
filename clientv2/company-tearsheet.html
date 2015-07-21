@@ -30,9 +30,9 @@
 
 						<h1 data-bind="text: company.companyInfo.companyName"></h1>
 						<div>
-							<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'type=advanced-screener&industryGroup=' + industryGroup() }"></a> 
+							<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() }"></a> 
 							> 
-							<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'type=advanced-screener&industryGroup=' + industryGroup() + '&industry=' + industry() }"></a>
+							<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() + '&industry=' + industry() }"></a>
 						</div>
 					
 					</td>
