@@ -83,7 +83,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			if (this.viewModel.keywords() == null) $(".search-results th.companyName").click();
 			
 			// resize
-			PAGE.resizeIframe(PAGE.getTrueContentHeight(), scroll);
+			PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
 			
 		},
 		
@@ -233,6 +233,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					$(".pager input").focus();
 					return;
 				} 
+				PAGE.resizeIframe(PAGE.getTrueContentHeight(), this.resultsTop());
 			} , mdl);
 			
 			mdl.pages = ko.computed(function() { 
@@ -253,7 +254,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					this.search = false;
 					return;
 				}
-				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), mdl.resultsTop()); }, 50);
+				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1); }, 50);
 			}, mdl);
 			
 			/**
@@ -312,6 +313,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	val: ko.observable(UTIL.getParameterByName('industry') == "" ? null : UTIL.getParameterByName('industry'))
         			
         	};
+        	
+        	mdl.sectors.val.subscribe(function(change) { mdl.page(1); });
 
 			return mdl;    		
 		}
