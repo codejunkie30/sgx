@@ -137,6 +137,7 @@ define([ "wmsi/utils", "knockout", "client/modules/screener/results", "jquery-pl
 			screenerToggle: function(data, event) {
 				var name = $(event.currentTarget).attr("data-name");
 				var screener = ko.dataFor($(".screener-header")[0]);
+				screener.results.viewModel.sectors.val(null);
 				screener.changeScreenerToggle(name);
 			},
 			

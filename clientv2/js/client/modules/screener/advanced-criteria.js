@@ -60,7 +60,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				$(".search-options[data-section='advanced-screener'] .criteria-select").attr("data-init", "true");
 
 	    		// industry search
-				if (UTIL.getParameterByName("action") == "isearch") {
+				if (this.firstRun && UTIL.getParameterByName("action") == "isearch") {
 					
 					// deselect everything but industrygroup
 					$.each(this.getSelectedFields().fields, function(idx, val) {
@@ -89,6 +89,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		},
 
     	reset: function(finished) {
+    		
+    		this.firstRun = true;
         	
         	$(".search-criteria tbody").children().remove();
         	
@@ -410,6 +412,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         			CRITERIA.maxCriteriaMsg();
         			return;
         		}
+        		
+        		CRITERIA.clickEvents.checkCriteriaItem(mainEl);
         		
         		// let's show loading
         		var data = { "fields" : [ $(mainEl).attr("data-id") ] };
