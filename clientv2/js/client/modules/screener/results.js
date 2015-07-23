@@ -219,6 +219,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				var startIdx = (pg-1)*resultSize;
 				return this.refinedCompanies().slice(startIdx);
 			}, mdl);
+
 			
 			/**
 			 * paging
@@ -308,7 +309,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             		return industries;
             	}, mdl),
             	
-            	val: ko.observable()
+            	val: ko.observable(UTIL.getParameterByName('industry') == "" ? null : UTIL.getParameterByName('industry'))
         			
         	};
 

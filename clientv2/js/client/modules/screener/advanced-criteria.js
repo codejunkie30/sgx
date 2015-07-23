@@ -54,8 +54,32 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			// only apply bindings first time
 			if ($(".search-options[data-section='advanced-screener'] .criteria-select[data-init='true']").length == 0) {
+				
+				// bind
 				ko.applyBindings(screener, $(".search-options[data-section='advanced-screener'] .criteria-select")[0]);
 				$(".search-options[data-section='advanced-screener'] .criteria-select").attr("data-init", "true");
+
+	    		// industry search
+				if (UTIL.getParameterByName("action") == "isearch") {
+					
+					// deselect everything but industrygroup
+					$.each(this.getSelectedFields().fields, function(idx, val) {
+						if (val == "industryGroup") return;
+						screener.criteria.clickEvents.uncheckCriteriaItem($(".checkbox[data-id='" + val + "']"));
+					});
+					
+					var tmpFn = finalize;
+					
+					// select industry
+					finalize = function(data) {
+						var val = UTIL.getParameterByName("industryGroup");
+						screener.criteria.firstRun = false;
+						tmpFn(data);
+						if (val != "") $(".button-dropdown li:contains('" + val + "')").click();
+					};
+					
+				}
+				
 				this.getDistributions(this.getSelectedFields(), finalize);
 				return;
 			}

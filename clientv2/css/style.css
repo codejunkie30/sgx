@@ -429,6 +429,10 @@ background: url("../img/title-back.png");
 
 /** modal */
 
+#cboxOverlay{
+	opacity: .35 !important;
+}
+
 .modal-container {
 	padding: 0 20px 20px 20px;
 	overflow-x: hidden;
