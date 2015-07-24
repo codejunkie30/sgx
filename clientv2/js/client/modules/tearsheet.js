@@ -1,46 +1,18 @@
-define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL, ko, PRICE_CHART) {
-	
-	ko.bindingHandlers.companyTabs = {
-		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-			$(element).tabs({
-	            active: 0,
-	            load: function(event, ui) {
-	            	ko.cleanNode(ui.panel[0]);
-	            	var using = $(ui.tab[0]).attr("using");
-	            	if (typeof using !== "undefined" && using != "") {
-	            		viewModel.tabInit(using, viewModel, ui.panel[0]);
-	            		return;
-	            	}
-	            	try { ko.applyBindings(viewModel, ui.panel[0]); } catch(err) {}
-	            	PAGE.resizeIframeSimple();
-	            },
-	            beforeActivate: function(event, ui) {
-	            	$.each(Highcharts.charts, function(idx, chart) { if (typeof chart !== "undefined") { chart.destroy(); } });
-	            	ui.oldPanel.empty(); 
-	            }
-			});
-		}
-	};
-	
+define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL, ko, PRICE_CHART) {
 	
 	var TEARSHEET = {
 			
 		ticker: UTIL.getParameterByName("code"),
-		
-		profileTab: null,
-		financialsTab: null,
 		priceData: ko.observable({}),
 		
-		initPage: function() {
+		init: function(finished) {
 
-			var self = this; 
+			var self = this;
 
 			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
 			var params = { id: this.ticker };
-			UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initCompanyData(data); }, undefined);
-			
-			http://sgx-api-lb-195267723.ap-southeast-1.elb.amazonaws.com
+			UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initCompanyData(data, finished); }, undefined);
 			
     		// init real-time/delayed pricing data
     		endpoint = this.fqdn + "/sgx/price";
@@ -50,7 +22,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
     		return this;
 		},
 		
-		initCompanyData: function(data) {
+		initCompanyData: function(data, finished) {
 			
 			$.extend(true, this, data);
 			
@@ -64,12 +36,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
 			this.holders = this.hasOwnProperty("holders") && this.holders.hasOwnProperty("holders") ? this.holders.holders : [];
 			this.holders.sort(function(a, b) { return b.shares - a.shares; });
 			
-    		// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
+    		if (typeof finished !== "undefined") finished();
 
-    		// resize
-    		this.resizeIframeSimple();
-			
 		},
 		
 		initPriceData: function(parent, data) {
@@ -90,18 +58,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart" ], function(UTIL
     		
     		parent.priceData(pdata);
 			
-		},
-		
-		tabInit: function(name, parent, element) {
-
-			// initialize using custom module, please note that applyBindings 
-			// will need to be called when initialization is done 
-			require(["client/modules/tearsheet/" + name], function(tab) {
-				tab.init(parent, element);
-            	try { ko.applyBindings(parent, element); } catch(err) {}
-            	PAGE.resizeIframeSimple();
-			});
-
 		},
 		
 		industry: function() {

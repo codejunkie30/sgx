@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/screener/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
+define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
 	
 	
 	var SCREENER = {
@@ -105,14 +105,6 @@ define([ "wmsi/utils", "knockout", "client/modules/screener/results", "jquery-pl
 			
 			this.searchEvents[name](this);
 			
-		},
-		
-		hideLoading: function() {
-			$('#loading').hide();
-		},
-		
-		showLoading: function() {
-			$('#loading').show();
 		},
 		
 		/**

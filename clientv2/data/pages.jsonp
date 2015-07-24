@@ -3,12 +3,15 @@ configuration(
 		"pages": [
 			"index", 
 			"company-tearsheet", 
-			"financials", 
+			"company-financials", 
 			"related", 
 			"alpha-factor", 
 			"", 
 			"trade", 
-			"terms-conditions"
+			"terms-conditions",
+			"company-estimates",
+			"company-charting",
+			"company-comparables"
 		]
 	
 	}
