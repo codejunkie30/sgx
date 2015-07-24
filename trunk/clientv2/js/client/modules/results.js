@@ -19,13 +19,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	
 	var RESULTS = {
 			
-		screener: undefined,
+		parent: undefined,
 		
 		viewModel: null,
 		
-		init: function(screener) {
+		init: function(parent) {
 			
-			this.screener = screener;
+			this.parent = parent;
 			this.viewModel = this.initModel(JSON.parse(fieldData).fieldGroups);
 
 			return this;
@@ -34,7 +34,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		retrieve: function(endpoint, params, keywords, scrollPos) {
 
 			var results = this;
-			results.screener.showLoading();
+			results.parent.showLoading();
 			
 			var success = function(data) { 
 				data.scrollPos = scrollPos;
@@ -42,12 +42,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				data.params = params;
 				if (typeof keywords !== "undefined") data.keywords = keywords;
 				results.render(data); 
-				results.screener.hideLoading(); 
+				results.parent.hideLoading(); 
 			}
 			
 			$(".search-results").hide();
 			
-			UTIL.handleAjaxRequest(this.screener.fqdn + endpoint, params, success, this.fail);
+			UTIL.handleAjaxRequest(this.parent.fqdn + endpoint, params, success, this.fail);
 			
 		},
 
@@ -109,14 +109,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		}
     		
 			var fmt = field.format == "millions" ? "number1" : field.format;
-			val = this.screener.getFormatted(fmt, val);
+			val = this.parent.getFormatted(fmt, val);
     		
     		return val;
 			
 		},
 		
 		companyLink: function(row) {
-			var url = this.screener.pageData.getCompanyPage(row.tickerCode);
+			var url = this.parent.pageData.getCompanyPage(row.tickerCode);
 			return '<a target="_parent" href="' + url + '">' + row.companyName + '</a>' 
 		},
 		
@@ -161,18 +161,18 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                     },
                     
                     confirm: function(settings) {
-                    	RESULTS.screener.modal.close();
+                    	RESULTS.parent.modal.close();
                     }
 			};
 			
-			this.screener.modal.open(settings);
+			this.parent.modal.open(settings);
 			
 		},
 		
 		initModel: function(groups) {
 			
 			var mdl = {
-				screener: this.screener,
+				parent: this.parent,
 				companies: ko.observable(null),
 				fieldGroups: groups,
 				staticFields: [ { "id":"companyName", "name":"Company Name", "format":"string" }, { "id":"tickerCode", "name":"Code", "format":"string" } ],
@@ -206,14 +206,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * actual results
 			 */
 			mdl.refinedCompanies = ko.computed(function() {
-				if (this.companies() == null) return null;
+				if (this.companies() == null) return [];
 				var companies = this.companies().slice();
-				if (typeof mdl.sectors.val() === "undefined") return companies; 
+				if (typeof mdl.sectors.val() === "undefined" || mdl.sectors.val() == null) return companies;
 				return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
 			}, mdl);
 			
 			mdl.currentCompanies = ko.computed(function() {
-				if (this.refinedCompanies() == null) return;
+				if (this.refinedCompanies() == null) return [];
 				var pg = this.page();
 				var resultSize = this.resultSize();
 				var startIdx = (pg-1)*resultSize;

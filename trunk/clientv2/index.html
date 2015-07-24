@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.0" />
     <link rel="stylesheet" href="css/screener.css?v=1.0" />
+    <link rel="stylesheet" href="css/results.css?v=1.0" />
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -19,12 +20,6 @@
 </head>
 
 <body style="width: auto;">
-
-<div id="loading">
-	<div class="loading-text">
-		<img src="img/ajax-loader.gif" />
-	</div>
-</div>
 
 <div class="grid screener-header">
 
@@ -168,7 +163,7 @@
 	<table data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<thead>
 			<tr data-bind="foreach: viewModel.headers">
-				<th data-bind="click: function(data, event) { $parent.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.screener.currentFormats[format].header"></span></th>
+				<th data-bind="click: function(data, event) { $parent.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.parent.currentFormats[format].header"></span></th>
 			</tr>
 		</thead>
 		<tbody>

@@ -416,7 +416,15 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             close: function(filter) {
             	$(".tooltip").remove();
             }
-        }
+        },
+        
+		hideLoading: function() {
+			$('#loading').hide();
+		},
+		
+		showLoading: function() {
+			$('#loading').show();
+		},
 		
 	};
 	
