@@ -125,12 +125,15 @@ public class Company{
 	@ConversionAnnotation(name = "IQ_PRICE_VOL_HIST_YR")
 	private Double priceVolHistYr;
 
-	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
+	@ConversionAnnotation(name = "IQ_RETURN_EQUITY")
 	private Double returnOnEquity;
 
 	@ConversionAnnotation(name = "IQ_SHORT_INTEREST")
 	private Double sharesSoldShort;
 
+	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
+	private Double sharesOutstanding;
+	
 	@ConversionAnnotation(name = "IQ_TARGET_PRICE_NUM_CIQ")
 	private Double targetPriceNum;
 
@@ -619,7 +622,7 @@ public class Company{
 	}
 
 	public Double getSharesOutstanding() {
-		return returnOnEquity;
+		return sharesOutstanding;
 	}
 
 	public Double getSharesSoldShort() {
@@ -792,9 +795,79 @@ public class Company{
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory, dividendHistory);
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory, dividendHistory);
 	}
 	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+			.add("avgBrokerReq", avgBrokerReq)
+			.add("avgTradedVolM3", avgTradedVolM3)
+			.add("avgVolumeM3", avgVolumeM3)
+			.add("basicEpsIncl", basicEpsIncl)
+			.add("beta5Yr", beta5Yr)
+			.add("businessDescription", businessDescription)
+			.add("bvShare", bvShare)
+			.add("capitalExpenditures", capitalExpenditures)
+			.add("cashInvestments", cashInvestments)
+			.add("closePrice", closePrice)
+			.add("companyAddress", companyAddress)
+			.add("companyName", companyName)
+			.add("companyWebsite", companyWebsite)
+			.add("divShare", divShare)
+			.add("ebit", ebit)
+			.add("ebitda", ebitda)
+			.add("ebitdaMargin", ebitdaMargin)
+			.add("employees", employees)
+			.add("eps", eps)
+			.add("filingCurrency", filingCurrency)
+			.add("filingDate", filingDate)
+			.add("fiscalYearEnd", fiscalYearEnd)
+			.add("floatPercentage", floatPercentage)
+			.add("gtiScore", gtiScore)
+			.add("gtiRankChange", gtiRankChange)
+			.add("gvKey", gvKey)
+			.add("highPrice", highPrice)
+			.add("industry", industry)
+			.add("industryGroup", industryGroup)
+			.add("lastSalePrice", lastSalePrice)
+			.add("lowPrice", lowPrice)
+			.add("minorityInterest", minorityInterest)
+			.add("netDebt", netDebt)
+			.add("netIncome", netIncome)
+			.add("netProfitMargin", netProfitMargin)
+			.add("openPrice", openPrice)
+			.add("previousCloseDate", previousCloseDate)
+			.add("previousClosePrice", previousClosePrice)
+			.add("priceVolHistYr", priceVolHistYr)
+			.add("returnOnEquity", returnOnEquity)
+			.add("sharesSoldShort", sharesSoldShort)
+			.add("sharesOutstanding", sharesOutstanding)
+			.add("targetPriceNum", targetPriceNum)
+			.add("targetPrice", targetPrice)
+			.add("tickerCode", tickerCode)
+			.add("tbv", tbv)
+			.add("totalAssets", totalAssets)
+			.add("totalDebt", totalDebt)
+			.add("totalDebtEbitda", totalDebtEbitda)
+			.add("totalDebtEquity", totalDebtEquity)
+			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
+			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
+			.add("totalRevenue", totalRevenue)
+			.add("tradeName", tradeName)
+			.add("volume", volume)
+			.add("vwapAsOfDate", vwapAsOfDate)
+			.add("vwapCurrency", vwapCurrency)
+			.add("volWeightedAvgPrice", volWeightedAvgPrice)
+			.add("yearFounded", yearFounded)
+			.add("yearHigh", yearHigh)
+			.add("yearLow", yearLow)
+			.add("priceHistory", priceHistory)
+			.add("dividendHistory", dividendHistory)
+			.toString();
+	}
+
 	@Override
 	public boolean equals(Object object){
 		if (object instanceof Company) {
@@ -840,6 +913,7 @@ public class Company{
 				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
 				&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
 				&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
+				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
 				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
 				&& Objects.equal(this.targetPrice, that.targetPrice)
 				&& Objects.equal(this.tickerCode, that.tickerCode)
@@ -864,75 +938,6 @@ public class Company{
 				&& Objects.equal(this.dividendHistory, that.dividendHistory);
 		}
 		return false;
-	}
-
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("avgBrokerReq", avgBrokerReq)
-			.add("avgTradedVolM3", avgTradedVolM3)
-			.add("avgVolumeM3", avgVolumeM3)
-			.add("basicEpsIncl", basicEpsIncl)
-			.add("beta5Yr", beta5Yr)
-			.add("businessDescription", businessDescription)
-			.add("bvShare", bvShare)
-			.add("capitalExpenditures", capitalExpenditures)
-			.add("cashInvestments", cashInvestments)
-			.add("closePrice", closePrice)
-			.add("companyAddress", companyAddress)
-			.add("companyName", companyName)
-			.add("companyWebsite", companyWebsite)
-			.add("divShare", divShare)
-			.add("ebit", ebit)
-			.add("ebitda", ebitda)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("employees", employees)
-			.add("eps", eps)
-			.add("filingCurrency", filingCurrency)
-			.add("filingDate", filingDate)
-			.add("fiscalYearEnd", fiscalYearEnd)
-			.add("floatPercentage", floatPercentage)
-			.add("gtiScore", gtiScore)
-			.add("gtiRankChange", gtiRankChange)
-			.add("gvKey", gvKey)
-			.add("highPrice", highPrice)
-			.add("industry", industry)
-			.add("industryGroup", industryGroup)
-			.add("lastSalePrice", lastSalePrice)
-			.add("lowPrice", lowPrice)
-			.add("minorityInterest", minorityInterest)
-			.add("netDebt", netDebt)
-			.add("netIncome", netIncome)
-			.add("netProfitMargin", netProfitMargin)
-			.add("openPrice", openPrice)
-			.add("previousCloseDate", previousCloseDate)
-			.add("previousClosePrice", previousClosePrice)
-			.add("priceVolHistYr", priceVolHistYr)
-			.add("returnOnEquity", returnOnEquity)
-			.add("sharesSoldShort", sharesSoldShort)
-			.add("targetPriceNum", targetPriceNum)
-			.add("targetPrice", targetPrice)
-			.add("tickerCode", tickerCode)
-			.add("tbv", tbv)
-			.add("totalAssets", totalAssets)
-			.add("totalDebt", totalDebt)
-			.add("totalDebtEbitda", totalDebtEbitda)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
-			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-			.add("totalRevenue", totalRevenue)
-			.add("tradeName", tradeName)
-			.add("volume", volume)
-			.add("vwapAsOfDate", vwapAsOfDate)
-			.add("vwapCurrency", vwapCurrency)
-			.add("volWeightedAvgPrice", volWeightedAvgPrice)
-			.add("yearFounded", yearFounded)
-			.add("yearHigh", yearHigh)
-			.add("yearLow", yearLow)
-			.add("priceHistory", priceHistory)
-			.add("dividendHistory", dividendHistory)
-			.toString();
 	}
 
 }

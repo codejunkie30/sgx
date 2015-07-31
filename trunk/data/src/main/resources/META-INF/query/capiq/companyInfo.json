@@ -65,7 +65,7 @@
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RE", "properties":{"CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RETURN_ASSETS", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RETURN_CAPITAL", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
-{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RETURN_EQUITY", "properties":{"PERIODTYPE":"IQ_FY", "CURRENCYID":"SGD"}},
+{"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_RETURN_EQUITY", "properties":{"PERIODTYPE":"IQ_LTM", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_SHARESOUTSTANDING", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_SHORT_INTEREST", "properties":{"STARTDATE":"$startDate$", "CURRENCYID":"SGD"}},
 {"function":"GDSP", "identifier":"$id$","mnemonic":"IQ_TARGET_PRICE_NUM_CIQ"},
