@@ -624,6 +624,10 @@ public class Company{
 	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
+	
+	public void setSharesOutstanding(Double sharesOutstanding) {
+		this.sharesOutstanding = sharesOutstanding;
+	}
 
 	public Double getSharesSoldShort() {
 		return sharesSoldShort;
