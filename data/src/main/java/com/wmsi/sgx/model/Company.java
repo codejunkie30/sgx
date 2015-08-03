@@ -347,7 +347,7 @@ public class Company{
 		else{
 			BigDecimal share = new BigDecimal(divShare);
 			BigDecimal close = new BigDecimal(lastSalePrice);
-			return share.divide(close, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
+			return share.divide(close, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 		}
 	}
 
