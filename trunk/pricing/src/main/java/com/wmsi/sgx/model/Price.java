@@ -14,6 +14,7 @@ public class Price{
 	private Double highPrice;
 	private Double lowPrice;
 	private Double lastPrice;
+	private Double lastTradeVolume;
 	private Double openPrice;
 	private Double closePrice;
 	private Date previousDate;
@@ -21,7 +22,7 @@ public class Price{
 	private Date lastTradeTimestamp;
 	private String tradingCurrency;
 	private Double volume;
-		
+
 	public Double getBidPrice() {
 		return bidPrice;
 	}
@@ -118,6 +119,14 @@ public class Price{
 		this.volume = volume;
 	}
 
+	public Double getLastTradeVolume() {
+		return lastTradeVolume;
+	}
+
+	public void setLastTradeVolume(Double lastTradeVolume) {
+		this.lastTradeVolume = lastTradeVolume;
+	}
+
 	public Double getChange() {
 		Double change = 0.0D;
 
@@ -139,39 +148,37 @@ public class Price{
 	}
 
 	@Override
-	public int hashCode(){
-		return Objects.hashCode(lastPrice, openPrice, closePrice, previousDate, currentDate, lastTradeTimestamp, tradingCurrency, volume);
+	public int hashCode() {
+		return Objects.hashCode(bidPrice, askPrice, highPrice, lowPrice, lastPrice, lastTradeVolume, openPrice,
+				closePrice, previousDate, currentDate, lastTradeTimestamp, tradingCurrency, volume);
 	}
-	
+
 	@Override
-	public boolean equals(Object object){
-		if (object instanceof Price) {
+	public boolean equals(Object object) {
+		if(object instanceof Price){
 			Price that = (Price) object;
-			return Objects.equal(this.lastPrice, that.lastPrice)
-				&& Objects.equal(this.openPrice, that.openPrice)
-				&& Objects.equal(this.closePrice, that.closePrice)
-				&& Objects.equal(this.previousDate, that.previousDate)
-				&& Objects.equal(this.currentDate, that.currentDate)
-				&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp)
-				&& Objects.equal(this.tradingCurrency, that.tradingCurrency)
-				&& Objects.equal(this.volume, that.volume);
+			return Objects.equal(this.bidPrice, that.bidPrice) && Objects.equal(this.askPrice, that.askPrice)
+					&& Objects.equal(this.highPrice, that.highPrice) && Objects.equal(this.lowPrice, that.lowPrice)
+					&& Objects.equal(this.lastPrice, that.lastPrice)
+					&& Objects.equal(this.lastTradeVolume, that.lastTradeVolume)
+					&& Objects.equal(this.openPrice, that.openPrice) && Objects.equal(this.closePrice, that.closePrice)
+					&& Objects.equal(this.previousDate, that.previousDate)
+					&& Objects.equal(this.currentDate, that.currentDate)
+					&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp)
+					&& Objects.equal(this.tradingCurrency, that.tradingCurrency)
+					&& Objects.equal(this.volume, that.volume);
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("DECIMAL_PLACES", DECIMAL_PLACES)
-			.add("lastPrice", lastPrice)
-			.add("openPrice", openPrice)
-			.add("closePrice", closePrice)
-			.add("previousDate", previousDate)
-			.add("currentDate", currentDate)
-			.add("lastTradeTimestamp", lastTradeTimestamp)
-			.add("tradingCurrency", tradingCurrency)
-			.add("volume", volume)
-			.toString();
+		return Objects.toStringHelper(this).add("bidPrice", bidPrice).add("askPrice", askPrice)
+				.add("highPrice", highPrice).add("lowPrice", lowPrice).add("lastPrice", lastPrice)
+				.add("lastTradeVolume", lastTradeVolume).add("openPrice", openPrice).add("closePrice", closePrice)
+				.add("previousDate", previousDate).add("currentDate", currentDate)
+				.add("lastTradeTimestamp", lastTradeTimestamp).add("tradingCurrency", tradingCurrency)
+				.add("volume", volume).toString();
 	}
-	
+
 }

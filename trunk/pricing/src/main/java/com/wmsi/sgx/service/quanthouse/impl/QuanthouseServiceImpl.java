@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.domain.TradeEvent;
 import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.service.company.CompanyService;
 import com.wmsi.sgx.service.company.CompanyServiceException;
-import com.wmsi.sgx.service.quanthouse.PriceService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseService;
 import com.wmsi.sgx.service.quanthouse.QuanthouseServiceException;
+import com.wmsi.sgx.service.quanthouse.TradeEventService;
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSData;
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSService;
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSSubscriptionObserver;
@@ -25,19 +26,83 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 	private static final Logger log = LoggerFactory.getLogger(QuanthouseServiceImpl.class);
 
-	@Autowired
-	private FeedOSService feedOSService;
-
 	private static final String MARKET_CODE = "XSES";
 	private static final String MARKET_EXTENTION = "_RY";
+
+	@Autowired
+	private FeedOSService feedOSService;
 
 	@Autowired
 	private CompanyService companyService;
 
 	@Autowired
-	private PriceService priceService;
+	private TradeEventService tradeEventService;
 
-	@Scheduled(fixedDelay = 60000)
+	/**
+	 * Get intraday price data for the given id within the given market
+	 * 
+	 * @param market
+	 *            - Market ID belongs too
+	 * @param id
+	 *            - Local Market identifier
+	 * @return The last price
+	 * @throws QuanthouseServiceException
+	 */
+	@Override
+	// @Cacheable(value = "price")
+	public Price getPrice(String market, String id) throws QuanthouseServiceException {
+		
+		TradeEvent event = tradeEventService.getLatestEvent(market, toMarketId(id));
+		
+		return bindPriceData(event);				
+	}
+
+	/**
+	 * Get intraday prices for all trade events by day. 
+	 * @param market
+	 *            - Market ID belongs too
+	 * @param id
+	 *            - Local Market identifier
+	 * @return The prices for
+	 * @throws QuanthouseServiceException
+	 */
+	@Override
+	public List<Price> getIntradayPrices(String market, String id) throws QuanthouseServiceException {
+
+		List<Price> ret = new ArrayList<Price>();
+		List<TradeEvent> events = tradeEventService.getEventsForDate(market, toMarketId(id), new Date());
+		
+		for(TradeEvent e : events){
+			ret.add(bindPriceData(e));
+		}
+		
+		return ret;
+	}
+	
+	private String toMarketId(String id){
+		return id.concat(MARKET_EXTENTION);
+	}
+
+	private Price bindPriceData(TradeEvent data) {
+		Price p = new Price();
+		p.setLastPrice(data.getLastPrice());
+		p.setClosePrice(data.getClosePrice());
+		p.setOpenPrice(data.getOpenPrice());
+		p.setCurrentDate(data.getCurrentDate());
+		p.setPreviousDate(data.getPreviousDate());
+		p.setLastTradeTimestamp(data.getLastTradeTime());
+		p.setLastTradeVolume(data.getLastTradeVolume());
+		p.setTradingCurrency(data.getTradingCurrency());
+		p.setVolume(data.getVolume());
+		p.setAskPrice(data.getAskPrice());
+		p.setBidPrice(data.getBidPrice());
+		p.setHighPrice(data.getHighPrice());
+		p.setLowPrice(data.getLowPrice());
+
+		return p;
+	}
+
+	@Scheduled(fixedDelayString= "${quanthouse.subscription.time}")
 	private void subscribe() throws QuanthouseServiceException {
 
 		log.debug("Subscribing to real time update feed");
@@ -53,6 +118,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			@Override
 			public void subscriptionResponse(List<FeedOSData> data) {
 
+				// TODO - Remove this, for testing only
 				for(FeedOSData d : data)
 					saveEvent(d);
 
@@ -85,88 +151,26 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 	private void saveEvent(FeedOSData data) {
 
-		com.wmsi.sgx.domain.Price price = new com.wmsi.sgx.domain.Price();
+		TradeEvent event = new TradeEvent();
 
-		price.setTicker(data.getTradingSymbol());
+		event.setTicker(data.getTradingSymbol());
 		
-		price.setAskPrice(data.getAsk());
-		price.setBidPrice(data.getBid());
-		price.setClosePrice(data.getClosePrice());
-		price.setCurrentDate(data.getCurrentBusinessDay());
-		price.setHighPrice(data.getHighPrice());
-		price.setLastPrice(data.getLastPrice());
-		price.setLastTradePrice(data.getLastTradePrice());
-		price.setLastTradeTime(getLastTradeTimestamp(data));
-		price.setLastTradeVolume(data.getLastTradeVolume());
-		price.setLowPrice(data.getLowPrice());
-		price.setOpenPrice(data.getOpenPrice());
-		price.setPreviousDate(data.getPreviousBusinessDay());
-		price.setTradingCurrency(data.getTradingCurrency());
-		price.setVolume(data.getTotalVolume());
-		
-		priceService.savePrice(price);
-	}
-
-	/**
-	 * Get intraday price data for the given id within the given market
-	 * 
-	 * @param market
-	 *            - Market ID belongs too
-	 * @param id
-	 *            - Local Market identifier
-	 * @return The last price
-	 * @throws QuanthouseServiceException
-	 */
-	/*
-	 * @Override
-	 * 
-	 * @Cacheable(value = "price") public Price getPrice(String market, String
-	 * id) throws QuanthouseServiceException { FeedOSData priceData =
-	 * feedOSService.getPriceData(market, id.concat(MARKET_EXTENTION)); return
-	 * bindPriceData(priceData); }
-	 */
-
-	@Override
-	// @Cacheable(value = "price")
-	public Price getPrice(String market, String id) throws QuanthouseServiceException {
-		Price priceData = null;
-
-		/*
-		 * for(FeedOSData data : subscribed){
-		 * 
-		 * if(data.getTradingSymbol().equals(id.concat(MARKET_EXTENTION))){
-		 * priceData = bindPriceData(data); break; } }
-		 */
-
-		return priceData;
-
-	}
-
-	public List<Price> getIntradayPrices(String market, String id) throws QuanthouseServiceException {
-
-		List<Price> ret = new ArrayList<Price>();
-
-		Price price = getPrice(market, id);
-
-		return ret;
-	}
-
-	private Price bindPriceData(FeedOSData data) {
-		Price p = new Price();
-		p.setLastPrice(data.getLastPrice());
-		p.setClosePrice(data.getClosePrice());
-		p.setOpenPrice(data.getOpenPrice());
-		p.setCurrentDate(data.getCurrentBusinessDay());
-		p.setPreviousDate(data.getPreviousBusinessDay());
-		p.setLastTradeTimestamp(getLastTradeTimestamp(data));
-		p.setTradingCurrency(data.getTradingCurrency());
-		p.setVolume(data.getTotalVolume());
-		p.setAskPrice(data.getAsk());
-		p.setBidPrice(data.getBid());
-		p.setHighPrice(data.getHighPrice());
-		p.setLowPrice(data.getLowPrice());
-
-		return p;
+		event.setAskPrice(data.getAsk());
+		event.setBidPrice(data.getBid());
+		event.setClosePrice(data.getClosePrice());
+		event.setCurrentDate(data.getCurrentBusinessDay());
+		event.setHighPrice(data.getHighPrice());
+		event.setLastPrice(data.getLastPrice());
+		event.setLastTradePrice(data.getLastTradePrice());
+		event.setLastTradeTime(getLastTradeTimestamp(data));
+		event.setLastTradeVolume(data.getLastTradeVolume());
+		event.setLowPrice(data.getLowPrice());
+		event.setOpenPrice(data.getOpenPrice());
+		event.setPreviousDate(data.getPreviousBusinessDay());
+		event.setTradingCurrency(data.getTradingCurrency());
+		event.setVolume(data.getTotalVolume());
+		event.setMarket(data.getMarket());
+		tradeEventService.saveEvent(event);
 	}
 
 	private Date getLastTradeTimestamp(FeedOSData data) {
@@ -184,5 +188,6 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			lastTrade = lastOffBookTrade;
 
 		return lastTrade;
-	}
+	}	
+
 }
