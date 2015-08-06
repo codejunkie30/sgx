@@ -44,6 +44,14 @@
 		<level value="info"/>
 	</logger>
 	
+		<logger name="org.hibernate">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.hibernate.type">
+		<level value="trace" />
+	</logger>
+	
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />

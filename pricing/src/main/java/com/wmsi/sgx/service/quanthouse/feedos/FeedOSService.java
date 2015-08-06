@@ -90,6 +90,7 @@ public class FeedOSService {
 			fosd.setTradingSymbol(ticker.get_string());
 			fosd.setIsin(isin.get_string());
 			fosd.setId(chara.getInternal_instrument_code());
+			fosd.setMarket(market);
 			data.put(chara.getInternal_instrument_code(), fosd);
 		}
 		

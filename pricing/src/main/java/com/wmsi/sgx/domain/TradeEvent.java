@@ -6,18 +6,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.google.common.base.Objects;
 
-@Entity(name = "prices")
-public class Price{
+@Entity(name = "TradeEvents")
+@Table(name = "trade_events")
+public class TradeEvent{
 
 	@Id
 	@GeneratedValue(generator = "priceGenerator")
 	@GenericGenerator(name = "priceGenerator", strategy = "increment")
 	private Long id;
+
+	@Column(name = "market")
+	private String market;
 
 	@Column(name = "ticker")
 	private String ticker;
@@ -66,6 +71,10 @@ public class Price{
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getMarket() {
+		return market;
 	}
 
 	public String getTicker() {
@@ -132,6 +141,10 @@ public class Price{
 		this.id = id;
 	}
 
+	public void setMarket(String market) {
+		this.market = market;
+	}
+
 	public void setTicker(String ticker) {
 		this.ticker = ticker;
 	}
@@ -194,25 +207,28 @@ public class Price{
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("id", id).add("ticker", ticker).add("lastTradeTime", lastTradeTime)
-				.add("lastPrice", lastPrice).add("volume", volume).add("lastTradeVolume", lastTradeVolume)
-				.add("lastTradePrice", lastTradePrice).add("bidPrice", bidPrice).add("askPrice", askPrice)
-				.add("highPrice", highPrice).add("lowPrice", lowPrice).add("openPrice", openPrice)
-				.add("closePrice", closePrice).add("previousDate", previousDate).add("currentDate", currentDate)
+		return Objects.toStringHelper(this).add("id", id).add("market", market).add("ticker", ticker)
+				.add("lastTradeTime", lastTradeTime).add("lastPrice", lastPrice).add("volume", volume)
+				.add("lastTradeVolume", lastTradeVolume).add("lastTradePrice", lastTradePrice)
+				.add("bidPrice", bidPrice).add("askPrice", askPrice).add("highPrice", highPrice)
+				.add("lowPrice", lowPrice).add("openPrice", openPrice).add("closePrice", closePrice)
+				.add("previousDate", previousDate).add("currentDate", currentDate)
 				.add("tradingCurrency", tradingCurrency).toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(ticker, lastTradeTime, lastPrice, volume, lastTradeVolume, lastTradePrice, bidPrice,
-				askPrice, highPrice, lowPrice, openPrice, closePrice, previousDate, currentDate, tradingCurrency);
+		return Objects.hashCode(market, ticker, lastTradeTime, lastPrice, volume, lastTradeVolume, lastTradePrice,
+				bidPrice, askPrice, highPrice, lowPrice, openPrice, closePrice, previousDate, currentDate,
+				tradingCurrency);
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if(object instanceof Price){
-			Price that = (Price) object;
-			return Objects.equal(this.ticker, that.ticker) && Objects.equal(this.lastTradeTime, that.lastTradeTime)
+		if(object instanceof TradeEvent){
+			TradeEvent that = (TradeEvent) object;
+			return Objects.equal(this.market, that.market) && Objects.equal(this.ticker, that.ticker)
+					&& Objects.equal(this.lastTradeTime, that.lastTradeTime)
 					&& Objects.equal(this.lastPrice, that.lastPrice) && Objects.equal(this.volume, that.volume)
 					&& Objects.equal(this.lastTradeVolume, that.lastTradeVolume)
 					&& Objects.equal(this.lastTradePrice, that.lastTradePrice)

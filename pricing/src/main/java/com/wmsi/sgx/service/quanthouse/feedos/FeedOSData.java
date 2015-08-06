@@ -19,6 +19,7 @@ public class FeedOSData{
 	private Date lastTradeTimestamp;
 	private double lastTradeVolume;
 	private Double lowPrice;
+	private String market;
 	private Double openPrice;
 	private Date previousBusinessDay;
 	private String tradingCurrency;
@@ -75,6 +76,10 @@ public class FeedOSData{
 
 	public Double getLowPrice() {
 		return lowPrice;
+	}
+
+	public String getMarket() {
+		return market;
 	}
 
 	public Double getOpenPrice() {
@@ -149,6 +154,10 @@ public class FeedOSData{
 		this.lowPrice = lowPrice;
 	}
 
+	public void setMarket(String market) {
+		this.market = market;
+	}
+
 	public void setOpenPrice(Double openPrice) {
 		this.openPrice = openPrice;
 	}
@@ -176,16 +185,16 @@ public class FeedOSData{
 				.add("isin", isin).add("lastOffBookTradeTimestamp", lastOffBookTradeTimestamp)
 				.add("lastPrice", lastPrice).add("lastTradePrice", lastTradePrice)
 				.add("lastTradeTimestamp", lastTradeTimestamp).add("lastTradeVolume", lastTradeVolume)
-				.add("lowPrice", lowPrice).add("openPrice", openPrice).add("previousBusinessDay", previousBusinessDay)
-				.add("tradingCurrency", tradingCurrency).add("tradingSymbol", tradingSymbol)
-				.add("totalVolume", totalVolume).toString();
+				.add("lowPrice", lowPrice).add("market", market).add("openPrice", openPrice)
+				.add("previousBusinessDay", previousBusinessDay).add("tradingCurrency", tradingCurrency)
+				.add("tradingSymbol", tradingSymbol).add("totalVolume", totalVolume).toString();
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(ask, bid, closePrice, currentBusinessDay, highPrice, id, isin,
 				lastOffBookTradeTimestamp, lastPrice, lastTradePrice, lastTradeTimestamp, lastTradeVolume, lowPrice,
-				openPrice, previousBusinessDay, tradingCurrency, tradingSymbol, totalVolume);
+				market, openPrice, previousBusinessDay, tradingCurrency, tradingSymbol, totalVolume);
 	}
 
 	@Override
@@ -202,7 +211,8 @@ public class FeedOSData{
 					&& Objects.equal(this.lastTradePrice, that.lastTradePrice)
 					&& Objects.equal(this.lastTradeTimestamp, that.lastTradeTimestamp)
 					&& Objects.equal(this.lastTradeVolume, that.lastTradeVolume)
-					&& Objects.equal(this.lowPrice, that.lowPrice) && Objects.equal(this.openPrice, that.openPrice)
+					&& Objects.equal(this.lowPrice, that.lowPrice) && Objects.equal(this.market, that.market)
+					&& Objects.equal(this.openPrice, that.openPrice)
 					&& Objects.equal(this.previousBusinessDay, that.previousBusinessDay)
 					&& Objects.equal(this.tradingCurrency, that.tradingCurrency)
 					&& Objects.equal(this.tradingSymbol, that.tradingSymbol)
