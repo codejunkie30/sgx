@@ -87,6 +87,7 @@ public class DividendService extends AbstractDataService{
 	
 	private List<DividendValue> duplicates(List<DividendValue> list){
 		List<DividendValue> ret = new ArrayList<DividendValue>();
+		ret.add(list.get(0));
 		for(int i = 1; i < list.size(); i++){
 			if(!list.get(i).getDividendExDate().equals(list.get(i-1).getDividendExDate()))
 				ret.add(list.get(i));
