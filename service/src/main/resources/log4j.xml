@@ -28,8 +28,12 @@
 		<level value="debug" />
 	</logger>
 
-	<logger name="com.wmsi.sgx.service.quanthouse">
-		<level value="debug" />
+	<logger name="org.springframework.orm.jpa">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.transaction.interceptor">
+		<level value="trace" />
 	</logger>
 
 	<logger name="org.apache.http.wire">
