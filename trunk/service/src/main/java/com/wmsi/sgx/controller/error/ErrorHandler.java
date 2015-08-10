@@ -13,20 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.wmsi.sgx.service.quanthouse.InvalidInstrumentException;
-
 @ControllerAdvice
 public class ErrorHandler{
 	
 	private Logger log = LoggerFactory.getLogger(ErrorHandler.class);
 	
-	@ExceptionHandler(InvalidInstrumentException.class )
-	@ResponseStatus(HttpStatus.BAD_REQUEST)	
-	public @ResponseBody ErrorResponse handleInvalidInstrumentException(InvalidInstrumentException e) {
-		log.error("Invalid ID requested");
-		return new ErrorResponse(new ErrorMessage("Invalid ID", 4001));
-	}
-
 	@ExceptionHandler(MethodArgumentNotValidException.class )
 	@ResponseStatus(HttpStatus.BAD_REQUEST)	
 	public @ResponseBody ErrorResponse handleInvalidInstrumentException(MethodArgumentNotValidException e) {

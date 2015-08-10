@@ -15,8 +15,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import com.wmsi.sgx.service.quanthouse.feedos.FeedOSConfig;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.service" })
@@ -47,18 +46,7 @@ public class AppConfig{
 		cacheManager.setCacheManager(ehCacheManagerFactoryBean().getObject());
 		return cacheManager;
 	}
-	
-	@Bean
-	public FeedOSConfig feedOSConfig() {
-		FeedOSConfig config = new FeedOSConfig();
-		config.setSessionName(env.getProperty("quanthouse.api.sessionName"));
-		config.setUrl(env.getProperty("quanthouse.api.url"));
-		config.setPort(env.getProperty("quanthouse.api.port", Integer.class));
-		config.setUser(env.getProperty("quanthouse.api.user"));
-		config.setPassword(env.getProperty("quanthouse.api.password"));
-		return config;
-	}
-	
+
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
 		PropertySourcesPlaceholderConfigurer ppc = new PropertySourcesPlaceholderConfigurer();
