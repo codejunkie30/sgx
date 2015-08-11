@@ -16,13 +16,17 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.integration.version>2.2.4.RELEASE</spring.integration.version>
-		<spring.version>4.0.2.RELEASE</spring.version>
+		<org.springframework-security-version>3.2.4.RELEASE</org.springframework-security-version>
+		<spring.version>4.1.7.RELEASE</spring.version>
+		<spring.data.version>1.10.1.RELEASE</spring.data.version>
+		<spring.data.jpa.version>1.8.2.RELEASE</spring.data.jpa.version>
 		<guava.version>14.0.1</guava.version>
 		<jackson.version>2.1.3</jackson.version>
 		<junit.version>4.11</junit.version>
 		<testNG.version>6.8.8</testNG.version>
 		<log4j.version>1.2.17</log4j.version>
 		<es.version>1.0.1</es.version>
+		<hibernate.version>4.3.10.Final</hibernate.version>
 	</properties>
 
 	<repositories>
@@ -69,8 +73,8 @@
 				<configuration>
 					<excludedGroups>integration</excludedGroups>
 					<systemPropertyVariables>
-                	    <log4j.configuration>file:${basedir}/src/test/resources/log4j-surefire.xml</log4j.configuration>
-                	</systemPropertyVariables>
+						<log4j.configuration>file:${basedir}/src/test/resources/log4j-surefire.xml</log4j.configuration>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -97,6 +101,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -109,6 +120,36 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${org.springframework-security-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${org.springframework-security-version}</version>
 		</dependency>
 
 		<!-- Spring Integration -->
@@ -132,6 +173,56 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Spring Data -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring.data.jpa.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${spring.data.version}</version>
+		</dependency>
+
+		<!-- Database Access -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sql</groupId>
+			<artifactId>sqlserver</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
 		<!-- Logging -->
 
 		<dependency>
@@ -152,19 +243,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- Local dependencies -->
-		<dependency>
-			<groupId>com.quant</groupId>
-			<artifactId>feedos</artifactId>
-			<version>3.9.1.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.quant</groupId>
-			<artifactId>nanoxml-lite</artifactId>
-			<version>2.2.1</version>
 		</dependency>
 
 		<!-- Other -->
@@ -200,6 +278,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${org.springframework-security-version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
@@ -229,6 +313,17 @@
 			<version>${es.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.4</version>
+		</dependency>
 
 		<!-- Testing -->
 
@@ -275,6 +370,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 			<version>0.8.1</version>
@@ -303,6 +404,12 @@
 			<artifactId>hamcrest-all</artifactId>
 			<version>1.3</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.7</version>
 		</dependency>
 
 	</dependencies>
