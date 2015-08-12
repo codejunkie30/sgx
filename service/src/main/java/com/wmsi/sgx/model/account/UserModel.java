@@ -1,4 +1,4 @@
-package com.wmsi.sgx.dto;
+package com.wmsi.sgx.model.account;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +9,7 @@ import com.wmsi.sgx.model.validation.annotations.PasswordMatch;
 import com.wmsi.sgx.model.validation.annotations.PasswordValid;
 
 @PasswordMatch(passwordField = "password", matchField = "passwordMatch")
-public class UserDTO{
+public class UserModel{
 
 	@Email
 	@NotNull
@@ -53,8 +53,8 @@ public class UserDTO{
 	
 	@Override
 	public boolean equals(Object object){
-		if (object instanceof UserDTO) {
-			UserDTO that = (UserDTO) object;
+		if (object instanceof UserModel) {
+			UserModel that = (UserModel) object;
 			return Objects.equal(this.email, that.email)
 				&& Objects.equal(this.password, that.password)
 				&& Objects.equal(this.passwordMatch, that.passwordMatch);

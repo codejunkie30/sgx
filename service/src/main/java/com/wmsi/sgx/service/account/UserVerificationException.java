@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account;
 
 public class UserVerificationException extends Exception{
 

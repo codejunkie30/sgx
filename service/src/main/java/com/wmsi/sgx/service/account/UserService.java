@@ -1,19 +1,19 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account;
 
 import java.util.Set;
 
 import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
-import com.wmsi.sgx.dto.UserDTO;
+import com.wmsi.sgx.model.account.UserModel;
 
 public interface UserService{
 
-	User createUser(UserDTO dto) throws UserExistsException;
+	User createUser(UserModel dto) throws UserExistsException;
 
 	User getUserByUsername(String username);
 
-	Boolean changePassword(UserDTO user, String token) throws InvalidTokenException;
+	Boolean changePassword(UserModel user, String token) throws InvalidTokenException;
 
 	UserLogin recordLogin(UserLogin login);
 
@@ -25,6 +25,6 @@ public interface UserService{
 
 	Set<Authority> getAuthorities(User user);
 
-	Boolean changePassword(UserDTO user) throws UserNotFoundException;
+	Boolean changePassword(UserModel user) throws UserNotFoundException;
 
 }

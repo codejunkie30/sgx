@@ -7,7 +7,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 import com.wmsi.sgx.domain.UserLogin;
-import com.wmsi.sgx.service.UserService;
+import com.wmsi.sgx.service.account.UserService;
 
 @Component
 public class LoginFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent>{

@@ -1,8 +1,8 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account;
 
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.User;
-import com.wmsi.sgx.dto.AccountModel;
+import com.wmsi.sgx.model.account.AccountModel;
 
 public interface AccountService{
 
