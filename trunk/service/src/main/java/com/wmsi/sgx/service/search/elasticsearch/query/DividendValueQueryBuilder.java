@@ -1,7 +1,5 @@
 package com.wmsi.sgx.service.search.elasticsearch.query;
 
-import java.util.Date;
-
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;

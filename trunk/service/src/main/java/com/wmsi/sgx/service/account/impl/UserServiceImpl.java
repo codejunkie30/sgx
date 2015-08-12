@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -15,12 +15,16 @@ import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.PasswordReset;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
-import com.wmsi.sgx.dto.UserDTO;
+import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.repository.PasswordResetRepository;
 import com.wmsi.sgx.repository.UserLoginRepository;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.repository.UserVerificationRepository;
 import com.wmsi.sgx.security.SecureTokenGenerator;
+import com.wmsi.sgx.service.account.InvalidTokenException;
+import com.wmsi.sgx.service.account.UserExistsException;
+import com.wmsi.sgx.service.account.UserNotFoundException;
+import com.wmsi.sgx.service.account.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public User createUser(UserDTO dto) throws UserExistsException{
+	public User createUser(UserModel dto) throws UserExistsException{
 
 		if(getUserByUsername(dto.getEmail()) != null)
 			throw new UserExistsException("There is already an account with this email address");
@@ -69,7 +73,7 @@ public class UserServiceImpl implements UserService{
 		return userReposistory.save(user);
 	}
 
-	private User saveUser(User user, UserDTO dto){
+	private User saveUser(User user, UserModel dto){
 
 		user.setUsername(dto.getEmail());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -102,7 +106,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public Boolean changePassword(UserDTO user, String token) throws InvalidTokenException {
+	public Boolean changePassword(UserModel user, String token) throws InvalidTokenException {
 		
 		PasswordReset reset = passwordResetRepository.findByToken(token);
 		
@@ -134,7 +138,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public Boolean changePassword(UserDTO dto) throws UserNotFoundException{
+	public Boolean changePassword(UserModel dto) throws UserNotFoundException{
 		
 		User user = getUserByUsername(dto.getEmail());
 		

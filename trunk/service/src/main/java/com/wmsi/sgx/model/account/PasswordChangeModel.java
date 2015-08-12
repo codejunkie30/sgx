@@ -1,11 +1,11 @@
-package com.wmsi.sgx.dto;
+package com.wmsi.sgx.model.account;
 
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.validation.annotations.PasswordMatch;
 import com.wmsi.sgx.model.validation.annotations.PasswordValid;
 
 @PasswordMatch(passwordField = "password", matchField = "passwordMatch")
-public class PasswordChange{
+public class PasswordChangeModel{
 
 	@PasswordValid
 	private String password;
@@ -40,8 +40,8 @@ public class PasswordChange{
 
 	@Override
 	public boolean equals(Object object) {
-		if(object instanceof PasswordChange){
-			PasswordChange that = (PasswordChange) object;
+		if(object instanceof PasswordChangeModel){
+			PasswordChangeModel that = (PasswordChangeModel) object;
 			return Objects.equal(this.password, that.password) && Objects.equal(this.passwordMatch, that.passwordMatch);
 		}
 		return false;

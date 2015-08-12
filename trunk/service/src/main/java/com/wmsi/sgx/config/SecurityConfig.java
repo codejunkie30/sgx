@@ -67,10 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 		.authorizeRequests()
 		
-		.antMatchers("/#{servletContext.contextPath}/user/*").permitAll()
-		.antMatchers("/#{servletContext.contextPath}/company/**").permitAll()
-		.antMatchers("/#{servletContext.contextPath}/search/**").permitAll()
-		.antMatchers("/#{servletContext.contextPath}/account/*").hasRole("USER")
+		.antMatchers("/user/*").permitAll()
+		.antMatchers("/company/*").permitAll()
+		.antMatchers("/search/*").permitAll()
+		.antMatchers("/account/*").hasRole("USER")
 		.anyRequest().authenticated()
 
 		.and()

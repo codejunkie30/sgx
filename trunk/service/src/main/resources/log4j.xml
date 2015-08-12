@@ -28,18 +28,6 @@
 		<level value="debug" />
 	</logger>
 
-	<logger name="org.springframework.orm.jpa">
-		<level value="info" />
-	</logger>
-
-	<logger name="org.springframework.security">
-		<level value="debug" />
-	</logger>
-
-	<logger name="org.springframework.transaction.interceptor">
-		<level value="trace" />
-	</logger>
-
 	<logger name="org.apache.http.wire">
 		<level value="info"/>
 	</logger>

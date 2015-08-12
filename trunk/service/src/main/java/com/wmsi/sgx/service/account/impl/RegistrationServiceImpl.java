@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account.impl;
 
 import java.text.MessageFormat;
 
@@ -11,7 +11,17 @@ import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
-import com.wmsi.sgx.dto.UserDTO;
+import com.wmsi.sgx.model.account.UserModel;
+import com.wmsi.sgx.service.EmailService;
+import com.wmsi.sgx.service.account.AccountCreationException;
+import com.wmsi.sgx.service.account.AccountService;
+import com.wmsi.sgx.service.account.InvalidTokenException;
+import com.wmsi.sgx.service.account.RegistrationService;
+import com.wmsi.sgx.service.account.UserExistsException;
+import com.wmsi.sgx.service.account.UserNotFoundException;
+import com.wmsi.sgx.service.account.UserService;
+import com.wmsi.sgx.service.account.UserVerificationException;
+import com.wmsi.sgx.service.account.UserVerificationService;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
@@ -27,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public void registerUser(UserDTO dto) throws UserExistsException{
+	public void registerUser(UserModel dto) throws UserExistsException{
 	
 		// Create the user record in the database.
 		User user = userService.createUser(dto);
@@ -74,7 +84,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public Boolean convertToPremiumAccount(UserDTO dto){
+	public Boolean convertToPremiumAccount(UserModel dto){
 
 		// TODO ECommerce validation to make sure user has paid.
 
@@ -111,7 +121,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 	@Override
 	@Transactional
-	public Boolean resetPassword(UserDTO user, String resetToken) throws InvalidTokenException{
+	public Boolean resetPassword(UserModel user, String resetToken) throws InvalidTokenException{
 		
 		Boolean success = userService.changePassword(user, resetToken);
 		
@@ -124,7 +134,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Override
 	@Transactional
 	@PreAuthorize("hasRole('ROLE_USER') and authentication.name == #user.email")
-	public Boolean changePassword(UserDTO user) throws UserNotFoundException{
+	public Boolean changePassword(UserModel user) throws UserNotFoundException{
 		
 		Boolean success = userService.changePassword(user);
 		
@@ -141,8 +151,8 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private EmailService emailService;
 	
-	private static final String emailBody = "Please verify your email address http://localhost:8080/user/verify?ref={0}";	
-	private static final String resetEmailBody = "To reset your password vist http://localhost:8080/user/password?ref={0}";	
+	private static final String emailBody = "Please verify your email address http://localhost:8080/sgx/user/verify?ref={0}";	
+	private static final String resetEmailBody = "To reset your password vist http://localhost:8080/sgx/user/password?ref={0}";	
 	private static final String resetConfirmEmailBody = "Your password was reset.";
 
 	private void sendVerificationEmail(String email, String token){

@@ -85,15 +85,10 @@ public class AppConfig{
 
 	@Bean
 	public MailSender mailSender(){
-		// TODO Move to properties. 
-		String host = "email-smtp.us-east-1.amazonaws.com"; // env.getProperty("mail.host");
-		String user = "AKIAILM2MCZLWH6LLBWQ";
-		String pass = "AlxnDsap3lIu9w2Zfsvvs4ypqd8YwGFu3bkf4v4j6794";
-
 		JavaMailSenderImpl sender = new JavaMailSenderImpl();
-		sender.setHost(host);
-		sender.setUsername(user);
-		sender.setPassword(pass);
+		sender.setHost(env.getProperty("mail.host"));
+		sender.setUsername(env.getProperty("mail.user"));
+		sender.setPassword(env.getProperty("mail.password"));
 		return sender;
 	}
 

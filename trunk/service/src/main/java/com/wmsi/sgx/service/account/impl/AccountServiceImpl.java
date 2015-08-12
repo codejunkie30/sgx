@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
-import com.wmsi.sgx.dto.AccountModel;
+import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.repository.AccountRepository;
+import com.wmsi.sgx.service.account.AccountCreationException;
+import com.wmsi.sgx.service.account.AccountService;
 
 @Service
 public class AccountServiceImpl implements AccountService{

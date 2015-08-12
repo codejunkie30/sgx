@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.repository.AuthorityRepository;
-import com.wmsi.sgx.service.UserService;
+import com.wmsi.sgx.service.account.UserService;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{

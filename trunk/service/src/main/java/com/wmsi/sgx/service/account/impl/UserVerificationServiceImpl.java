@@ -1,4 +1,4 @@
-package com.wmsi.sgx.service;
+package com.wmsi.sgx.service.account.impl;
 
 import java.util.Date;
 
@@ -11,9 +11,11 @@ import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserVerification;
 import com.wmsi.sgx.repository.UserVerificationRepository;
 import com.wmsi.sgx.security.SecureTokenGenerator;
+import com.wmsi.sgx.service.account.UserVerificationException;
+import com.wmsi.sgx.service.account.UserVerificationService;
 
 @Service
-public class UserVerificationService{
+public class UserVerificationServiceImpl implements UserVerificationService{
 
 	@Autowired
 	private UserVerificationRepository userVerificationReposistory;
@@ -21,6 +23,7 @@ public class UserVerificationService{
 	@Autowired
 	private SecureTokenGenerator tokenGenerator;
 
+	@Override
 	@Transactional
 	public String createVerificationToken(User user){
 		
@@ -34,6 +37,7 @@ public class UserVerificationService{
 		return userVerification.getToken(); 
 	}
 	
+	@Override
 	@Transactional
 	public User verifyToken(String token) throws UserVerificationException{
 	

@@ -1,4 +1,4 @@
-package com.wmsi.sgx.dto;
+package com.wmsi.sgx.model.account;
 
 import java.util.Date;
 
