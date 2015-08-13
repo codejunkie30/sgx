@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -28,7 +27,6 @@ import com.wmsi.sgx.security.SecureTokenGenerator;
 
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.security"})
-// @EnableCaching
 @EnableWebSecurity
 @EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -101,7 +99,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public RestAuthenticationFailureHandler authenticationFailureHandler;
 
 	@Bean
-	// TODO Remove this?
 	public UserDetailsService userDetailsService() {
 		return customUserDetailsService;
 	}
