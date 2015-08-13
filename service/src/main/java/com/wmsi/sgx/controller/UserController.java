@@ -2,6 +2,8 @@ package com.wmsi.sgx.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,8 @@ import com.wmsi.sgx.service.account.UserVerificationException;
 @RequestMapping("/user")
 public class UserController{
 
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private RegistrationService registrationService;
 
@@ -43,7 +47,20 @@ public class UserController{
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
 	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException{
 	
-		return registrationService.sendPasswordReset(user.getUsername());
+		// Catch all exceptions and always return success so attackers have no way to guess at 
+		// usernames. 
+		try{
+			registrationService.sendPasswordReset(user.getUsername());	
+		}
+		catch(UserNotFoundException ue){
+			log.debug("Password reset user not found", ue );
+		}
+		catch(Exception e){
+			log.debug("Exception occrued in password reset", e);			
+		}
+		
+		return true;
+		
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
@@ -53,13 +70,13 @@ public class UserController{
 	}
 	
 	// TEMP TEMP TEMP TEMP
-	// The following endpoing is for proof of concept only and should be removed once ecommerce is full
-	// intetgrated. 
+	// The following endpoint is for proof of concept only and should be removed once ecommerce is full
+	// integrated. 
 	@RequestMapping(value = "premium", method = RequestMethod.POST)
 	public @ResponseBody Boolean registerPremium(@RequestBody UserModel user){
 		
 		
-		// TODO Ecomm integeration 
+		// TODO Ecomm integration 
 		// This end point should not be public but is here for testing purposes
 		// remove this and integrate this service call with the Ecommerce callback for successful payment.
 		return registrationService.convertToPremiumAccount(user);
