@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SGX</title>
+    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.0" id="print-css" />	
+</head>
+
+<body class="print-page" paper-height="11in" paper-width="8.5in" paper-margin="[ 0,0,0,0 ]">
+
+	<div class="page">	
+		<div class="container_3 header" type="special">		
+			<div class="row logos">
+				<span class="column50"><img src="img/sgxlogo.jpg" /></span>
+				<span class="column50 right"><img src="img/CAPIQ.png" /></span>
+				<hr />
+			</div>		
+		</div>
+		
+		<div class="container_3" id="tearsheet">
+			<div class="row">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" class="company-header">
+					<tr>
+						<td class="page-title">
+							<h1><span data-bind="text: company.companyInfo.companyName"></span> (<span  data-bind="text: company.companyInfo.tickerCode"></span>)</h1>
+						</td>
+						<td>
+							<span class="stock-price">
+								<div class="main">
+									<span class="currency" data-bind="text: priceData().currency"></span>  
+									<span class="lastPrice formattable" data-bind="text: priceData().price, format: 'number'">--</span>
+									&nbsp;
+									<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }">--</span>
+								</div>
+								<div class="last-updated">
+									Last Price:&nbsp;
+									<span class="date">
+										<span class="date" data-bind="text: priceData().day"></span>
+										<span class="time" data-bind="text: priceData().time"></span>  SGT
+									</span>
+								</div>
+							</span>				
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+              	<div class="module dark-module breadcrumb-tree">
+					<span>Industry Tree:</span> 
+					<span class="dynamic">
+						<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() }"></a> 
+						> 
+						<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() + '&industry=' + industry() }"></a>
+					</span>
+				</div>
+			</div>
+			<div class="row">			
+	        	<table cellpadding="0" width="100%">	        	
+	        		<tr>
+	        			<td width="60%">
+              				<div id="price-volume"></div>
+			                <div class="businessDescription">
+			                	<h3>Company Description</h3>
+			                    <p data-bind="text: company.companyInfo.businessDescription">-</p>
+			                </div>			
+						</td>
+						<td width="40%" class="right" valign="top">
+							<div class="dark-module stock-events left">
+								<div class="title">
+									<h3>In The News</h3>
+								</div>
+								<div class="gray-border padded">
+									<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
+										<li>
+											<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
+											<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+										</li>
+									</ul>
+									<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
+								</div>
+							</div>							
+							<div class="dark-module left">							
+				               	<h3>General Information</h3>				               	
+				               	<p>
+				               		<span class="bold">Contact</span>
+				               		<br />
+				               		<span data-bind="text:companyInfo.companyAddress">-</span>
+				               	</p>	
+				               	<p>
+				               		<span class="bold">Year Founded</span>
+				               		<br />
+				               		<span data-bind="text:companyInfo.yearFounded">-</span>
+				               	</p>	
+				               	<p>
+				               		<span class="bold">Current Fiscal Year End</span>
+				               		<br />
+				               		<span data-bind="text:companyInfo.fiscalYearEnd, format: 'date'">-</span>
+				               	</p>	
+				               	<p class="companyWebsite" data-bind="visible: companyInfo.hasOwnProperty('companyWebsite')">
+				               		<span class="bold">Website</span>
+				               		<br />
+									<span data-bind="text: companyInfo.companyWebsite"></span>
+				               	</p>			               	
+							</div>						
+						</td>
+					</tr>
+				</table>			
+			</div>			
+		</div>	
+	</div>
+	
+	<div class="page">
+		<div class="container_3 header" type="special">		
+			<div class="row logos">
+				<span class="column50"><img src="img/sgxlogo.jpg" /></span>
+				<span class="column50 right"><img src="img/CAPIQ.png" /></span>
+				<hr />
+			</div>		
+		</div>
+
+	    <div class="container_3">
+	        <div class="row">	        
+	        	<table cellpadding="0">	        	
+	        		<tr>
+	        			<td width="60%">
+			            	<h3>Overview</h3>			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+				                        <td width="25%">Previous Open Price</td>
+				                        <td width="25%" class="normal right" data-bind="text: companyInfo.openPrice, format: 'dollars'">-</td>
+				                        <td width="25%">Previous Day High/Low</td>
+				                        <td width="25%" class="normal right"><span data-bind="text: companyInfo.highPrice, format: 'dollars'"></span>-<span data-bind="text: companyInfo.lowPrice, format: 'dollars'"></span></td>
+				                    </tr>
+				                    <tr class="even">
+				                        <td>Previous Day Volume</td>
+				                        <td class="normal right" data-bind="text: companyInfo.volume, format: 'volume'">-</td>
+				                        <td>Previous Close</td>
+				                        <td class="normal right" data-bind="text: companyInfo.previousClosePrice, format: 'dollars'">-</td>
+				                    </tr>
+				                    <tr>
+				                        <td>Previous Close Date</td>
+				                        <td class="normal right" data-bind="text: companyInfo.previousCloseDate, format: 'date'">-</td>
+				                        <td>52 Week High/Low</td>
+				                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh, format: 'number'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'number'">-</span></td>
+				                    </tr>
+				                    <tr class="even">
+				                        <td>5-Year Beta</td>
+				                        <td class="normal right" data-bind="text: companyInfo.beta5Yr, format: 'number'">-</td>
+				                        <td>Shares Outstanding</td>
+				                        <td class="normal right" data-bind="text: companyInfo.sharesOutstanding, format: 'volume'">-</td>
+				                    </tr>
+				                    <tr>
+				                        <td>Average 3-month Volume</td>
+				                        <td class="normal right" data-bind="text: companyInfo.avgVolumeM3, format: 'volume'">-</td>
+				                        <td>Normalized Diluted EPS</td>
+				                        <td class="normal right" data-bind="text: companyInfo.eps, format: 'number'">-</td>
+				                    </tr>
+				                    <tr class="even">
+				                        <td>Total Market Cap</td>
+				                        <td class="normal right" data-bind="text: companyInfo.marketCap, format: 'millions'">-</td>
+				                        <td>Float</td>
+				                        <td class="normal right" data-bind="text: companyInfo.floatPercentage, format: 'percent'">-</td>
+				                    </tr>
+				                    <tr>
+										<td>6-month VWAP</td>
+										
+										<!-- has vwap -->
+										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice')">
+											<span data-bind="text: companyInfo.vwapCurrency"></span> 
+											<span data-bind="text: companyInfo.volWeightedAvgPrice, format: 'dollars'"></span> 
+											<span class="normal">as of</span> 
+											<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
+										</td>
+		
+										<!--  doesn't -->
+										<td class="normal" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice')">-</td>
+		
+										<!-- both -->
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										
+									</tr>
+								</tbody>
+							</table>
+							
+							<h3>Valuation</h3>
+			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+										<td width="25%">Price/Book Value</td>
+										<td width="25%" class="property formattable" data-format="number" data-name="priceToBookRatio">-</td>
+										<td width="25%">P/E Ratio</td>
+										<td width="25%" class="property formattable" data-format="number" data-name="peRatio">-</td>
+									</tr>
+									<tr class="even">
+										<td>Dividend Yield</td>
+										<td class="property formattable" data-format="percent" data-name="dividendYield" data-unit="percent">-</td>
+										<td>EV/EBITDA</td>
+										<td class="property formattable" data-format="number" data-name="evEbitData">-</td>
+									</tr>
+									<tr>
+										<td colspan="4" class="right note">All data based on previous day information.</td>
+									</tr>
+								</tbody>
+							</table>
+			
+							<h3>Financials</h3>
+			
+							<table cellspacing="0" class="panel">
+								<tbody>
+									<tr>
+				                        <td>Debt/EBITDA</td>
+				                        <td data-bind="text: companyInfo.totalDebtEbitda, format: 'number'">-</td>
+				                        <td>Cap Ex</td>
+				                        <td data-bind="text: companyInfo.capitalExpenditures, format: 'millions'">-</td>
+				                    </tr>
+				                    <tr class="even">
+				                        <td>Total Debt</td>
+				                        <td data-bind="text: companyInfo.totalDebt, format: 'millions'">-</td>
+				                        <td>EBIT</td>
+				                        <td data-bind="text: companyInfo.ebit, format: 'millions'">-</td>
+				                    </tr>
+				                    <tr>
+				                        <td>Enterprise Value</td>
+				                        <td data-bind="text: companyInfo.enterpriseValue, format: 'millions'">-</td>
+				                        <td>Total Revenue</td>
+				                        <td data-bind="text: companyInfo.totalRevenue, format: 'millions'">-</td>
+				                    </tr>
+				                    <tr class="even">
+				                        <td>Total Assets</td>
+				                        <td data-bind="text: companyInfo.totalAssets, format: 'millions'">-</td>
+				                        <td>Net Income</td>
+				                        <td data-bind="text: companyInfo.netIncome, format: 'millions'">-</td>
+				                    </tr>
+				                    <tr>
+				                        <td>Cash & ST Investments</td>
+				                        <td data-bind="text: companyInfo.cashInvestments, format: 'millions'">-</td>
+				                        <td>EBITDA</td>
+				                        <td data-bind="text: companyInfo.ebitda, format: 'millions'">-</td>
+				                    </tr>
+				                    <tr>
+				                    	<td colspan="4" class="right note">
+				                    		All data based on last reported information from <span data-bind="text: companyInfo.filingDate, format: 'date'"></span>.  
+				                    	</td>
+				                    </tr>
+								</tbody>
+							</table>
+							
+							<h3>Dividends</h3>
+							<table cellspacing="0" class="panel">
+								<thead data-bind="visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
+									<tr>
+										<td width="25%">Ex-Date</td>
+				         				<td width="25%">Pay Date</td>
+				         				<td width="25%">Type</td>
+				         				<td width="25%">Price</td>
+				         			</tr>
+				         		</thead>
+				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues, visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
+				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
+										<td data-bind="text: dividendExDate, format: 'date'">-</td>
+										<td data-bind="text: dividendPayDate, format: 'date'">-</td>
+										<td data-bind="text: dividendType">-</td>
+										<td data-bind="text: dividendPrice, format: 'number'">-</td>
+				         			</tr>
+				         		</tbody>
+				         		<tbody data-bind="visible: !$data.hasOwnProperty('dividendHistory') && !$data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length == 0">
+				         			<tr>
+				         				<td class="custom note"><span>There is no dividend data available.</span></td>
+				         			</tr>
+				         		</tbody>
+				         	</table>
+
+
+
+							<h3>Ownership</h3>
+			
+							<table cellspacing="0" class="panel">
+								<thead>
+									<tr>
+										<td width="50%">Substantial Shareholders</td>
+										<td width="25%">Number of shares held</td>
+										<td width="25%">Percent of shares held</td>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: $data.holders">
+									<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
+										<td data-bind="text:name">-</td>
+										<td data-bind="text:shares, format: 'number'">-</td>
+										<td data-bind="text:percent, format: 'percent'">-</td>
+									</tr>
+								</tbody>
+							</table>
+				        			
+	        			
+	        			</td>
+	        			<td width="40%" class="right">
+	        				<div class="dark-module valuation left">
+								<h3>Valuation</h3>
+				
+								<table cellspacing="0" class="panel">
+									<tbody>
+										<tr>
+					                        <td>Price/Book Value</td>
+											<td data-bind="text: companyInfo.priceToBookRatio, format: 'number'">-</td>
+					                        <td>P/E Ratio</td>
+					                        <td data-bind="text: companyInfo.peRatio, format: 'number'">-</td>
+					                    </tr>
+					                    <tr class="even">
+					                        <td>Dividend Yield</td>
+					                        <td data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
+					                        <td>EV/EBITDA</td>
+					                        <td data-bind="text: companyInfo.evEbitData, format: 'number'">-</td>
+					                    </tr>
+					                    <tr>
+					                    	<td colspan="4" class="right note">All data based on previous day information.</td>
+					                    </tr>
+									</tbody>
+								</table>
+							</div>
+			                <div class="dark-module progress-estimate left">
+								<h3>S&amp;P Capital IQ Consensus Estimates</h3>
+			                    <div class="has-estimate" data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum')  && companyInfo.targetPriceNum >= 3">
+			                    	<div class="center bold">Consensus Recommendation</div>
+										<div class="recommendation" data-bind="css: 'opt-' + Math.round(companyInfo.avgBrokerReq)">
+											<span class="inline-block">Sell</span>
+											<span class="inline-block center">Hold</span>
+											<span class="inline-block right">Buy</span>
+					                	</div>
+					                	<hr />
+					                	<div class="center bold">Consensus Target Price</div>
+					                	<div class="center consensus-price"><span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
+			                    </div>
+			                    <div class="center" data-bind="visible: !companyInfo.hasOwnProperty('targetPriceNum') || companyInfo.targetPriceNum < 3">
+									<h4>No Recommendation</h4>
+								</div>
+			                </div>	        				
+			                
+			                <!-- alpha factors -->
+			                <div class="dark-module alpha-factors left">
+			                
+			                	<h3>S&amp;P Capital IQ Alpha Factor Composites</h3>
+			                	
+			                    <div data-bind="visible: $data.hasOwnProperty('alphaFactors') && $data.alphaFactors != null">
+									<div class="bold">
+										Click on the composite to see companies with the same rank.
+										<hr />
+									</div>
+									<span class="column" data-bind="template: { name: 'alpha-factor', foreach: factors, afterRender: function(el, data) { handleFactor($root, el, data); } }"></span> 
+								</div>
+								<div class="center" data-bind="visible: !$data.hasOwnProperty('alphaFactors') || $data.alphaFactors == null">
+									<h4>No Data Available</h4>
+								</div>
+			                </div>							
+			                
+			                <div class="module dark-module gti-block left">
+								<h3>Governance &amp; Transparency Index (GTI)</h3>
+			                    <table cellspacing="0" width="100%">
+									<thead>
+										<tr>
+											<td width="40%">GTI Year</td>
+											<td width="30%">Rank</td>
+											<td width="30%">Score</td>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: $data.gtis.gtis">
+										<tr data-bind="css: { 'even': ($index() % 2 == 0) }">
+											<td data-bind="text:issue.substring(3, 7)">-</td>
+											<td data-bind="text:rank">-</td>
+											<td data-bind="text:totalScore">-</td>
+										</tr>
+									</tbody>
+								</table>
+			                </div>	        			
+	        			</td>
+	        		</tr>
+	        	</table>				
+			</div>				
+		</div>
+	</div>
+	<div class="page" id="financials">
+		<div class="container_3 header" type="special">		
+			<div class="row logos">
+				<span class="column50"><img src="img/sgxlogo.jpg" /></span>
+				<span class="column50 right"><img src="img/CAPIQ.png" /></span>
+				<hr />
+			</div>		
+		</div>
+		
+		<div class="container_3">
+			<div class="row financials-section">		
+				<h2>Financials</h2>				
+				<p>In millions <span class="currency"></span>, except per-share items.</p>	
+				<!-- ko foreach : sections -->	
+				<table class="statistics">
+						<thead>
+							<tr>
+								<th class="section"><h4 data-bind="text: name"></h4></th>
+								<!-- ko foreach : $parent.dataPoints -->
+									<th class="title">
+										<span data-bind="text: absPeriod.indexOf('LTM') != -1 ? 'LTM Ending' : absPeriod"></span>
+										<!--<br />
+										<span data-bind="text: periodDate, format: 'date'"></span>-->
+									</th>
+								<!-- /ko -->
+								<th class="uncheck" data-bind="visible: $root.series().length > 0">&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- ko foreach : dataPoints -->
+								<tr data-bind="css: { 'even': ($index() % 2 == 0) }">
+									<td>
+										<span data-bind="text: name"></span>
+									</td>
+									<!-- ko foreach : $root.dataPoints -->
+										<td data-bind="text: $data.hasOwnProperty($parent.property) ? $data[$parent.property] : '-', format: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
+									<!-- /ko -->
+									<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
+										<span data-bind="visible: $root.canUncheck($root, property)">[UNCHECK]</span>
+									</td>
+								</tr>
+							<!-- /ko -->
+						</tbody>
+				</table>
+				<!-- /ko -->
+
+			
+			</div>	
+		
+		</div>
+		
+	</div>
+	
+	<div class="page">
+
+		<div class="container_3 header" type="special">
+		
+			<div class="row logos">
+				<span class="column50"><img src="img/sgxlogo.jpg" /></span>
+				<span class="column50 right"><img src="img/CAPIQ.png" /></span>
+				<hr />
+			</div>
+		
+		</div>
+		
+		<div class="container_3">
+
+			<div class="row terms">
+				<h2>Terms and Conditions</h2>
+			
+				<h4>Your use of SGX StockFacts is subject to the below terms and conditions:</h4>
+				
+				<ul>
+					<li>Singapore Exchange Securities Trading Limited ("SGX"), any of its third-party licensors (including but not limited to Capital IQ, Inc. ("Capital IQ") or their respective affiliates shall not be liable for (a) the accuracy or completeness of the information or software furnished through SGX StockFacts, all of which are provided on an "as is" basis, or (b) delays, interruptions or omissions therein, or (c) for any lost profits, indirect, special or consequential damages. Companies that have no trading activity, are suspended, or on trading halt for longer than a year will not be displayed on this page.</li>
+					<li>SGX and all third party information and data providers (collectively referred to as "Information Providers"), and any other third party involved in or relating to SGX StockFacts and/or the provision of the data and information contained therein make no representations or warranties of any kind, either express or implied, with respect to SGX StockFacts, the data and information contained therein or the results to be obtained by the use thereof.  Without limiting the generality of the foregoing, SGX, its Information Providers and any other third party involved in or related to the making or compiling of SGX StockFacts and/or the data and information contained thereof expressly disclaim any and all warranties of originality, accuracy, timeliness, completeness, non-infringement, merchantability and fitness for any particular purpose.</li>
+					<li>You assume the entire risk of any use you may make of SGX StockFacts and/or the data and information contained therein. In no event shall SGX, its Information Providers or any third party involved in or related to the making or compiling of any of SGX StockFacts and/or the data and information contained therein, be liable to you, or any other person, for (a) any direct or indirect damages, including, without limitation, any lost profits, lost savings or other incidental, special or consequential damages, or (b) the inability to use SGX StockFacts and/or the data and information contained therein, regardless of the form of action, even if SGX, any of its information providers, or any other third party involved in or related to the making or compiling of any of SGX StockFacts and/or the data and information contained therein has been advised of or otherwise might have anticipated the possibility of such damages. Either SGX or third-party licensors, as the case may be, have exclusive proprietary rights in any information and software received.</li>
+					<li>You shall not use or permit anyone to use the information or software provided through SGX StockFacts for any unlawful or unauthorized purpose.</li>
+					<li>You are not authorized or permitted to furnish or redistribute such information or software in any form or manner to any third party without prior written approval of the source of or any other parties with proprietary rights to such information or software.</li>
+					<li>You acknowledge that your ability to receive and/or use SGX StockFacts and/or all or any part of the data and information contained therein may be terminated at any time.</li>
+					<li>Your use of SGX StockFacts shall be solely for your personal, non-commercial use. You are not to (a) alter, reformat, modify or adapt any component of SGX StockFacts including the creation of derivative works; (b) resell or otherwise transfer any use of SGX StockFacts or make available to any other person of organization (including subsidiaries, affiliates or unlicensed business units or any of your unauthorized employees), directly or indirectly, for any use; or (c) copy, redistribute or publish in any form, the SGX StockFacts or any portion thereof.</li>   
+					<li>You represent that you will not use SGX StockFacts and/or the data and information contained therein to create any securities products or indices based thereon. </li>
+					<li>You represent that you will treat the Global Industry Classification Standard ("GICS") data as proprietary to MSCI, Inc. ("MSCI") and Standard & Poor's Financial Services LLC ("S&P").  Further, you acknowledge that MSCI and S&P are the sole and exclusive owners of GICS (including all trade secrets, copyrights, trademarks and other intellectual property rights in or to GICS).</li>
+					<li>You represent that you will not: (i) alter, modify or adapt any component of the GICS data, including, but not limited to, translating, decompiling, disassembling, reverse engineering or creating derivative works; or (ii) use any of the GICS data to verify the accuracy of other data or to correct such other data; or (iii) resell or otherwise transfer or make GICS data, or any part or component thereof, available to any other person or organization directly or indirectly, for any of the foregoing or for any other use, including, without limitation, by loan, rental, service bureau, external time sharing or similar arrangement.</li>
+					<li>Unless otherwise agreed and subject to such terms and conditions as may be imposed, no permission is granted to hyperlink to any page (including the home page) of SGX StockFacts.</li> 
+					<li>You represent that your use shall be in compliance with all applicable laws and regulations.</li>
+					<li>Your use of SGX StockFacts and/or the data and information contained therein shall be in compliance with these Terms and Conditions, and any amendments of the same.</li>
+					<li>You acknowledge S&P, Capital IQ, Inc., their affiliates and SGX affiliates and MSCI as third party beneficiaries of the these terms and conditions and that each of them is entitled to enforce all provisions hereof.</li>
+					<li>You agree to indemnify and hold harmless SGX, its Information Providers, and any other third party involved in or related to the making or compiling of SGX StockFacts and/or the data and information contained therein, from and against any claims, losses, damages, liabilities, costs and expenses, including reasonable attorneys' fees and costs, as incurred, arising in any manner out of your use of, or inability to use, the SGX StockFacts and/or the data and information contained therein or any breach by you of the use restrictions regarding the SGX StockFacts and/or the data and information contained therein.</li>
+					<li>The GTI Ranking, sponsored by CPA Australia, is produced independently by a team of CGIO researchers. The information and statistics are prepared by CGIO from publicly available material on the basis that such information is accurate and complete. The GTI Ranking exercise is not an offer for corporate governance consultancy. While SGX and its affiliates have taken reasonable care to ensure the accuracy and completeness of the information provided on this page, they will not be liable for any loss or damage of any kind (whether direct, indirect or consequential losses or other economic loss of any kind) suffered due to any omission, error, inaccuracy, incompleteness, or otherwise, any reliance on such information. Partners, directors and/or employees of NUS (including CGIO), CPA Australia and SGX may sit on the board of directors of certain of the SGX Listed Companies but they are not directly involved in the GTI Ranking assessment of such SGX Listed Companies. The information in this page is subject to change without notice. Further information may be obtained from <a target="_blank" href="http://bschool.nus.edu.sg/CGIO.aspx">http://bschool.nus.edu.sg/CGIO.aspx</a>.</li>
+				</ul>
+				
+				<p>Disclaimer: Nothing herein should be considered to be a solicitation or recommendation to buy or sell any security, nor should it be considered to be investment advice. Advice should be sought from a financial adviser regarding the suitability of any investments, taking into account the specific investment objectives, financial situation or particular needs of any person in receipt of the recommendation.</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer-content" style="height:95px;">
+		<style>
+			table.footer { width: 100%; background-color: #eee; }
+			table.footer td { padding: 10px; }			
+			table.footer * { font-size: 13px; color: #333; font-family: Arial, Helvetica, sans-serif; }
+		</style>
+		<table class="footer">
+			<tr>
+				<td width="50%">Source: S&P Capital IQ</td>
+				<td width="50%" align="right" class="property" data-bind="text: company.companyInfo.companyName"></td>
+			</tr>
+		</table>
+	</div>
+	<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base", "client/pdf" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>    
+</body>
+
+</html>
