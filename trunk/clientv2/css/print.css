@@ -61,7 +61,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .terms ul li { margin-bottom: 10px; }
 
 .stock-events { max-height: 560px; overflow: hidden; margin: 10px 0 25px; }
-.stock-events ul { border: 0; margin: 0;  padding: 10px 15px; }
+.stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
 .stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 12px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
 .stock-events li span { color: #1e2171; cursor: pointer; font-weight: bold; text-decoration: none; }
@@ -70,7 +70,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .company-header td { vertical-align: bottom; }
 
 #area-chart,
-#price-volume { width: 660px; }
+#price-volume { width: 660px; height: 420px; }
 
 .financials-section { overflow: hidden; }
 .financials-section .left { width: 47.5%; padding: 0 2.5% 0 0; float: left; }
