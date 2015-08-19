@@ -6,13 +6,12 @@ configuration(
 			"company-financials", 
 			"related", 
 			"alpha-factor", 
-			"", 
+			"print", 
 			"trade", 
 			"terms-conditions",
 			"company-estimates",
 			"company-charting",
 			"company-comparables"
-		]
-	
+		]	
 	}
 );
