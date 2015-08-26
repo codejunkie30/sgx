@@ -294,7 +294,6 @@ table th, table td {
 .header .profile .breadcrumb { color: #fff; }
 .header .profile .breadcrumb a { color: #fff; text-decoration: none;}
 .header .profile .breadcrumb a:hover { text-decoration: underline; }
-
 .header .profile .pricing .currency,
 .header .profile .pricing .price,
 .header .profile .as-of,
@@ -306,7 +305,6 @@ table th, table td {
 .header .profile .profile-bar a:hover { text-decoration: underline; cursor: pointer; }
 .header .profile .profile-bar .right { margin: 0 20px 0 0 !important; }
 .header .profile .profile-bar .right a { margin: 0 0 0 32px; }
-
 .header .profile .profile-bar a.back { background-position: 0 0; padding: 2px 0 0 21px; }
 .header .profile .profile-bar a.view { background-position: 0 -27px; padding: 3px 0 2px 24px; }
 .header .profile .profile-bar a.add { background-position: 0 -59px; padding: 1px 0 0 21px; }
@@ -316,8 +314,13 @@ table th, table td {
 .header .profile nav ul { font-size: 0; overflow: hidden; }
 .header .profile nav ul li { display: inline-block; font-size: 13pt !important; line-height: 36px; }
 .header .profile nav ul li a { padding: 10px 53px; color: #fff; text-decoration: none; border: 1px solid #000; border-bottom: 0 !important; border-radius: 8px 8px 0 0; }
+/* Nav Active Link Styles */
 .header .profile nav ul li a:hover,
-.header .profile nav ul li.active a { background: #fff; color: #000; border-color: #fff; border-radius: 8px 8px 0 0; cursor: pointer; }
+#tearsheet .header .profile nav ul li.company-tearsheet a,
+#financials .header .profile nav ul li.company-financials a,
+#estimates .header .profile nav ul li.company-estimates a,
+#charting .header .profile nav ul li.company-charting a,
+#comparables .header .profile nav ul li.company-comparables a { background: #fff; color: #000; border-color: #fff; border-radius: 8px 8px 0 0; cursor: pointer; }
 
 .title {
 background: url("../img/title-back.png");
