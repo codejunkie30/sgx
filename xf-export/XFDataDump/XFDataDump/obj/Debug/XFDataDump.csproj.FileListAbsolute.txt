@@ -1,0 +1,8 @@
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\bin\Debug\XFDataDump.exe.config
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\bin\Debug\XFDataDump.exe
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\bin\Debug\XFDataDump.pdb
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\obj\Debug\XFDataDump.csprojResolveAssemblyReference.cache
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\obj\Debug\XFDataDump.Properties.Resources.resources
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\obj\Debug\XFDataDump.csproj.GenerateResource.Cache
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\obj\Debug\XFDataDump.exe
+C:\Users\MParcewski\workspace\SGX\xf-export\XFDataDump\XFDataDump\obj\Debug\XFDataDump.pdb
