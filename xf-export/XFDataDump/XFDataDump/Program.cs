@@ -24,7 +24,6 @@ namespace XFDataDump
 
             // tmp directory to store files
             string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
-            string sqlScripts = ConfigurationManager.AppSettings["sqlDir"].ToString();
             string tmpTable = ConfigurationManager.AppSettings["tickerTableName"].ToString();
 
             // company information
@@ -36,16 +35,32 @@ namespace XFDataDump
             using (SqlCommand command = new SqlCommand("SELECT * FROM " + tmpTable, conn)) tickerData.Load(command.ExecuteReader());
             writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["tickerFileName"].ToString());
 
-            // now execute sql scripts
-            executeQueries(sqlScripts, conn);
+            // now execute sql scripts (need a while to do so)
+            executeQueries(tmpDir, conn);
             
             // close connection (removes tmp table)
             conn.Close();
 
         }
 
-        static void executeQueries(string baseDir, SqlConnection conn)
+        static void executeQueries(string tmpDir, SqlConnection conn)
         {
+
+            string baseDir = ConfigurationManager.AppSettings["sqlDir"].ToString();
+            string[] files = Directory.GetFiles(baseDir, "*.sql");
+
+            foreach (string file in files) 
+            {
+                DataTable results = new DataTable();
+                string query = File.ReadAllText(file);
+                string name = Path.GetFileName(file).Replace(".sql", ".csv");
+                using (SqlCommand command = new SqlCommand(query, conn))
+                {
+                    command.CommandTimeout = 1800;
+                    results.Load(command.ExecuteReader());
+                }
+                writeToFile(results, tmpDir + name);
+            }
 
         }
 
