@@ -75,7 +75,16 @@
     <None Include="updateTmpTickerTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="tmpTickerTable.sql" />
+    <None Include="createTickerTable.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exportUniqueCurrency.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exportTickerTable.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exportNFCompanies.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

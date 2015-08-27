@@ -24,18 +24,29 @@ namespace XFDataDump
 
             // tmp directory to store files
             string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
-            string tmpTable = ConfigurationManager.AppSettings["tickerTableName"].ToString();
 
-            // company information
+            // SGX ticker file - write to DB and lookup S&P data
             DataTable tickerData = getTickerData();
-            using (SqlCommand command = new SqlCommand(Properties.Resources.tmpTickerTable, conn)) command.ExecuteNonQuery();
+            using (SqlCommand command = new SqlCommand(Properties.Resources.createTickerTable, conn)) command.ExecuteNonQuery();
             writeToDB(tickerData, conn);
             using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn)) command.ExecuteNonQuery();
-            tickerData = new DataTable();
-            using (SqlCommand command = new SqlCommand("SELECT * FROM " + tmpTable, conn)) tickerData.Load(command.ExecuteReader());
-            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["tickerFileName"].ToString());
 
-            // now execute sql scripts (need a while to do so)
+            // export list of good companies
+            tickerData = new DataTable();
+            using (SqlCommand command = new SqlCommand(Properties.Resources.exportTickerTable, conn)) tickerData.Load(command.ExecuteReader());
+            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["companiesFileName"].ToString());
+
+            // export list of bad companies
+            tickerData = new DataTable();
+            using (SqlCommand command = new SqlCommand(Properties.Resources.exportNFCompanies, conn)) tickerData.Load(command.ExecuteReader());
+            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["notFoundFileName"].ToString());
+
+            // export list of unique currencies
+            tickerData = new DataTable();
+            using (SqlCommand command = new SqlCommand(Properties.Resources.exportUniqueCurrency, conn)) tickerData.Load(command.ExecuteReader());
+            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["currenciesFileName"].ToString());
+
+            // now execute loader specific sql scripts (need a while to do so)
             executeQueries(tmpDir, conn);
             
             // close connection (removes tmp table)
@@ -82,7 +93,7 @@ namespace XFDataDump
             MemoryStream stream = new MemoryStream(bytes);
 
             DataTable table = new DataTable();
-            table.TableName = ConfigurationManager.AppSettings["tickerTableName"];
+            table.TableName = ConfigurationManager.AppSettings["companiesTableName"];
             string[] fields = new string[] { "name", "tickerSymbol", "exchangeSymbol", "isin", "short_name" };
             foreach (string field in fields) table.Columns.Add(field, typeof(string));
 

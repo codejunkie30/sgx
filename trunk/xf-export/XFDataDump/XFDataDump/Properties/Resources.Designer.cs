@@ -61,7 +61,7 @@ namespace XFDataDump.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CREATE TABLE sgxpop (
+        ///   Looks up a localized string similar to CREATE TABLE ##sgxpop (
         ///	name VARCHAR(1000),
         ///	tickerSymbol VARCHAR(25),
         ///	exchangeSymbol VARCHAR(100),
@@ -69,12 +69,40 @@ namespace XFDataDump.Properties {
         ///	short_name VARCHAR(500),
         ///	TradingItemId int,
         ///	companyId int,
-        ///	currencyId smallint
+        ///	currencyId smallint,
+        ///	currencyISO varchar(10)
         ///);.
         /// </summary>
-        internal static string tmpTickerTable {
+        internal static string createTickerTable {
             get {
-                return ResourceManager.GetString("tmpTickerTable", resourceCulture);
+                return ResourceManager.GetString("createTickerTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM ##sgxpop WHERE TradingItemId is null.
+        /// </summary>
+        internal static string exportNFCompanies {
+            get {
+                return ResourceManager.GetString("exportNFCompanies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM ##sgxpop WHERE TradingItemId is not null.
+        /// </summary>
+        internal static string exportTickerTable {
+            get {
+                return ResourceManager.GetString("exportTickerTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT distinct(currencyISO) as currencies from ##sgxpop WHERE currencyISO is not null.
+        /// </summary>
+        internal static string exportUniqueCurrency {
+            get {
+                return ResourceManager.GetString("exportUniqueCurrency", resourceCulture);
             }
         }
         
@@ -82,7 +110,8 @@ namespace XFDataDump.Properties {
         ///   Looks up a localized string similar to UPDATE pop SET
         ///	pop.TradingItemId = ti.tradingItemId,
         ///	pop.companyId = (SELECT s.companyId FROM ciqSecurity s WHERE ti.securityId = s.securityId),
-        ///	pop.currencyId = ti.currencyId
+        ///	pop.currencyId = ti.currencyId,
+        ///	pop.currencyISO = (SELECT c.ISOCode FROM ciqCurrency c WHERE ti.currencyId = c.currencyId)
         ///FROM
         ///	##sgxpop pop
         ///INNER JOIN
