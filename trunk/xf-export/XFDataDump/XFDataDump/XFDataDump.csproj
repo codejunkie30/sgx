@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0972A114-9005-4628-9C1E-2B77703CF2F9}</ProjectGuid>
+    <ProjectGuid>{8900B025-1343-41F3-B53D-86E4F67B1734}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XFDataDump</RootNamespace>
@@ -33,15 +33,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Renci.SshNet">
+      <HintPath>..\packages\SSH.NET.2013.4.7\lib\net40\Renci.SshNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -58,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -72,19 +76,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="updateTmpTickerTable.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="createTickerTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="exportUniqueCurrency.sql" />
+    <None Include="exportNFCompanies.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="exportTickerTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="exportNFCompanies.sql" />
+    <None Include="exportUniqueCurrency.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="updateTmpTickerTable.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
