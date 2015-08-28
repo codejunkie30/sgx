@@ -98,7 +98,9 @@ namespace XFDataDump.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT distinct(currencyISO) as currencies from ##sgxpop WHERE currencyISO is not null.
+        ///   Looks up a localized string similar to SELECT distinct ciq.ISOCode, ciq.currencyName
+        ///  FROM ciqCurrency ciq, ##sgxpop pop
+        /// WHERE ciq.ISOCode = pop.currencyISO.
         /// </summary>
         internal static string exportUniqueCurrency {
             get {
