@@ -7,37 +7,44 @@ using System.IO;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using Renci.SshNet;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace XFDataDump
 {
 
+    /**
+     * hack logger to reduce overhead
+     */
     static class LOG
     {
 
-        internal static void Debug(string msg) { LogIt(msg, "Debug"); }
+        internal static void Debug(string msg) { LogIt(msg, 0); }
 
-        internal static void Info(string msg) { LogIt(msg, "Info"); }
+        internal static void Info(string msg) { LogIt(msg, 1); }
 
-        internal static void Error(String msg, Exception e) { LogIt(msg + Environment.NewLine + e.StackTrace, "Error"); }
+        internal static void Error(String msg, Exception e) { LogIt(msg + Environment.NewLine + e.StackTrace, 2); }
 
-        internal static void LogIt(string msg, string cat)
+        internal static void LogIt(string msg, int cat)
         {
+            int logLevel = Convert.ToInt32(ConfigurationManager.AppSettings["logLevel"].ToString());
+            if (cat < logLevel) return;
+
             var log = ConfigurationManager.AppSettings["sgxLog"].ToString();
             using (StreamWriter w = File.AppendText(log))
             {
-                w.WriteLine("{0} {1}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm"), msg);
-                Console.WriteLine("{0} {1}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm"), msg);
+                w.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm:ss"), cat, msg);
+                Console.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm"), cat, msg);
             }        
         }
 
     }
 
+    /**
+     * program to load remote tickers and then build an export based on those files
+     */
     static class Program
     {
 
-        /// <summary>
-        /// 
-        /// </summary>
         static void Main()
         {
              SqlConnection conn = null;
@@ -49,7 +56,7 @@ namespace XFDataDump
                 string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
 
                 // open (and keep open connection) need for temporary table
-                LOG.Info("Opening Database Connection");
+                LOG.Debug("Opening Database Connection");
                 conn = new SqlConnection(ConfigurationManager.ConnectionStrings["xf.target"].ConnectionString);
                 conn.Open();
 
@@ -59,16 +66,12 @@ namespace XFDataDump
                 LOG.Info("Finished Creating Ticker Table");
 
                 // SGX ticker file - write to DB
-                LOG.Info("Loading SGX Listings");
                 DataTable tickerData = getTickerData(new string[] { "name", "tickerSymbol", "exchangeSymbol", "isin", "short_name" }, ConfigurationManager.AppSettings["tickerURL"].ToString(), "SGX");
                 writeToDB(tickerData, conn);
-                LOG.Info("Finished Loading SGX Listings");
 
                 // ASEAN ticker file - write to DB
-                LOG.Info("Loading ASEAN Listings");
                 tickerData = getTickerData(new string[] { "exchangeSymbol", "tickerSymbol", "name" }, ConfigurationManager.AppSettings["xtraTickerURL"].ToString(), "ASEAN");
                 writeToDB(tickerData, conn);
-                LOG.Info("Finished Loading ASEAN Listings");
 
                 // match S&P companies to lists provided
                 LOG.Info("Updating Ticker Table");
@@ -93,15 +96,11 @@ namespace XFDataDump
                 // now execute loader specific sql scripts (need a while to do so)
                 executeQueries(tmpDir, conn);
 
-                // close connection (removes tmp table)
-                conn.Close();
-
                 // now let's move the files over to an FTP server
                 pushFiles(tmpDir);
 
                 // archive files
                 archiveFiles(tmpDir);
-
 
             }
             catch (Exception e)
@@ -111,7 +110,7 @@ namespace XFDataDump
             finally
             {
                 if (conn != null) conn.Close();
-                LOG.Info("Closing Database Connection");
+                LOG.Debug("Closing Database Connection");
             }
 
         }
@@ -127,7 +126,7 @@ namespace XFDataDump
             WebClient client = new WebClient();
             string response = client.DownloadString(tickerURL);
             client.Dispose();
-            LOG.Info("Finished " + type + " Retrieving Ticker Data");
+            LOG.Debug("Finished " + type + " Retrieving Ticker Data");
 
             byte[] bytes = Encoding.UTF8.GetBytes(response);
             MemoryStream stream = new MemoryStream(bytes);
@@ -136,7 +135,7 @@ namespace XFDataDump
             table.TableName = ConfigurationManager.AppSettings["companiesTableName"];
             foreach (string field in columns) table.Columns.Add(field, typeof(string));
 
-            LOG.Debug("Parsing " + type + " Ticker Data");
+            LOG.Info("Parsing " + type + " Ticker Data");
             using (TextFieldParser parser = new TextFieldParser(stream))
             {
                 // set delimeters
@@ -180,7 +179,7 @@ namespace XFDataDump
                 {
                     command.CommandTimeout = 1800;
                     IDataReader reader = command.ExecuteReader();
-                    LOG.Info("Finished executing script " + file);
+                    LOG.Debug("Finished executing script " + file);
                     writeToFile(reader, outPath);
                     reader.Close();
                 }
@@ -199,7 +198,7 @@ namespace XFDataDump
             string user = ConfigurationManager.AppSettings["ftpUsername"].ToString();
             string pass = ConfigurationManager.AppSettings["ftpPassword"].ToString();
 
-            LOG.Debug("Creating SFTP Client");
+            LOG.Info("Creating SFTP Client");
 
             using (SftpClient scp = new SftpClient(url, user, pass))
             {
@@ -229,9 +228,42 @@ namespace XFDataDump
         /**
          * archive files
          */
-        static void archiveFiles(string tmpdir)
+        static void archiveFiles(string tmpDir)
         {
-            // TODO archive each run
+
+            string archiveDir = ConfigurationManager.AppSettings["archiveDir"].ToString();
+            string zipPath = archiveDir + DateTime.Now.ToString("MMddyyyyHHmmss") + ".zip";
+            string[] files = Directory.GetFiles(tmpDir);
+            byte[] buffer = new byte[4096];
+
+            LOG.Info("Creating archive " + zipPath);
+
+            using (ZipOutputStream s = new ZipOutputStream(File.Create(zipPath))) {
+                s.SetLevel(9);
+                foreach(string file in files) {
+
+                    LOG.Debug("Adding Entry " + file);
+
+                    ZipEntry entry = new ZipEntry(Path.GetFileName(file));
+                    s.PutNextEntry(entry);
+
+                    using (FileStream fs = File.OpenRead(file)) {
+                        int sourceBytes;
+                        do
+                        {
+                            sourceBytes = fs.Read(buffer, 0, buffer.Length);
+                            s.Write(buffer, 0, sourceBytes);
+                        } while (sourceBytes > 0);
+                    }
+
+                    LOG.Debug("Finished Adding Entry " + file);
+
+                }
+
+            }
+
+            LOG.Debug("Finished Creating archive " + zipPath);
+
         }
 
         /**
@@ -262,7 +294,7 @@ namespace XFDataDump
             }
             sw.Close();
 
-            LOG.Info("Finished Exporting data to " + fileOutputPath);
+            LOG.Debug("Finished Exporting data to " + fileOutputPath);
         }
 
         /**
