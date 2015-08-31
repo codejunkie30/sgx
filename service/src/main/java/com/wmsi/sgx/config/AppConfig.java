@@ -18,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.service" })
 @EnableCaching
+@EnableScheduling
 @PropertySources(value = {
 		// If spring.profiles is set use <profile>.application.properties else defaults to application.properties
 		// Uses -Dconfig.file to override internal settings with external file, must prefix path with file://
