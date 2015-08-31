@@ -18,6 +18,8 @@ namespace XFDataDump
 
         internal static void Info(string msg) { LogIt(msg, "Info"); }
 
+        internal static void Error(String msg, Exception e) { LogIt(msg + Environment.NewLine + e.StackTrace, "Error"); }
+
         internal static void LogIt(string msg, string cat)
         {
             var log = ConfigurationManager.AppSettings["sgxLog"].ToString();
@@ -38,56 +40,151 @@ namespace XFDataDump
         /// </summary>
         static void Main()
         {
+             SqlConnection conn = null;
 
-            // tmp directory to store files
-            string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
+            try
+            {
 
-            // open (and keep open connection) need for temporary table
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["xf.target"].ConnectionString);
-            conn.Open();
+                // tmp directory to store files
+                string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
 
-            // SGX ticker file - write to DB and lookup S&P data
-            DataTable tickerData = getTickerData();
-            LOG.Info("Creating Ticker Table");
-            using (SqlCommand command = new SqlCommand(Properties.Resources.createTickerTable, conn)) command.ExecuteNonQuery();
-            writeToDB(tickerData, conn);
-            LOG.Info("Finished Creating Ticker Table");
-            LOG.Info("Updating Ticker Table");
-            using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn)) command.ExecuteNonQuery();
-            LOG.Info("Finished Updating Ticker Table");
+                // open (and keep open connection) need for temporary table
+                LOG.Info("Opening Database Connection");
+                conn = new SqlConnection(ConfigurationManager.ConnectionStrings["xf.target"].ConnectionString);
+                conn.Open();
 
-            // export list of good companies
-            LOG.Info("Saving Company List");
-            tickerData = new DataTable();
-            using (SqlCommand command = new SqlCommand(Properties.Resources.exportTickerTable, conn)) tickerData.Load(command.ExecuteReader());
-            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["companiesFileName"].ToString());
-            LOG.Info("Finished Saving Company List");
+                // table to hold file mappings
+                LOG.Info("Creating Ticker Table");
+                using (SqlCommand command = new SqlCommand(Properties.Resources.createTickerTable, conn)) command.ExecuteNonQuery();
+                LOG.Info("Finished Creating Ticker Table");
 
-            // export list of bad companies
-            LOG.Info("Saving Bad Company List");
-            tickerData = new DataTable();
-            using (SqlCommand command = new SqlCommand(Properties.Resources.exportNFCompanies, conn)) tickerData.Load(command.ExecuteReader());
-            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["notFoundFileName"].ToString());
-            LOG.Info("Finished Saving Bad Company List");
+                // SGX ticker file - write to DB
+                LOG.Info("Loading SGX Listings");
+                DataTable tickerData = getTickerData(new string[] { "name", "tickerSymbol", "exchangeSymbol", "isin", "short_name" }, ConfigurationManager.AppSettings["tickerURL"].ToString(), "SGX");
+                writeToDB(tickerData, conn);
+                LOG.Info("Finished Loading SGX Listings");
 
-            // export list of unique currencies
-            LOG.Info("Exporting Currency Info");
-            tickerData = new DataTable();
-            using (SqlCommand command = new SqlCommand(Properties.Resources.exportUniqueCurrency, conn)) tickerData.Load(command.ExecuteReader());
-            writeToFile(tickerData, tmpDir + ConfigurationManager.AppSettings["currenciesFileName"].ToString());
-            LOG.Info("Finished Exporting Currency Info");
-            
-            // now execute loader specific sql scripts (need a while to do so)
-            executeQueries(tmpDir, conn);
-            
-            // close connection (removes tmp table)
-            conn.Close();
+                // ASEAN ticker file - write to DB
+                LOG.Info("Loading ASEAN Listings");
+                tickerData = getTickerData(new string[] { "exchangeSymbol", "tickerSymbol", "name" }, ConfigurationManager.AppSettings["xtraTickerURL"].ToString(), "ASEAN");
+                writeToDB(tickerData, conn);
+                LOG.Info("Finished Loading ASEAN Listings");
 
-            // now let's move the files over to an FTP server
-            pushFiles(tmpDir);
+                // match S&P companies to lists provided
+                LOG.Info("Updating Ticker Table");
+                using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn)) command.ExecuteNonQuery();
+                LOG.Info("Finished Updating Ticker Table");
 
-            // archive files
-            archiveFiles(tmpDir);
+                // export list of good companies
+                tickerData = new DataTable();
+                using (SqlCommand command = new SqlCommand(Properties.Resources.exportTickerTable, conn)) tickerData.Load(command.ExecuteReader());
+                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["companiesFileName"].ToString());
+
+                // export list of bad companies
+                tickerData = new DataTable();
+                using (SqlCommand command = new SqlCommand(Properties.Resources.exportNFCompanies, conn)) tickerData.Load(command.ExecuteReader());
+                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["notFoundFileName"].ToString());
+
+                // export list of unique currencies
+                tickerData = new DataTable();
+                using (SqlCommand command = new SqlCommand(Properties.Resources.exportUniqueCurrency, conn)) tickerData.Load(command.ExecuteReader());
+                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["currenciesFileName"].ToString());
+
+                // now execute loader specific sql scripts (need a while to do so)
+                executeQueries(tmpDir, conn);
+
+                // close connection (removes tmp table)
+                conn.Close();
+
+                // now let's move the files over to an FTP server
+                pushFiles(tmpDir);
+
+                // archive files
+                archiveFiles(tmpDir);
+
+
+            }
+            catch (Exception e)
+            {
+                LOG.Error("Running Program", e);
+            }
+            finally
+            {
+                if (conn != null) conn.Close();
+                LOG.Info("Closing Database Connection");
+            }
+
+        }
+
+        /**
+         * retrieve ticker file and convert to data table
+         */
+        static DataTable getTickerData(string[] columns, string tickerURL, string type)
+        {
+
+            // start by retrieving file
+            LOG.Info("Retrieving " + type + " Ticker Data");
+            WebClient client = new WebClient();
+            string response = client.DownloadString(tickerURL);
+            client.Dispose();
+            LOG.Info("Finished " + type + " Retrieving Ticker Data");
+
+            byte[] bytes = Encoding.UTF8.GetBytes(response);
+            MemoryStream stream = new MemoryStream(bytes);
+
+            DataTable table = new DataTable();
+            table.TableName = ConfigurationManager.AppSettings["companiesTableName"];
+            foreach (string field in columns) table.Columns.Add(field, typeof(string));
+
+            LOG.Debug("Parsing " + type + " Ticker Data");
+            using (TextFieldParser parser = new TextFieldParser(stream))
+            {
+                // set delimeters
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(new string[] { ",", ":" });
+
+                // ignore first line
+                parser.ReadFields();
+
+                // loop through rest
+                while (!parser.EndOfData)
+                {
+                    string[] values = parser.ReadFields();
+                    if (values.Length < columns.Length) continue;
+                    DataRow row = table.NewRow();
+                    for (int i = 0; i < columns.Length; i++) row[columns[i]] = values[i].Replace(" MAINBOARD", "");
+                    table.Rows.Add(row);
+                }
+            }
+            LOG.Debug("Finished " + type + " Parsing Ticker Data");
+
+            return table;
+        }
+
+        /**
+         * traverse a directory sql files an execute them, dumping a CSV file of the same name into the tmp directory
+         */
+        static void executeQueries(string tmpDir, SqlConnection conn)
+        {
+
+            string baseDir = ConfigurationManager.AppSettings["sqlDir"].ToString();
+            string[] files = Directory.GetFiles(baseDir, "*.sql");
+
+            foreach (string file in files)
+            {
+                LOG.Info("Executing script " + file);
+                DataTable results = new DataTable();
+                string query = File.ReadAllText(file);
+                string outPath = tmpDir + Path.GetFileName(file).Replace(".sql", ".csv");
+                using (SqlCommand command = new SqlCommand(query, conn))
+                {
+                    command.CommandTimeout = 1800;
+                    IDataReader reader = command.ExecuteReader();
+                    LOG.Info("Finished executing script " + file);
+                    writeToFile(reader, outPath);
+                    reader.Close();
+                }
+            }
 
         }
 
@@ -138,125 +235,42 @@ namespace XFDataDump
         }
 
         /**
-         * traverse a directory sql files an execute them, dumping a CSV file of the same name into the tmp directory
-         */
-        static void executeQueries(string tmpDir, SqlConnection conn)
-        {
-
-            string baseDir = ConfigurationManager.AppSettings["sqlDir"].ToString();
-            string[] files = Directory.GetFiles(baseDir, "*.sql");
-
-            foreach (string file in files)
-            {
-                LOG.Info("Executing script " + file);
-                DataTable results = new DataTable();
-                string query = File.ReadAllText(file);
-                string name = Path.GetFileName(file).Replace(".sql", ".csv");
-                using (SqlCommand command = new SqlCommand(query, conn))
-                {
-                    command.CommandTimeout = 1800;
-                    results.Load(command.ExecuteReader());
-                }
-                LOG.Info("Finished executing script " + file);
-                writeToFile(results, tmpDir + name);
-                LOG.Info("Exported data to " + name);
-            }
-
-        }
-
-        /**
-         * retrieve ticker file and convert to data table
-         */
-        static DataTable getTickerData()
-        {
-
-            LOG.Info("Retrieving Ticker Data");
-
-            // get the ticker URL
-            var tickerURL = ConfigurationManager.AppSettings["tickerURL"].ToString();
-
-            // start by retrieving file
-            WebClient client = new WebClient();
-            string response = client.DownloadString(tickerURL);
-            client.Dispose();
-
-            byte[] bytes = Encoding.UTF8.GetBytes(response);
-            MemoryStream stream = new MemoryStream(bytes);
-
-            DataTable table = new DataTable();
-            table.TableName = ConfigurationManager.AppSettings["companiesTableName"];
-            string[] fields = new string[] { "name", "tickerSymbol", "exchangeSymbol", "isin", "short_name" };
-            foreach (string field in fields) table.Columns.Add(field, typeof(string));
-
-            LOG.Debug("Parsing Ticker Data");
-
-            using (TextFieldParser parser = new TextFieldParser(stream))
-            {
-                // set delimeters
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(new string[] { ",", ":" });
-
-                // ignore first line
-                parser.ReadFields();
-
-                // loop through rest
-                while (!parser.EndOfData)
-                {
-                    string[] values = parser.ReadFields();
-                    if (values.Length < 5) continue;
-                    DataRow row = table.NewRow();
-                    for (int i = 0; i < fields.Length; i++) row[fields[i]] = values[i].Replace(" MAINBOARD", "");
-                    table.Rows.Add(row);
-                }
-            }
-
-            LOG.Debug("Finished Parsing Ticker Data");
-
-            LOG.Info("Finished Retrieving Ticker Data");
-
-            return table;
-        }
-
-        /**
          * write dataset to delimeted file
          */
-        static void writeToFile(DataTable dataSource, string fileOutputPath, bool firstRowIsColumnHeader = false, string seperator = ",")
-        {
-            var sw = new StreamWriter(fileOutputPath, false);
-
-            int icolcount = dataSource.Columns.Count;
-
-            if (!firstRowIsColumnHeader)
+        public static void writeToFile(this IDataReader dataReader, string fileOutputPath, bool firstRowIsColumnHeader = true, string seperator = ",")
             {
-                for (int i = 0; i < icolcount; i++)
-                {
-                    sw.Write(dataSource.Columns[i]);
-                    if (i < icolcount - 1)
-                        sw.Write(seperator);
-                }
 
+            LOG.Info("Exporting data to " + fileOutputPath);
+
+            StreamWriter sw = new StreamWriter(fileOutputPath, false);
+            int icolcount = dataReader.FieldCount;
+
+            if (firstRowIsColumnHeader) {
+                for (int index = 0; index < icolcount; index++) {
+                    sw.Write(dataReader.GetName(index));
+                    if (index < icolcount - 1) sw.Write(seperator);
+                }
                 sw.Write(sw.NewLine);
             }
 
-            foreach (DataRow drow in dataSource.Rows)
-            {
-                for (int i = 0; i < icolcount; i++)
-                {
-                    if (!Convert.IsDBNull(drow[i])) sw.Write(FormatValueCSV(drow[i]));
-                    if (i < icolcount - 1) sw.Write(seperator);
+            while (dataReader.Read()) {
+                for (int index = 0; index < icolcount; index++) {
+                    if (!dataReader.IsDBNull(index)) sw.Write(FormatValueCSV(dataReader.GetValue(index), dataReader.GetFieldType(index)));
+                    if (index < icolcount - 1) sw.Write(seperator);
                 }
                 sw.Write(sw.NewLine);
             }
             sw.Close();
+
+            LOG.Info("Finished Exporting data to " + fileOutputPath);
         }
 
         /**
          * format value for CSV
          */
-        public static string FormatValueCSV(object value)
+        public static string FormatValueCSV(object value, Type valueType)
         {
             if (Object.ReferenceEquals(value, null)) return "";
-            Type valueType = value.GetType();
             if (valueType == typeof(DateTime)) return value.ToString();
             if (valueType.IsPrimitive && valueType != typeof(string)) return value.ToString();
             return String.Format("\"{0}\"", value.ToString().Replace("\"", "\"\""));
