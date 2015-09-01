@@ -379,16 +379,19 @@ div.news {
   height: 19px;
 }
 
+.data-point-container .trigger .name { position: relative; top: -1px; }
+
 .data-point-container .checkbox .trigger {
 	padding-left: 32px;
 	color: #000;
 	font-size: 12px;
 	font-weight: bold;
-	background: url("../img/sprite-checkbox.jpg") no-repeat 0 -18px;
+	background: url("../img/bg-checkboxes.png") no-repeat 0 -26px;
+	line-height: 16px;	
 }
 
 .data-point-container .checkbox .trigger:hover, .data-point-container .checkbox.checked {
-  background-position: 0 -36px;
+  background-position: 0 -54px;
 }
 
 .data-point-container .checkbox.checked .trigger, .data-point-container .checkbox.checked:hover {

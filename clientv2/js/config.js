@@ -10,6 +10,7 @@
             "knockout": "vendor/knockout/knockout-3.3.0-min",
             "knockout-amd-helpers": "vendor/knockout/knockout-amd-helpers",
             "knockout-repeat": "vendor/knockout/knockout-repeat",
+			"knockout-validate": "vendor/knockout/knockout.validation",			
 	    	"text": "vendor/text",
             "highstock": 'vendor/highstock/highstock',
             "underscore": 'vendor/underscore',

@@ -11,7 +11,12 @@ configuration(
 			"terms-conditions",
 			"company-estimates",
 			"company-charting",
-			"company-comparables"
+			"company-comparables",
+			"sign-in",
+			"sign-up",
+			"forgot-password",
+			"change-password",
+			"account-settings"
 		]	
 	}
 );
