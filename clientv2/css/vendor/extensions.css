@@ -28,4 +28,5 @@ p#vtip.info{ color:#0053BA; }
 p#vtip.err{ 
 	font-size: 90%;
     font-weight: bold;
-    color: #ff0000;
+	color: #ff0000;
+}
