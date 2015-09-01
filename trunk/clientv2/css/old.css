@@ -837,10 +837,10 @@ td .page-title {
   padding-left: 32px;
   color: #000;
   font: bold 12px/18px Arial, Helvetica, sans-serif;
-  background: url("../img/sprite-checkbox.jpg") no-repeat 0 -18px;
+  background: url("../img/bg-checkboxes.png") no-repeat 0 -26px;
 }
 .checkbox .trigger:hover {
-  background-position: 0 -36px;
+  background-position: 0 -54px;
 }
 .checkbox.checked {
   background-position: 0 0;

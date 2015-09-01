@@ -81,7 +81,7 @@
 			                        <td class="normal right" data-bind="text: companyInfo.floatPercentage, format: 'percent'">-</td>
 			                    </tr>
 			                    <tr>
-									<td>6-month VWAP <img src="img/info.jpg" alt="" data-bind="tooltip: 'vwap'" width="11" height="11" /></td>
+									<td>6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'vwap'" /></td>
 									
 									<!-- has vwap -->
 									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice')">
@@ -268,7 +268,7 @@
 		
 			<div id="key-devs">
 				<div class="title">
-					<h3>In The News <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'keyDevs'" alt="" src="img/info.jpg" /></h3>
+					<h3>In The News <img class="tooltip-left" data-bind="tooltip: 'keyDevs'" alt="" src="img/info.png" /></h3>
 				</div>
 				<div class="gray-border padded">
 					<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
@@ -283,7 +283,7 @@
 			
 			<div class="section-break">
 				<div class="title">
-					<h5>S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.jpg" data-bind="tooltip: 'consensusRec'" width="11" height="11" /></h5>
+					<h5>S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h5>
 				</div>
 				<div class="gray padded">
 					<div data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum')  && companyInfo.targetPriceNum >= 3">
@@ -305,7 +305,7 @@
 			
 			<div class="section-break">
 				<div class="title">
-					<h5>S&P Capital IQ Alpha Factor Composites <img class="tooltip-left" width="11" height="11" data-bind="tooltip: 'alphaFactors'" alt="" src="img/info.jpg" /></h5>
+					<h5>S&P Capital IQ Alpha Factor Composites <img class="tooltip-left" data-bind="tooltip: 'alphaFactors'" alt="" src="img/info.png" /></h5>
 				</div>
 				<div class="gray padded">
 					<div data-bind="visible: $data.hasOwnProperty('alphaFactors') && $data.alphaFactors != null">
@@ -329,8 +329,8 @@
 					<thead>
 						<tr class="odd">
 							<td width="40%">GTI Year</td>
-							<td width="30%">Rank <img src="img/info.jpg" alt="" class="tooltip-left" data-bind="tooltip: 'gtiRank'" width="11" height="11" /></td>
-							<td width="30%">Score <img src="img/info.jpg" alt="" class="tooltip-left" data-bind="tooltip: 'gtiScore'" width="11" height="11" /></td>
+							<td width="30%">Rank <img src="img/info.png" alt="" class="tooltip-left" data-bind="tooltip: 'gtiRank'"/></td>
+							<td width="30%">Score <img src="img/info.png" alt="" class="tooltip-left" data-bind="tooltip: 'gtiScore'" /></td>
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: $data.gtis.gtis">

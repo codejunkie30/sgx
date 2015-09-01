@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Screener - SGX</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=1.0" />
+    <link rel="stylesheet" href="css/sign-in.css?v=1.0" />
+    
+	<!--[if lt IE 9]>
+    	<script type="text/javascript" src="js/vendor/json2.js"></script>
+    	<script type="text/javascript" src="js/wmsi/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body style="width: auto;">
+
+	<section>
+		<header>
+			<h2>StockFacts Premium</h2>
+		</header>
+		<div class="form">
+			<h4>Try StockFacts Premium free for 14 days.</h4>
+			<input class="text" type="email" data-bind="value: email" placeholder="Email Address">
+			<input class="text" type="password" data-bind="value: password" placeholder="Password">
+			<input class="text" type="password" data-bind="value: retypePassword" placeholder="Retype Password">
+						
+			<div class="error-messages">
+				<p data-bind="validationMessage:email"></p>
+				<p data-bind="validationMessage:password"></p>
+				<p data-bind="validationMessage:retypePassword"></p>
+			</div>
+			
+			<div class="agree-email">
+				<div class="checkbox terms">
+					<div class="trigger">					
+						I have read and agree to the <a data-bind="siteLink: { id: 'terms-conditions' }">SGX Terms and Conditions</a>.
+					</div>
+					<input type="checkbox" name="terms-conditions" id="terms-conditions" data-bind="checked: termsConditions">					
+				</div>
+				<div class="checkbox emails">
+					<div class="trigger">
+						I would like to receive emails from SGX.
+					</div>
+					<input type="checkbox" name="receive-emails" id="receive-emails" data-bind="checked: receiveEmails">	
+				</div>			
+			</div>
+			
+			<a class="button" data-bind="click:$root.startTrial">Start free trial</a>
+		</div>
+		<footer>
+			<span class="left">Learn more about <a data-bind="siteLink: { id: 'index' }">StockFacts Premium</a></span>
+			<span class="right">Have an account? <a data-bind="siteLink: { id: 'sign-in' }">Sign in</a></span>
+		</footer>
+	</section>
+
+	
+<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base", "client/sign-up" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>
+
+</body>
+
+</html>
