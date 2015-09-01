@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,10 +32,9 @@ public class CustomUserDetailsService implements UserDetailsService{
 
 	@Autowired
 	private AuthorityRepository authorityRepository;
-
+	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
 		User user = userService.getUserByUsername(username);
 		
 		if(user == null)
@@ -48,7 +50,10 @@ public class CustomUserDetailsService implements UserDetailsService{
 		// Check for account lock
 		Boolean locked = userService.isAccountLocked(username);
 		
-		return new UserDetailsWrapper(user, authorities, locked);
+		//Check for account expired
+		Boolean expired = userService.isAccountExpired(username);
+		
+		return new UserDetailsWrapper(user, authorities, locked, expired);
 		
 	}
 

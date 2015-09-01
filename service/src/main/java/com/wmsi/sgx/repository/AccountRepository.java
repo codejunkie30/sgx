@@ -12,6 +12,8 @@ import com.wmsi.sgx.domain.User;
 public interface AccountRepository extends CustomRepository<Account, Serializable>{
 	
 	List<Account> findAllByUser(User user);
+	
+	List<Account> findAll();
 
 	@Query("select a from Accounts a, Users u where a.user.id = u.id and u.username = :name and a.active = true")
 	List<Account> findByUsername(@Param("name") String username);

@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -8,14 +10,17 @@ import javax.transaction.Transactional;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.PasswordReset;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
 import com.wmsi.sgx.model.account.UserModel;
+import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.PasswordResetRepository;
 import com.wmsi.sgx.repository.UserLoginRepository;
 import com.wmsi.sgx.repository.UserRepository;
@@ -31,6 +36,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserRepository userReposistory;
+	
+	@Autowired
+	private AccountRepository accountReposistory;
 
 	@Autowired
 	private UserVerificationRepository userVerificationReposistory;
@@ -163,7 +171,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public Boolean isAccountLocked(String username){
-		
+
 		List<UserLogin> logins =  userLoginRepository
 							.findByUsernameAndDateGreaterThanOrderByDateDesc(
 									username, 
@@ -182,6 +190,17 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		return failed >= LOCKOUT_LIMIT;
+	}
+
+	@Override
+	public Boolean isAccountExpired(String username) {
+		List<Account> accounts = accountReposistory.findByUsername(username);
+		
+		for(Account account : accounts){
+			
+			return !account.getActive();
+		}
+		return true;
 	}
 	
 }
