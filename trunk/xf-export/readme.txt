@@ -29,5 +29,11 @@ Configuration
 	7) ftpURL - the url of the ftp site to put all files
 	8) ftpUsername - the username for the ftp site
 	9) ftpPassword - the password for the ftp site
+	10) logLevel - for determining what happens in the log
+	11) archiveFile - the file where current run will be saved
+	12) xtraTickerURL - the additional tickers (not SGX listed) to pull
+	13) sgxLog - dropped in the tmpDir (and eventually the archive zip) the log of events
+	14) companiesTableName - the temp table created by the process that the SQL scripts will use to identify the SGX population
+	
 	
 	In addition to these, the exe needs to be scheduled using task scheduler.  This should be done on the same machine as the loader database/program.  More info on scheduling can be found at http://www.howtogeek.com/school/using-windows-admin-tools-like-a-pro/lesson2/all/.

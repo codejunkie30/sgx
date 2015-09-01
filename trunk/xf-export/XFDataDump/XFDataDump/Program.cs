@@ -28,9 +28,7 @@ namespace XFDataDump
         {
             int logLevel = Convert.ToInt32(ConfigurationManager.AppSettings["logLevel"].ToString());
             if (cat < logLevel) return;
-
-            var log = ConfigurationManager.AppSettings["sgxLog"].ToString();
-            using (StreamWriter w = File.AppendText(log))
+            using (StreamWriter w = File.AppendText(Program.getPath("sgxLog")))
             {
                 w.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm:ss"), cat, msg);
                 Console.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm"), cat, msg);
@@ -45,15 +43,16 @@ namespace XFDataDump
     static class Program
     {
 
+        internal static DateTime ID = DateTime.Now;
+
+        internal static string TEMP_DIR =  getPath("tmpDir");
+
         static void Main()
         {
              SqlConnection conn = null;
 
             try
             {
-
-                // tmp directory to store files
-                string tmpDir = ConfigurationManager.AppSettings["tmpDir"].ToString();
 
                 // open (and keep open connection) need for temporary table
                 LOG.Debug("Opening Database Connection");
@@ -81,26 +80,23 @@ namespace XFDataDump
                 // export list of good companies
                 tickerData = new DataTable();
                 using (SqlCommand command = new SqlCommand(Properties.Resources.exportTickerTable, conn)) tickerData.Load(command.ExecuteReader());
-                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["companiesFileName"].ToString());
+                writeToFile(tickerData.CreateDataReader(), TEMP_DIR + ConfigurationManager.AppSettings["companiesFileName"].ToString());
 
                 // export list of bad companies
                 tickerData = new DataTable();
                 using (SqlCommand command = new SqlCommand(Properties.Resources.exportNFCompanies, conn)) tickerData.Load(command.ExecuteReader());
-                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["notFoundFileName"].ToString());
+                writeToFile(tickerData.CreateDataReader(), TEMP_DIR + ConfigurationManager.AppSettings["notFoundFileName"].ToString());
 
                 // export list of unique currencies
                 tickerData = new DataTable();
                 using (SqlCommand command = new SqlCommand(Properties.Resources.exportUniqueCurrency, conn)) tickerData.Load(command.ExecuteReader());
-                writeToFile(tickerData.CreateDataReader(), tmpDir + ConfigurationManager.AppSettings["currenciesFileName"].ToString());
+                writeToFile(tickerData.CreateDataReader(), TEMP_DIR + ConfigurationManager.AppSettings["currenciesFileName"].ToString());
 
                 // now execute loader specific sql scripts (need a while to do so)
-                executeQueries(tmpDir, conn);
+                executeQueries(TEMP_DIR, conn);
 
                 // now let's move the files over to an FTP server
-                pushFiles(tmpDir);
-
-                // archive files
-                archiveFiles(tmpDir);
+                pushFiles(TEMP_DIR);
 
             }
             catch (Exception e)
@@ -109,8 +105,20 @@ namespace XFDataDump
             }
             finally
             {
+
+                // close connection
                 if (conn != null) conn.Close();
                 LOG.Debug("Closing Database Connection");
+
+                // let's tell everyone we're done
+                LOG.Info("Finished Data Processing, cleaning up");
+
+                // archive files
+                archiveFiles(TEMP_DIR);
+
+                // remove temporary directory
+                Directory.Delete(TEMP_DIR, true);
+
             }
 
         }
@@ -231,8 +239,7 @@ namespace XFDataDump
         static void archiveFiles(string tmpDir)
         {
 
-            string archiveDir = ConfigurationManager.AppSettings["archiveDir"].ToString();
-            string zipPath = archiveDir + DateTime.Now.ToString("MMddyyyyHHmmss") + ".zip";
+            string zipPath = getPath("archiveFile");
             string[] files = Directory.GetFiles(tmpDir);
             byte[] buffer = new byte[4096];
 
@@ -322,6 +329,18 @@ namespace XFDataDump
             }
 
         }
+
+        /**
+         * get a date based directory
+         */
+        internal static string getPath(string prop) {
+            var val = ConfigurationManager.AppSettings[prop].ToString();
+            val = string.Format(val, ID);
+            var dirs = Path.GetDirectoryName(val);
+            if (!Directory.Exists(dirs)) Directory.CreateDirectory(dirs);
+            return val;
+        }
+
     }
 
 }
