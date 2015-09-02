@@ -16,7 +16,8 @@ configuration(
 			"sign-up",
 			"forgot-password",
 			"change-password",
-			"account-settings"
+			"account-settings",
+			"premium"
 		]	
 	}
 );
