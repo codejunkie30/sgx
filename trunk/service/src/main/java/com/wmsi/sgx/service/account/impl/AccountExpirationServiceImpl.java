@@ -35,8 +35,10 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		
 		for( Account acc: accounts)	{
-			if(sdf.format(acc.getExpirationDate()).compareTo(sdf.format(new Date()))<0){
-				acc.setActive(false);
+			if(acc.getAlwaysActive() == false){
+				if(sdf.format(acc.getExpirationDate()).compareTo(sdf.format(new Date()))<0){
+					acc.setActive(false);
+				}
 			}
 		}
 	}

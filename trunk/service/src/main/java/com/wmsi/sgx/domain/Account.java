@@ -38,12 +38,18 @@ public class Account extends AbstractAuditable{
 
 	@Column(name = "active")
 	private Boolean active;
+	
+	@Column(name = "always_Active")
+	private Boolean alwaysActive;
 
 	@Column(name = "start_dt")
 	private Date startDate;
 
 	@Column(name = "expiration_dt")
 	private Date expirationDate;
+	
+	@Column(name = "contact_opt_in")
+	private Boolean contactOptIn;
 
 	public Long getId() {
 		return id;
@@ -92,6 +98,22 @@ public class Account extends AbstractAuditable{
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+	
+	public Boolean getAlwaysActive() {
+		return alwaysActive;
+	}
+
+	public void setAlwaysActive(Boolean alwaysActive) {
+		this.alwaysActive = alwaysActive;
+	}
+	
+	public Boolean getContactOptIn() {
+		return contactOptIn;
+	}
+
+	public void setContactOptIn(Boolean contactOptIn) {
+		this.contactOptIn = contactOptIn;
+	}
 
 	@Override
 	public String toString() {
@@ -103,12 +125,14 @@ public class Account extends AbstractAuditable{
 			.add("active", active)
 			.add("startDate", startDate)
 			.add("expirationDate", expirationDate)
+			.add("alwaysActive", "alwaysActive")
+			.add("contactOptIn", "contactOptIn")
 			.toString();
 	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(super.hashCode(), user, type, active, startDate, expirationDate);
+		return Objects.hashCode(super.hashCode(), user, type, active, startDate, expirationDate, alwaysActive, contactOptIn );
 	}
 	
 	@Override
@@ -120,7 +144,9 @@ public class Account extends AbstractAuditable{
 				&& Objects.equal(this.type, that.type)
 				&& Objects.equal(this.active, that.active)
 				&& Objects.equal(this.startDate, that.startDate)
-				&& Objects.equal(this.expirationDate, that.expirationDate);
+				&& Objects.equal(this.expirationDate, that.expirationDate)
+				&& Objects.equal(this.alwaysActive, that.alwaysActive)
+				&& Objects.equal(this.contactOptIn, that.contactOptIn);
 		}
 		return false;
 	}

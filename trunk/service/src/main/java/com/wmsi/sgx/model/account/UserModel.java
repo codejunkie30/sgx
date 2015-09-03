@@ -21,6 +21,9 @@ public class UserModel{
 	
 	@NotNull
 	private String passwordMatch;
+	
+	@NotNull
+	private Boolean contactOptIn;
 
 	public String getEmail() {
 		return email;
@@ -45,10 +48,18 @@ public class UserModel{
 	public void setPasswordMatch(String passwordMatch) {
 		this.passwordMatch = passwordMatch;
 	}
+	
+	public Boolean getContactOptIn() {
+		return contactOptIn;
+	}
+
+	public void setContactOptIn(Boolean contactOptIn) {
+		this.contactOptIn = contactOptIn;
+	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(email, password, passwordMatch);
+		return Objects.hashCode(email, password, passwordMatch,contactOptIn);
 	}
 	
 	@Override
@@ -57,7 +68,8 @@ public class UserModel{
 			UserModel that = (UserModel) object;
 			return Objects.equal(this.email, that.email)
 				&& Objects.equal(this.password, that.password)
-				&& Objects.equal(this.passwordMatch, that.passwordMatch);
+				&& Objects.equal(this.passwordMatch, that.passwordMatch)
+				&& Objects.equal(this.contactOptIn, that.contactOptIn);
 		}
 		return false;
 	}
@@ -68,6 +80,7 @@ public class UserModel{
 			.add("email", email)
 			.add("password", password)
 			.add("passwordMatch", passwordMatch)
+			.add("contactOptIn", contactOptIn)
 			.toString();
 	}
 

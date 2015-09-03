@@ -90,6 +90,8 @@ public class AccountServiceImpl implements AccountService{
 		acc.setStartDate(new Date());
 		acc.setExpirationDate(new DateTime().plusDays(expirationDays).toDate());
 		acc.setActive(true);
+		acc.setAlwaysActive(false);
+		acc.setContactOptIn(user.getContactOptIn());
 		
 		return accountRepository.save(acc);
 		

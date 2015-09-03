@@ -33,7 +33,7 @@ public class ErrorMessage{
 			}else{
 				errorList.add(msg.replace("[", "").replace("]", ""));
 			}
-		}	
+		}else errorList.add(msg);	
 	}
 	
 	public String getMessage(){return message;}
