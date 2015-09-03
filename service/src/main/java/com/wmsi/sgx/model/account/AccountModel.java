@@ -14,6 +14,12 @@ public class AccountModel{
 	private Date expirationDate;
 	
 	private AccountType type;
+	
+	private Date lastLoginDate;
+	
+	private Date lastPaymentDate;
+	
+	private Boolean contactOptIn;
 
 	public String getEmail() {
 		return email;
@@ -46,16 +52,43 @@ public class AccountModel{
 	public void setType(AccountType type) {
 		this.type = type;
 	}
+	
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+
+	public Date getLastPaymentDate() {
+		return lastPaymentDate;
+	}
+
+	public void setLastPaymentDate(Date lastPaymentDate) {
+		this.lastPaymentDate = lastPaymentDate;
+	}
+
+	public Boolean getContactOptIn() {
+		return contactOptIn;
+	}
+
+	public void setContactOptIn(Boolean contactOptIn) {
+		this.contactOptIn = contactOptIn;
+	}
+
 
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("email", email).add("startDate", startDate)
-				.add("expirationDate", expirationDate).add("type", type).toString();
+				.add("expirationDate", expirationDate).add("type", type)
+				.add("lastLoginDate", lastLoginDate).add("lastPaymentDate", lastPaymentDate)
+				.add("contactOptIn", contactOptIn).toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(email, startDate, expirationDate, type);
+		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn);
 	}
 
 	@Override
@@ -63,7 +96,9 @@ public class AccountModel{
 		if(object instanceof AccountModel){
 			AccountModel that = (AccountModel) object;
 			return Objects.equal(this.email, that.email) && Objects.equal(this.startDate, that.startDate)
-					&& Objects.equal(this.expirationDate, that.expirationDate) && Objects.equal(this.type, that.type);
+					&& Objects.equal(this.expirationDate, that.expirationDate) && Objects.equal(this.type, that.type)
+					&& Objects.equal(this.lastLoginDate, that.lastLoginDate) && Objects.equal(this.lastPaymentDate, that.lastPaymentDate)
+					&& Objects.equal(this.contactOptIn, that.contactOptIn);
 		}
 		return false;
 	}
