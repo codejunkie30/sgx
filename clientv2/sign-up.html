@@ -37,21 +37,16 @@
 			</div>
 			
 			<div class="agree-email">
-				<div class="checkbox terms">
-					<div class="trigger">					
-						I have read and agree to the <a data-bind="siteLink:'terms-conditions'">SGX Terms and Conditions</a>.
-					</div>
-					<input type="checkbox" name="terms-conditions" id="terms-conditions" data-bind="checked: termsConditions">					
+				<div class="checkbox">
+					<input type="checkbox" name="terms-conditions" id="terms-conditions" data-bind="checked: termsConditions"> 
+					<label for="terms-conditions">I have read and agree to the <a data-bind="siteLink:'terms-conditions'">SGX Terms and Conditions</a>.</label>
 				</div>
-				<div class="checkbox emails">
-					<div class="trigger">
-						I would like to receive emails from SGX.
-					</div>
-					<input type="checkbox" name="receive-emails" id="receive-emails" data-bind="checked: receiveEmails">	
-				</div>			
-			</div>
-			
-			<a class="button" data-bind="click:$root.startTrial">Start free trial</a>
+				<div class="checkbox">
+					<input type="checkbox" name="receive-emails" id="receive-emails" data-bind="checked: receiveEmails">
+					<label for="receive-emails">I would like to receive emails from SGX.</label>					
+				</div>
+			</div>			
+			<a class="button" data-bind="click:$root.startTrial, css: {'disabled-btn': (isFormValid() == undefined || termsConditions() == false || errors().length)}">Start free trial</a>
 		</div>
 		<footer>
 			<span class="left">Learn more about <a data-bind="siteLink:'premium'">StockFacts Premium</a></span>

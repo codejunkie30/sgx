@@ -218,6 +218,8 @@ table th, table td {
   text-decoration: none;
 }
 
+.button.disabled-btn { background: #c8c8c8; cursor: default; }
+
 .action-btn {
   color: #1e2171;
   display: inline-block;

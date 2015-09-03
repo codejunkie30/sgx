@@ -27,13 +27,13 @@
 		<div class="form">
 			<h4>Try StockFacts Premium free for 14 days.</h4>
 			<input class="text" type="email" data-bind="value: email" placeholder="Email Address">
-			<input class="text" type="password" data-binf="value: password" placeholder="Password">
+			<input class="text" type="password" data-bind="value: password" placeholder="Password">
 			
 			<div class="error-messages">
 				<p data-bind="validationMessage:email"></p>
 				<p data-bind="validationMessage:password"></p>
 			</div>
-			<a class="button" data-bind="click:$root.signIn">Sign In</a>
+			<a class="button" data-bind="click:$root.signIn, css: {'disabled-btn': (isFormValid() == undefined || errors().length)}">Sign In</a>
 		</div>
 		<footer>
 			<span class="left"><a data-bind="siteLink:'forgot-password'">Forgot Password?</a></span>

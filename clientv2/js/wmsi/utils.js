@@ -93,6 +93,59 @@ define(["jquery"], function($) {
         	
         },
         
+		handleAjaxRequestPost: function(endpoint, data, successFN, errorFN, jsonpCallback) {
+        	
+        	var config = {
+                url: endpoint,
+                type: 'POST',
+                dataType: 'jsonp',
+                scriptCharset: "utf-8" , 
+                contentType: 'application/json; charset=UTF-8',          	
+                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+        	};
+        	
+        	// add data request
+        	if (typeof data !== "undefined") {
+        		config.data = { 'json': JSON.stringify(data) };
+        	}
+        	
+        	// add callback function name if exists
+        	if (typeof jsonpCallback !== "undefined") {
+        		config.jsonpCallback = jsonpCallback;
+        	}
+        	
+        	$.ajax(config);
+        	
+        },
+		
+		handleAjaxRequestPostEncode: function(endpoint, data, successFN, errorFN, jsonpCallback) {
+        	
+        	var config = {
+                url: endpoint,
+                type: 'POST',
+                dataType: 'jsonp',
+                scriptCharset: "utf-8" , 
+                contentType: 'application/x-www-form-urlencoded',           	
+                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+        	};
+        	
+        	// add data request
+        	if (typeof data !== "undefined") {
+        		config.data = { 'json': JSON.stringify(data) };
+        	}
+        	
+        	// add callback function name if exists
+        	if (typeof jsonpCallback !== "undefined") {
+        		config.jsonpCallback = jsonpCallback;
+        	}
+        	
+        	$.ajax(config);
+        	
+        },
+		
+		
         /**
          * used when no success function passed to handleAjaxRequest
          * @param data the data returned from the server
