@@ -1,26 +1,32 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
 	
-	var SIGNIN = {
-		email: ko.observable().extend({
-			required: { message: 'Email Address is required.'},
-			email: { message: 'Your email address must be in a valid format.'}
-		}),	
+	var FORGOTPASS = {
+		email: ko.observable(),
 		initPage: function() {
-    		ko.validation = validation;
-    		ko.validation.init({ insertMessages: false });
+			
+			this.isFormValid = ko.computed(function() {
+			    return this.email();
+			}, this);
+			
+    		// finish other page loading
+    		ko.applyBindings(this, $("body")[0]);
+			
+			ko.validation = validation;
+    		validation.init({ insertMessages: false });
 			
 			ko.validation.registerExtenders();
 			
-			this.errors = ko.validation.group(this);			
+			FORGOTPASS.email.extend({
+				required: { message: 'Email Address is required.' },
+				email: { message: 'Your email address must be in a valid format.' }
+			});
+
+			this.errors = validation.group(this);			
 			
 			this.errors.subscribe(function () {
-			    PAGE.resizeIframeSimple();
-		   });
-			
-			
-			// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
-    		
+				PAGE.resizeIframeSimple();
+			});
+						
 			// resize
     		this.resizeIframeSimple();			
 						
@@ -29,11 +35,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			//this.initValidation();
     		return this;
 		},
-		forgotPass: function(){			
+		forgotPass: function(){
+			
 		}
-
 	};
 	
-	return SIGNIN;
+	return FORGOTPASS;
 	
 });
