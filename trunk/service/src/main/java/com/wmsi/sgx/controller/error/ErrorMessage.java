@@ -21,12 +21,10 @@ public class ErrorMessage{
 		int startIndexOfFirstError = msg.indexOf('[');
 		if(startIndexOfFirstError>0){
 			String validationErrorString = msg.substring(startIndexOfFirstError); 
-			System.out.println(validationErrorString);
 			if(validationErrorString.contains("[")){
 				String[] errorMessages = validationErrorString.split("\\[");
 				
 				for( String message: errorMessages){
-					System.out.println(message);
 					if(message.length()>0)
 					errorList.add(message.replace("[", "").replace("]", ""));
 				}
