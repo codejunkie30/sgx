@@ -84,16 +84,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 	        }
 			
 			
-			UTIL.handleAjaxRequestPost(endpoint, params, function(){
-					console.log('status')
+			UTIL.handleAjaxRequestPost(
+				endpoint, 
+				params, 
+				function(data, textStatus, jqXHR){
+					console.log("I AM IN SUCCESS");
+					console.log(textStatus);
+					console.log(data);
+					console.log(jqXHR);
 				}, 
-				function(data){
-					console.log('fail');
-				}, 
-				function(callback){
-					console.log(callback);
-					console.log(data.message);
-				});
+				function(jqXHR, textStatus, errorThrown){
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				}
+			);
 			
 		}
 
