@@ -28,15 +28,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			});
 						
 			// resize
-    		this.resizeIframeSimple();			
-						
-			// validation
+    		this.resizeIframeSimple();
+			
+			// Placeholder
 			$('.form input').placeholder();
-			//this.initValidation();
     		return this;
 		},
-		forgotPass: function(){
+		forgotPass: function(me){
+			var endpoint = me.fqdn + "/sgx/user/reset";
+			var params = { username: FORGOTPASS.email() };
 			
+			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
+	            return
+	        }			
+			
+			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {
+				console.log( data );
+			});
 		}
 	};
 	

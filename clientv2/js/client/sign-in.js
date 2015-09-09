@@ -49,20 +49,45 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
     		return this;
 		},
 		signIn: function(me){
-			var endpoint = me.fqdn + "/sgx/login";
-			var params = { username: me.email(), password: me.password() };
 			
-			if (this.errors().length > 0 || SIGNIN.isFormValid() == undefined) {				
+			var endpoint = me.fqdn + "/sgx/login";
+			//var params = {username:me.email(), password:me.password()};
+			var params = 'username='+me.email()+'&password='+me.password()+''
+			
+			var username = me.email();
+			var password = me.password();
+			
+			alert($('.form').serialize());
+			
+			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
 			
-			UTIL.handleAjaxRequestEncode(endpoint, params, function(success) {
-				console.log(success);	
-			}, function(error){
-					console.log(error);
-			}, function(callback){
-				console.log(callback);
+			var callback = function(data){
+				console.log('callback');
+			}
+			
+			var success = function(data){
+				console.log('success');
+			}
+			
+			var fail = function(data){
+				console.log('fail');
+			}
+			
+			var result = $.ajax({
+				url: endpoint,
+                type: 'POST',
+				data:  params,
+                dataType: 'jsonp',
+				encode: true,
+                contentType: 'application/json',
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+			         console.log(textStatus, errorThrown);
+			    }
 			});
+			
+			//UTIL.handleAjaxRequestPost(endpoint, params, success, fail, callback);			
 		}
 
 	};

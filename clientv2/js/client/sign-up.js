@@ -42,8 +42,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			SIGNUP.password.extend({
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
+					maxLength: { params: 40, message: minMaxMessage }}).extend({
 					pattern: {
 						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
 						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
@@ -51,37 +50,51 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 				});
 			
 			SIGNUP.retypePassword.extend({
-					required: { message: 'Retype Password is required.' }			
-				}).extend({
+				required: { message: 'Retype Password is required.' }}).extend({
 					areSame: { 
-						params: SIGNUP.password						
+						params: SIGNUP.password,
+						message: 'Your passwords must match.'
 					}	
 				});			
 			
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
+				console.log(SIGNUP.password());
+				console.log(SIGNUP.retypePassword());
+
 				PAGE.resizeIframeSimple();
 			});			
     		
 			// resize
     		this.resizeIframeSimple();
 			
-			// validation
+			// Placeholder
 			$('.form input').placeholder();
-			//this.initValidation();
+			
     		return this;
 		},
-		startTrial: function(SIGNUP, me){
+		startTrial: function(me){
 			
 			var endpoint = me.fqdn + "/sgx/user/create";
-			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword() };
-			
-			if (this.errors().length > 0 || SIGNUP.isFormValid() == undefined || SIGNUP.termsConditions() == false) {				
+			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
+						
+			if (this.errors().length > 0 || this.isFormValid() == undefined || SIGNUP.termsConditions == false) {				
 	            return
 	        }
 			
-			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {console.log( data );});	
+			
+			UTIL.handleAjaxRequestPost(endpoint, params, function(){
+					console.log('status')
+				}, 
+				function(data){
+					console.log('fail');
+				}, 
+				function(callback){
+					console.log(callback);
+					console.log(data.message);
+				});
+			
 		}
 
 	};
