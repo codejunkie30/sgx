@@ -46,8 +46,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			CHANGEPASS.newPassword.extend({
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
+					maxLength: { params: 40, message: minMaxMessage }}).extend({
 					pattern: {
 						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
 						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
@@ -55,8 +54,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 				});
 			
 			CHANGEPASS.retypeNewPassword.extend({
-					required: { message: 'Retype Password is required.' }			
-				}).extend({
+				required: { message: 'Retype Password is required.' }}).extend({
 					areSame: { 
 						params: CHANGEPASS.newPassword
 					}	
@@ -71,21 +69,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			// resize
     		this.resizeIframeSimple();
 			
-			// validation
+			// Placeholder
 			$('.form input').placeholder();
-			//this.initValidation();
+			
     		return this;
 		},
-		resetPass: function(SIGNUP, me){
+		changePass: function(SIGNUP, me){
 			
-			var endpoint = me.fqdn + "/sgx/user/create";
-			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword() };
+			var endpoint = me.fqdn + "/sgx/account/password";
+			var params = { tempPassword: SIGNUP.tempPassword(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword() };
 			
-			if (this.errors().length > 0 || CHANGEPASS.isFormValid() == undefined) {				
+			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }			
 			
-			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {console.log( data );});		
+			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {
+				console.log( data );
+			});
 		}
 
 	};

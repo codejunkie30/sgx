@@ -1,7 +1,6 @@
 define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
-	
-	
-	var SIMPLE = {
+		
+	var PREMIUM = {
 			
 		initPage: function() {
 			
@@ -12,10 +11,12 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		this.resizeIframeSimple();
     		
     		return this;
-		}		
-
+		},		
+		cancel: function () {
+        	history.back();
+  		}
 	};
 	
-	return SIMPLE;
+	return PREMIUM;
 	
 });

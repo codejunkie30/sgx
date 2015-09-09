@@ -135,7 +135,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	PAGE = {
 
 		//fqdn : "http://54.254.221.141", /** PROD */
-		fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
+		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
+		
+		fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com",
 		
 		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
 			

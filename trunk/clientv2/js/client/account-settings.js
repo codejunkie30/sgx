@@ -1,55 +1,81 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
 	
-	var SIGNUP = {
-			
-		newPassword: ko.observable().extend({
-			required: { message: 'New Password is required.'}}).extend({
-				minLength: 8,
-				maxLength: 40,
-		        message: 'Your new password must be between 8 and 40 characters.'
-	        }).extend({
-				pattern: {
-					message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-					params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
-				}
-		}),
-		retypeNewPassword: ko.observable().extend({
-			required: { message: 'Retype New Password is required.'},
-			equal: { 
-				message: 'Your passwords must match.',
-				params: this.password			 
-			}
-		}),
-		
+	var SAVECHANGES = {			
+		newPassword: ko.observable(),
+		retypeNewPassword: ko.observable(),
+		receiveEmails: ko.observable(true),
+		showChange: ko.observable(false),
+		detectChange: ko.observable(false),
 		initPage: function() {
-    		ko.validation = validation;
-    		ko.validation.init({ insertMessages: false });
+    		
+			SAVECHANGES.receiveEmails.subscribe(function(newValue){
+			  // alert('email');
+			   this.test = ko.computed(function() {
+				   
+				   SAVECHANGES.detectChange = ko.observable(true);
+				   
+				   console.log(SAVECHANGES.detectChange());
+				});
+			   
+			});
+			
+			
+			SAVECHANGES.showChange.subscribe(function(newValue){
+				this.isFormValid = ko.computed(function() {
+				    return this.newPassword() && this.retypeNewPassword();
+				}, this);
+			});
+			
+    		ko.applyBindings(this, $("body")[0]);			
+			
+			ko.validation = validation;
+    		validation.init({ insertMessages: false });
+			
+			validation.rules['areSame'] = {
+			    getValue: function (o) {
+			        return (typeof o === 'function' ? o() : o);
+			    },
+			    validator: function (val, otherField) {
+			        return val === this.getValue(otherField);
+					PAGE.resizeIframeSimple();
+			    },
+			    message: 'Your passwords must match.'
+			};
 			
 			ko.validation.registerExtenders();
+			
+			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';		
+			
+			SAVECHANGES.newPassword.extend({
+				required: { message: 'New Password is required.' }}).extend({
+					minLength: { params: 8, message: minMaxMessage },
+					maxLength: { params: 40, message: minMaxMessage }
+		        }).extend({
+					pattern: {
+						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
+						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+					}
+				});
+			
+			SAVECHANGES.retypeNewPassword.extend({
+				required: { message: 'Retype Password is required.' }}).extend({
+				areSame: { 
+					params: SAVECHANGES.newPassword
+				}	
+			});			
 			
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
-			    PAGE.resizeIframeSimple();
-		   });
-			
-			
-			// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
+				PAGE.resizeIframeSimple();
+			});
     		
 			// resize
-    		this.resizeIframeSimple();			
+    		this.resizeIframeSimple();
 			
-			$('.change a').click(function(){
-				$('.change').hide();
-				$('.new-pass').show();
-			});
+			// Placeholder
+			$('.form input').placeholder();		
 			
-			$('.form input').placeholder();
-			
-			
-			// validation
-			//this.initValidation();
     		return this;
 		},
 		startTrial: function(){
@@ -59,10 +85,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			} else { 
 				alert('nope'); 
 			}			
-		}
+		},		
+		cancel: function () {
+        	history.back();
+  		}
 
 	};
 	
-	return SIGNUP;
+	return SAVECHANGES;
 	
 });

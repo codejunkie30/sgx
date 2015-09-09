@@ -29,11 +29,17 @@
 			<div class="form-wrapper">
 				<label>Password</label>
 				<span><input name="password" type="password" value="password" class="password" disabled readonly></span>
-				<span class="new-pass">
-					<input name="newPassword" type="password" value="" placeholder="New Password">
-					<input name="retypeNewPassword" type="password" placeholder="Retype New Password">
+				<span class="new-pass" data-bind="visible: showChange()">
+					<input name="newPassword" type="password" data-bind="value: newPassword" placeholder="New Password">
+					<input name="retypeNewPassword" type="password" data-bind="value: retypeNewPassword" placeholder="Retype New Password">
 				</span>
-				<span class="change"><a>CHANGE</a></span>
+				<span class="change" data-bind="click: showChange, visible: !showChange()"><a>CHANGE</a></span>
+				
+				<div class="error-messages">
+					<p data-bind="validationMessage: newPassword"></p>
+					<p data-bind="validationMessage: retypeNewPassword"></p>
+				</div>
+				
 			</div>
 			<div class="form-wrapper">
 				<label>Default Currency</label>
@@ -46,21 +52,14 @@
 			<div class="form-wrapper">
 				<label>Receive Mailings</label>
 				<span class="mailings">
-					<input name="mailings" type="radio" id="mail-yes" value="Yes" checked="checked"> <label for="mail-yes">Yes</label>
-					<input name="mailings" type="radio" id="mail-no" value="No"> <label for="mail-no">No</label>
+					<input type="checkbox" name="receive-emails" id="receive-emails" data-bind="checked: receiveEmails">
 				</span>
 			</div>
-						
-			<div class="error-messages">
-				<p data-bind="validationMessage:newPassword"></p>
-				<p data-bind="validationMessage:retypeNewPassword"></p>
-			</div>		
-			
 		</div>
 		<div style="text-align: center; margin: 15px 0;">
-			<a class="button">Save changes</a>
-			<a>CANCEL</a>
-			</div>
+			<a class="button" data-bind="click:$root.saveChanges, css: {'disabled-btn': (detectChange() == false)}">Save changes</a>
+			<a class="cancel" data-bind="click:$root.cancel">CANCEL</a>
+		</div>
 	</section>
 
 	
