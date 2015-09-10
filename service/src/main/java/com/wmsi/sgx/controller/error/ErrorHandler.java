@@ -50,7 +50,7 @@ public class ErrorHandler{
 	}
 
 	@ExceptionHandler(UserExistsException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ErrorResponse handleException(UserExistsException e) {
 
 		log.debug("User Exists Exception.", e);
