@@ -72,7 +72,7 @@ define(["jquery"], function($) {
         	var config = {
                 url: endpoint,
                 type: 'GET',
-                dataType: 'json',
+                dataType: 'jsonp',
                 contentType: 'text/plain; charset=UTF-8',           	
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError

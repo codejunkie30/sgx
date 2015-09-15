@@ -8,7 +8,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.j
 		detectChange: ko.observable(false),
 		initPage: function(data) {
     		
-			this.accountSettings(data);
+			//this.accountSettings(data);
 			
 			SAVECHANGES.receiveEmails.subscribe(function(newValue){
 			  // alert('email');
@@ -81,10 +81,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.j
     		return this;
 		},
 		accountSettings: function(){
-			//var endpoint = PAGE.fqdn + "/sgx/account/info";
-			var endpoint = "js/client/data/temp.json"
-			//console.log(PAGE.account);
-			UTIL.handleAjaxRequestPost(
+			var endpoint = PAGE.fqdn + "/sgx/account/info";			
+			
+			UTIL.handleAjaxRequest(
 				endpoint,
 				function(data, textStatus, jqXHR){
 					console.log(data.email);
@@ -100,8 +99,41 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.j
 				});
 			
 		},
-		saveChanges: function(){
+		saveChanges: function(me){
 			
+			var endpointPass = me.fqdn + "/sgx/account/password";	
+			var endpointInfo = me.fqdn + "/sgx/account/infoPost";	
+			
+			UTIL.handleAjaxRequestPost(
+				endpointChange,
+				function(data, textStatus, jqXHR){
+					console.log(data.email);
+					console.log(data.startDate);
+					console.log(data.expirationDate);
+					console.log(data.type);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+					console.log(jqXHR.statusCode() );
+				});
+			
+			
+			UTIL.handleAjaxRequestPost(
+				endpointSettings,
+				function(data, textStatus, jqXHR){
+					console.log(data.email);
+					console.log(data.startDate);
+					console.log(data.expirationDate);
+					console.log(data.type);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+					console.log(jqXHR.statusCode() );
+				});
 						
 		},		
 		cancel: function () {

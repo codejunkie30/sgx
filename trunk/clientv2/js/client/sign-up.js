@@ -30,6 +30,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			    message: 'Your passwords must match.'
 			};			
 			
+			ko.validation.rules['passwordComplexity'] = {
+			    validator: function (val) {
+			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
+			    },
+			    message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.'
+			};
+			
 			ko.validation.registerExtenders();
 			
 			SIGNUP.email.extend({
@@ -43,9 +50,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
 					maxLength: { params: 40, message: minMaxMessage }}).extend({
-					pattern: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+					passwordComplexity: {
+						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.'//,
+						//params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
 					}
 				});
 			

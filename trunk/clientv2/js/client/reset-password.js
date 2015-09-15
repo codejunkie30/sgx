@@ -1,7 +1,7 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
 	
 	var RESETPASS = {
-		tempPassword: ko.observable(),		
+		email: ko.observable(),		
 		newPassword: ko.observable(),
 		retypeNewPassword: ko.observable(),
 		
@@ -9,7 +9,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
     		// finish other page loading
 						
 			this.isFormValid = ko.computed(function() {
-			    return this.tempPassword() && this.newPassword() && this.retypeNewPassword();
+			    return this.email() && this.newPassword() && this.retypeNewPassword();
 			}, this);
 			
     		ko.applyBindings(this, $("body")[0]);
@@ -32,16 +32,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			
 			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
 			
-			RESETPASS.tempPassword.extend({
-				required: { message: 'Temporary Password is required.'}}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
-					pattern: {
-						message: 'Your temporary password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
-					}
-				});			
+			RESETPASS.email.extend({
+				required: { message: 'Email Address is required.' },
+				email: { message: 'Your email address must be in a valid format.' }
+			});		
 			
 			RESETPASS.newPassword.extend({
 				required: { message: 'New Password is required.' }}).extend({
@@ -56,7 +50,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			RESETPASS.retypeNewPassword.extend({
 				required: { message: 'Retype Password is required.' }}).extend({
 					areSame: { 
-						params: CHANGEPASS.newPassword
+						params: RESETPASS.newPassword
 					}	
 				});			
 			
@@ -77,7 +71,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 		resetPass: function(SIGNUP, me){
 			var token = this.getURLParam('ref');
 			var endpoint = me.fqdn + "/sgx/user/password?ref="+token;
-			var params = { tempPassword: RESETPASS.tempPassword(), password: RESETPASS.password(), passwordMatch: RESETPASS.retypePassword() };
+			var params = { email: RESETPASS.email(), password: RESETPASS.password(), passwordMatch: RESETPASS.retypePassword() };
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
