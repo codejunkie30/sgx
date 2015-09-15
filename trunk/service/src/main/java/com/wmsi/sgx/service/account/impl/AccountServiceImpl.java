@@ -46,6 +46,7 @@ public class AccountServiceImpl implements AccountService{
 			ret.setStartDate(account.getStartDate());
 			ret.setExpirationDate(account.getExpirationDate());
 			ret.setType(account.getType());
+			ret.setContactOptIn(account.getContactOptIn());
 		}
 			
 			return ret;

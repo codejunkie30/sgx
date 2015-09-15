@@ -22,7 +22,7 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setStatus(HttpServletResponse.SC_ACCEPTED);
 
 		objectMapper.writeValue(response.getOutputStream(), new AuthenticationFailure(exception.getMessage()));
 
