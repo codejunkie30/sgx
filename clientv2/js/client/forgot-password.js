@@ -38,13 +38,29 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			var endpoint = me.fqdn + "/sgx/user/reset";
 			var params = { username: FORGOTPASS.email() };
 			
+			var sentMsg = 'An email was sent to reset your password.';
+			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
-	        }			
+	        }
 			
-			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {
-				console.log( data );
-			});
+			UTIL.handleAjaxRequestPost(
+				endpoint,
+				params, 
+				function(data, textStatus, jqXHR){
+					if (data == true){
+						$('.form').empty().addClass('rp-sent');
+						$('<p/>').html(sentMsg).appendTo('.form.rp-sent');
+						PAGE.resizeIframeSimple();	
+					}
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				});
+			
 		}
 	};
 	

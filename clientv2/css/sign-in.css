@@ -2,6 +2,8 @@ section { margin: 0 auto; width: 700px; }
 section header { background: #5f6062; height: 110px; }
 section header h2 { color: #fff; font-size: 31px; text-align: center; position: relative; top: 60px; }
 section .form { background: #ebecec; text-align: center; }
+section .form.confirm,
+section .form.rp-sent { min-height: 175px; padding: 25px; }
 section .form h4 { padding: 14px 0; }
 section .form p { padding: 15px 0; margin: 0; }
 section .form p.forgot { padding: 0 0 15px 0; margin: 0; }
@@ -17,6 +19,8 @@ section .form .button { font-size: 17px !important; margin: 20px 0; padding: 5px
 section .form .error-messages p { color: #bf0052 !important; line-height: 16px; padding: 0 0 10px 0; }
 
 section.settings { text-align: left; width: 992px; }
+section.settings p a { color: #1e2171; text-decoration: none; }
+section.settings p a:hover { text-decoration: underline; }
 section.settings .form { background: #ebecec; padding: 0 30px 30px 30px; width: 932px; text-align: left; }
 section.settings .form-wrapper { padding: 30px 0 0 0; }
 section.settings .form-wrapper label { width: 200px; display: inline-block; color: #333; font-weight: bold; }

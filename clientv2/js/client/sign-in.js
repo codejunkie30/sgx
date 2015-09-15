@@ -51,43 +51,26 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 		signIn: function(me){
 			
 			var endpoint = me.fqdn + "/sgx/login";
-			//var params = {username:me.email(), password:me.password()};
-			var params = 'username='+me.email()+'&password='+me.password()+''
-			
-			var username = me.email();
-			var password = me.password();
-			
-			alert($('.form').serialize());
+			var params = {username:me.email(), password:me.password()};
+			//var params = 'username='+me.email()+'&password='+me.password()+'';
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
 			
-			var callback = function(data){
-				console.log('callback');
-			}
-			
-			var success = function(data){
-				console.log('success');
-			}
-			
-			var fail = function(data){
-				console.log('fail');
-			}
-			
-			var result = $.ajax({
-				url: endpoint,
-                type: 'POST',
-				data:  params,
-                dataType: 'jsonp',
-				encode: true,
-                contentType: 'application/json',
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-			         console.log(textStatus, errorThrown);
-			    }
-			});
-			
-			//UTIL.handleAjaxRequestPost(endpoint, params, success, fail, callback);			
+			UTIL.handleAjaxRequestPostLogin(
+				endpoint,
+				params, 
+				function(data, textStatus, jqXHR){
+					console.log('success');
+					console.log(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				});		
 		}
 
 	};

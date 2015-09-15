@@ -15,7 +15,7 @@
             "highstock": 'vendor/highstock/highstock',
             "underscore": 'vendor/underscore',
             "colorbox": 'vendor/colorbox',
-            "json2": 'vendor/json2'            
+            "json2": 'vendor/json2'
         },
         
         waitSeconds: 10,
