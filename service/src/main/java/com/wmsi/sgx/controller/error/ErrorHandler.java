@@ -29,7 +29,7 @@ public class ErrorHandler{
 	private MessageSource messages;
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ErrorResponse handleInvalidInstrumentException(MethodArgumentNotValidException e) {
 
 		StringBuilder errMsg = new StringBuilder("Validation failure. Errors: ");
@@ -66,7 +66,7 @@ public class ErrorHandler{
 	}
 
 	@ExceptionHandler(UserVerificationException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ErrorResponse handleException(UserVerificationException e) {
 
 		log.debug("User Verification Exception.", e);
@@ -81,7 +81,7 @@ public class ErrorHandler{
 	}
 
 	@ExceptionHandler(InvalidTokenException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ErrorResponse handleException(InvalidTokenException e) {
 
 		log.debug("Invalid Token Exception.", e);
@@ -96,7 +96,7 @@ public class ErrorHandler{
 	}
 
 	@ExceptionHandler(Throwable.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ErrorResponse handleException(Throwable e) {
 		
 		log.error("Caught unkown exception", e);
