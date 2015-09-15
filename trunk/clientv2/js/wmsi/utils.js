@@ -72,9 +72,8 @@ define(["jquery"], function($) {
         	var config = {
                 url: endpoint,
                 type: 'GET',
-                dataType: 'jsonp',
-                scriptCharset: "utf-8" , 
-                contentType: 'application/json; charset=UTF-8',           	
+                dataType: 'json',
+                contentType: 'text/plain; charset=UTF-8',           	
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};
@@ -98,9 +97,40 @@ define(["jquery"], function($) {
         	var config = {
                 url: endpoint,
                 type: 'POST',
+				timeout : 1500,
                 dataType: 'jsonp',
+				jsonp: 'callback',
+    			data: {'json':JSON.stringify(data)},
                 scriptCharset: "utf-8" , 
-                contentType: 'application/json; charset=UTF-8',          	
+                contentType: 'application/json',          	
+                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError,
+				jsonpCallback:"callback"
+        	};
+        	
+        	// add data request
+        	if (typeof data !== "undefined") {
+        		config.data = { 'json': JSON.stringify(data) };
+        	}
+        	
+        	// add callback function name if exists
+        	if (typeof jsonpCallback !== "undefined") {
+        		config.jsonpCallback = jsonpCallback;
+        	}
+        	
+        	$.ajax(config);
+        	
+        },
+		
+		handleAjaxRequestPostLogin: function(endpoint, data, successFN, errorFN, jsonpCallback) {
+        	
+        	var config = {
+                url: endpoint,
+                type: 'POST',
+				timeout : 1500,
+                dataType: 'jsonp',
+				jsonp: 'callback',
+    			data: {'json':JSON.stringify(data)},
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};

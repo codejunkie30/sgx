@@ -1,17 +1,15 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
 	
-	var SIGNUP = {
-		email: ko.observable(),
-		password: ko.observable(),
-		retypePassword: ko.observable(),		
-		termsConditions: ko.observable(false),
-		receiveEmails: ko.observable(false),
+	var RESETPASS = {
+		tempPassword: ko.observable(),		
+		newPassword: ko.observable(),
+		retypeNewPassword: ko.observable(),
 		
 		initPage: function() {
     		// finish other page loading
 						
 			this.isFormValid = ko.computed(function() {
-			    return this.email() && this.password() && this.retypePassword();
+			    return this.tempPassword() && this.newPassword() && this.retypeNewPassword();
 			}, this);
 			
     		ko.applyBindings(this, $("body")[0]);
@@ -28,18 +26,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 					PAGE.resizeIframeSimple();
 			    },
 			    message: 'Your passwords must match.'
-			};			
+			};
 			
 			ko.validation.registerExtenders();
 			
-			SIGNUP.email.extend({
-				required: { message: 'Email Address is required.' },
-				email: { message: 'Your email address must be in a valid format.' }
-			});
-			
 			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
 			
-			SIGNUP.password.extend({
+			RESETPASS.tempPassword.extend({
+				required: { message: 'Temporary Password is required.'}}).extend({
+					minLength: { params: 8, message: minMaxMessage },
+					maxLength: { params: 40, message: minMaxMessage }
+		        }).extend({
+					pattern: {
+						message: 'Your temporary password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
+						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+					}
+				});			
+			
+			RESETPASS.newPassword.extend({
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
 					maxLength: { params: 40, message: minMaxMessage }}).extend({
@@ -49,20 +53,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 					}
 				});
 			
-			SIGNUP.retypePassword.extend({
+			RESETPASS.retypeNewPassword.extend({
 				required: { message: 'Retype Password is required.' }}).extend({
 					areSame: { 
-						params: SIGNUP.password,
-						message: 'Your passwords must match.'
+						params: CHANGEPASS.newPassword
 					}	
 				});			
 			
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
-				console.log(SIGNUP.password());
-				console.log(SIGNUP.retypePassword());
-
 				PAGE.resizeIframeSimple();
 			});			
     		
@@ -74,23 +74,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			
     		return this;
 		},
-		startTrial: function(me){
+		resetPass: function(SIGNUP, me){
+			var token = this.getURLParam('ref');
+			var endpoint = me.fqdn + "/sgx/user/password?ref="+token;
+			var params = { tempPassword: RESETPASS.tempPassword(), password: RESETPASS.password(), passwordMatch: RESETPASS.retypePassword() };
 			
-			var endpoint = me.fqdn + "/sgx/user/create";
-			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
-						
-			if (this.errors().length > 0 || this.isFormValid() == undefined || SIGNUP.termsConditions == false) {				
+			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
-	        }
+	        }			
 			
-			var dupeEmailMsg = 'That email address is already registered with StockFacts. Please enter a new email address.';
-			var successMsg = 'Your account has been created. The next step is to validate your email address. Please log into your email account and click the link to confirm your email address.';
+			var invalidMsg = 'Invalid Token.';
+			var successMSG = 'Your password has been reset.'
 			
 			UTIL.handleAjaxRequestPost(
 				endpoint, 
 				params, 
 				function(data, textStatus, jqXHR){
-					if (data.details.errorCode == 4003){
+					if (data.details.errorCode == 4005){
 						$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					} else {
@@ -105,11 +105,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
 				});
-
+		},
+		getURLParam: function getURLParam(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+		
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+		
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
 		}
 
 	};
 	
-	return SIGNUP;
+	return RESETPASS;
 	
 });

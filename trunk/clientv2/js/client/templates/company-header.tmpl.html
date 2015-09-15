@@ -1,23 +1,23 @@
 <header class="header">	
 	<div class="login-bar">
-		<span class="stock-facts"><b>StockFacts <i>Premium</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'index', extra: 'code=' + ticker } ">Learn more &raquo;</a> </span>
+		<!--<span class="stock-facts"><b>StockFacts <i>Premium</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'premium', extra: 'code=' + ticker } ">Learn more &raquo;</a> </span>
 		<div class="right">
 			<a class="button" data-bind="siteLink: { id: 'sign-in', extra: 'code=' + ticker } ">Sign in</a>
 			<a class="button" data-bind="siteLink: { id: 'sign-up', extra: 'code=' + ticker } ">Start your free trial</a>
-		</div>
-		<!--<span class="stock-facts">StockFacts <i>Premium</i></span>
+		</div>-->
+		<span class="stock-facts">StockFacts <i>Premium</i></span>
 		<span class="logged-in-as">Logged in as sbray@wealthmsi.com</span>
 		<ul>
 			<li><a href="">Account</a></li>
 			<li><a href="">Alerts</a></li>
-			<li class="last"><a href="">Sign Out</a></li>
+			<li class="last"><a data-bind="siteLink: { id: 'logout', extra: 'code=' + ticker } ">Sign Out</a></li>
 		</ul>
 		<div class="right">
 			<span class="currency">Currency</span>
 			<select>
 				<option>Singapore (SGD)</option>
 			</select>
-		</div>-->
+		</div>
 	</div>
 	
 	<div class="profile">

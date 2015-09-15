@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.json", "jquery-placeholder" ], function(UTIL, ko, validation, account) {
 	
 	var SAVECHANGES = {			
 		newPassword: ko.observable(),
@@ -6,8 +6,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 		receiveEmails: ko.observable(true),
 		showChange: ko.observable(false),
 		detectChange: ko.observable(false),
-		initPage: function() {
+		initPage: function(data) {
     		
+			this.accountSettings(data);
+			
 			SAVECHANGES.receiveEmails.subscribe(function(newValue){
 			  // alert('email');
 			   this.test = ko.computed(function() {
@@ -22,7 +24,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			
 			SAVECHANGES.showChange.subscribe(function(newValue){
 				this.isFormValid = ko.computed(function() {
-				    return this.newPassword() && this.retypeNewPassword();
+				    return SAVECHANGES.newPassword() && SAVECHANGES.retypeNewPassword();
 				}, this);
 			});
 			
@@ -78,13 +80,29 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			
     		return this;
 		},
-		startTrial: function(){
+		accountSettings: function(){
+			//var endpoint = PAGE.fqdn + "/sgx/account/info";
+			var endpoint = "js/client/data/temp.json"
+			//console.log(PAGE.account);
+			UTIL.handleAjaxRequestPost(
+				endpoint,
+				function(data, textStatus, jqXHR){
+					console.log(data.email);
+					console.log(data.startDate);
+					console.log(data.expirationDate);
+					console.log(data.type);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+					console.log(jqXHR.statusCode() );
+				});
 			
-			if ($('.terms').hasClass('checked')) { 
-				alert('terms');
-			} else { 
-				alert('nope'); 
-			}			
+		},
+		saveChanges: function(){
+			
+						
 		},		
 		cancel: function () {
         	history.back();
