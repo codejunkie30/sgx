@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wmsi.sgx.model.ResetUser;
+import com.wmsi.sgx.model.VerifyUser;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.InvalidTokenException;
@@ -38,10 +39,10 @@ public class UserController{
 		return true;
 	}
 	
-	@RequestMapping(value = "verify", method = RequestMethod.GET)
-	public @ResponseBody Boolean verify(@RequestParam("ref") String token) throws UserVerificationException, AccountCreationException{
+	@RequestMapping(value = "verify", method = RequestMethod.POST)
+	public @ResponseBody Boolean verify(@RequestBody VerifyUser user) throws UserVerificationException, AccountCreationException{
 	
-		return registrationService.verifyUser(token);
+		return registrationService.verifyUser(user.getToken());
 	}
 
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
@@ -65,7 +66,6 @@ public class UserController{
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
 	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody UserModel user) throws InvalidTokenException{
-	
 		return registrationService.resetPassword(user, token);
 	}
 	
