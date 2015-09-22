@@ -1,0 +1,1 @@
+*/2 * * * * /bin/bash /root/cron/build.sh >> /root/logs/build.log 2>&1
