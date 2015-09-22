@@ -21,8 +21,9 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-
-		response.setStatus(HttpServletResponse.SC_ACCEPTED);
+		//Temporary: Changing HttpServletResponse.SC_Unauthorised to SC.OK as requested for UI to recieve 
+		//errors untill we implement CORS for cross domain
+		response.setStatus(HttpServletResponse.SC_OK);
 
 		objectMapper.writeValue(response.getOutputStream(), new AuthenticationFailure(exception.getMessage()));
 
