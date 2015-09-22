@@ -30,6 +30,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 	private ObjectMapper objectMapper;
 	
 	private static User user= new User();
+	private Boolean userSet= false;
 
 	public CustomLoginFilter(RestAuthenticationSuccessHandler restAuthenticationSuccessHandler,
 			RestAuthenticationFailureHandler restAuthenticationFailureHandler, ObjectMapper objectMapper) {
@@ -44,17 +45,17 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		
-			Gson gson = new Gson();
-			StringBuilder sb = new StringBuilder();
-			String s;
-			
-			while((s = request.getReader().readLine()) != null){
-				sb.append(s);
+			if(userSet==false){
+				Gson gson = new Gson();
+				StringBuilder sb = new StringBuilder();
+				String s;
+				
+				while((s = request.getReader().readLine()) != null){
+					sb.append(s);
+				}
+				
+				user = (User)gson.fromJson(sb.toString(), User.class);
 			}
-			
-			user = (User)gson.fromJson(sb.toString(), User.class);
-		
 		
 		
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(),
@@ -81,6 +82,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback")) {
 			
 			user = objectMapper.readValue(parms.get("json")[0], User.class);
+			userSet=true;
 			// Convert json query string value to request body
 			GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
 					MediaType.APPLICATION_JSON_VALUE);
