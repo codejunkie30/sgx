@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,8 +17,10 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.security.CustomLoginFilter;
 import com.wmsi.sgx.security.CustomUserDetailsService;
 import com.wmsi.sgx.security.RestAuthenticationEntryPoint;
 import com.wmsi.sgx.security.RestAuthenticationFailureHandler;
@@ -40,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-
+	
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authProvider());
@@ -53,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	public RestAuthenticationEntryPoint authenticationEntry;
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -62,9 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.exceptionHandling().authenticationEntryPoint(authenticationEntry)
 
 		.and()
-
 		.authorizeRequests()
-		
 		.antMatchers("/user/**").permitAll()
 		.antMatchers("/company/**").permitAll()
 		.antMatchers("/search/**").permitAll()
@@ -74,18 +75,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 
 		.csrf().disable()
-
-		.formLogin()
+		
+		.formLogin()		     
 			.loginProcessingUrl("/login").permitAll()
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.successHandler(authenticationSuccessHandler)
 			.failureHandler(authenticationFailureHandler)
-
+			
 		.and()
-
+		.addFilterBefore(this.customLoginFilter(), UsernamePasswordAuthenticationFilter.class)
 		.logout().logoutUrl("/logout").permitAll()
 		.logoutSuccessHandler(logoutSuccessHandler);
+		
+		//http.addFilterBefore(new CustomLoginFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
 
@@ -115,4 +118,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public SecureTokenGenerator tokenGenerator() {
 		return new SecureTokenGenerator();
 	}
+	
+	
+	@Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+	
+	@Bean
+	CustomLoginFilter customLoginFilter() throws Exception {
+		CustomLoginFilter customLoginFilter = new CustomLoginFilter(authenticationSuccessHandler, authenticationFailureHandler, objectMapper);
+		customLoginFilter.setAuthenticationManager(this.authenticationManagerBean());
+	  return customLoginFilter;
+	}
+
 }
