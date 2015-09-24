@@ -29,7 +29,7 @@ public class AccountController{
 	@Autowired 
 	private RegistrationService registrationService;
 	
-	@RequestMapping(value = "info", method = RequestMethod.GET)
+	@RequestMapping(value = "info", method = RequestMethod.POST)
 	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{
 		
 		return accountService.getAccountForUsername(user.getUsername());

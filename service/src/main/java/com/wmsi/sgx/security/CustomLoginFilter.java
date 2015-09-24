@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -53,15 +54,13 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 				while((s = request.getReader().readLine()) != null){
 					sb.append(s);
 				}
-				
 				user = (User)gson.fromJson(sb.toString(), User.class);
 			}
-		
 		
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(),
 				user.getPassword());
 		authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
-
+		SecurityContextHolder.getContext().setAuthentication(authRequest);
 		return this.getAuthenticationManager().authenticate(authRequest);
 	}
 
@@ -74,12 +73,9 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		Map<String, String[]> parms = request.getParameterMap();
 		
-		//String[] string = parms.get("json");
-		//StringBuilder sb = new StringBuilder();
 		
-		//user = objectMapper.readValue(parms.get("json")[0], User.class);
-		
-		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback")) {
+		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback") 
+				&& (request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login")))) {
 			
 			user = objectMapper.readValue(parms.get("json")[0], User.class);
 			userSet=true;

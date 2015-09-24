@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AccountExpiredException;
 import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
+import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.account.UserModel;
 
 public interface UserService{
@@ -14,7 +15,7 @@ public interface UserService{
 
 	User getUserByUsername(String username);
 
-	Boolean changePassword(UserModel user, String token) throws InvalidTokenException;
+	Boolean changePassword(ChangePasswordModel user, String token) throws InvalidTokenException;
 
 	UserLogin recordLogin(UserLogin login);
 

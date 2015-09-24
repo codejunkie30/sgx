@@ -88,8 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.logout().logoutUrl("/logout").permitAll()
 		.logoutSuccessHandler(logoutSuccessHandler);
 		
-		//http.addFilterBefore(new CustomLoginFilter(), UsernamePasswordAuthenticationFilter.class);
-
 	}
 
 	@Autowired

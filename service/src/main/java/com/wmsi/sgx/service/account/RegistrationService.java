@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.account;
 
+import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.account.UserModel;
 
 public interface RegistrationService{
@@ -14,7 +15,7 @@ public interface RegistrationService{
 
 	Boolean sendPasswordReset(String email) throws UserNotFoundException;
 
-	Boolean resetPassword(UserModel user, String resetToken) throws InvalidTokenException;
+	Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException;
 
 	Boolean changePassword(UserModel user) throws UserNotFoundException;
 

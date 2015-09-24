@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AccountCreationException;
@@ -121,7 +122,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 	@Override
 	@Transactional
-	public Boolean resetPassword(UserModel user, String resetToken) throws InvalidTokenException{
+	public Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException{
 		
 		Boolean success = userService.changePassword(user, resetToken);
 		

@@ -19,6 +19,7 @@ import com.wmsi.sgx.domain.Authority;
 import com.wmsi.sgx.domain.PasswordReset;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
+import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.PasswordResetRepository;
@@ -89,6 +90,14 @@ public class UserServiceImpl implements UserService{
 		
 		return userReposistory.save(user);
 	}
+	
+	private User saveChangePasswordUser(User user, ChangePasswordModel dto){
+
+		user.setUsername(dto.getEmail());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		
+		return userReposistory.save(user);
+	}
 
 	@Autowired
 	private PasswordResetRepository passwordResetRepository;
@@ -115,7 +124,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public Boolean changePassword(UserModel user, String token) throws InvalidTokenException {
+	public Boolean changePassword(ChangePasswordModel user, String token) throws InvalidTokenException {
 		
 		PasswordReset reset = passwordResetRepository.findByToken(token);
 		
@@ -135,7 +144,7 @@ public class UserServiceImpl implements UserService{
 			throw new InvalidTokenException("User does not match token");
 		
 		// Update password
-		saveUser(resetUser, user);
+		saveChangePasswordUser(resetUser, user);
 		
 		// Set redemption flag to prevent this token from being used twice
 		reset.setRedeemed(true);
