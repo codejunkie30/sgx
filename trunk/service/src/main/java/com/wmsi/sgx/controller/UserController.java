@@ -1,3 +1,4 @@
+
 package com.wmsi.sgx.controller;
 
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.VerifyUser;
 import com.wmsi.sgx.model.account.UserModel;
@@ -65,7 +67,7 @@ public class UserController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody UserModel user) throws InvalidTokenException{
+	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody ChangePasswordModel user) throws InvalidTokenException{
 		return registrationService.resetPassword(user, token);
 	}
 	
