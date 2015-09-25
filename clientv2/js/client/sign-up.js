@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder"], function(UTIL, ko, validation, MESSAGES) {
 	
 	var SIGNUP = {
 		email: ko.observable(),
@@ -6,9 +6,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 		retypePassword: ko.observable(),		
 		termsConditions: ko.observable(false),
 		receiveEmails: ko.observable(false),
+		messages: JSON.parse(MESSAGES),
 		
 		initPage: function() {
     		// finish other page loading
+			
+			var displayMessage = SIGNUP.messages.messages[0];
 			
 			// Returns if fields have been filled out
 			this.isFormValid = ko.computed(function() {
@@ -28,41 +31,39 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			        return val === this.getValue(otherField);
 					PAGE.resizeIframeSimple();
 			    },
-			    message: 'Your passwords must match.'
+			    message: displayMessage.passwordMatch
 			};			
 			
 			ko.validation.rules['passwordComplexity'] = {
 			    validator: function (val) {
 			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
 			    },
-			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+			    message: displayMessage.passwordError
 			};
 			
 			ko.validation.registerExtenders();
 			
 			SIGNUP.email.extend({
-				required: { message: 'Email Address is required.' },
-				email: { message: 'Your email address must be in a valid format.' }
+				required: { message: displayMessage.emailRequired },
+				email: { message: displayMessage.emailValid }
 			});
-			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
-			
+						
 			SIGNUP.password.extend({
-				required: { message: 'New Password is required.' }}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }}).extend({
+				required: { message: displayMessage.password }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordMinMax },
+					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
 					passwordComplexity: {
-						message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+						message: displayMessage.passwordError
 					}
 				});
 			
 			SIGNUP.retypePassword.extend({
-				required: { message: 'Retype Password is required.' }}).extend({
+				required: { message: displayMessage.passwordRetype }}).extend({
 					areSame: { 
 						params: SIGNUP.password,
-						message: 'Your passwords must match.'
+						message: displayMessage.passwordMatch
 					}	
-				});			
+				});
 			
 			this.errors = ko.validation.group(this);			
 			
@@ -79,7 +80,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
     		return this;
 		},
 		startTrial: function(me){
-			
+			var displayMessage = SIGNUP.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/user/create";
 			var postType = 'POST';
 			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
@@ -89,10 +90,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			if (this.errors().length > 0 || this.isFormValid() == undefined || SIGNUP.termsConditions == false) {				
 	            return
 	        }
-			
-			var dupeEmailMsg = 'That email address is already registered with StockFacts. Please enter a new email address.';
-			var successMsg = 'Your account has been created. The next step is to validate your email address. Please log into your email account and click the link to confirm your email address.';
-			
+
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -101,11 +99,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('confirm');
-						$('<p/>').html(successMsg).appendTo('.form.confirm');
+						$('<p/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
 						PAGE.resizeIframeSimple();
 					} else {
 						if (data.details.errorCode == 4003){
-							$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');
+							$('<p/>').html(displayMessage.signUp.emailDuplicate).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();	
 						}
 					}

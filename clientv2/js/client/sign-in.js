@@ -1,12 +1,15 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 	
 	var SIGNIN = {
 		email: ko.observable(),
-		password: ko.observable(),		
+		password: ko.observable(),
+		messages: JSON.parse(MESSAGES),
 		initPage: function() {
     		this.isFormValid = ko.computed(function() {
 			    return this.email() && this.password();
 			}, this);
+			
+			var displayMessage = SIGNIN.messages.messages[0];
 			
 			// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
@@ -18,25 +21,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			    validator: function (val) {
 			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
 			    },
-			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+			    message: displayMessage.passwordError
 			};
 			
 			ko.validation.registerExtenders();
 			
 			SIGNIN.email.extend({
-				required: { message: 'Email Address is required.'},
-				email: { message: 'Your email address must be in a valid format.' }
+				required: { message: displayMessage.emailRequired },
+				email: { message: displayMessage.emailValid }
 			});
 			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
-			
 			SIGNIN.password.extend({
-				required: { message: 'New Password is required.' }}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
+				required: { message: displayMessage.passwordNew }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordMinMax },
+					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
 					passwordComplexity: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
+						message: displayMessage.passwordError
 					}
 				});
 			
@@ -55,7 +55,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
     		return this;
 		},
 		signIn: function(me){
-			
+			var displayMessage = SIGNIN.messages.messages[0];			
 			var endpoint = me.fqdn + "/sgx/login";
 			var postType = 'POST';
 			var params = {username:me.email(), password:me.password()};
@@ -65,10 +65,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
-			
-			var invalidUserPassMsg = 'The email address and/or password you entered are not valid';
-			var accountLockedMsg = 'You have surpassed the number of allowable logins (we allow three attempts). Your account has been locked. Please try again in 30 minutes.';
-			
+						
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -77,16 +74,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 				function(data, textStatus, jqXHR){
 					console.log(data);
 					console.log(textStatus);
-					if (data == '' || data == undefined){						
-						PAGE.premiumUser(true);
+					if (data == '' || data == undefined){
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 					}					
 					if (data.reason == 'Invalid username or password'){
-						$('<p/>').html(invalidUserPassMsg).appendTo('.error-messages');
+						$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					}
 					if (data.reason == 'User is disabled' || data.reason == 'User account is locked'){
-						$('<p/>').html(invalidUserPassMsg).appendTo('.error-messages');
+						$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					} 
 					
