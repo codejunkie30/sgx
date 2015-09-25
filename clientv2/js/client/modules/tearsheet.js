@@ -11,13 +11,14 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 
 			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
+			var postType = 'GET';
 			var params = { id: this.ticker };
-			UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initCompanyData(data, finished); }, undefined);
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initCompanyData(data, finished); }, undefined, undefined);
 			
     		// init real-time/delayed pricing data
     		endpoint = this.fqdn + "/sgx/price";
     		params = { id: this.ticker };
-    		UTIL.handleAjaxRequest(endpoint, params, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined);
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined, undefined);
 			
     		return this;
 		},

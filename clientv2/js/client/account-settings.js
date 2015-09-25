@@ -5,22 +5,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.j
 		retypeNewPassword: ko.observable(),
 		receiveEmails: ko.observable(true),
 		showChange: ko.observable(false),
-		detectChange: ko.observable(false),
 		initPage: function(data) {
     		
-			//this.accountSettings(data);
-			
-			SAVECHANGES.receiveEmails.subscribe(function(newValue){
-			  // alert('email');
-			   this.test = ko.computed(function() {
-				   
-				   SAVECHANGES.detectChange = ko.observable(true);
-				   
-				   console.log(SAVECHANGES.detectChange());
-				});
-			   
-			});
-			
+			//this.accountSettings(data);			
 			
 			SAVECHANGES.showChange.subscribe(function(newValue){
 				this.isFormValid = ko.computed(function() {
@@ -104,24 +91,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/temp.j
 			var endpointPass = me.fqdn + "/sgx/account/password";	
 			var endpointInfo = me.fqdn + "/sgx/account/infoPost";	
 			
-			UTIL.handleAjaxRequestPost(
+			UTIL.handleAjaxRequest(
 				endpointChange,
-				function(data, textStatus, jqXHR){
-					console.log(data.email);
-					console.log(data.startDate);
-					console.log(data.expirationDate);
-					console.log(data.type);
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-					console.log(jqXHR.statusCode() );
-				});
-			
-			
-			UTIL.handleAjaxRequestPost(
-				endpointSettings,
 				function(data, textStatus, jqXHR){
 					console.log(data.email);
 					console.log(data.startDate);

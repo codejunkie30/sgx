@@ -48,13 +48,14 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			this.factors(tmp.factors);
 			
 			// init charts
+			var postType = 'GET';
 			var params = { id: me.ticker };
 			var tearendpoint = me.fqdn + "/sgx/company/priceHistory";
-			UTIL.handleAjaxRequest(tearendpoint, params, function(data) { me.initPriceChart(me, data); }, undefined);
+			UTIL.handleAjaxRequest(tearendpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
 			
 			var finendpoint = me.fqdn + "/sgx/company/financials";
     		var params = { id: me.ticker };
-    		UTIL.handleAjaxRequest(finendpoint, params, function(data) { me.initFinancials(me, data);  });
+    		UTIL.handleAjaxRequest(finendpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
 
 			return this;
 			
@@ -87,9 +88,10 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			$(div).attr("start-dt", start).attr("end-dt", end);
 			
 			var endpoint = parent.fqdn + "/sgx/search/keydevs";
+			var postType = 'GET';
 			var params = { tickerCode: parent.ticker, from: Highcharts.dateFormat("%Y-%m-%e", start), to: Highcharts.dateFormat("%Y-%m-%e", end) };
 			
-			UTIL.handleAjaxRequest(endpoint, params, function(data) {
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
 				
 				// just make it an empty array
 				if (!data.hasOwnProperty("keyDevs")) data.keyDevs = [];
@@ -115,7 +117,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 				// everything is done
 				if (typeof finishedDrawing !== "undefined") finishedDrawing();
 				
-			});
+			}, undefined, undefined);
 			
 		},
 		

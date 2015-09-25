@@ -28,29 +28,34 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			    message: 'Your passwords must match.'
 			};
 			
-			ko.validation.registerExtenders();
-			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
+			ko.validation.rules['passwordComplexity'] = {
+			    validator: function (val) {
+			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
+			    },
+			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+			};
 			
 			RESETPASS.email.extend({
 				required: { message: 'Email Address is required.' },
 				email: { message: 'Your email address must be in a valid format.' }
-			});		
+			});
+			
+			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
 			
 			RESETPASS.newPassword.extend({
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
 					maxLength: { params: 40, message: minMaxMessage }}).extend({
-					pattern: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+					passwordComplexity: {
+						message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
 					}
 				});
 			
 			RESETPASS.retypeNewPassword.extend({
-				required: { message: 'Retype Password is required.' }}).extend({
+				required: { message: 'Retype New Password is required.' }}).extend({
 					areSame: { 
-						params: RESETPASS.newPassword
+						params: RESETPASS.newPassword,
+						message: 'Your passwords must match.'
 					}	
 				});			
 			
@@ -70,19 +75,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 		},
 		resetPass: function(SIGNUP, me){
 			var token = this.getURLParam('ref');
-			var endpoint = me.fqdn + "/sgx/user/password?ref="+token;
-			var params = { email: RESETPASS.email(), password: RESETPASS.password(), passwordMatch: RESETPASS.retypePassword() };
+			var endpoint = PAGE.fqdn + "/sgx/user/password";
+			var postType = 'POST';
+			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword(), token: token };
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }			
 			
 			var invalidMsg = 'Invalid Token.';
-			var successMSG = 'Your password has been reset.'
+			var successMsg = 'Your password has been reset.'
 			
-			UTIL.handleAjaxRequestPost(
-				endpoint, 
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
 				params, 
+				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data.details.errorCode == 4005){
 						$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');

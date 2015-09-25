@@ -39,8 +39,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			me.trackPage("SGX Company Financials - " + me.companyInfo.companyName);
 			
     		var endpoint = me.fqdn + "/sgx/company/financials";
+			var postType = 'GET';
     		var params = { id: me.ticker };
-    		UTIL.handleAjaxRequest(endpoint, params, function(data) { me.initFinancials(me, data);  });
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
     		
 		},
 		
