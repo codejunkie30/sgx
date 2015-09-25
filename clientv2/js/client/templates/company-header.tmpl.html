@@ -1,28 +1,5 @@
 <header class="header">	
-	<div class="login-bar" data-bind="css: {'non-premium': (premiumUser() == false)}">
-		<span class="stock-facts"><b>StockFacts <i>Premium</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'premium', extra: 'code=' + ticker } ">Learn more &raquo;</a> </span>
-		<div class="right">
-			<a class="button" data-bind="siteLink: { id: 'sign-in', extra: 'code=' + ticker } ">Sign in</a>
-			<a class="button" data-bind="siteLink: { id: 'sign-up', extra: 'code=' + ticker } ">Start your free trial</a>
-		</div>
-	</div>
-	
-	<div class="login-bar" data-bind="css: {'premium': (premiumUser() == true)}">		
-		<span class="stock-facts">StockFacts <i>Premium</i></span>
-		<span class="logged-in-as">Logged in as <span data-bind="text: premiumUserEmail"></span></span>
-		<ul>
-			<li><a href="">Account</a></li>
-			<li><a href="">Alerts</a></li>
-			<li class="last"><a data-bind="siteLink: { id: 'logout', extra: 'ref=manual'} ">Sign Out</a></li>
-		</ul>
-		<div class="right">
-			<span class="currency">Currency</span>
-			<select>
-				<option>Singapore (SGD)</option>
-			</select>
-		</div>	
-	</div>	
-	
+	<div data-bind="template: 'login-bar'"></div>
 	<div class="profile">
 		<div class="left">
 			<h1 data-bind="text: company.companyInfo.companyName"></h1>
