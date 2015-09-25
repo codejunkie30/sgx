@@ -36,6 +36,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			var results = this;
 			results.parent.showLoading();
 			
+			var postType = 'GET';
 			var success = function(data) { 
 				data.scrollPos = scrollPos;
 				data.endpoint = endpoint;
@@ -47,8 +48,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			$(".search-results").hide();
 			
-			UTIL.handleAjaxRequest(this.parent.fqdn + endpoint, params, success, this.fail);
-			
+			UTIL.handleAjaxRequest(this.parent.fqdn + endpoint, postType, params, undefined, success, this.fail, undefined);
 		},
 
     	fail: function(xhr, ajaxOptions, thrownErr) {
@@ -64,6 +64,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
 			this.viewModel.page(1);
 			this.viewModel.search = true;
+			this.viewModel.postType = 'GET';
 			this.viewModel.params = data.params;
 			this.viewModel.endpoint = data.endpoint;
 			this.viewModel.companies(data.companies);

@@ -28,28 +28,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			    message: 'Your passwords must match.'
 			};
 			
+			ko.validation.rules['passwordComplexity'] = {
+			    validator: function (val) {
+			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
+			    },
+			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+			};
+			
 			ko.validation.registerExtenders();
 			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
-			
-			CHANGEPASS.tempPassword.extend({
-				required: { message: 'Temporary Password is required.'}}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
-					pattern: {
-						message: 'Your temporary password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
-					}
-				});			
+			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';			
 			
 			CHANGEPASS.newPassword.extend({
 				required: { message: 'New Password is required.' }}).extend({
 					minLength: { params: 8, message: minMaxMessage },
 					maxLength: { params: 40, message: minMaxMessage }}).extend({
-					pattern: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+					passwordComplexity: {
+						message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
 					}
 				});
 			
@@ -83,7 +78,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 	            return
 	        }			
 			
-			UTIL.handleAjaxRequestPost(endpoint, params, function(data) {
+			UTIL.handleAjaxRequest(endpoint, params, function(data) {
 				console.log( data );
 			});
 		}

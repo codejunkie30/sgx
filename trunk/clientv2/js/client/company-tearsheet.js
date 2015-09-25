@@ -40,8 +40,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			
 			// init charts
 			var params = { id: me.ticker };
+			var postType = 'GET';
 			var endpoint = me.fqdn + "/sgx/company/priceHistory";
-			UTIL.handleAjaxRequest(endpoint, params, function(data) { me.initPriceChart(me, data); }, undefined);
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
 
 			return this;
 			
@@ -76,9 +77,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			$(div).attr("start-dt", start).attr("end-dt", end);
 			
 			var endpoint = parent.fqdn + "/sgx/search/keydevs";
+			var postType = 'GET';
 			var params = { tickerCode: parent.ticker, from: Highcharts.dateFormat("%Y-%m-%e", start), to: Highcharts.dateFormat("%Y-%m-%e", end) };
 			
-			UTIL.handleAjaxRequest(endpoint, params, function(data) {
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
 				
 				// just make it an empty array
 				if (!data.hasOwnProperty("keyDevs")) data.keyDevs = [];
@@ -104,7 +106,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 				// everything is done
 				if (typeof finishedDrawing !== "undefined") finishedDrawing();
 				
-			});
+			}, undefined, undefined);
 			
 		},
 		

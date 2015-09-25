@@ -12,6 +12,7 @@ configuration(
 			"company-estimates",
 			"company-charting",
 			"company-comparables",
+			"alerts",
 			"sign-up",
 			"verify-account",
 			"sign-in",

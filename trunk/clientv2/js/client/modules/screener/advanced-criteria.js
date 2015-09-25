@@ -104,6 +104,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     		var tmpF = finished;
     		var endpoint = this.screener.fqdn + "/sgx/search/distributions";
+			var postType = 'GET';
     		var processFields = [], ignoreFields = []; 
 
     		// some fields require additional steps, remove these from this service
@@ -141,7 +142,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     			return;
     		}
     		
-        	UTIL.handleAjaxRequest(endpoint, data, tmpF, undefined);
+        	UTIL.handleAjaxRequest(endpoint, postType, data, undefined, tmpF, undefined, undefined);
 
     	},
     	

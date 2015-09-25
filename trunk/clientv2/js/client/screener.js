@@ -170,7 +170,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 					crit.init(screener, screener.finalize);
 				});
 			
-			},
+			}
 			
 			
 			

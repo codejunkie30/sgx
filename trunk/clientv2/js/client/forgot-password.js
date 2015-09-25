@@ -36,7 +36,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 		},
 		forgotPass: function(me){
 			var endpoint = me.fqdn + "/sgx/user/reset";
+			var postType = 'POST';
 			var params = { username: FORGOTPASS.email() };
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
 			
 			var sentMsg = 'An email was sent to reset your password.';
 			
@@ -44,9 +47,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 	            return
 	        }
 			
-			UTIL.handleAjaxRequestPost(
+			UTIL.handleAjaxRequest(
 				endpoint,
+				postType,
 				params, 
+				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
@@ -59,7 +64,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 					console.log('sta', textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				});
+				},jsonpCallback);
 			
 		}
 	};

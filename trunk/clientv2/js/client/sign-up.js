@@ -9,7 +9,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 		
 		initPage: function() {
     		// finish other page loading
-						
+			
+			// Returns if fields have been filled out
 			this.isFormValid = ko.computed(function() {
 			    return this.email() && this.password() && this.retypePassword();
 			}, this);
@@ -34,7 +35,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			    validator: function (val) {
 			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
 			    },
-			    message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.'
+			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
 			};
 			
 			ko.validation.registerExtenders();
@@ -51,8 +52,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 					minLength: { params: 8, message: minMaxMessage },
 					maxLength: { params: 40, message: minMaxMessage }}).extend({
 					passwordComplexity: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.'//,
-						//params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+						message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
 					}
 				});
 			
@@ -67,9 +67,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
-				console.log(SIGNUP.password());
-				console.log(SIGNUP.retypePassword());
-
 				PAGE.resizeIframeSimple();
 			});			
     		
@@ -84,8 +81,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 		startTrial: function(me){
 			
 			var endpoint = me.fqdn + "/sgx/user/create";
+			var postType = 'POST';
 			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
-						
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+					
 			if (this.errors().length > 0 || this.isFormValid() == undefined || SIGNUP.termsConditions == false) {				
 	            return
 	        }
@@ -93,17 +93,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 			var dupeEmailMsg = 'That email address is already registered with StockFacts. Please enter a new email address.';
 			var successMsg = 'Your account has been created. The next step is to validate your email address. Please log into your email account and click the link to confirm your email address.';
 			
-			UTIL.handleAjaxRequestPost(
-				endpoint, 
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
 				params, 
+				jsonp,
 				function(data, textStatus, jqXHR){
-					if (data.details.errorCode == 4003){
-						$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');
-						PAGE.resizeIframeSimple();	
-					} else {
+					if (data == true){
 						$('.form').empty().addClass('confirm');
 						$('<p/>').html(successMsg).appendTo('.form.confirm');
-						PAGE.resizeIframeSimple();	
+						PAGE.resizeIframeSimple();
+					} else {
+						if (data.details.errorCode == 4003){
+							$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');
+							PAGE.resizeIframeSimple();	
+						}
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -111,8 +115,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder"], f
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});
-
+				},jsonpCallback);
 		}
 
 	};
