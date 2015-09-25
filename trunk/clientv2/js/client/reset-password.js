@@ -1,9 +1,10 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 	
 	var RESETPASS = {
 		email: ko.observable(),		
 		newPassword: ko.observable(),
 		retypeNewPassword: ko.observable(),
+		messages: JSON.parse(MESSAGES),
 		
 		initPage: function() {
     		// finish other page loading
@@ -11,6 +12,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			this.isFormValid = ko.computed(function() {
 			    return this.email() && this.newPassword() && this.retypeNewPassword();
 			}, this);
+			
+			var displayMessage = RESETPASS.messages.messages[0];
 			
     		ko.applyBindings(this, $("body")[0]);
 			
@@ -25,39 +28,37 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			        return val === this.getValue(otherField);
 					PAGE.resizeIframeSimple();
 			    },
-			    message: 'Your passwords must match.'
+			    message: displayMessage.passwordMatch
 			};
 			
 			ko.validation.rules['passwordComplexity'] = {
 			    validator: function (val) {
 			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
 			    },
-			    message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+			    message: displayMessage.passwordError
 			};
 			
 			RESETPASS.email.extend({
-				required: { message: 'Email Address is required.' },
-				email: { message: 'Your email address must be in a valid format.' }
+				required: { message: displayMessage.emailRequired },
+				email: { message: displayMessage.emailValid }
 			});
 			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';
-			
 			RESETPASS.newPassword.extend({
-				required: { message: 'New Password is required.' }}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }}).extend({
+				required: { message: displayMessage.passwordNew }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordMinMax },
+					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
 					passwordComplexity: {
-						message: 'Your new password does not meet the minimum requirements: it must include atleast one character, one number and one special character.'
+						message: displayMessage.passwordError
 					}
 				});
 			
 			RESETPASS.retypeNewPassword.extend({
-				required: { message: 'Retype New Password is required.' }}).extend({
+				required: { message: displayMessage.passwordRetypeNew }}).extend({
 					areSame: { 
-						params: RESETPASS.newPassword,
-						message: 'Your passwords must match.'
+						params: SIGNUP.password,
+						message: displayMessage.passwordMatch
 					}	
-				});			
+				});
 			
 			this.errors = ko.validation.group(this);			
 			
@@ -83,10 +84,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
-	        }			
+	        }
 			
-			var invalidMsg = 'Invalid Token.';
-			var successMsg = 'Your password has been reset.'
+			var displayMessage = RESETPASS.messages.messages[0];
 			
 			UTIL.handleAjaxRequest(
 				endpoint,
@@ -95,11 +95,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data.details.errorCode == 4005){
-						$('<p/>').html(dupeEmailMsg).appendTo('.error-messages');
+						$('<p/>').html(displayMessage.resetPass.invaldToken).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					} else {
 						$('.form').empty().addClass('confirm');
-						$('<p/>').html(successMsg).appendTo('.form.confirm');
+						$('<p/>').html(displayMessage.resetPass.success).appendTo('.form.confirm');
 						PAGE.resizeIframeSimple();	
 					}
 				}, 

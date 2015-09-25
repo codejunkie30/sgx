@@ -1,6 +1,7 @@
-define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
+define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(UTIL, ko, MESSAGES) {
 	
-	var LOGOUT = {		
+	var LOGOUT = {
+		messages: JSON.parse(MESSAGES),
 		initPage: function() {
 			var token = this.getURLParam('ref');
 			var endpoint = PAGE.fqdn + "/sgx/user/verify";
@@ -9,8 +10,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
-			var verifyMsg = 'Your email address has been verified. Select the link below to access StockFacts Premium.';
-			var invalidMsg = 'The time limit for validating your email address has expired. Select the link below to access StockFacts Premium, then login to trigger another validation email to be sent to you.';			
+			var displayMessage = LOGOUT.messages.messages[0];			
 			
 			UTIL.handleAjaxRequest(
 				endpoint,
@@ -19,11 +19,11 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data == true){
-						$('.message').html(verifyMsg);
+						$('.message').html(displayMessage.verifyAccount.success);
 						PAGE.resizeIframeSimple();
 					} else {
 						if (data.details.errorCode == 4004){
-							$('.message').html(invalidMsg);							
+							$('.message').html(displayMessage.verifyAccount.invaldToken);							
 							PAGE.resizeIframeSimple();	
 						}
 					}

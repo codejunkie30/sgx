@@ -1,12 +1,15 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 	
 	var FORGOTPASS = {
 		email: ko.observable(),
+		messages: JSON.parse(MESSAGES),
 		initPage: function() {
 			
 			this.isFormValid = ko.computed(function() {
 			    return this.email();
 			}, this);
+			
+			var displayMessage = FORGOTPASS.messages.messages[0];
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
@@ -17,8 +20,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			ko.validation.registerExtenders();
 			
 			FORGOTPASS.email.extend({
-				required: { message: 'Email Address is required.' },
-				email: { message: 'Your email address must be in a valid format.' }
+				required: { message: displayMessage.emailRequired },
+				email: { message: displayMessage.emailValid }
 			});
 
 			this.errors = validation.group(this);			
@@ -41,7 +44,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
-			var sentMsg = 'An email was sent to reset your password.';
+			var displayMessage = FORGOTPASS.messages.messages[0];
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
@@ -55,7 +58,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], 
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
-						$('<p/>').html(sentMsg).appendTo('.form.rp-sent');
+						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
 						PAGE.resizeIframeSimple();	
 					}
 				}, 

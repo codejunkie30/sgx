@@ -1,9 +1,10 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "jquery-placeholder" ], function(UTIL, ko, validation) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 	
 	var CHANGEPASS = {
 		tempPassword: ko.observable(),		
 		newPassword: ko.observable(),
 		retypeNewPassword: ko.observable(),
+		messages: JSON.parse(MESSAGES),
 		
 		initPage: function() {
     		// finish other page loading
