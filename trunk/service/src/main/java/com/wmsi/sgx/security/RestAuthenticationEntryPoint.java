@@ -15,6 +15,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint{
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
 			throws IOException {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");		
+		//Implemented untill we implement CORS as JSONP can not handle 400 errors 
+		response.sendError(HttpServletResponse.SC_OK, "Unauthorized");		
 	}
 }
