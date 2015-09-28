@@ -32,7 +32,7 @@ public class AccountController{
 	private RegistrationService registrationService;
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
-	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserExistsException{
+	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{
 		
 		return accountService.getAccountForUsername(user.getUsername());
 	}
