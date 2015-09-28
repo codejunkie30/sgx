@@ -24,28 +24,10 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 		//Temporary: Changing HttpServletResponse.SC_Unauthorised to SC.OK as requested for UI to recieve 
 		//errors untill we implement CORS for cross domain
 		response.setStatus(HttpServletResponse.SC_OK);
-
-		objectMapper.writeValue(response.getOutputStream(), new AuthenticationFailure(exception.getMessage()));
+		AuthenticationFailure authFailure = new AuthenticationFailure(exception.getMessage());
+		objectMapper.writeValue(response.getOutputStream(), authFailure);
 
 		return;
-	}
-
-	class AuthenticationFailure{
-
-		private String reason;
-
-		public AuthenticationFailure(String r){
-			reason = r;
-		}
-
-		public String getReason() {
-			return reason;
-		}
-
-		public void setReason(String reason) {
-			this.reason = reason;
-		}
-
 	}
 
 }

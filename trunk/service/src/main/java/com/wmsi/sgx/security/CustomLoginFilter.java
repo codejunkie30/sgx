@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.wmsi.sgx.web.filter.GenericResponseWrapper;
 import com.wmsi.sgx.web.filter.GetToPostRequestWrapper;
+import com.wmsi.sgx.web.filter.JsonpWrappingFilterHelper;
 import com.wmsi.sgx.web.filter.User;
 
 public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -74,11 +75,12 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		Map<String, String[]> parms = request.getParameterMap();
 		
 		
-		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback") 
-				&& (request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login")))) {
+		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback")) {
 			
-			user = objectMapper.readValue(parms.get("json")[0], User.class);
-			userSet=true;
+			if(request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login"))){
+				user = objectMapper.readValue(parms.get("json")[0], User.class);
+				userSet=true;
+			}
 			// Convert json query string value to request body
 			GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
 					MediaType.APPLICATION_JSON_VALUE);
@@ -100,8 +102,6 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 			out.close();
 		}else{
-			
-			
 			super.doFilter(req, res, chain);
 		}
 	}
