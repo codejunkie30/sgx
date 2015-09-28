@@ -50,7 +50,10 @@ public class Account extends AbstractAuditable{
 	
 	@Column(name = "contact_opt_in")
 	private Boolean contactOptIn;
-
+	
+	@Column(name ="currency")
+	private String currency;
+	
 	public Long getId() {
 		return id;
 	}
@@ -114,6 +117,14 @@ public class Account extends AbstractAuditable{
 	public void setContactOptIn(Boolean contactOptIn) {
 		this.contactOptIn = contactOptIn;
 	}
+	
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 
 	@Override
 	public String toString() {
@@ -127,12 +138,13 @@ public class Account extends AbstractAuditable{
 			.add("expirationDate", expirationDate)
 			.add("alwaysActive", "alwaysActive")
 			.add("contactOptIn", "contactOptIn")
+			.add("currency", "currency")
 			.toString();
 	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(super.hashCode(), user, type, active, startDate, expirationDate, alwaysActive, contactOptIn );
+		return Objects.hashCode(super.hashCode(), user, type, active, startDate, expirationDate, alwaysActive, contactOptIn, currency );
 	}
 	
 	@Override
@@ -146,7 +158,8 @@ public class Account extends AbstractAuditable{
 				&& Objects.equal(this.startDate, that.startDate)
 				&& Objects.equal(this.expirationDate, that.expirationDate)
 				&& Objects.equal(this.alwaysActive, that.alwaysActive)
-				&& Objects.equal(this.contactOptIn, that.contactOptIn);
+				&& Objects.equal(this.contactOptIn, that.contactOptIn)
+				&& Objects.equal(this.currency, that.currency);
 		}
 		return false;
 	}

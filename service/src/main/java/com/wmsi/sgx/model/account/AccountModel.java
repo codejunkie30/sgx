@@ -20,6 +20,8 @@ public class AccountModel{
 	private Date lastPaymentDate;
 	
 	private Boolean contactOptIn;
+	
+	private String currency;
 
 	public String getEmail() {
 		return email;
@@ -76,19 +78,29 @@ public class AccountModel{
 	public void setContactOptIn(Boolean contactOptIn) {
 		this.contactOptIn = contactOptIn;
 	}
+	
+	
 
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("email", email).add("startDate", startDate)
 				.add("expirationDate", expirationDate).add("type", type)
 				.add("lastLoginDate", lastLoginDate).add("lastPaymentDate", lastPaymentDate)
-				.add("contactOptIn", contactOptIn).toString();
+				.add("contactOptIn", contactOptIn).add("currency", currency).toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn);
+		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn, currency);
 	}
 
 	@Override
@@ -98,7 +110,7 @@ public class AccountModel{
 			return Objects.equal(this.email, that.email) && Objects.equal(this.startDate, that.startDate)
 					&& Objects.equal(this.expirationDate, that.expirationDate) && Objects.equal(this.type, that.type)
 					&& Objects.equal(this.lastLoginDate, that.lastLoginDate) && Objects.equal(this.lastPaymentDate, that.lastPaymentDate)
-					&& Objects.equal(this.contactOptIn, that.contactOptIn);
+					&& Objects.equal(this.contactOptIn, that.contactOptIn)&& Objects.equal(this.currency, that.currency);
 		}
 		return false;
 	}

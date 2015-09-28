@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.account.AccountCreationException;
@@ -47,10 +48,26 @@ public class AccountServiceImpl implements AccountService{
 			ret.setExpirationDate(account.getExpirationDate());
 			ret.setType(account.getType());
 			ret.setContactOptIn(account.getContactOptIn());
+			ret.setCurrency(account.getCurrency());
 		}
 			
 			return ret;
 	}
+	
+	@Override
+	@Secured("ROLE_USER")
+	public AccountModel updateAccount(UpdateAccountModel dto){
+		
+		List<Account> accounts = accountRepository.findByUsername(dto.getEmail());		
+		
+		accounts.get(0).setContactOptIn(dto.getContactOptIn());
+		accounts.get(0).setCurrency(dto.getCurrency());
+		accountRepository.save(accounts.get(0));
+		
+		return getAccountForUsername(dto.getEmail());
+		
+	}
+	
 	
 	@Override
 	public Account createTrialAccount(User user) throws AccountCreationException{
