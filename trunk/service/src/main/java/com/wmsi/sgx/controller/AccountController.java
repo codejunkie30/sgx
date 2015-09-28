@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.PasswordChangeModel;
 import com.wmsi.sgx.model.account.UserModel;
@@ -30,7 +32,7 @@ public class AccountController{
 	private RegistrationService registrationService;
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
-	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{
+	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserExistsException{
 		
 		return accountService.getAccountForUsername(user.getUsername());
 	}
@@ -46,6 +48,15 @@ public class AccountController{
 		dto.setPasswordMatch(pass.getPasswordMatch());
 		
 		return registrationService.changePassword(dto);
+	}
+	
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public @ResponseBody AccountModel updateAccount(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException{
+		
+		String username = user.getUsername();
+		dto.setEmail(username);
+		return accountService.updateAccount(dto);
+		
 	}
 	
 }
