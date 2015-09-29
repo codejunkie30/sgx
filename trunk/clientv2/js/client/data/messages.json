@@ -29,6 +29,11 @@
 			"resetPass": {
 				"success": "Your password has been reset.",
 				"invaldToken": "The time limit for resetting your password has expired."
+			},
+			"accountSettings": {
+				"introPremium": "You are currently enrolled in a StockFacts Premium account. It is set to expire on",
+				"introTrial": "You are currently in day <span class='current-day'></span> of a 14 day trial.",
+				"introExpired": "Your trial has expired."			
 			}
 		}	
 	]

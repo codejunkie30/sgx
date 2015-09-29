@@ -2,15 +2,14 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 	
 	
 	var SCREENER = {
-			
-		criteria: null,
-		
-		results: null,
-		
-		defaultSearch: "advanced-screener",
-
+		criteria: null,		
+		results: null,		
+		defaultSearch: "advanced-screener",		
+		premiumUser: ko.observable(),	
+		premiumUserEmail: ko.observable(),		
+		premiumUserAccntInfo: ko.observable(),
 		initPage: function() {
-			
+						
 			this.results = SEARCH.init(this);
 
 			// some base variables
@@ -29,6 +28,8 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
     		
+			this.checkStatus();
+			
     		// finish other page loading
     		ko.applyBindings(this, $(".disclosure")[0]);
 
@@ -170,10 +171,50 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 					crit.init(screener, screener.finalize);
 				});
 			
-			}
+			}			
+		},
+		checkStatus: function(){
+//			$('body').idleTimeout({
+//		      redirectUrl: 'sign-in.html',
+//		      idleTimeLimit: 5,
+//		      idleCheckHeartbeat: 1,
+//		       customCallback:    function () {    // define optional custom js function
+//		           alert('hi yo');
+//				  // window.location.href= 'sign-in.html'
+//		       },
+//			  enableDialog: false,
+//			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
+//		      sessionKeepAliveTimer: false
+//		    });
+//			
 			
+			var endpoint = PAGE.fqdn + "/sgx/account/info";
+			var postType = 'POST';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
 			
-			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+					if (data.reason == 'Full authentication is required to access this resource'){
+						PAGE.premiumUser(false);
+					} else {
+						PAGE.premiumUser(true);
+						PAGE.premiumUserAccntInfo = data;
+						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
+					}
+					
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);			
 		}
 
 	};

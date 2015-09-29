@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -135,9 +135,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	PAGE = {
 
 		//fqdn : "http://54.254.221.141", /** PROD */
-		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
-		
-		fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com",
+		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */		
+		//fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com",
+		fqdn: "https://sgx-api-us.sharefc.com",
 		
 		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
 			
@@ -147,7 +147,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		tooltipHTML: TOOLTIP,
 		
-		currentFormats: null, 
+		currentFormats: null,
 		
 		pageData: {
 			
@@ -203,6 +203,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 			// initialize the core object
 			this.initPage();
+			
+			
 			
 			return this;
 			
@@ -426,7 +428,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		showLoading: function() {
 			$('#loading').show();
-		},
+		}
 		
 	};
 	
