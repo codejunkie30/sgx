@@ -174,19 +174,8 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			}			
 		},
 		checkStatus: function(){
-//			$('body').idleTimeout({
-//		      redirectUrl: 'sign-in.html',
-//		      idleTimeLimit: 5,
-//		      idleCheckHeartbeat: 1,
-//		       customCallback:    function () {    // define optional custom js function
-//		           alert('hi yo');
-//				  // window.location.href= 'sign-in.html'
-//		       },
-//			  enableDialog: false,
-//			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
-//		      sessionKeepAliveTimer: false
-//		    });
-//			
+			
+			
 			
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
@@ -206,6 +195,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
 						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
+						PAGE.timedLogout();
 					}
 					
 				}, 

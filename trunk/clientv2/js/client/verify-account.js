@@ -6,7 +6,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 			var token = this.getURLParam('ref');
 			var endpoint = PAGE.fqdn + "/sgx/user/verify";
 			var postType = 'POST';
-			var params = { token: token };
+			var params = { "token": token };
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -16,25 +16,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				endpoint,
 				postType,
 				params,
-				jsonp,
+				undefined,
 				function(data, textStatus, jqXHR){
+					console.log(data);
+					console.log(token);
 					if (data == true){
 						$('.message').html(displayMessage.verifyAccount.success);
 						PAGE.resizeIframeSimple();
 					} else {
-						if (data.details.errorCode == 4004){
+						if (data.details.errorCode == 4004 || data.details.errorCode == 5001){
 							$('.message').html(displayMessage.verifyAccount.invaldToken);							
 							PAGE.resizeIframeSimple();	
 						}
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
-					console.log('sta', textStatus);
+					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-					console.log(jqXHR.statusCode() );
-				},
-				jsonpCallback);
+				}, jsonpCallback);
 				
 			// finish other page loading
     		ko.applyBindings(this, $("body")[0]);

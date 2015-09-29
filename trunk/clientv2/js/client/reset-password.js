@@ -55,7 +55,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			RESETPASS.retypeNewPassword.extend({
 				required: { message: displayMessage.passwordRetypeNew }}).extend({
 					areSame: { 
-						params: SIGNUP.password,
+						params: RESETPASS.password,
 						message: displayMessage.passwordMatch
 					}	
 				});
@@ -74,7 +74,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
     		return this;
 		},
-		resetPass: function(SIGNUP, me){
+		resetPass: function(RESETPASS, me){
 			var token = this.getURLParam('ref');
 			var endpoint = PAGE.fqdn + "/sgx/user/password";
 			var postType = 'POST';

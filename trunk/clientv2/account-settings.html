@@ -53,18 +53,19 @@
 			<div class="form-wrapper">
 				<label>Receive Mailings</label>
 				<span class="mailings">
-					<input type="checkbox" name="opt-in" id="opt-in" data-bind="checked: userOptIn">
+					<input type="checkbox" name="opt-in" id="opt-in" data-bind="checked: contactOptIn">
 				</span>
 			</div>
 		</div>
 		<div style="text-align: center; margin: 15px 0;">
-			<a class="button" data-bind="click:$root.saveChanges, css: {'disabled-btn': (showChange() == false)}">Save changes</a>
+			<a class="button" data-bind="click:$root.saveChanges">Save changes</a>
 			<a class="cancel" data-bind="click:$root.cancel">CANCEL</a>
 		</div>
 	</section>
 
 	
 <!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/store.js"></script>
 <script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
 <script type="text/javascript">
 
