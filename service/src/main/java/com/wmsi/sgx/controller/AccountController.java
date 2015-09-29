@@ -46,7 +46,7 @@ public class AccountController{
 		dto.setEmail(username);
 		dto.setPassword(pass.getPassword());
 		dto.setPasswordMatch(pass.getPasswordMatch());
-		
+		dto.setContactOptIn(user.getUser().getContactOptIn());
 		return registrationService.changePassword(dto);
 	}
 	
