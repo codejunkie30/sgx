@@ -5,11 +5,9 @@ define(deps, function($, _, SGX) {
 	
     SGX = {
     		
-    		//fqdn : "http://SGX-API-LB-195267723.ap-southeast-1.elb.amazonaws.com", /** PROD */
+    		fqdn : "http://SGX-API-LB-195267723.ap-southeast-1.elb.amazonaws.com", /** PROD */
     		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
     		
-			fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com", /**  Local/Dev */
-			
     		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
     		
     		resultSize: 25,
@@ -1666,7 +1664,7 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.relatedPage.file) != -1) SGX.related.init();
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
-            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1000, 0);
+            	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1200, 0);
             	else SGX.screener.init();
             	
             },
