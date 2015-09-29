@@ -15,7 +15,9 @@
             "highstock": 'vendor/highstock/highstock',
             "underscore": 'vendor/underscore',
             "colorbox": 'vendor/colorbox',
-            "json2": 'vendor/json2'
+            "json2": 'vendor/json2',
+            "jquery-timeout": 'vendor/jquery/jquery.idleTimeout.min',
+			'jquery-store': 'vendor/store'
         },
         
         waitSeconds: 10,
@@ -48,7 +50,13 @@
             },
             'json2': { 
             	exports: 'JSON' 
-            }
+            }, 
+			'jquery-store': {
+                deps: ['jquery']
+			}, 
+			'jquery-timeout': {
+                deps: ['jquery']				
+			}
             
         }
         

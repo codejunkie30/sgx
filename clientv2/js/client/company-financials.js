@@ -7,7 +7,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
-		
+		premiumUser: ko.observable(),		
+		premiumUserEmail: ko.observable(),		
+		premiumUserAccntInfo: ko.observable(),
 		initPage: function() {
 			
 			// extend tearsheet
@@ -28,6 +30,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			
 			var self = this;
 			this.init(function() { self.finish(self); });
+			
+			this.checkStatus();
 			
 		},
 		
@@ -73,6 +77,49 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     		// resize
 			me.resizeIframeSimple();
 			
+		},
+		checkStatus: function(){
+//			$('body').idleTimeout({
+//		      redirectUrl: 'sign-in.html',
+//		      idleTimeLimit: 5,
+//		      idleCheckHeartbeat: 1,
+//		       customCallback:    function () {    // define optional custom js function
+//		           alert('hi yo');
+//				  // window.location.href= 'sign-in.html'
+//		       },
+//			  enableDialog: false,
+//			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
+//		      sessionKeepAliveTimer: false
+//		    });
+//			
+			
+			var endpoint = PAGE.fqdn + "/sgx/account/info";
+			var postType = 'POST';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+					if (data.reason == 'Full authentication is required to access this resource'){
+						PAGE.premiumUser(false);
+					} else {
+						PAGE.premiumUser(true);
+						PAGE.premiumUserAccntInfo = data;
+						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
+					}
+					
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);			
 		},
 		
 		initChart: function(me) {
