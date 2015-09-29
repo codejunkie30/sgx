@@ -5,18 +5,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		retypeNewPassword: ko.observable(),
 		showChange: ko.observable(false),
 		userEmail: ko.observable(),
-		userOptIn: ko.observable(),
-		userCurrency: ko.observable(),
+		contactOptIn: ko.observable(),
+		currency: ko.observable(),
 		subType: ko.observable(),
 		subExpire: ko.observable(),
+		isFormValid: ko.observable(),
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
 
 			var displayMessage = SAVECHANGES.messages.messages[0];
 
-			this.accountSettings(displayMessage);
-			
-			
+			this.accountSettings(displayMessage);			
 			
 			SAVECHANGES.showChange.subscribe(function(newValue){
 				this.isFormValid = ko.computed(function() {
@@ -24,11 +23,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, this);
 			});
 			
-    		ko.applyBindings(this, $("body")[0]);
-			
-			
-			
-			
+    		ko.applyBindings(this, $("body")[0]);			
 			
 			ko.validation = validation;
     		validation.init({ insertMessages: false });
@@ -41,36 +36,40 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			        return val === this.getValue(otherField);
 					PAGE.resizeIframeSimple();
 			    },
-			    message: 'Your passwords must match.'
+			    message: displayMessage.passwordMatch
+			};			
+			
+			ko.validation.rules['passwordComplexity'] = {
+			    validator: function (val) {
+			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
+			    },
+			    message: displayMessage.passwordError
 			};
 			
 			ko.validation.registerExtenders();
-			
-			var minMaxMessage = 'Your new password must be between 8 and 40 characters.';		
-			
+						
 			SAVECHANGES.newPassword.extend({
-				required: { message: 'New Password is required.' }}).extend({
-					minLength: { params: 8, message: minMaxMessage },
-					maxLength: { params: 40, message: minMaxMessage }
-		        }).extend({
-					pattern: {
-						message: 'Your new password does not meet the minimum requirements: it must include an alphanumeric character, number and/or special character.',
-						params: '((?!.*\s)(?=.*[A-Za-z0-9]))(?=(1)(?=.*\d)|.*[!@#$%\^&*\(\)-+])^.*$'
+				required: { message: displayMessage.passwordNew }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordMinMax },
+					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
+					passwordComplexity: {
+						message: displayMessage.passwordError
 					}
 				});
 			
 			SAVECHANGES.retypeNewPassword.extend({
-				required: { message: 'Retype Password is required.' }}).extend({
-				areSame: { 
-					params: SAVECHANGES.newPassword
-				}	
-			});			
+				required: { message: displayMessage.passwordRetypeNew }}).extend({
+					areSame: { 
+						params: SAVECHANGES.newPassword,
+						message: displayMessage.passwordMatch
+					}	
+				});
 			
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
-			});
+			});	
     		
 			// resize
     		this.resizeIframeSimple();
@@ -81,33 +80,74 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		saveChanges: function(me){
-			
-			var endpointPass = me.fqdn + "/sgx/account/password";
+						
+			if (SAVECHANGES.showChange() == false){
+				//updates Currency & OptIn Status
+				this.updateSettings();
+				
+			} else {
+				if (this.errors().length > 0 || this.isFormValid == undefined) {				
+		            return
+		        } else {
+					//updates Password
+					this.updatePassword();
+					//updates Currency & OptIn Status
+					this.updateSettings();
+				}				
+			}
+
+		},	
+		
+		updateSettings: function(){
+			var endpoint = PAGE.fqdn + "/sgx/account/update";
 			var postType = 'POST';
-			var params = { email: SAVECHANGES.userEmail(), password: SAVECHANGES.newPassword(), passwordMatch: SAVECHANGES.retypeNewPassword() };
+			var params = { contactOptIn: SAVECHANGES.contactOptIn(), currency: 'SGD' }; //SAVECHANGES.currency()
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
-			
-			
-			var endpointInfo = me.fqdn + "/sgx/account/infoPost";	
-			
 			UTIL.handleAjaxRequest(
-				endpointChange,
+				endpoint,
+				postType,
+				params,
+				undefined,
 				function(data, textStatus, jqXHR){
-					console.log(data.email);
-					console.log(data.startDate);
-					console.log(data.expirationDate);
-					console.log(data.type);
+					console.log('update success');
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('sta', textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});
-						
-		},	
+				},jsonpCallback);			
+		},
+		
+		updatePassword: function(){
+			var endpoint = PAGE.fqdn + "/sgx/account/password";
+			var postType = 'POST';
+			var params = { password: SAVECHANGES.newPassword(), passwordMatch: SAVECHANGES.retypeNewPassword() };
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				undefined,
+				function(data, textStatus, jqXHR){
+					console.log(SAVECHANGES.newPassword());
+					console.log(SAVECHANGES.retypeNewPassword());
+					
+					console.log('update password success');
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+					console.log(jqXHR.statusCode() );
+				},jsonpCallback);
+			
+			
+		},
 		
 		accountSettings: function(displayMessage){
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
@@ -122,10 +162,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
-					
+					console.log(data);
 					SAVECHANGES.userEmail(data.email);
-					SAVECHANGES.userOptIn(data.contactOptIn);
-					SAVECHANGES.userCurrency(data.userCurrency);
+					SAVECHANGES.contactOptIn(data.contactOptIn);
+					SAVECHANGES.currency(data.currency);
 					SAVECHANGES.subExpire(data.expirationDate);
 					
 					
@@ -141,8 +181,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						var end = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.expirationDate));
 						var now = $.datepicker.formatDate("dd/M/yy", Date.fromISO(new Date()));
 						var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
-						var daysRemaiing = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-						var currentTrialDay = Math.floor(trialPeriod-daysRemaiing);
+						var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
+						var currentTrialDay = Math.floor(trialPeriod-daysRemaining);
 						
 						$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
 						$('.settings .intro .content .current-day').html(currentTrialDay);
@@ -155,6 +195,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('.settings .intro .date').remove();
 					}
 										
+					PAGE.timedLogout();					
 					PAGE.resizeIframeSimple();
 										
 				}, 

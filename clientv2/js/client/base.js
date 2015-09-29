@@ -428,6 +428,18 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		showLoading: function() {
 			$('#loading').show();
+		},
+		timedLogout: function(){
+			$('body').idleTimeout({
+			  idleTimeLimit: 1200,
+			  idleCheckHeartbeat: 1,
+			   customCallback:    function () {    // define optional custom js function
+				   top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+			   },
+			  enableDialog: false,
+			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
+			  sessionKeepAliveTimer: false
+			});	
 		}
 		
 	};
