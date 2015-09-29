@@ -175,8 +175,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		},
 		checkStatus: function(){
 			
-			
-			
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
 			var params = {};
