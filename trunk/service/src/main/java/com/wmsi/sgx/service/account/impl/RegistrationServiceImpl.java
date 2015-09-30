@@ -152,8 +152,8 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private EmailService emailService;
 	
-	private static final String emailBody = "Please verify your email address http://localhost:8080/sgx/user/verify?ref={0}";	
-	private static final String resetEmailBody = "To reset your password vist http://localhost:8080/sgx/user/password?ref={0}";	
+	private static final String emailBody = "Please verify your email address http://sgx2.sharefc.com/iframe.html?page=13&ref={0}";	
+	private static final String resetEmailBody = "To reset your password vist http://sgx2.sharefc.com/iframe.html?page=17&ref={0}";	
 	private static final String resetConfirmEmailBody = "Your password was reset.";
 
 	private void sendVerificationEmail(String email, String token){
