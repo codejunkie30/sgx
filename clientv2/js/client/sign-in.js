@@ -78,10 +78,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 					}					
 					if (data.reason == 'Invalid username or password'){
+						$('.error-messages').empty();
 						$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					}
 					if (data.reason == 'User is disabled' || data.reason == 'User account is locked'){
+						$('.error-messages').empty();
 						$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
 					} 

@@ -9,7 +9,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		currency: ko.observable(),
 		subType: ko.observable(),
 		subExpire: ko.observable(),
-		isFormValid: ko.observable(),
+		isFormValid: ko.observable(true),
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
 
@@ -59,18 +59,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			SAVECHANGES.retypeNewPassword.extend({
 				required: { message: displayMessage.passwordRetypeNew }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordMinMax },
+					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
 					areSame: { 
 						params: SAVECHANGES.newPassword,
 						message: displayMessage.passwordMatch
 					}	
 				});
 			
-			this.errors = ko.validation.group(this);			
+			this.errors = ko.validation.group(this);
 			
 			this.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
-			});	
-    		
+			});
+			
 			// resize
     		this.resizeIframeSimple();
 			
@@ -84,15 +86,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (SAVECHANGES.showChange() == false){
 				//updates Currency & OptIn Status
 				this.updateSettings();
+				alert('Account Settings Updated');
 				
 			} else {
-				if (this.errors().length > 0 || this.isFormValid == undefined) {				
+				if (this.errors().length > 0 || this.isFormValid == undefined) {
+					$('<p/>').html('New Password and Retype New Password are required.').appendTo('.error-messages');
 		            return
 		        } else {
 					//updates Password
 					this.updatePassword();
 					//updates Currency & OptIn Status
 					this.updateSettings();
+					
+					alert('Account Settings & Password Updated');
 				}				
 			}
 
@@ -111,7 +117,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				undefined,
 				function(data, textStatus, jqXHR){
-					console.log('update success');
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('sta', textStatus);
@@ -134,10 +139,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				undefined,
 				function(data, textStatus, jqXHR){
-					console.log(SAVECHANGES.newPassword());
-					console.log(SAVECHANGES.retypeNewPassword());
-					
-					console.log('update password success');
+					$('.error-messaage').empty();
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('sta', textStatus);
@@ -162,27 +164,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
-					console.log(data);
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.currency(data.currency);
 					SAVECHANGES.subExpire(data.expirationDate);
-					
-					
 					
 					if (data.type == 'PREMIUM'){
 						$('.settings .intro .content').html(displayMessage.accountSettings.introPremium);
 						$('.settings .intro a').remove();
 					}
 					
-					if (data.type == 'TRIAL'){
-						
+					if (data.type == 'TRIAL'){						
 						var start = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.startDate));
 						var end = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.expirationDate));
 						var now = $.datepicker.formatDate("dd/M/yy", Date.fromISO(new Date()));
 						var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 						var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-						var currentTrialDay = Math.floor(trialPeriod-daysRemaining);
+						var currentTrialDay = Math.floor(trialPeriod-daysRemaining+1);
 						
 						$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
 						$('.settings .intro .content .current-day').html(currentTrialDay);

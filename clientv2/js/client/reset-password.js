@@ -76,9 +76,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		resetPass: function(RESETPASS, me){
 			var token = this.getURLParam('ref');
-			var endpoint = PAGE.fqdn + "/sgx/user/password";
+			var endpoint = PAGE.fqdn + "/sgx/user/password?ref="+token;
 			var postType = 'POST';
-			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword(), token: token };
+			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword() };
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -92,16 +92,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params, 
-				jsonp,
-				function(data, textStatus, jqXHR){
-					if (data.details.errorCode == 4005){
-						$('<p/>').html(displayMessage.resetPass.invaldToken).appendTo('.error-messages');
-						PAGE.resizeIframeSimple();	
-					} else {
+				undefined,
+				function(data, textStatus, jqXHR){					
+					if (data == true){
 						$('.form').empty().addClass('confirm');
 						$('<p/>').html(displayMessage.resetPass.success).appendTo('.form.confirm');
-						PAGE.resizeIframeSimple();	
-					}
+						PAGE.resizeIframeSimple();					
+					} else {
+						if (data.details.errorCode == 4005){
+							$('.error-messages').empty();
+							$('<p/>').html(displayMessage.resetPass.invaldToken).appendTo('.error-messages');
+							PAGE.resizeIframeSimple();	
+						} 
+					}		
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('sta', textStatus);
