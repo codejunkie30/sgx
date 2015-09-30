@@ -33,8 +33,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			ko.validation.rules['passwordComplexity'] = {
 			    validator: function (val) {
-			        return /((?=.*?\d)(?=.*?[A-Za-z])|(?=.*?\d)(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
-			    },
+		        return /((?=.*?\d)(?=.*?[a-zA-Z])(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
+		    	},
 			    message: displayMessage.passwordError
 			};
 			
