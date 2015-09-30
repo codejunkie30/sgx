@@ -6,4 +6,4 @@ ENVIRONMENT_NAME="SGX Premium API (QA)"
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $SCRIPT_DIR
 
-./deploy.sh
+./deploy.sh $REMOTE_PATH $ENVIRONMENT_NAME
