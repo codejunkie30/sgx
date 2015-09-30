@@ -34,9 +34,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			ko.validation.rules['passwordComplexity'] = {
 			    validator: function (val) {
 		        return /((?=.*?\d)(?=.*?[a-zA-Z])(?=.*?[^\w\d\s]))^.*/.test('' + val + '');
-		    	},
+		    },
 			    message: displayMessage.passwordError
 			};
+			
+			ko.validation.registerExtenders();
 			
 			RESETPASS.email.extend({
 				required: { message: displayMessage.emailRequired },
@@ -44,7 +46,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			RESETPASS.newPassword.extend({
-				required: { message: displayMessage.passwordNew }}).extend({
+				required: { message: displayMessage.password }}).extend({
 					minLength: { params: 8, message: displayMessage.passwordMinMax },
 					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
 					passwordComplexity: {
@@ -55,7 +57,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			RESETPASS.retypeNewPassword.extend({
 				required: { message: displayMessage.passwordRetypeNew }}).extend({
 					areSame: { 
-						params: RESETPASS.password,
+						params: RESETPASS.newPassword,
 						message: displayMessage.passwordMatch
 					}	
 				});
