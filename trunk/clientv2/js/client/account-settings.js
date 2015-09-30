@@ -139,7 +139,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				undefined,
 				function(data, textStatus, jqXHR){
-					$('.error-messaage').empty();
+					$('.error-messages').empty();
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('sta', textStatus);
