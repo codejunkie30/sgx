@@ -103,6 +103,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						PAGE.resizeIframeSimple();
 					} else {
 						if (data.details.errorCode == 4003){
+							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signUp.emailDuplicate).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();	
 						}

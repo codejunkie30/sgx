@@ -58,7 +58,7 @@
 			</div>
 		</div>
 		<div style="text-align: center; margin: 15px 0;">
-			<a class="button" data-bind="click:$root.saveChanges">Save changes</a>
+			<a class="button" data-bind="click:$root.saveChanges, css: {'disabled-btn': (isFormValid() == false)}">Save changes</a>
 			<a class="cancel" data-bind="click:$root.cancel">CANCEL</a>
 		</div>
 	</section>
