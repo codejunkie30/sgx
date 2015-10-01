@@ -32,13 +32,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			SIGNIN.password.extend({
-				required: { message: displayMessage.passwordNew }}).extend({
-					minLength: { params: 8, message: displayMessage.passwordMinMax },
-					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
-					passwordComplexity: {
-						message: displayMessage.passwordError
-					}
-				});
+				required: { message: displayMessage.passwordNew }
+			});
 			
 			this.errors = validation.group(this);			
 			
@@ -70,24 +65,26 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params, 
-				jsonp, 
+				undefined, 
 				function(data, textStatus, jqXHR){
 					console.log(data);
 					console.log(textStatus);
 					if (data == '' || data == undefined){
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
-					}					
-					if (data.reason == 'Invalid username or password'){
-						$('.error-messages').empty();
-						$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
-						PAGE.resizeIframeSimple();	
-					}
-					if (data.reason == 'User is disabled' || data.reason == 'User account is locked'){
-						$('.error-messages').empty();
-						$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
-						PAGE.resizeIframeSimple();	
-					} 
+					} else {
+						
+						if (data.reason == 'Invalid username or password'){
+							$('.error-messages').empty();
+							$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
+							PAGE.resizeIframeSimple();	
+						}
+						if (data.reason == 'User is disabled' || data.reason == 'User account is locked'){
+							$('.error-messages').empty();
+							$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
+							PAGE.resizeIframeSimple();	
+						} 
 					
+					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
