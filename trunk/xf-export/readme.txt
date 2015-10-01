@@ -37,3 +37,26 @@ Configuration
 	
 	
 	In addition to these, the exe needs to be scheduled using task scheduler.  This should be done on the same machine as the loader database/program.  More info on scheduling can be found at http://www.howtogeek.com/school/using-windows-admin-tools-like-a-pro/lesson2/all/.
+	
+Deployment
+
+	The following explains the default deployment.  If you want to change the paths, you will need to update XFDataDump.exe.config with the new ones (no need to recompile). 
+	
+		1) Create the following directories 
+			a) c:\sgx\
+			b) c:\sgx\archive\
+			c) c:\sgx\bin\
+			d) c:\sgx\logs\
+			e) c:\sgx\output\
+			f) c:\sgx\queries\
+		2) Drop the following generated files into c:\sgx\bin from the XFDataDump project
+			a) ICSharpCode.SharpZipLib.dll
+			b) Renci.SshNet.dll
+			c) Renci.SshNet.xml
+			d) XFDataDump.exe
+			e) XFDataDump.exe.config
+		3) Drop any .sql files in the "queries" directory from the xf-export project into c:\sgx\queries\
+		
+	That's it.  Logs will end up in the logs directory (named after the timestamp of when it was kicked off), archive will contain all the previous runs and output is a scratch directory.
+	
+		 
