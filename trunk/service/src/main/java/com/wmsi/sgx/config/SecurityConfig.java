@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.failureHandler(authenticationFailureHandler)
 			
 		.and()
-		.addFilterBefore(this.customLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+		//.addFilterBefore(this.customLoginFilter(), UsernamePasswordAuthenticationFilter.class)
 		.logout().logoutUrl("/logout").permitAll()
 		.logoutSuccessHandler(logoutSuccessHandler);
 		
