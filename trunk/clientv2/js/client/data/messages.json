@@ -1,8 +1,8 @@
 {
 	"messages": [
 		{
-			"passwordError": "Your new password does not meet the minimum requirements: it must include at least one character, one number and one special character.",
-			"passwordMinMax": "Your new password must be between 8 and 40 characters.",
+			"passwordError": "Your password must be at least 8 characters, and include characters, numbers and special characters.",
+			"passwordMinMax": "Your password must be at least 8 characters, and include characters, numbers and special characters.",
 			"password": "Password is required.",
 			"passwordNew": "New Password is required.",
 			"passwordRetype": "Retype Password is required.",

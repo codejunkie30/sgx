@@ -205,7 +205,7 @@ table th, table td {
 	border-radius: 4px;
 	line-height: 22px;
 	padding: 0 10px;
-	color: #fff;
+	color: #fff !important;
 	cursor: pointer;
 }
 
@@ -214,10 +214,11 @@ table th, table td {
 }
 
 .button a {
-  color: #fff;
+  color: #fff !important;
   text-decoration: none;
 }
-
+.button a:hover,
+.button:hover { text-decoration: none !important; }
 .button.disabled-btn { background: #c8c8c8; cursor: default; }
 
 .action-btn {
@@ -282,8 +283,8 @@ header.header { margin: 10px 0 0 0; }
 .header .login-bar span,
 .header .login-bar ul,
 .header .login-bar ul li,
-.header .login-bar select { display: inline-block; line-height: 28px !important; }
-.header .login-bar .stock-facts { background: url(../img/bg-pb-star.png) no-repeat; margin: 0 12px; padding: 0 0 0 29px; line-height: 29px !important; }
+.header .login-bar select { display: inline-block; line-height: 29px !important; }
+.header .login-bar .stock-facts { margin: 0 12px; line-height: 29px !important; }
 .header .login-bar.logged-in .stock-facts { font-weight: bold; padding: 0 12px }
 .header .login-bar .logged-in-as { background: #b3c6cf; font-weight: bold; padding: 0 9px; }
 .header .login-bar ul { margin: 0 !important; padding: 0 6px; }
@@ -508,7 +509,8 @@ background: url("../img/title-back.png");
 /** modal */
 
 #cboxOverlay{
-	opacity: .35 !important;
+	opacity: .65 !important;
+	background: #fff !important;
 }
 
 .modal-container {

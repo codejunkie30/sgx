@@ -20,12 +20,13 @@
 
 <body style="width: auto;">
 	<section class="settings">
+		<h2>StockFacts Premium Account</h2>
 		<p class="intro"><span class="content"></span> <span class="date" data-bind="value: subExpire, format: 'date'"></span> <a data-bind="siteLink: { id: 'index'}">Purchase a StockFacts Premium account now</a>.</p>
 		<div class="form">
 			<div class="form-wrapper">
 				<label>Email Address</label>
 				<span data-bind="text: userEmail"></span>
-				<span class="note">Note: email address cannot be changed</span>
+				<span class="note">Note: email address cannot be changed.</span>
 			</div>
 			<div class="form-wrapper">
 				<label>Password</label>
@@ -52,9 +53,12 @@
 			</div>
 			<div class="form-wrapper">
 				<label>Receive Mailings</label>
-				<span class="mailings">
-					<input type="checkbox" name="opt-in" id="opt-in" data-bind="checked: contactOptIn">
-				</span>
+				<label class="mailings">Yes
+					<input type="radio" name="contactOptIn" data-bind="checked:contactOptIn, checkedValue: true">
+				</label> 
+				<label class="mailings">No					
+					<input type="radio" name="contactOptIn" data-bind="checked:contactOptIn, checkedValue: false">
+				</label>
 			</div>
 		</div>
 		<div style="text-align: center; margin: 15px 0;">
