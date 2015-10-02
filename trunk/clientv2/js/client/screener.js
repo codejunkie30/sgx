@@ -8,6 +8,13 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
+		libLoggedIn: ko.observable(),
+		libTrialPeriod: ko.observable(),
+		libTrialExpired: ko.observable(),
+		libSubscribe: ko.observable(),
+		libAlerts: ko.observable(),
+		libCurrency: ko.observable(),
+		currentDay: ko.observable(),
 		initPage: function() {
 						
 			this.results = SEARCH.init(this);
@@ -28,7 +35,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
     		
-			this.checkStatus();
+			PAGE.checkStatus();
 			
     		// finish other page loading
     		ko.applyBindings(this, $(".disclosure")[0]);
@@ -172,37 +179,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 				});
 			
 			}			
-		},
-		checkStatus: function(){
-			
-			var endpoint = PAGE.fqdn + "/sgx/account/info";
-			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
-			
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params,
-				jsonp,
-				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource'){
-						PAGE.premiumUser(false);
-					} else {
-						PAGE.premiumUser(true);
-						PAGE.premiumUserAccntInfo = data;
-						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-						PAGE.timedLogout();
-					}
-					
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);			
 		}
 
 	};

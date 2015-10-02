@@ -7,9 +7,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
-		premiumUser: ko.observable(),		
+		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
+		libLoggedIn: ko.observable(),
+		libTrialPeriod: ko.observable(),
+		libTrialExpired: ko.observable(),
+		libSubscribe: ko.observable(),
+		libAlerts: ko.observable(),
+		libCurrency: ko.observable(),
+		currentDay: ko.observable(),
 		initPage: function() {
 			
 			// extend tearsheet
@@ -31,7 +38,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			var self = this;
 			this.init(function() { self.finish(self); });
 			
-			this.checkStatus();
+			PAGE.checkStatus();
 			
 		},
 		
@@ -77,38 +84,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     		// resize
 			me.resizeIframeSimple();
 			
-		},
-		checkStatus: function(){			
-			var endpoint = PAGE.fqdn + "/sgx/account/info";
-			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
-			
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params,
-				jsonp,
-				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource'){
-						PAGE.premiumUser(false);
-					} else {
-						PAGE.premiumUser(true);
-						PAGE.premiumUserAccntInfo = data;
-						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-						PAGE.timedLogout();
-					}
-					
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);			
-		},
-		
+		},		
 		initChart: function(me) {
 			
 			// categories
