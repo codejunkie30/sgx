@@ -11,7 +11,14 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		factors: ko.observable([]),
 		premiumUser: ko.observable(),		
 		premiumUserEmail: ko.observable(),		
-		premiumUserAccntInfo: ko.observable(),
+		premiumUserAccntInfo: ko.observable(),		
+		libLoggedIn: ko.observable(),
+		libTrialPeriod: ko.observable(),
+		libTrialExpired: ko.observable(),
+		libSubscribe: ko.observable(),
+		libAlerts: ko.observable(),
+		libCurrency: ko.observable(),
+		currentDay: ko.observable(),
 		
 		initPage: function() {
 			
@@ -21,17 +28,17 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			var self = this;
 
 			this.init(function() { self.finish(self); });
-			
-			this.checkStatus();
+
+			PAGE.checkStatus();			
 		},
 		
 		finish: function(me) {
-
+			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
 			
 			// track the view
-			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);
+			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);			
 			
 			// alpha factors
 			var tmp = JSON.parse(FACTORS);
@@ -160,49 +167,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			var pg = tearsheet.getPage(tearsheet.pageData.getPage("index"), "type=alpha-factors&factor=" + id + "&quintile=" + factor);
 			$(".quintiles", elements[0]).addClass("per-" + (factor*20)).click(function() { window.top.location.href = pg; });
 			
-		},
-		checkStatus: function(){
-//			$('body').idleTimeout({
-//		      redirectUrl: 'sign-in.html',
-//		      idleTimeLimit: 5,
-//		      idleCheckHeartbeat: 1,
-//		       customCallback:    function () {    // define optional custom js function
-//		           alert('hi yo');
-//				  // window.location.href= 'sign-in.html'
-//		       },
-//			  enableDialog: false,
-//			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
-//		      sessionKeepAliveTimer: false
-//		    });
-//			
-			
-			var endpoint = PAGE.fqdn + "/sgx/account/info";
-			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
-			
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params,
-				jsonp,
-				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource'){
-						PAGE.premiumUser(false);
-					} else {
-						PAGE.premiumUser(true);
-						PAGE.premiumUserAccntInfo = data;
-						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-					}
-					
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);			
 		}
 		
 	};

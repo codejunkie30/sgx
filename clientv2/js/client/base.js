@@ -202,9 +202,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$.extend(true, this, child);
 			
 			// initialize the core object
-			this.initPage();
-			
-			
+			this.initPage();			
 			
 			return this;
 			
@@ -429,10 +427,69 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		showLoading: function() {
 			$('#loading').show();
 		},
+		checkStatus: function(){
+			
+			var endpoint = PAGE.fqdn + "/sgx/account/info";
+			var postType = 'POST';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+					if (data.reason == 'Full authentication is required to access this resource'){
+						PAGE.premiumUser(false);
+					} else {
+						
+						PAGE.premiumUser(true);
+						PAGE.premiumUserAccntInfo = data;
+						
+						if (data.type == 'PREMIUM'){
+							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
+							
+							PAGE.libTrialPeriod(true);
+							PAGE.libTrialExpired(true);
+							PAGE.libSubscribe(true);
+						}
+						
+						if (data.type == 'TRIAL'){
+							var start = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.startDate));
+							var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));
+							var now = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(new Date()));
+	
+							var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
+							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
+							
+							PAGE.libLoggedIn(true);
+							PAGE.libTrialExpired(true);
+							PAGE.currentDay = daysRemaining;
+						}
+						
+						if (data.type == 'EXPIRED'){							
+							PAGE.libLoggedIn(true);
+							PAGE.libTrialPeriod(true);
+							PAGE.libAlerts(true);
+							PAGE.libCurrency(true);							
+						}
+						PAGE.timedLogout();
+					}
+					
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);			
+		},
 		timedLogout: function(){
 			$('body').idleTimeout({
 			  idleTimeLimit: 1200,
-			  idleCheckHeartbeat: 1,
+			  idleCheckHeartbeat: 60,
 			   customCallback:    function () {    // define optional custom js function
 				   top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
 			   },
