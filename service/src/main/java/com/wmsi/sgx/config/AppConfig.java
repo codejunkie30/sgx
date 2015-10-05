@@ -2,6 +2,7 @@ package com.wmsi.sgx.config;
 
 import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -13,10 +14,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -24,6 +26,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import org.thymeleaf.spring3.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.UrlTemplateResolver;
+
 
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.service" })
@@ -86,12 +93,39 @@ public class AppConfig{
     }
 
 	@Bean
-	public MailSender mailSender(){
+	public JavaMailSender mailSender(){
 		JavaMailSenderImpl sender = new JavaMailSenderImpl();
 		sender.setHost(env.getProperty("mail.host"));
 		sender.setUsername(env.getProperty("mail.user"));
 		sender.setPassword(env.getProperty("mail.password"));
 		return sender;
+	}
+	
+	@Value ("${email.cachable}")
+	Boolean cachable;
+	
+	@Value ("${cache.duration}")
+	Long cacheDuration;
+	
+	@Bean
+	public UrlTemplateResolver emailTemplateResolver(){
+		UrlTemplateResolver emailTemplateResolver = new UrlTemplateResolver();
+        emailTemplateResolver.setTemplateMode("HTML5");
+        emailTemplateResolver.setCharacterEncoding("UTF-8");
+        emailTemplateResolver.setOrder(1);
+        emailTemplateResolver.setCacheable(cachable);
+        if(cachable){
+        	emailTemplateResolver.setCacheTTLMs(cacheDuration);
+        }
+        
+        return emailTemplateResolver;
+	}
+	
+	@Bean
+	public SpringTemplateEngine templateEngine(){
+		SpringTemplateEngine engine = new SpringTemplateEngine();
+		engine.setTemplateResolver(this.emailTemplateResolver());
+		return engine;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.wmsi.sgx.controller;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class AccountController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(@AuthenticationPrincipal UserDetailsWrapper user, @Valid @RequestBody PasswordChangeModel pass) throws UserNotFoundException{
+	public @ResponseBody Boolean changePassword(@AuthenticationPrincipal UserDetailsWrapper user, @Valid @RequestBody PasswordChangeModel pass) throws UserNotFoundException, MessagingException{
 	
 		String username = user.getUsername();
 		
