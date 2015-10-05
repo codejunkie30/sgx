@@ -25,8 +25,8 @@ public class WebappInitializerConfig extends AbstractAnnotationConfigDispatcherS
 		return new String[]{"/"};
 	}
 
-	@Override
+	/*@Override
 	protected Filter[] getServletFilters(){
 		return new Filter[]{new JsonpWrappingFilter()};
-	}
+	}*/
 }
