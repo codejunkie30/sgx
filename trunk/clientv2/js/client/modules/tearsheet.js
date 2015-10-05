@@ -69,6 +69,12 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 		
 		industryGroup: function() {
 			return encodeURIComponent(this.companyInfo.industryGroup);
+		},
+		
+		printLink: function(id, extra) {
+			var local = location.protocol + "//" + window.location.hostname + "/print.html?code=" + id + (typeof extra === "undefined" ? "" : extra);
+			var url = PAGE.pqdn + encodeURIComponent(local);
+			return url;
 		}
 
 
