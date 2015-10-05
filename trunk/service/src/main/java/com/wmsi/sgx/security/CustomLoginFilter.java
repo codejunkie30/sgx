@@ -89,6 +89,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			// the results.
 			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
 			super.doFilter(postRequestWrapper, wrapper, chain);
+			response.setContentType("text/javascript;UTF-8");
 			String callback = parms.get("callback")[0];
 
 			// Wrap json with jsonp callback
@@ -97,8 +98,9 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			out.write((callback + "(").getBytes());
 			out.write(wrapper.getData());
 			out.write(");".getBytes());
-
+			//levaing this here just in case(paranoid checking)
 			wrapper.setContentType("text/javascript;UTF-8");
+			
 
 			out.close();
 		}else{
