@@ -6,7 +6,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		volumeData: [],
 		priceData: [],
 		
-		init(element, data, finished, periodChange) {
+		init: function(element, data, finished, periodChange) {
 			
 			var self = this;
 		
