@@ -51,8 +51,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						
 			SAVECHANGES.newPassword.extend({
 				required: { message: displayMessage.passwordNew }}).extend({
-					minLength: { params: 8, message: displayMessage.passwordMinMax },
-					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordError },
+					maxLength: { params: 40, message: displayMessage.passwordError }}).extend({
 					passwordComplexity: {
 						message: displayMessage.passwordError
 					}

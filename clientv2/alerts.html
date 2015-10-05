@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Screener - SGX</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=1.0" />
+    <link rel="stylesheet" href="css/alerts.css?v=1.0" />
+    
+	<!--[if lt IE 9]>
+    	<script type="text/javascript" src="js/vendor/json2.js"></script>
+    	<script type="text/javascript" src="js/wmsi/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body style="width: auto;" id="alerts">
+	
+	<div class="grid scan">
+		<h2>Alerts</h2>
+		<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
+		<p><a href="">Create a New Watch List</a></p>
+	</div>
+	
+	<div class="grid scan">
+		<section class="watchlist">
+			<select>
+				<option>Watch List Name A</option>
+			</select>
+			<a href="#">EDIT</a> <a href="#">DELETE</a>
+			
+			<div class="companies">
+				<ul>								
+					<li class="odd">						
+						<!--<span data-bind="text: company.companyInfo.tickerCode"></span>
+						<span class="currency" data-bind="text: priceData().currency"></span> 
+						<span class="price" data-bind="text: priceData().price, format: 'number'"></span>
+						<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }"></span>
+						<span class="remove"></span>
+						<div data-bind="text: company.companyInfo.companyName"></div>>-->
+						
+						<span class="ticker">CL34</span>
+						<span class="currency">SGD</span> 
+						<span class="price">1.45</span>
+						<span class="change negative">-0.13</span>
+						<span class="remove"></span>
+						<div class="company">Singapore Airlines Limited</div>						
+					</li>
+					<li>
+						<span class="ticker">T14</span>
+						<span class="currency">SGD</span> 
+						<span class="price">10.06</span>
+						<span class="change">+0.02</span>
+						<span class="remove"></span>
+						<div class="company">Tianjin Zhongxin Pharmaceutical Group Corporation Limited</div>						
+					</li>					
+				</ul>				
+			</div>
+			<div>
+				<div class="searchtoggle">
+					<span class="toggle button sname" placeholder="Search by company name" data-validator="isValidName">Company Name</span><span class="toggle button scode" placeholder="Search by stock code">Stock Code</span>
+				</div>
+				<div>
+					<span class="searchbar">
+						<input type="text" />
+						<span class="search-submit" class="button" value="" alt="Search Submit"></span>
+					</span>
+				</div>
+				<!--  results display data-bind="visible: viewModel.refinedCompanies().length > 0" data-bind="repeat: { foreach: viewModel.currentCompanies(), limit: viewModel.resultSize }" 
+					<div class="searchtoggle">
+					<span class="toggle button sname" data-bind="click: clickEvents.keywordToggle" data-name="name" data-placeholder="Search by company name" data-validator="isValidName">Company Name</span><span class="toggle button scode" data-bind="click: clickEvents.keywordToggle" data-name="code" data-placeholder="Search by stock code" data-validator="isValidTicker">Stock Code</span>
+				</div>
+				<div>
+					<span class="searchbar">
+						<input type="text" data-bind="enterkey: clickEvents.keywordSearch" />
+						<span class="search-submit" data-bind="click: clickEvents.keywordSearch" class="button" value="" alt="Search Submit"></span>
+					</span>
+				</div>
+				
+				-->
+			</div>
+			<div>
+				<h3>Your Matches</h3>
+				<div>
+					<span>X</span>
+					<span class="company"></span>
+				</div>
+			</div>			
+		</section>
+		
+		<!--<span class="checkbox left">
+			<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+				<span class="name" data-bind="text: name"></span>
+			</span>
+			<input type="checkbox">
+		</span>-->
+		
+		<section class="alerts">
+			<h3>Price Changes</h3>
+			<div class="price-changes">
+				<ul>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Price drops below <input type="text"> or rises above <input type="text"></span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Trading volume exceeds 30 day daily change in volume by <input type="text"></span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name" data-bind="text: name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Reaches a new 52-week 
+							<select>
+								<option>High</option>
+								<option>Low</option>
+							</select>
+						</span>
+					</li>
+				</ul>
+			</div>
+			<!--<span class="checkbox left">
+				<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+					<span class="name" data-bind="text: name"></span>
+				</span>
+				<input type="checkbox">
+			</span>-->
+			<h3>Estimates</h3>
+			<div class="estimates">
+				<ul>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Change in target price drops below <input type="text"> or rises above <input type="text"></span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Change in consensus recommendation (buy, sell, hold).
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Change in estimates to actual
+							<select>
+								<option>Beat</option>
+							</select>
+						</span>
+					</li>
+				</ul>
+			</div>
+			
+			<h3>Key Developments</h3>
+			<div class="developments">
+				<ul>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Announced/Completed Transactions</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox">
+						</span>
+						<span>Transaction Updates</span>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<a href="#" class="button">Save</a> <a href="#">CANCEL</a>
+			</div>
+	</section>
+	
+
+	<div class="grid disclosure scan">
+		<!--data-bind="siteLink:'terms-conditions'"--><p>Source: S&amp;P Capital IQ - <a >Use of this information is subject to terms and conditions</a></p>
+	</div>	
+	
+<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/store.js"></script>
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>
+
+</body>
+
+</html>

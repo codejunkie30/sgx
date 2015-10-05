@@ -441,10 +441,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
+					console.log(data);
+					console.log(textStatus);
+					console.log(jqXHR);
+					
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
-					} else {
-						
+					} else {						
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
 						
@@ -460,13 +463,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							var start = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.startDate));
 							var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));
 							var now = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(new Date()));
-	
+							
 							var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-							
+
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialExpired(true);
-							PAGE.currentDay = daysRemaining;
+							PAGE.currentDay(daysRemaining);
 						}
 						
 						if (data.type == 'EXPIRED'){							
