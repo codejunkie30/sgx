@@ -47,8 +47,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			RESETPASS.newPassword.extend({
 				required: { message: displayMessage.password }}).extend({
-					minLength: { params: 8, message: displayMessage.passwordMinMax },
-					maxLength: { params: 40, message: displayMessage.passwordMinMax }}).extend({
+					minLength: { params: 8, message: displayMessage.passwordError },
+					maxLength: { params: 40, message: displayMessage.passwordError }}).extend({
 					passwordComplexity: {
 						message: displayMessage.passwordError
 					}

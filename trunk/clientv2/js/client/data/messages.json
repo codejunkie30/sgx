@@ -2,7 +2,6 @@
 	"messages": [
 		{
 			"passwordError": "Your password must be at least 8 characters, and include characters, numbers and special characters.",
-			"passwordMinMax": "Your password must be at least 8 characters, and include characters, numbers and special characters.",
 			"password": "Password is required.",
 			"passwordNew": "New Password is required.",
 			"passwordRetype": "Retype Password is required.",

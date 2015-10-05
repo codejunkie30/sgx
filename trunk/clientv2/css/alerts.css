@@ -1,0 +1,26 @@
+#alerts select { background: #e1e1e1; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; min-width: 80px; }
+#alerts a { color: #0b236b; text-decoration: none; }
+#alerts a:hover { text-decoration: underline; }
+.watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
+.watchlist .companies { margin: 12px 0; }
+.watchlist .companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
+.watchlist .companies ul li { list-style-type: none; padding: 10px; display: block; }
+.watchlist .companies ul li.odd { background: #ebecec; }
+.watchlist .companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
+.watchlist .companies ul li .ticker { width: 123px; }
+.watchlist .companies ul li .currency { width: 58px; }
+.watchlist .companies ul li .price { width: 64px; }
+.watchlist .companies ul li .change { width: 69px; color: #b5cf34; }
+.watchlist .companies ul li .change.negative { color: #bf0052; }
+
+
+.watchlist .companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; }
+.watchlist .companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
+
+
+.alerts { display: inline-block; width: 60%; }
+.alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
+.alerts h3 { background: #0b236b; height: 36px; line-height: 36px; font-size: 19px; color: #fff; font-weight: normal; padding: 0 15px; margin: 0;  }
+.alerts ul { padding: 17px 10px; margin: 0; }
+.alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
+.alerts ul li input[type="text"] { width: 32px; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; }

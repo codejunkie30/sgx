@@ -1,10 +1,9 @@
 define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
 	
 	
-	var SCREENER = {
-		criteria: null,		
-		results: null,		
-		defaultSearch: "advanced-screener",		
+	var ALERTS = {
+		
+		watchList: ko.observable(true),
 		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
@@ -15,17 +14,16 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		libAlerts: ko.observable(),
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
+		
+		defaultSearch: "advanced-screener",
+
 		initPage: function() {
-			
-			PAGE.checkStatus();
 			
 			this.results = SEARCH.init(this);
 
 			// some base variables
 			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
 
-    		// load the marketing copy
-    		this.loadMarketingCopy();
 
     		// apply bindings
     		var scrnr = this;
@@ -36,6 +34,8 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
     		
     		// load the default keyword/screener toggle
     		this.changeScreenerToggle(searchType);
+    		
+			PAGE.checkStatus();
 			
     		// finish other page loading
     		ko.applyBindings(this, $(".disclosure")[0]);
@@ -53,36 +53,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
     		// show page
 			screener.hideLoading();
-			
-		},
-		
-		/**
-		 * load a random ad from the JSON and display in header
-		 */
-		loadMarketingCopy: function() {
-			
-			$.getJSON( "data/homepage.json?time=" + new Date().getMilliseconds(), function(data) {
-            	var promo = Math.floor(Math.random() * data.promos.length) + 1;
-            	promo = data.promos[promo-1];
-            	
-            	var remove = promo.type == "image" ? "text" : "image";
-            	$(".screener-header .message .promo-" + remove).remove();
-            	
-            	if (promo.type == "image") {
-            		
-            		$(".screener-header .message .promo-image img").attr("src", promo.src);
-            		if (promo.hasOwnProperty("href")) {
-            			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("target", "_top");
-            			
-            		}
-            		
-            		return;
-            	}
-            	
-            	// otherwise promo is text
-            	$(".screener-header .message .intro-headline").html(promo.title);
-            	$(".screener-header .message .copy").html(promo.copy);
-			});
 			
 		},
 		
@@ -178,11 +148,42 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 					crit.init(screener, screener.finalize);
 				});
 			
-			}			
+			}
+		},
+		checkStatus: function(){
+			
+			var endpoint = PAGE.fqdn + "/sgx/account/info";
+			var postType = 'POST';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+					if (data.reason == 'Full authentication is required to access this resource'){
+						//top.location.href = PAGE.getPage(PAGE.pageData.getPage('premium'));
+					} else {
+						PAGE.premiumUser(true);
+						PAGE.premiumUserAccntInfo = data;
+						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
+						PAGE.timedLogout();
+					}
+					
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);			
 		}
 
 	};
 	
-	return SCREENER;
+	return ALERTS;
 	
 });

@@ -816,8 +816,10 @@ background: url("../img/title-back.png");
   margin-right: 30px;
   display: inline-block;
   position: relative;
-  height: 30px;
+  height: 30px;  
 }
+.button-dropdown select { background: #e1e1e1; border-radius: 4px; }
+.button-dropdown select option {}
 .button-dropdown.open {
   z-index: 50;
 }
@@ -914,6 +916,10 @@ background: url("../img/title-back.png");
 .secondary-search-dropdown .dropdown {
   width: 337px;
 }
+
+.custom-select select { background: transparent; width: 227px; font-size: 10px; font-weight: bold; border: 1px solid #fff; border-radius: 4px; height: 21px; -webkit-appearance: none; }
+.custom-select { width: 200px; height: 21px; overflow: hidden; background: url(../img/bg-select-arrow.png) no-repeat right #ddd; border: 2px solid #d4d4d4; border-radius: 4px; }
+.custom-select select option { background: #f3f3f3; border-bottom: 2px solid #fff; font-weight: normal !important; }
 
 /** alpha factors */
 
