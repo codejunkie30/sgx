@@ -2,9 +2,11 @@ package com.wmsi.sgx.service.account.impl;
 
 import java.text.MessageFormat;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -38,7 +40,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public void registerUser(UserModel dto) throws UserExistsException{
+	public void registerUser(UserModel dto) throws UserExistsException, MessagingException{
 	
 		// Create the user record in the database.
 		User user = userService.createUser(dto);
@@ -53,7 +55,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public void resendVerificationEmail(String username){
+	public void resendVerificationEmail(String username) throws MessagingException{
 
 		User user = userService.getUserByUsername(username);
 		
@@ -108,7 +110,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public Boolean sendPasswordReset(String email) throws UserNotFoundException{
+	public Boolean sendPasswordReset(String email) throws UserNotFoundException, MessagingException{
 		
 		String token = userService.createPasswordResetToken(email);
 		
@@ -122,7 +124,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 	@Override
 	@Transactional
-	public Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException{
+	public Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException, MessagingException{
 		
 		Boolean success = userService.changePassword(user, resetToken);
 		
@@ -135,7 +137,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Override
 	@Transactional
 	@PreAuthorize("hasRole('ROLE_USER') and authentication.name == #user.email")
-	public Boolean changePassword(UserModel user) throws UserNotFoundException{
+	public Boolean changePassword(UserModel user) throws UserNotFoundException, MessagingException{
 		
 		Boolean success = userService.changePassword(user);
 		
@@ -152,20 +154,23 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private EmailService emailService;
 	
-	private static final String emailBody = "Please verify your email address http://sgx2.sharefc.com/iframe.html?page=13&ref={0}";	
-	private static final String resetEmailBody = "To reset your password vist http://sgx2.sharefc.com/iframe.html?page=17&ref={0}";	
-	private static final String resetConfirmEmailBody = "Your password was reset.";
+	@Value ("${verify.email}")
+	private String emailBody;
+	@Value ("${reset.password}")
+	private String resetEmailBody;	
+	@Value ("${reset.confirm}")
+	private String resetConfirmEmailBody;
 
-	private void sendVerificationEmail(String email, String token){
-		emailService.send(email, "Verify Email", MessageFormat.format(emailBody, token));
+	private void sendVerificationEmail(String email, String token) throws MessagingException{
+		emailService.send(email, "Verify Email", token, emailBody);
 	}
 	
-	private void sendResetEmail(String email, String token){
-		emailService.send(email, "Reset Password", MessageFormat.format(resetEmailBody, token));
+	private void sendResetEmail(String email, String token) throws MessagingException{
+		emailService.send(email, "Reset Password", token, resetEmailBody);
 	}
 
-	private void sendResetConfirmationEmail(String email){
-		emailService.send(email, "Password Reset", resetConfirmEmailBody);
+	private void sendResetConfirmationEmail(String email) throws MessagingException{
+		emailService.send(email, "Password Reset", null, resetConfirmEmailBody);
 	}
 
 

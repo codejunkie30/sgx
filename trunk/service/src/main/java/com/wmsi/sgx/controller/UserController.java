@@ -1,6 +1,7 @@
 
 package com.wmsi.sgx.controller;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class UserController{
 	private RegistrationService registrationService;
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public @ResponseBody Boolean register(@Valid @RequestBody UserModel user) throws UserExistsException{
+	public @ResponseBody Boolean register(@Valid @RequestBody UserModel user) throws UserExistsException, MessagingException{
 		
 		registrationService.registerUser(user);
 
@@ -67,7 +68,7 @@ public class UserController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody ChangePasswordModel user) throws InvalidTokenException{
+	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody ChangePasswordModel user) throws InvalidTokenException, MessagingException{
 		return registrationService.resetPassword(user, token);
 	}
 	
