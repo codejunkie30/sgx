@@ -20,7 +20,8 @@ configuration(
 			"forgot-password",
 			"reset-password",
 			"account-settings",
-			"premium"
+			"premium",
+			"resend-validation-email"
 		]	
 	}
 );

@@ -20,6 +20,7 @@
 			},
 			"signIn": {
 				"invalidUserPass": "The email address and/or password you entered are not valid.",
+				"accountNotValid": "Your email address has not been validated yet. ",
 				"accountLocked": "You have surpassed the number of allowable logins (we allow three attempts). Your account has been locked. Please try again in 30 minutes."
 			},
 			"forgotPass": {
@@ -31,8 +32,11 @@
 			},
 			"accountSettings": {
 				"introPremium": "You are currently enrolled in a StockFacts Premium account. It is set to expire on",
-				"introTrial": "You are currently in day <span class='current-day'></span> of a 14 day trial.",
+				"introTrial": "You have <span class='current-day'></span> days left in your trial.",
 				"introExpired": "Your trial has expired."			
+			},
+			"resendValidation": {
+				"emailResent": "An email was sent to with new validation requirements."	
 			}
 		}	
 	]

@@ -183,6 +183,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
         	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
         	dollars: { header: "in S$", decimals: 3 },
+        	cents: { header: "in S$", decimals: 3, format: "S$ $VALUE" },
         	percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
         	number1: { header: "", decimals: 1 }
@@ -221,7 +222,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     		
     		var formatter = this.currentFormats.hasOwnProperty(fmt) ? this.currentFormats[fmt] : {};
     		
-    		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent" || fmt =="dollars" || fmt == "volume") {
+    		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent" || fmt =="dollars" || fmt =="cents" || fmt == "volume") {
 
     			// round
     			val = parseFloat(val).toFixed(formatter.decimals).replace(/(\.\d*[1-9])0+$/,'$1').replace(/\.0*$/,'');
@@ -440,11 +441,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				postType,
 				params,
 				jsonp,
-				function(data, textStatus, jqXHR){
-					console.log(data);
-					console.log(textStatus);
-					console.log(jqXHR);
-					
+				function(data, textStatus, jqXHR){					
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
 					} else {						

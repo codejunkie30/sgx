@@ -153,9 +153,9 @@
 	</div>
 	
 	<!-- results customization -->
-	<div class="toolbar" data-bind="visible: viewModel.refinedCompanies().length > 0">
+	<div class="toolbar home" data-bind="visible: viewModel.refinedCompanies().length > 0">
 		<span class="column results">Select a column header to change the sort order.</span>
-		<span class="column center" style="padding-top:4px;">
+		<span class="column center">
 			<div class="custom-select">
 				<select data-bind="options: viewModel.sectors.values, optionsCaption: 'Select Sector', value: viewModel.sectors.val"></select>
 			</div>

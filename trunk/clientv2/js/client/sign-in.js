@@ -78,11 +78,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();	
 						}
-						if (data.reason == 'User is disabled' || data.reason == 'User account is locked'){
+						if (data.reason == 'User account is locked'){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();	
-						} 
+						}
+						if (data.reason == 'User is disabled'){
+							$('.error-messages .resend-email').show();
+							PAGE.resizeIframeSimple();	
+						}
+						
 					
 					}
 				}, 
