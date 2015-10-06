@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
 
+import com.wmsi.sgx.domain.UnverifiedUserException;
 import com.wmsi.sgx.service.account.InvalidTokenException;
 import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserVerificationException;
+import com.wmsi.sgx.service.account.VerifiedUserException;
 
 @ControllerAdvice
 public class ErrorHandler{
@@ -94,6 +97,22 @@ public class ErrorHandler{
 							LocaleContextHolder.getLocale()),							
 						4005));
 	}
+	
+	@ExceptionHandler(VerifiedUserException.class)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody ErrorResponse handleException(VerifiedUserException e) {
+
+		log.debug("User is already verified", e);
+		
+		return new ErrorResponse(
+					new ErrorMessage(
+						messages.getMessage(
+							"user.verified", 
+							null,  
+							LocaleContextHolder.getLocale()),							
+						4006));
+	}
+
 
 	@ExceptionHandler(Throwable.class)
 	@ResponseStatus(HttpStatus.OK)

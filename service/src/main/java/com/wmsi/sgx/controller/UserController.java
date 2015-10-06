@@ -24,6 +24,7 @@ import com.wmsi.sgx.service.account.RegistrationService;
 import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.account.UserVerificationException;
+import com.wmsi.sgx.service.account.VerifiedUserException;
 
 @Controller
 @RequestMapping("/user")
@@ -43,9 +44,16 @@ public class UserController{
 	}
 	
 	@RequestMapping(value = "verify", method = RequestMethod.POST)
-	public @ResponseBody Boolean verify(@RequestBody VerifyUser user) throws UserVerificationException, AccountCreationException{
+	public @ResponseBody Boolean verify(@RequestBody VerifyUser user) throws UserVerificationException, AccountCreationException, VerifiedUserException{
 	
 		return registrationService.verifyUser(user.getToken());
+	}
+	
+	@RequestMapping(value = "resetToken", method = RequestMethod.POST)
+	public @ResponseBody Boolean resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException{
+		
+		registrationService.resendVerificationEmail(user.getUsername());
+		return true;
 	}
 
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
