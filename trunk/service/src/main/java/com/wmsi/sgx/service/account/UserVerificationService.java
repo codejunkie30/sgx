@@ -8,6 +8,6 @@ public interface UserVerificationService{
 
 	String createVerificationToken(User user);
 
-	User verifyToken(String token) throws UserVerificationException;
+	User verifyToken(String token) throws UserVerificationException, VerifiedUserException;
 
 }

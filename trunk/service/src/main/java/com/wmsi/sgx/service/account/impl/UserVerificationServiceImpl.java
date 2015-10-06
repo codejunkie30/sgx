@@ -13,6 +13,7 @@ import com.wmsi.sgx.repository.UserVerificationRepository;
 import com.wmsi.sgx.security.SecureTokenGenerator;
 import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.UserVerificationService;
+import com.wmsi.sgx.service.account.VerifiedUserException;
 
 @Service
 public class UserVerificationServiceImpl implements UserVerificationService{
@@ -39,7 +40,7 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 	
 	@Override
 	@Transactional
-	public User verifyToken(String token) throws UserVerificationException{
+	public User verifyToken(String token) throws UserVerificationException, VerifiedUserException{
 	
 		UserVerification verification = userVerificationReposistory.findByToken(token);
 		
@@ -49,7 +50,7 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 		User user = verification.getUser();
 		
 		if(user.getEnabled() || verification.getRedeemed())
-			throw new UserVerificationException("User already activated");
+			throw new VerifiedUserException("User already activated");
 		
 		verification.setRedeemed(true);
 		userVerificationReposistory.save(verification);

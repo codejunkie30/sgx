@@ -25,6 +25,7 @@ import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.account.UserService;
 import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.UserVerificationService;
+import com.wmsi.sgx.service.account.VerifiedUserException;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
@@ -68,7 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException{
+	public Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException{
 	
 		User user = userVerificationService.verifyToken(token);
 		

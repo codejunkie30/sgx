@@ -11,7 +11,7 @@ public interface RegistrationService{
 
 	void resendVerificationEmail(String username) throws MessagingException;
 
-	Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException;
+	Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException;
 
 	Boolean convertToPremiumAccount(UserModel dto);
 
