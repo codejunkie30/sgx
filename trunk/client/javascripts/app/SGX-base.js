@@ -156,7 +156,9 @@ define(deps, function($, _, SGX) {
                         		$(".screener-header .message .promo-image img").attr("src", promo.src);
                         		if (promo.hasOwnProperty("href")) {
                         			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("target", "_top");
-                        			
+                        		}
+                        		else if (promo.hasOwnProperty("page")) {
+                        			$(".screener-header .message .promo-image a").attr("href", SGX.getPage(promo.page)).attr("target", "_top");
                         		}
                         		
                         		return;
@@ -1665,6 +1667,7 @@ define(deps, function($, _, SGX) {
             	else if (page.indexOf(SGX.printPage.file) != -1) SGX.print.init();
             	else if (page.indexOf(SGX.tradePage.file) != -1) SGX.trade.init();
             	else if (page.indexOf(SGX.termsPage.file) != -1) SGX.resizeIframe(1200, 0);
+            	else if (page.indexOf("coming-soon") != -1) SGX.resizeIframe(600, 0);
             	else SGX.screener.init();
             	
             },
