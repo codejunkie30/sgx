@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
 
-import com.wmsi.sgx.domain.UnverifiedUserException;
 import com.wmsi.sgx.service.account.InvalidTokenException;
 import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserVerificationException;
