@@ -60,13 +60,13 @@
 					</li>					
 				</ul>				
 			</div>
-			<div>
+			<div class="search">
 				<div class="searchtoggle">
-					<span class="toggle button sname" placeholder="Search by company name" data-validator="isValidName">Company Name</span><span class="toggle button scode" placeholder="Search by stock code">Stock Code</span>
+					<span class="toggle button sname selected" placeholder="Search by company name">Company Name</span><span class="toggle button scode" placeholder="Search by stock code">Stock Code</span>
 				</div>
 				<div>
 					<span class="searchbar">
-						<input type="text" />
+						<input type="text" placeholder="Search by company name" />
 						<span class="search-submit" class="button" value="" alt="Search Submit"></span>
 					</span>
 				</div>
@@ -83,12 +83,14 @@
 				
 				-->
 			</div>
-			<div>
-				<h3>Your Matches</h3>
-				<div>
-					<span>X</span>
-					<span class="company"></span>
-				</div>
+			<div class="results">
+				<h5>Your Matches</h5>
+				<ul class="company">
+					<li>
+						<span class="add"></span>
+						<span class="name">Company Name</span>
+					</li>
+				</li>
 			</div>			
 		</section>
 		
@@ -203,7 +205,7 @@
 					</li>
 				</ul>
 			</div>
-			<div>
+			<div class="button-wrapper">
 				<a href="#" class="button">Save</a> <a href="#">CANCEL</a>
 			</div>
 	</section>
