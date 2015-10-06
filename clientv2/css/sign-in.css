@@ -25,6 +25,10 @@ section .form .button { font-size: 17px !important; margin: 20px 0; padding: 5px
 
 section .form .error-messages p { color: #bf0052 !important; line-height: 16px; padding: 0 0 10px 0; }
 
+.error-messages .resend-email { display: none; }
+.error-messages .resend-email a { color: #bf0052; }
+.error-messages .resend-email a:hover { text-decoration: none; }
+
 section.settings { text-align: left; width: 992px; }
 section.settings p a { color: #1e2171; text-decoration: none; }
 section.settings p a:hover { text-decoration: underline; }

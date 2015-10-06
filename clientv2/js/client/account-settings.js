@@ -187,10 +187,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 						var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 						var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-						var currentTrialDay = Math.floor(trialPeriod-daysRemaining);
 						
 						$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
-						$('.settings .intro .content .current-day').html(currentTrialDay);
+						$('.settings .intro .content .current-day').html(daysRemaining);
 						
 						$('.settings .intro .date').remove();
 					}

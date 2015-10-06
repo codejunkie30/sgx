@@ -5,21 +5,30 @@
 
 
 .search-results .toolbar {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
     background-color: #f3f3f3;
-    border-color: #dcdcdc -moz-use-text-color;
     border-image: none;
     border-style: solid none;
     border-width: 1px medium;
     height: 39px;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
 }
 
 .search-results .toolbar .column {
     width: 33%;
     display: inline-block;
+}
+
+.search-results .toolbar.home .column {
+    width: 33%;
+    display: inline-block;
+	float: left;
+}
+
+.search-results .toolbar.home .column.center,
+.search-results .toolbar.home .column.right {
+	position: relative;
+	top: 7px;
 }
 
 .search-results .toolbar .results {
