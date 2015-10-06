@@ -8,7 +8,8 @@ configuration(
 			"alpha-factor", 
 			"", 
 			"trade", 
-			"terms-conditions"
+			"terms-conditions",
+			"coming-soon"
 		]
 	
 	}
