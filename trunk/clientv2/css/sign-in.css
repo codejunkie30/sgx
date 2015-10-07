@@ -1,18 +1,18 @@
-section { margin: 0 auto; width: 700px; }
+section { margin: 0 auto 50px auto; width: 700px; }
 section header { background: #5f6062; height: 110px; }
 section header h2 { color: #fff; font-size: 31px; text-align: center; position: relative; top: 60px; }
 section .form { background: #ebecec; text-align: center; }
 section .form.confirm,
 section .form.rp-sent,
 section .form.sign-up { min-height: 175px; padding: 25px; }
-section .form h4 { padding: 14px 0; }
+section .form h4 { padding: 14px 0; font-weight: normal; }
 section .form p { padding: 15px 0; margin: 0; }
 section .form p.forgot,
 section .form p.link { padding: 0 0 15px 0; margin: 0; }
-section .form input.text { background: #f5f5f5; border: 1px solid #c4c4c4; color: #848484; display: block; margin: 0 auto 17px auto; width: 349px; padding: 0 12px; line-height: 32px; height: 32px; }
+section .form input.text { background: #f5f5f5; border: 1px solid #c4c4c4; color: #333; display: block; margin: 0 auto 17px auto; width: 349px; padding: 0 12px; line-height: 32px; height: 32px; }
 
 section .link a,
-section .form .checkbox a { cursor: pointer; color: #1e2171; text-decoration: underline; }
+section .form .checkbox a { cursor: pointer; color: #0e236b; text-decoration: underline; }
 section .link a:hover,
 section .form .checkbox a:hover { text-decoration: none; }
 
@@ -30,13 +30,13 @@ section .form .error-messages p { color: #bf0052 !important; line-height: 16px; 
 .error-messages .resend-email a:hover { text-decoration: none; }
 
 section.settings { text-align: left; width: 992px; }
-section.settings p a { color: #1e2171; text-decoration: none; }
+section.settings p a { color: #0e236b; text-decoration: none; }
 section.settings p a:hover { text-decoration: underline; }
 section.settings .form { background: #ebecec; padding: 0 30px 30px 30px; width: 932px; text-align: left; }
 section.settings .form-wrapper { padding: 30px 0 0 0; }
 section.settings .form-wrapper label { width: 200px; display: inline-block; color: #333; font-weight: bold; }
 section.settings .form-wrapper span { display: inline-block; color: #767676; }
-section.settings a { cursor: pointer; color: #1e2171; }
+section.settings a { cursor: pointer; color: #0e236b; }
 section.settings a:hover { text-decoration: underline; }
 section.settings .form-wrapper span input[type="password"] { background: #f5f5f5; border: 1px solid #c4c4c4; color: #848484; width: 148px; padding: 0 12px; line-height: 28px; height: 28px; display: inline-block !important; margin: 0 12px 0 0; }
 section.settings .form-wrapper span input[type="password"].password { background: none; border: 0; margin: 0; padding: 0; width: 100px; }
@@ -51,5 +51,5 @@ section footer { background: #bcbdbe; height: 40px; overflow: hidden; }
 section footer span { display: inline-block; padding: 0 15px; }
 section footer .left { float: left; line-height: 40px; }
 section footer .right { float: right; line-height: 40px; }
-section footer a { color: #1e2171; text-decoration: none; }
+section footer a { color: #0e236b; text-decoration: none; }
 section footer a:hover { text-decoration: underline; }

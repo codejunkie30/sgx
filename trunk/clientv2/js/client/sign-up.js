@@ -99,7 +99,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('confirm');
-						$('<p/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
+						$('<div/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
 						PAGE.resizeIframeSimple();
 					} else {
 						if (data.details.errorCode == 4003){

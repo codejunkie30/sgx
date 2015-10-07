@@ -8,11 +8,11 @@ body { font-family: Arial,Helvetica,sans-serif; font-size: 11.5px; margin: 0; pa
 .change { color: #b5cf34; }
 
 hr { height: 2px; background: #9e9d98; border: 0; margin: 15px 0 15px 0; }
-h1 { margin: 0; padding: 0; font-weight: bold; font-size: 36px; line-height: 42px; color: #1e2171; }
-h2 { font-size: 22px; font-weight: normal; margin: 0 0 10px 0; color: #1e2171; }
-h3 { font-weight: bold; font-size: 16px; line-height: 26px; color: #1e2171; border-bottom: 1px solid #ccc;  margin: 0; padding: 15px 0 0 0;  }
+h1 { margin: 0; padding: 0; font-weight: bold; font-size: 36px; line-height: 42px; color: #0e236b; }
+h2 { font-size: 22px; font-weight: normal; margin: 0 0 10px 0; color: #0e236b; }
+h3 { font-weight: bold; font-size: 16px; line-height: 26px; color: #0e236b; border-bottom: 1px solid #ccc;  margin: 0; padding: 15px 0 0 0;  }
 h4 { font-size: 16px; font-weight: bold; line-height: 30px; padding: 0; margin: 0; }
-.terms h4 { color: #1e2171; font-size: 16px; font-weight: normal; margin-bottom: 15px; }
+.terms h4 { color: #0e236b; font-size: 16px; font-weight: normal; margin-bottom: 15px; }
 
 .header { padding-top: 20px; }
 .header .row { padding: 5px 25px; }
@@ -43,11 +43,11 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .logos { white-space: nowrap; }
 
 .page-title { width: 700px !important; }
-.page-title, .page-title span { color: #1e2171; font-size: 36px; font-weight: bold; }
+.page-title, .page-title span { color: #0e236b; font-size: 36px; font-weight: bold; }
 
 .breadcrumb-tree { padding: 8px; }
 .breadcrumb-tree a, 
-.breadcrumb-tree span { font-size: 12px !important; text-decoration: none; color: #1e2171; font-weight: bold; }
+.breadcrumb-tree span { font-size: 12px !important; text-decoration: none; color: #0e236b; font-weight: bold; }
 
 .dark-module { margin-bottom: 20px; background: #f2f2f2 none repeat scroll 0 0; }
 .module { position: relative; }
@@ -64,7 +64,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
 .stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 12px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
-.stock-events li span { color: #1e2171; cursor: pointer; font-weight: bold; text-decoration: none; }
+.stock-events li span { color: #0e236b; cursor: pointer; font-weight: bold; text-decoration: none; }
 
 .company-header { margin: 10px 0; }
 .company-header td { vertical-align: bottom; }
@@ -112,7 +112,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .gti-block .even { background-color: #fff; }
 .gti-block td { display: table-cell; width: 30%; padding: 5px 10px; }
 .gti-link { padding: 10px; }
-.gti-link a { font-weight: bold; color: #1e2171; text-decoration: none; }
+.gti-link a { font-weight: bold; color: #0e236b; text-decoration: none; }
 
 table.footer { background-color: #eee; width: 100%; }
 table.footer td { padding: 10px; }

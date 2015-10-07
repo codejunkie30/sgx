@@ -82,6 +82,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							PAGE.resizeIframeSimple();	
 						}
 						if (data.reason == 'User is disabled'){
+							var endpoint = PAGE.fqdn + "/sgx/logout";
+							var params = {};
+							
+							UTIL.handleAjaxRequestLogout(
+								endpoint,
+								params,
+								function(data, textStatus, jqXHR){
+									console.log(data.status);
+									PAGE.resizeIframeSimple();
+								}, 
+								function(jqXHR, textStatus, errorThrown){
+									console.log('fail');
+								});
+							
 							$('.error-messages .resend-email').show();
 							PAGE.resizeIframeSimple();	
 						}					

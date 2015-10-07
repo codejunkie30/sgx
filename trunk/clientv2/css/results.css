@@ -59,7 +59,7 @@
 }
 
 .search-results table thead tr th {
-  color: #1e2171;
+  color: #0e236b;
   border: 1px solid #ccc;
   padding: 8px 12px;
   font: bold 14px/12px Arial, Helvetica, sans-serif;
@@ -69,7 +69,7 @@
 }
 
 .search-results table thead tr th span {
-	color: #1e2171;
+	color: #0e236b;
 	display: block;
 }
 
