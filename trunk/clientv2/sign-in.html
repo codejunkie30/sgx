@@ -31,7 +31,7 @@
 			<div class="error-messages">
 				<p data-bind="validationMessage:email"></p>
 				<p data-bind="validationMessage:password"></p>
-				<p class="resend-email">Your email address has not been validated yet. <a data-bind="siteLink: { id: 'resend-validation-email' } ">Resend the validation email.</a></p>
+				<p class="resend-email">Your email address has not been validated yet. <a data-bind="siteLink: 'resend-validation-email'">Resend the validation email.</a></p>
 			</div>
 			<a class="button" data-bind="click:$root.signIn, css: {'disabled-btn': (isFormValid() == undefined || errors().length)}">Sign In</a>
 		</div>

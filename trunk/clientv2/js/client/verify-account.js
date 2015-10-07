@@ -24,6 +24,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 						$('.message').html(displayMessage.verifyAccount.success);
 						PAGE.resizeIframeSimple();
 					} else {
+						if (data.details.errorCode == 4006){
+							$('.message').html(displayMessage.verifyAccount.alreadyVerified);							
+							PAGE.resizeIframeSimple();	
+						}
+						
 						if (data.details.errorCode == 4004 || data.details.errorCode == 5001){
 							$('.message').html(displayMessage.verifyAccount.invaldToken);							
 							PAGE.resizeIframeSimple();	

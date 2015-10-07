@@ -32,7 +32,7 @@
 			<div class="error-messages">
 				<p data-bind="validationMessage:email"></p>
 			</div>
-			<a class="button" data-bind="click:$root.resendEmail, css: {'disabled-btn': (isFormValid() == undefined || errors().length)}">Resend Validation</a>
+			<a class="button resend" data-bind="click:$root.resendEmail, css: {'disabled-btn': (isFormValid() == undefined || errors().length)}">Resend Validation</a>
 		</div>
 		<footer>
 		</footer>
