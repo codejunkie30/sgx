@@ -8,7 +8,7 @@ define(deps, function($, _, SGX) {
     		fqdn : "http://SGX-API-LB-195267723.ap-southeast-1.elb.amazonaws.com", /** PROD */
     		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */
     		
-    		pqdn : "http://sgx-pdf.wealthmsi.com/pdfx/",
+    		pqdn : window.location.hostname == "localhost" ? "http://localhost:3000/?site=" : "http://sgx-pdf.wealthmsi.com/pdfx/", 
     		
     		resultSize: 25,
     		
