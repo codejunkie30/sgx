@@ -441,7 +441,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				postType,
 				params,
 				jsonp,
-				function(data, textStatus, jqXHR){					
+				function(data, textStatus, jqXHR){
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
 					} else {						
@@ -480,7 +480,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);

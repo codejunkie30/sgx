@@ -56,7 +56,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				jsonp,
 				function(data, textStatus, jqXHR){
-					console.log(data);
+					if (data == 'User is disabled'){
+						$('.button.resend').click(this.resendEmail());
+					}
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
 						$('<p/>').html(displayMessage.resendValidation.emailResent).appendTo('.form.rp-sent');

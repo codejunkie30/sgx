@@ -67,8 +67,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					console.log(data);
-					console.log(textStatus);
 					if (data == '' || data == undefined){
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 					} else {
@@ -86,9 +84,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if (data.reason == 'User is disabled'){
 							$('.error-messages .resend-email').show();
 							PAGE.resizeIframeSimple();	
-						}
-						
-					
+						}					
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
