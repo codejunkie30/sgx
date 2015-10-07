@@ -163,15 +163,15 @@ public class RegistrationServiceImpl implements RegistrationService{
 	private String resetConfirmEmailBody;
 
 	private void sendVerificationEmail(String email, String token) throws MessagingException{
-		emailService.send(email, "Verify Email", token, emailBody);
+		emailService.send(email, "SGX StockFacts: Verify Your Email Address", token, emailBody);
 	}
 	
 	private void sendResetEmail(String email, String token) throws MessagingException{
-		emailService.send(email, "Reset Password", token, resetEmailBody);
+		emailService.send(email, "SGX StockFacts Premium: Reset Your Password", token, resetEmailBody);
 	}
 
 	private void sendResetConfirmationEmail(String email) throws MessagingException{
-		emailService.send(email, "Password Reset", null, resetConfirmEmailBody);
+		emailService.send(email, "SGX StockFacts Premium: Password Reset", null, resetConfirmEmailBody);
 	}
 
 
