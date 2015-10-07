@@ -8,6 +8,9 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
+		finishedItems: 2,
+		processedItems: 0,
+		
 		
 		initPage: function() {
 			
@@ -62,12 +65,10 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 		},
 		initPriceChart: function(parent, data) {
 			var finished = function() {
-				parent.resizeIframeSimple();
-				var myFin = function() { parent.resizeIframeSimple(); };
-				parent.initNews(parent, data, myFin); 
+				parent.initNews(parent, data, function() { parent.checkFinished(parent) }); 
 			};
 			
-			var update = function() { parent.initNews(parent, data);  };
+			var update = function() { parent.initNews(parent, data, finished);  };
 		
 			PRICE_CHART.init("#price-volume", data, finished, update);
 			
@@ -128,6 +129,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 		getKeyDevID: function(idx) {
 			return "keyDev-" + this.getKeyDevLetter(idx);
 		},
+		
 		handleFactor: function(tearsheet, elements, data) {
 			
 			// nothing to do
@@ -169,24 +171,26 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			this.dataPoints(financials);
 			this.currency(financials[0].filingCurrency);
 			
-			// initialize the chart without a series
-			//this.initChart(me);
-			
-    		// resize
-			me.resizeIframeSimple();
-			
 			var pathName = window.location.pathname;
 			var finalPath = pathName.replace('/','').replace('.html','');
 			
 			if (finalPath == 'print') {
 				$('.financials-section > table:gt(2)').wrapAll('<div class="right"></div>');
 				$('.financials-section > table:lt(3)').wrapAll('<div class="left"></div>');
-			}			
+			}	
+			
+			me.checkFinished(me);
+			
 		},
-		canUncheck: function(model, name) {
-			var ret = false;
-			$.each(model.series(), function(idx, series) { if ($(".trigger", series).data().name == name) { ret = true; } });
-			return ret;
+		canUncheck: function(model, name) { 
+			return false; 
+		},
+		checkFinished: function(me) {
+			me.processedItems++;
+			if (me.processedItems < me.finishedItems) return;
+    		$("body").attr("pdf-name", me.ticker + "-" + new Date().getTime() + ".pdf");
+    		me.trackPage("SGX Print Company Profile - " + me.companyInfo.companyName);
+			setTimeout(function() { document["pdf-name"] = $("body").attr("pdf-name"); }, 100);
 		}
 
 	}
