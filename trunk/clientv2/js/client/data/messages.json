@@ -17,8 +17,7 @@
 			"verifyAccount": {
 				"success": "Your email address has been verified. Select the link below to access StockFacts Premium.",
 				"invaldToken": "The time limit for validating your email address has expired. Select the link below to access StockFacts Premium, then login to trigger another validation email to be sent to you.",
-				"alreadyVerified": "Your email address has already been verified. Select the link below to access StockFacts Premium.",
-				
+				"alreadyVerified": "Your email address has already been verified. Select the link below to access StockFacts Premium."				
 			},
 			"signIn": {
 				"invalidUserPass": "The email address and/or password you entered are not valid.",
