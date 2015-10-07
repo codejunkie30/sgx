@@ -57,8 +57,9 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .column50 { display: inline-block; padding-left: 15px; vertical-align: top; width: 50%; }
 .column50.right { padding-left: 0; width: 47%; }
 
-.terms ul * { font-size: 12px; line-height: 14px; width: 90%; }
+.terms ul * { font-size: 11px; line-height: 14px; width: 90%; }
 .terms ul li { margin-bottom: 10px; }
+.terms p { font-size: 11px; }
 
 .stock-events { max-height: 560px; overflow: hidden; margin: 10px 0 25px; }
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
