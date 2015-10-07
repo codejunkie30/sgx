@@ -1,7 +1,7 @@
 {
 	"messages": [
 		{
-			"passwordError": "Your password must be at least 8 characters, and include characters, numbers and special characters.",
+			"passwordError": "Passwords must be at least 8 characters, and include a blend of letters, numbers and symbols.",
 			"password": "Password is required.",
 			"passwordNew": "New Password is required.",
 			"passwordRetype": "Retype Password is required.",
@@ -10,9 +10,8 @@
 			"emailRequired": "Email Address is required.",
 			"emailValid": "Your email address must be in a valid format.",
 			"signUp": {
-				"success": "Your account has been created. The next step is to validate your email address. Please log into your email account and click the link to confirm your email address.",
-				"emailDuplicate": "That email address is already registered with StockFacts. Please enter a new email address."
-					
+				"success": "<h4>Your account has been created.</h4> <p>The next step is to validate your email address.</p> <p>Please log into your email account and click the link to confirm your email address.</p>",
+				"emailDuplicate": "That email address is already registered with StockFacts. Please enter a new email address."					
 			},
 			"verifyAccount": {
 				"success": "Your email address has been verified. Select the link below to access StockFacts Premium.",
@@ -37,7 +36,8 @@
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {
-				"emailResent": "An email was sent to with new validation requirements."	
+				"emailResent": "An email was sent to with new validation requirements."	,
+				"invalidUser": "Your account is currently disabled."	
 			}
 		}	
 	]

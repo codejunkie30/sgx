@@ -46,7 +46,7 @@
   list-style: none;
   margin: 0 0 0 2px;
   display: inline-block;
-  background: #1e2171;
+  background: #0e236b;
   outline: none;
   padding: 0px;
   -webkit-border-radius: 5px 5px 0 0;
@@ -190,7 +190,7 @@
 
 .key-devs li span {
   font-weight: bold;
-  color: #1e2171;
+  color: #0e236b;
   text-decoration: none;
   cursor: pointer;
 }

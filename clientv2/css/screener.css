@@ -36,7 +36,7 @@
 
 .screener-header .message {
 	width: 300px;
-	background-color: #1e2171;
+	background-color: #0e236b;
 	font-color: #FFF;
 	line-height: 150% !important;
 }
@@ -86,12 +86,12 @@
 }
 
 .screener-header .searchtoggle .selected {
-	background-color: #1e2171;
+	background-color: #0e236b;
 }
 
 .screener-header .searchbar {
 	margin: 10px 0;
-	border: 1px solid #1e2171;
+	border: 1px solid #0e236b;
 	display: inline-block;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -123,7 +123,7 @@
 	width: 26px !important;
 	height: 0;
 	padding-top: 22px;
-	background: #1e2171 url("../img/searchbar-icon.jpg") no-repeat center center !important;
+	background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important;
 	z-index: 20;
 	cursor: pointer;
 }
@@ -147,7 +147,7 @@
 }
 
 .screener-header .screener-toggles .button.selected {
-	background-color: #1e2171;
+	background-color: #0e236b;
 }
 
 .screener-header .screener-toggles .button.selected .arrow {
@@ -233,7 +233,7 @@ table.search-criteria .label {
 }
 
 table.search-criteria .label span {
-  color: #1e2171;
+  color: #0e236b;
   display: inline-block;
   width: 80px;
   padding-bottom: 4px;
@@ -297,7 +297,7 @@ table.search-criteria .remove {
 }
 #loading .loading-text {
   font-size: 44px;
-  color: #1e2171;
+  color: #0e236b;
   text-align: center;
   position: fixed;
   margin: 0 auto;

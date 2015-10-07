@@ -22,18 +22,18 @@ h1 {
   font-weight: bold;
   font-size: 36px;
   line-height: 42px;
-  color: #1e2171;
+  color: #0e236b;
 }
 
 h2 {
-    color: #1e2171;
+    color: #0e236b;
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 20px;
 }
 
 h3, h3 span {
-    color: #1e2171;
+    color: #0e236b;
     font-size: 16px;
     font-weight: bold;
     line-height: 26px;
@@ -46,7 +46,7 @@ h4 {
 }
 
 h5 {
-    color: #1e2171;
+    color: #0e236b;
     font-size: 14px;
     font-weight: bold;
     line-height: 20px;
@@ -200,7 +200,7 @@ table th, table td {
 .button {
 	display: inline-block;
 	font-size: 12px;
-	background: #1e2171;
+	background: #0e236b;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	line-height: 22px;
@@ -222,7 +222,7 @@ table th, table td {
 .button.disabled-btn { background: #c8c8c8; cursor: default; }
 
 .action-btn {
-  color: #1e2171;
+  color: #0e236b;
   display: inline-block;
   height: 22px;
   line-height: 22px;
@@ -336,12 +336,12 @@ header.header { margin: 10px 0 0 0; }
 #charting .header .profile nav ul li.company-charting a,
 #comparables .header .profile nav ul li.company-comparables a { background: #fff; color: #000; border-color: #fff; border-radius: 8px 8px 0 0; cursor: pointer; }
 
-#premium h5 { text-transform: uppercase; }
+#premium h5 { text-transform: uppercase; color: #333; }
 #premium .premium-wrapper .trial-box { background: #e6e7e7; padding: 25px; width: 380px; float: left; margin: 0 25px 0 0  }
 #premium .premium-wrapper .trial-box p { color: #333;  margin: 0 0 20px 0; font-size: 13pt; }
 #premium .premium-wrapper .trial-box p i { font-size: 10pt !important; }
 #premium .premium-wrapper .trial-box .button { font-size: 13pt; margin: 0 15px 0 0; padding: 7px 25px; text-decoration: none; }
-#premium .premium-wrapper .trial-box .not { color: #1e2171; font-size: 10pt; text-transform: uppercase; text-decoration: none; }
+#premium .premium-wrapper .trial-box .not { color: #0e236b; font-size: 10pt; text-transform: uppercase; text-decoration: none; }
 #premium .premium-wrapper .trial-box .not:hover { text-decoration: underline; }
 #premium .premium-wrapper img { display: inline-block; }
 
@@ -385,7 +385,7 @@ background: url("../img/title-back.png");
 
 .title .button {
   float: right;
-  color: #1E2171;
+  color: #0e236b;
   display: inline-block;
   height: 18px;
   line-height: 22px;
@@ -472,7 +472,7 @@ background: url("../img/title-back.png");
 }
 
 .ui-accordion .ui-state-active, .ui-accordion .ui-state-default, .ui-accordion .ui-state-hover {
-	color: #1E2171;
+	color: #0e236b;
 }
 
 .ui-accordion .ui-corner-all, .ui-accordion .ui-corner-bottom, .ui-accordion .ui-corner-left, .ui-accordion .ui-corner-bl, .ui-accordion .ui-corner-all, .ui-accordion .ui-corner-top, .ui-accordion .ui-corner-right, .ui-accordion .ui-corner-tr {
