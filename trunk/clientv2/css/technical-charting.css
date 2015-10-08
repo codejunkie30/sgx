@@ -1,0 +1,100 @@
+body {
+  font-family: verdana, Arial, Helvetica, Sans-serif;
+  font-size: 12px; }
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+div.wrapper {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0 2px; }
+
+.technical-charting {
+  border-right: 1px solid #cacdd3;
+  border-left: 1px solid #cacdd3;
+  border-bottom: 1px solid #cacdd3;
+  padding-bottom: 100px; }
+  .technical-charting a {
+    text-decoration: none; }
+  .technical-charting ul {
+    padding: 8px 0;
+    margin: 0; }
+  .technical-charting ul li {
+    list-style: none;
+    display: inline-block;
+    margin-left: 8px; }
+    .technical-charting ul li:first-child {
+      margin-left: 0;
+      padding-right: 10px;
+      border-right: 2px solid #fff; }
+  .technical-charting .content {
+    padding: 20px;
+    text-align: right; }
+    .technical-charting .content label {
+      display: block; }
+
+.header-bar {
+  background: #cacdd3;
+  text-align: center;
+  font-weight: bold; }
+  .header-bar a {
+    color: #4d4e50; }
+    .header-bar a:hover {
+      color: #0b236b; }
+    .header-bar a.active {
+      color: #0b236b; }
+
+.bottom-space {
+  margin-bottom: 2px; }
+
+.show-hidden {
+  display: block !important; }
+
+.technical-charting .control-box {
+  width: 26%;
+  background: #ebecee;
+  text-align: left;
+  float: left; }
+  .technical-charting .control-box .title-bar {
+    background: #0b236b;
+    padding: 6px 0 6px 0;
+    padding-left: 12px;
+    border-left: 4px solid #bed61f;
+    position: relative; }
+    .technical-charting .control-box .title-bar:first-child {
+      margin-top: 0; }
+  .technical-charting .control-box .arrow {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #bed61f;
+    position: absolute;
+    top: 8px;
+    left: 0px;
+    display: none; }
+  .technical-charting .control-box .arrow-space {
+    top: 16px; }
+  .technical-charting .control-box .control-wrapper {
+    padding: 8px 10px 10px 12px;
+    border-left: 4px solid #bed61f; }
+  .technical-charting .control-box label {
+    color: #8c8e90; }
+    .technical-charting .control-box label.selected {
+      color: #000; }
+  .technical-charting .control-box h2 {
+    font-size: 12px;
+    color: #fff;
+    font-weight: normal;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0; }
+
+#technical-chart-container {
+  background: #e7e7e8;
+  display: inline-block;
+  width: 72.5%;
+  height: 400px; }
