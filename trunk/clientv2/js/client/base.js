@@ -280,6 +280,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             		overlayClose: false,
             		transition: 'none',
             		maxWidth: settings.hasOwnProperty("maxWidth") ? settings.maxWidth : 550,
+					width: settings.hasOwnProperty("width") ? settings.width : 550,
             		onComplete: function() {
             			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
             			if (PAGE.getParentURL() != null) {

@@ -88,7 +88,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				//updates Currency & OptIn Status
 				this.updateSettings();
     		
-                PAGE.modal.open({ type: 'alert',  content: '<p>Your account changes have been saved.</p>' });
+                PAGE.modal.open({ type: 'alert',  content: '<p>Your account changes have been saved.</p>', width: 300 });
     			return;				
 			} else {
 				if (this.errors().length > 0 && SAVECHANGES.isFormValid() == false) {
@@ -103,7 +103,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					
 					SAVECHANGES.showChange(false) ;
 					SAVECHANGES.isFormValid(true);
-					PAGE.modal.open({ type: 'alert',  content: '<p>Your account changes have been saved.</p>' });
+					PAGE.modal.open({ type: 'alert',  content: '<p>Your account changes have been saved.</p>', width: 300 });
     				return;
 				}				
 			}
