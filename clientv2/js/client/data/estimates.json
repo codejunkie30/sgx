@@ -1,0 +1,103 @@
+{
+	"quarterly": [
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"totalRevenue",
+	            "glossaryTerm":"totalRevenue",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EPS Norm"
+	         },
+	         {
+	            "property":"grossProfit",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EPS GAAP"
+	         },
+	         {
+	            "property":"netIncome",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Revenue"
+	         },
+	         {
+	            "property":"ebitda",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EBIT"
+	         },
+	         {
+	            "property":"eps",
+	            "glossaryTerm":"eps",
+	            "group":"per",
+	            "name":"EBT"
+	         },
+	         {
+	            "property":"payoutRatio",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Net Income (excluding Exceptions)"
+	         },
+	         {
+	            "property":"dividendsPerShare",
+	            "format":"cash",
+	            "group":"per",
+	            "name":"Net Income (GAAP)"
+	         }
+	      ],
+	      "name":"Quarterly"
+	   }
+	],
+	"annual": [
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"totalRevenue",
+	            "glossaryTerm":"totalRevenue",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EPS Norm"
+	         },
+	         {
+	            "property":"grossProfit",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EPS GAAP"
+	         },
+	         {
+	            "property":"netIncome",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Revenue"
+	         },
+	         {
+	            "property":"ebitda",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"EBIT"
+	         },
+	         {
+	            "property":"eps",
+	            "glossaryTerm":"eps",
+	            "group":"per",
+	            "name":"EBT"
+	         },
+	         {
+	            "property":"payoutRatio",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Net Income (excluding Exceptions)"
+	         },
+	         {
+	            "property":"dividendsPerShare",
+	            "format":"cash",
+	            "group":"per",
+	            "name":"Net Income (GAAP)"
+	         }
+	      ],
+	      "name":"Annual"
+	   }
+	]
+	
+}
