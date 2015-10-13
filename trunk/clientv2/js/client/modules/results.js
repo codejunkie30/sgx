@@ -307,7 +307,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             			if (!company.hasOwnProperty("industry") || $.inArray(company.industry, industries) != -1) return;
             			industries.push(company.industry);
             		});
-            		industries.sort(function(a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
+            		industries.sort(function(a, b) { 
+            			if (a == null) a = ""; if (b == null) b = "";
+            			return a.toLowerCase().localeCompare(b.toLowerCase()); 
+            		});
             		return industries;
             	}, mdl),
             	
