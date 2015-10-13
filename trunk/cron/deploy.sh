@@ -3,12 +3,13 @@
 ### arguments
 REMOTE_PATH=$1
 ENVIRONMENT_NAME=$2
+WAR_NAME=$3
 
 ###  local variables
 BASE_PATH=/root
 BUILDS_PATH=$BASE_PATH/builds
 BUILDS_ARCHIVE_PATH=$BUILDS_PATH/archives
-CURRENT_BUILD_FILE=$BUILDS_PATH/current.build
+CURRENT_BUILD_FILE=$BUILDS_PATH/${WAR_NAME}.current.build
 CURRENT_BUILD=`cat $CURRENT_BUILD_FILE`
 
 ### remote variables
@@ -50,11 +51,11 @@ if [[ "$CURRENT_BUILD" != "$LAST_BUILD" ]]; then
 	## cleaning up resources
 	logCommandToOut "Cleaning up resources"
 	cd /var/lib/tomcat7/webapps
-	rm -fR sgx*
+	rm -fR $WAR_NAME
 	
 	## copy latest war
 	logCommandToOut "Deploying latest war"
-	cp $BUILDS_PATH/$LAST_BUILD sgx.war
+	cp $BUILDS_PATH/$LAST_BUILD $WAR_NAME
 	
 	## starting server
 	logCommandToOut "Starting server"
