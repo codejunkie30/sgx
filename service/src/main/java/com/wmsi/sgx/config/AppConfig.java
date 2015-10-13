@@ -104,7 +104,7 @@ public class AppConfig{
 	@Value ("${email.cachable}")
 	Boolean cachable;
 	
-	@Value ("${cache.duration}")
+	@Value ("${email.cachable.duration}")
 	Long cacheDuration;
 	
 	@Bean
