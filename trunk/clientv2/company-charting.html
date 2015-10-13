@@ -7,9 +7,10 @@
 
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/colorbox.css" />
-	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.0" />
     <link rel="stylesheet" href="css/tearsheet.css?v=1.0" />
+    <link rel="stylesheet" href="css/technical-charting.css">
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -28,9 +29,115 @@
 		<h2>Technical Charting</h2>
 	</div>
 	
-	<div class="grid search-results">
+	<div class="grid">
 		
-		
+		<section class="technical-charting">
+
+		    <div class="header-bar">
+		      <ul>
+		        <li><a href="#" data-bind="click:changeTab.bind($data, 'indicators'), css:{'active': activeTab() == 'indicators'}">INDICATORS</a></li>
+		        <li><a href="#" data-bind="click:changeTab.bind($data, 'financials'), css:{'active': activeTab() == 'financials'}">FINANCIALS</a></li>
+		      </ul>
+		    </div>
+		    
+		    <div class="content indicators" data-bind="css:{'show-hidden': activeTab() == 'indicators'}">
+		      <div class="control-box">
+		        <div class="title-bar">
+		          <h2>Simple Moving Average</h2>
+		          <div class="icons">
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 0)">&nbsp;</a>
+		            <a href="#" class="icon" data-bind="click:toggleControlBox.bind($data, 'simpleMA'), css:{'minus-icon':controlBoxVars.simpleMA, 'plus-icon': controlBoxVars.simpleMA() == false }">&nbsp;</a>
+		          </div>
+		          <div class="arrow" data-bind="css:{'show-hidden':control.simpleAvg().length > 0}"></div>
+		        </div>
+		        <div class="control-wrapper" data-bind="slideVisible:controlBoxVars.simpleMA">
+		          <label class="checkbox-label"><input type="checkbox" value="simpleAvg.15day" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">15 Day</span></label>
+		          <label class="checkbox-label"><input type="checkbox" value="simpleAvg.50day" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">50 Day</span></label>
+		        </div>
+
+		        <div class="title-bar">
+		          <h2>Moving Average <br/>Convergence Divergence</h2>
+		          <div class="icons icons-space">
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 1)">&nbsp;</a>
+		            <a href="#" class="icon" data-bind="click:toggleControlBox.bind($data, 'divergenceMA'), css:{'minus-icon':controlBoxVars.divergenceMA, 'plus-icon': controlBoxVars.divergenceMA() == false }">&nbsp;</a>
+		            <!-- <img src="images/Vector-Smart-Object.png" alt=""> -->
+		          </div>
+		          <div class="arrow arrow-space" data-bind="css:{'show-hidden':control.convDivg().length > 0}"></div>
+		        </div>
+		        <div class="control-wrapper" data-bind="slideVisible:controlBoxVars.divergenceMA">
+		          <label class="checkbox-label"><input type="checkbox" value="convDivg.MACD" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">MACD</span></label>
+		          <label class="checkbox-label"><input type="checkbox" value="convDivg.Histogram" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Histogram</span></label>
+		          <label class="checkbox-label"><input type="checkbox" value="convDivg.SignalLine" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Signal Line</span></label>
+		        </div>
+
+		        <div class="title-bar">
+		          <h2>Relative Strength Index</h2>
+		          <div class="icons">
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 2)">&nbsp;</a>
+		            <a href="#" class="icon plus-icon">&nbsp;</a>
+		          </div>
+		        </div> 
+		      </div><!--control-box end-->
+
+		      <div id="technical-chart-container">
+		      </div>
+
+		    </div><!-- content indicators end -->
+
+		    <div class="content financials" data-bind="css:{'show-hidden': activeTab() == 'financials'}">
+		      <div class="financials-controls">
+		        <select name="" id="">
+		          <option value="">Income Statement</option>
+		        </select>
+		        <select name="" id="">
+		          <option value="">Balance Sheet</option>
+		        </select> 
+		        <select name="" id="">
+		          <option value="">Cash Flows</option>
+		        </select>  
+		      </div>
+
+		      <div id="financials-chart-container">
+		      </div>
+		    </div><!--content financials end -->
+		<!-- ko if:modalVisible -->
+		<div class="modal" data-bind="css:{'show-hidden':modalVisible}">
+		  <div class="modal-content">
+		    <div class="close" data-bind="click:destroyModal">x</div>
+		    <h1 data-bind="text:modalContent[ modalActiveContentNumber() ].title"></h1>
+		    <p data-bind="text:modalContent[ modalActiveContentNumber() ].text"></p>
+		  </div>
+		  <div class="modal-controls">
+		    <div class="control-left" data-bind="click:modalPrev">
+		      <div class="control-icon"></div>
+		    </div>
+		    <div class="position-indicator">
+		      <ul data-bind="foreach:contentArray()">
+		        <li data-bind="css:{current:$data == $parent.modalActiveContentNumber() }">&nbsp;</li>
+		      </ul>
+		    </div>
+		    <div class="control-right" data-bind="click:modalNext">
+		      <div class="control-icon"></div>
+		    </div>
+		  </div>
+		</div>
+		<!-- /ko -->
+		</section>
+
+		<section class="technical-charting-alternative">
+		  <div class="content">
+		    <h1>StockFacts Premium</h1>
+		    <h2>Technical charts are only available with a StockFacts Premium account</h2>
+		    <h3>With StockFacts Premium you will have access to:</h3>
+		    <ul>
+		      <li>Ability to create and manage portfolios</li>
+		      <li>Access to additional companies and currencies</li>
+		      <li>Access to estimates and advanced charting</li>
+		      <li>Real time market data (only available with a paid Premium account).</li>
+		    </ul>
+		    <button>Purchase</button>
+		    </div>
+		</section>
 
 	</div>
 
@@ -43,7 +150,7 @@
 <script type="text/javascript">
 
 	function loadPage() {
-		require([ "client/base", "client/company-comparables" ],
+		require([ "client/base", "client/company-charting" ],
 			function(base, pg) {
 				$(document).ready(function(e) {
 					var page = base.init(pg);
