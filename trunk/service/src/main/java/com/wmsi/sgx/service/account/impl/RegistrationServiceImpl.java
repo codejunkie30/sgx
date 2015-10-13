@@ -155,11 +155,11 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private EmailService emailService;
 	
-	@Value ("${verify.email}")
+	@Value ("${email.verify.email}")
 	private String emailBody;
-	@Value ("${reset.password}")
+	@Value ("${email.reset.password}")
 	private String resetEmailBody;	
-	@Value ("${reset.confirm}")
+	@Value ("${email.reset.confirm}")
 	private String resetConfirmEmailBody;
 
 	private void sendVerificationEmail(String email, String token) throws MessagingException{

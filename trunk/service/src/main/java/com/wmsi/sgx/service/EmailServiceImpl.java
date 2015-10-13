@@ -4,6 +4,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,15 @@ public class EmailServiceImpl implements EmailService{
 	@Autowired 
 	private TemplateEngine templateEngine;
 	
+	@Value ("${email.base}")
+	public String baseUrl;
+	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
 		final Context ctx = new Context();
 		ctx.setVariable("token", token);
+		ctx.setVariable("baseUrl", baseUrl);
 		
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
