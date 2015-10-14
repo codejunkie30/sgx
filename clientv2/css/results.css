@@ -144,6 +144,6 @@
 }
 
 .customize-display-modal {
-	width: 700px;
-	height: 280px;
+	width: 550px !important;
+	height: 460px !important;
 }

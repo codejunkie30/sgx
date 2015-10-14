@@ -11,6 +11,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var displayMessage = RESEND.messages.messages[0];
 			
+			PAGE.trackPage("SGX Resend Validation Email");
+			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
 			

@@ -70,8 +70,8 @@
 		</div>
 		<div class="right">
 			<div class="dark-module progress-estimate">
-				<h3>S&amp;P Capital IQ Consensus Estimates</h3>
-				<div class="has-estimate" data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum')  && companyInfo.targetPriceNum >= 3">
+				<h3 class="title">S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h3>
+				<div class="has-estimate" data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum') && companyInfo.targetPriceNum >= 3">
 					<div class="bold">Consensus Recommendation</div>
 						<div class="recommendation" data-bind="css: 'opt-' + Math.round(companyInfo.avgBrokerReq)">
 							<span class="inline-block">Sell</span>

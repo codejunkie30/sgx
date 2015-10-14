@@ -7,7 +7,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		colors: [ 'rgb(206, 217, 236)', '#BFCE00' ],
             
 		chart: {
-			backgroundColor:'rgba(255, 255, 255, 0.1)'
+			backgroundColor:'rgba(255, 255, 255, 0.1)',
+			height: 445
 		},
             
 		plotOptions: {

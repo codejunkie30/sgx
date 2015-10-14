@@ -271,6 +271,10 @@ table th, table td {
 	cursor: auto;
 }
 
+.column-two a { color: #0e236b; text-decoration: none; }
+.column-two a:hover { text-decoration: underline; }
+.column-two .learn-more sup { position: relative; top: -2px; }
+
 /** sections */
 
 /* Premium Header */
@@ -435,11 +439,12 @@ background: url("../img/title-back.png");
 	text-align: center;
  }
  
+.highcharts-tooltip b { height: 20px !important; line-height: 20px !important; }
 .highcharts-tooltip span {
  	padding: 4px;
 	background-color: #FFFFFF;
     opacity:1;
-    z-index:9999 !important;
+    z-index:9999 !important; line-height: 20px !important;
 }
 
 /** general ui widgets */

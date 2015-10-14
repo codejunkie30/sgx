@@ -9,7 +9,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
 		premiumUser: ko.observable(),	
-		premiumUserEmail: ko.observable(),		
+		premiumUserEmail: ko.observable(),
 		premiumUserAccntInfo: ko.observable(),
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -51,7 +51,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
 			
-			me.trackPage("SGX Company Financials - " + me.companyInfo.companyName);
+			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
 			
     		var endpoint = me.fqdn + "/sgx/company/financials";
 			var postType = 'GET';

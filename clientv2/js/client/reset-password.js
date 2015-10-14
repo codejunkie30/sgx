@@ -15,6 +15,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var displayMessage = RESETPASS.messages.messages[0];
 			
+			PAGE.trackPage("SGX Reset Password");
+			
     		ko.applyBindings(this, $("body")[0]);
 			
 			ko.validation = validation;

@@ -18,6 +18,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    return this.email() && this.password() && this.retypePassword();
 			}, this);
 			
+			PAGE.trackPage("SGX Sign Up");
+			
     		ko.applyBindings(this, $("body")[0]);
 			
 			ko.validation = validation;
