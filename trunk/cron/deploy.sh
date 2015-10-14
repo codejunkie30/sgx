@@ -52,6 +52,7 @@ if [[ "$CURRENT_BUILD" != "$LAST_BUILD" ]]; then
 	logCommandToOut "Cleaning up resources"
 	cd /var/lib/tomcat7/webapps
 	rm -fR $WAR_NAME
+	rm -fR "${WAR_NAME%.*}/"
 	
 	## copy latest war
 	logCommandToOut "Deploying latest war"
