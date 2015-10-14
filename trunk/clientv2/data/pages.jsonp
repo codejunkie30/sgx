@@ -21,7 +21,8 @@ configuration(
 			"reset-password",
 			"account-settings",
 			"premium",
-			"resend-validation-email"
+			"resend-validation-email",
+			"purchase-account"
 		]	
 	}
 );

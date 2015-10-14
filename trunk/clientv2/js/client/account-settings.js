@@ -23,7 +23,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				    return SAVECHANGES.newPassword() && SAVECHANGES.retypeNewPassword();
 				}, this);
 			});
-						
+			
+			PAGE.trackPage("SGX Account Settings");
+					
     		ko.applyBindings(this, $("body")[0]);			
 			
 			ko.validation = validation;

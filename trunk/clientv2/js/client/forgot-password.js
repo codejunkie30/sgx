@@ -17,6 +17,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			ko.validation = validation;
     		validation.init({ insertMessages: false });
 			
+			PAGE.trackPage("SGX Forgot Password");
+			
 			ko.validation.registerExtenders();
 			
 			FORGOTPASS.email.extend({
@@ -49,17 +51,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
-			
+			console.log(endpoint);
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
 				params, 
 				jsonp,
-				function(data, textStatus, jqXHR){
+				function(){
+						console.log('help2');	
+					console.log(data);
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
 						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
 						PAGE.resizeIframeSimple();	
+					} else {
+						console.log('help2');	
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){

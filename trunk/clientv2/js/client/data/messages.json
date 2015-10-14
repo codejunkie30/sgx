@@ -21,7 +21,8 @@
 			"signIn": {
 				"invalidUserPass": "The email address and/or password you entered are not valid.",
 				"accountNotValid": "Your email address has not been validated yet. ",
-				"accountLocked": "You have surpassed the number of allowable logins (we allow three attempts). Your account has been locked. Please try again in 30 minutes."
+				"accountLocked": "You have surpassed the number of allowable logins (we allow three attempts). Your account has been locked. Please try again in 30 minutes.",
+				"verifySuccess": "Your account has been verified. Sign in to get started!"
 			},
 			"forgotPass": {
 				"emailReset": "An email was sent to reset your password."	
@@ -36,8 +37,12 @@
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {
-				"emailResent": "An email was sent to with new validation requirements."	,
+				"emailResent": "An email was sent to with new validation requirements.",
 				"invalidUser": "Your account is currently disabled."	
+			},
+			"purchaseAccount": {
+				"success": "Purchase account success message.",
+				"cancelFail": "Canacel/Fail purchase account message."
 			}
 		}	
 	]

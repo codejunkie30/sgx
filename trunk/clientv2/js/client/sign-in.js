@@ -5,11 +5,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		password: ko.observable(),
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
-    		this.isFormValid = ko.computed(function() {
-			    return this.email() && this.password();
-			}, this);
+    		var displayMessage = SIGNIN.messages.messages[0];
 			
-			var displayMessage = SIGNIN.messages.messages[0];
+			//Displays verification message after user is re-directed after verifying account
+			var verifiedToken = this.getURLParam('verified');			
+			(verifiedToken != undefined) ? 	$('.message').html(displayMessage.signIn.verifySuccess) : $('.message').hide();
+			
+			this.isFormValid = ko.computed(function() {
+			    return this.email() && this.password();
+			}, this);			
+			
+			
+			PAGE.trackPage("SGX Sign In");
+			
+			//PAGE.checkStatus();
 			
 			// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
@@ -89,7 +98,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								endpoint,
 								params,
 								function(data, textStatus, jqXHR){
-									console.log(data.status);
 									PAGE.resizeIframeSimple();
 								}, 
 								function(jqXHR, textStatus, errorThrown){
@@ -108,6 +116,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(jqXHR);
 				},jsonpCallback);
 			
+		},
+		getURLParam: function getURLParam(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+		
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+		
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
 		}
 
 	};

@@ -4,6 +4,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 		initPage: function() {
 			
+			PAGE.trackPage("SGX Premium");
+			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
 
