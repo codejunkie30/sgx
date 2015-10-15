@@ -118,7 +118,7 @@ select
        case
              when ed.dataItemId = 100160 then 'avgBrokerReq'
              when ed.dataItemId = 100161 then 'targetPrice'
-             when ed.dataItemId = 100167 then 'LTG meanEstimate'
+             when ed.dataItemId = 100167 then 'ltgMeanEstimate'
              when ed.dataItemId = 114353 then 'VolatilityNum'
              when ed.dataItemId = 114362 then 'IndustryRecNum'
        end as WMSIApi,
@@ -167,11 +167,11 @@ select
        pop.tickerSymbol,
        pop.exchangeSymbol,
        case
-             when ed.dataItemId = 100162 then 'TP medianEstimate'
-             when ed.dataItemId = 100163 then 'TP highEstimate'
-             when ed.dataItemId = 100164 then 'TP lowEstimate'
-             when ed.dataItemId = 100165 then 'TP estimateNum'
-             when ed.dataItemId = 100166 then 'TP estimateDeviation'
+             when ed.dataItemId = 100162 then 'tpMedianEstimate'
+             when ed.dataItemId = 100163 then 'tpHighEstimate'
+             when ed.dataItemId = 100164 then 'tpLowEstimate'
+             when ed.dataItemId = 100165 then 'tpEstimateNum'
+             when ed.dataItemId = 100166 then 'tpEstimateDeviation'
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
@@ -219,11 +219,11 @@ select
        pop.tickerSymbol,
        pop.exchangeSymbol,
        case
-             when ed.dataItemId = 100168 then 'LTG medianEstimate'
-             when ed.dataItemId = 100169 then 'LTG highEstimate'
-             when ed.dataItemId = 100170 then 'LTG lowEstimate'
-             when ed.dataItemId = 100171 then 'LTG estimatesNum'
-             when ed.dataItemId = 100172 then 'LTG estimateDeviation'
+             when ed.dataItemId = 100168 then 'ltgMedianEstimate'
+             when ed.dataItemId = 100169 then 'ltgHighEstimate'
+             when ed.dataItemId = 100170 then 'ltgLowEstimate'
+             when ed.dataItemId = 100171 then 'ltgEstimatesNum'
+             when ed.dataItemId = 100172 then 'ltgEstimateDeviation'
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
