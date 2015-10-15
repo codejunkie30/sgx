@@ -39,7 +39,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 				var prg = $(".quintiles", element);
 				$(prg).removeClass($(prg).attr("data-class")).removeAttr("data-class")
 				$(prg).removeAttr("data-value");
-				if (!bindingContext.$parent.paused) bindingContext.$parent.runSearch();
+				bindingContext.$parent.runSearch();
 			});
 			
 			

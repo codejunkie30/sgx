@@ -51,15 +51,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
-			console.log(endpoint);
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
 				params, 
 				jsonp,
-				function(){
-						console.log('help2');	
-					console.log(data);
+				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
 						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');

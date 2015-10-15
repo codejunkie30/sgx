@@ -213,13 +213,16 @@ table th, table td {
 	vertical-align: middle;
 }
 
-.button a {
+.button a,
+a.button {
   color: #fff !important;
   text-decoration: none;
 }
 .button a:hover,
 .button:hover { text-decoration: none !important; }
 .button.disabled-btn { background: #c8c8c8; cursor: default; }
+
+.button-reset { color: #1e2171 !important; }
 
 .action-btn {
   color: #0e236b;
@@ -391,8 +394,8 @@ background: url("../img/title-back.png");
   float: right;
   color: #0e236b;
   display: inline-block;
-  height: 18px;
-  line-height: 22px;
+  height: 20px;
+  line-height: 20px;
   padding: 0 6px;
   border: 1px solid #a6a6a6;
   -webkit-border-radius: 4px;

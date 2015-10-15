@@ -19,6 +19,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				params,
 				undefined,
 				function(data, textStatus, jqXHR){
+					console.log(data);
 					if (data == true){
 						var signIn = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
 						var verifyNum = VERIFY.randomNum();
