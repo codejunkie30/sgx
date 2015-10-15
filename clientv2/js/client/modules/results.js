@@ -3,14 +3,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	ko.bindingHandlers.formatResultColumn = {
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var models = ko.utils.unwrapObservable(valueAccessor());
-	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	var prop = viewModel.hasOwnProperty("resultDisplay") ? viewModel.resultDisplay : models.prop;
+	    	var val = RESULTS.formatField(viewModel, models.row, prop);
 	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
 	    	if (val == null || val == "") val = "-";
 	    	$(element).html(val);
 	    },
 	    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var models = ko.utils.unwrapObservable(valueAccessor());
-	    	var val = RESULTS.formatField(viewModel, models.row, models.prop);
+	    	var prop = viewModel.hasOwnProperty("resultDisplay") ? viewModel.resultDisplay : models.prop;
+	    	var val = RESULTS.formatField(viewModel, models.row, prop);
 	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
 	    	if (val == null || val == "") val = "-";
 	    	$(element).html(val);
