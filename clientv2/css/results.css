@@ -143,7 +143,4 @@
 	font-weight: bold;
 }
 
-.customize-display-modal {
-	width: 550px !important;
-	height: 460px !important;
-}
+.customize-display-modal { width: 550px; height: 460px; }

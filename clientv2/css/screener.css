@@ -368,10 +368,9 @@ table.search-criteria .remove {
 }
 
 .factor .label {
+	padding: 2px 0 0 0;
 	width: 160px;
-	padding-right: 0px;
 	vertical-align: top;
-	padding-top: 2px;
 }
 
 .factor .right-label {

@@ -306,7 +306,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                 	if (this.refinedCompanies() == null) return;
             		var industries = [];
             		$.each(this.refinedCompanies(), function(idx, company) {
-            			if (!company.hasOwnProperty("industry") || $.inArray(company.industry, industries) != -1) return;
+            			if (!company.hasOwnProperty("industry") || $.inArray(company.industry, industries) != -1 || company.industry == null) return;
             			industries.push(company.industry);
             		});
             		industries.sort(function(a, b) { 

@@ -7,7 +7,7 @@
 	</div>
 	
 	<div class="login-bar" data-bind="css: {'premium': (premiumUser() ==  true)}">		
-		<span class="stock-facts">StockFacts <i>Premium</i></span>
+		<span class="stock-facts"><b>StockFacts <i>Premium</i></b></span>
 		<span class="logged-in-as" data-bind="css: {'hide': (libLoggedIn() == true)}">Logged in as <span data-bind="text: premiumUserEmail"></span></span>
 		<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> days left in your trial.</span>
 		<span class="trial-expired" data-bind="css: {'hide': (libTrialExpired() == true)}">: Your trial has expired.</span>
