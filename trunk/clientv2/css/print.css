@@ -92,7 +92,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .alpha-factors .title img { display: none; }
 
 .factor { margin: 15px 0; display: inline-block; width: 100%; }
-.factor .label { position: relative; display: block; padding-right: 24px; font-weight: bold; font-size: 13px; line-height: 16px;  }
+.factor .label { position: relative; display: block; padding-right: 24px; font-weight: bold; font-size: 13px; line-height: 16px; }
 .factor .quintiles { position: absolute; display: inline-block; width: 0; height: 11px; background: url("../img/slider-full.png") no-repeat; margin: 4px auto; cursor: pointer; white-space: nowrap; padding: 0px; }
 .factor .quintiles span { display: inline-block; width: 34px; overflow: visible; height: 11px; margin-left: 1px; }
 .factor .per-100 { width: 177px; }
