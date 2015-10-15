@@ -59,7 +59,7 @@
 			                    </tr>
 			                    <tr class="even">
 			                        <td>5-Year Beta</td>
-			                        <td class="normal right" data-bind="text: companyInfo.beta5Yr, format: 'number'">-</td>
+			                        <td class="normal right" data-bind="text: companyInfo.beta5Yr != null ? companyInfo.beta5Yr : '-', format: 'number'"></td>
 			                        <td>Shares Outstanding</td>
 			                        <td class="normal right" data-bind="text: companyInfo.sharesOutstanding, format: 'volume'">-</td>
 			                    </tr>
@@ -73,7 +73,7 @@
 			                        <td>Total Market Cap <img src="img/info.png" alt="" data-bind="tooltip: 'totalMarketCap'" /></td>
 			                        <td class="normal right" data-bind="text: companyInfo.marketCap, format: 'millions'">-</td>
 			                        <td>Float</td>
-			                        <td class="normal right" data-bind="text: companyInfo.floatPercentage, format: 'percent'">-</td>
+			                        <td class="normal right" data-bind="text: companyInfo.floatPercentage != null ? companyInfo.floatPercentage : '-', format: 'percent'"></td>
 			                    </tr>
 			                    <tr>
 									<td>6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'vwap'" /></td>
@@ -111,7 +111,7 @@
 			                        <td>Dividend Yield <img src="img/info.png" alt="" data-bind="tooltip: 'dividendYieldVal'" /></td>
 			                        <td class="normal" data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
 			                        <td>EV/EBITDA</td>
-			                        <td class="normal" data-bind="text: companyInfo.evEbitData, format: 'number'">-</td>
+			                        <td class="normal" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
 			                    </tr>
 			                    <tr>
 			                    	<td colspan="4" class="right note">All data based on previous day information.</td>
@@ -126,9 +126,9 @@
 			                <tbody>
 			                    <tr>
 			                        <td>Debt/EBITDA</td>
-			                        <td class="normal" data-bind="text: companyInfo.totalDebtEbitda, format: 'number'">-</td>
+			                        <td class="normal" data-bind="text: companyInfo.totalDebtEbitda != null ? companyInfo.totalDebtEbitda : '-', format: 'number'">-</td>
 			                        <td>Cap Ex</td>
-			                        <td class="normal" data-bind="text: companyInfo.capitalExpenditures, format: 'millions'">-</td>
+			                        <td class="normal" data-bind="text: companyInfo.capitalExpenditures != null ? companyInfo.capitalExpenditures : '-', format: 'millions'">-</td>
 			                    </tr>
 			                    <tr class="even">
 			                        <td>Total Debt</td>
@@ -152,7 +152,7 @@
 			                        <td>Cash & ST Investments</td>
 			                        <td class="normal" data-bind="text: companyInfo.cashInvestments, format: 'millions'">-</td>
 			                        <td>EBITDA</td>
-			                        <td class="normal" data-bind="text: companyInfo.ebitda, format: 'millions'">-</td>
+			                        <td class="normal" data-bind="text:  companyInfo.ebitda != null ? companyInfo.ebitda : '-', format: 'millions'">-</td>
 			                    </tr>
 			                    <tr>
 			                    	<td colspan="4" class="right note">
@@ -216,7 +216,7 @@
 			</div>
 			
 			<div class="right section-break">
-				<div class="button" data-bind="click: function() { $('#primary-tabs li a[href=\'modules/company-financials.html\']').click(); }">View recent financial statement data</div>
+				<a class="button" data-bind="siteLink: { id: 'company-financials', extra: 'code=' + ticker } ">View recent financial statement data</a>
 			</div>
 			
 			<div data-bind="visible: companyInfo.hasOwnProperty('businessDescription')" class="title section-break">
@@ -244,12 +244,12 @@
 						<td width="33%">
 							<strong>Year Founded</strong>
 							<br />
-							<span data-bind="text:companyInfo.yearFounded">-</span>
+							<span data-bind="text:companyInfo.yearFounded != null ? companyInfo.yearFounded : '-'">-</span>
 						</td>
 					</tr>
 					<tr data-bind="visible: companyInfo.hasOwnProperty('companyWebsite')">
 						<td colspan="3">
-							<a target="_blank" data-bind="text: companyInfo.companyWebsite, attr: { href: companyInfo.companyWebsite }"></a>					
+							<a target="_blank" data-bind="text: companyInfo.companyWebsite, attr: { href: 'http://'+companyInfo.companyWebsite }"></a>					
 						</td>
 					</tr>
 				</table>

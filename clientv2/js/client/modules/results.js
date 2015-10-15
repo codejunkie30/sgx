@@ -228,7 +228,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * paging
 			 * 
 			 */
-			mdl.changePage = function(i) { mdl.page(mdl.page() + i); }
+			mdl.changePage = function(i) { mdl.page(+mdl.page() + i); }
 			
 			mdl.page.subscribe(function(change) {
 				if (isNaN(change) || change <= 0 || change > mdl.pages()) { 

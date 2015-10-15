@@ -344,7 +344,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     		var vm = ko.dataFor($(".criteria[data-id='" + $(target).attr("data-id") + "']")[0]);
     		vm.val(null);
-
+						
+			if ($('.search-criteria .criteria').length <= 1) { PAGE.modal.open({ type: 'alert',  content: '<p>At least one search criteria is required.</p>', width: 300 }); return; }
+			
     		$(target).remove();
             
         	$(".search-criteria .criteria").removeClass("even");
