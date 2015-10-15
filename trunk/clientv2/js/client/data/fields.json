@@ -244,7 +244,8 @@
 			      "label":"Select Industry",
 			      "isDefault":true,
 			      "shortName":"Industry",
-			      "dataSort":"string"
+			      "dataSort":"string",
+			      "resultDisplay": "industry"
 			   }
 			]		
 		}
