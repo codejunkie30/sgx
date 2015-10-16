@@ -11,7 +11,8 @@
 			"emailValid": "Your email address must be in a valid format.",
 			"signUp": {
 				"success": "<h4>Your account has been created.</h4> <p>The next step is to validate your email address.</p> <p>Please log into your email account and click the link to confirm your email address.</p>",
-				"emailDuplicate": "That email address is already registered with StockFacts. Please enter a new email address."					
+				"emailDuplicate": "That email address is already registered with StockFacts. Please enter a new email address.",
+				"termsCheck": "You must agree to the SGX Terms and Conditions before proceeding."				
 			},
 			"verifyAccount": {
 				"success": "Your email address has been verified. Select the link below to access StockFacts Premium.",

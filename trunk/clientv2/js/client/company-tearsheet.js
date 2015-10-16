@@ -37,8 +37,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
 			
-			console.log(me.companyInfo.beta5Yr);
-			
 			// track the view
 			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);			
 			
