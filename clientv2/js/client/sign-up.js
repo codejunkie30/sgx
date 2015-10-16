@@ -15,7 +15,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			// Returns if fields have been filled out
 			this.isFormValid = ko.computed(function() {
-			    return this.email() && this.password() && this.retypePassword();
+				if (this.termsConditions() == true) { $('.error-messages .terms').hide(); }
+			    return this.email() && this.password() && this.retypePassword() && this.termsConditions();
 			}, this);
 			
 			PAGE.trackPage("SGX Sign Up");
@@ -67,11 +68,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}	
 				});
 			
+			SIGNUP.termsConditions.extend({ required: { message: displayMessage.signUp.termsCheck }});
+			
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
-			});			
+			});
     		
 			// resize
     		this.resizeIframeSimple();
@@ -88,8 +91,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
-					
-			if (this.errors().length > 0 || this.isFormValid() == undefined || SIGNUP.termsConditions == false) {				
+			
+			if (this.errors().length > 0 || this.isFormValid() == undefined || this.termsConditions() == false) {
+				if (this.termsConditions() == false) { 
+					$('.error-messages .terms').remove(); 
+					$('<p/>').addClass('terms').html(displayMessage.signUp.termsCheck).appendTo('.error-messages'); 
+				}
 	            return
 	        }
 
