@@ -341,6 +341,7 @@ header.header { margin: 10px 0 0 0; }
 #comparables .header .profile nav ul li.company-comparables a { background: #fff; color: #000; border-color: #fff; border-radius: 8px 8px 0 0; cursor: pointer; }
 
 #premium h5 { text-transform: uppercase; color: #333; }
+#premium h1 { margin: 3px 0 0 !important; }
 #premium .premium-wrapper .trial-box { background: #e6e7e7; padding: 25px; width: 380px; float: left; margin: 0 25px 0 0  }
 #premium .premium-wrapper .trial-box p { color: #333;  margin: 0 0 20px 0; font-size: 13pt; }
 #premium .premium-wrapper .trial-box p i { font-size: 10pt !important; }

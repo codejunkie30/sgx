@@ -132,7 +132,7 @@
   font-weight: bold;
   vertical-align: top;
 }
-
+.profile .ui-tabs .ui-tabs-panel tr td.border { border-right: 2px solid #fff; }
 .profile .ui-tabs .ui-tabs-panel tr td.note {
 	font-weight: normal;
 }
