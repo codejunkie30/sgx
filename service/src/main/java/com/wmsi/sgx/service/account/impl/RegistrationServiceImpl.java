@@ -163,7 +163,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	private String resetConfirmEmailBody;
 
 	private void sendVerificationEmail(String email, String token) throws MessagingException{
-		emailService.send(email, "SGX StockFacts: Verify Your Email Address", token, emailBody);
+		emailService.send(email, "SGX StockFacts Premium: Verify Your Email Address", token, emailBody);
 	}
 	
 	private void sendResetEmail(String email, String token) throws MessagingException{
