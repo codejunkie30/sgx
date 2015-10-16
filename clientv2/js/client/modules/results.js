@@ -148,7 +148,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                     		else {
 
                         		// can't check anymore
-                        		if ($(".modal-container .checked").length >= 4) { alert("Please remove a column before adidng a new one."); return; }
+                        		if ($(".modal-container .checked").length >= 4) { alert("Please remove a column before adding a new one."); return; }
                         		
                         		// check it
                         		$(this).addClass("checked");	
