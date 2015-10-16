@@ -268,6 +268,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				var curField = $("th." + field.id);
 				var direction = $(curField).hasClass("asc") ? "desc" : "asc";
 				var companies = mdl.companies();
+				var prop = field.hasOwnProperty("resultDisplay") ? field.resultDisplay : field.id;
 				
 				$(".search-results th").removeClass("asc").removeClass("desc");
 				$(curField).addClass(direction);
@@ -275,8 +276,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	// sort
             	companies.sort(function(a, b) {
             		
-            		var a1 = "asc" == direction ? a[field.id] : b[field.id];
-            		var b1 = "asc" == direction ? b[field.id] : a[field.id];
+            		var a1 = "asc" == direction ? a[prop] : b[prop];
+            		var b1 = "asc" == direction ? b[prop] : a[prop];
             		
             		if (field.format == "lookup") {
         				a1 = "asc" == direction ? results.formatField(field, a, field.id).toLowerCase() : results.formatField(field, b, field.id).toLowerCase();
