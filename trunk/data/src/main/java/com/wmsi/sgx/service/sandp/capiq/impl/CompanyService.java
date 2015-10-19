@@ -84,7 +84,8 @@ public class CompanyService extends AbstractDataService {
 	}
 
 	public Company getCompany(String id) throws ResponseParserException, CapIQRequestException {
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+		String file = "/mnt/sgx-data/company-data.csv";
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
 		Map<String, Object> map = new HashMap<String, Object>();

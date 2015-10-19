@@ -51,7 +51,8 @@ public class FinancialsService extends AbstractDataService {
 	public Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException {		
 		Financials financials = new Financials();
 		financials.setFinancials(new ArrayList<Financial>());
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+				String file = "/mnt/sgx-data/company-data.csv";
 		
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
