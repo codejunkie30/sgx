@@ -42,41 +42,63 @@
 		    
 		    <div class="content indicators" data-bind="css:{'show-hidden': activeTab() == 'indicators'}">
 		      <div class="control-box">
-		        <div class="title-bar">
+		        <div class="title-bar" data-bind="css:{'bottom-space': controlBoxVars.simpleMA()==false}">
 		          <h2>Simple Moving Average</h2>
+
 		          <div class="icons">
-		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 0)">&nbsp;</a>
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 'simpleMA')">&nbsp;</a>
 		            <a href="#" class="icon" data-bind="click:toggleControlBox.bind($data, 'simpleMA'), css:{'minus-icon':controlBoxVars.simpleMA, 'plus-icon': controlBoxVars.simpleMA() == false }">&nbsp;</a>
 		          </div>
+
 		          <div class="arrow" data-bind="css:{'show-hidden':control.simpleAvg().length > 0}"></div>
 		        </div>
+
 		        <div class="control-wrapper" data-bind="slideVisible:controlBoxVars.simpleMA">
-		          <label class="checkbox-label"><input type="checkbox" value="simpleAvg.15day" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">15 Day</span></label>
-		          <label class="checkbox-label"><input type="checkbox" value="simpleAvg.50day" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">50 Day</span></label>
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.fifteen}"><input type="checkbox" value="simpleAvg.fifteen" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">15 Day</span></label>
+
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.fifty}"><input type="checkbox" value="simpleAvg.fifty" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">50 Day</span></label>
 		        </div>
 
-		        <div class="title-bar">
+		        <div class="title-bar" data-bind="css:{'bottom-space': controlBoxVars.divergenceMA()==false}">
 		          <h2>Moving Average <br/>Convergence Divergence</h2>
+
 		          <div class="icons icons-space">
-		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 1)">&nbsp;</a>
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 'divergenceMA')">&nbsp;</a>
 		            <a href="#" class="icon" data-bind="click:toggleControlBox.bind($data, 'divergenceMA'), css:{'minus-icon':controlBoxVars.divergenceMA, 'plus-icon': controlBoxVars.divergenceMA() == false }">&nbsp;</a>
 		            <!-- <img src="images/Vector-Smart-Object.png" alt=""> -->
 		          </div>
+
 		          <div class="arrow arrow-space" data-bind="css:{'show-hidden':control.convDivg().length > 0}"></div>
 		        </div>
+
 		        <div class="control-wrapper" data-bind="slideVisible:controlBoxVars.divergenceMA">
-		          <label class="checkbox-label"><input type="checkbox" value="convDivg.MACD" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">MACD</span></label>
-		          <label class="checkbox-label"><input type="checkbox" value="convDivg.Histogram" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Histogram</span></label>
-		          <label class="checkbox-label"><input type="checkbox" value="convDivg.SignalLine" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Signal Line</span></label>
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.MACD}"><input type="checkbox" value="convDivg.MACD" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">MACD</span></label>
+
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.Histogram}"><input type="checkbox" value="convDivg.Histogram" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Histogram</span></label>
+
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.SignalLine}"><input type="checkbox" value="convDivg.SignalLine" data-bind="event:{click:processCheckbox}"> <span class="checkbox-text">Signal Line</span></label>
 		        </div>
 
 		        <div class="title-bar">
 		          <h2>Relative Strength Index</h2>
+
 		          <div class="icons">
-		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 2)">&nbsp;</a>
-		            <a href="#" class="icon plus-icon">&nbsp;</a>
+		            <a href="" class="icon info-icon" data-bind="click:viewModal.bind($data, 'RSI')">&nbsp;</a>
+		            <a href="#" class="icon" data-bind="click:toggleControlBox.bind($data, 'RSI'), css:{'minus-icon':controlBoxVars.RSI, 'plus-icon': controlBoxVars.RSI() == false }">&nbsp;</a>
 		          </div>
+
+		          <div class="arrow" data-bind="css:{'show-hidden':editEnableRSI}"></div>
 		        </div> 
+		        <div class="control-wrapper" data-bind="slideVisible:controlBoxVars.RSI">
+		          <label class="checkbox-label" data-bind="css:{'active-checkBox': checkBoxes.RSI}"><input type="checkbox" data-bind="checked:editEnableRSI"> <span class="checkbox-text">RSI</span></label>
+		          <div class="rsi-inputs" data-bind="slideVisible:editEnableRSI, css:{'show-hidden':editEnableRSI}">
+		            <label class="text-input"><span class="rsi-label-text">Overbought</span><input class="rsi-input" type="text" data-bind="value:rsiInput.overBought"></label>
+
+		            <span data-bind="validationMessage:rsiInput.overBought" class="techChart-validationMessage"></span>
+		            <label class="text-input"><span class="rsi-label-text">OverSold</span><input class="rsi-input" type="text" data-bind="value:rsiInput.overSold"></label>
+		            <span data-bind="validationMessage:rsiInput.overSold" class="techChart-validationMessage"></span>
+		          </div>
+		        </div>
 		      </div><!--control-box end-->
 
 		      <div id="technical-chart-container">
@@ -102,26 +124,29 @@
 		    </div><!--content financials end -->
 		<!-- ko if:modalVisible -->
 		<div class="modal" data-bind="css:{'show-hidden':modalVisible}">
-		  <div class="modal-content">
-		    <div class="close" data-bind="click:destroyModal">x</div>
-		    <h1 data-bind="text:modalContent[ modalActiveContentNumber() ].title"></h1>
-		    <p data-bind="text:modalContent[ modalActiveContentNumber() ].text"></p>
-		  </div>
-		  <div class="modal-controls">
-		    <div class="control-left" data-bind="click:modalPrev">
-		      <div class="control-icon"></div>
+		  <div class="modal-wrapper">
+		    <div class="modal-content">
+		      <div class="close" data-bind="click:destroyModal">x</div>
+		      <h1 data-bind="text:modalActiveArray()[ modalActiveContentNumber() ].title"></h1>
+		      <p data-bind="text:modalActiveArray()[ modalActiveContentNumber() ].text"></p>
 		    </div>
-		    <div class="position-indicator">
-		      <ul data-bind="foreach:contentArray()">
-		        <li data-bind="css:{current:$data == $parent.modalActiveContentNumber() }">&nbsp;</li>
-		      </ul>
-		    </div>
-		    <div class="control-right" data-bind="click:modalNext">
-		      <div class="control-icon"></div>
+		    <div class="modal-controls">
+		      <a class="control-left" data-bind="click:modalPrev" href="#">
+		        <div class="control-icon"></div>
+		      </a>
+		      <div class="position-indicator">
+		        <ul data-bind="foreach:contentArray()">
+		          <li data-bind="css:{current:$data == $parent.modalActiveContentNumber() }">&nbsp;</li>
+		        </ul>
+		      </div>
+		      <a class="control-right" data-bind="click:modalNext" href="#">
+		        <div class="control-icon"></div>
+		      </a>
 		    </div>
 		  </div>
 		</div>
 		<!-- /ko -->
+
 		</section>
 
 		<section class="technical-charting-alternative">
