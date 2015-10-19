@@ -109,7 +109,7 @@ public class CompanyService extends AbstractDataService {
 
 	public PriceHistory getPreviousClose(String input) throws ResponseParserException, CapIQRequestException {
 		PriceHistory ph = new PriceHistory();
-		String file = "src/main/resources/data/company-data.csv";
+		String file = "/mnt/sgx-data/company-data.csv";
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
 		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
