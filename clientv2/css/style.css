@@ -2,7 +2,7 @@
 
 body {
     min-width: 1000px;
-    padding: 0px;
+    padding: 0 0 25px 0;
     margin: 0px;
 }
 
@@ -352,7 +352,6 @@ header.header { margin: 10px 0 0 0; }
 #premium .premium-wrapper img { display: inline-block; }
 
 .cancel { cursor: pointer; }
-
 
 .title {
 background: url("../img/title-back.png");
