@@ -1,0 +1,5 @@
+Base server (api, data loader) - in tomcat7.conf
+	-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms1024m -Xmx1024m
+	
+For pricing server
+	-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms2048m -Xmx2048m
