@@ -82,7 +82,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			this.initChart(me);
 			
     		// resize
+			setTimeout(function(){
 			me.resizeIframeSimple();
+			}, 500);
 			
 		},		
 		initChart: function(me) {

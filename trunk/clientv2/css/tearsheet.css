@@ -147,14 +147,12 @@
 	line-height: 125%;
 }
 
-#key-devs {
-	width: 99%;
-}
+.general-info.gray td a { color: #0e236b; text-decoration: underline; }
+.general-info.gray td a:hover { text-decoration: none; }
 
-.key-devs {
-  padding: 0px;
-  margin: 10px 0 25px;
-}
+#key-devs { width: 99%; }
+
+.key-devs {  padding: 0px; margin: 10px 0 25px; }
 
 .key-devs ul {
   margin: 0px 0;

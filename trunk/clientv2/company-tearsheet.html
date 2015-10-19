@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
-    <link rel="stylesheet" href="css/style.css?v=1.0" />
-    <link rel="stylesheet" href="css/tearsheet.css?v=1.0" />
+    <link rel="stylesheet" href="css/style.css?v=1.2" />
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -173,7 +173,7 @@
 			         				<td class="right" width="25%">Price</td>
 			         			</tr>
 			         		</thead>
-			         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues, visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
+			         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.slice(0).reverse(), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
 			         			<tr data-bind="css: { 'even': ($index() % 2 == 0) }">
 									<td class="normal border" data-bind="text: dividendExDate, format: 'date'">-</td>
 									<td class="normal border" data-bind="text: dividendPayDate, format: 'date'">-</td>

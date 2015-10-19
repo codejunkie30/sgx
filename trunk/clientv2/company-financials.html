@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
-    <link rel="stylesheet" href="css/style.css?v=1.0" />
-    <link rel="stylesheet" href="css/tearsheet.css?v=1.0" />
+    <link rel="stylesheet" href="css/style.css?v=1.2" />
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -78,7 +78,7 @@
 								<td data-bind="text: $data.hasOwnProperty($parent.property) &&  $data[$parent.property] != null? $data[$parent.property] : '-', format: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
 							<!-- /ko -->
 							<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
-								<span data-bind="visible: $root.canUncheck($root, property)">[UNCHECK]</span>
+								<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
 							</td>
 						</tr>
 					<!-- /ko -->
