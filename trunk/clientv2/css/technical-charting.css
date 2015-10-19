@@ -2,8 +2,8 @@
   content: "";
   display: table;
   clear: both; }
-
-/*div.wrapper {
+/*
+div.wrapper {
   width: 1000px;
   margin: 0 auto;
   padding: 0 2px; }*/
@@ -12,7 +12,7 @@
   border-right: 1px solid #cacdd3;
   border-left: 1px solid #cacdd3;
   border-bottom: 1px solid #cacdd3;
-  padding-bottom: 50px; }
+  padding-bottom: 120px; }
   .technical-charting a {
     text-decoration: none; }
   .technical-charting ul {
@@ -50,7 +50,7 @@
   display: block !important; }
 
 .technical-charting .control-box {
-  width: 26%;
+  width: 24.5%;
   background: #ebecee;
   text-align: left;
   float: left; }
@@ -81,6 +81,21 @@
     color: #8c8e90; }
     .technical-charting .control-box label.selected {
       color: #000; }
+  .technical-charting .control-box label.active-checkBox {
+    font-size: 11.5px;
+    font-weight: bold;
+    color: #000; }
+  .technical-charting .control-box label.text-input {
+    padding: 5px 0;
+    display: block; }
+  .technical-charting .control-box div.rsi-inputs {
+    display: none; }
+  .technical-charting .control-box .rsi-input {
+    width: 40px;
+    margin-left: 10px;
+    float: right;
+    margin-right: 60px;
+    padding-left: 5px; }
   .technical-charting .control-box h2 {
     font-size: 12px;
     color: #fff;
@@ -89,11 +104,19 @@
     margin: 0;
     padding: 0; }
 
+.techChart-validationMessage {
+  margin-top: 6px;
+  margin-bottom: 2px;
+  display: block;
+  width: 100%;
+  font-size: 11px;
+  color: red; }
+
 #technical-chart-container {
   background: #e7e7e8;
   display: inline-block;
-  width: 72.5%;
-  height: 400px; }
+  width: 75%;
+  height: 475px; }
 
 .indicators, .financials {
   display: none; }
@@ -117,13 +140,13 @@
   display: inline-block; }
 
 .info-icon {
-  background: url(css/../images/info.png) no-repeat; }
+  background: url(images/info.png) no-repeat; }
 
 .plus-icon {
-  background: url(css/../images/plus.png) no-repeat; }
+  background: url(images/plus.png) no-repeat; }
 
 .minus-icon {
-  background: url(css/../images/minus.png) no-repeat; }
+  background: url(images/minus.png) no-repeat; }
 
 .grayout {
   position: absolute;
@@ -142,16 +165,17 @@
   position: absolute;
   z-index: 100;
   width: 675px;
-  top: 45%;
+  top: 434px;
   left: 18%;
-  border: 4px solid #cfcfd0;
-  border-radius: 4px;
   color: #3d3d3d; }
   .modal h1 {
-    margin:0;
-    font-size: 16px; }
+    margin: 0;
+    margin-top: 5px;
+    font-size: 16px;
+    margin-bottom: 10px; }
   .modal ul {
-    padding: 0; }
+    padding: 0;
+    display: inline; }
   .modal li {
     width: 10px;
     height: 10px;
@@ -163,11 +187,17 @@
       background: #868788; }
   .modal .position-indicator {
     padding-top: 25px; }
+  .modal .modal-wrapper {
+    background: url(images/transparent-bg.png);
+    border-radius: 4px;
+    padding: 5px; }
 
 .modal-content {
+  opacity: 1;
   padding: 20px;
   padding-bottom: 40px;
   position: relative;
+  border-radius: 4px;
   background: #fff; }
   .modal-content p {
     margin: 0; }
@@ -178,7 +208,7 @@
     right: 4px;
     background: #9c9e9f;
     color: #fff;
-    padding: 0px 5px 1px 5px;
+    padding: 0px 4px 1px 4px;
     border-radius: 2px; }
 
 .modal-controls {
@@ -189,35 +219,35 @@
   .modal-controls .control-left {
     position: absolute;
     cursor: pointer;
-    top: 18px;
-    width: 20px;
-    height: 20px;
-    left: 4px;
+    top: 16px;
+    width: 30px;
+    height: 30px;
+    left: 10px;
     border-radius: 50%;
     background: white; }
     .modal-controls .control-left .control-icon {
       position: absolute;
-      top: 5px;
-      right: -3px;
+      top: 6px;
+      right: 4px;
       width: 18px;
       height: 18px;
-      background: url(css/../images/left.png) no-repeat; }
+      background: url(images/left.png) no-repeat; }
   .modal-controls .control-right {
     position: absolute;
     cursor: pointer;
-    top: 18px;
-    width: 20px;
-    height: 20px;
-    right: 4px;
+    top: 16px;
+    width: 30px;
+    height: 30px;
+    right: 10px;
     border-radius: 50%;
     background: white; }
     .modal-controls .control-right .control-icon {
       position: absolute;
-      top: 5px;
-      right: -6px;
+      top: 6px;
+      right: 1px;
       width: 18px;
       height: 18px;
-      background: url(css/../images/right.png) no-repeat; }
+      background: url(images/right.png) no-repeat; }
 
 .technical-charting-alternative {
   display: none; }
