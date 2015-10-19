@@ -1,12 +1,13 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.DividendHistory;
+import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
-import com.wmsi.sgx.model.DividendHistory;
 
 public interface CapIQService{
 	
@@ -22,5 +23,7 @@ public interface CapIQService{
 
 	DividendHistory getDividendData(CompanyInputRecord input)
 			throws ResponseParserException, CapIQRequestException;
+	
+	Estimates getEstimates(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
 }

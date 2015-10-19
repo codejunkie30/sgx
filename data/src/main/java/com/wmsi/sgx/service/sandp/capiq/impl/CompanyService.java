@@ -1,20 +1,30 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
@@ -24,94 +34,168 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
 @SuppressWarnings("unchecked")
-public class CompanyService extends AbstractDataService{
+public class CompanyService extends AbstractDataService {
 
-	@Autowired
+	/*@Autowired
 	private DataService historicalService;
 	@Autowired
 	private DataService dividendService;
-
-	private CapIQRequestImpl companyRequest() {
-		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
-	}
+*/
+	private PriceHistory priceHistory;
 	
-	@Override	
-	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException{
+	/*private CapIQRequestImpl companyRequest() {
+		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
+	}*/
+
+	@Override
+	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 
 		Assert.notEmpty(parms);
-		
+
 		String startDate = parms[0];
-		Company company = executeRequest(id, startDate);
+		id = id.split(":")[0];
+		Company company = getCompany(id);
+		
+		priceHistory = getPreviousClose(id);
+		Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
 
-		loadPreviousClose(company, id);
-		loadHistorical(company, id, startDate);
-
+		if (priceHistory.getPrice().get(1).getValue() != null) {
+			company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
+			company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
+		}
+		
+		loadHistorical(priceHistory, startDate, company);
 		return company;
 	}
 
-	private Company loadPreviousClose(Company comp, String id) throws ResponseParserException, CapIQRequestException {
-
-		Date d = comp.getPreviousCloseDate();
-
-		if(d != null){
-			Company previousDay = executeRequest(id, DateUtil.fromDate(d));
-
-			if(previousDay != null)
-				comp.setPreviousClosePrice(previousDay.getClosePrice());
-		}
-
-		return comp;
-	}
 	
-	private Company loadHistorical(Company comp, final String id, final String startDate) throws ResponseParserException, CapIQRequestException {
 
-		String yearAgo = DateUtil.adjustDate(startDate, Calendar.YEAR, -1);
-		PriceHistory historicalData = historicalService.load(id, yearAgo, startDate);
-
+	private Company loadHistorical(PriceHistory historicalData, final String startDate, Company comp)
+			throws ResponseParserException, CapIQRequestException {
+		
 		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
 		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
 
 		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
 		comp.setPriceHistory(lastYearPrice);
-		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume,lastYearPrice, startDate));
-		
+		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume, lastYearPrice, startDate));
+
 		return comp;
 	}
-	
-	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice, String startDate){
+
+	public Company getCompany(String id) throws ResponseParserException, CapIQRequestException {
+		String file = "src/main/resources/data/company-data.csv";
+		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
+		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		for (CSVRecord record : records) {
+			if (record.get(0).equalsIgnoreCase(id)) {
+				String lastName = record.get(2);
+				map.put(lastName, record.get(3));
+			}
+		}
+
+		if (map.size() == 0)
+			throw new ResponseParserException("record map is empty in getCompany()");
+
+		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
+		JsonElement jsonElement = gson.toJsonTree(map);
+		Company comp = gson.fromJson(jsonElement, Company.class);
+		comp.setTickerCode(id.split(":")[0]);
+		return comp;
+	}
+
+	public PriceHistory getPreviousClose(String input) throws ResponseParserException, CapIQRequestException {
+		PriceHistory ph = new PriceHistory();
+		String file = "src/main/resources/data/company-data.csv";
+		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
+		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
+		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
+
+		List<HistoricalValue> price = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> highPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> lowPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> openPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
+		
+		/*while(records.iterator().hasNext()){
+			records.iterator().remove();
+			break;
+		}*/
+		
+		for (CSVRecord record : records) {
+			if (record.get(0).equalsIgnoreCase(input) && list.contains(record.get(2))) {
+				HistoricalValue hv = new HistoricalValue();
+				hv.setTickerCode(input);
+
+				Double value = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
+				hv.setValue(value);
+				hv.setDate(new Date(record.get(5)));
+				switch (record.get(2)) {
+				case "openPrice":
+					openPrice.add(hv);
+					break;
+				case "closePrice":
+					price.add(hv);
+					break;
+				case "lowPrice":
+					lowPrice.add(hv);
+					break;
+				case "highPrice":
+					highPrice.add(hv);
+					break;
+				case "volume":
+					volume.add(hv);
+					break;
+				}
+			}
+		}
+		ph.setHighPrice(highPrice);
+		ph.setLowPrice(lowPrice);
+		ph.setOpenPrice(openPrice);
+		ph.setPrice(price);
+		ph.setVolume(volume);
+
+		return ph;
+	}
+
+	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice,
+			String startDate) {
 		List<HistoricalValue> volume = getLastThreeMonths(lastYearVol, startDate);
 		List<HistoricalValue> price = getLastThreeMonths(lastYearPrice, startDate);
 		List<HistoricalValue> price2 = getLastThreeMonths(lastYearPrice, startDate);
-		
-		//Checks for matching price volume size/dates and removes unmatching entries.
-		if(volume.size() != price.size()){
-			for(HistoricalValue currPrice : price){
+
+		// Checks for matching price volume size/dates and removes unmatching
+		// entries.
+		if (volume.size() != price.size()) {
+			for (HistoricalValue currPrice : price) {
 				Boolean isFound = false;
-				for(HistoricalValue currVol : volume){
-					if(currPrice.getDate() == currVol.getDate()){
+				for (HistoricalValue currVol : volume) {
+					if (currPrice.getDate() == currVol.getDate()) {
 						isFound = true;
 						break;
 					}
-				}
-				if(isFound == false){
+				}   
+				if (isFound == false) {
 					price2.remove(currPrice);
 				}
 			}
 		}
-		
+
 		Double sum = 0.0;
-		
-		for(int i = 0; i < price2.size(); i++){
+
+		for (int i = 0; i < price2.size(); i++) {
 			HistoricalValue vol = volume.get(i);
-			HistoricalValue pri = price2.get(i);			
+			HistoricalValue pri = price2.get(i);
 			sum += vol.getValue() * pri.getValue();
 		}
-		
-		if(sum == 0)
+
+		if (sum == 0)
 			return 0.0;
-		
+
 		return avg(sum, volume.size(), 4);
-		
+
 	}
 
 	private Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws ResponseParserException {
@@ -120,10 +204,10 @@ public class CompanyService extends AbstractDataService{
 
 		Double sum = 0.0;
 
-		for(HistoricalValue v : volume)
+		for (HistoricalValue v : volume)
 			sum += v.getValue();
 
-		if(sum == 0)
+		if (sum == 0)
 			return 0.0;
 
 		return avg(sum, volume.size(), 4);
@@ -135,15 +219,15 @@ public class CompanyService extends AbstractDataService{
 
 		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
 
-		for(HistoricalValue val : lastYear){
-			if(val.getDate().compareTo(DateUtil.toDate(threeMonthsAgo)) >= 0)
+		for (HistoricalValue val : lastYear) {
+			if (val.getDate().compareTo(DateUtil.toDate(threeMonthsAgo)) >= 0)
 				volume.add(val);
 		}
 
 		return volume;
 	}
 
-	private Map<String, Object> buildContext(String id, String startDate) {
+	/*private Map<String, Object> buildContext(String id, String startDate) {
 		String previousDate = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -1);
 
 		Map<String, Object> ctx = new HashMap<String, Object>();
@@ -151,12 +235,12 @@ public class CompanyService extends AbstractDataService{
 		ctx.put("startDate", startDate);
 		ctx.put("previousDate", previousDate);
 		return ctx;
-	}
+	}*/
 
-	private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
+	/*private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
 		Map<String, Object> ctx = buildContext(id, startDate);
 		return executeRequest(companyRequest(), ctx);
-	}
+	}*/
 
 	private Double avg(Double sum, Integer total, int scale) {
 		BigDecimal s = new BigDecimal(sum);

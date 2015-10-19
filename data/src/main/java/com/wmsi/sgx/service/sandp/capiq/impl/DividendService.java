@@ -1,38 +1,65 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
+import java.util.List;
+
+
+import org.apache.commons.csv.CSVRecord;
+
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.DividendHistory;
-import com.wmsi.sgx.model.DividendDate;
-import com.wmsi.sgx.model.DividendPrice;
-import com.wmsi.sgx.model.DividendType;
+
 import com.wmsi.sgx.model.DividendValue;
-import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
-import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
-import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
+
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
-import com.wmsi.sgx.util.DateUtil;
-
 public class DividendService extends AbstractDataService{
 	
-	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/dividendHistory.json");
-
 	@SuppressWarnings("unchecked")
+	public DividendHistory load(String id, String... parms)
+			throws ResponseParserException, CapIQRequestException {
+		Assert.notEmpty(parms);
+		id = id.split(":")[0];
+		return getDividendData(id);
+	}
+	
+	public DividendHistory getDividendData(String id) throws ResponseParserException, CapIQRequestException {		
+		DividendHistory dH = new DividendHistory();
+		dH.setTickerCode(id);		
+		
+		String file = "src/main/resources/data/dividend-history.csv";
+		
+		Iterable<CSVRecord> records = null;
+		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
+		records = csvHelperUtil.getRecords(file);
+		List<DividendValue> list = new ArrayList<DividendValue>();
+				
+		for (CSVRecord record : records) {
+			if(record.get(0).equalsIgnoreCase(id)){
+				DividendValue dV = new DividendValue();
+				
+				
+				dV.setDividendExDate(new Date(record.get(2)));
+				dV.setDividendPayDate(new Date(record.get(3)));
+				dV.setDividendPrice(Double.parseDouble(record.get(4)));
+				dV.setDividendType(record.get(5));				
+				
+		    	list.add(dV);		    	
+		    	
+			}
+		}
+		dH.setDividendValues(list);
+		return dH;
+	}
+	
+	
+	
+
+	/*@SuppressWarnings("unchecked")
 	public DividendHistory load(String id, String... parms)
 			throws ResponseParserException, CapIQRequestException {
 		Assert.notEmpty(parms);		
@@ -176,7 +203,7 @@ public class DividendService extends AbstractDataService{
 		} catch (ParseException e) {
 			throw new CapIQRequestException("Invalid Date format or data.", e);
 		}
-	}
+	}*/
 	
 	
 }

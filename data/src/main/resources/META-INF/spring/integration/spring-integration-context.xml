@@ -173,13 +173,15 @@
 		<constructor-arg value="${loader.vwap.url}"/>
 	</bean>
 	
+	
+	
 	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
 	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="data/sgx_companies.txt"/>
 	</bean>
 
-	<bean id="gtiFileResource" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="data/gti.csv"/>
+	<bean id="gtiFileResource" class="org.springframework.core.io.UrlResource">
+		<constructor-arg value="${loader.gti.url}"/>
 	</bean>
 	
 	<bean id="gtiService" class="com.wmsi.sgx.service.gti.impl.GtiServiceImpl">

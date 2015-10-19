@@ -577,6 +577,25 @@
 				}
 			}
 		},
+		
+		"estimate": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"period": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				}
+			}
+		},
 
 		"price": 
 		{
