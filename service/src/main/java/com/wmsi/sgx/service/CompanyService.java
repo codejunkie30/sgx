@@ -5,6 +5,7 @@ import java.util.List;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
+import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
@@ -38,5 +39,7 @@ public interface CompanyService{
 	GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException;
 
 	DividendHistory loadDividendHistory(String id) throws CompanyServiceException;
+	
+	List<Estimate> loadEstimates(String id) throws CompanyServiceException;
 
 }

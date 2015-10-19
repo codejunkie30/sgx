@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
+import com.wmsi.sgx.model.Estimate;
+import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
@@ -80,6 +82,14 @@ public class CompanyController{
 		List<Financial> hits = companyService.loadFinancials(search.getId());
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
+		return ret;
+	}
+	
+	@RequestMapping(value="company/estimates")
+	public Estimates getEstimates(@RequestBody IdSearch search) throws CompanyServiceException {		
+		List<Estimate> hits = companyService.loadEstimates(search.getId());
+		Estimates ret = new Estimates();
+		ret.setEstimates(hits);
 		return ret;
 	}
 

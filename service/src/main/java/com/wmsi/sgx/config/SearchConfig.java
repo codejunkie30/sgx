@@ -100,6 +100,11 @@ public class SearchConfig{
 	}
 	
 	@Bean 
+	public SearchService estimatesSerach(){
+		return searchService("estimate");		
+	}
+	
+	@Bean 
 	public ElasticSearchService elasticSearchService(){
 		ElasticSearchServiceImpl es = new ElasticSearchServiceImpl();
 		es.setExecutor(esQueryExecutor());
