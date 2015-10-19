@@ -307,7 +307,8 @@ header.header { margin: 10px 0 0 0; }
 .header .profile { background: #0b236b; margin: 18px 0; }
 .header .profile .left { float: left; margin: 28px 0 10px 22px; }
 .header .profile .right { float: right; margin: 20px 18px 0 0; }
-.header .profile h1 { color: #fff; font-size: 27px; margin: 0 0 10px 0 !important; line-height: 27px !important; }
+.header .profile h1 { margin: 0 0 10px 0 !important; }
+.header .profile h1, .header .profile h1 span  { color: #fff; font-size: 27px; line-height: 27px !important; }
 .header .profile .breadcrumb { color: #fff; }
 .header .profile .breadcrumb a { color: #fff; text-decoration: none;}
 .header .profile .breadcrumb a:hover { text-decoration: underline; }
