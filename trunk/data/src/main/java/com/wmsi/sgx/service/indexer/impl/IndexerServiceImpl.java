@@ -117,7 +117,8 @@ public class IndexerServiceImpl implements IndexerService{
 			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
 		}	
 		MappingJsonFactory jf = new MappingJsonFactory();
-		String line = "src/main/resources/data/company-data.csv";
+		
+		String line = "/mnt/sgx-data/company-data.csv";
 		//JsonNode jsonNode = new JsonNode();
 	
 		if(line == null){

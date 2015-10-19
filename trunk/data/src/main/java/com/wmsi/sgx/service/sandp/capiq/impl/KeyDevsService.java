@@ -61,7 +61,8 @@ public class KeyDevsService extends AbstractDataService {
 		KeyDevs kD = new KeyDevs();
 		kD.setTickerCode(id);
 		
-		String file = "src/main/resources/data/key-devs.csv";
+		/*String file = "src/main/resources/data/key-devs.csv";*/
+		String file = "/mnt/sgx-data/key-devs.csv";
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
 		List<KeyDev> list = new ArrayList<KeyDev>();
