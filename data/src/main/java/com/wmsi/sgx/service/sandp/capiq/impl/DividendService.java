@@ -31,7 +31,8 @@ public class DividendService extends AbstractDataService{
 		DividendHistory dH = new DividendHistory();
 		dH.setTickerCode(id);		
 		
-		String file = "src/main/resources/data/dividend-history.csv";
+		//String file = "src/main/resources/data/dividend-history.csv";
+		String file = "/mnt/sgx-data/dividend-history.csv";
 		
 		Iterable<CSVRecord> records = null;
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();

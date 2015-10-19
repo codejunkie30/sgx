@@ -130,7 +130,8 @@ public class HistoricalService extends AbstractDataService {
 	
 	public PriceHistory getHistoricalData(String id) throws ResponseParserException, CapIQRequestException {			
 		PriceHistory ph = new PriceHistory();
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+		String file = "/mnt/sgx-data/company-data.csv";
 		CSVHelperUtil csvHelper = new CSVHelperUtil();
 		Iterable<CSVRecord> records = csvHelper.getRecords(file);		
 		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");

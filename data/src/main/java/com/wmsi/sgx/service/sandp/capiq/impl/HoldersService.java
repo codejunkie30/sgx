@@ -29,7 +29,8 @@ public class HoldersService extends AbstractDataService {
 		Holders hol = new Holders();
 		hol.setTickerCode(id);
 		
-		String file = "src/main/resources/data/ownership.csv";
+		//String file = "src/main/resources/data/ownership.csv";
+		String file = "/mnt/sgx-data/ownership.csv";
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
 		List<Holder> list = new ArrayList<Holder>();

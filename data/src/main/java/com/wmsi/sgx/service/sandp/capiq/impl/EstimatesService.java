@@ -32,8 +32,8 @@ public class EstimatesService extends AbstractDataService{
 	private Estimates getEstimates(String id){
 		Estimates estimates = new Estimates();
 		estimates.setEstimates(new ArrayList<Estimate>());
-		String file = "src/main/resources/data/consensus-estimates.csv";
-		
+		//String file = "src/main/resources/data/consensus-estimates.csv";
+		String file = "/mnt/sgx-data/consensus-estimates.csv";
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 		Map<String, List<CSVRecord>> dataMap = getMap(id, csvHelperUtil.getRecords(file));		

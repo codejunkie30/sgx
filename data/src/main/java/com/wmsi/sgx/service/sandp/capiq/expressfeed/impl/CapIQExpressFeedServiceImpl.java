@@ -46,7 +46,8 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 	@Override
 	public PriceHistory getHistoricalData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {			
 		PriceHistory ph = new PriceHistory();
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+		String file = "/mnt/sgx-data/company-data.csv";
 		Iterable<CSVRecord> records = getRecords(file);		
 		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
 		
@@ -100,7 +101,8 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 
 	@Override
 	public Company getCompany(CompanyInputRecord input)	throws ResponseParserException, CapIQRequestException {		
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+				String file = "/mnt/sgx-data/company-data.csv";
 		Iterable<CSVRecord> records = getRecords(file);		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -123,7 +125,8 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 		Holders hol = new Holders();
 		hol.setTickerCode(input.getTicker());
 		
-		String file = "src/main/resources/data/ownership.csv";
+		//String file = "src/main/resources/data/ownership.csv";
+				String file = "/mnt/sgx-data/ownership.csv";
 		Iterable<CSVRecord> records = getRecords(file);
 		List<Holder> list = new ArrayList<Holder>();
 		
@@ -146,7 +149,9 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 		KeyDevs kD = new KeyDevs();
 		kD.setTickerCode(input.getTicker());
 		
-		String file = "src/main/resources/data/key-devs.csv";
+		//String file = "src/main/resources/data/key-devs.csv";
+		
+		String file = "/mnt/sgx-data/key-devs.csv";
 		Iterable<CSVRecord> records = getRecords(file);
 		List<KeyDev> list = new ArrayList<KeyDev>();
 		for (CSVRecord record : records) {
@@ -168,7 +173,8 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 	public Financials getCompanyFinancials(CompanyInputRecord input, String currency) throws ResponseParserException, CapIQRequestException {		
 		Financials financials = new Financials();
 		financials.setFinancials(new ArrayList<Financial>());
-		String file = "src/main/resources/data/company-data.csv";
+		//String file = "src/main/resources/data/company-data.csv";
+				String file = "/mnt/sgx-data/company-data.csv";
 		
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		
@@ -200,7 +206,9 @@ public class CapIQExpressFeedServiceImpl implements CapIQService{
 		DividendHistory dH = new DividendHistory();
 		dH.setTickerCode(input.getTicker());		
 		
-		String file = "src/main/resources/data/dividend-history.csv";
+		//String file = "src/main/resources/data/dividend-history.csv";
+		
+				String file = "/mnt/sgx-data/dividend-history.csv";
 		
 		Iterable<CSVRecord> records = null;
 		records = getRecords(file);
