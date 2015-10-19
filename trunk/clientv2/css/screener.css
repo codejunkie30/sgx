@@ -126,6 +126,7 @@
 	background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important;
 	z-index: 20;
 	cursor: pointer;
+	z-index: 1;
 }
 
 .screener-header .description .screener-toggles {

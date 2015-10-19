@@ -336,16 +336,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         },
         
     	removeCriteria: function(target, finished) {
-
+			// Prevents user from removing all search criteria
+			if ($('.search-criteria .criteria').length == 1) { PAGE.modal.open({ type: 'alert',  content: '<p>At least one search criteria is required.</p>', width: 300 }); return; }
+			
     		this.clickEvents.uncheckCriteriaItem(target);
     		this.screener.tooltips.close();
     		
     		$(target).addClass("inactive");
 
     		var vm = ko.dataFor($(".criteria[data-id='" + $(target).attr("data-id") + "']")[0]);
-    		vm.val(null);
-						
-			if ($('.search-criteria .criteria').length <= 1) { PAGE.modal.open({ type: 'alert',  content: '<p>At least one search criteria is required.</p>', width: 300 }); return; }
+    		vm.val(null);			
 			
     		$(target).remove();
             

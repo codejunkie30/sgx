@@ -11,7 +11,7 @@ hr { height: 2px; background: #9e9d98; border: 0; margin: 15px 0 15px 0; }
 h1 { margin: 0; padding: 0; font-weight: bold; font-size: 36px; line-height: 42px; color: #0e236b; }
 h2 { font-size: 22px; font-weight: normal; margin: 0 0 10px 0; color: #0e236b; }
 h3 { font-weight: bold; font-size: 16px; line-height: 26px; color: #0e236b; border-bottom: 1px solid #ccc;  margin: 0; padding: 15px 0 0 0;  }
-h4 { font-size: 16px; font-weight: bold; line-height: 30px; padding: 0; margin: 0; }
+h4 { font-size: 16px; font-weight: bold; padding: 0; margin: 0; }
 .terms h4 { color: #0e236b; font-size: 16px; font-weight: normal; margin-bottom: 15px; }
 
 .header { padding-top: 20px; }
@@ -31,13 +31,14 @@ h4 { font-size: 16px; font-weight: bold; line-height: 30px; padding: 0; margin: 
 
 table.panel { width: 600px; }
 table.panel td.property { text-align: right; }
-table.panel td, .general-info td { font-weight: bold; padding: 7px 8px; }
+.general-info td { font-weight: bold; padding: 7px 8px; }
+table.panel td { padding: 7px 8px; }
 td { vertical-align: top; }
 td.right { padding-left: 20px; padding-top: 20px; }
 
 .panel .right { text-align: right; }
 table.panel td.property, .general-info td.property, table.panel td.note, .general-info td.note { font-weight: normal; }
-.panel tr td.property, .panel .property { border-right: 2px solid #fff; }
+.panel tr td.border { border-right: 2px solid #fff; }
 .right table.panel { width: 100%; }
 
 .logos { white-space: nowrap; }
@@ -52,20 +53,32 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .dark-module { margin-bottom: 20px; background: #f2f2f2 none repeat scroll 0 0; }
 .module { position: relative; }
 
+.page2 .dark-module { margin-bottom: 15px !important; }
+
 .last-updated { font-size: 12px; }
 .last-updated .date { font-weight: bold; }
 .column50 { display: inline-block; padding-left: 15px; vertical-align: top; width: 50%; }
 .column50.right { padding-left: 0; width: 47%; }
 
-.terms ul * { font-size: 11px; line-height: 14px; width: 90%; }
-.terms ul li { margin-bottom: 10px; }
-.terms p { font-size: 11px; }
+.terms ul * { font-size: 11.5px; line-height: 14px; width: 90%; }
+.terms ul li { margin-bottom: 11.5px; }
+.terms p { font-size: 11.5px; }
 
 .stock-events { max-height: 560px; overflow: hidden; margin: 10px 0 25px; }
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
 .stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 12px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
 .stock-events li span { color: #0e236b; cursor: pointer; font-weight: bold; text-decoration: none; }
+
+.recommendation { overflow: hidden; padding-top: 25px; margin: 10px 0; }
+.recommendation span.inline-block { width: 32%; font-weight: bold; }
+.recommendation.opt-1 { background: url("../img/consensus-step-1.jpg") no-repeat; }
+.recommendation.opt-2 { background: url("../img/consensus-step-2.jpg") no-repeat; }
+.recommendation.opt-3 { background: url("../img/consensus-step-3.jpg") no-repeat; }
+.recommendation.opt-4 { background: url("../img/consensus-step-4.jpg") no-repeat; }
+.recommendation.opt-5 { background: url("../img/consensus-step-5.jpg") no-repeat; }
+.consensus-price span { display: block; padding-top: 8px;  font-size: 18px; font-weight: bold; line-height: 22px; }
+.recommendation .inline-block { display: inline-block; }
 
 .company-header { margin: 10px 0; }
 .company-header td { vertical-align: bottom; }
@@ -76,7 +89,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .financials-section { overflow: hidden; }
 .financials-section .left { width: 47.5%; padding: 0 2.5% 0 0; float: left; }
 .financials-section .right { width: 47.5%; padding: 0 0 0 2.5%; float: left; }
-.financials-section td { padding: 4px; font: normal 11px/11px Arial, Helvetica, sans-serif !important; text-align: center; height: auto; }
+.financials-section td { padding: 4px; font: normal 11.5px/11.5px Arial, Helvetica, sans-serif !important; text-align: center; height: auto; }
 .financials-section h4 { font-size: 13px; border-bottom: 1px dotted #d6d6d6; color: #4d4e50; display: inline-block; margin: 0 0 10px; }
 .financials-section tr td:first-child { font-weight: bold !important; text-align: left; }
 .financials-section td.right { padding-left: 5%; }
@@ -91,7 +104,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .factor .label img,
 .alpha-factors .title img { display: none; }
 
-.factor { margin: 15px 0; display: inline-block; width: 100%; }
+.factor { margin: 0 0 10px 0; display: inline-block; width: 100%; }
 .factor .label { position: relative; display: block; padding-right: 24px; font-weight: bold; font-size: 13px; line-height: 16px; }
 .factor .quintiles { position: absolute; display: inline-block; width: 0; height: 11px; background: url("../img/slider-full.png") no-repeat; margin: 4px auto; cursor: pointer; white-space: nowrap; padding: 0px; }
 .factor .quintiles span { display: inline-block; width: 34px; overflow: visible; height: 11px; margin-left: 1px; }
@@ -107,7 +120,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .module-stock-slider .bar, 
 .module-stock-slider .slider-bar { background: #808080; position: absolute; top: 50%; margin-top: -3px; height: 6px; -webkit-border-radius: 10px; border-radius: 10px; width: 100%; }
 
-.gti-block { margin-top: 10px; display: table; overflow: hidden; }
+.page2 .dark-module.gti-block { margin-top: 0; margin-bottom: 0 !important; display: table; }
 .gti-block tr { display: table-row; }
 .gti-block thead { font-weight: bold; }
 .gti-block .even { background-color: #fff; }
