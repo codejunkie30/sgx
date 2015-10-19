@@ -139,7 +139,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		//fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com",
 		fqdn: "https://sgx-api-us.sharefc.com",
 		
-		pqdn : window.location.hostname == "localhost" ? "http://localhost:3000/?site=" : "http://pdfx.sharefc.com/pdfx/",
+		pqdn : window.location.hostname == "sgx.fakemsi.com" ? "http://localhost:3000/?site=" : "http://pdfx.sharefc.com/pdfx/",
 			
 		gaClientId: "UA-50238919-1",
 		
