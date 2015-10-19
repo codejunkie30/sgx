@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.DividendDate;
 import com.wmsi.sgx.model.DividendHistory;
-import com.wmsi.sgx.model.DividendPrice;
-import com.wmsi.sgx.model.DividendType;
-import com.wmsi.sgx.model.DividendValue;
+import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
@@ -26,6 +23,7 @@ import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.DividendValueQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.EstimatesQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
@@ -237,5 +235,19 @@ public class CompanyServiceImpl implements CompanyService{
 		}		
 		
 		return companies;
+	}
+	
+	@Autowired
+	private SearchService estimatesSerach;
+	
+	@Override
+	//@Cacheable(value = "estimate")
+	public List<Estimate> loadEstimates(String id) throws CompanyServiceException {
+		try{
+			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading estimates", e);
+		}
 	}
 }
