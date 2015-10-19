@@ -2,8 +2,9 @@
 	<div data-bind="template: 'login-bar'"></div>
 	<div class="profile">
 		<div class="left">
-			<h1 data-bind="text: company.companyInfo.companyName"></h1>
+			<h1><span data-bind="text: company.companyInfo.companyName"></span> (<span data-bind="text: ticker"></span>)</h1>
 			<div class="breadcrumb">
+				Industry Tree: 
 				<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() }"></a> 
 				> 
 				<a data-bind="text: companyInfo.industry, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() + '&industry=' + industry() }"></a>
