@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -114,7 +115,15 @@ public class IndexerServiceImpl implements IndexerService{
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){	
 			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
-		}		
+		}	
+		MappingJsonFactory jf = new MappingJsonFactory();
+		String line = "src/main/resources/data/company-data.csv";
+		//JsonNode jsonNode = new JsonNode();
+	
+		if(line == null){
+			int fields = line.length();
+			System.out.println(fields);
+		}
         
         return true;
 	}

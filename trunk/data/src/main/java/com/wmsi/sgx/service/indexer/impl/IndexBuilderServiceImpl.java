@@ -22,15 +22,12 @@ import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.DividendDate;
 import com.wmsi.sgx.model.DividendHistory;
-import com.wmsi.sgx.model.DividendPrice;
-import com.wmsi.sgx.model.DividendType;
 import com.wmsi.sgx.model.DividendValue;
+import com.wmsi.sgx.model.Estimate;
+import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndex;
@@ -55,7 +52,8 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.service.vwap.VwapService;
-import com.wmsi.sgx.util.DateUtil;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -338,6 +336,13 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		for(DividendValue data : dividendValue){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDividendExDate().getTime()).toString());
 			indexerService.save("dividendValue", id, data, index);
+		}
+		
+		Estimates estimates = capIQService.getEstimates(input);
+
+		for(Estimate e : estimates.getEstimates()){
+			String id = e.getTickerCode().concat(e.getPeriod());
+			indexerService.save("estimate", id, e, index);
 		}
 	}
 	

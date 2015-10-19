@@ -44,6 +44,7 @@ import com.wmsi.sgx.service.sandp.capiq.impl.CapIQRequestExecutor;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.CompanyService;
 import com.wmsi.sgx.service.sandp.capiq.impl.DividendService;
+import com.wmsi.sgx.service.sandp.capiq.impl.EstimatesService;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsResponseParser;
 import com.wmsi.sgx.service.sandp.capiq.impl.FinancialsService;
 import com.wmsi.sgx.service.sandp.capiq.impl.HistoricalService;
@@ -224,7 +225,13 @@ public class HttpConfig{
 		service.setResponseParser(keyDevResponseParser());
 		return service;
 	}
-
+	
+	@Bean
+	public DataService estimatesService(){
+		EstimatesService service = new EstimatesService();
+		return service;
+	}
+	
 	@Bean
 	public ResponseParser keyDevResponseParser(){
 		return new KeyDevResponseParser();

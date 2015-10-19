@@ -3,21 +3,19 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
-import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
+import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.model.sandp.capiq.CapIQRow;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
@@ -28,7 +26,7 @@ import com.wmsi.sgx.util.DateUtil;
 @SuppressWarnings("unchecked")
 public class HistoricalService extends AbstractDataService {
 	
-	@Value ("${loader.dir.cache}")
+	/*@Value ("${loader.dir.cache}")
 	private String cachePath;	
 	private ClassPathResource template = new ClassPathResource("META-INF/query/capiq/priceHistory.json");
 	private ClassPathResource template2 = new ClassPathResource("META-INF/query/capiq/priceHistory2.json");
@@ -118,34 +116,66 @@ public class HistoricalService extends AbstractDataService {
 			history = process.processHistory(history);
 		}		
 		return history;
-	}
-
-	private List<HistoricalValue> getHistory(CapIQResult res, String id) throws CapIQRequestException {
-		List<HistoricalValue> results = new ArrayList<HistoricalValue>();
-		for(CapIQRow row : res.getRows()){
-			List<String> values = row.getValues();
-			if(values.size() < 2)
-				throw new CapIQRequestException("Historical data response is missing fields");			
-			String v = values.get(0);			
-			if(NumberUtils.isNumber(v)){				
-				HistoricalValue val = new HistoricalValue();
-				val.setTickerCode(id);
-				val.setValue(Double.valueOf(v));
-				val.setDate(DateUtil.toDate(values.get(1)));
-				results.add(val);
-			}
-		}
-		return results;
+	}*/
+	
+	@Override
+	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
+		
+		Assert.notEmpty(parms);		
+		id = id.split(":")[0];
+		
+		return getHistoricalData(id);
+		
 	}
 	
-	private String getTime(String object) throws CapIQRequestException{
-		Date date;
-		try {
-			date = new SimpleDateFormat("MM/dd/yyyy").parse(object);
-			return new SimpleDateFormat("MM-dd-yyyy").format(date);
-		} catch (ParseException e) {
-			throw new CapIQRequestException("Invalid Date format or data.", e);
+	public PriceHistory getHistoricalData(String id) throws ResponseParserException, CapIQRequestException {			
+		PriceHistory ph = new PriceHistory();
+		String file = "src/main/resources/data/company-data.csv";
+		CSVHelperUtil csvHelper = new CSVHelperUtil();
+		Iterable<CSVRecord> records = csvHelper.getRecords(file);		
+		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
+		
+		List<HistoricalValue> price = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> highPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> lowPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> openPrice = new ArrayList<HistoricalValue>();
+		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
+		
+		for (CSVRecord record : records) {
+			if(record.get(0).equalsIgnoreCase(id) && list.contains(record.get(2))){
+				HistoricalValue hv = new HistoricalValue();
+				hv.setTickerCode(id);								
+				
+				Double value  = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
+				hv.setValue(value);
+				hv.setDate(DateUtil.toDate(record.get(5), "yyyy/MM/dd hh:mm:ss aaa"));
+				
+				switch(record.get(2)){
+				case "openPrice":
+					openPrice.add(hv);
+					break;
+				case "closePrice":
+					price.add(hv);
+					break;
+				case "lowPrice":
+					lowPrice.add(hv);
+					break;
+				case "highPrice":
+					highPrice.add(hv);
+					break;
+				case "volume":
+					volume.add(hv);
+					break;
+				}
+			}
 		}
+		ph.setHighPrice(highPrice);
+		ph.setLowPrice(lowPrice);
+		ph.setOpenPrice(openPrice);
+		ph.setPrice(price);
+		ph.setVolume(volume);
+		
+		return ph;
 	}
-
+	
 }
