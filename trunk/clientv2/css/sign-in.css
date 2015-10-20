@@ -44,6 +44,13 @@ section.settings .cancel { margin: 0 15px; font-size: 17px !important; }
 section.settings .form-wrapper label.mailings { width: 45px; cursor: pointer; margin: 0 15px 0 0; }
 section.settings .form-wrapper label.mailings input[type="radio"] { margin: 0; padding: 0; position: relative; top: 2px; cursor: pointer; }
 
+.modal-container .terms .underline { font-weight: bold; text-decoration: underline; }
+.modal-container .terms ol, .modal-container .terms ul { margin: 1em 2em 1em 2em !important; }
+.modal-container .terms ol li, .modal-container .terms ul li { margin: 0 0 .5em 0 !important; }
+.modal-container .terms ol li ol, .modal-container .terms ul li ul { margin-top: .15em 0 !important; }
+.modal-container .terms a { color: #0e236b; text-decoration: underline; }
+.modal-container .terms a:hover { text-decoration: none; }
+
 section footer { background: #bcbdbe; height: 40px; overflow: hidden; }
 section footer span { display: inline-block; padding: 0 15px; }
 section footer .left { float: left; line-height: 40px; }

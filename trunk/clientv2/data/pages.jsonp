@@ -22,7 +22,8 @@ configuration(
 			"account-settings",
 			"premium",
 			"resend-validation-email",
-			"purchase-account"
+			"purchase-account",
+			"purchase-account-confirmation"
 		]	
 	}
 );

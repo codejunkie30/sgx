@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
-    <link rel="stylesheet" href="css/style.css?v=1.2" />
-    <link rel="stylesheet" href="css/sign-in.css?v=1.2" />
+    <link rel="stylesheet" href="css/style.css?v=1.3" />
+    <link rel="stylesheet" href="css/sign-in.css?v=1.3" />
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
     	<script type="text/javascript" src="js/wmsi/html5.js"></script>
@@ -37,7 +37,7 @@
 			<div class="agree-email">
 				<div class="checkbox">
 					<input type="checkbox" name="terms-conditions" id="terms-conditions" data-bind="checked: termsConditions"> 
-					<label for="terms-conditions">I have read and agree to the <a data-bind="siteLink:'terms-conditions'">SGX Terms and Conditions</a>.</label>
+					<label for="terms-conditions">I have read and agree to the <a data-bind="click:$root.termsConditionsModal">SGX Terms and Conditions</a>.</label>
 				</div>
 				<div class="checkbox">
 					<input type="checkbox" name="receive-emails" id="receive-emails" data-bind="checked: receiveEmails">

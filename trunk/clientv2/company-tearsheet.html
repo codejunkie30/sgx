@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.2" />
-    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />
-    
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />    
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
     	<script type="text/javascript" src="js/wmsi/html5.js"></script>
@@ -103,13 +102,13 @@
 			                <tbody>
 			                    <tr>
 			                        <td>Price/Book Value</td>
-									<td class="normal right border" data-bind="text: companyInfo.priceToBookRatio, format: 'number'">-</td>
+									<td class="normal right border" data-bind="text: companyInfo.priceToBookRatio != null ? companyInfo.priceToBookRatio : '-', format: 'number'">-</td>
 			                        <td>P/E Ratio</td>
-			                        <td class="normal right" data-bind="text: companyInfo.peRatio, format: 'number'">-</td>
+			                        <td class="normal right" data-bind="text: companyInfo.peRatio != null ? companyInfo.peRatio : '-', format: 'number'">-</td>
 			                    </tr>
 			                    <tr class="even">
 			                        <td>Dividend Yield <img src="img/info.png" alt="" data-bind="tooltip: 'dividendYieldVal'" /></td>
-			                        <td class="normal right border" data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
+			                        <td class="normal right border" data-bind="text: companyInfo.dividendYield != null ? companyInfo.dividendYield : '-', format: 'percent'">-</td>
 			                        <td>EV/EBITDA</td>
 			                        <td class="normal right" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
 			                    </tr>
