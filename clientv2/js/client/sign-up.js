@@ -124,6 +124,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
 				},jsonpCallback);
+		},
+		termsConditionsModal: function(){
+			var displayMessage = SIGNUP.messages.messages[0];
+			PAGE.modal.open({  width: 950, maxWidth: 950, height: 425, scrolling: true, content: displayMessage.signUp.termsConditions }); 
+			return;
 		}
 
 	};
