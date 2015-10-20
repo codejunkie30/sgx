@@ -59,8 +59,10 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			var finendpoint = me.fqdn + "/sgx/company/financials";
     		var params = { id: me.ticker };
     		UTIL.handleAjaxRequest(finendpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
-
+this.resizeIframeSimple();
 			return this;
+			
+			
 			
 		},
 		initPriceChart: function(parent, data) {
@@ -191,6 +193,11 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
     		$("body").attr("pdf-name", me.ticker + "-" + new Date().getTime() + ".pdf");
     		me.trackPage("SGX Print Company Profile - " + me.companyInfo.companyName);
 			setTimeout(function() { document["pdf-name"] = $("body").attr("pdf-name"); }, 100);
+		},
+		hasGTIs: function(model) {
+			var ret = false;
+			try { ret = model.gtis.gtis.length > 0; } catch(err) {}
+			return ret;
 		}
 
 	}
