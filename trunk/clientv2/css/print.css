@@ -97,7 +97,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .financials-section p { font-size: 15px; margin-bottom: 0; }
 .financials-section th { font-size: 9pt; border-left: 4px solid #fff; text-align: left; }
 .financials-section thead tr { background: #fff; height: 10px; }
-.financials-section th.title { text-align: left; }
+.financials-section th.title { text-align: center; }
 
 .valuation .even { background: #fff; }
 

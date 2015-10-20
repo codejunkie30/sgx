@@ -160,7 +160,7 @@
 				                        <td><b>Total Market Cap</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.marketCap, format: 'millions'">-</td>
 				                        <td><b>Float</b></td>
-				                        <td class="normal right" data-bind="text: companyInfo.floatPercentage, format: 'percent'">-</td>
+				                        <td class="normal right" data-bind="text: companyInfo.floatPercentage != null ? companyInfo.floatPercentage : '-', format: 'percent'">-</td>
 				                    </tr>
 				                    <tr>
 										<td><b>6-month VWAP</b></td>
@@ -190,33 +190,33 @@
 								<tbody>
 									<tr>
 				                        <td><b>Debt/EBITDA</b></td>
-				                        <td class="border" data-bind="text: companyInfo.totalDebtEbitda != null ? companyInfo.totalDebtEbitda : '-', format: 'number'">-</td>
+				                        <td class="border right" data-bind="text: companyInfo.totalDebtEbitda != null ? companyInfo.totalDebtEbitda : '-', format: 'number'">-</td>
 				                        <td><b>Cap Ex</b></td>
-				                        <td data-bind="text: companyInfo.capitalExpenditures != null ? companyInfo.capitalExpenditures : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text: companyInfo.capitalExpenditures != null ? companyInfo.capitalExpenditures : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr class="even">
 				                        <td><b>Total Debt</b></td>
-				                        <td class="border" data-bind="text: companyInfo.totalDebt != null ? companyInfo.totalDebt : '-', format: 'millions'">-</td>
+				                        <td class="border right" data-bind="text: companyInfo.totalDebt != null ? companyInfo.totalDebt : '-', format: 'millions'">-</td>
 				                        <td><b>EBIT</b></td>
-				                        <td data-bind="text: companyInfo.ebit != null ? companyInfo.ebit : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text: companyInfo.ebit != null ? companyInfo.ebit : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr>
 				                        <td><b>Enterprise Value</b></td>
-				                        <td class="border" data-bind="text: companyInfo.enterpriseValue != null ? companyInfo.enterpriseValue : '-', format: 'millions'">-</td>
+				                        <td class="border right" data-bind="text: companyInfo.enterpriseValue != null ? companyInfo.enterpriseValue : '-', format: 'millions'">-</td>
 				                        <td><b>Total Revenue</b></td>
-				                        <td data-bind="text: companyInfo.totalRevenue != null ? companyInfo.totalRevenue : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text: companyInfo.totalRevenue != null ? companyInfo.totalRevenue : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr class="even">
 				                        <td><b>Total Assets</b></td>
-				                        <td class="border" data-bind="text: companyInfo.totalAssets != null ? companyInfo.totalAssets : '-', format: 'millions'">-</td>
+				                        <td class="border right" data-bind="text: companyInfo.totalAssets != null ? companyInfo.totalAssets : '-', format: 'millions'">-</td>
 				                        <td><b>Net Income</b></td>
-				                        <td data-bind="text: companyInfo.netIncome != null ? companyInfo.netIncome : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text: companyInfo.netIncome != null ? companyInfo.netIncome : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr>
 				                        <td><b>Cash & ST Investments</b></td>
-				                        <td class="border" data-bind="text: companyInfo.cashInvestments != null ? companyInfo.cashInvestments : '-', format: 'millions'">-</td>
+				                        <td class="border right" data-bind="text: companyInfo.cashInvestments != null ? companyInfo.cashInvestments : '-', format: 'millions'">-</td>
 				                        <td><b>EBITDA</b></td>
-				                        <td data-bind="text:  companyInfo.ebitda != null ? companyInfo.ebitda : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text:  companyInfo.ebitda != null ? companyInfo.ebitda : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr>
 				                    	<td colspan="4" class="right note">
@@ -232,16 +232,16 @@
 									<tr>
 										<td width="25%"><b>Ex-Date</b></td>
 				         				<td width="25%"><b>Pay Date</b></td>
-				         				<td width="25%"><b>Type</b></td>
-				         				<td width="25%"><b>Price</b></td>
+				         				<td class="right" width="25%"><b>Type</b></td>
+				         				<td class="right" width="25%"><b>Price</b></td>
 				         			</tr>
 				         		</thead>
 				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues, visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
 				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
 										<td class="border" data-bind="text: dividendExDate, format: 'date'">-</td>
 										<td class="border" data-bind="text: dividendPayDate, format: 'date'">-</td>
-										<td class="border" data-bind="text: dividendType">-</td>
-										<td data-bind="text: dividendPrice, format: 'number'">-</td>
+										<td class="border right" data-bind="text: dividendType">-</td>
+										<td class="right" data-bind="text: dividendPrice, format: 'number'">-</td>
 				         			</tr>
 				         		</tbody>
 				         		<tbody data-bind="visible: !$data.hasOwnProperty('dividendHistory') && !$data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length == 0">
@@ -259,15 +259,15 @@
 								<thead>
 									<tr>
 										<td width="50%"><b>Substantial Shareholders</b></td>
-										<td width="25%"><b>Number of shares held</b></td>
-										<td width="25%"><b>Percent of shares held</b></td>
+										<td class="right" width="25%"><b>Number of shares held</b></td>
+										<td class="right" width="25%"><b>Percent of shares held</b></td>
 									</tr>
 								</thead>
 								<tbody data-bind="foreach: $data.holders">
 									<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
 										<td class="border" data-bind="text:name">-</td>
-										<td class="border" data-bind="text:shares, format: 'number'">-</td>
-										<td data-bind="text:percent, format: 'percent'">-</td>
+										<td class="border right" data-bind="text:shares, format: 'number'">-</td>
+										<td class="right" data-bind="text:percent, format: 'percent'">-</td>
 									</tr>
 								</tbody>
 							</table>
@@ -282,15 +282,15 @@
 									<tbody>
 										<tr>
 					                        <td>Price/Book Value</td>
-											<td data-bind="text: companyInfo.priceToBookRatio, format: 'number'">-</td>
+											<td class="right" data-bind="text: companyInfo.priceToBookRatio, format: 'number'">-</td>
 					                        <td>P/E Ratio</td>
-					                        <td data-bind="text: companyInfo.peRatio, format: 'number'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.peRatio, format: 'number'">-</td>
 					                    </tr>
 					                    <tr class="even">
 					                        <td>Dividend Yield</td>
-					                        <td data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
 					                        <td>EV/EBITDA</td>
-					                        <td data-bind="text: companyInfo.evEbitData, format: 'number'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.evEbitData, format: 'number'">-</td>
 					                    </tr>
 					                    <tr>
 					                    	<td colspan="4" class="right note">All data based on previous day information.</td>
@@ -329,7 +329,7 @@
 								</div>
 			                </div>							
 			                
-			                <div class="module dark-module gti-block left">
+			                <div class="module dark-module gti-block left" data-bind="visible: hasGTIs($root)">
 								<h3>Governance &amp; Transparency Index (GTI)</h3>
 			                    <table cellspacing="0" width="100%">
 									<thead>
@@ -366,7 +366,7 @@
 		<div class="container_3">
 			<div class="row financials-section">		
 				<h2>Financials</h2>				
-				<p>In millions <span class="currency"></span>, except per-share items.</p>	
+				<p>In millions <span data-bind="text: currency()"></span>, except per-share items.</p>	
 					<!-- ko foreach : sections -->
 				<table class="statistics">	
 						<thead>
