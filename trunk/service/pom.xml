@@ -349,6 +349,49 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
+		
+		<!--  eNets -->
+		
+		<dependency>
+			<groupId>umapi</groupId>
+			<artifactId>umapi</artifactId>
+			<version>1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>castor</groupId>
+			<artifactId>castor</artifactId>
+			<version>0.9.7</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix-jce-api</groupId>
+			<artifactId>cryptix-jce-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix-jce-provider</groupId>
+			<artifactId>cryptix-jce-provider</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix-message-api</groupId>
+			<artifactId>cryptix-message-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix-openpgp-provider</groupId>
+			<artifactId>cryptix-openpgp-provider</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix-pki-api</groupId>
+			<artifactId>cryptix-pki-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xerces</artifactId>
+			<version>1.0</version>
+		</dependency>
 
 		<!-- Testing -->
 
