@@ -1,0 +1,19 @@
+<config>
+	<merchPrivKey>C:\Users\dwu\Documents\workspace-sts-3.5.1.RELEASE\eNetsMVC\src\main\webapp\WEB-INF\keys\26062015093347-priv.pgp.asc</merchPrivKey>
+	<merchKeyPass>Wmsi2015!</merchKeyPass>
+	<netsPubKey>C:\Users\dwu\Documents\workspace-sts-3.5.1.RELEASE\eNetsMVC\src\main\webapp\WEB-INF\keys\nets-full-pub.pgp.asc</netsPubKey>
+	
+	<payURL>https://test.enets.sg/enets2/PaymentListener.do</payURL>
+	<queryURL>https://test.enets.sg/enets2/QueryTxnStatus.do</queryURL>
+	<usePGP>true</usePGP>	
+	
+	<useProxy>false</useProxy>
+	<proxyHost></proxyHost>
+	<proxyPort></proxyPort>
+	<proxyUsername></proxyUsername>
+	<proxyPassword></proxyPassword>
+	
+	<configPath></configPath>
+	<encryption>false</encryption>
+    <TimeOut>1</TimeOut>
+</config>
