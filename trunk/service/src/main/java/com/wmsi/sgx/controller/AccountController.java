@@ -102,7 +102,7 @@ public class AccountController{
 		
 	}
 	
-	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST)
+	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST, produces="application/json")
 	public String getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
 		
 		String username = user.getUsername();
@@ -112,7 +112,7 @@ public class AccountController{
 		return formMessage(token);
 	}
 	
-	@RequestMapping(value = "errorCode", method = RequestMethod.POST)
+	@RequestMapping(value = "errorCode", method = RequestMethod.POST, produces="application/json")
 	public String getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
 		String error = errorCode.getErrorCode();
 		String msg =  null;
