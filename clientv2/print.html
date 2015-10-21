@@ -3,7 +3,7 @@
 
 <head>
     <title>SGX</title>
-    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.3" id="print-css" />	
+    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.4" id="print-css" />	
 </head>
 
 <body class="print-page" paper-height="11in" paper-width="8.5in" paper-margin="[ 0,-32,0,0 ]">
@@ -73,7 +73,7 @@
 									<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 										<li>
 											<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
-											<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+											<span data-bind="truncatedText: headline, maxTextLength: 91, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
 										</li>
 									</ul>
 									<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
@@ -216,7 +216,7 @@
 				                        <td><b>Cash & ST Investments</b></td>
 				                        <td class="border right" data-bind="text: companyInfo.cashInvestments != null ? companyInfo.cashInvestments : '-', format: 'millions'">-</td>
 				                        <td><b>EBITDA</b></td>
-				                        <td class="right" data-bind="text:  companyInfo.ebitda != null ? companyInfo.ebitda : '-', format: 'millions'">-</td>
+				                        <td class="right" data-bind="text: companyInfo.ebitda != null ? companyInfo.ebitda : '-', format: 'millions'">-</td>
 				                    </tr>
 				                    <tr>
 				                    	<td colspan="4" class="right note">
@@ -236,12 +236,12 @@
 				         				<td class="right" width="25%"><b>Price</b></td>
 				         			</tr>
 				         		</thead>
-				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues, visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
+				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.slice(0).reverse(), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
 				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
 										<td class="border" data-bind="text: dividendExDate, format: 'date'">-</td>
 										<td class="border" data-bind="text: dividendPayDate, format: 'date'">-</td>
 										<td class="border right" data-bind="text: dividendType">-</td>
-										<td class="right" data-bind="text: dividendPrice, format: 'number'">-</td>
+										<td class="right" data-bind="text: dividendPrice, format: 'cents'">-</td>
 				         			</tr>
 				         		</tbody>
 				         		<tbody data-bind="visible: !$data.hasOwnProperty('dividendHistory') && !$data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length == 0">
@@ -282,15 +282,15 @@
 									<tbody>
 										<tr>
 					                        <td>Price/Book Value</td>
-											<td class="right" data-bind="text: companyInfo.priceToBookRatio, format: 'number'">-</td>
+											<td class="right" data-bind="text: companyInfo.priceToBookRatio != null ? companyInfo.priceToBookRatio : '-', format: 'number'">-</td>
 					                        <td>P/E Ratio</td>
-					                        <td class="right" data-bind="text: companyInfo.peRatio, format: 'number'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.peRatio != null ? companyInfo.peRatio : '-', format: 'number'">-</td>
 					                    </tr>
 					                    <tr class="even">
 					                        <td>Dividend Yield</td>
-					                        <td class="right" data-bind="text: companyInfo.dividendYield, format: 'percent'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.dividendYield != null ? companyInfo.dividendYield : '-', format: 'percent'">-</td>
 					                        <td>EV/EBITDA</td>
-					                        <td class="right" data-bind="text: companyInfo.evEbitData, format: 'number'">-</td>
+					                        <td class="right" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
 					                    </tr>
 					                    <tr>
 					                    	<td colspan="4" class="right note">All data based on previous day information.</td>
@@ -375,8 +375,9 @@
 								<!-- ko foreach : $parent.dataPoints -->
 									<th class="title">
 										<span data-bind="text: absPeriod.indexOf('LTM') != -1 ? 'LTM Ending' : absPeriod"></span>
-										<br />
-										<span data-bind="text: periodDate, format: 'date'"></span>
+										<div data-bind="visible: absPeriod.indexOf('LTM') != -1">
+											<span data-bind="text: periodDate, format: 'date'"></span>										
+										</div>
 									</th>
 								<!-- /ko -->
 							</tr>
