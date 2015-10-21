@@ -21,7 +21,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		currentDay: ko.observable(),
 		
 		initPage: function() {
-			
+			this.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
 
@@ -36,6 +36,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
+			
+			PAGE.hideLoading();
 			
 			// track the view
 			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);			

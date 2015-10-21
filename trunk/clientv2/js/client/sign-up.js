@@ -99,7 +99,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}
 	            return
 	        }
-
+			
+			PAGE.showLoading();
+			
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -110,11 +112,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('.form').empty().addClass('confirm');
 						$('<div/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
 						PAGE.resizeIframeSimple();
+						PAGE.hideLoading();
 					} else {
 						if (data.details.errorCode == 4003){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signUp.emailDuplicate).appendTo('.error-messages');
-							PAGE.resizeIframeSimple();	
+							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
 						}
 					}
 				}, 

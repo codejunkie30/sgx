@@ -18,7 +18,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		initPage: function() {
-			
+			this.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
 
@@ -46,7 +46,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
-			
+
+			PAGE.hideLoading();
+
 			me.trackPage("SGX Company Financials - " + me.companyInfo.companyName);
 			
     		var endpoint = me.fqdn + "/sgx/company/financials";
