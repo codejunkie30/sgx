@@ -103,17 +103,19 @@ public class AccountController{
 	}
 	
 	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST, produces="application/json")
-	public String getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
+	public Response getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
 		
 		String username = user.getUsername();
 		User usr = userRepository.findByUsername(username);
 		String token = premiumService.createPremiumToken(usr);
 		
-		return formMessage(token);
+		Response response = new Response();
+		response.setMessage(formMessage(token));
+		return response;
 	}
 	
 	@RequestMapping(value = "errorCode", method = RequestMethod.POST, produces="application/json")
-	public String getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
+	public Response getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
 		String error = errorCode.getErrorCode();
 		String msg =  null;
 		
@@ -134,11 +136,10 @@ public class AccountController{
 				msg = "null";
 		}
 		
-			Gson g = new Gson();
 			Response response = new Response();
 			response.setMessage(msg);
-			msg = g.toJson(response);
-			return msg;
+			
+			return response;
 		
 	}
 	
@@ -165,12 +166,6 @@ public class AccountController{
 		CreditMerchant m = (CreditMerchant) Merchant.getInstance (Merchant.MERCHANT_TYPE_CREDIT);
 		
 		String sMsg = m.formPayReq(req);
-		
-		Gson g = new Gson();
-		Response response = new Response();
-		response.setMessage(sMsg);
-		sMsg = g.toJson(response);
-		
 		return sMsg;
 	}
 	
