@@ -132,6 +132,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		}
 	};
 	
+	KO.bindingHandlers.truncatedText = {
+	    init: function (element, valueAccessor, allBindingsAccessor) {
+	        var originalText = KO.utils.unwrapObservable(valueAccessor()),
+	            // 10 is a default maximum length
+	            length = KO.utils.unwrapObservable(allBindingsAccessor().maxTextLength) || 100,
+	            truncatedText = originalText.length > length ? originalText.substring(0, length) + "..." : originalText;
+	        // updating text binding handler to show truncatedText
+	        KO.bindingHandlers.text.update(element, function () {
+	            return truncatedText; 
+	        });
+	    }
+	};
+	
+	
 	PAGE = {
 
 		//fqdn : "http://54.254.221.141", /** PROD */

@@ -1,0 +1,75 @@
+define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(UTIL, ko, MESSAGES) {
+	
+	var PURCHASE = {
+		messages: JSON.parse(MESSAGES),
+		purchaseToken: ko.observable(),
+		initPage: function() {
+			
+			//Update data.type
+			//Update data.expirationDate
+			
+			
+			//var token = this.getURLParam('ref');
+			var endpoint = PAGE.fqdn + "/sgx/account/premiumMessage";
+			var postType = 'POST';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			var displayMessage = PURCHASE.messages.messages[0];			
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+					console.log(data.message);
+					//Display success message
+					if (data.message != undefined){
+						
+						PURCHASE.purchaseToken($.trim(data.message));
+						
+						//PAGE.modal.open({  width: 550, maxWidth: 550, height: 200, content: '<p>You will be redirected off site to complete your StockFacts Premium account purchase.</p>' }); 	
+						setTimeout(function() {
+						    $("#txnForm").submit();
+						  }, 500);
+					} else {
+						$('.message').html(data.error);
+					}
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log(textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				}, jsonpCallback);
+			
+			PAGE.trackPage("SGX Purchase Account");
+			
+			// finish other page loading
+    		ko.applyBindings(this, $("body")[0]);
+					this.showLoading();	
+			// resize
+    		//this.resizeIframeSimple();
+    		return this;
+		},
+		getURLParam: function getURLParam(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+		
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+		
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
+		}
+
+	};
+	
+	return PURCHASE;
+	
+});
