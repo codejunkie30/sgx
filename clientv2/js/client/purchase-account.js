@@ -29,6 +29,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 					if (data.message != undefined){
 						
 						PURCHASE.purchaseToken($.trim(data.message));
+						this.showLoading();	
 						
 						//PAGE.modal.open({  width: 550, maxWidth: 550, height: 200, content: '<p>You will be redirected off site to complete your StockFacts Premium account purchase.</p>' }); 	
 						setTimeout(function() {
@@ -48,7 +49,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 			
 			// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
-					this.showLoading();	
 			// resize
     		//this.resizeIframeSimple();
     		return this;

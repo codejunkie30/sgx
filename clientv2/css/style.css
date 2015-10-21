@@ -930,7 +930,6 @@ background: url("../img/title-back.png");
   background-color: rgba(255,255,255,0.8);
   position: fixed;
   z-index: 100;
-  display: none;
 }
 #loading .loading-text {
   font-size: 44px;
@@ -941,7 +940,7 @@ background: url("../img/title-back.png");
   width: 100%;
   vertical-align: middle;
   height: 30px;
-  top: 50%;
+  top: 40%;
   margin-top: -15px;
 }
 

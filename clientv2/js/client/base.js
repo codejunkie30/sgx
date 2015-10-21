@@ -439,11 +439,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
         
 		hideLoading: function() {
-			$('#loading').hide();
+			$('#loading').remove();
 		},
 		
 		showLoading: function() {
-			$('#loading').show();
+			$('body').prepend($('<div id="loading"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		checkStatus: function(){
 			

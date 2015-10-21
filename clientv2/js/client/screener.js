@@ -16,7 +16,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		initPage: function() {
-			
 			PAGE.checkStatus();
 			
 			this.results = SEARCH.init(this);
@@ -39,7 +38,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
     		// finish other page loading
     		ko.applyBindings(this, $(".disclosure")[0]);
-
+			
     		return this;
 		},
 		
@@ -52,7 +51,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			screener.criteria.renderInputs(data);
 			
     		// show page
-			screener.hideLoading();
+			PAGE.hideLoading();
 			
 		},
 		
@@ -154,7 +153,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		searchEvents: {
 			
 			"advanced-screener": function(screener) {
-				
 				// initialize using advanced criteria object
 				require(["client/modules/screener/advanced-criteria"], function(crit) {
 					crit.init(screener, screener.finalize);
@@ -163,7 +161,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			},
 			
 			"alpha-factors": function(screener) {
-
 				// initialize using advanced criteria object
 				require(["client/modules/screener/alpha-criteria"], function(crit) {
 					crit.init(screener, screener.finalize);
