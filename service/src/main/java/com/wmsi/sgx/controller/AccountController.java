@@ -1,8 +1,12 @@
 package com.wmsi.sgx.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -12,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wiz.enets2.transaction.umapi.CreditMerchant;
 import com.wiz.enets2.transaction.umapi.Merchant;
 import com.wiz.enets2.transaction.umapi.data.CreditTxnReq;
 import com.wiz.enets2.transaction.umapi.data.TxnReq;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.ErrorCode;
@@ -96,30 +103,43 @@ public class AccountController{
 	}
 	
 	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST)
-	public String getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException {
+	public String getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
 		
 		String username = user.getUsername();
 		User usr = userRepository.findByUsername(username);
 		String token = premiumService.createPremiumToken(usr);
+		
 		return formMessage(token);
 	}
 	
 	@RequestMapping(value = "errorCode", method = RequestMethod.POST)
-	public String getErrorCode(@RequestBody ErrorCode errorCode){
+	public String getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
 		String error = errorCode.getErrorCode();
+		String msg =  null;
 		
 		switch(error) {
 			case "0":
-				return "Cancelled";
+				msg = "Cancelled";
+				break;
 			case "1202":
-				return "Credit Card Number not allowed";
+				msg = "Credit Card Number not allowed";
+				break;
 			case "1203":
-				return "Credit Card Expired";
+				msg = "Credit Card Expired";
+				break;
 			case "1223":
-				return "Duplicate transaction";
+				msg = "Duplicate transaction";
+				break;
 			default:
-				return "null";
+				msg = "null";
 		}
+		
+			Gson g = new Gson();
+			Response response = new Response();
+			response.setMessage(msg);
+			msg = g.toJson(response);
+			return msg;
+		
 	}
 	
 	public String formMessage(String token) {
@@ -145,6 +165,15 @@ public class AccountController{
 		CreditMerchant m = (CreditMerchant) Merchant.getInstance (Merchant.MERCHANT_TYPE_CREDIT);
 		
 		String sMsg = m.formPayReq(req);
+		
+		System.out.println(sMsg);
+		
+		Gson g = new GsonBuilder()
+			.disableHtmlEscaping()
+			.create();
+		Response response = new Response();
+		response.setMessage(sMsg);
+		sMsg = g.toJson(response);
 		
 		return sMsg;
 	}
