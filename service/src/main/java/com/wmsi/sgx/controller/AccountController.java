@@ -166,9 +166,7 @@ public class AccountController{
 		
 		String sMsg = m.formPayReq(req);
 		
-		Gson g = new GsonBuilder()
-			.disableHtmlEscaping()
-			.create();
+		Gson g = new Gson();
 		Response response = new Response();
 		response.setMessage(sMsg);
 		sMsg = g.toJson(response);
