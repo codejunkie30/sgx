@@ -111,7 +111,7 @@ public class CompanyService extends AbstractDataService {
 				HistoricalValue hv = new HistoricalValue();
 				hv.setTickerCode(input.split(":")[0]);								
 				
-				Double value  = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
+				Double value  = !record.get(3).equalsIgnoreCase("null") || record.get(3).length() == 0 ? Double.parseDouble(record.get(3)) : null;
 				hv.setValue(value);
 				hv.setDate(DateUtil.toDate(record.get(5), "yyyy/MM/dd hh:mm:ss aaa"));
 				

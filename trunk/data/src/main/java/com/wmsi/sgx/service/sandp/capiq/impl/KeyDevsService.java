@@ -54,6 +54,7 @@ public class KeyDevsService extends AbstractDataService {
 		KeyDevs kD = new KeyDevs();
 		kD.setTickerCode(tickerNoEx);
 		Iterable<CSVRecord> records = getCompanyData(id, "key-devs");
+		if (records == null) return null;
 		List<KeyDev> list = new ArrayList<KeyDev>();
 		for (CSVRecord record : records) {
 			KeyDev keydev = new KeyDev();

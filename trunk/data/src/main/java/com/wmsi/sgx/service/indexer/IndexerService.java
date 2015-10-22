@@ -15,4 +15,9 @@ public interface IndexerService{
 	Indexes getIndexes() throws IndexerServiceException;
 
 	Boolean deleteIndex(String indexName) throws IndexerServiceException;
+	
+	Boolean startBulkIndexing(String indexName) throws IndexerServiceException;
+	
+	Boolean stopBulkIndexing(String indexName) throws IndexerServiceException, IOException;
+	
 }
