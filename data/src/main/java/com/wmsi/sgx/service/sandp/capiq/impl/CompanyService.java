@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class CompanyService extends AbstractDataService {
 				
 				Double value  = !record.get(3).equalsIgnoreCase("null") || record.get(3).length() == 0 ? Double.parseDouble(record.get(3)) : null;
 				hv.setValue(value);
-				hv.setDate(DateUtil.toDate(record.get(5), "yyyy/MM/dd hh:mm:ss aaa"));
+				hv.setDate(new Date(record.get(5)));
 				
 				switch(record.get(2)){
 				case "openPrice":
