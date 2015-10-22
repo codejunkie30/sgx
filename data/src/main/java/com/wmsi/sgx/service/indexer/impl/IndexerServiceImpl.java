@@ -117,6 +117,59 @@ public class IndexerServiceImpl implements IndexerService{
 
         return true;
 	}
+	
+	@Override
+	@Transactional
+	public Boolean startBulkIndexing(@Header String indexName) throws IndexerServiceException {
+		
+		UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_settings").build();
+		URI uri = uriComp.expand(indexName).toUri();
+
+		log.debug("Stopping refresh interval");
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode index = mapper.createObjectNode();
+		ObjectNode refresh = mapper.createObjectNode();
+		refresh.put("refresh_interval", "-1");
+		index.put("index",  refresh);
+		int statusCode = putJson(uri, index);
+			
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Start bulk indexing returned " + statusCode + " http response code. Could not change setting.");
+		}		
+		
+		return true;
+	}
+	
+	@Override
+	@Transactional
+	public Boolean stopBulkIndexing(@Header String indexName) throws IndexerServiceException, IOException {
+		
+		UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_settings").build();
+		URI uri = uriComp.expand(indexName).toUri();
+
+		log.debug("Starting refresh interval");
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode index = mapper.createObjectNode();
+		ObjectNode refresh = mapper.createObjectNode();
+		refresh.put("refresh_interval", "1s");
+		index.put("index",  refresh);
+		int statusCode = putJson(uri, index);
+			
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Stop bulk indexing returned " + statusCode + " http response code. Could not change setting.");
+		}		
+		
+		// now optimize
+		uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_optimize?max_num_segments=5").build();
+		uri = uriComp.expand(indexName).toUri();
+		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(uri, HttpMethod.PUT).execute();
+		boolean ok = headResponse.getStatusCode() == HttpStatus.OK;
+		
+		return ok;
+	}
+
 
 	@Override
 	@Transactional
@@ -182,6 +235,12 @@ public class IndexerServiceImpl implements IndexerService{
 	private int postJson(URI uri, Object json){
 		HttpEntity<?> entity = buildEntity(json);
 		ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);		
+		return res.getStatusCode().value();		
+	}
+	
+	private int putJson(URI uri, Object json){
+		HttpEntity<?> entity = buildEntity(json);
+		ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);		
 		return res.getStatusCode().value();		
 	}
 
