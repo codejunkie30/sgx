@@ -278,7 +278,6 @@ define([ "jquery" ], function( $ ) {
 
        // atr requires close value     
        if((xVal.length <= period) || !$.isArray(yVal[0]) || yVal[0].length != 4) {
-        console.log('here');
           return;
        }
        
