@@ -17,10 +17,16 @@
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>
+		<int:service-activator ref="xfSplitterService" method="init"/>
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
-		<int:service-activator ref="vwapService" method="init"/>	
+		<int:service-activator ref="gtiService" method="init"/>
+		<int:service-activator ref="vwapService" method="init"/>
 		<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" />
 	</int:chain>
+	
+	<!-- 
+		BEGIN HACK SECTION FOR CHANNEL PROCESSING 
+	 -->
 
 	<!-- Http gateway to request latest ticker from SGX web service -->
 	<int-http:outbound-gateway 
@@ -32,6 +38,15 @@
 	
 	<!-- Error handler, if http outbound gateway throws and exception default to local copy of ticker file -->
 	<int:service-activator input-channel="httpTickerErrorChannel" expression="@tickerFileResource" />
+	
+	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
+	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="${loader.ticker.file}"/>
+	</bean>
+
+	<!-- 
+		END HACK SECTION FOR CHANNEL PROCESSING 
+	 -->
 
 	<!-- Split on tickers for multi-threading -->
 	<int:splitter 
@@ -173,13 +188,6 @@
 		<constructor-arg value="${loader.vwap.url}"/>
 	</bean>
 	
-	
-	
-	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
-	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="data/sgx_companies.txt"/>
-	</bean>
-
 	<bean id="gtiFileResource" class="org.springframework.core.io.UrlResource">
 		<constructor-arg value="${loader.gti.url}"/>
 	</bean>
@@ -192,4 +200,6 @@
 		<property name="vwapData" ref="vwapFileResource"/>
 	</bean>
 	 	
+	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
+
 </beans>

@@ -2,15 +2,10 @@ package com.wmsi.sgx.service.vwap.impl;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -19,8 +14,6 @@ import org.springframework.core.io.Resource;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.wmsi.sgx.model.GovTransparencyIndex;
-import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.VolWeightedAvgPrice;
 import com.wmsi.sgx.model.VolWeightedAvgPrices;
 import com.wmsi.sgx.service.vwap.VWAPServiceException;
@@ -53,7 +46,6 @@ public class VwapServiceImpl implements VwapService{
 		return ret;
 	}
 	
-	
 	public Boolean init() throws VWAPServiceException{
 		log.info("Reading data from VWAP file...");
 		
@@ -69,8 +61,8 @@ public class VwapServiceImpl implements VwapService{
 			List<VolWeightedAvgPrice> ret = new ArrayList<VolWeightedAvgPrice>();
 			
 			while((record = csvReader.readNext()) != null){
-				ret.add(getRec(record));
-				
+				VolWeightedAvgPrice vap = getRec(record);
+				if (vap != null) ret.add(vap);
 			}
 			
 			log.info("Loaded {} VWAP records", ret.size());
@@ -89,7 +81,7 @@ public class VwapServiceImpl implements VwapService{
 	}
 	
 	public VolWeightedAvgPrice getRec(String[] record){
-		
+		try {
 		VolWeightedAvgPrice r = new VolWeightedAvgPrice();
 		
 		r.setExchange(record[0].trim());
@@ -99,7 +91,11 @@ public class VwapServiceImpl implements VwapService{
 		r.setVolume(record[4].trim());				
 		r.setCurrency(record[5].trim());
 		return r;
-		
+		}
+		catch(Exception e) {
+			log.error("VWAP BAD ROW", record);
+		}
+		return null;
 	}
 	
 	private void sortVwap(VolWeightedAvgPrices vwap){

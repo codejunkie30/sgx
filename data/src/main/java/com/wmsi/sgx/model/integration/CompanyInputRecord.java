@@ -9,6 +9,9 @@ public class CompanyInputRecord{
 	private String isin;
 	private String date;
 	private String tradeName;
+	private String legalName;
+	private String exSymbol;
+	private String currency;
 	private Boolean indexed = false;
 
 	public Boolean getIndexed() {
@@ -58,7 +61,32 @@ public class CompanyInputRecord{
 	public void setTradeName(String tradeName) {
 		this.tradeName = tradeName;
 	}
+	
+	public String getCurrency() {
+		return currency;
+	}
 
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getExchangeSymbol() {
+		return exSymbol;
+	}
+
+	public void setExchangeSymbol(String exSymbol) {
+		this.exSymbol = exSymbol;
+	}
+	
+	public String getLegalName() {
+		return legalName;
+	}
+
+	public void setLegalName(String legalName) {
+		this.legalName = legalName;
+	}
+
+	
 	@Override
 	public int hashCode(){
 		return Objects.hashCode(id, ticker, isin, date, tradeName, indexed);
@@ -73,7 +101,10 @@ public class CompanyInputRecord{
 				&& Objects.equal(this.isin, that.isin)
 				&& Objects.equal(this.date, that.date)
 				&& Objects.equal(this.tradeName, that.tradeName)
-				&& Objects.equal(this.indexed, that.indexed);
+				&& Objects.equal(this.indexed, that.indexed)
+				&& Objects.equal(this.currency, that.currency)
+				&& Objects.equal(this.exSymbol, that.exSymbol)
+				&& Objects.equal(this.legalName, that.legalName);
 		}
 		return false;
 	}
@@ -87,6 +118,9 @@ public class CompanyInputRecord{
 			.add("date", date)
 			.add("tradeName", tradeName)
 			.add("indexed", indexed)
+			.add("currency", currency)
+			.add("exSymbol", exSymbol)
+			.add("legalName", legalName)
 			.toString();
 	}
 

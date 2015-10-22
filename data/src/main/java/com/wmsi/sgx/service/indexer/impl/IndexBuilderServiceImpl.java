@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.indexer.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -16,11 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
@@ -53,8 +55,6 @@ import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.service.vwap.VwapService;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
@@ -67,6 +67,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	@Value("${indexer.failureThreshold}")
 	private int FAILURE_THRESHOLD;
+	
+	@Value("${loader.ticker.file}")
+	private String tickerFile;
 	
 	@Autowired
 	private CapIQService capIQService;
@@ -88,10 +91,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 
 	@Override
-	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate, Resource tickers) throws IndexerServiceException {
+	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate) throws IndexerServiceException {
 
 		log.info("Reading tickers from input file...");
-		log.info("Tickers loaded from: {}", tickers.getDescription());
+		log.info("Tickers loaded from: {}", tickerFile);
 		
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
@@ -99,8 +102,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		try{
 			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 			String date = fmt.format(jobDate);
-
-			reader = new InputStreamReader(tickers.getInputStream());
+			reader = new InputStreamReader(new FileInputStream(tickerFile));
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext(); // skip header
 
@@ -110,19 +112,15 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			while((record = csvReader.readNext()) != null){
 				
 				CompanyInputRecord r = new CompanyInputRecord();
-				r.setId(record[0].trim());
-				
-				String ticker = record[1].trim();
-				
-				if(record[1].indexOf(' ') > 0){
-					// Remove junk from end of ticker string
-					ticker = record[1].trim().split(" ")[0];
-				}
-				
-				r.setTicker(ticker);
-				r.setIsin(record[2].trim());
-				r.setTradeName(record[3].trim());
+				r.setId(record[6]);
+				r.setLegalName(record[0]);
+				r.setTicker(record[1]);
+				r.setExchangeSymbol(record[2]);
+				r.setIsin(record[3]);
+				r.setTradeName(record[4].length() == 0 ? r.getLegalName() : record[4]);
+				r.setCurrency(record[8]);
 				r.setDate(date);
+				
 				ret.add(r);
 			}
 		
@@ -142,6 +140,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	@Override
 	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
 		
+		long start = System.currentTimeMillis();
+		
 		try{
 			log.debug("Indexing record: {}", input.getTicker());
 			indexRecord(indexName, input);
@@ -150,8 +150,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			// Allow bad tickers to flow through ie. don't consider it an error
 			log.error("Invalid id " + input.getTicker());
 		}
-
+		catch(Exception ex) {
+			log.error("Invalid record: " + input.getTicker(), ex);
+		}
+		
 		input.setIndexed(true);
+		
+		log.debug("Record {} took {} ms", input.getTicker(), (System.currentTimeMillis()-start));
+		
 		return input;
 	}
 
@@ -243,11 +249,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
-
-		Company company = capIQService.getCompany(input);
 		
-		if(company == null)
-			return;
+		Company company = capIQService.getCompany(input);
+		if(company == null) return;
 		
 		String tickerNoExchange = company.getTickerCode();
 		
@@ -256,37 +260,26 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			log.warn("Warning: CapIQService returned company with null ticker"); 
 			throw new InvalidIdentifierException("Ticker not found " + input.getTicker());
 		}
-		
+
 		loadCompanyGTI(company);
 		loadCompanyVWAP(company);
 		
 		indexerService.save("company", tickerNoExchange, company, index);
 		
 		GovTransparencyIndexes gtis = gtiService.getForTicker(tickerNoExchange);
-
-		if(gtis != null)
-			indexerService.save("gtis", tickerNoExchange, gtis, index);
-
+		if(gtis != null) indexerService.save("gtis", tickerNoExchange, gtis, index);
 
 		Holders h = capIQService.getHolderDetails(input);
-
-		if(h != null)
-			indexerService.save("holders", tickerNoExchange, h, index);
+		if(h != null) indexerService.save("holders", tickerNoExchange, h, index);
 		
 		KeyDevs kd = capIQService.getKeyDevelopments(input);
-
-		if(kd != null)
-			indexerService.save("keyDevs", tickerNoExchange, kd, index);
+		if(kd != null) indexerService.save("keyDevs", tickerNoExchange, kd, index);
 		
 		DividendHistory dH = capIQService.getDividendData(input);
-		if(dH != null)
-			indexerService.save("dividendHistory", tickerNoExchange, dH, index);
+		if(dH != null) indexerService.save("dividendHistory", tickerNoExchange, dH, index);
 
 		String currency = company.getFilingCurrency();
-		
-		if(StringUtils.isEmpty(currency))
-			currency = "SGD";
-		
+		if(StringUtils.isEmpty(currency)) currency = "SGD";
 		Financials financials = capIQService.getCompanyFinancials(input, currency);
 
 		for(Financial c : financials.getFinancials()){
@@ -295,54 +288,53 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		}
 
 		PriceHistory historicalData = capIQService.getHistoricalData(input);
-		DividendHistory dividendData = capIQService.getDividendData(input);
 		
-		List<HistoricalValue> price = historicalData.getPrice();
+		DividendHistory dividendData = capIQService.getDividendData(input);
 
+		List<HistoricalValue> price = historicalData.getPrice();
 		for(HistoricalValue data : price){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("price", id, data, index);
 		}
-		
-		List<HistoricalValue> highPrice = historicalData.getHighPrice();
 
+		List<HistoricalValue> highPrice = historicalData.getHighPrice();
 		for(HistoricalValue data : highPrice){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("highPrice", id, data, index);
 		}
-		
-		List<HistoricalValue> lowPrice = historicalData.getLowPrice();
 
+		List<HistoricalValue> lowPrice = historicalData.getLowPrice();
 		for(HistoricalValue data : lowPrice){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("lowPrice", id, data, index);
 		}
-		
-		List<HistoricalValue> openPrice = historicalData.getOpenPrice();
 
+		List<HistoricalValue> openPrice = historicalData.getOpenPrice();
 		for(HistoricalValue data : openPrice){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("openPrice", id, data, index);
 		}
 
 		List<HistoricalValue> volume = historicalData.getVolume();
-
 		for(HistoricalValue data : volume){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}
 		
 		List<DividendValue> dividendValue = dividendData.getDividendValues();
-		for(DividendValue data : dividendValue){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDividendExDate().getTime()).toString());
-			indexerService.save("dividendValue", id, data, index);
+		if (dividendValue != null) {
+			for(DividendValue data : dividendValue){
+				String id = tickerNoExchange.concat(Long.valueOf(data.getDividendExDate().getTime()).toString());
+				indexerService.save("dividendValue", id, data, index);
+			}
 		}
-		
-		Estimates estimates = capIQService.getEstimates(input);
 
-		for(Estimate e : estimates.getEstimates()){
-			String id = e.getTickerCode().concat(e.getPeriod());
-			indexerService.save("estimate", id, e, index);
+		Estimates estimates = capIQService.getEstimates(input);
+		if (estimates != null) {
+			for(Estimate e : estimates.getEstimates()){
+				String id = e.getTickerCode().concat(e.getPeriod());
+				indexerService.save("estimate", id, e, index);
+			}
 		}
 	}
 	

@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -37,40 +38,26 @@ import com.wmsi.sgx.util.TemplateUtil;
 @SuppressWarnings("unchecked")
 public class KeyDevsService extends AbstractDataService {
 
-	
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
-		
+		String tickerNoEx = id.split(":")[0];
 		Assert.notEmpty(parms);
-		id=id.split(":")[0];
-		//List<String> ids = getKeyDevelopmentIds(id, parms[0]);
-
-		//String json = getQuery(ids);
-		
-		//Resource template = new ByteArrayResource(json.getBytes());
-		//KeyDevs devs =  executeRequest(new CapIQRequestImpl(template), null);
-		
 		KeyDevs devs = getKeyDevelopments(id);
-		devs.setTickerCode(id);
+		devs.setTickerCode(tickerNoEx);
 		return devs;
 	}
 
 	
 	
 	public KeyDevs getKeyDevelopments(String id)	throws ResponseParserException, CapIQRequestException {
+		String tickerNoEx = id.split(":")[0];
 		KeyDevs kD = new KeyDevs();
-		kD.setTickerCode(id);
-		
-		/*String file = "src/main/resources/data/key-devs.csv";*/
-		String file = "/mnt/sgx-data/key-devs.csv";
-		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
-		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
+		kD.setTickerCode(tickerNoEx);
+		Iterable<CSVRecord> records = getCompanyData(id, "key-devs");
 		List<KeyDev> list = new ArrayList<KeyDev>();
 		for (CSVRecord record : records) {
 			KeyDev keydev = new KeyDev();
-			//String fmt = "yyyy/MM/dd hh:mm:ss aaa";
 			keydev.setDate(new Date(record.get(3)));
-			//keydev.setDate(DateUtil.toDate(record.get(3), fmt));
 			keydev.setHeadline(record.get(4));
 			keydev.setSituation(record.get(5));
 			keydev.setType(record.get(6));

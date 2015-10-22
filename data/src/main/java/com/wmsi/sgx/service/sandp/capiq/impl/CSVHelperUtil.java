@@ -10,30 +10,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 public class CSVHelperUtil {
+	
 	private static final Logger log = LoggerFactory.getLogger(CSVHelperUtil.class);
 	
+	static Map<String,Iterable<CSVRecord>> CACHE = new HashMap<String,Iterable<CSVRecord>>();
+	
 	public Iterable<CSVRecord> getRecords(String file) {
+		ArrayList<CSVRecord> ret = new ArrayList<CSVRecord>();
 		Reader in = null;
+		CSVParser parsed = null;
 		try {
+			long cur = System.currentTimeMillis();
 			in = new FileReader(file);
+			parsed = CSVFormat.DEFAULT.parse(in);
+			for (CSVRecord record: parsed) ret.add(record);
+			return ret;
 		} catch (FileNotFoundException e) {
 			log.error("FileNotFoundException CSVHelperUtil: ", e);
-		}
-
-		Iterable<CSVRecord> records = null;
-		try {
-			records = CSVFormat.DEFAULT.parse(in);
 		} catch (IOException e) {
 			log.error("IOException CSVHelperUtil: ", e);
 		}
-		return records;
-
+		finally {
+			try { if (parsed != null) parsed.close(); }
+			catch(Exception e) {}
+		}
+		return null;
 	}
 
 	public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
@@ -56,4 +63,5 @@ public class CSVHelperUtil {
 		
 		return map;		
 	}
+	
 }

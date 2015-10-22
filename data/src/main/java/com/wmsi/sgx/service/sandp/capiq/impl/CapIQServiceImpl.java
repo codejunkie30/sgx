@@ -30,7 +30,7 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public Company getCompany(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{
-		Company company = companyService.load(input.getTicker(),  input.getDate());
+		Company company = companyService.load(input.getTicker() + ":" + input.getExchangeSymbol(),  input.getDate());
 		
 		if(company != null)
 			company.setTradeName(input.getTradeName());
@@ -44,7 +44,7 @@ public class CapIQServiceImpl implements CapIQService{
 
 	@Override
 	public Financials getCompanyFinancials(CompanyInputRecord input, String currency) throws ResponseParserException, CapIQRequestException{
-		return financialsService.load(input.getTicker(), currency);		
+		return financialsService.load(input.getTicker() + ":" + input.getExchangeSymbol(), currency);		
 	}
 
 	@Autowired
@@ -52,14 +52,14 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{		
-		return keyDevsService.load(input.getTicker(), input.getDate());
+		return keyDevsService.load(input.getTicker() + ":" + input.getExchangeSymbol(), input.getDate());
 	}
 	
 	@Autowired
 	private DataService holdersService;
 	
 	public Holders getHolderDetails(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {
-		return holdersService.load(input.getTicker());
+		return holdersService.load(input.getTicker() + ":" + input.getExchangeSymbol());
 	}
 
 	@Autowired
@@ -69,7 +69,7 @@ public class CapIQServiceImpl implements CapIQService{
 	public PriceHistory getHistoricalData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {
 		String asOfDate = input.getDate();
 		String startDate = DateUtil.adjustDate(asOfDate, Calendar.DAY_OF_MONTH, -1835);
-		return historicalService.load(input.getTicker(), startDate, asOfDate);
+		return historicalService.load(input.getTicker() + ":" + input.getExchangeSymbol(), startDate, asOfDate);
 	}
 	
 	@Autowired
@@ -79,7 +79,7 @@ public class CapIQServiceImpl implements CapIQService{
 	public DividendHistory getDividendData(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException {
 		String asOfDate = input.getDate();
 		String startDate = DateUtil.adjustDate(asOfDate, Calendar.DAY_OF_MONTH, -1835);
-		return dividendService.load(input.getTicker(), startDate, asOfDate);
+		return dividendService.load(input.getTicker() + ":" + input.getExchangeSymbol(), startDate, asOfDate);
 	}
 	
 	@Autowired
@@ -87,8 +87,6 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public Estimates getEstimates(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{
-		
-		return estimatesService.load(input.getTicker());
-		
+		return estimatesService.load(input.getTicker() + ":" + input.getExchangeSymbol());
 	}
 }
