@@ -1,4 +1,4 @@
-define(['knockout', 'text!./premium.html'], function(ko, htmlString) {
+define(['knockout', 'text!./premium-preview.html'], function(ko, htmlString) {
 
   function ComponentViewModel(params) { }
 

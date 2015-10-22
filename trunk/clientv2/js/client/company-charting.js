@@ -3,7 +3,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
   ko.validation = Validation;
   ko.validation.init({insertMessages:false});
 
-  ko.components.register('premium-preview', { require: 'client/components/premium'});
+  ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 
   ko.validation.rules.between = {
       validator: function(value, params) {
