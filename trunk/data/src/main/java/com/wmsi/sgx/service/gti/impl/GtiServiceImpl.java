@@ -85,8 +85,7 @@ public class GtiServiceImpl implements GtiService{
 	 *
 	 * @throws GTIServiceException
 	 */
-	@PostConstruct
-	private void loadData() throws GTIServiceException {
+	public Boolean init() throws GTIServiceException {
 
 		log.info("Reading data from GTI file...");
 
@@ -143,6 +142,8 @@ public class GtiServiceImpl implements GtiService{
 			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
 		}
+		
+		return true;
 	}
 
 	private List<String> getAllTickers(GovTransparencyIndexes gtis){

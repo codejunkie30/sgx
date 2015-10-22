@@ -1,24 +1,18 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.google.gson.Gson;
@@ -29,23 +23,15 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
-import com.wmsi.sgx.service.sandp.capiq.DataService;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
 @SuppressWarnings("unchecked")
 public class CompanyService extends AbstractDataService {
-
-	/*@Autowired
-	private DataService historicalService;
-	@Autowired
-	private DataService dividendService;
-*/
-	private PriceHistory priceHistory;
 	
-	/*private CapIQRequestImpl companyRequest() {
-		return new CapIQRequestImpl(new ClassPathResource("META-INF/query/capiq/companyInfo.json"));
-	}*/
+	private static final Logger log = LoggerFactory.getLogger(CompanyService.class);
+
+	private PriceHistory priceHistory;
 
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -53,18 +39,25 @@ public class CompanyService extends AbstractDataService {
 		Assert.notEmpty(parms);
 
 		String startDate = parms[0];
-		id = id.split(":")[0];
 		Company company = getCompany(id);
 		
 		priceHistory = getPreviousClose(id);
 		Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
-
-		if (priceHistory.getPrice().get(1).getValue() != null) {
-			company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
-			company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
-		}
 		
-		loadHistorical(priceHistory, startDate, company);
+		if (priceHistory.getPrice().size() > 0) {
+			
+			if (priceHistory.getPrice().get(1).getValue() != null) {
+				company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
+				company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
+			}
+			
+			loadHistorical(priceHistory, startDate, company);
+			
+		}
+		else {
+			log.error("NO PRICE HISTORY: " + id);
+		}
+
 		return company;
 	}
 
@@ -84,21 +77,15 @@ public class CompanyService extends AbstractDataService {
 	}
 
 	public Company getCompany(String id) throws ResponseParserException, CapIQRequestException {
-		//String file = "src/main/resources/data/company-data.csv";
-		String file = "/mnt/sgx-data/company-data.csv";
-		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
-		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
+		Iterable<CSVRecord> records = getCompanyData(id, "company-data");
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		for (CSVRecord record : records) {
-			if (record.get(0).equalsIgnoreCase(id)) {
-				String lastName = record.get(2);
-				map.put(lastName, record.get(3));
-			}
+			String lastName = record.get(2);
+			map.put(lastName, record.get(3));
 		}
 
-		if (map.size() == 0)
-			throw new ResponseParserException("record map is empty in getCompany()");
+		if (map.size() == 0) throw new ResponseParserException("record map is empty in getCompany()");
 
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		JsonElement jsonElement = gson.toJsonTree(map);
@@ -108,32 +95,27 @@ public class CompanyService extends AbstractDataService {
 	}
 
 	public PriceHistory getPreviousClose(String input) throws ResponseParserException, CapIQRequestException {
+		
 		PriceHistory ph = new PriceHistory();
-		String file = "/mnt/sgx-data/company-data.csv";
-		CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
-		Iterable<CSVRecord> records = csvHelperUtil.getRecords(file);
+		Iterable<CSVRecord> records = getCompanyData(input, "company-data");
 		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
-
+		
 		List<HistoricalValue> price = new ArrayList<HistoricalValue>();
 		List<HistoricalValue> highPrice = new ArrayList<HistoricalValue>();
 		List<HistoricalValue> lowPrice = new ArrayList<HistoricalValue>();
 		List<HistoricalValue> openPrice = new ArrayList<HistoricalValue>();
 		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
 		
-		/*while(records.iterator().hasNext()){
-			records.iterator().remove();
-			break;
-		}*/
-		
 		for (CSVRecord record : records) {
-			if (record.get(0).equalsIgnoreCase(input) && list.contains(record.get(2))) {
+			if(list.contains(record.get(2))){
 				HistoricalValue hv = new HistoricalValue();
-				hv.setTickerCode(input);
-
-				Double value = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
+				hv.setTickerCode(input.split(":")[0]);								
+				
+				Double value  = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
 				hv.setValue(value);
-				hv.setDate(new Date(record.get(5)));
-				switch (record.get(2)) {
+				hv.setDate(DateUtil.toDate(record.get(5), "yyyy/MM/dd hh:mm:ss aaa"));
+				
+				switch(record.get(2)){
 				case "openPrice":
 					openPrice.add(hv);
 					break;
@@ -157,7 +139,7 @@ public class CompanyService extends AbstractDataService {
 		ph.setOpenPrice(openPrice);
 		ph.setPrice(price);
 		ph.setVolume(volume);
-
+		
 		return ph;
 	}
 
@@ -227,21 +209,6 @@ public class CompanyService extends AbstractDataService {
 
 		return volume;
 	}
-
-	/*private Map<String, Object> buildContext(String id, String startDate) {
-		String previousDate = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -1);
-
-		Map<String, Object> ctx = new HashMap<String, Object>();
-		ctx.put("id", id);
-		ctx.put("startDate", startDate);
-		ctx.put("previousDate", previousDate);
-		return ctx;
-	}*/
-
-	/*private Company executeRequest(String id, String startDate) throws ResponseParserException, CapIQRequestException {
-		Map<String, Object> ctx = buildContext(id, startDate);
-		return executeRequest(companyRequest(), ctx);
-	}*/
 
 	private Double avg(Double sum, Integer total, int scale) {
 		BigDecimal s = new BigDecimal(sum);
