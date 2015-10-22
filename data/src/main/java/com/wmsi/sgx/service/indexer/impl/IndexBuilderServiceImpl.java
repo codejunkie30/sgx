@@ -254,16 +254,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(company == null) return;
 		
 		String tickerNoExchange = company.getTickerCode();
-		
-		if(tickerNoExchange == null){
-			// This seems to happen if a ticker is valid but the company merged. 
-			log.warn("Warning: CapIQService returned company with null ticker"); 
-			throw new InvalidIdentifierException("Ticker not found " + input.getTicker());
-		}
 
 		loadCompanyGTI(company);
 		loadCompanyVWAP(company);
-		
 		indexerService.save("company", tickerNoExchange, company, index);
 		
 		GovTransparencyIndexes gtis = gtiService.getForTicker(tickerNoExchange);
@@ -281,7 +274,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		String currency = company.getFilingCurrency();
 		if(StringUtils.isEmpty(currency)) currency = "SGD";
 		Financials financials = capIQService.getCompanyFinancials(input, currency);
-
+		
 		for(Financial c : financials.getFinancials()){
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
 			indexerService.save("financial", id, c, index);
@@ -289,8 +282,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		PriceHistory historicalData = capIQService.getHistoricalData(input);
 		
-		DividendHistory dividendData = capIQService.getDividendData(input);
-
 		List<HistoricalValue> price = historicalData.getPrice();
 		for(HistoricalValue data : price){
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
@@ -320,7 +311,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
 			indexerService.save("volume", id, data, index);
 		}
-		
+
+		DividendHistory dividendData = capIQService.getDividendData(input);
 		List<DividendValue> dividendValue = dividendData.getDividendValues();
 		if (dividendValue != null) {
 			for(DividendValue data : dividendValue){
@@ -336,6 +328,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 				indexerService.save("estimate", id, e, index);
 			}
 		}
+
+		
 	}
 	
 	private void loadCompanyVWAP(Company company){

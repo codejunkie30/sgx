@@ -113,19 +113,8 @@ public class IndexerServiceImpl implements IndexerService{
         int statusCode = res.getStatusCode().value();
         
 		// Check for 200 range response code
-		if(statusCode / 100 != 2){	
-			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
-		}	
-		MappingJsonFactory jf = new MappingJsonFactory();
-		
-		String line = "/mnt/sgx-data/company-data.csv";
-		//JsonNode jsonNode = new JsonNode();
-	
-		if(line == null){
-			int fields = line.length();
-			System.out.println(fields);
-		}
-        
+		if(statusCode / 100 != 2) throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+
         return true;
 	}
 
