@@ -3,6 +3,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
   ko.validation = Validation;
   ko.validation.init({insertMessages:false});
 
+  ko.components.register('premium-preview', { require: 'client/components/premium'});
+
   ko.validation.rules.between = {
       validator: function(value, params) {
           var min = params[0];
@@ -178,7 +180,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $('.technical-charting').remove();
       $('.technical-charting-alternative').show();
       ko.applyBindings(this, $("body")[0]);
-      setTimeout(function(){ PAGE.resizeIframeSimple(); }, 50);
+      //setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
     },
 
     init_premium: function() {
