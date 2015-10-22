@@ -433,7 +433,7 @@ select pop.tickerSymbol,
 	pop.exchangeSymbol,
 	case
 		when childlevel=2 then 'industryGroup'
-		when childlevel=3 then 'indsutry' 
+		when childlevel=3 then 'industry' 
 	end as WMSIApi,
 	convert(varchar(max),b.subTypeValue) as dataItemValue,
 	null,
