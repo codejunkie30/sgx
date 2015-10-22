@@ -3,8 +3,6 @@ package com.wmsi.sgx.service.indexer;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.core.io.Resource;
-
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;

@@ -282,35 +282,20 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		PriceHistory historicalData = capIQService.getHistoricalData(input);
 		
-		List<HistoricalValue> price = historicalData.getPrice();
-		for(HistoricalValue data : price){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save("price", id, data, index);
-		}
+		List<HistoricalValue> hvs = historicalData.getPrice();
+		saveHistorical("price", hvs, tickerNoExchange, index);
+		
+		hvs = historicalData.getHighPrice();
+		saveHistorical("highPrice", hvs, tickerNoExchange, index);
 
-		List<HistoricalValue> highPrice = historicalData.getHighPrice();
-		for(HistoricalValue data : highPrice){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save("highPrice", id, data, index);
-		}
+		hvs = historicalData.getLowPrice();
+		saveHistorical("lowPrice", hvs, tickerNoExchange, index);
 
-		List<HistoricalValue> lowPrice = historicalData.getLowPrice();
-		for(HistoricalValue data : lowPrice){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save("lowPrice", id, data, index);
-		}
+		hvs = historicalData.getOpenPrice();
+		saveHistorical("openPrice", hvs, tickerNoExchange, index);
 
-		List<HistoricalValue> openPrice = historicalData.getOpenPrice();
-		for(HistoricalValue data : openPrice){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save("openPrice", id, data, index);
-		}
-
-		List<HistoricalValue> volume = historicalData.getVolume();
-		for(HistoricalValue data : volume){
-			String id = tickerNoExchange.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save("volume", id, data, index);
-		}
+		hvs = historicalData.getVolume();
+		saveHistorical("volume", hvs, tickerNoExchange, index);
 
 		DividendHistory dividendData = capIQService.getDividendData(input);
 		List<DividendValue> dividendValue = dividendData.getDividendValues();
@@ -330,6 +315,23 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		}
 
 		
+	}
+	
+	private void saveHistorical(String type, List<HistoricalValue> values, String ticker, String index) throws IndexerServiceException {
+		
+		String txt = "";
+		for(HistoricalValue data : values){
+			String val = Long.valueOf(data.getDate().getTime()).toString();
+			txt += "{ \"index\": { \"_id\": \"" + ticker.concat(val)  + "\" }}\n";
+			txt += "{ \"tickerCode\": \"" + ticker + "\", \"value\": " + data.getValue() + ", \"date\": " + val + "}\n";
+		}
+		if (txt.length() > 0) indexerService.bulkSave(type, txt, index);
+/**
+		for(HistoricalValue data : values){
+			String id = ticker.concat(Long.valueOf(data.getDate().getTime()).toString());
+			indexerService.save(type, id, data, index);
+		}
+	*/
 	}
 	
 	private void loadCompanyVWAP(Company company){

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.integration.annotation.Header;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +26,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -49,7 +49,10 @@ public class IndexerServiceImpl implements IndexerService{
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
 	private RestTemplate restTemplate;
-	public void setRestTemplate(RestTemplate t){restTemplate = t;}
+	public void setRestTemplate(RestTemplate t){
+		restTemplate = t;
+		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+	}
 	
 	@Override
 	@Transactional
@@ -117,60 +120,24 @@ public class IndexerServiceImpl implements IndexerService{
 
         return true;
 	}
-	
+
 	@Override
 	@Transactional
-	public Boolean startBulkIndexing(@Header String indexName) throws IndexerServiceException {
+	public Boolean bulkSave(String type, String body, String indexName) throws IndexerServiceException {
 		
-		UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_settings").build();
-		URI uri = uriComp.expand(indexName).toUri();
-
-		log.debug("Stopping refresh interval");
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode index = mapper.createObjectNode();
-		ObjectNode refresh = mapper.createObjectNode();
-		refresh.put("refresh_interval", "-1");
-		index.put("index",  refresh);
-		int statusCode = putJson(uri, index);
-			
+        UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/{type}/_bulk").build();
+        URI uri = uriComp.expand(indexName, type).toUri();
+        
+        ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, buildEntityText(body), Object.class);
+        
+        int statusCode = res.getStatusCode().value();
+        
 		// Check for 200 range response code
-		if(statusCode / 100 != 2){	
-			throw new IndexerServiceException("Start bulk indexing returned " + statusCode + " http response code. Could not change setting.");
-		}		
-		
-		return true;
+		if(statusCode / 100 != 2) throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+
+        return true;
 	}
 	
-	@Override
-	@Transactional
-	public Boolean stopBulkIndexing(@Header String indexName) throws IndexerServiceException, IOException {
-		
-		UriComponents uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_settings").build();
-		URI uri = uriComp.expand(indexName).toUri();
-
-		log.debug("Starting refresh interval");
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode index = mapper.createObjectNode();
-		ObjectNode refresh = mapper.createObjectNode();
-		refresh.put("refresh_interval", "1s");
-		index.put("index",  refresh);
-		int statusCode = putJson(uri, index);
-			
-		// Check for 200 range response code
-		if(statusCode / 100 != 2){	
-			throw new IndexerServiceException("Stop bulk indexing returned " + statusCode + " http response code. Could not change setting.");
-		}		
-		
-		// now optimize
-		uriComp = UriComponentsBuilder.fromUriString(esUrl + "/{indexName}/_optimize?max_num_segments=5").build();
-		uri = uriComp.expand(indexName).toUri();
-		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(uri, HttpMethod.PUT).execute();
-		boolean ok = headResponse.getStatusCode() == HttpStatus.OK;
-		
-		return ok;
-	}
-
-
 	@Override
 	@Transactional
 	public Boolean deleteIndex(String indexName) throws IndexerServiceException {
@@ -223,13 +190,12 @@ public class IndexerServiceImpl implements IndexerService{
 		return alias;
 	}
 
-	private <T> HttpEntity<T> buildEntity(T json){
+	private <T> HttpEntity<String> buildEntityText(String txt){
 		HttpHeaders headers = new HttpHeaders();
 		Charset utf8 = Charset.forName("UTF-8");
-		MediaType mediaType = new MediaType("application", "json", utf8);
-		headers.setContentType(mediaType);
+		headers.setContentType(MediaType.TEXT_PLAIN);
 		headers.setAcceptCharset(Collections.singletonList(utf8));
-		return new HttpEntity<T>(json, headers);		
+		return new HttpEntity<String>(txt, headers);		
 	}
 	
 	private int postJson(URI uri, Object json){
@@ -238,10 +204,13 @@ public class IndexerServiceImpl implements IndexerService{
 		return res.getStatusCode().value();		
 	}
 	
-	private int putJson(URI uri, Object json){
-		HttpEntity<?> entity = buildEntity(json);
-		ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);		
-		return res.getStatusCode().value();		
+	private <T> HttpEntity<T> buildEntity(T json){
+		HttpHeaders headers = new HttpHeaders();
+		Charset utf8 = Charset.forName("UTF-8");
+		MediaType mediaType = new MediaType("application", "json", utf8);
+		headers.setContentType(mediaType);
+		headers.setAcceptCharset(Collections.singletonList(utf8));
+		return new HttpEntity<T>(json, headers);		
 	}
 
 }

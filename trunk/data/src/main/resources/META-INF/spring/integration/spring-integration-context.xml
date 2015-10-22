@@ -21,7 +21,6 @@
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="gtiService" method="init"/>
 		<int:service-activator ref="vwapService" method="init"/>
-		<int:service-activator ref="indexerService" method="startBulkIndexing"/>
 		<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" />
 	</int:chain>
 	
@@ -106,7 +105,6 @@
  	<!--  Job Completed successfully, create index and remove old indexes -->
  	<int:chain input-channel="createAlias" output-channel="loggingChannel">
  		<int:service-activator ref="indexerService" method="createIndexAlias" />
-		<int:service-activator ref="indexerService" method="stopBulkIndexing"/>
  		<!-- <int:service-activator ref="indexBuilderService" method="deleteOldIndexes" />  -->
  	</int:chain>
 
