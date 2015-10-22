@@ -182,7 +182,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },
 
     init_premium: function() {
-      console.log('initiated');
+
       var self = this;
       this.initModal();
       this.activeTab.subscribe(function(data){
@@ -229,7 +229,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.init();  //this is tearsheet.js init
       PAGE.checkStatus();
       self.premiumUser.subscribe(function(data){
-        console.log('loaded');
+
         if(data == true)
           self.init_premium();
         else 
