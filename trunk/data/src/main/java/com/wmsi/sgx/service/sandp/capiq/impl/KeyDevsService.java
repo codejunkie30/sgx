@@ -43,7 +43,7 @@ public class KeyDevsService extends AbstractDataService {
 		String tickerNoEx = id.split(":")[0];
 		Assert.notEmpty(parms);
 		KeyDevs devs = getKeyDevelopments(id);
-		devs.setTickerCode(tickerNoEx);
+		if (devs != null) devs.setTickerCode(tickerNoEx);
 		return devs;
 	}
 
