@@ -193,6 +193,8 @@ public class Company {
 	private List<HistoricalValue> priceHistory;
 
 	private List<DividendValue> dividendHistory;
+	
+	public PriceHistory fullPH;
 
 	public List<DividendValue> getDividendHistory() {
 		return dividendHistory;

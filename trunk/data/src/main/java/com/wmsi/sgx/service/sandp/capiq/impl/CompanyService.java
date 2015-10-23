@@ -73,6 +73,7 @@ public class CompanyService extends AbstractDataService {
 		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
 		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
 
+		comp.fullPH = historicalData;
 		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
 		comp.setPriceHistory(lastYearPrice);
 		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume, lastYearPrice, startDate));
