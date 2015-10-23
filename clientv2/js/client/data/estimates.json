@@ -3,44 +3,42 @@
 	   {
 	      "dataPoints":[
 	         {
-	            "property":"totalRevenue",
-	            "glossaryTerm":"totalRevenue",
+	            "property":"normalizedEps",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EPS Norm"
 	         },
 	         {
-	            "property":"grossProfit",
+	            "property":"eps",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EPS GAAP"
 	         },
 	         {
-	            "property":"netIncome",
+	            "property":"revenue",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"Revenue"
 	         },
 	         {
-	            "property":"ebitda",
+	            "property":"ebit",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EBIT"
 	         },
 	         {
-	            "property":"eps",
-	            "glossaryTerm":"eps",
+	            "property":"ebt",
 	            "group":"per",
 	            "name":"EBT"
 	         },
 	         {
-	            "property":"payoutRatio",
+	            "property":"netIncomeExcl",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Net Income (excluding Exceptions)"
 	         },
 	         {
-	            "property":"dividendsPerShare",
+	            "property":"netIncome",
 	            "format":"cash",
 	            "group":"per",
 	            "name":"Net Income (GAAP)"
@@ -53,44 +51,42 @@
 	   {
 	      "dataPoints":[
 	         {
-	            "property":"totalRevenue",
-	            "glossaryTerm":"totalRevenue",
+	            "property":"normalizedEps",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EPS Norm"
 	         },
 	         {
-	            "property":"grossProfit",
+	            "property":"eps",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EPS GAAP"
 	         },
 	         {
-	            "property":"netIncome",
+	            "property":"revenue",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"Revenue"
 	         },
 	         {
-	            "property":"ebitda",
+	            "property":"ebit",
 	            "format":"cash",
 	            "group":"pure",
 	            "name":"EBIT"
 	         },
 	         {
-	            "property":"eps",
-	            "glossaryTerm":"eps",
+	            "property":"ebt",
 	            "group":"per",
 	            "name":"EBT"
 	         },
 	         {
-	            "property":"payoutRatio",
+	            "property":"netIncomeExcl",
 	            "format":"percent",
 	            "group":"ratio",
 	            "name":"Net Income (excluding Exceptions)"
 	         },
 	         {
-	            "property":"dividendsPerShare",
+	            "property":"netIncome",
 	            "format":"cash",
 	            "group":"per",
 	            "name":"Net Income (GAAP)"

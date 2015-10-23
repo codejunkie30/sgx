@@ -124,9 +124,9 @@
 					<th width="30%"></th>
 					<!-- ko foreach : $parent.dataPoints -->
 						<th width="15%">
-							<span data-bind="text: absPeriod.indexOf('LTM') != -1 ? 'LTM Ending' : absPeriod"></span>
+							<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
 							<br />
-							<span data-bind="text: periodDate, format: 'date'"></span>
+							<span data-bind="text: period, format: 'date'"></span>
 						</th>
 					<!-- /ko -->
 					<th width="10%" class="uncheck">&nbsp;</th>
@@ -161,12 +161,12 @@
 		<table class="section" data-bind="css: name, attr: {id: name }">
 			<thead>
 				<tr>
-					<th width="30%">a</th>
+					<th width="30%"></th>
 					<!-- ko foreach : $parent.dataPoints -->
 						<th width="15%">
-							<span data-bind="text: absPeriod.indexOf('LTM') != -1 ? 'LTM Ending' : absPeriod"></span>
+							<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
 							<br />
-							<span data-bind="text: periodDate, format: 'date'"></span>
+							<span data-bind="text: period, format: 'date'"></span>
 						</th>
 					<!-- /ko -->
 					<th width="10%" class="uncheck">&nbsp;</th>
@@ -185,7 +185,7 @@
 							<input type="checkbox">
 						</td>
 						<!-- ko foreach : $root.dataPoints -->
-							<td data-bind="text: $data.hasOwnProperty($parent.property) ? $data[$parent.property] : '-', format: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
+							<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', format: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
 						<!-- /ko -->
 						<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
 							<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>

@@ -53,12 +53,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
 			
-    		var endpoint = me.fqdn + "/sgx/company/financials";
+    		//var endpoint = me.fqdn + "/sgx/company/financials";
 			
-			//var endpoint = me.fqdn + "/sgx/company/estimates";
+			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'GET';
     		var params = { id: me.ticker };
-    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { console.log(data); me.initFinancials(me, data);  }, undefined, undefined);
     		
 		},
 		
@@ -67,25 +67,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			//console.log(me);
 			//console.log(data);
 			
-    		var financials = data.financials.slice();
+    		var estimates = data.estimates.slice();
     		var currency = null;
     		
     		// let's make sure they're sorted
-    		financials.sort(function(a, b) {
-        		var a = parseInt(a.absPeriod.replace("FY", "").replace("LTM", ""));
-        		var b = parseInt(b.absPeriod.replace("FY", "").replace("LTM", ""));
+    		estimates.sort(function(a, b) {
+        		var a = parseInt(a.period.replace("FY", "").replace("LTM", ""));
+        		var b = parseInt(b.period.replace("FY", "").replace("LTM", ""));
         		return a - b;
         	});          		
         	
-        	if (financials.length == 5) return financials;
+        	if (estimates.length == 5) return estimates;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
-    		var isQ4 = financials[financials.length - 1].absPeriod.indexOf("LTM4") != -1;
-    		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
+    		var isQ4 = estimates[estimates.length - 1].period.indexOf("LTM4") != -1;
+    		estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);  
 			
-			this.dataPoints(financials);
-			this.currency(financials[0].filingCurrency);
+			this.dataPoints(estimates);
+			this.currency(estimates[0].filingCurrency);
 			
 			// initialize the chart without a series
 			this.initChart(me);
