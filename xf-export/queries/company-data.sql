@@ -126,7 +126,7 @@ select pop.tickerSymbol,
 		when fp.periodTypeId = 1 then 'FY'+cast(fp.fiscalYear as varchar(max))
 		when fp.periodTypeId = 4 then 'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max))
 	end as period,
-	null as date,
+	fp.periodEndDate as date,
 	null as currency
 from ciqLatestInstanceFinPeriod fp
 	join ##SGXPop pop on fp.companyId=pop.companyId
@@ -410,11 +410,11 @@ from (
 			case when city is null then '' else ', ' + city end +
 			case when st.state is null then '' else ', ' + st.state end +
 			case when zipcode is null then '' else ' ,' + zipcode end +
-			case when cty.country is null then '' else ', ' + cty.country end) as contact,
+			case when cty.country is null then '' else ', ' + cty.country end) as companyAddress,
 		convert(varchar(max),c.yearFounded) as yearFounded,
 		convert(varchar(max),fp.periodEndDate,101) as fiscalYearEnd,
 		convert(varchar(max),cISO.ISOCode) as filingCurrency,
-		convert(varchar(max),c.webpage) as website,
+		convert(varchar(max),c.webpage) as companyWebsite,
 		convert(varchar(max),bd.BusinessDescription) as businessDescription
 	from ciqCompany c
 		join ##sgxpop pop on c.companyId=pop.companyId
