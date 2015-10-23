@@ -32,6 +32,7 @@ public class HistoricalService extends AbstractDataService {
 		return getHistoricalData(id);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public PriceHistory getHistoricalData(String id) throws ResponseParserException, CapIQRequestException {
 		String tickerNoEx = id.split(":")[0];
 		PriceHistory ph = new PriceHistory();
@@ -51,7 +52,7 @@ public class HistoricalService extends AbstractDataService {
 				
 				Double value  = !record.get(3).equalsIgnoreCase("null") ? Double.parseDouble(record.get(3)) : null;
 				hv.setValue(value);
-				hv.setDate(DateUtil.toDate(record.get(5), "yyyy/MM/dd hh:mm:ss aaa"));
+				hv.setDate(new Date(record.get(5)));
 				
 				switch(record.get(2)){
 				case "openPrice":

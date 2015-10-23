@@ -10,7 +10,7 @@ import com.google.common.base.Objects;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 
 @JsonRootName("company")
-public class Company{
+public class Company {
 
 	@ConversionAnnotation(name = "IQ_AVG_BROKER_REC_NO_CIQ")
 	private Double avgBrokerReq;
@@ -97,7 +97,7 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_LASTSALEPRICE")
 	private Double lastSalePrice;
-	
+
 	@ConversionAnnotation(name = "IQ_LOWPRICE")
 	private Double lowPrice;
 
@@ -133,7 +133,7 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
 	private Double sharesOutstanding;
-	
+
 	@ConversionAnnotation(name = "IQ_TARGET_PRICE_NUM_CIQ")
 	private Double targetPriceNum;
 
@@ -174,11 +174,11 @@ public class Company{
 
 	@ConversionAnnotation(name = "IQ_VOLUME")
 	private Double volume;
-	
+
 	private Date vwapAsOfDate;
-	
+
 	private String vwapCurrency;
-	
+
 	private Double volWeightedAvgPrice;
 
 	@ConversionAnnotation(name = "IQ_YEAR_FOUNDED")
@@ -191,9 +191,8 @@ public class Company{
 	private Double yearLow;
 
 	private List<HistoricalValue> priceHistory;
-	
+
 	private List<DividendValue> dividendHistory;
-	
 
 	public List<DividendValue> getDividendHistory() {
 		return dividendHistory;
@@ -213,7 +212,7 @@ public class Company{
 
 	public Double getPriceVs52WeekHigh() {
 
-		if(closePrice == null || closePrice == 0 || yearHigh == null)
+		if (closePrice == null || closePrice == 0 || yearHigh == null)
 			return null;
 
 		BigDecimal close = new BigDecimal(closePrice);
@@ -225,7 +224,7 @@ public class Company{
 
 	public Double getPriceVs52WeekLow() {
 
-		if(closePrice == null || closePrice == 0 || yearLow == null)
+		if (closePrice == null || closePrice == 0 || yearLow == null)
 			return null;
 
 		BigDecimal close = new BigDecimal(closePrice);
@@ -339,14 +338,13 @@ public class Company{
 		this.companyWebsite = companyWebsite;
 	}
 
-	public Double getDividendYield() {		
-		
-		if(divShare == null || lastSalePrice == null || divShare == 0 || lastSalePrice == 0){
+	public Double getDividendYield() {
+
+		if (divShare == null || closePrice == null || divShare == 0 || closePrice == 0) {
 			return null;
-		}
-		else{
+		} else {
 			BigDecimal share = new BigDecimal(divShare);
-			BigDecimal close = new BigDecimal(lastSalePrice);
+			BigDecimal close = new BigDecimal(closePrice);
 			return share.divide(close, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 		}
 	}
@@ -407,7 +405,7 @@ public class Company{
 	}
 
 	public Double getEvEbitData() {
-		if(getEnterpriseValue() == null || ebitda == null || ebitda == 0){
+		if (getEnterpriseValue() == null || ebitda == null || ebitda == 0) {
 			return null;
 		}
 		BigDecimal ev = new BigDecimal(getEnterpriseValue() != null ? getEnterpriseValue() : 0);
@@ -496,7 +494,7 @@ public class Company{
 	}
 
 	public Double getLastSalePrice() {
-		return lastSalePrice;
+		return closePrice;
 	}
 
 	public void setLastSalePrice(Double lastSalePrice) {
@@ -512,15 +510,14 @@ public class Company{
 	}
 
 	public Double getMarketCap() {
-		if(getSharesOutstanding() == null || lastSalePrice == null || lastSalePrice == 0){
+		if (getSharesOutstanding() == null || closePrice == null || closePrice == 0) {
 			return null;
-		}else{
+		} else {
 			BigDecimal shares = new BigDecimal(getSharesOutstanding());
-			BigDecimal price = new BigDecimal(lastSalePrice);
+			BigDecimal price = new BigDecimal(closePrice);
 			return shares.multiply(price).doubleValue();
 		}
-		
-		
+
 	}
 
 	public Double getMinorityInterest() {
@@ -564,18 +561,18 @@ public class Company{
 	}
 
 	public Double getPeRatio() {
-		if(lastSalePrice == null || eps == null || eps == 0){
+		if (closePrice == null || eps == null || eps == 0) {
 			return null;
-		}else{
-			BigDecimal price = new BigDecimal (lastSalePrice);
+		} else {
+			BigDecimal price = new BigDecimal(closePrice);
 			BigDecimal dilutedEps = new BigDecimal(eps);
 			BigDecimal peratio = price.divide(dilutedEps, RoundingMode.HALF_UP);
-			if(peratio.compareTo(BigDecimal.ZERO) == -1){
+			if (peratio.compareTo(BigDecimal.ZERO) == -1) {
 				return null;
-			}else{
+			} else {
 				return peratio.doubleValue();
 			}
-		}		
+		}
 	}
 
 	public Date getPreviousCloseDate() {
@@ -595,14 +592,14 @@ public class Company{
 	}
 
 	public Double getPriceToBookRatio() {
-		if(lastSalePrice == null || bvShare == null || bvShare == 0){
+		if (closePrice == null || bvShare == null || bvShare == 0) {
 			return null;
-		}else{
-			BigDecimal price = new BigDecimal(lastSalePrice);
+		} else {
+			BigDecimal price = new BigDecimal(closePrice);
 			BigDecimal bookValue = new BigDecimal(bvShare);
 			return price.divide(bookValue, RoundingMode.HALF_UP).doubleValue();
 		}
-		
+
 	}
 
 	public Double getPriceVolHistYr() {
@@ -624,7 +621,7 @@ public class Company{
 	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
-	
+
 	public void setSharesOutstanding(Double sharesOutstanding) {
 		this.sharesOutstanding = sharesOutstanding;
 	}
@@ -798,148 +795,105 @@ public class Company{
 	}
 
 	@Override
-	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory, dividendHistory);
-	}
-	
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("avgBrokerReq", avgBrokerReq)
-			.add("avgTradedVolM3", avgTradedVolM3)
-			.add("avgVolumeM3", avgVolumeM3)
-			.add("basicEpsIncl", basicEpsIncl)
-			.add("beta5Yr", beta5Yr)
-			.add("businessDescription", businessDescription)
-			.add("bvShare", bvShare)
-			.add("capitalExpenditures", capitalExpenditures)
-			.add("cashInvestments", cashInvestments)
-			.add("closePrice", closePrice)
-			.add("companyAddress", companyAddress)
-			.add("companyName", companyName)
-			.add("companyWebsite", companyWebsite)
-			.add("divShare", divShare)
-			.add("ebit", ebit)
-			.add("ebitda", ebitda)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("employees", employees)
-			.add("eps", eps)
-			.add("filingCurrency", filingCurrency)
-			.add("filingDate", filingDate)
-			.add("fiscalYearEnd", fiscalYearEnd)
-			.add("floatPercentage", floatPercentage)
-			.add("gtiScore", gtiScore)
-			.add("gtiRankChange", gtiRankChange)
-			.add("gvKey", gvKey)
-			.add("highPrice", highPrice)
-			.add("industry", industry)
-			.add("industryGroup", industryGroup)
-			.add("lastSalePrice", lastSalePrice)
-			.add("lowPrice", lowPrice)
-			.add("minorityInterest", minorityInterest)
-			.add("netDebt", netDebt)
-			.add("netIncome", netIncome)
-			.add("netProfitMargin", netProfitMargin)
-			.add("openPrice", openPrice)
-			.add("previousCloseDate", previousCloseDate)
-			.add("previousClosePrice", previousClosePrice)
-			.add("priceVolHistYr", priceVolHistYr)
-			.add("returnOnEquity", returnOnEquity)
-			.add("sharesSoldShort", sharesSoldShort)
-			.add("sharesOutstanding", sharesOutstanding)
-			.add("targetPriceNum", targetPriceNum)
-			.add("targetPrice", targetPrice)
-			.add("tickerCode", tickerCode)
-			.add("tbv", tbv)
-			.add("totalAssets", totalAssets)
-			.add("totalDebt", totalDebt)
-			.add("totalDebtEbitda", totalDebtEbitda)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth)
-			.add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
-			.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth)
-			.add("totalRevenue", totalRevenue)
-			.add("tradeName", tradeName)
-			.add("volume", volume)
-			.add("vwapAsOfDate", vwapAsOfDate)
-			.add("vwapCurrency", vwapCurrency)
-			.add("volWeightedAvgPrice", volWeightedAvgPrice)
-			.add("yearFounded", yearFounded)
-			.add("yearHigh", yearHigh)
-			.add("yearLow", yearLow)
-			.add("priceHistory", priceHistory)
-			.add("dividendHistory", dividendHistory)
-			.toString();
+	public int hashCode() {
+		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription,
+				bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite,
+				divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd,
+				floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice,
+				lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate,
+				previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, sharesOutstanding, targetPriceNum,
+				targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity,
+				totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume,
+				vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory,
+				dividendHistory);
 	}
 
 	@Override
-	public boolean equals(Object object){
+	public String toString() {
+		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("avgTradedVolM3", avgTradedVolM3)
+				.add("avgVolumeM3", avgVolumeM3).add("basicEpsIncl", basicEpsIncl).add("beta5Yr", beta5Yr)
+				.add("businessDescription", businessDescription).add("bvShare", bvShare)
+				.add("capitalExpenditures", capitalExpenditures).add("cashInvestments", cashInvestments)
+				.add("closePrice", closePrice).add("companyAddress", companyAddress).add("companyName", companyName)
+				.add("companyWebsite", companyWebsite).add("divShare", divShare).add("ebit", ebit).add("ebitda", ebitda)
+				.add("ebitdaMargin", ebitdaMargin).add("employees", employees).add("eps", eps)
+				.add("filingCurrency", filingCurrency).add("filingDate", filingDate).add("fiscalYearEnd", fiscalYearEnd)
+				.add("floatPercentage", floatPercentage).add("gtiScore", gtiScore).add("gtiRankChange", gtiRankChange)
+				.add("gvKey", gvKey).add("highPrice", highPrice).add("industry", industry)
+				.add("industryGroup", industryGroup).add("lastSalePrice", lastSalePrice).add("lowPrice", lowPrice)
+				.add("minorityInterest", minorityInterest).add("netDebt", netDebt).add("netIncome", netIncome)
+				.add("netProfitMargin", netProfitMargin).add("openPrice", openPrice)
+				.add("previousCloseDate", previousCloseDate).add("previousClosePrice", previousClosePrice)
+				.add("priceVolHistYr", priceVolHistYr).add("returnOnEquity", returnOnEquity)
+				.add("sharesSoldShort", sharesSoldShort).add("sharesOutstanding", sharesOutstanding)
+				.add("targetPriceNum", targetPriceNum).add("targetPrice", targetPrice).add("tickerCode", tickerCode)
+				.add("tbv", tbv).add("totalAssets", totalAssets).add("totalDebt", totalDebt)
+				.add("totalDebtEbitda", totalDebtEbitda).add("totalDebtEquity", totalDebtEquity)
+				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).add("totalRevenue", totalRevenue)
+				.add("tradeName", tradeName).add("volume", volume).add("vwapAsOfDate", vwapAsOfDate)
+				.add("vwapCurrency", vwapCurrency).add("volWeightedAvgPrice", volWeightedAvgPrice)
+				.add("yearFounded", yearFounded).add("yearHigh", yearHigh).add("yearLow", yearLow)
+				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).toString();
+	}
+
+	@Override
+	public boolean equals(Object object) {
 		if (object instanceof Company) {
 			Company that = (Company) object;
 			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
-				&& Objects.equal(this.avgTradedVolM3, that.avgTradedVolM3)
-				&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
-				&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl)
-				&& Objects.equal(this.beta5Yr, that.beta5Yr)
-				&& Objects.equal(this.businessDescription, that.businessDescription)
-				&& Objects.equal(this.bvShare, that.bvShare)
-				&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
-				&& Objects.equal(this.cashInvestments, that.cashInvestments)
-				&& Objects.equal(this.closePrice, that.closePrice)
-				&& Objects.equal(this.companyAddress, that.companyAddress)
-				&& Objects.equal(this.companyName, that.companyName)
-				&& Objects.equal(this.companyWebsite, that.companyWebsite)
-				&& Objects.equal(this.divShare, that.divShare)
-				&& Objects.equal(this.ebit, that.ebit)
-				&& Objects.equal(this.ebitda, that.ebitda)
-				&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
-				&& Objects.equal(this.employees, that.employees)
-				&& Objects.equal(this.eps, that.eps)
-				&& Objects.equal(this.filingCurrency, that.filingCurrency)
-				&& Objects.equal(this.filingDate, that.filingDate)
-				&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
-				&& Objects.equal(this.floatPercentage, that.floatPercentage)
-				&& Objects.equal(this.gtiScore, that.gtiScore)
-				&& Objects.equal(this.gtiRankChange, that.gtiRankChange)
-				&& Objects.equal(this.gvKey, that.gvKey)
-				&& Objects.equal(this.highPrice, that.highPrice)
-				&& Objects.equal(this.industry, that.industry)
-				&& Objects.equal(this.industryGroup, that.industryGroup)
-				&& Objects.equal(this.lastSalePrice, that.lastSalePrice)
-				&& Objects.equal(this.lowPrice, that.lowPrice)
-				&& Objects.equal(this.minorityInterest, that.minorityInterest)
-				&& Objects.equal(this.netDebt, that.netDebt)
-				&& Objects.equal(this.netIncome, that.netIncome)
-				&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
-				&& Objects.equal(this.openPrice, that.openPrice)
-				&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
-				&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
-				&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
-				&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
-				&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
-				&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
-				&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
-				&& Objects.equal(this.targetPrice, that.targetPrice)
-				&& Objects.equal(this.tickerCode, that.tickerCode)
-				&& Objects.equal(this.tbv, that.tbv)
-				&& Objects.equal(this.totalAssets, that.totalAssets)
-				&& Objects.equal(this.totalDebt, that.totalDebt)
-				&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
-				&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
-				&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
-				&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
-				&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
-				&& Objects.equal(this.totalRevenue, that.totalRevenue)
-				&& Objects.equal(this.tradeName, that.tradeName)
-				&& Objects.equal(this.volume, that.volume)
-				&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate)
-				&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
-				&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
-				&& Objects.equal(this.yearFounded, that.yearFounded)
-				&& Objects.equal(this.yearHigh, that.yearHigh)
-				&& Objects.equal(this.yearLow, that.yearLow)
-				&& Objects.equal(this.priceHistory, that.priceHistory)
-				&& Objects.equal(this.dividendHistory, that.dividendHistory);
+					&& Objects.equal(this.avgTradedVolM3, that.avgTradedVolM3)
+					&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
+					&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl) && Objects.equal(this.beta5Yr, that.beta5Yr)
+					&& Objects.equal(this.businessDescription, that.businessDescription)
+					&& Objects.equal(this.bvShare, that.bvShare)
+					&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
+					&& Objects.equal(this.cashInvestments, that.cashInvestments)
+					&& Objects.equal(this.closePrice, that.closePrice)
+					&& Objects.equal(this.companyAddress, that.companyAddress)
+					&& Objects.equal(this.companyName, that.companyName)
+					&& Objects.equal(this.companyWebsite, that.companyWebsite)
+					&& Objects.equal(this.divShare, that.divShare) && Objects.equal(this.ebit, that.ebit)
+					&& Objects.equal(this.ebitda, that.ebitda) && Objects.equal(this.ebitdaMargin, that.ebitdaMargin)
+					&& Objects.equal(this.employees, that.employees) && Objects.equal(this.eps, that.eps)
+					&& Objects.equal(this.filingCurrency, that.filingCurrency)
+					&& Objects.equal(this.filingDate, that.filingDate)
+					&& Objects.equal(this.fiscalYearEnd, that.fiscalYearEnd)
+					&& Objects.equal(this.floatPercentage, that.floatPercentage)
+					&& Objects.equal(this.gtiScore, that.gtiScore)
+					&& Objects.equal(this.gtiRankChange, that.gtiRankChange) && Objects.equal(this.gvKey, that.gvKey)
+					&& Objects.equal(this.highPrice, that.highPrice) && Objects.equal(this.industry, that.industry)
+					&& Objects.equal(this.industryGroup, that.industryGroup)
+					&& Objects.equal(this.lastSalePrice, that.lastSalePrice)
+					&& Objects.equal(this.lowPrice, that.lowPrice)
+					&& Objects.equal(this.minorityInterest, that.minorityInterest)
+					&& Objects.equal(this.netDebt, that.netDebt) && Objects.equal(this.netIncome, that.netIncome)
+					&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
+					&& Objects.equal(this.openPrice, that.openPrice)
+					&& Objects.equal(this.previousCloseDate, that.previousCloseDate)
+					&& Objects.equal(this.previousClosePrice, that.previousClosePrice)
+					&& Objects.equal(this.priceVolHistYr, that.priceVolHistYr)
+					&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
+					&& Objects.equal(this.sharesSoldShort, that.sharesSoldShort)
+					&& Objects.equal(this.sharesOutstanding, that.sharesOutstanding)
+					&& Objects.equal(this.targetPriceNum, that.targetPriceNum)
+					&& Objects.equal(this.targetPrice, that.targetPrice)
+					&& Objects.equal(this.tickerCode, that.tickerCode) && Objects.equal(this.tbv, that.tbv)
+					&& Objects.equal(this.totalAssets, that.totalAssets)
+					&& Objects.equal(this.totalDebt, that.totalDebt)
+					&& Objects.equal(this.totalDebtEbitda, that.totalDebtEbitda)
+					&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+					&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+					&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+					&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
+					&& Objects.equal(this.totalRevenue, that.totalRevenue)
+					&& Objects.equal(this.tradeName, that.tradeName) && Objects.equal(this.volume, that.volume)
+					&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate)
+					&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
+					&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
+					&& Objects.equal(this.yearFounded, that.yearFounded) && Objects.equal(this.yearHigh, that.yearHigh)
+					&& Objects.equal(this.yearLow, that.yearLow) && Objects.equal(this.priceHistory, that.priceHistory)
+					&& Objects.equal(this.dividendHistory, that.dividendHistory);
 		}
 		return false;
 	}
