@@ -26,7 +26,7 @@ public class DividendService extends AbstractDataService{
 		dH.setTickerCode(id);		
 		
 		Iterable<CSVRecord> records = null; 
-		try { getCompanyData(id, "dividend-history"); }
+		try { records = getCompanyData(id, "dividend-history"); }
 		catch(Exception e) {}
 		
 		// don't need a history

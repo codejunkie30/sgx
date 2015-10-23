@@ -10,14 +10,14 @@ public class Estimate {
 	private Double tpMedianEstimate;
 	private Double tpHighEstimate;
 	private Double tpLowEstimate;
-	private int tpEstimateNum;
+	private Double tpEstimateNum;
 	private Double targetPrice;
 	private Double ltgEstimateDeviation;
 	private Double ltgMeanEstimate;
 	private Double ltgMedianEstimate;
 	private Double ltgHighEstimate;
 	private Double ltgLowEstimate;
-	private int ltgEstimateNum;
+	private Double ltgEstimateNum;
 	private Double volitality;
 	private Double industryRec;
 	private Double avgBrokerRec;
@@ -68,10 +68,10 @@ public class Estimate {
 	public void settpLowEstimate(Double tpLowEstimate) {
 		this.tpLowEstimate = tpLowEstimate;
 	}
-	public int getTpEstimateNum() {
+	public Double getTpEstimateNum() {
 		return tpEstimateNum;
 	}
-	public void setTpEstimateNum(int tpEstimateNum) {
+	public void setTpEstimateNum(Double tpEstimateNum) {
 		this.tpEstimateNum = tpEstimateNum;
 	}
 	public Double getTargetPrice() {
@@ -110,10 +110,10 @@ public class Estimate {
 	public void setLtgLowEstimate(Double ltgLowEstimate) {
 		this.ltgLowEstimate = ltgLowEstimate;
 	}
-	public int getLtgEstimateNum() {
+	public Double getLtgEstimateNum() {
 		return ltgEstimateNum;
 	}
-	public void setLtgEstimateNum(int ltgEstimateNum) {
+	public void setLtgEstimateNum(Double ltgEstimateNum) {
 		this.ltgEstimateNum = ltgEstimateNum;
 	}
 	public Double getVolitality() {
