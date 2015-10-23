@@ -251,7 +251,11 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 		
 		Company company = capIQService.getCompany(input);
+		
 		if(company == null) return;
+		
+		PriceHistory historicalData = company.fullPH;
+		company.fullPH = null; // HACK to keep from serializing
 		
 		String tickerNoExchange = company.getTickerCode();
 
@@ -280,8 +284,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			indexerService.save("financial", id, c, index);
 		}
 
-		PriceHistory historicalData = capIQService.getHistoricalData(input);
-		
 		List<HistoricalValue> hvs = historicalData.getPrice();
 		saveHistorical("price", hvs, tickerNoExchange, index);
 		
