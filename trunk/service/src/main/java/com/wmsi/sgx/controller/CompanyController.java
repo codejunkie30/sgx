@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.AlphaFactor;
+import com.wmsi.sgx.model.Charts;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
@@ -48,6 +49,18 @@ public class CompanyController{
 		ret.put("alphaFactors", getAlphas(search));
 		ret.put("gtis", getGtis(search));
 		ret.put("dividendHistory", getDividendHistory(search));
+		ret.put("financials", getFinancials(search));
+		ret.put("estimates",getEstimates(search));
+		return ret;
+	}
+	
+	@RequestMapping(value="company/techChart")
+	public Map<String, Object> getTechChart(@RequestBody IdSearch search) throws CompanyServiceException {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("company", getCompany(search));
+		ret.put("dividendHistory", getDividendHistory(search));
+		ret.put("financials", getFinancials(search));
+		ret.put("estimates",getEstimates(search));
 		return ret;
 	}
 	

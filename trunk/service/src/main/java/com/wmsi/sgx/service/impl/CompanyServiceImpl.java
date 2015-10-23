@@ -241,7 +241,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService estimatesSerach;
 	
 	@Override
-	//@Cacheable(value = "estimate")
+	@Cacheable(value = "estimate")
 	public List<Estimate> loadEstimates(String id) throws CompanyServiceException {
 		try{
 			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
