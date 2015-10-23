@@ -283,21 +283,23 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
 			indexerService.save("financial", id, c, index);
 		}
-
-		List<HistoricalValue> hvs = historicalData.getPrice();
-		saveHistorical("price", hvs, tickerNoExchange, index);
 		
-		hvs = historicalData.getHighPrice();
-		saveHistorical("highPrice", hvs, tickerNoExchange, index);
+		if (historicalData != null) {
+			List<HistoricalValue> hvs = historicalData.getPrice();
+			saveHistorical("price", hvs, tickerNoExchange, index);
+			
+			hvs = historicalData.getHighPrice();
+			saveHistorical("highPrice", hvs, tickerNoExchange, index);
 
-		hvs = historicalData.getLowPrice();
-		saveHistorical("lowPrice", hvs, tickerNoExchange, index);
+			hvs = historicalData.getLowPrice();
+			saveHistorical("lowPrice", hvs, tickerNoExchange, index);
 
-		hvs = historicalData.getOpenPrice();
-		saveHistorical("openPrice", hvs, tickerNoExchange, index);
+			hvs = historicalData.getOpenPrice();
+			saveHistorical("openPrice", hvs, tickerNoExchange, index);
 
-		hvs = historicalData.getVolume();
-		saveHistorical("volume", hvs, tickerNoExchange, index);
+			hvs = historicalData.getVolume();
+			saveHistorical("volume", hvs, tickerNoExchange, index);
+		}
 
 		DividendHistory dividendData = capIQService.getDividendData(input);
 		List<DividendValue> dividendValue = dividendData.getDividendValues();
