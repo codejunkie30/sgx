@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 import com.google.gson.Gson;
@@ -46,10 +48,14 @@ public class FinancialsService extends AbstractDataService {
 			Map<String, Object> financialMap = new HashMap<String, Object>();
 			financialMap.put("absPeriod", entry.getKey());
 			financialMap.put("tickerCode", tickerNoEx);
+			Date period = null;
 			for (CSVRecord record : records) {				
-				financialMap.put(record.get(2), record.get(3));				
+				financialMap.put(record.get(2), record.get(3));
+				if (period == null && StringUtils.stripToNull(record.get(5)) != null) period = new Date(record.get(5));
 			}
+			if (period != null) financialMap.put("periodDate", period);
 			JsonElement jsonElement = gson.toJsonTree(financialMap);
+			financialMap.put("period", tickerNoEx);
 			Financial fin = gson.fromJson(jsonElement, Financial.class);
 			List<Financial> list = financials.getFinancials();
 			list.add(fin);			
