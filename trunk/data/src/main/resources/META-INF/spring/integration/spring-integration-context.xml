@@ -17,10 +17,8 @@
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>
-		<!-- 
 		<int:service-activator ref="xfRetrievalService" method="init"/>
 		<int:service-activator ref="xfSplitterService" method="init"/>
-		 -->
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="gtiService" method="init"/>
 		<int:service-activator ref="vwapService" method="init"/>
