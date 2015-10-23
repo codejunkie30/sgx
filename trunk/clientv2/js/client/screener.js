@@ -112,6 +112,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
 			this.searchEvents[name](this);
 			
+			this.hideLoading();
 		},
 		
 		/**

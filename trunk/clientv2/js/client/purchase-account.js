@@ -5,11 +5,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 		purchaseToken: ko.observable(),
 		initPage: function() {
 			
-			//Update data.type
-			//Update data.expirationDate
-			
-			
-			//var token = this.getURLParam('ref');
 			var endpoint = PAGE.fqdn + "/sgx/account/premiumMessage";
 			var postType = 'POST';
 			var params = {};
@@ -23,20 +18,18 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				postType,
 				params,
 				jsonp,
-				function(data, textStatus, jqXHR){
-					console.log(data.message);
+				function(data, textStatus, jqXHR){					
 					//Display success message
 					if (data.message != undefined){
 						
 						PURCHASE.purchaseToken($.trim(data.message));
-						this.showLoading();	
-						
-						//PAGE.modal.open({  width: 550, maxWidth: 550, height: 200, content: '<p>You will be redirected off site to complete your StockFacts Premium account purchase.</p>' }); 	
+						PAGE.showLoading();	
+							
 						setTimeout(function() {
 						    $("#txnForm").submit();
 						  }, 500);
 					} else {
-						$('.message').html(data.error);
+						$('.message').html(data.message);
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){

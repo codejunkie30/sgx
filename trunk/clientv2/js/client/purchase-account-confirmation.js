@@ -19,11 +19,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
-					//Display success message
-					console.log(data);
-					if (token != undefined){
-						console.log(data);
-						$('.message').html(data.message);
+					//Display success message					
+					if (token != undefined || data.reason != undefined){
+						$('.message').html(data.reason);
 						
 					} else {
 						$('.message').html('Account Created');

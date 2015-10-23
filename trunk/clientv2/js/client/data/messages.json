@@ -39,7 +39,7 @@
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {
-				"emailResent": "An email was sent to with new validation requirements.",
+				"emailResent": "An email has been sent for you to validate your email address.",
 				"invalidUser": "Your account is currently disabled."	
 			},
 			"purchaseAccount": {
