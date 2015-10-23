@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -111,8 +112,8 @@ public class CompanyService extends AbstractDataService {
 			if(list.contains(record.get(2))){
 				HistoricalValue hv = new HistoricalValue();
 				hv.setTickerCode(input.split(":")[0]);								
-				
-				Double value  = !record.get(3).equalsIgnoreCase("null") || record.get(3).length() == 0 ? Double.parseDouble(record.get(3)) : null;
+				String cVal = StringUtils.stripToNull(record.get(3));
+				Double value  = cVal.equalsIgnoreCase("null") ? null : Double.parseDouble(cVal);
 				hv.setValue(value);
 				hv.setDate(new Date(record.get(5)));
 				
