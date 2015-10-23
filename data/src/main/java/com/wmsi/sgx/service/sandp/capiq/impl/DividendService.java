@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.DividendHistory;
@@ -36,10 +37,10 @@ public class DividendService extends AbstractDataService{
 				
 		for (CSVRecord record : records) {
 			DividendValue dV = new DividendValue();
-			dV.setDividendExDate(new Date(record.get(2)));
-			dV.setDividendPayDate(new Date(record.get(3)));
-			dV.setDividendPrice(Double.parseDouble(record.get(4)));
-			dV.setDividendType(record.get(5));				
+			if (StringUtils.stripToNull(record.get(2)) != null) dV.setDividendExDate(new Date(record.get(2)));
+			if (StringUtils.stripToNull(record.get(3)) != null) dV.setDividendPayDate(new Date(record.get(3)));
+			if (StringUtils.stripToNull(record.get(4)) != null) dV.setDividendPrice(Double.parseDouble(record.get(4)));
+			if (StringUtils.stripToNull(record.get(5)) != null) dV.setDividendType(record.get(5));				
 	    	list.add(dV);		    	
 		}
 		
