@@ -50,7 +50,7 @@ public class CompanyService extends AbstractDataService {
 			
 			company.setClosePrice(priceHistory.getPrice().get(0).getValue());
 			
-			if (priceHistory.getPrice().size() >= 1 && priceHistory.getPrice().get(1).getValue() != null) {
+			if (priceHistory.getPrice().size() > 1 && priceHistory.getPrice().get(1).getValue() != null) {
 				company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
 				company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
 			}
@@ -115,7 +115,7 @@ public class CompanyService extends AbstractDataService {
 				HistoricalValue hv = new HistoricalValue();
 				hv.setTickerCode(input.split(":")[0]);								
 				String cVal = StringUtils.stripToNull(record.get(3));
-				Double value  = cVal.equalsIgnoreCase("null") ? null : Double.parseDouble(cVal);
+				Double value  = cVal == null || cVal.equalsIgnoreCase("null") ? null : Double.parseDouble(cVal);
 				hv.setValue(value);
 				hv.setDate(new Date(record.get(5)));
 				
