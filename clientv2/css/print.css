@@ -64,10 +64,10 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .terms ul li { margin-bottom: 11.5px; }
 .terms p { font-size: 11.5px; }
 
-.stock-events { max-height: 580px; overflow: hidden; margin: 10px 0 25px; }
+.stock-events { max-height: 610px; margin: 10px 0 25px; }
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
-.stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 12px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
+.stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 11.5px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
 .stock-events li span { color: #0e236b; cursor: pointer; font-weight: bold; text-decoration: none; line-height: 15px; }
 
 .recommendation { overflow: hidden; padding-top: 25px; margin: 10px 0; }
@@ -103,7 +103,6 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 
 .factor .label img,
 .alpha-factors .title img { display: none; }
-
 .factor { margin: 0 0 10px 0; display: inline-block; width: 100%; }
 .factor .label { position: relative; display: block; padding-right: 24px; font-weight: bold; font-size: 13px; line-height: 16px; }
 .factor .quintiles { position: absolute; display: inline-block; width: 0; height: 11px; background: url("../img/slider-full.png") no-repeat; margin: 4px auto; cursor: pointer; white-space: nowrap; padding: 0px; }

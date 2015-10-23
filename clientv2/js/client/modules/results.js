@@ -87,7 +87,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			// resize
 			PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
-			
+			PAGE.hideLoading();
 		},
 		
 		formatField: function(field, row, id) {
@@ -237,6 +237,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					return;
 				} 
 				PAGE.resizeIframe(PAGE.getTrueContentHeight(), this.resultsTop());
+				PAGE.hideLoading();
 			} , mdl);
 			
 			mdl.pages = ko.computed(function() { 
@@ -258,6 +259,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					return;
 				}
 				setTimeout(function() { PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1); }, 50);
+				PAGE.hideLoading();
 			}, mdl);
 			
 			/**
@@ -287,9 +289,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             			if (typeof b1 === "undefined") b1 = -99999999999999;
             			if (typeof a1 === "undefined") a1 = -99999999999999;
             			return b1-a1;
-            		} 
-            		
-            		return a1.localeCompare(b1);
+            		}
+					if (a1 != null) { return a1.localeCompare(b1); }
             	});
             	
             	mdl.companies(companies);

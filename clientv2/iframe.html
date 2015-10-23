@@ -88,7 +88,11 @@
     		var curId = getParameterByName("page");
     		var curPage = getPageBase(curId);
     		var companyURL = remoteDomain + curPage + "#" + encodeURIComponent(currentDomain);
-    		$("#company-info").attr("src", companyURL);
+    		//$("#company-info").attr("src", companyURL);
+			
+			// Fix for history issue in Firefox.  Works across browsers
+			var frame = $("#company-info")[0];
+			frame.contentWindow.location.replace(companyURL);
     		
     	}
     	
