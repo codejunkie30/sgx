@@ -425,7 +425,7 @@ from (
 		left join ciqBusinessDescription bd on c.companyId=bd.companyId
 	) pvt
 unpivot
-	(dataItemValue for WMSIAPI in (tickerCode, companyName, contact, yearFounded, fiscalYearEnd, filingCurrency, website, businessDescription)) as unpvt
+	(dataItemValue for WMSIAPI in (tickerCode, companyName, companyAddress, yearFounded, fiscalYearEnd, filingCurrency, companyWebsite, businessDescription)) as unpvt
 union
 
 --Industry and Industry Group
