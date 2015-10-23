@@ -17,6 +17,7 @@
 			<int:header name="indexDate" expression="headers.jobDate" />			
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>
+		<int:service-activator ref="xfRetrievalService" method="init"/>
 		<int:service-activator ref="xfSplitterService" method="init"/>
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="gtiService" method="init"/>
@@ -200,6 +201,9 @@
 		<property name="vwapData" ref="vwapFileResource"/>
 	</bean>
 	 	
+	<bean id="xfRetrievalService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFRetrievalService" />
+	
 	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
+	
 
 </beans>
