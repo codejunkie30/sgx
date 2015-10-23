@@ -82,7 +82,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		// we need to decide whether to use the latest year end
     		// or quarter data
     		var isQ4 = estimates[estimates.length - 1].period.indexOf("LTM4") != -1;
-    		estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);  
+    		estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
 			
 			this.dataPoints(estimates);
 			this.currency(estimates[0].filingCurrency);
