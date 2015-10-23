@@ -48,8 +48,9 @@ public class CompanyService extends AbstractDataService {
 		
 		if (priceHistory.getPrice().size() > 0) {
 			
-			if (priceHistory.getPrice().get(1).getValue() != null) {
-				company.setClosePrice(priceHistory.getPrice().get(0).getValue());
+			company.setClosePrice(priceHistory.getPrice().get(0).getValue());
+			
+			if (priceHistory.getPrice().size() >= 1 && priceHistory.getPrice().get(1).getValue() != null) {
 				company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
 				company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
 			}
