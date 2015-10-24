@@ -13,6 +13,8 @@ public interface AccountService{
 
 	Account createPremiumAccount(User user);
 	
+	Boolean convertToExpiry(User user);
+	
 	AccountModel updateAccount(UpdateAccountModel dto);
 
 }

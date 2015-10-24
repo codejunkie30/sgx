@@ -21,7 +21,7 @@ public class Estimate {
 	private Double volitality;
 	private Double industryRec;
 	private Double avgBrokerRec;
-	private Double normalizedEps;
+	private Double normalizedEPS;
 	private Double eps;
 	private Double revenue;
 	private Double ebit;
@@ -134,11 +134,18 @@ public class Estimate {
 	public void setAvgBrokerRec(Double avgBrokerRec) {
 		this.avgBrokerRec = avgBrokerRec;
 	}
-	public Double getNormalizedEps() {
-		return normalizedEps;
+	
+	public Double getTpLowEstimate() {
+		return tpLowEstimate;
 	}
-	public void setNormalizedEps(Double normalizedEps) {
-		this.normalizedEps = normalizedEps;
+	public void setTpLowEstimate(Double tpLowEstimate) {
+		this.tpLowEstimate = tpLowEstimate;
+	}
+	public Double getNormalizedEPS() {
+		return normalizedEPS;
+	}
+	public void setNormalizedEPS(Double normalizedEPS) {
+		this.normalizedEPS = normalizedEPS;
 	}
 	public Double getEps() {
 		return eps;
@@ -182,11 +189,12 @@ public class Estimate {
 	public void setTickerCode(String tickerCode) {
 		this.tickerCode = tickerCode;
 	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(tpEstimateDeviation, tpMeanEstimate, tpMedianEstimate, tpHighEstimate, tpLowEstimate,
 				tpEstimateNum, targetPrice, ltgEstimateDeviation, ltgMeanEstimate, ltgMedianEstimate, ltgHighEstimate,
-				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEps, eps, revenue,
+				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEPS, eps, revenue,
 				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period);
 	}
 	@Override
@@ -209,7 +217,7 @@ public class Estimate {
 					&& Objects.equal(this.volitality, that.volitality)
 					&& Objects.equal(this.industryRec, that.industryRec)
 					&& Objects.equal(this.avgBrokerRec, that.avgBrokerRec)
-					&& Objects.equal(this.normalizedEps, that.normalizedEps) && Objects.equal(this.eps, that.eps)
+					&& Objects.equal(this.normalizedEPS, that.normalizedEPS) && Objects.equal(this.eps, that.eps)
 					&& Objects.equal(this.revenue, that.revenue) && Objects.equal(this.ebit, that.ebit)
 					&& Objects.equal(this.ebt, that.ebt) && Objects.equal(this.netIncomeExcl, that.netIncomeExcl)
 					&& Objects.equal(this.netIncome, that.netIncome) && Objects.equal(this.tickerCode, that.tickerCode)
@@ -227,7 +235,7 @@ public class Estimate {
 				.add("ltgMedianEstimate", ltgMedianEstimate).add("ltgHighEstimate", ltgHighEstimate)
 				.add("ltgLowEstimate", ltgLowEstimate).add("ltgEstimateNum", ltgEstimateNum)
 				.add("volitality", volitality).add("industryRec", industryRec).add("avgBrokerRec", avgBrokerRec)
-				.add("normalizedEps", normalizedEps).add("eps", eps).add("revenue", revenue).add("ebit", ebit)
+				.add("normalizedEPS", normalizedEPS).add("eps", eps).add("revenue", revenue).add("ebit", ebit)
 				.add("ebt", ebt).add("netIncomeExcl", netIncomeExcl).add("netIncome", netIncome)
 				.add("tickerCode", tickerCode).add("period", period).toString();
 	}

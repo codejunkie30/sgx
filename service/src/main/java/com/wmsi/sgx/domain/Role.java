@@ -12,5 +12,8 @@ public enum Role{
 	ROLE_PREMIUM,
 	
 	// Trial access
-	ROLE_TRIAL;	
+	ROLE_TRIAL,	
+	
+	// Expired access
+	ROLE_EXPIRED;	
 }
