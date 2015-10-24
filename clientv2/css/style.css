@@ -1054,3 +1054,8 @@ background: url("../img/title-back.png");
 .odd {
   background-color: #e8e8e8;
 }
+
+.hidden {display:none;}
+.display-hidden {
+  display:block !important;
+}
