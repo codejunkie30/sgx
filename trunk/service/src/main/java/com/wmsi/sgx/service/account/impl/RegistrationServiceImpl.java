@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.ChangePasswordModel;
+import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AccountCreationException;
@@ -104,7 +105,28 @@ public class RegistrationServiceImpl implements RegistrationService{
 		userService.saveUser(user);
 		
 		// Create premium account record
-		accountService.createPremiumAccount(user);
+		
+		
+		return accountService.convertToExpiry(user);
+	}
+	
+	@Override
+	@Transactional
+	public Boolean convertToExpiredAccount(String email) throws UserNotFoundException{
+
+		User user = userService.getUserByUsername(email);
+		
+		// Remove trial access
+		if(user.hasRole(Role.ROLE_TRIAL))
+			user.removeRole(Role.ROLE_TRIAL);
+				
+		// Add expired role
+		user.addRole(Role.ROLE_EXPIRED);
+		
+		userService.saveUser(user);
+		
+		// Create premium account record
+		accountService.convertToExpiry(user);
 		
 		return true;
 	}

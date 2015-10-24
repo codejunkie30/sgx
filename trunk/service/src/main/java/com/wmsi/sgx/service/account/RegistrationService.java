@@ -3,6 +3,7 @@ package com.wmsi.sgx.service.account;
 import javax.mail.MessagingException;
 
 import com.wmsi.sgx.model.ChangePasswordModel;
+import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
 
 public interface RegistrationService{
@@ -14,6 +15,8 @@ public interface RegistrationService{
 	Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException;
 
 	Boolean convertToPremiumAccount(UserModel dto);
+	
+	Boolean convertToExpiredAccount(String email) throws UserNotFoundException;
 
 	Boolean sendPasswordReset(String email) throws UserNotFoundException, MessagingException;
 

@@ -3,6 +3,8 @@ package com.wmsi.sgx.service.account.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.AccessType;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -46,7 +48,11 @@ public class AccountServiceImpl implements AccountService{
 			ret.setEmail(account.getUser().getUsername());
 			ret.setStartDate(account.getStartDate());
 			ret.setExpirationDate(account.getExpirationDate());
-			ret.setType(account.getType());
+			if(account.getActive().equals(false)){
+				ret.setType(AccountType.EXPIRED);
+			}else{
+				ret.setType(account.getType());
+			}
 			ret.setContactOptIn(account.getContactOptIn());
 			ret.setCurrency(account.getCurrency());
 		}
@@ -100,6 +106,24 @@ public class AccountServiceImpl implements AccountService{
 		
 	}
 	
+	@Override
+	public Boolean convertToExpiry(User user){
+		Boolean success = false;
+		List<Account> accounts = accountRepository.findAllByUser(user);
+		
+		for(Account acc : accounts){
+			
+			// Deactivate trial account
+			if(acc.getType().equals(AccountType.TRIAL)){
+				acc.setActive(false);
+				accountRepository.save(acc);
+				success  = true;
+			}
+		}
+		
+		return success;
+		
+	}
 	private Account createAccount(User user, AccountType type, int expirationDays){
 
 		Account acc = new Account();

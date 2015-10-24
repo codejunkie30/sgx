@@ -59,16 +59,35 @@ public class UserController{
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
 	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException{
 	
-		// Catch all exceptions and always return success so attackers have no way to guess at 
-		// usernames. 
+		 
 		try{
-			registrationService.sendPasswordReset(user.getUsername());	
+			return registrationService.sendPasswordReset(user.getUsername());	
+			
 		}
 		catch(UserNotFoundException ue){
 			log.debug("Password reset user not found", ue );
 		}
 		catch(Exception e){
 			log.debug("Exception occrued in password reset", e);			
+		}
+		
+		return false;
+		
+	}
+	//Strictly used for internal testing, 
+	//you can make a user expired by calling this api endpoint  
+	@RequestMapping(value = "expireUser", method = RequestMethod.POST)
+	public @ResponseBody Boolean expireUser(@RequestBody ResetUser user) throws UserNotFoundException{
+	
+		
+		try{
+			registrationService.convertToExpiredAccount(user.getUsername());	
+		}
+		catch(UserNotFoundException ue){
+			log.debug("Expire User not found", ue );
+		}
+		catch(Exception e){
+			log.debug("Exception occrued expire User Call", e);			
 		}
 		
 		return true;
