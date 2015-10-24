@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.model.AlphaFactor;
-import com.wmsi.sgx.model.Charts;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
@@ -23,12 +22,25 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.charts.BalanceSheet;
+import com.wmsi.sgx.model.charts.BalanceSheets;
+import com.wmsi.sgx.model.charts.CashFlow;
+import com.wmsi.sgx.model.charts.CashFlows;
+import com.wmsi.sgx.model.charts.GrowthOverPriorYear;
+import com.wmsi.sgx.model.charts.GrowthOverPriorYears;
+import com.wmsi.sgx.model.charts.IncomeStatement;
+import com.wmsi.sgx.model.charts.IncomeStatements;
+import com.wmsi.sgx.model.charts.Ratio;
+import com.wmsi.sgx.model.charts.Ratios;
+import com.wmsi.sgx.model.search.ChartDomain;
+import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.conversion.ModelMapper;
+import com.wmsi.sgx.service.search.SearchServiceException;
 
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
@@ -105,6 +117,70 @@ public class CompanyController{
 		ret.setEstimates(hits);
 		return ret;
 	}
+	
+	@RequestMapping(value="company/techCharts/balanceSheets")
+	public BalanceSheets getBalanceSheetCharts(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {	
+		ChartRequestModel req = new ChartRequestModel();
+		req.setChartDomain(ChartDomain.BALANCE_SHEET);
+		req.setId(search.getId());
+		@SuppressWarnings("unchecked")
+		List<BalanceSheet> hits = (List<BalanceSheet>) companyService.loadChartData(req);
+		BalanceSheets ret = new BalanceSheets();
+		ret.setBalanceSheet(hits);
+		return ret;
+	}
+	
+
+	@RequestMapping(value="company/techCharts/ratios")
+	public Ratios getRatioChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
+		ChartRequestModel req = new ChartRequestModel();
+		req.setChartDomain(ChartDomain.RATIOS);
+		req.setId(search.getId());
+		@SuppressWarnings("unchecked")
+		List<Ratio> hits = (List<Ratio>) companyService.loadChartData(req);
+		Ratios ret = new Ratios();
+		ret.setRatios(hits);
+		return ret;
+	}
+	
+
+	@RequestMapping(value="company/techCharts/income")
+	public IncomeStatements getIncomeChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
+		ChartRequestModel req = new ChartRequestModel();
+		req.setChartDomain(ChartDomain.INCOME_STATEMENT);
+		req.setId(search.getId());
+		@SuppressWarnings("unchecked")
+		List<IncomeStatement> hits = (List<IncomeStatement>) companyService.loadChartData(req);
+		IncomeStatements ret = new IncomeStatements();
+		ret.setIncomeStatements(hits);
+		return ret;
+	}
+	
+
+	@RequestMapping(value="company/techCharts/growth")
+	public GrowthOverPriorYears getGrowthChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
+		ChartRequestModel req = new ChartRequestModel();
+		req.setChartDomain(ChartDomain.GROWTH_OVER_PRIOR_YEAR);
+		req.setId(search.getId());
+		@SuppressWarnings("unchecked")
+		List<GrowthOverPriorYear> hits = (List<GrowthOverPriorYear>) companyService.loadChartData(req);
+		GrowthOverPriorYears ret = new GrowthOverPriorYears();
+		ret.setGrowthOverPriorYears(hits);
+		return ret;
+	}
+	
+
+	@RequestMapping(value="company/techCharts/cashFlow")
+	public CashFlows getCashFlowChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
+		ChartRequestModel req = new ChartRequestModel();
+		req.setChartDomain(ChartDomain.CASH_FLOWS);
+		req.setId(search.getId());
+		@SuppressWarnings("unchecked")
+		List<CashFlow> hits = (List<CashFlow>) companyService.loadChartData(req);
+		CashFlows ret = new CashFlows();
+		ret.setCashFlows(hits);
+		return ret;
+	}
 
 	@RequestMapping(value="company/gtis")
 	public GovTransparencyIndexes getGtis(@RequestBody IdSearch search) throws CompanyServiceException {		
@@ -134,7 +210,7 @@ public class CompanyController{
 	}
 
 	@RequestMapping(value="company/relatedCompanies")
-	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException {		
+	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException{		
 		
 		SearchResults searchResults = new SearchResults();
 		List<SearchCompany> searchCompanies = new ArrayList<SearchCompany>();

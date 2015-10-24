@@ -2,6 +2,8 @@ package com.wmsi.sgx.service;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
@@ -11,6 +13,8 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.search.ChartRequestModel;
+import com.wmsi.sgx.service.search.SearchServiceException;
 
 public interface CompanyService{
 
@@ -41,5 +45,7 @@ public interface CompanyService{
 	DividendHistory loadDividendHistory(String id) throws CompanyServiceException;
 	
 	List<Estimate> loadEstimates(String id) throws CompanyServiceException;
+	
+	List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException;
 
 }

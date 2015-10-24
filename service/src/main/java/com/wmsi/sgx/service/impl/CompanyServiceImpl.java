@@ -6,7 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.wmsi.sgx.controller.error.ErrorResponse;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
@@ -16,6 +18,13 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.charts.BalanceSheet;
+import com.wmsi.sgx.model.charts.CashFlow;
+import com.wmsi.sgx.model.charts.GrowthOverPriorYear;
+import com.wmsi.sgx.model.charts.IncomeStatement;
+import com.wmsi.sgx.model.charts.Ratio;
+import com.wmsi.sgx.model.search.ChartDomain;
+import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.search.SearchResult;
@@ -86,7 +95,8 @@ public class CompanyServiceImpl implements CompanyService{
 			throw new CompanyServiceException("Exception loading financials", e);
 		}
 	}
-
+	
+	
 	@Autowired
 	private SearchService gtiSearch;
 	
@@ -249,5 +259,27 @@ public class CompanyServiceImpl implements CompanyService{
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading estimates", e);
 		}
+	}
+	
+	@Override
+	public List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException {
+		
+			if(search.getChartDomain().equals(ChartDomain.BALANCE_SHEET)){
+				return financialSearch.search(new FinancialsQueryBuilder(search.getId()), BalanceSheet.class).getHits();
+			}else{
+				if(search.getChartDomain().equals(ChartDomain.CASH_FLOWS)){
+					return financialSearch.search(new FinancialsQueryBuilder(search.getId()), CashFlow.class).getHits();
+				}else{
+					if(search.getChartDomain().equals(ChartDomain.GROWTH_OVER_PRIOR_YEAR)){
+						return financialSearch.search(new FinancialsQueryBuilder(search.getId()), GrowthOverPriorYear.class).getHits();
+					}else{
+						if(search.getChartDomain().equals(ChartDomain.INCOME_STATEMENT)){
+							return financialSearch.search(new FinancialsQueryBuilder(search.getId()), IncomeStatement.class).getHits();
+						}else{
+							if(search.getChartDomain().equals(ChartDomain.RATIOS)){
+								return financialSearch.search(new FinancialsQueryBuilder(search.getId()), Ratio.class).getHits();
+							}else{
+								throw new SearchServiceException("Exception loading ChartingData");
+							}}}}}	
 	}
 }
