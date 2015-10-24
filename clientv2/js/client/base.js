@@ -35,11 +35,37 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		update: function(element, valueAccessor, allBindings) {
 	        return KO.bindingHandlers.text.update(element,function(){
 	        	if (valueAccessor() == null) return $(element).html(); 
+	        	//console.log(allBindings().text);
 	            return PAGE.getFormatted(KO.unwrap(valueAccessor()), allBindings().text);
 	        });
 				
 		}
-	}
+	};
+
+	KO.bindingHandlers.precision = {
+		update: function(element, valueAccessor, allBindings) {
+			var precision = valueAccessor();
+			var value = allBindings().text;
+			return KO.bindingHandlers.text.update(element, function(){
+				if(value == null || value == '-') return '-';
+ 				var roundingMultiplier = Math.pow(10, precision);
+                var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
+                valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+                //ensure trailing .00;
+                valueToWrite = valueToWrite.toString();
+                if(valueToWrite.indexOf('.') != -1) {
+                	if(valueToWrite.split('.')[1].length != 2) {
+                		valueToWrite += '0';
+                	}
+                } else {
+
+                	valueToWrite += '.00';
+                }
+                return valueToWrite;
+
+			});
+		}
+	};
 
 	KO.bindingHandlers.prepend = {
 			update: function(element, valueAccessor, allBindings) {
@@ -227,7 +253,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
 		},
 		
-        getFormatted: function(fmt, value) {
+        getFormatted: function(fmt, value, decimals) {
         	
         	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
         	if (value === "" || value === "-") return value;
