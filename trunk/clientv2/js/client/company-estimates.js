@@ -4,7 +4,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			
 		quarterlyEst: null,
 		annualEst: null,
-		dataPoints: ko.observable([]),
+		estimates: null,
+
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
@@ -20,9 +21,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		currentDay: ko.observable(),
 		quarterlyTab: ko.observable(true),
 	    annualTab: ko.observable(false),
+
+        summaryData: null,
 		
 		initPage: function() {
 			
+            var me = this;
 			// extend tearsheet
 			$.extend(true, this, TS);
 
@@ -30,7 +34,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			this.quarterlyEst = JSON.parse(ESTIMATES).quarterly;
 			this.annualEst = JSON.parse(ESTIMATES).annual;
 			this.series([]);
-			this.dataPoints([]);
+			this.estimates = {
+                quarterly:[],
+                annually: []
+            };
 			this.currency("");
 
 			this.legendItems = ko.computed(function() {
@@ -39,6 +46,22 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 				$.each(chart.series, function(idx, series) { ret.push(series.userOptions) });
 				return ret;
 			}, this);
+
+            this.quarterlyTab.subscribe(function(data) {
+                if(data) 
+                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+            });
+            this.annualTab.subscribe(function(data) {
+                if(data)
+                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+            });
+            this.series.subscribe(function(data) {
+                if(data.length == 0) {
+                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+                }
+            });
+
+
 			
 			var self = this;
 			this.init(function() { self.finish(self); });
@@ -49,7 +72,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		finish: function(me) {
 			
     		// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
+    		// ko.applyBindings(this, $("body")[0]);
 			
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
 			
@@ -58,54 +81,54 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'GET';
     		var params = { id: me.ticker };
-    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { console.log(data); me.initFinancials(me, data);  }, undefined, undefined);
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
     		
 		},
 		
 		initFinancials: function(me, data) {
 			
-			//console.log(me);
-			//console.log(data);
-			
-    		var estimates = data.estimates.slice();
+            console.log(data);
+            this.dataExists = ko.observable(data.estimates.length);
+            this.summaryData = data.estimates[0];  //index 0 is summaryData
+
+
+    		var combinedData = data.estimates.slice(1); //use data from index 1
     		var currency = null;
-    		
-    		// let's make sure they're sorted
-    		estimates.sort(function(a, b) {
-        		var a = parseInt(a.period.replace("FY", "").replace("LTM", ""));
-        		var b = parseInt(b.period.replace("FY", "").replace("LTM", ""));
-        		return a - b;
-        	});          		
+
+            for( var i = 0, len = combinedData.length; i < len; i++ ) {
+                var val = combinedData[i];
+                if (/FY/.test(val.period)){
+                    this.estimates.annually.push(val);
+                }else {
+                    this.estimates.quarterly.push(val);
+                }
+            }
+
         	
-        	if (estimates.length == 5) return estimates;
+        	//if (estimates.length == 5) return estimates;
+
+
+
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
-    		var isQ4 = estimates[estimates.length - 1].period.indexOf("LTM4") != -1;
-    		estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
-			
-			this.dataPoints(estimates);
-			this.currency(estimates[0].filingCurrency);
+
+    		//var isQ4 = combinedData[combinedData.length - 1].period.indexOf("LTM4") != -1;
+    		//estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
+
+            if(this.dataExists())
+			 this.currency(combinedData[0].filingCurrency);
 			
 			// initialize the chart without a series
 			this.initChart(me);
+
+            ko.applyBindings(this, $("body")[0]);
 			
     		// resize
-			me.resizeIframeSimple();
+			
 			
 		},		
 		initChart: function(me) {
-			
-			// categories
-			var categories = [];
-    		$(".data-point-container thead:first th").not(".section, .uncheck").each(function(idx, el) {
-    			var txt = "";
-    			$("span", $(this)).each(function(i, e) {
-    				if (i > 0) txt += "<br />";
-    				txt += $(this).text();
-    			});
-    			categories.push(txt); 
-    		});
 
     		var chart = $('#bar-chart').highcharts({
     			chart: {
@@ -140,7 +163,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 					useHTML: true
 				},
                 xAxis: {
-                    categories: categories,
+                    categories: [],
                     plotBands: {
                         color: '#e2e2e2',
                         from: 0
@@ -154,6 +177,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 	title: null
                 }
     		});
+            setTimeout(function() { me.resizeIframeSimple(); }, 300);
     		
 		},
 		
@@ -181,9 +205,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 model.modal.open({ type: 'alert',  content: '<h4>Chart Company Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
     			return;
     		}
-    		
+
     		// check for data in the row
-    		if ($(el).siblings().filter(function() { return $(this).text() != "-"; }).length <= 0) {
+    		if ($(el).siblings().filter(function() { return $(this).text() == "-"; }).length == $(el).siblings().length -1 ) {
 				model.modal.open({ type: "alert", content: "<p>No data available for this series.</p>" });
     			return;
     		}
@@ -221,8 +245,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			var data = $(trigger).data();
 			var name = $(trigger).text().trim();
 
+            var categories = [];
+             $.each($(".data-point-container thead .col-title"), function(key, val) {
+                var txt = "";
+                $("span", $(this)).each(function(i, e) {
+                    if (i > 0) txt += "<br />";
+                    txt += $(this).text();
+                });
+                categories.push(txt); 
+             });
+
+            chart.xAxis[0].setCategories(categories);
+
 			// create series data
-			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
+			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, 
+                                    mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
 			var seriesData = [];
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
 				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
@@ -276,15 +313,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		$.each(series, function(idx, data) {  colors = $.grep(colors, function(val) { return data.color != val; }); });
     		return colors[0];    		
     	},
-    	
-    	getSeriesType: function(group) {
-    		var groups = [];
-    		groups["pure"] = "column";
-    		groups["per"] = "line";
-    		groups["ratio"] = "column";
-    		return groups[group];
-    	},
-    	
+            	
     	getChartWidth: function(seriesCount) {
     		var div = $("#bar-chart");
     		var width = (seriesCount * parseInt($(div).attr("series-increment"))) + parseInt($(div).attr("default-width"));
