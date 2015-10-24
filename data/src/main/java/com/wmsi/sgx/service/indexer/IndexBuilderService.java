@@ -19,5 +19,7 @@ public interface IndexBuilderService{
 	Boolean isJobSuccessful(List<CompanyInputRecord> records);
 
 	List<CompanyInputRecord> readTickers(String indexName, Date jobDate) throws IndexerServiceException;
+	
+	Boolean createFXIndex(String indexName) throws IndexerServiceException;
 
 }
