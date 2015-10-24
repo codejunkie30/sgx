@@ -1,7 +1,9 @@
 package com.wmsi.sgx.service.indexer.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -71,6 +73,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	@Value("${loader.ticker.file}")
 	private String tickerFile;
 	
+	@Value("${loader.fx.file}")
+	private String fxFile = "/mnt/data/fx-conversion.csv";
+	
 	@Autowired
 	private CapIQService capIQService;
 
@@ -89,7 +94,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
 	}
-
+	
 	@Override
 	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate) throws IndexerServiceException {
 
@@ -322,20 +327,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	private void saveHistorical(String type, List<HistoricalValue> values, String ticker, String index) throws IndexerServiceException {
-		
-		String txt = "";
+		StringBuilder buffer = new StringBuilder(); 
 		for(HistoricalValue data : values){
 			String val = Long.valueOf(data.getDate().getTime()).toString();
-			txt += "{ \"index\": { \"_id\": \"" + ticker.concat(val)  + "\" }}\n";
-			txt += "{ \"tickerCode\": \"" + ticker + "\", \"value\": " + data.getValue() + ", \"date\": " + val + "}\n";
+			buffer.append("{ \"index\": { \"_id\": \"" + ticker.concat(val)  + "\" }}\n");
+			buffer.append("{ \"tickerCode\": \"" + ticker + "\", \"value\": " + data.getValue() + ", \"date\": " + val + "}\n");
 		}
-		if (txt.length() > 0) indexerService.bulkSave(type, txt, index);
-/**
-		for(HistoricalValue data : values){
-			String id = ticker.concat(Long.valueOf(data.getDate().getTime()).toString());
-			indexerService.save(type, id, data, index);
-		}
-	*/
+		if (buffer.length() > 0) indexerService.bulkSave(type, buffer.toString(), index);
+		buffer.setLength(0);
 	}
 	
 	private void loadCompanyVWAP(Company company){
@@ -396,6 +395,50 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		company.setGtiScore(gti.getTotalScore());
 		company.setGtiRankChange(gti.getRankChange());
 	}
+	
+	@Override
+	public Boolean createFXIndex(@Header String indexName) throws IndexerServiceException {
+
+		log.info("Creating FX index");
+		
+		String json = "{ \"index\": { }}\n";
+		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"date\": \"%4s-%2s-%2s\", \"value\": %s }\n";
+		
+		StringBuilder buffer = new StringBuilder(); int cnt = 0;
+		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
+		    for(String line; (line = br.readLine()) != null; ) {
+		    	Object[] vals = parseFXLine(line); 
+		    	if (vals == null) continue;
+		    	buffer.append(String.format(json, vals).replace("- ", "-0"));
+		    	if (cnt % 150000 == 0 && cnt > 0) {
+		    		log.info("FX Processed {} records", cnt);
+		    		indexerService.bulkSave("fxdata", buffer.toString(), indexName);
+		    		buffer.setLength(0);
+		    	}
+		    	cnt++;
+		    }
+		    if (buffer.length() > 0) indexerService.bulkSave("fxdata", buffer.toString(), indexName);
+		}
+		catch(Exception e) {
+			throw new IndexerServiceException("Trying to create FX conversion index", e);
+		}
+		
+		log.info("Finished Creating FX index with {} records", cnt);
+		
+		return true;
+	}
+	
+	public Object[] parseFXLine(String line) {
+		try {
+			String[] vals = line.replaceAll("\"", "").split(",");
+			if (!vals[1].equals("SGD")) return null; // temp hack to speed things up, only conversions to SGD
+			String[] dt = vals[2].split(" ")[0].split("/");
+			return new Object[] { vals[0], vals[1], dt[2], dt[0], dt[1], vals[3] };
+		}
+		catch(Exception e) {}
+		return null;
+	}
+
 	
 	
 }
