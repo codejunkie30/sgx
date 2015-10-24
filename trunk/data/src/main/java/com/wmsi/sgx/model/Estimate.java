@@ -1,5 +1,6 @@
 package com.wmsi.sgx.model;
 
+import java.util.Date;
 import java.util.List;
 import com.google.common.base.Objects;
 
@@ -30,8 +31,14 @@ public class Estimate {
 	private Double netIncome;
 	private String tickerCode;
 	private String period;
+	private Date periodDate;
 	
-	
+	public Date getPeriodDate() {
+		return periodDate;
+	}
+	public void setPeriodDate(Date periodDate) {
+		this.periodDate = periodDate;
+	}
 	public String getPeriod() {
 		return period;
 	}
@@ -201,14 +208,14 @@ public class Estimate {
 				.add("volitality", volitality).add("industryRec", industryRec).add("avgBrokerRec", avgBrokerRec)
 				.add("normalizedEPS", normalizedEPS).add("eps", eps).add("revenue", revenue).add("ebit", ebit)
 				.add("ebt", ebt).add("netIncomeExcl", netIncomeExcl).add("netIncome", netIncome)
-				.add("tickerCode", tickerCode).add("period", period).toString();
+				.add("tickerCode", tickerCode).add("period", period).add("periodDate", periodDate).toString();
 	}
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(tpEstimateDeviation, tpMeanEstimate, tpMedianEstimate, tpHighEstimate, tpLowEstimate,
 				tpEstimateNum, targetPrice, ltgEstimateDeviation, ltgMeanEstimate, ltgMedianEstimate, ltgHighEstimate,
 				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEPS, eps, revenue,
-				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period);
+				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period, periodDate);
 	}
 	@Override
 	public boolean equals(Object object) {
@@ -234,7 +241,7 @@ public class Estimate {
 					&& Objects.equal(this.revenue, that.revenue) && Objects.equal(this.ebit, that.ebit)
 					&& Objects.equal(this.ebt, that.ebt) && Objects.equal(this.netIncomeExcl, that.netIncomeExcl)
 					&& Objects.equal(this.netIncome, that.netIncome) && Objects.equal(this.tickerCode, that.tickerCode)
-					&& Objects.equal(this.period, that.period);
+					&& Objects.equal(this.period, that.period) && Objects.equal(this.periodDate, that.periodDate);
 		}
 		return false;
 	}
