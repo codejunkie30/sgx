@@ -96,6 +96,7 @@ public class CompanyService extends AbstractDataService {
 		JsonElement jsonElement = gson.toJsonTree(map);
 		Company comp = gson.fromJson(jsonElement, Company.class);
 		comp.setTickerCode(id.split(":")[0]);
+		comp.setExchange(id.split(":")[1]);
 		return comp;
 	}
 

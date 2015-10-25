@@ -1,7 +1,7 @@
 package com.wmsi.sgx.model;
 
 import java.util.Date;
-import java.util.List;
+
 import com.google.common.base.Objects;
 
 public class Estimate {
@@ -69,12 +69,7 @@ public class Estimate {
 	public void setTpHighEstimate(Double tpHighEstimate) {
 		this.tpHighEstimate = tpHighEstimate;
 	}
-	public Double gettpLowEstimate() {
-		return tpLowEstimate;
-	}
-	public void settpLowEstimate(Double tpLowEstimate) {
-		this.tpLowEstimate = tpLowEstimate;
-	}
+	
 	public Double getTpEstimateNum() {
 		return tpEstimateNum;
 	}
@@ -245,5 +240,6 @@ public class Estimate {
 		}
 		return false;
 	}
+	
 	
 }	
