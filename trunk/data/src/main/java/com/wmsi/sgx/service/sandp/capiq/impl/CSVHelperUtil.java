@@ -26,7 +26,6 @@ public class CSVHelperUtil {
 		Reader in = null;
 		CSVParser parsed = null;
 		try {
-			long cur = System.currentTimeMillis();
 			in = new FileReader(file);
 			parsed = CSVFormat.DEFAULT.parse(in);
 			for (CSVRecord record: parsed) ret.add(record);

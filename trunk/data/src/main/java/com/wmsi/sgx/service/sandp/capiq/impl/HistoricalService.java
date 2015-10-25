@@ -16,7 +16,6 @@ public class HistoricalService extends AbstractDataService {
 		return getHistoricalData(id);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public PriceHistory getHistoricalData(String id) throws ResponseParserException, CapIQRequestException {
 		return null;
 	}

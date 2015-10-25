@@ -2,8 +2,6 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.util.Calendar;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class CapIQServiceImpl implements CapIQService{
-	private static final Logger log = LoggerFactory.getLogger(CapIQServiceImpl.class);
+
 	@Autowired
 	private DataService companyService;
 	
