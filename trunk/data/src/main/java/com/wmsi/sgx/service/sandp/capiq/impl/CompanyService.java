@@ -193,11 +193,12 @@ public class CompanyService extends AbstractDataService {
 
 		Double sum = 0.0;
 
-		for (HistoricalValue v : volume)
+		for (HistoricalValue v : volume) {
+			if (v == null || v.getValue() == null) continue;
 			sum += v.getValue();
-
-		if (sum == 0)
-			return 0.0;
+		}
+			
+		if (sum == 0) return 0.0;
 
 		return avg(sum, volume.size(), 4);
 	}
