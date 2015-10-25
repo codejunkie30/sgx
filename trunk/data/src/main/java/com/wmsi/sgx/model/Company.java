@@ -14,6 +14,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_AVG_BROKER_REC_NO_CIQ")
 	private Double avgBrokerReq;
+	
+	private String exchange;
 
 	private Double avgTradedVolM3;
 
@@ -373,6 +375,15 @@ public class Company {
 
 	public void setEbitda(Double ebitda) {
 		this.ebitda = ebitda;
+	}
+	
+	
+	public String getExchange() {
+		return exchange;
+	}
+
+	public void setExchange(String exchange) {
+		this.exchange = exchange;
 	}
 
 	public Double getEbitdaMargin() {
@@ -797,24 +808,10 @@ public class Company {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hashCode(avgBrokerReq, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription,
-				bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite,
-				divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency, filingDate, fiscalYearEnd,
-				floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lastSalePrice,
-				lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin, openPrice, previousCloseDate,
-				previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort, sharesOutstanding, targetPriceNum,
-				targetPrice, tickerCode, tbv, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity,
-				totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, tradeName, volume,
-				vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh, yearLow, priceHistory,
-				dividendHistory);
-	}
-
-	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("avgTradedVolM3", avgTradedVolM3)
-				.add("avgVolumeM3", avgVolumeM3).add("basicEpsIncl", basicEpsIncl).add("beta5Yr", beta5Yr)
-				.add("businessDescription", businessDescription).add("bvShare", bvShare)
+		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("exchange", exchange)
+				.add("avgTradedVolM3", avgTradedVolM3).add("avgVolumeM3", avgVolumeM3).add("basicEpsIncl", basicEpsIncl)
+				.add("beta5Yr", beta5Yr).add("businessDescription", businessDescription).add("bvShare", bvShare)
 				.add("capitalExpenditures", capitalExpenditures).add("cashInvestments", cashInvestments)
 				.add("closePrice", closePrice).add("companyAddress", companyAddress).add("companyName", companyName)
 				.add("companyWebsite", companyWebsite).add("divShare", divShare).add("ebit", ebit).add("ebitda", ebitda)
@@ -836,14 +833,29 @@ public class Company {
 				.add("tradeName", tradeName).add("volume", volume).add("vwapAsOfDate", vwapAsOfDate)
 				.add("vwapCurrency", vwapCurrency).add("volWeightedAvgPrice", volWeightedAvgPrice)
 				.add("yearFounded", yearFounded).add("yearHigh", yearHigh).add("yearLow", yearLow)
-				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).toString();
+				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).add("fullPH", fullPH)
+				.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(avgBrokerReq, exchange, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr,
+				businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress,
+				companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency,
+				filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry,
+				industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin,
+				openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort,
+				sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt,
+				totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth,
+				totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh,
+				yearLow, priceHistory, dividendHistory, fullPH);
 	}
 
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof Company) {
 			Company that = (Company) object;
-			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq)
+			return Objects.equal(this.avgBrokerReq, that.avgBrokerReq) && Objects.equal(this.exchange, that.exchange)
 					&& Objects.equal(this.avgTradedVolM3, that.avgTradedVolM3)
 					&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
 					&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl) && Objects.equal(this.beta5Yr, that.beta5Yr)
@@ -895,7 +907,8 @@ public class Company {
 					&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
 					&& Objects.equal(this.yearFounded, that.yearFounded) && Objects.equal(this.yearHigh, that.yearHigh)
 					&& Objects.equal(this.yearLow, that.yearLow) && Objects.equal(this.priceHistory, that.priceHistory)
-					&& Objects.equal(this.dividendHistory, that.dividendHistory);
+					&& Objects.equal(this.dividendHistory, that.dividendHistory)
+					&& Objects.equal(this.fullPH, that.fullPH);
 		}
 		return false;
 	}

@@ -295,6 +295,11 @@
 				{
 					"type": "double"
 				},
+				"exchange":
+				{
+					"type": "string",
+					"index": "not_analyzed"	
+				},
 
 				"floatPercentage": 
 				{
