@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -26,12 +29,15 @@ import org.springframework.util.StringUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
+import com.wmsi.sgx.model.FXRecord;
+import com.wmsi.sgx.model.FXRecords;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndex;
@@ -47,6 +53,7 @@ import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
 import com.wmsi.sgx.service.gti.GtiService;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
+import com.wmsi.sgx.service.indexer.IndexQueryResponse;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
@@ -402,7 +409,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		log.info("Creating FX index");
 		
 		String json = "{ \"index\": { }}\n";
-		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"date\": \"%4s-%2s-%2s\", \"value\": %s }\n";
+		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"date\": \"%4s-%2s-%2s\", \"multiplier\": %s }\n";
 		
 		StringBuilder buffer = new StringBuilder(); int cnt = 0;
 		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
@@ -418,6 +425,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		    	cnt++;
 		    }
 		    if (buffer.length() > 0) indexerService.bulkSave("fxdata", buffer.toString(), indexName);
+		    buffer.setLength(0);
 		}
 		catch(Exception e) {
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
@@ -425,7 +433,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		log.info("Finished Creating FX index with {} records", cnt);
 		
-		return true;
+		return false;
 	}
 	
 	public Object[] parseFXLine(String line) {
