@@ -2,8 +2,6 @@ package com.wmsi.sgx.service.indexer;
 
 import java.io.IOException;
 
-import org.springframework.http.HttpMethod;
-
 import com.wmsi.sgx.model.indexer.Indexes;
 
 public interface IndexerService{
