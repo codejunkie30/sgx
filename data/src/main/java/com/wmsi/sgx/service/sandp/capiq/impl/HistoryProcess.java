@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
-import com.wmsi.sgx.util.DateUtil;
 
 public class HistoryProcess {
 	

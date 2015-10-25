@@ -8,14 +8,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
-import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
