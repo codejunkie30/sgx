@@ -1,7 +1,6 @@
 package com.wmsi.sgx.model;
 
 import java.util.List;
-import java.util.Date;
 
 import com.google.common.base.Objects;
 
