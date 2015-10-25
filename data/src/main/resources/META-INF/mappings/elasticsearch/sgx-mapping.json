@@ -581,7 +581,7 @@
 					"type": "date"
 				},
 	
-				"value": 
+				"multiplier": 
 				{
 					"type": "double"
 				}

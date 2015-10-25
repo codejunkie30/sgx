@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wmsi.sgx.model.indexer.Indexes;
+import com.wmsi.sgx.service.indexer.IndexQueryResponse;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 
@@ -52,6 +53,29 @@ public class IndexerServiceImpl implements IndexerService{
 	public void setRestTemplate(RestTemplate t){
 		restTemplate = t;
 		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+	}
+	
+	@Override
+	public IndexQueryResponse query(String endpoint, String json) throws IndexerServiceException {
+		
+		try{
+			
+			URI uri = buildUri(endpoint);
+			
+			log.debug("Executing query on {}", endpoint);
+			log.debug("Query: {}", json);
+			
+			JsonNode res = restTemplate.postForObject(uri, json, JsonNode.class);
+			
+			log.debug("Query returned successfully");
+			log.trace("ES Response: {}", res);
+			
+			return new IndexQueryResponse(res);
+		}
+		catch(Exception e){
+			throw new IndexerServiceException("Executing query", e);
+		}
+
 	}
 	
 	@Override

@@ -2,6 +2,8 @@ package com.wmsi.sgx.service.indexer;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpMethod;
+
 import com.wmsi.sgx.model.indexer.Indexes;
 
 public interface IndexerService{
@@ -17,5 +19,8 @@ public interface IndexerService{
 	Indexes getIndexes() throws IndexerServiceException;
 
 	Boolean deleteIndex(String indexName) throws IndexerServiceException;
+	
+	IndexQueryResponse query(String endpoint, String json) throws IndexerServiceException;
+	
 	
 }
