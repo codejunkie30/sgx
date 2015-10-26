@@ -256,5 +256,10 @@ div.wrapper {
     padding-bottom: 100px;
     border: 1px solid #cacdd3; }
 
+.indicators-description {
+  margin-top:30px;
+  text-align:left;
+}
+
 .financials-controls select {
   width: 19%; }
