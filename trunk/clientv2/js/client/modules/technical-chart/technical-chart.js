@@ -386,6 +386,9 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
 
         }
       },
+      credits: {
+        enabled:false
+      },
       title: {
         text:''
       },
