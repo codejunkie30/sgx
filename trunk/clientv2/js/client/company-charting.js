@@ -152,7 +152,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     /* End modal related code */
 
 
-    changeTab: function(tabName, event){
+    changeTab: function(tabName){
 
       if( tabName == this.activeTab ) return;
       this.activeTab(tabName);
