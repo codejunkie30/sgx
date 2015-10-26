@@ -255,3 +255,6 @@ div.wrapper {
     padding: 20px;
     padding-bottom: 100px;
     border: 1px solid #cacdd3; }
+
+.financials-controls select {
+  width: 19%; }

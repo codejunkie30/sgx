@@ -108,19 +108,36 @@
 
 		    <div class="content financials" data-bind="css:{'show-hidden': activeTab() == 'financials'}">
 		      <div class="financials-controls">
-		        <select name="" id="">
-		          <option value="">Income Statement</option>
-		        </select>
-		        <select name="" id="">
-		          <option value="">Balance Sheet</option>
-		        </select> 
-		        <select name="" id="">
-		          <option value="">Cash Flows</option>
-		        </select>  
+		      
+		        <select data-bind="options:financialsDropdowns.income,
+		                          optionsText: 'displayName',
+		                          optionsCaption:'Income Statement',
+		                          value:financialsDropdowns.selectedChoices.income"></select>
+
+		       <select data-bind="options:financialsDropdowns.balanceSheets,
+		                          optionsText: 'displayName',
+		                          value:financialsDropdowns.selectedChoices.balanceSheets,
+		                          optionsCaption:'Balance Sheet'"></select>
+
+		        <select data-bind="options:financialsDropdowns.cashFlow,
+		                          optionsText: 'displayName',
+		                          value:financialsDropdowns.selectedChoices.cashFlow,
+		                          optionsCaption:'Cash Flows'"></select>
+
+		        <select data-bind="options:financialsDropdowns.ratios,
+		                          optionsText: 'displayName',
+		                          value:financialsDropdowns.selectedChoices.ratios,
+		                          optionsCaption:'Ratios'"></select>
+
+		        <select data-bind="options:financialsDropdowns.growth,
+		                          optionsText: 'displayName',
+		                          value:financialsDropdowns.selectedChoices.growth,
+		                          optionsCaption:'Growth over Prior Year(%)'"></select>
+
+		       
 		      </div>
 
-		      <div id="financials-chart-container">
-		      </div>
+		      <div id="financials-chart-container"></div>
 		    </div><!--content financials end -->
 		<!-- ko if:modalVisible -->
 		<div class="modal" data-bind="css:{'show-hidden':modalVisible}">
