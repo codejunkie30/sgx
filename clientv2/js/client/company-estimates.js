@@ -149,12 +149,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                     return a.periodDate > b.periodDate;
                 });
 
-                this.quarterlyTableColWidth = 90/this.estimates.quarterly.length+'%';
+                this.quarterlyTableColWidth = 70/this.estimates.quarterly.length+'%';
             }
 
             if(this.estimates.annually.length > 0) {
 
-                this.annualTableColWidth = 90/this.estimates.annually.length+'%';
+                this.annualTableColWidth = 70/this.estimates.annually.length+'%';
             }
 
 
