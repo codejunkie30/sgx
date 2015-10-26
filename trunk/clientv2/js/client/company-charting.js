@@ -79,6 +79,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libCurrency: ko.observable(),
     currentDay: ko.observable(),
 
+    sectionName: 'Technical Charts',
     //reference to chart class/function
     indicators_chart: null,
 

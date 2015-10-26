@@ -9,6 +9,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		estimates: null,
         dataExists:ko.observable(),
 
+        sectionName:'Estimates',
+
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
