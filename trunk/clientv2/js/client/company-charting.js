@@ -281,6 +281,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },
 
     financialsDataCache: {},
+    getFinancialsColor: function(key){
+      var colors = { 'income':'#565a5c', 
+                      'balanceSheets': '#1e2171', 
+                      'cashFlow': '#BED600', 
+                      'ratios': '#0094B3', 
+                      'growth': '#BF0052' 
+                    };
+      return colors[key];
+    },
+
+
+
     financialsHandler: function(data, serviceObj, self) {
 
       var self = self;
@@ -302,6 +314,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       if (self.financials_chart.chartElement == null) {
         self.financials_chart.initChart({data:seriesData,
+                                          color:self.getFinancialsColor(serviceName),
                                           id: serviceName+'-series',
                                           name: serviceObj.displayName});
 
@@ -330,6 +343,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
         self.financials_chart.chartElement
                       .addSeries({data: seriesData,
+                                  color:self.getFinancialsColor(serviceName),
                                   id:serviceName+'-series',
                                   name: serviceObj.displayName,
                                   yAxis:serviceName});
