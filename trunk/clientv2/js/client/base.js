@@ -47,11 +47,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			var precision = valueAccessor();
 			var value = allBindings().text;
       var postFix = allBindings().postFix;
+      var formatNum = allBindings().formatNum;
 			return KO.bindingHandlers.text.update(element, function(){
 				if(value == null || value == '-') return '-';
         var roundingMultiplier = Math.pow(10, precision);
-        if(precision == 0)
-          return Math.round(value);
         var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
         valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
                 //ensure trailing .00;
@@ -64,8 +63,16 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
                 	valueToWrite += '.00';
                 }
+
+                if(precision == 0){
+                  valueToWrite =  Math.round(value);
+                  valueToWrite+="";
+                }
+                if(formatNum) {
+                  valueToWrite = valueToWrite.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
                 if(postFix) {
-                  return valueToWrite+postFix;
+                  valueToWrite = valueToWrite+postFix;
                 }
                 return valueToWrite;
 
@@ -497,7 +504,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
 						
-            console.log(data);
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
 							
