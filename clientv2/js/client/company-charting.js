@@ -1,5 +1,5 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearsheet", "client/modules/technical-chart/technical-chart-algorithms", "client/modules/technical-chart/technical-chart", "highstock" ], function(UTIL, ko, Validation, TS, Algorithms, HS_Chart) {
-
+define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearsheet", "client/modules/technical-chart/technical-chart-algorithms", "client/modules/technical-chart/technical-chart", "highstock" ], function(UTIL, ko, Validation, TS, Algorithms, Chart) {
+  //here
   ko.validation = Validation;
   ko.validation.init({insertMessages:false});
 
@@ -175,6 +175,67 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     },
 
+    financialsDropdowns: {
+
+      selectedChoices: {
+        income: ko.observable(),
+        balanceSheets: ko.observable(),
+        cashFlow: ko.observable(),
+        ratios: ko.observable(),
+        growth: ko.observable()
+      },
+
+      income: [{displayName: 'Total Revenue', serviceName: 'income', key: 'totalRevenue', axisName:'Income' },
+                {displayName: 'Gross Profit', serviceName: 'income', key: 'grossProfit', axisName:'Income'},
+                {displayName: 'Net Income', serviceName: 'income', key: 'netIncome', axisName:'Income'},
+                {displayName: 'EBITDA', serviceName: 'income', key: 'ebitda', axisName:'Income'},
+                {displayName: 'Normalized Diluted EPS', serviceName: 'income', key: 'eps', axisName:'Income'},
+                {displayName: 'Payout Ratio', serviceName: 'income', key: 'payoutRatio', axisName:'Income'},
+                {displayName: 'Dividends (per share)', serviceName: 'income', key: 'dividendsPerShare', axisName:'Income'}
+              ],
+
+      balanceSheets: [ {displayName: 'Total Assets', serviceName: 'balanceSheets', key: 'totalAssets', axisName:'Balance Sheets'},
+                        {displayName: 'Total Current Assets', serviceName: 'balanceSheets', key: 'totalCurrentAssets', axisName:'Balance Sheets'},
+                        {displayName: 'Net PP&E', serviceName: 'balanceSheets', key: 'netPpe', axisName:'Balance Sheets'},
+                        {displayName: 'Total Current Liabilities', serviceName: 'balanceSheets', key: 'totalCurrentLiabily', axisName:'Balance Sheets'},
+                        {displayName: 'Long-Term Debt', serviceName: 'balanceSheets', key: 'longTermDebt', axisName:'Balance Sheets'},
+                        {displayName: 'Total Liabilities', serviceName: 'balanceSheets', key: 'totalLiability', axisName:'Balance Sheets'},
+                        {displayName: 'Retained Earnings', serviceName: 'balanceSheets', key: 'retainedEarnings', axisName:'Balance Sheets'},
+                        {displayName: 'Common Stock', serviceName: 'balanceSheets', key: 'commonStock', axisName:'Balance Sheets'},
+                        {displayName: 'Total Equity', serviceName: 'balanceSheets', key: 'totalEquity', axisName:'Balance Sheets'},
+                        {displayName: 'Minority Interest', serviceName: 'balanceSheets', key: 'minorityInterest', axisName:'Balance Sheets'}
+                      ],
+
+      cashFlow: [ {displayName: 'Operations', serviceName: 'cashFlow', key: 'cashOperations', axisName:'Cash Flow'},
+                    {displayName: 'Investing', serviceName: 'cashFlow', key: 'cashInvesting', axisName:'Cash Flow'},
+                    {displayName: 'Financing', serviceName: 'cashFlow', key: 'cashFinancing', axisName:'Cash Flow'},
+                    {displayName: 'Net Change in Cash', serviceName: 'cashFlow', key: 'netChange', axisName:'Cash Flow'}
+                  ],
+
+      ratios: [ {displayName: 'Return on Assets', serviceName: 'ratios', key:'returnAssets', axisName: 'Ratios'},
+                  {displayName: 'Return on Capital', serviceName: 'ratios', key: 'returnCapital', axisName: 'Ratios'},
+                  {displayName: 'Return on Equity', serviceName: 'ratios', key: 'returnEquity', axisName: 'Ratios'},
+                  {displayName: 'Gross Margin', serviceName: 'ratios', key: 'grossMargin', axisName: 'Ratios'},
+                  {displayName: 'EBITDA Margin', serviceName: 'ratios', key: 'ebitdaMargin', axisName: 'Ratios'},
+                  {displayName: 'Net Income Margin', serviceName: 'ratios', key: 'netIncomeMargin', axisName: 'Ratios'},
+                  {displayName: 'Total Asset Turnover', serviceName: 'ratios', key: 'assetTurns', axisName: 'Ratios'},
+                  {displayName: 'Current Ratio', serviceName: 'ratios', key:'currentRatio', axisName: 'Ratios'},
+                  {displayName: 'Quick Ratio', serviceName: 'ratios', key: 'quickRatio', axisName: 'Ratios'},
+                  {displayName: 'Avg Days Inventory', serviceName: 'ratios', key: 'avgDaysInventory', axisName: 'Ratios'},
+                  {displayName: 'Avg Days Payable', serviceName: 'ratios', key: 'avgDaysPayable', axisName: 'Ratios'},
+                  {displayName: 'Avg Cash Conversion', serviceName: 'ratios', key: 'cashConversion', axisName: 'Ratios'},
+                  {displayName: 'Total Debt/Equity', serviceName: 'ratios', key:'totalDebtEquity', axisName: 'Ratios'},
+                  {displayName: 'EBITDA/Interest Expense',  serviceName: 'ratios', key: 'ebitdaInterest', axisName: 'Ratios'}
+                ],
+
+      growth: [ {displayName: 'Total Revenue', serviceName: 'growth', key: 'totalRevenue1YrAnnGrowth', axisName:'Growth' },
+                  {displayName: 'EBITDA', serviceName: 'growth', key: 'ebitda1YrAnnGrowth', axisName:'Growth' },
+                  {displayName: 'Net Income', serviceName: 'growth', key: 'netIncome1YrAnnGrowth', axisName:'Growth' },
+                  {displayName: 'Normalized Diluted EPS', serviceName: 'growth', key:'eps1YrAnnGrowth', axisName:'Growth' },
+                  {displayName: 'Common Equity', serviceName: 'growth', key: 'commonEquity1YrAnnGrowth', axisName:'Growth' }
+                ]
+    },
+
     init_nonPremium: function() {
 
       $('.technical-charting').remove();
@@ -189,7 +250,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.initModal();
       this.activeTab.subscribe(function(data){
         if(data == 'financials' && this.financials_chart == null) {
-          this.financials_chart = new HS_Chart('#financials-chart-container');
+          this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
+          this.financialsDropdowns.selectedChoices.income({displayName: 'Net Income', serviceName: 'income', key: 'netIncome', axisName:'Income'});
         }
       }, this);
 
@@ -211,13 +273,105 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
       }, this);
 
+      this.financialsDataCache = {};
+      this.financialsPayload = ko.computed({
+        read: function() {
+          var selectedObj = ko.toJS(this.financialsDropdowns.selectedChoices);
+          $.each(selectedObj, function(key, val) {
+            if (val) {
+              if( self.financialsDataCache[key] ) {
+                var cachedData = self.financialsDataCache[key];
+                self.financialsHandler( cachedData, val, self);
+              }else {
+                self.makeDataCall(val, self.financialsHandler);
+              } 
+              
+            }
+          });
+
+        },
+        owner:this
+      }),
+
       ko.applyBindings(this, $("body")[0]);
+
+    },
+
+    financialsDataCache: {},
+    financialsHandler: function(data, serviceObj, self) {
+
+      var self = self;
+      var serviceName = serviceObj.serviceName;
+      var serviceKey = serviceObj.key;
+      if( !self.financialsDataCache[ serviceName ] ) {
+        self.financialsDataCache[ serviceName ] = data;
+      }
+
+      var seriesData = [];
+      var arrayCategories = [];
+      $.each(data, function(key, val) {
+
+        for (var i=0, len=val.length; i < len; i++) {
+          seriesData.push(val[i][serviceKey]);
+          arrayCategories.push(val[i]['absPeriod']);
+        }
+      });
+
+      if (self.financials_chart.chartElement == null) {
+        self.financials_chart.initChart({data:seriesData,
+                                          id: serviceName+'-series',
+                                          name: serviceObj.displayName});
+
+        self.financials_chart.chartReady.subscribe(function(data) {
+          self.financials_chart.chartElement.xAxis[0].setCategories(arrayCategories);
+          PAGE.resizeIframeSimple()
+        });
+
+      } else {
+
+        var needNewAxis = true;
+
+        if( self.financials_chart.chartElement.get( serviceName+'-series')) {
+          var prevSeries = self.financials_chart.chartElement.get( serviceName+'-series');
+          if(prevSeries) prevSeries.remove();
+          needNewAxis = false;
+        }
+
+        if(needNewAxis) {
+          self.financials_chart.chartElement
+                      .addAxis({id: serviceName,
+                                name: serviceObj.axisName,
+                                title: {text:serviceObj.axisName},
+                                opposite:true});
+        }
+
+        self.financials_chart.chartElement
+                      .addSeries({data: seriesData,
+                                  id:serviceName+'-series',
+                                  name: serviceObj.displayName,
+                                  yAxis:serviceName});
+      }
+
+    },
+
+    makeDataCall: function(serviceObj, callback) {
+      
+      var self = this;
+      if(!serviceObj || !callback) {
+        return;
+      }
+
+      var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
+      var postType = 'GET';
+      var params = { id: self.ticker };
+
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { callback(data, serviceObj, self);  }, undefined, undefined);
 
     },
 
     initIndicatorsChart: function(data) {
 
-      this.indicators_chart = new HS_Chart('#technical-chart-container', this.ticker);
+      this.indicators_chart = new Chart.HS_Chart('#technical-chart-container', this.ticker);
       this.indicators_chart.chartReady.subscribe(function(){
         setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
       });
@@ -236,6 +390,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
           self.init_premium();
         else 
           self.init_nonPremium();
+          //self.init_premium();
         
       });
 

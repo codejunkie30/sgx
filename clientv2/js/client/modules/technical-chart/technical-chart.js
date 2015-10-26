@@ -347,7 +347,63 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
     return options;
   }
 
+  var FS_Chart = function(chartId, companyName) {
+    this.chartElement = null;
+    this.optionObj = null;
+    this.dataReady = ko.observable(false);
+    this.chartReady = ko.observable(false);
+    this.chartId = chartId;
+    this.companyName = 'Default' || companyName;
+    this.seriesObj = [];
+  }
 
-  return HS_Chart;
+  FS_Chart.prototype.initChart = function(seriesObj) {
+    var self = this;
+    var chartOptions = this.getGenericChartObj();
+    chartOptions.series.push(seriesObj);
+    $(this.chartId).highcharts(chartOptions);
+    setTimeout(function(){ 
+      self.chartElement = $(self.chartId).highcharts(); 
+      self.chartReady(true);
+    }, 500);
+    
+  }
+
+  FS_Chart.prototype.getGenericChartObj = function() {
+    var options =
+    {
+      legend: {
+        useHTML:true,
+        enabled:true,
+        labelFormatter: function() {
+          var lbl = '<span style="font-weight:bold">'+this.yAxis.userOptions.name+'</span>';
+          lbl += '<br />';
+          lbl += '<span style="font-weight:normal">'+this.name+'</span>';
+          return lbl;
+
+        }
+      },
+      title: {
+        text:''
+      },
+      xAxis: {
+        categories:[]
+      },
+      yAxis: {
+        title: {
+          text:'Income'
+        },
+        id:'income',
+        name: 'Income'
+      },
+      series: []
+    }
+
+    return options;
+  }
+
+
+  return { HS_Chart: HS_Chart, 
+            FS_Chart: FS_Chart};
 
 });
