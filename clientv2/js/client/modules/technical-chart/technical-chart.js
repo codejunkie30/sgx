@@ -335,6 +335,9 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
           turboThreshold:2000
         }
       },
+      tooltip: {
+        valueDecimals: 3
+      },
       series: [{
           type: 'line',
           name: this.companyName+' Stock Price',
