@@ -384,6 +384,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
       PAGE.checkStatus();
+
+      // self.gotCompanyData.subscribe(function(data){
+      //   if(data) {}
+      // })
       self.premiumUser.subscribe(function(data){
 
         if(data == true)

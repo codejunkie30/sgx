@@ -4,6 +4,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			
 		ticker: UTIL.getParameterByName("code"),
 		priceData: ko.observable({}),
+		gotCompanyData: ko.observable(false),
 		
 		init: function(finished) {
 
@@ -36,6 +37,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			// set holders (too long) than sort
 			this.holders = this.hasOwnProperty("holders") && this.holders.hasOwnProperty("holders") ? this.holders.holders : [];
 			this.holders.sort(function(a, b) { return b.shares - a.shares; });
+
+			this.gotCompanyData(true);
 			
     		if (typeof finished !== "undefined") finished();
 
