@@ -39,5 +39,258 @@
               "text": "Normal readings are typically 25 to 70. Readings above 70 suggest strong upward momentum and the possibility a stock has become too highly valued for the current market, a condition called overbought. Readings below 25 may be the result of strong downward momentum, which could have depressed the value of the stock excessively. That condition is called oversold."
           }
       ]
+  },
+  "financialsDropdowns":
+  {
+    "income": [
+        {
+            "displayName": "Total Revenue",
+            "serviceName": "income",
+            "key": "totalRevenue",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "Gross Profit",
+            "serviceName": "income",
+            "key": "grossProfit",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "Net Income",
+            "serviceName": "income",
+            "key": "netIncome",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "EBITDA",
+            "serviceName": "income",
+            "key": "ebitda",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "Normalized Diluted EPS",
+            "serviceName": "income",
+            "key": "eps",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "Payout Ratio",
+            "serviceName": "income",
+            "key": "payoutRatio",
+            "axisName": "Income"
+        },
+        {
+            "displayName": "Dividends (per share)",
+            "serviceName": "income",
+            "key": "dividendsPerShare",
+            "axisName": "Income"
+        }
+    ],
+    "balanceSheets": [
+        {
+            "displayName": "Total Assets",
+            "serviceName": "balanceSheets",
+            "key": "totalAssets",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Total Current Assets",
+            "serviceName": "balanceSheets",
+            "key": "totalCurrentAssets",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Net PP&E",
+            "serviceName": "balanceSheets",
+            "key": "netPpe",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Total Current Liabilities",
+            "serviceName": "balanceSheets",
+            "key": "totalCurrentLiabily",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Long-Term Debt",
+            "serviceName": "balanceSheets",
+            "key": "longTermDebt",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Total Liabilities",
+            "serviceName": "balanceSheets",
+            "key": "totalLiability",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Retained Earnings",
+            "serviceName": "balanceSheets",
+            "key": "retainedEarnings",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Common Stock",
+            "serviceName": "balanceSheets",
+            "key": "commonStock",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Total Equity",
+            "serviceName": "balanceSheets",
+            "key": "totalEquity",
+            "axisName": "Balance Sheets"
+        },
+        {
+            "displayName": "Minority Interest",
+            "serviceName": "balanceSheets",
+            "key": "minorityInterest",
+            "axisName": "Balance Sheets"
+        }
+    ],
+    "cashFlow": [
+        {
+            "displayName": "Operations",
+            "serviceName": "cashFlow",
+            "key": "cashOperations",
+            "axisName": "Cash Flow"
+        },
+        {
+            "displayName": "Investing",
+            "serviceName": "cashFlow",
+            "key": "cashInvesting",
+            "axisName": "Cash Flow"
+        },
+        {
+            "displayName": "Financing",
+            "serviceName": "cashFlow",
+            "key": "cashFinancing",
+            "axisName": "Cash Flow"
+        },
+        {
+            "displayName": "Net Change in Cash",
+            "serviceName": "cashFlow",
+            "key": "netChange",
+            "axisName": "Cash Flow"
+        }
+    ],
+    "ratios": [
+        {
+            "displayName": "Return on Assets",
+            "serviceName": "ratios",
+            "key": "returnAssets",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Return on Capital",
+            "serviceName": "ratios",
+            "key": "returnCapital",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Return on Equity",
+            "serviceName": "ratios",
+            "key": "returnEquity",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Gross Margin",
+            "serviceName": "ratios",
+            "key": "grossMargin",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "EBITDA Margin",
+            "serviceName": "ratios",
+            "key": "ebitdaMargin",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Net Income Margin",
+            "serviceName": "ratios",
+            "key": "netIncomeMargin",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Total Asset Turnover",
+            "serviceName": "ratios",
+            "key": "assetTurns",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Current Ratio",
+            "serviceName": "ratios",
+            "key": "currentRatio",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Quick Ratio",
+            "serviceName": "ratios",
+            "key": "quickRatio",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Avg Days Inventory",
+            "serviceName": "ratios",
+            "key": "avgDaysInventory",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Avg Days Payable",
+            "serviceName": "ratios",
+            "key": "avgDaysPayable",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Avg Cash Conversion",
+            "serviceName": "ratios",
+            "key": "cashConversion",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "Total Debt/Equity",
+            "serviceName": "ratios",
+            "key": "totalDebtEquity",
+            "axisName": "Ratios"
+        },
+        {
+            "displayName": "EBITDA/Interest Expense",
+            "serviceName": "ratios",
+            "key": "ebitdaInterest",
+            "axisName": "Ratios"
+        }
+    ],
+    "growth": [
+        {
+            "displayName": "Total Revenue",
+            "serviceName": "growth",
+            "key": "totalRevenue1YrAnnGrowth",
+            "axisName": "Growth"
+        },
+        {
+            "displayName": "EBITDA",
+            "serviceName": "growth",
+            "key": "ebitda1YrAnnGrowth",
+            "axisName": "Growth"
+        },
+        {
+            "displayName": "Net Income",
+            "serviceName": "growth",
+            "key": "netIncome1YrAnnGrowth",
+            "axisName": "Growth"
+        },
+        {
+            "displayName": "Normalized Diluted EPS",
+            "serviceName": "growth",
+            "key": "eps1YrAnnGrowth",
+            "axisName": "Growth"
+        },
+        {
+            "displayName": "Common Equity",
+            "serviceName": "growth",
+            "key": "commonEquity1YrAnnGrowth",
+            "axisName": "Growth"
+        }
+    ]
   }
 }
