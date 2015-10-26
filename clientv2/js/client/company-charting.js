@@ -152,7 +152,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     /* End modal related code */
 
 
-    changeTab: function(tabName){
+    changeTab: function(tabName, event){
 
       if( tabName == this.activeTab ) return;
       this.activeTab(tabName);
@@ -196,6 +196,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         if(data == 'financials' && this.financials_chart == null) {
           this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
           this.financialsDropdowns.selectedChoices.income({displayName: 'Net Income', serviceName: 'income', key: 'netIncome', axisName:'Income'});
+        }else {
+          setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
         }
       }, this);
 
