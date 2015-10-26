@@ -116,16 +116,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 		User user = userService.getUserByUsername(email);
 		
-		// Remove trial access
-		if(user.hasRole(Role.ROLE_TRIAL))
-			user.removeRole(Role.ROLE_TRIAL);
-				
-		// Add expired role
-		user.addRole(Role.ROLE_EXPIRED);
 		
-		userService.saveUser(user);
-		
-		// Create premium account record
 		accountService.convertToExpiry(user);
 		
 		return true;

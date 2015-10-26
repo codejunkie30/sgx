@@ -50,10 +50,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 		// Check for account lock
 		Boolean locked = userService.isAccountLocked(username);
 		
-		//Check for account expired
-		Boolean expired = userService.isAccountExpired(username);
 		
-		return new UserDetailsWrapper(user, authorities, locked, expired);
+		return new UserDetailsWrapper(user, authorities, locked);
 		
 	}
 
