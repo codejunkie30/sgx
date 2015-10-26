@@ -36,7 +36,7 @@
 
 	<section data-bind="if:(dataExists() == false && premiumUser() == true)">
 		<div class="grid hidden" data-bind="css:{'display-hidden': dataExists() == 0}">
-			<p>No Estimates data available.</p>
+			<p style="margin-bottom:80px; margin-top:30px">There are no estimates available for this company.</p>
 		</div>
 	</section>
 	<section id="estimates-content" data-bind="if:dataExists, css:{'display-hidden':dataExists}">
