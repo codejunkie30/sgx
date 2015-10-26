@@ -1,10 +1,13 @@
 define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/modules/tearsheet", "highstock" ], function(UTIL, ko, ESTIMATES, TS) {
 
+    ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
+
 	var CF = {
 			
 		quarterlyEst: null,
 		annualEst: null,
 		estimates: null,
+        dataExists:ko.observable(),
 
 		currency: ko.observable(""),
 		series: ko.observable([]),
@@ -29,7 +32,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             var me = this;
 			// extend tearsheet
 			$.extend(true, this, TS);
-
+            this.init();  //this is tearsheet init
 			// set up some basics
 			this.quarterlyEst = JSON.parse(ESTIMATES).quarterly;
 			this.annualEst = JSON.parse(ESTIMATES).annual;
@@ -64,9 +67,35 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
 			
 			var self = this;
-			this.init(function() { self.finish(self); });
+			//this.init(function() { self.finish(self); });
 			
 			PAGE.checkStatus();
+
+            // this.premiumUser.subscribe(function(data) {
+            //     if(data) {
+
+            //     }else {
+            //         this.dataExists(false);
+            //         this.init_nonPremium();
+            //     }
+            // }, this);
+
+            
+            var waitForDataToInit = ko.computed({
+                read:function(){
+                    var userData = this.premiumUser();
+                    var companyData = this.gotCompanyData();
+
+                    if(userData && companyData) {
+                        this.init(function() { self.finish(self); });
+                    }else if(userData == false && companyData == true) {
+                        this.dataExists(false);
+                        this.init_nonPremium();
+                    }
+                },
+                owner:this
+            });
+            
 		},
 		
 		finish: function(me) {
@@ -84,11 +113,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
     		
 		},
+
+        init_nonPremium: function() {
+            $('#estimates-content-alternative').show();
+            ko.applyBindings(this, $("body")[0]);
+        },
 		
 		initFinancials: function(me, data) {
 			
             console.log(data);
-            this.dataExists = ko.observable(data.estimates.length);
+            this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
 

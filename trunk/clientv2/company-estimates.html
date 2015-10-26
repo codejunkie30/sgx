@@ -27,188 +27,195 @@
 	<div class="grid scan">
 		<h1>Estimates</h1>
 	</div>
-<main data-bind="ifnot:dataExists">
-	<div class="grid hidden" data-bind="css:{'display-hidden': dataExists() == 0}">
-		<p>No Estimates data available.</p>
-	</div>
-</main>
-<main id="estimates-content" data-bind="if:dataExists, css:{'display-hidden':dataExists}">
 	
-	<div class="summary">
-		<h2>Summary</h2>
+
+	<section id="estimates-content-alternative">
+		<div data-bind="component:'premium-preview'"></div>
+	</section>
+
+
+	<section data-bind="if:(dataExists() == false && premiumUser() == true)">
+		<div class="grid hidden" data-bind="css:{'display-hidden': dataExists() == 0}">
+			<p>No Estimates data available.</p>
+		</div>
+	</section>
+	<section id="estimates-content" data-bind="if:dataExists, css:{'display-hidden':dataExists}">
 		
-		<div class="left">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<th></th>
-					<th>Mean</th>
-					<th>Median</th>
-					<th>High/Low Estimate</th>
-					<th>Std. Dev</th>
-					<th>No. of Estimates</th>
-				</tr>
-				<tr class="odd">
-					<td class="name">Target Price</td>
-					<td><span data-bind="text:summaryData.tpMeanEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.tpMedianEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.tpHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.tpLowEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.tpEstimateDeviation, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.tpEstimateNum, precision: 2"></span></td>
-				</tr>
-				<tr>
-					<td class="name">Long Term Growth</td>
-					<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.ltgEstimateDeviation, precision: 2"></span></td>
-					<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 2"></span></td>
-				</tr>
-			</table>
+		<div class="summary">
+			<h2>Summary</h2>
 			
-			<div>
-				<h4>Price Volatility</h4>
-				<p><span data-bind="text:summaryData.volatility, precision: 2"></span></p>
-			</div>
-			<div>
-				<h4>Industry Recommendation</h4>
-				<p><span data-bind="text:summaryData.industryRec, precision: 2"></span></p>
-			</div>
-		</div>
-		<div class="right">
-			<div class="dark-module progress-estimate">
-				<h3 class="title">S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h3>
-				<div class="has-estimate" data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum') && companyInfo.targetPriceNum >= 3">
-					<div class="bold">Consensus Recommendation</div>
-						<div class="recommendation" data-bind="css: 'opt-' + Math.round(companyInfo.avgBrokerReq)">
-							<span class="inline-block">Sell</span>
-							<span class="inline-block center">Hold</span>
-							<span class="inline-block right">Buy</span>
-						</div>
-						<hr />
-						<div class="bold">Consensus Target Price</div>
-						<div class="consensus-price"><span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
+			<div class="left">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<th></th>
+						<th>Mean</th>
+						<th>Median</th>
+						<th>High/Low Estimate</th>
+						<th>Std. Dev</th>
+						<th>No. of Estimates</th>
+					</tr>
+					<tr class="odd">
+						<td class="name">Target Price</td>
+						<td><span data-bind="text:summaryData.tpMeanEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpMedianEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.tpLowEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpEstimateDeviation, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpEstimateNum, precision: 2"></span></td>
+					</tr>
+					<tr>
+						<td class="name">Long Term Growth</td>
+						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgEstimateDeviation, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 2"></span></td>
+					</tr>
+				</table>
+				
+				<div>
+					<h4>Price Volatility</h4>
+					<p><span data-bind="text:summaryData.volatility, precision: 2"></span></p>
 				</div>
-				<div class="center" data-bind="visible: !companyInfo.hasOwnProperty('targetPriceNum') || companyInfo.targetPriceNum < 3">
-					<h4>No Recommendation</h4>
+				<div>
+					<h4>Industry Recommendation</h4>
+					<p><span data-bind="text:summaryData.industryRec, precision: 2"></span></p>
 				</div>
-			</div>		
-		</div>
-	</div>
-	
-	
-	
-	<div class="chart-container section-break" data-bind="visible: series().length > 0">
-		<div id="bar-chart" series-increment="50" default-width="600" default-height="400"></div>
-		<div class="legend-note">
-			<div class="items" data-bind="foreach: legendItems()">
-				<span class="item">
-					<span class="color" data-bind="attr: { 'style': 'background-color:' + color }"></span>
-					<span class="label" data-bind="text: name"></span>
-					<span class="parent" data-bind="text: parentName"></span>
-				</span>
 			</div>
-		</div>
-	</div>
-	<nav class="tabs">
-		<ul>
-			<li class="quarterly"><a class="active" data-bind="click: $root.showEstQuarterly">QUARTERLY</a></li>
-			<li class="annual"><a data-bind="click: $root.showEstAnnual">ANNUAL</a></li>
-		</ul>
-	</nav>
-	
-	<div class="data-point-container">
-		<div class="header">
-			<div class="tab">Select up to five options to chart the data points.</div>
-		</div>
-
-		<div data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0">
-			<p>No data available.</p>
+			<div class="right">
+				<div class="dark-module progress-estimate">
+					<h3 class="title">S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h3>
+					<div class="has-estimate" data-bind="visible: companyInfo.hasOwnProperty('targetPriceNum') && companyInfo.targetPriceNum >= 3">
+						<div class="bold">Consensus Recommendation</div>
+							<div class="recommendation" data-bind="css: 'opt-' + Math.round(companyInfo.avgBrokerReq)">
+								<span class="inline-block">Sell</span>
+								<span class="inline-block center">Hold</span>
+								<span class="inline-block right">Buy</span>
+							</div>
+							<hr />
+							<div class="bold">Consensus Target Price</div>
+							<div class="consensus-price"><span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
+					</div>
+					<div class="center" data-bind="visible: !companyInfo.hasOwnProperty('targetPriceNum') || companyInfo.targetPriceNum < 3">
+						<h4>No Recommendation</h4>
+					</div>
+				</div>		
+			</div>
 		</div>
 		
-		<div data-bind="visible: quarterlyTab() && estimates.quarterly.length > 0">
-		<!-- ko foreach : quarterlyEst -->
-		<table class="section" data-bind="css: name, attr: {id: name }">
-			<thead>
-				<tr>
-					<th width="30%"></th>
-					<!-- ko foreach : $parent.estimates.quarterly -->
-						<th width="15%" class="col-title">
-							<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
-							<br />
-							<span data-bind="text: period, format: 'date'"></span>
-						</th>
-					<!-- /ko -->
-					<th width="10%" class="uncheck">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- ko foreach : dataPoints -->
-					<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-						<td class="checkbox left">
-							<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
-								<span class="name" data-bind="text: name"></span>
-								<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
-									<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
-								</span>
-							</div>
-							<input type="checkbox">
-						</td>
-						<!-- ko foreach : $root.estimates.quarterly-->
-							<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', precision: 2, attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
-						<!-- /ko -->
-						<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
-							<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
-						</td>
-					</tr>
-				<!-- /ko -->
-			</tbody>
-		</table>
-		<!-- /ko -->
-
+		
+		
+		<div class="chart-container section-break" data-bind="visible: series().length > 0">
+			<div id="bar-chart" series-increment="50" default-width="600" default-height="400"></div>
+			<div class="legend-note">
+				<div class="items" data-bind="foreach: legendItems()">
+					<span class="item">
+						<span class="color" data-bind="attr: { 'style': 'background-color:' + color }"></span>
+						<span class="label" data-bind="text: name"></span>
+						<span class="parent" data-bind="text: parentName"></span>
+					</span>
+				</div>
+			</div>
 		</div>
-		<div data-bind="visible: annualTab()">
-		<!-- ko foreach : annualEst -->
-		<table class="section" data-bind="css: name, attr: {id: name }">
-			<thead>
-				<tr>
-					<th width="30%"></th>
-					<!-- ko foreach : $parent.estimates.annually -->
-						<th width="15%" class="col-title">
-							<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
-							<br />
-							<span data-bind="text: period, format: 'date'"></span>
-						</th>
-					<!-- /ko -->
-					<th width="10%" class="uncheck">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- ko foreach : dataPoints -->
-					<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-						<td class="checkbox left">
-							<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
-								<span class="name" data-bind="text: name"></span>
-								<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
-									<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
-								</span>
-							</div>
-							<input type="checkbox">
-						</td>
-						<!-- ko foreach : $root.estimates.annually -->
-							<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', precision: 2, attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
-						<!-- /ko -->
-						<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
-							<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
-						</td>
-					</tr>
-				<!-- /ko -->
-			</tbody>
-		</table>
-		<!-- /ko -->
-		</div>
-	</div>
+		<nav class="tabs">
+			<ul>
+				<li class="quarterly"><a class="active" data-bind="click: $root.showEstQuarterly">QUARTERLY</a></li>
+				<li class="annual"><a data-bind="click: $root.showEstAnnual">ANNUAL</a></li>
+			</ul>
+		</nav>
+		
+		<div class="data-point-container">
+			<div class="header">
+				<div class="tab">Select up to five options to chart the data points.</div>
+			</div>
 
-</main>
+			<div data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0">
+				<p>No data available.</p>
+			</div>
+			
+			<div data-bind="visible: quarterlyTab() && estimates.quarterly.length > 0">
+			<!-- ko foreach : quarterlyEst -->
+			<table class="section" data-bind="css: name, attr: {id: name }">
+				<thead>
+					<tr>
+						<th width="30%"></th>
+						<!-- ko foreach : $parent.estimates.quarterly -->
+							<th width="15%" class="col-title">
+								<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
+								<br />
+								<span data-bind="text: period, format: 'date'"></span>
+							</th>
+						<!-- /ko -->
+						<th width="10%" class="uncheck">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ko foreach : dataPoints -->
+						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+							<td class="checkbox left">
+								<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+									<span class="name" data-bind="text: name"></span>
+									<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
+										<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
+									</span>
+								</div>
+								<input type="checkbox">
+							</td>
+							<!-- ko foreach : $root.estimates.quarterly-->
+								<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', precision: 2, attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
+							<!-- /ko -->
+							<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
+								<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
+							</td>
+						</tr>
+					<!-- /ko -->
+				</tbody>
+			</table>
+			<!-- /ko -->
+
+			</div>
+			<div data-bind="visible: annualTab()">
+			<!-- ko foreach : annualEst -->
+			<table class="section" data-bind="css: name, attr: {id: name }">
+				<thead>
+					<tr>
+						<th width="30%"></th>
+						<!-- ko foreach : $parent.estimates.annually -->
+							<th width="15%" class="col-title">
+								<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
+								<br />
+								<span data-bind="text: period, format: 'date'"></span>
+							</th>
+						<!-- /ko -->
+						<th width="10%" class="uncheck">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ko foreach : dataPoints -->
+						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+							<td class="checkbox left">
+								<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+									<span class="name" data-bind="text: name"></span>
+									<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
+										<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
+									</span>
+								</div>
+								<input type="checkbox">
+							</td>
+							<!-- ko foreach : $root.estimates.annually -->
+								<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', precision: 2, attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
+							<!-- /ko -->
+							<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
+								<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
+							</td>
+						</tr>
+					<!-- /ko -->
+				</tbody>
+			</table>
+			<!-- /ko -->
+			</div>
+		</div>
+
+	</section>
 	
 	<div class="grid disclosure">
 		<p>Source: S&amp;P Capital IQ - <a data-bind="siteLink:'terms-conditions'">Use of this information is subject to terms and conditions</a></p>
