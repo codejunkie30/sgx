@@ -34,6 +34,8 @@ public class IndexQueryResponse {
 		
 		if(response == null) throw new IndexerServiceException("Response is null or empty");
 		
+		System.out.println(response.toString());
+		
 		if(response.path("hits").path("hits").isMissingNode()) throw new IndexerServiceException("Response is missing 'hits' field");
 			
 		List<T> ret = new ArrayList<T>();

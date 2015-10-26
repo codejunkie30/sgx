@@ -1,18 +1,17 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -21,10 +20,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.util.DateUtil;
 
@@ -32,64 +34,88 @@ import com.wmsi.sgx.util.DateUtil;
 public class CompanyService extends AbstractDataService {
 	
 	private static final Logger log = LoggerFactory.getLogger(CompanyService.class);
-
-	private PriceHistory priceHistory;
-
+	
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 
 		Assert.notEmpty(parms);
-
-		String startDate = parms[0];
-		Company company = getCompany(id);
 		
-		priceHistory = getPreviousClose(id);
-		Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
+		try {
 		
-		if (priceHistory.getPrice().size() > 0) {
+			// list of records
+			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
 			
-			company.setClosePrice(priceHistory.getPrice().get(0).getValue());
+			// initialize FX data
+			List<FXRecord> fxRecords = initFXRecords(id, records);
 			
-			if (priceHistory.getPrice().size() > 1 && priceHistory.getPrice().get(1).getValue() != null) {
-				company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
-				company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
+			Company company = getCompany(id, records, fxRecords);
+			
+			PriceHistory priceHistory = loadPriceHistory(id, records, fxRecords);
+			company.fullPH = priceHistory;
+	
+			Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
+			
+			if (priceHistory.getPrice().size() > 0) {
+				
+				company.setClosePrice(priceHistory.getPrice().get(0).getValue());
+				
+				if (priceHistory.getPrice().size() > 1 && priceHistory.getPrice().get(1).getValue() != null) {
+					company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
+					company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
+				}
+				
+				loadHistorical(parms[0], company);
+				
+			}
+			else {
+				log.error("NO PRICE HISTORY: " + id);
 			}
 			
-			loadHistorical(priceHistory, startDate, company);
+			return company;
 			
 		}
-		else {
-			log.error("NO PRICE HISTORY: " + id);
+		catch(Exception e) {
+			throw new ResponseParserException("Loading company: " + id, e);
 		}
-
-		return company;
-	}
-
-	
-
-	private Company loadHistorical(PriceHistory historicalData, final String startDate, Company comp)
-			throws ResponseParserException, CapIQRequestException {
 		
-		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
-		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
-
-		comp.fullPH = historicalData;
-		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
-		comp.setPriceHistory(lastYearPrice);
-		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume, lastYearPrice, startDate));
-
-		return comp;
 	}
 
-	public Company getCompany(String id) throws ResponseParserException, CapIQRequestException {
-		Iterable<CSVRecord> records = getCompanyData(id, "company-data");
+	/**
+	 * load any of the fx records needed for this record
+	 * @param records
+	 * @throws ResponseParserException
+	 */
+	public List<FXRecord> initFXRecords(String id, List<CompanyCSVRecord> records) throws ResponseParserException  {
+		List<String> currenciesList = new ArrayList<String>();
+		for (CompanyCSVRecord record : records) {
+			if (record.getCurrency() == null || currenciesList.contains(record.getCurrency())) continue;
+			currenciesList.add(record.getCurrency());
+		}
+		try { return getFXData(id, currenciesList); }
+		catch(Exception e) { throw new ResponseParserException("Loading FX data", e); }
+	}
+
+	/**
+	 * load up the base fields
+	 * @param id
+	 * @param records
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public Company getCompany(String id, List<CompanyCSVRecord> records, List<FXRecord> fxRecords) throws ResponseParserException, CapIQRequestException {
+		
+		
+		Field[] fields = Company.class.getDeclaredFields();
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		for (CSVRecord record : records) {
-			String lastName = record.get(2);
-			map.put(lastName, record.get(3));
+		for (Field field : fields) {
+			String name = field.getName();
+			String val = getFieldValue(field, records, fxRecords);
+			if (val == null) continue;
+			map.put(name, val);
 		}
-
+		
 		if (map.size() == 0) throw new ResponseParserException("record map is empty in getCompany()");
 
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
@@ -99,54 +125,125 @@ public class CompanyService extends AbstractDataService {
 		comp.setExchange(id.split(":")[1]);
 		return comp;
 	}
+	
+	/**
+	 * get the value for a particular field
+	 * @param name
+	 * @param records
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFieldValue(Field field, List<CompanyCSVRecord> records, List<FXRecord> fxRecords) throws ResponseParserException, CapIQRequestException {
+		
+		CompanyCSVRecord actual = null;
+		
+		for (CompanyCSVRecord record : records) {
+			if (!record.getName().equals(field.getName())) continue;
 
-	public PriceHistory getPreviousClose(String input) throws ResponseParserException, CapIQRequestException {
+			// becomes actual if most recent or no date specified
+			if (actual == null || record.getPeriodDate() == null || record.getPeriodDate().after(actual.getPeriodDate())) actual = record;
+			
+		}
+		
+		return actual == null ? null : getFXConverted(field, actual, fxRecords);
+	}
+	
+	/**
+	 * handle FX conversion if necessary
+	 * @param field
+	 * @param actual
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFXConverted(Field field, CompanyCSVRecord actual, List<FXRecord> fxRecords) throws ResponseParserException, CapIQRequestException {
+		if (!field.isAnnotationPresent(FXAnnotation.class)) return actual.getValue();
+		return getFXConverted(actual, fxRecords);
+	}
+	
+	/**
+	 * convert the value of csv record (assumes it can be converted)
+	 * @param actual
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFXConverted(CompanyCSVRecord actual, List<FXRecord> fxRecords) throws ResponseParserException, CapIQRequestException {
+		
+		// ignore for now
+		if (fxRecords.size() == 0 || actual == null || actual.getCurrency() == null || actual.getCurrency().equals("SGD")) return actual.getValue();
+
+		for (FXRecord record : fxRecords) {
+			if (!record.getFrom().equals(actual.getCurrency()) || !DateUtils.isSameDay(actual.getPeriodDate(), record.getDate())) continue;
+			BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
+			return val.toString();
+		}
+		
+		throw new ResponseParserException("No conversion available for field " + actual +  "\n" + fxRecords.toString());
+		
+		
+	}
+	
+	/**
+	 * load up the price history	
+	 * @param input
+	 * @param records
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public PriceHistory loadPriceHistory(String input, List<CompanyCSVRecord> records, List<FXRecord> fxRecords) throws ResponseParserException, CapIQRequestException {
 		
 		PriceHistory ph = new PriceHistory();
-		Iterable<CSVRecord> records = getCompanyData(input, "company-data");
-		List<String> list = Arrays.asList("openPrice", "closePrice", "volume", "highPrice", "lowPrice");
+		Map<String, List<HistoricalValue>> pricing = new HashMap<String, List<HistoricalValue>>();
+		pricing.put("openPrice", new ArrayList<HistoricalValue>());
+		pricing.put("closePrice", new ArrayList<HistoricalValue>());
+		pricing.put("volume", new ArrayList<HistoricalValue>());
+		pricing.put("highPrice", new ArrayList<HistoricalValue>());
+		pricing.put("lowPrice", new ArrayList<HistoricalValue>());
 		
-		List<HistoricalValue> price = new ArrayList<HistoricalValue>();
-		List<HistoricalValue> highPrice = new ArrayList<HistoricalValue>();
-		List<HistoricalValue> lowPrice = new ArrayList<HistoricalValue>();
-		List<HistoricalValue> openPrice = new ArrayList<HistoricalValue>();
-		List<HistoricalValue> volume = new ArrayList<HistoricalValue>();
 		
-		for (CSVRecord record : records) {
-			if(list.contains(record.get(2))){
+		for (CompanyCSVRecord record : records) {
+			
+			List<HistoricalValue> list = pricing.get(record.getName());
+			if (list == null || record == null) continue;
+			
+			try {
 				HistoricalValue hv = new HistoricalValue();
-				hv.setTickerCode(input.split(":")[0]);								
-				String cVal = StringUtils.stripToNull(record.get(3));
-				Double value  = cVal == null || cVal.equalsIgnoreCase("null") ? null : Double.parseDouble(cVal);
-				hv.setValue(value);
-				hv.setDate(new Date(record.get(5)));
-				
-				switch(record.get(2)){
-				case "openPrice":
-					openPrice.add(hv);
-					break;
-				case "closePrice":
-					price.add(hv);
-					break;
-				case "lowPrice":
-					lowPrice.add(hv);
-					break;
-				case "highPrice":
-					highPrice.add(hv);
-					break;
-				case "volume":
-					volume.add(hv);
-					break;
-				}
+				String val = StringUtils.stripToNull(getFXConverted(record, fxRecords));
+				hv.setTickerCode(record.getTicker());
+				hv.setDate(record.getPeriodDate());
+				if (val != null) hv.setValue(Double.parseDouble(val));
+				list.add(hv);
 			}
+			catch(Exception e) {
+				log.error("Trying to load hv record: " + record.toString(), e);
+			}
+			
 		}
-		ph.setHighPrice(highPrice);
-		ph.setLowPrice(lowPrice);
-		ph.setOpenPrice(openPrice);
-		ph.setPrice(price);
-		ph.setVolume(volume);
+		
+		
+		ph.setHighPrice(pricing.get("highPrice"));
+		ph.setLowPrice(pricing.get("lowPrice"));
+		ph.setOpenPrice(pricing.get("openPrice"));
+		ph.setPrice(pricing.get("closePrice"));
+		ph.setVolume(pricing.get("volume"));
 		
 		return ph;
+	}
+
+	private Company loadHistorical(final String startDate, Company comp) throws ResponseParserException, CapIQRequestException {
+		
+		PriceHistory historicalData = comp.fullPH;
+		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
+		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
+
+		comp.setAvgVolumeM3(getThreeMonthAvg(lastYearVolume, startDate));
+		comp.setPriceHistory(lastYearPrice);
+		comp.setAvgTradedVolM3(getAvgTradedValueM3(lastYearVolume, lastYearPrice, startDate));
+
+		return comp;
 	}
 
 	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice,

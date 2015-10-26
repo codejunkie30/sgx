@@ -20,6 +20,6 @@ public interface IndexBuilderService{
 
 	List<CompanyInputRecord> readTickers(String indexName, Date jobDate) throws IndexerServiceException;
 	
-	Boolean createFXIndex(String indexName) throws IndexerServiceException;
+	Boolean createFXIndex(String indexName, int fxBatchSize) throws IndexerServiceException;
 
 }

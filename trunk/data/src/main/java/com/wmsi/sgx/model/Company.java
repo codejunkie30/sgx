@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 
 @JsonRootName("company")
 public class Company {
@@ -33,9 +34,11 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_BV_SHARE")
 	private Double bvShare;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CAPEX")
 	private Double capitalExpenditures;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_ST_INVEST")
 	private Double cashInvestments;
 
@@ -54,6 +57,7 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_DIV_SHARE")
 	private Double divShare;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBIT")
 	private Double ebit;
 
@@ -88,6 +92,7 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_GVKEY")
 	private String gvKey;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_HIGHPRICE")
 	private Double highPrice;
 
@@ -100,21 +105,25 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_LASTSALEPRICE")
 	private Double lastSalePrice;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_LOWPRICE")
 	private Double lowPrice;
 
 	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
 	private Double minorityInterest;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NET_DEBT")
 	private Double netDebt;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI")
 	private Double netIncome;
 
 	@ConversionAnnotation(name = "IQ_NI_MARGIN")
 	private Double netProfitMargin;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_OPENPRICE")
 	private Double openPrice;
 
@@ -148,9 +157,11 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_TBV")
 	private Double tbv;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT")
 	private Double totalDebt;
 
@@ -169,6 +180,7 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_5YR_ANN_GROWTH")
 	private Double totalRev5YrAnnGrowth;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV")
 	private Double totalRevenue;
 
@@ -186,9 +198,11 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_YEAR_FOUNDED")
 	private Integer yearFounded;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_YEARHIGH")
 	private Double yearHigh;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_YEARLOW")
 	private Double yearLow;
 
