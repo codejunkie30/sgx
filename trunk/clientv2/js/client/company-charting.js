@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearsheet", "client/modules/technical-chart/technical-chart-algorithms", "client/modules/technical-chart/technical-chart", "highstock" ], function(UTIL, ko, Validation, TS, Algorithms, Chart) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearsheet", "client/modules/technical-chart/technical-chart-algorithms", "client/modules/technical-chart/technical-chart", "text!client/data/technicalCharts.json", "highstock" ], function(UTIL, ko, Validation, TS, Algorithms, Chart, Static_Content) {
   //here
   ko.validation = Validation;
   ko.validation.init({insertMessages:false});
@@ -45,25 +45,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
   };
 
 
-
-  var modalContent = {
-
-    simpleMA: [
-      {title:'what\'s the Simple Moving Average?', text:'The SMA smooths out the peaks and valleys of daily price volatility. When looked at for any given day, it tells you the average price for some period in the immediate past (usually the preceding 15 days or 50 days). When looked at over time (as in our graphs), the 15-day SMA suggests the shapes of short-term trading trends and the 50-day, medium-term trends.' },
-      {title:'Why I Should Look at This Chart?', text:'Stock price moving averages are typically looked at in relation to the price of the stock itself. When a share price is rising consistently, it tends to stay above its SMA on any given day. When it starts to fall consistently, it eventually falls below its SMA. Being above the SMA is generally seen as a bullish signal, below, a bearish signal.'},
-    ],
-    divergenceMA:[
-      {title:'What\'s the Moving Average Convergence Divergence?', text:'The MACD combines two moving averages into a single indicator. This offers you a potentially simpler way to read the trends suggested by the simple moving averages. It also offers clues about how much momentum might have built up to sustain the prevailing trend.'},
-      {title:'What Does The Histogram Show?', text:'Accompanying the MACD indicator and signal line is a histogram that represents the difference between the two. The columns of the histogram extend above or below zero. The longer the column at any point, the greater the momentum in that direction. Positive numbers are bullish, and negative, bearish.'},
-      {title:'What Does The Signal Line Show?', text: 'The MACD signal line shows how quickly the MACD itself is changing, and in which direction. When the MACD line crosses the signal line on an upswing, it creates a bullish signal (on a downswing, bearish).'},
-      {title:'Why I Should Look at This Chart?', text:'The MACD indicator is the difference between short-term and medium-term moving averages of the share price. An MACD reading above zero occurs when a price might have been rising more quickly in recent days than it had been some weeks earlier (below zero, the reverse).'}
-    ],
-    RSI: [
-      {title:'What\'s the Relative Strength Index?', text:'The Relative Strength Index (RSI) can help an investor understand whether a stock may have become overvalued or undervalued after recent trading. A reading of zero in this indicator shows that every day\'s closing price change has been negative in the recent past. A reading of 100 shows that every price change has been positive, and a reading of 50 indicates that the ups and downs cancelled each other out.'},
-      {title:'Why I Should Look at This Chart?', text: 'Normal readings are typically 25 to 70. Readings above 70 suggest strong upward momentum and the possibility a stock has become too highly valued for the current market, a condition called overbought. Readings below 25 may be the result of strong downward momentum, which could have depressed the value of the stock excessively. That condition is called oversold.'}
-    ]
-
-  }
+  var modalContent = JSON.parse(Static_Content).modalContent;
 
 
   var TechnicalCharting = {
