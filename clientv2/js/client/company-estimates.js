@@ -253,7 +253,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			
 			// block it
     		if ($(".checked").length >= 5) {
-                model.modal.open({ type: 'alert',  content: '<h4>Chart Company Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
+                model.modal.open({ type: 'alert',  content: '<h4>Chart Company Estimates <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
     			return;
     		}
 
