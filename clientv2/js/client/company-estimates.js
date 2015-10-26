@@ -140,11 +140,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
+            //sort quarterly data 
+            this.estimates.quarterly.sort(function(a, b){
+                return a.periodDate > b.periodDate;
+            });
+
         	
         	//if (estimates.length == 5) return estimates;
-
-
-
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
