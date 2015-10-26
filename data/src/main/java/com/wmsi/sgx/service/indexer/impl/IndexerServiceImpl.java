@@ -47,6 +47,8 @@ public class IndexerServiceImpl implements IndexerService{
 	@Value("${elasticsearch.index.name}")
 	private String indexAlias;
 	
+	public String indexName;
+	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
 	private RestTemplate restTemplate;
@@ -60,20 +62,30 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		try{
 			
+			endpoint = "/" + indexName + endpoint;
 			URI uri = buildUri(endpoint);
-			
-			log.debug("Executing query on {}", endpoint);
-			log.debug("Query: {}", json);
-			
 			JsonNode res = restTemplate.postForObject(uri, json, JsonNode.class);
-			
-			log.debug("Query returned successfully");
-			log.trace("ES Response: {}", res);
 			
 			return new IndexQueryResponse(res);
 		}
 		catch(Exception e){
-			throw new IndexerServiceException("Executing query", e);
+			throw new IndexerServiceException(String.format("Executing query for {}  with params {}", endpoint, json), e);
+		}
+
+	}
+	
+	@Override
+	@Transactional
+	public void refresh() throws IndexerServiceException {
+		
+		try{
+			
+			URI uri = buildUri("/_refesh");
+			ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, null, Object.class);
+			
+		}
+		catch(Exception e){
+			throw new IndexerServiceException("Executing refresh", e);
 		}
 
 	}
@@ -81,6 +93,9 @@ public class IndexerServiceImpl implements IndexerService{
 	@Override
 	@Transactional
 	public synchronized Boolean createIndex(@Header String indexName) throws IOException, IndexerServiceException{
+		
+		this.indexName = indexName;
+		
 		URI indexUri = buildUri("/" + indexName);
 		
 		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(indexUri, HttpMethod.HEAD).execute();

@@ -20,5 +20,7 @@ public interface IndexerService{
 	
 	IndexQueryResponse query(String endpoint, String json) throws IndexerServiceException;
 	
+	void refresh() throws IndexerServiceException;
+	
 	
 }

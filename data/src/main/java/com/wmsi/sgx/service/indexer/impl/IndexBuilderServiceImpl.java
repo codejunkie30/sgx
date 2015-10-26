@@ -259,6 +259,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		if(company == null) return;
 		
+		company.setFilingCurrency(input.getCurrency());
+		company.setTradeName(input.getTradeName());
+		
 		PriceHistory historicalData = company.fullPH;
 		company.fullPH = null; // HACK to keep from serializing
 		
@@ -397,7 +400,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	}
 	
 	@Override
-	public Boolean createFXIndex(@Header String indexName) throws IndexerServiceException {
+	public Boolean createFXIndex(@Header String indexName, @Header int fxBatchSize) throws IndexerServiceException {
 
 		log.info("Creating FX index");
 		
