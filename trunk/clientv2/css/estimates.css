@@ -22,4 +22,5 @@
 .summary .progress-estimate .recommendation { margin: 10px auto; width: 292px; }
 
 #estimates-content {display:none;}
+#estimates-content table tbody tr td {font-weight:normal;}
 #estimates-content-alternative {display:none; margin-top:20px; padding:20px; border:1px solid #cacdd3;}
