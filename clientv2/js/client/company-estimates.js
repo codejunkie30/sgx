@@ -140,10 +140,23 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
-            //sort quarterly data 
-            this.estimates.quarterly.sort(function(a, b){
-                return a.periodDate > b.periodDate;
-            });
+            //table col widths 
+            this.quarterlyTableColWidth = '15%';
+            this.annualTableColWidth = '15%';
+            //sort quarterly data and get th width
+            if(this.estimates.quarterly.length > 0) {
+                this.estimates.quarterly.sort(function(a, b){
+                    return a.periodDate > b.periodDate;
+                });
+
+                this.quarterlyTableColWidth = 90/this.estimates.quarterly.length+'%';
+            }
+
+            if(this.estimates.annually.length > 0) {
+
+                this.annualTableColWidth = 90/this.estimates.annually.length+'%';
+            }
+
 
         	
         	//if (estimates.length == 5) return estimates;
