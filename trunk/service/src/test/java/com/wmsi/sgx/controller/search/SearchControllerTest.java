@@ -46,43 +46,43 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isMethodNotAllowed());
 	}
 	
-	@Test
+	//@Test
 	public void testSearch() throws Exception{
-		SearchCompany company = new SearchCompanyBuilder()
-		.withCompanyName("Fab chem China Limited")
-		.withBeta5Yr(0.182D)
-		.withDividendYield(5.7851D)
-		.build();
-		
-		SearchRequest req = new SearchRequestBuilder()
-			.withAddedCriteriaElement(
-					new CriteriaBuilder()
-					.withField("marketCap")
-					.withTo(5000D)
-					.withFrom(5D)
-					.build())
-				.build();
-		
-		when(companySearchService
-				.search(
-						any(SearchRequest.class)))
-				.thenReturn(
-						SearchResultsBuilder.searchResults()
-						.withAddedCompany(company)
-						.build());
-
-		mockMvc.perform(post("/search")
-				.content(TestUtils.objectToJson(req))
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.companies", Matchers.hasSize(1)))
-			.andExpect(jsonPath("$.companies[0].companyName", Matchers.is("Fab chem China Limited")))
-			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
-			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
-		
-		 verify(companySearchService, times(1)).search(any(SearchRequest.class));
-	     verifyNoMoreInteractions(companySearchService);
+//		SearchCompany company = new SearchCompanyBuilder()
+//		.withCompanyName("Fab chem China Limited")
+//		.withBeta5Yr(0.182D)
+//		.withDividendYield(5.7851D)
+//		.build();
+//		
+//		SearchRequest req = new SearchRequestBuilder()
+//			.withAddedCriteriaElement(
+//					new CriteriaBuilder()
+//					.withField("marketCap")
+//					.withTo(5000D)
+//					.withFrom(5D)
+//					.build())
+//				.build();
+//		
+//		when(companySearchService
+//				.search(
+//						any(SearchRequest.class)))
+//				.thenReturn(
+//						SearchResultsBuilder.searchResults()
+//						.withAddedCompany(company)
+//						.build());
+//
+//		mockMvc.perform(post("/search")
+//				.content(TestUtils.objectToJson(req))
+//				.contentType(MediaType.APPLICATION_JSON))
+//			.andExpect(status().isOk())
+//			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//			.andExpect(jsonPath("$.companies", Matchers.hasSize(1)))
+//			.andExpect(jsonPath("$.companies[0].companyName", Matchers.is("Fab chem China Limited")))
+//			.andExpect(jsonPath("$.companies[0].beta5Yr", Matchers.is(0.182D)))
+//			.andExpect(jsonPath("$.companies[0].dividendYield", Matchers.is(5.7851D)));
+//		
+//		 verify(companySearchService, times(1)).search(any(SearchRequest.class));
+//	     verifyNoMoreInteractions(companySearchService);
 	}
 	
 	@Test(dataProvider="invalidSearchCriteria")

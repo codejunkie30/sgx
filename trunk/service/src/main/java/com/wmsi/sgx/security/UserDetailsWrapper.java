@@ -14,13 +14,11 @@ public class UserDetailsWrapper extends org.springframework.security.core.userde
 	
 	private Boolean locked;
 	
-	private Boolean expired;
 	
-	public UserDetailsWrapper(User u, Collection<? extends GrantedAuthority> authorities, Boolean locked, Boolean expired){
+	public UserDetailsWrapper(User u, Collection<? extends GrantedAuthority> authorities, Boolean locked){
 		super(u.getUsername(), u.getPassword(), authorities);
 		user = u;
 		this.locked = locked;
-		this.expired = expired;
 	}
 	
 	public User getUser(){
@@ -40,8 +38,4 @@ public class UserDetailsWrapper extends org.springframework.security.core.userde
 		this.locked = locked;
 	}
 	
-	public boolean isAccountNonExpired() {
-        return !expired;
-    }
-
 }

@@ -15,7 +15,7 @@ public interface AccountRepository extends CustomRepository<Account, Serializabl
 	
 	List<Account> findAll();
 
-	@Query("select a from Accounts a, Users u where a.user.id = u.id and u.username = :name and a.active = true")
+	@Query("select a from Accounts a, Users u where a.user.id = u.id and u.username = :name")
 	List<Account> findByUsername(@Param("name") String username);
 	
 }

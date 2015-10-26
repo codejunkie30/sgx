@@ -20,8 +20,6 @@ public interface UserService{
 	UserLogin recordLogin(UserLogin login);
 
 	Boolean isAccountLocked(String username);
-	
-	Boolean isAccountExpired(String username);
 
 	User saveUser(User user);
 

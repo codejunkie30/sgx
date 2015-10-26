@@ -2,7 +2,9 @@ package com.wmsi.sgx.service.search.elasticsearch.query;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,9 @@ import org.elasticsearch.index.query.RangeFilterBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.search.Criteria;
 
 public class CompanyQueryBuilder extends AbstractQueryBuilder{
@@ -25,28 +29,40 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 	private static final Logger log = LoggerFactory.getLogger(CompanyQueryBuilder.class);
 
 	private List<Criteria> criteria;	
+	private AccountType acctType;
 	
-	public CompanyQueryBuilder (List<Criteria> criteria) {
-		this.criteria = criteria;		
+
+	@Value("${list.permitted.exchanges}")
+	private String permittedExchangesList="SGX,CATALIST";
+	
+	public CompanyQueryBuilder (List<Criteria> criteria, AccountType acctType) {
+		this.criteria = criteria;	
+		this.acctType = acctType;
 	}
 	
 	@Override
 	public String build(){
-
+		
 		// Match all if no criteria
 		if(criteria == null || criteria.size() <= 0)
 			return new SearchSourceBuilder()
 			.query(QueryBuilders.matchAllQuery())
 			.size(MAX_RESULTS)
 			.toString();
-
+		
 		QueryBuilder query = null;
 		FilterBuilder filter = null;
-		SearchSourceBuilder builder = new SearchSourceBuilder();		
+		SearchSourceBuilder builder = new SearchSourceBuilder();
+		//query = QueryBuilders.boolQuery();
+		
+		List<String> exchanges = new ArrayList<String>();
+		exchanges = checkExchangeCriteria();
 		
 		for(Criteria c : criteria){
-			
-			if(c.getField().equals("companyName")){
+			if(c.getField().equals("exchange")) {
+				query = addQuery(query, buildExchangeQuery(exchanges));
+			}
+			else if(c.getField().equals("companyName")){
 				// Name query
 				query = addQuery(query, buildNameQuery(c));				
 			}
@@ -91,6 +107,59 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		return builder
 				.size(MAX_RESULTS)
 				.toString();
+	}
+	
+	
+	private List<String> checkExchangeCriteria(){
+		
+		List<String> exchanges = new ArrayList<String>();
+		int noOfExchangesOnUserSerached=0;
+		
+		
+		for (Iterator<Criteria> it =  criteria.iterator();it.hasNext();){
+			Criteria c = it.next();
+			if(c.getField().equals("exchange")){
+				exchanges.add(c.getValue());
+				it.remove();
+			}
+			noOfExchangesOnUserSerached++;
+		}
+			
+		
+		//Add the Exchange criteria back on the criteria Object after 
+		//retrieving the number of exchanges on which user wants to search
+		if(noOfExchangesOnUserSerached>0 || (noOfExchangesOnUserSerached==0 && (!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ))))){
+			Criteria c =  new Criteria();
+			c.setField("exchange");
+			criteria.add(c);
+		}
+		
+		
+		if(!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ))){
+			
+			List<String> exchangesWhiteList = new ArrayList<String>();
+			if(!permittedExchangesList.equals(null)|| permittedExchangesList.length()<0){
+				for(int i=0; i<permittedExchangesList.split(",").length; i++){
+					exchangesWhiteList.add(permittedExchangesList.split(",")[i]);
+				}
+			}
+			
+			if(exchanges.size()==0){
+				return exchangesWhiteList;
+			}
+			
+			List<String> exchangesForFreeUser = new ArrayList<String>();
+			//exchangesForFreeUser = exchanges;
+			
+			for(String ex: exchanges){
+				if(exchangesWhiteList.contains(ex))
+					exchangesForFreeUser.add(ex);
+			}
+			return exchangesForFreeUser;
+			
+		}else return exchanges;
+		
+		
 	}
 	
 	/**
@@ -207,6 +276,17 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			.boost(2));
 	}
 
+	private QueryBuilder buildExchangeQuery(List<String> exchanges){
+		
+		return QueryBuilders.boolQuery()
+				
+		// Text search for prefix match
+		.should(QueryBuilders.constantScoreQuery(
+				FilterBuilders.boolFilter()
+				.must(FilterBuilders.termsFilter("exchange", exchanges))
+				.must(FilterBuilders.typeFilter("company"))));
+		}
+	
 	// MVEL Script fragment for collecting price history between dates on nested 'priceHistory' field 
 	private static final String SCRIPT_SELECT_FRAGMENT = 
 			"if(_source['priceHistory'] == null) return false; prices = ($.value in _source.priceHistory if $.date >= from && $.date <= to);";

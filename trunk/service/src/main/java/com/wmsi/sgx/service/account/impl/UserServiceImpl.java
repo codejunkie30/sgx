@@ -202,15 +202,5 @@ public class UserServiceImpl implements UserService{
 		return failed >= LOCKOUT_LIMIT;
 	}
 
-	@Override
-	public Boolean isAccountExpired(String username) {
-		List<Account> accounts = accountReposistory.findByUsername(username);
-		
-		for(Account account : accounts){
-			
-			return !account.getActive();
-		}
-		return true;
-	}
 	
 }
