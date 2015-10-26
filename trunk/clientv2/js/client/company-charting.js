@@ -385,17 +385,25 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.init();  //this is tearsheet.js init
       PAGE.checkStatus();
 
-      // self.gotCompanyData.subscribe(function(data){
-      //   if(data) {}
-      // })
-      self.premiumUser.subscribe(function(data){
-
-        if(data == true)
-          self.init_premium();
-        else 
-          self.init_nonPremium();
-          //self.init_premium();
+      //   if(data == true)
+      //     self.init_premium();
+      //   else 
+      //     self.init_nonPremium();
         
+      // });
+
+      var waitForDataToInit = ko.computed({
+          read:function(){
+              var userData = this.premiumUser();
+              var companyData = this.gotCompanyData();
+
+              if(userData && companyData) {
+                  self.init_premium();
+              }else if(userData == false && companyData == true) {
+                  self.init_nonPremium();
+              }
+          },
+          owner:this
       });
 
     },
