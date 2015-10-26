@@ -57,17 +57,17 @@
 					</tr>
 					<tr class="odd">
 						<td class="name">Target Price</td>
-						<td><span data-bind="text:summaryData.tpMeanEstimate, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.tpMedianEstimate, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.tpHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.tpLowEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpMeanEstimate, precision: 2, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.tpMedianEstimate, precision: 2, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.tpHighEstimate, precision: 2, postFix:'%'"></span>/<span data-bind="text:summaryData.tpLowEstimate, precision: 2, postFix:'%'"></span></td>
 						<td><span data-bind="text:summaryData.tpEstimateDeviation, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.tpEstimateNum, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.tpEstimateNum, precision: 0"></span></td>
 					</tr>
 					<tr>
 						<td class="name">Long Term Growth</td>
-						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2, postFix:'%'"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2, postFix:'%'"></span></td>
 						<td><span data-bind="text:summaryData.ltgEstimateDeviation, precision: 2"></span></td>
 						<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 2"></span></td>
 					</tr>
