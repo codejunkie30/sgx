@@ -16,7 +16,7 @@ select
 		when ep.periodTypeId = 1 then 'FY'+cast(ep.fiscalYear as varchar(max))
 		when ep.periodTypeId = 2 then 'FQ'+cast(ep.fiscalQuarter as varchar(max))+cast(ep.fiscalYear as varchar(max))
 	end as period,
-	null as date,
+	ep.periodEndDate as date,
 	cISO.ISOCode
 from ciqEstimatePeriod ep
 	join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
@@ -72,7 +72,7 @@ select
 		when ep.periodTypeId = 1 then 'FY'+cast(ep.fiscalYear as varchar(max))
 		when ep.periodTypeId = 2 then 'FQ'+cast(ep.fiscalQuarter as varchar(max))+cast(ep.fiscalYear as varchar(max))
 	end as period,
-	null as date,
+	ep.periodEndDate as date,
 	cISO.ISOCode
 from ciqEstimatePeriod ep
 	join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
@@ -124,7 +124,7 @@ select
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
-       null as date,
+       ep.periodEndDate as date,
        cISO.ISOCode
 from ciqEstimatePeriod ep
        join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
@@ -175,7 +175,7 @@ select
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
-       null as date,
+       ep.periodEndDate as date,
        cISO.ISOCode
 from ciqEstimatePeriod ep
        join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
@@ -227,7 +227,7 @@ select
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
-       null as date,
+       ep.periodEndDate as date,
        cISO.ISOCode
 from ciqEstimatePeriod ep
        join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId

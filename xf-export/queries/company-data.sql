@@ -192,7 +192,7 @@ select pop.tickerSymbol,
 		when fp.periodTypeId = 1 then 'FY'+cast(fp.fiscalYear as varchar(max))
 		when fp.periodTypeId = 4 then 'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max))
 	end as period,
-	null as date,
+	fp.periodEndDate as date,
 	cISO.ISOCode as currency
 from ciqLatestInstanceFinPeriod fp
 	join ##SGXPop pop on fp.companyId=pop.companyId
@@ -371,7 +371,7 @@ select pop.tickerSymbol, pop.exchangeSymbol,
 	end as WMSIApi,
 	convert(varchar(max),fd.dataItemValue),
 	'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max)),
-	null as date,
+	fp.periodEndDate as date,
 	case when fd.dataItemId in (9, 3058, 4020, 2021, 4173, 1310, 4364) then cISO.ISOCode end
 from ciqLatestInstanceFinPeriod fp
 	join ciqFinancialData fd on fp.FinancialPeriodId=fd.FinancialPeriodId
