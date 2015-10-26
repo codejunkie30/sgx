@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Date;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,9 +51,12 @@ public class EstimatesService extends AbstractDataService{
 			Map<String, Object> estimateMap = new HashMap<String, Object>();
 			estimateMap.put("period", entry.getKey());
 			estimateMap.put("tickerCode", tickerNoEx);
+			Date periodDate = null;
 			for (CSVRecord record : records) {	
-				estimateMap.put(record.get(2), Double.parseDouble(record.get(3)));				
+				estimateMap.put(record.get(2), Double.parseDouble(record.get(3)));	
+				if (periodDate == null && StringUtils.stripToNull(record.get(5)) != null) periodDate = new Date(record.get(5));
 			}
+			if (periodDate != null) estimateMap.put("periodDate", periodDate);
 			JsonElement jsonElement = gson.toJsonTree(estimateMap);
 			Estimate est = gson.fromJson(jsonElement, Estimate.class);
 			List<Estimate> list = estimates.getEstimates();
