@@ -37,11 +37,12 @@ div.wrapper {
   text-align: center;
   font-weight: bold; }
   .header-bar a {
-    color: #4d4e50; }
+    color:  #0b236b;}
     .header-bar a:hover {
       color: #0b236b; }
     .header-bar a.active {
-      color: #0b236b; }
+      cursor:default;
+      color: #4d4e50; }
 
 .bottom-space {
   margin-bottom: 2px; }
