@@ -10,7 +10,7 @@
 .summary .right { width: 32%; background: #ccc; display: inline-block; vertical-align: top; }
 
 .summary table { border-spacing: 0; border-collapse: collapse; margin: 0 0 20px 0; border-right: 1px solid #ccc; border-top: 1px solid #ccc; }
-.summary table tr th { color: #0e236b; border: 1px solid #ccc; padding: 8px 12px; font: bold 14px/12px Arial, Helvetica, sans-serif; text-align: center; cursor: pointer; vertical-align: top; }
+.summary table tr th { color: #0e236b; border: 1px solid #ccc; padding: 8px 12px; font: bold 14px/12px Arial, Helvetica, sans-serif; text-align: center; cursor: default; vertical-align: top; }
 .summary table tr th span {	color: #0e236b; display: block; }
 .summary table tbody td { color: #000; border: 1px solid #ccc; padding: 8px 12px; font: normal 12px/12px Arial, Helvetica, sans-serif; text-align: center; line-height: 125%; vertical-align: top; }
 .summary table tbody td.name { font-weight: bold; }
