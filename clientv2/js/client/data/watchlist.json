@@ -1,0 +1,98 @@
+{ 
+	"watchlists": [
+		{
+			"id": 1,
+			"name": "Watchlist Name A",
+			"companies": [
+				{
+					"ticker": "CL34",
+					"companyName": "Singapore Airlines Limited",
+					"currency": "SGD",
+					"price": "2.45",
+					"change": "2.13"
+				},
+				{
+					"ticker": "T14",
+					"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited",
+					"currency": "SGD",
+					"price": "20.06",
+					"change": "2.02"
+				}
+			],
+			"optionList": {
+				"pcPriceDrop": true,
+				"pcPriceDropBelow": null,
+				"pcPriceRiseAbove": null,
+				"pcTradingVolume": false,
+				"pcTradingVolumeValue": 5,
+				"pcReachesWeek": true,
+				"pcReachesWeekValue": 2,
+				"estChangePriceDrop": false,
+				"estChangePriceDropBelow": null,
+				"estChangePriceDropAbove": null,
+				"estChangeConsensus": true,
+				"estChangeConsensusValue": 2,
+				"estChangeEstimates": false,
+				"estChangeEstimatesValue" : 3,		
+				"kdAnounceCompTransactions": true,
+				"kdTransactionUpdates": false,
+				"kdBankruptcyUpdates": true,
+				"kdCompanyForecasts": false,
+				"kdCorporateStructureRelated": true,
+				"kdCustProdRelated": false,
+				"kdDividensSplits": true,
+				"kdListTradeRelated": false,
+				"kdPotentialRedFlags": true,
+				"kdPotentialTransactions": false,
+				"kdResultsCorpAnnouncements": true
+			}
+		},
+		{
+			"id": 2,
+			"name": "Watchlist Name B",
+			"companies": [
+				{
+					"ticker": "CL34",
+					"companyName": "Singapore Airlines Limited",
+					"currency": "SGD",
+					"price": "1.45",
+					"change": "0.13"
+				},
+				{
+					"ticker": "T14",
+					"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited",
+					"currency": "SGD",
+					"price": "10.06",
+					"change": "0.02"
+				}
+			],
+			"optionList": {
+				"pcPriceDrop": false,
+				"pcPriceDropBelow": null,
+				"pcPriceRiseAbove": null,
+				"pcTradingVolume": true,
+				"pcTradingVolumeValue": 10,
+				"pcReachesWeek": false,
+				"pcReachesWeekValue": "high",
+				"estChangePriceDrop": true,
+				"estChangePriceDropBelow": null,
+				"estChangePriceDropAbove": null,
+				"estChangeConsensus": false,
+				"estChangeConsensusValue": "Buy",
+				"estChangeEstimates": true,
+				"estChangeEstimatesValue" : "beat",		
+				"kdAnounceCompTransactions": false,
+				"kdTransactionUpdates": true,
+				"kdBankruptcyUpdates": false,
+				"kdCompanyForecasts": true,
+				"kdCorporateStructureRelated": false,
+				"kdCustProdRelated": true,
+				"kdDividensSplits": false,
+				"kdListTradeRelated": true,
+				"kdPotentialRedFlags": false,
+				"kdPotentialTransactions": true,
+				"kdResultsCorpAnnouncements": false
+			}
+		}
+	]
+}

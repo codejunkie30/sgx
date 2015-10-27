@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.0" />
-    <link rel="stylesheet" href="css/alerts.css?v=1.0" />
+    <link rel="stylesheet" href="css/alerts.css?v=1.0" />  
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -18,47 +18,38 @@
 
 </head>
 
-<body style="width: auto;" id="alerts">
+<body style="width: auto;">
 	
-	<div class="grid scan">
-		<h2>Alerts</h2>
-		<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
-		<p><a href="">Create a New Watch List</a></p>
+	<div class="grid">
+		<span data-bind="template: 'company-header'"></span>
 	</div>
 	
-	<div class="grid scan">
+	<div class="grid scan intro">
+		<h1>Alerts</h1>
+		<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
+		<p>Enter a Watch List name: <input class="text" type="email" data-bind="value: name"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
+		<div class="error-messages">
+		</div>
+	</div>
+	
+	<div class="grid scan wl-container">
 		<section class="watchlist">
-			<select>
-				<option>Watch List Name A</option>
-			</select>
+			<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
 			<a href="#">EDIT</a> <a href="#">DELETE</a>
 			
-			<div class="companies">
-				<ul>								
-					<li class="odd">						
-						<!--<span data-bind="text: company.companyInfo.tickerCode"></span>
-						<span class="currency" data-bind="text: priceData().currency"></span> 
-						<span class="price" data-bind="text: priceData().price, format: 'number'"></span>
-						<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }"></span>
-						<span class="remove"></span>
-						<div data-bind="text: company.companyInfo.companyName"></div>>-->
-						
-						<span class="ticker">CL34</span>
-						<span class="currency">SGD</span> 
-						<span class="price">1.45</span>
-						<span class="change negative">-0.13</span>
-						<span class="remove"></span>
-						<div class="company">Singapore Airlines Limited</div>						
-					</li>
-					<li>
-						<span class="ticker">T14</span>
-						<span class="currency">SGD</span> 
-						<span class="price">10.06</span>
-						<span class="change">+0.02</span>
-						<span class="remove"></span>
-						<div class="company">Tianjin Zhongxin Pharmaceutical Group Corporation Limited</div>						
-					</li>					
-				</ul>				
+			<div class="companies">					
+				<div data-bind="if: displayList">
+					<ul data-bind="foreach: displayList().companies">
+						<li data-bind="css: { 'odd': ($index() % 2 == 0) }">
+							<span class="ticker" data-bind="text: ticker"></span>
+							<span class="currency" data-bind="text: currency"></span> 
+							<span class="price" data-bind="text: price"></span>
+							<span class="change" data-bind="text: change"></span>
+							<span class="remove"></span>
+							<div class="company" data-bind="text: companyName"></div>						
+						</li>
+					</ul>	
+				</div>
 			</div>
 			<div class="search">
 				<div class="searchtoggle">
@@ -98,10 +89,10 @@
 			<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
 				<span class="name" data-bind="text: name"></span>
 			</span>
-			<input type="checkbox">
+			<input type="checkbox" data-bind="checked: displayList().optionList.">
 		</span>-->
 		
-		<section class="alerts">
+		<section class="alerts" data-bind="if: displayList">
 			<h3>Price Changes</h3>
 			<div class="price-changes">
 				<ul>
@@ -110,31 +101,28 @@
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.pcPriceDrop">
 						</span>
-						<span>Price drops below <input type="text"> or rises above <input type="text"></span>
+						<span>Price drops below <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceRiseAbove"></span>
 					</li>
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.pcTradingVolume">
 						</span>
-						<span>Trading volume exceeds 30 day daily change in volume by <input type="text"></span>
+						<span>Trading volume exceeds 30 day daily change in volume by <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.pcTradingVolumeValue"></span>
 					</li>
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
 								<span class="name" data-bind="text: name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.pcReachesWeek">
 						</span>
 						<span>Reaches a new 52-week 
-							<select>
-								<option>High</option>
-								<option>Low</option>
-							</select>
+							<select data-bind="options: weeks, optionsValue: 'id', optionsText: 'name', value: displayList().optionList.pcReachesWeekValue"></select>
 						</span>
 					</li>
 				</ul>
@@ -143,7 +131,7 @@
 				<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
 					<span class="name" data-bind="text: name"></span>
 				</span>
-				<input type="checkbox">
+				<input type="checkbox" data-bind="checked: displayList().optionList.">
 			</span>-->
 			<h3>Estimates</h3>
 			<div class="estimates">
@@ -153,30 +141,29 @@
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.estChangePriceDrop">
 						</span>
-						<span>Change in target price drops below <input type="text"> or rises above <input type="text"></span>
+						<span>Change in target price drops below <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.estChangePriceDropBelow"> or rises above <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.estChangePriceDropAbove"></span>
 					</li>
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.estChangeConsensus">
 						</span>
-						<span>Change in consensus recommendation (buy, sell, hold).
+						<span>Change in consensus recommendation
+							<select data-bind="options: consensusRec, optionsValue: 'id', optionsText: 'name', value: displayList().optionList.estChangeConsensusValue"></select>
 					</li>
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.estChangeEstimates">
 						</span>
 						<span>Change in estimates to actual
-							<select>
-								<option>Beat</option>
-							</select>
+							<select data-bind="options: actualEstimates, optionsValue: 'id', optionsText: 'name', value: displayList().optionList.estChangeEstimatesValue"></select>
 						</span>
 					</li>
 				</ul>
@@ -184,13 +171,13 @@
 			
 			<h3>Key Developments</h3>
 			<div class="developments">
-				<ul>
+				<ul style="float: left;">
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdAnounceCompTransactions">
 						</span>
 						<span>Announced/Completed Transactions</span>
 					</li>
@@ -199,17 +186,100 @@
 							<span class="trigger">
 								<span class="name"></span>
 							</span>
-							<input type="checkbox">
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdTransactionUpdates">
 						</span>
 						<span>Transaction Updates</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdBankruptcyUpdate">
+						</span>
+						<span>Bankruptcy Updates</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdCompanyForecasts">
+						</span>
+						<span>Company Forecasts and Ratings</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdCorporateStructureRelated">
+						</span>
+						<span>Corporate Structure Related</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdCustProdRelated">
+						</span>
+						<span>Customer/Product Related</span>
+					</li>
+				</ul>				
+				<ul style="float: left;">
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdDividensSplits">
+						</span>
+						<span>Dividends/Splits</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdListTradeRelated">
+						</span>
+						<span>Listing/Trading Related</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdPotentialRedFlags">
+						</span>
+						<span>Potential Red Flags/Distress Indicators</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdPotentialTransactions">
+						</span>
+						<span>Potential Transactions</span>
+					</li>
+					<li>
+						<span class="checkbox left">
+							<span class="trigger">
+								<span class="name"></span>
+							</span>
+							<input type="checkbox" data-bind="checked: displayList().optionList.kdResultsCorpAnnouncements">
+						</span>
+						<span>Results and Corporate Announcements</span>
 					</li>
 				</ul>
 			</div>
 			<div class="button-wrapper">
 				<a href="#" class="button">Save</a> <a href="#">CANCEL</a>
 			</div>
-	</section>
-	
+		</section>
+	</div>
 
 	<div class="grid disclosure scan">
 		<!--data-bind="siteLink:'terms-conditions'"--><p>Source: S&amp;P Capital IQ - <a >Use of this information is subject to terms and conditions</a></p>
@@ -221,7 +291,7 @@
 <script type="text/javascript">
 
 	function loadPage() {
-		require([ "client/base" ],
+		require([ "client/base", "client/alerts" ],
 			function(base, pg) {
 				$(document).ready(function(e) {
 					var page = base.init(pg);

@@ -10,7 +10,8 @@
 			      "name":"Total Market Cap",
 			      "template":"number",
 			      "isDefault":true,
-			      "shortName":"Mkt. Cap."
+			      "shortName":"Mkt. Cap.",
+				  "distribution-buckets":600
 			   },
 			   {
 			      "id":"percentChange",
@@ -81,76 +82,6 @@
 			]
 		},
 		{
-			"name": "Valuation",
-			"customizeDisplay": true,
-			"fields": [
-			   {
-			      "id":"peRatio",
-			      "format":"number",
-			      "name":"P/E Ratio",
-			      "template":"number",
-			      "isDefault":true,
-			      "shortName":"P/E"
-			   },
-			   {
-			      "id":"dividendYield",
-			      "format":"percent",
-			      "name":"Dividend Yield",
-			      "template":"number",
-			      "isDefault":true,
-			      "shortName":"Div. Yld.",
-				  "distribution-buckets":700
-			   },
-			   {
-			      "id":"priceToBookRatio",
-			      "format":"number",
-			      "name":"P/BV",
-			      "template":"number",
-			      "shortName":"P/BV"
-			   },
-			   {
-			      "id":"avgBrokerReq",
-			      "format":"lookup",
-			      "name":"Consensus Recommendation",
-			      "template":"number",
-			      "shortName":"Consensus",
-			      "minLabel":"Buy",
-			      "maxLabel":"Sell",
-			      "dataSort":"string",
-			      "formatter":{
-			         "type":"round-list",
-			         "values":[
-			            "",
-			            "Buy",
-			            "Overperform",
-			            "Hold",
-			            "Underperform",
-			            "Sell"
-			         ],
-			         "minField":"targetPriceNum",
-			         "minValue":3
-			      },
-			      "distribution-type": "histogram"
-			   },
-			   {
-			      "id":"gtiScore",
-			      "format":"number",
-			      "name":"GTI Score",
-			      "template":"number",
-			      "shortName":"GTI Score",
-				  "distribution-buckets":680
-			   },
-			   {
-			      "id":"gtiRankChange",
-			      "format":"number",
-			      "name":"GTI Change In Rank",
-			      "template":"number",
-			      "shortName":"GTI Chg. Rank",
-				  "distribution-buckets":680
-			   }			
-			]
-		},
-		{
 			"name": "Financials",
 			"customizeDisplay": true,
 			"fields": [
@@ -160,7 +91,8 @@
 			      "name":"Total Revenue",
 			      "template":"number",
 			      "isDefault":true,
-			      "shortName":"Tot. Rev."
+			      "shortName":"Tot. Rev.",
+				  "distribution-buckets":650
 			   },
 			   {
 			      "id":"ebitdaMargin",
@@ -230,6 +162,77 @@
 			      "template":"number",
 			      "shortName":"ROE"
 			   }
+			]
+		},
+		{
+			"name": "Valuation",
+			"customizeDisplay": true,
+			"fields": [
+			   {
+			      "id":"peRatio",
+			      "format":"number",
+			      "name":"P/E Ratio",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"P/E",
+				  "distribution-buckets":700
+			   },
+			   {
+			      "id":"dividendYield",
+			      "format":"percent",
+			      "name":"Dividend Yield",
+			      "template":"number",
+			      "isDefault":true,
+			      "shortName":"Div. Yld.",
+				  "distribution-buckets":750
+			   },
+			   {
+			      "id":"priceToBookRatio",
+			      "format":"number",
+			      "name":"P/BV",
+			      "template":"number",
+			      "shortName":"P/BV"
+			   },
+			   {
+			      "id":"avgBrokerReq",
+			      "format":"lookup",
+			      "name":"Consensus Recommendation",
+			      "template":"number",
+			      "shortName":"Consensus",
+			      "minLabel":"Buy",
+			      "maxLabel":"Sell",
+			      "dataSort":"string",
+			      "formatter":{
+			         "type":"round-list",
+			         "values":[
+			            "",
+			            "Buy",
+			            "Overperform",
+			            "Hold",
+			            "Underperform",
+			            "Sell"
+			         ],
+			         "minField":"targetPriceNum",
+			         "minValue":3
+			      },
+			      "distribution-type": "histogram"
+			   },
+			   {
+			      "id":"gtiScore",
+			      "format":"number",
+			      "name":"GTI Score",
+			      "template":"number",
+			      "shortName":"GTI Score",
+				  "distribution-buckets":680
+			   },
+			   {
+			      "id":"gtiRankChange",
+			      "format":"number",
+			      "name":"GTI Change In Rank",
+			      "template":"number",
+			      "shortName":"GTI Chg. Rank",
+				  "distribution-buckets":680
+			   }			
 			]
 		},
 		{

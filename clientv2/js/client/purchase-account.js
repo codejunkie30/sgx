@@ -23,7 +23,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 					if (data.message != undefined){
 						
 						PURCHASE.purchaseToken($.trim(data.message));
-						PAGE.showLoading();	
+						//PAGE.showLoading();	
+						
+						PAGE.modal.open({  width: 550, maxWidth: 550, height: 200, content: '<p>You are being redirected to a third-party site, eNets to complete this transaction.</p>' });
 							
 						setTimeout(function() {
 						    $("#txnForm").submit();
