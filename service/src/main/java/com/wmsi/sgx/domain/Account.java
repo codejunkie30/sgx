@@ -20,7 +20,7 @@ import com.google.common.base.Objects;
 public class Account extends AbstractAuditable{
 
 	public enum AccountType{
-		TRIAL, PREMIUM, EXPIRED
+		TRIAL, PREMIUM, EXPIRED, NOT_LOGGED_IN
 	};
 
 	@Id
