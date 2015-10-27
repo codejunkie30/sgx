@@ -32,7 +32,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	
 	//need to switch it to pick value from the placeholder
 	//there is some issue its not picking up value form there 
-	@Scheduled(cron="0 39 9 ? * *")
+	@Scheduled(cron="0 20 14 ? * *")
 	public void checkAccountExpiration() {
 		List<Account> accounts = accountRepository.findAll();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
