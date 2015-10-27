@@ -23,9 +23,10 @@
 	<div class="grid">
 		<span data-bind="template: 'company-header'"></span>
 	</div>
-	<div class="grid scan">
+	<!--<div class="grid scan">
 		<h2>Financials</h2>
-	</div>
+	</div>-->
+<section id="financials">
 	<div class="chart-container section-break" data-bind="visible: series().length > 0">
 		<div id="bar-chart" series-increment="50" default-width="600" default-height="400"></div>
 		<div class="legend-note">
@@ -87,6 +88,7 @@
 		</table>
 		
 	</div>
+</section>
 	
 	<div class="grid disclosure">
 		<p>Source: S&amp;P Capital IQ - <a data-bind="siteLink:'terms-conditions'">Use of this information is subject to terms and conditions</a></p>

@@ -330,8 +330,8 @@ header.header { margin: 10px 0 0 0; }
 
 .header .profile nav { margin: 10px 22px 0 24px; position: relative; }
 .header .profile nav ul { font-size: 0; overflow: hidden; }
-.header .profile nav ul li { display: inline-block; font-size: 13pt !important; line-height: 36px; }
-.header .profile nav ul li a { padding: 10px 53px; color: #fff; text-decoration: none; border: 1px solid #000; border-bottom: 0 !important; border-radius: 8px 8px 0 0; }
+.header .profile nav ul li { display: inline-block; font-size: 13pt !important; line-height: 38px; }
+.header .profile nav ul li a { font-size:12pt; padding: 10px 45px; color: #fff; text-decoration: none; border: 1px solid #000; border-bottom: 0 !important; border-radius: 8px 8px 0 0; }
 
 /* Nav Active Link Styles */
 .header .profile nav ul li a:hover,
@@ -1061,3 +1061,12 @@ background: url("../img/title-back.png");
 .display-hidden {
   display:block !important;
 }
+
+#estimates-content,
+.estimates-content-alternative,
+.technical-charting,
+#financials,
+.technical-charting-alternative {
+  margin-top:40px;
+}
+
