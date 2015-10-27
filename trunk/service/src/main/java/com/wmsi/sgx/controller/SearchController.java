@@ -3,12 +3,15 @@ package com.wmsi.sgx.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
@@ -27,8 +30,22 @@ public class SearchController{
 	@Autowired
 	private AccountService accountService;
 	@RequestMapping("search")
-	public SearchResults search(@AuthenticationPrincipal UserDetailsWrapper user,@Valid @RequestBody SearchRequest req) throws ServiceException{
-		AccountModel ac =  accountService.getAccountForUsername(user.getUsername());
-		return companySearchService.search(req,ac.getType());
+	public SearchResults search(@Valid @RequestBody SearchRequest req) throws ServiceException{
+
+		User u = null;
+		AccountType accountType=null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication == null|| !authentication.isAuthenticated()){
+			
+			accountType = AccountType.NOT_LOGGED_IN;	
+		}
+		if(authentication.getPrincipal() instanceof User){
+			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
+			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
+			accountType = accountModel.getType();
+		}
+			
+		
+		return companySearchService.search(req,accountType);
 	}
 }
