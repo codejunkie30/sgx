@@ -291,7 +291,9 @@ header.header { margin: 10px 0 0 0; }
 .header .login-bar select { display: inline-block; line-height: 29px !important; }
 .header .login-bar .stock-facts { margin: 0 0 0 12px; line-height: 29px !important; }
 .header .login-bar.logged-in .stock-facts { font-weight: bold; padding: 0 12px }
-.header .login-bar .logged-in-as { background: #b3c6cf; font-weight: bold; padding: 0 9px; margin: 0 0 0 12px; }
+.header .login-bar .logged-in-as { background: #b3c6cf; font-weight: bold; padding: 1px 9px 0px; margin: 0 0 0 12px; font-size:9pt; }
+.header .login-bar .logged-in-as span {font-size:9pt;}
+.header .login-bar span {line-height: 28px !important;}
 .header .login-bar ul { margin: 0 !important; padding: 0 6px; }
 .header .login-bar ul li { border-right: 1px solid #333; line-height: 16px !important; padding: 0 10px 0 6px; }
 .header .login-bar ul li a { text-decoration: none; }
@@ -1069,4 +1071,6 @@ background: url("../img/title-back.png");
 .technical-charting-alternative {
   margin-top:40px;
 }
+
+
 
