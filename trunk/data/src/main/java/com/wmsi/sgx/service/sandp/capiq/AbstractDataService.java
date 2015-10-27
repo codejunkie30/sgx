@@ -137,8 +137,7 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws CapIQRequestException
 	 */
 	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
-
-		String value = actual == null ? null : actual.getValue();
+		String value = actual == null ? null : StringUtils.stripToNull(actual.getValue());
 		return value;
 		/**
 		// nothing to do
