@@ -81,18 +81,25 @@ public abstract class AbstractDataService implements DataService{
 		
 		// not converting SGD for now
 		currencies.remove("SGD");
-		if (currencies.size() == 0) return null;
 		
-		String endpoint = "/fxdata/_search?size=10000&q=from:";
-		String terms = "";
-
-		for (String s : currencies) {
-			if (terms.length() > 0) terms += "%20OR%20";
-			terms += s;
+		List<FXRecord> records = null;
+		
+		if (currencies.size() > 0) {
+		
+			String endpoint = "/fxdata/_search?size=10000&q=from:";
+			String terms = "";
+	
+			for (String s : currencies) {
+				if (terms.length() > 0) terms += "%20OR%20";
+				terms += s;
+			}
+			
+			IndexQueryResponse iqr = indexerService.query(endpoint + terms);
+			records = iqr.getHits(FXRecord.class);
+			
 		}
 		
-		IndexQueryResponse iqr = indexerService.query(endpoint + terms);
-		List<FXRecord> records = iqr.getHits(FXRecord.class);
+		if (records == null) records = new ArrayList<FXRecord>();
 		
 		return records;
 	}
