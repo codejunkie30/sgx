@@ -18,7 +18,7 @@ public interface IndexerService{
 
 	Boolean deleteIndex(String indexName) throws IndexerServiceException;
 	
-	IndexQueryResponse query(String endpoint, String json) throws IndexerServiceException;
+	IndexQueryResponse query(String endpoint) throws IndexerServiceException;
 	
 	void refresh() throws IndexerServiceException;
 	

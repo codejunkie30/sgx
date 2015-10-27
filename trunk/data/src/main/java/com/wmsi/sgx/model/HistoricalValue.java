@@ -4,11 +4,14 @@ import java.util.Comparator;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 
 public class HistoricalValue {
 
 	private String tickerCode;
 	private Date date;
+	
+	@FXAnnotation
 	private Double value;
 
 	public Date getDate() {
