@@ -6,13 +6,10 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -24,7 +21,6 @@ import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
-import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
@@ -35,8 +31,6 @@ import com.wmsi.sgx.util.DateUtil;
 public class CompanyService extends AbstractDataService {
 	
 	private static final Logger log = LoggerFactory.getLogger(CompanyService.class);
-	
-	private List<FXRecord> fxRecords;
 	
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {

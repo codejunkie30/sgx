@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.sandp.capiq;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,12 +10,14 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.wmsi.sgx.model.FXRecord;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.service.indexer.IndexQueryResponse;
 import com.wmsi.sgx.service.indexer.IndexerService;
@@ -30,6 +33,7 @@ public abstract class AbstractDataService implements DataService{
 	@Value("${loader.companies.dir}")
 	private String companiesBase;
 	
+	protected List<FXRecord> fxRecords;
 
 	protected RequestExecutor requestExecutor;
 	public void setRequestExecutor(RequestExecutor e){requestExecutor = e;}
@@ -133,7 +137,60 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws CapIQRequestException
 	 */
 	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
-		return actual == null ? null : StringUtils.stripToNull(actual.getValue());
+
+		String value = actual == null ? null : actual.getValue();
+		return value;
+		/**
+		// nothing to do
+		if (value == null) return null;
+		
+		// fx convert
+		if (field.isAnnotationPresent(FXAnnotation.class)) value = getFXConverted(value, actual);
+		
+		return value;
+		*/
+	}
+	
+	/**
+	 * convert the value of csv record (assumes it can be converted)
+	 * @param actual
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFXConverted(String value, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
+
+		// can't convert
+		if (value == null ||
+			fxRecords == null || 
+			fxRecords.size() == 0 ||
+			actual.getCurrency() == null || 
+			actual.getPeriodDate() == null
+		) return value;
+		
+		// temp hack for just processing SGD
+		if (actual.getCurrency().equals("SGD")) return actual.getValue();
+		
+		// let's try and find a match
+		for (FXRecord record : fxRecords) {
+			if (!record.getFrom().equals(actual.getCurrency()) || !DateUtils.isSameDay(actual.getPeriodDate(), record.getDate())) continue;
+			BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
+			return val.toString();
+		}
+		
+		// this is for runs that are ahead of the FX conversion data
+		// we go back a day - temporary hack
+		if (DateUtils.isSameDay(actual.getPeriodDate(), new Date())) {
+			for (FXRecord record : fxRecords) {
+				if (!record.getFrom().equals(actual.getCurrency()) || !DateUtils.isSameDay(DateUtils.addDays(new Date(), -1), record.getDate())) continue;
+				BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
+				return val.toString();
+			}
+		}
+		
+		throw new ResponseParserException("No conversion available for field " + actual);
+		
+		
 	}
 	
 }
