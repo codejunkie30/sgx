@@ -141,7 +141,7 @@
 						<th width="30%"></th>
 						<!-- ko foreach : $parent.estimates.quarterly -->
 						<th data-bind="attr:{width:$root.quarterlyTableColWidth}" class="col-title">
-							<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
+							<span data-bind="text: period, tblHeader: true"></span>
 							<br />
 							<span data-bind="text: periodDate, format: 'date'"></span>
 						</th>
@@ -182,7 +182,7 @@
 						<th width="30%"></th>
 						<!-- ko foreach : $parent.estimates.annually -->
 							<th data-bind="attr:{width:$root.annualTableColWidth}" class="col-title">
-								<span data-bind="text: period.indexOf('LTM') != -1 ? 'LTM Ending' : period"></span>
+								<span data-bind="text: period, tblHeader:true"></span>
 								<br />
 								<span data-bind="text: periodDate, format: 'date'"></span>
 							</th>

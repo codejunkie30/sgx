@@ -2,6 +2,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
     ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 
+    //Estimates specific table header handling
+    ko.bindingHandlers.tblHeader = {
+        init: function(element, valueAccessor, allBindings) {
+            var value = allBindings().text;
+            var val = valueAccessor();
+            return ko.bindingHandlers.text.update(element, function(){
+                return value.slice(0, -4)+' '+value.slice(-4);
+            });
+        }
+    }
+
 	var CF = {
 			
 		quarterlyEst: null,
@@ -101,13 +112,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		},
 		
 		finish: function(me) {
-			
-    		// finish other page loading
-    		// ko.applyBindings(this, $("body")[0]);
+
 			
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
-			
-    		//var endpoint = me.fqdn + "/sgx/company/financials";
 			
 			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'GET';
@@ -123,7 +130,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		
 		initFinancials: function(me, data) {
 			
-            console.log(data);
             this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
