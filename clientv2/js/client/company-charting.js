@@ -322,6 +322,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       }
 
       var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
+      //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
       var postType = 'GET';
       var params = { id: self.ticker };
 
@@ -344,22 +345,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
       PAGE.checkStatus();
-
-      //   if(data == true)
-      //     self.init_premium();
-      //   else 
-      //     self.init_nonPremium();
         
-      // });
-
       var waitForDataToInit = ko.computed({
           read:function(){
               var userData = this.premiumUser();
               var companyData = this.gotCompanyData();
+              var acctNotExpired = this.libTrialExpired()
 
-              if(userData && companyData) {
+              if(userData && companyData && acctNotExpired) {
                   self.init_premium();
-              }else if(userData == false && companyData == true) {
+              }else if(userData != undefined && companyData == true) {
                   self.init_nonPremium();
               }
           },
@@ -492,20 +487,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var section = $('.technical-charting');
       if(this.indicators_chart.chartElement.yAxis.length ==4 ) {
         section.animate({ 'paddingBottom':20 }, 1000);
+        //$('.indicators-description').animate({'margin-top', 130});
       }else {
         section.animate({ 'paddingBottom':120 }, 1000);
       }
     }
 
   }
-
-
-
-
-
-
-
-
 
 
 
