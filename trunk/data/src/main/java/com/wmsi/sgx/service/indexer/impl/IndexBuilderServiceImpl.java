@@ -414,7 +414,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		    	Object[] vals = parseFXLine(line); 
 		    	if (vals == null) continue;
 		    	buffer.append(String.format(json, vals).replace("- ", "-0"));
-		    	if (cnt % 150000 == 0 && cnt > 0) {
+		    	if (cnt % fxBatchSize == 0 && cnt > 0) {
 		    		log.info("FX Processed {} records", cnt);
 		    		indexerService.bulkSave("fxdata", buffer.toString(), indexName);
 		    		buffer.setLength(0);
