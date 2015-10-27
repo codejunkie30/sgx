@@ -1,16 +1,17 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlist.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, WL) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/watchlist.json", "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, WL, AL) {
 	
 	
 	var ALERTS = {
 		finalWL: ko.observableArray(),
 		selectedValue: ko.observable(),
 		displayList: ko.observable(),
+		//companies: ko.observableArray(),
 		weeks: ko.observableArray(),
 		actualEstimates: ko.observableArray(),
 		consensusRec: ko.observableArray(),
 		displayListCompanies: ko.observableArray(),
 		watchList: ko.observable(true),
-		name: ko.observable(),
+		newWLName: ko.observable(),
 		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
@@ -22,6 +23,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		alerts: JSON.parse(AL),
 		
 		defaultSearch: "",
 		
@@ -49,29 +51,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();			
 			}
 			
-			var test = ko.computed(function(){				
-				ALERTS.displayList(ALERTS.finalWL()[ALERTS.selectedValue()-1]);
+			//Alerts select lists
+			this.weeks(JSON.parse(AL).alerts[0].weeks);
+			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
+			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
 			
-				ALERTS.weeks([
-			        {"id":1, "name": "High"},
-			        {"id":2, "name": "Low"}
-			    ]);
+			var wathclistDisplay = ko.computed(function(){
 				
-				ALERTS.consensusRec([
-			        {id:1, name: "Buy"},
-			        {id:2, name: "Sell"},
-			        {id:3, name: "Hold"}
-			    ]);
+				ALERTS.finalWL(JSON.parse(WL).watchlists);
 				
-				ALERTS.actualEstimates([
-			        {id:1, name: "Beat"},
-			        {id:2, name: "Miss"},
-			        {id:3, name: "Flat"}
-			    ]);
-				
-				
-				
-				console.log(ALERTS.actualEstimates());
+				$.each(ALERTS.finalWL(), function(idx, wl){					
+					if (ALERTS.selectedValue() ==  wl.id){						
+						var companies = wl.companies
+						wl.companies = ko.observableArray(companies);						
+						ALERTS.displayList(wl);
+					}
+				});
 				
 				$.each($('.alerts input[type=text]'),function(){
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
@@ -85,18 +80,31 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			
+			
+			//var endpoint = "http://sgx.fakemsi.com/js/client/data/watchlists/watchlist.json";
+//			var postType = 'GET';
+//    		var params = {};
+//			var jsonp = 'jsonp';
+//			var jsonpCallback = 'jsonpCallback';
+//    		UTIL.handleAjaxRequest(endpoint, postType, params, jsonp, function(data, textStatus, jqXHR){ console.log(data); },
+//				function(jqXHR, textStatus, errorThrown){
+//					console.log('fail');
+//					console.log(textStatus);
+//					console.log(errorThrown);
+//					console.log(jqXHR);
+//				},jsonpCallback);
+						
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
 			
 			me.trackPage("SGX Company Watchlist - " + me.companyInfo.companyName);
     		
 			ko.validation = validation;
-    		validation.init({ insertMessages: false });
 			
-			ko.validation.registerExtenders();
+    		validation.init({ insertMessages: true });
 			
-			ALERTS.name.extend({
-				required: { message: displayMessage.watchlist.error}}).extend({
+			this.newWLName.extend({
+				required: { message: displayMessage.watchlist.error }}).extend({
 					minLength: { params: 1, message: displayMessage.watchlist.error },
 					maxLength: { params: 40, message: displayMessage.watchlist.error }
 				});
@@ -107,11 +115,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();
 			});
 			
-			
-			 
-			
-			
-			
+			return this;
 		},
 		
 		searchEvents: {
@@ -144,19 +148,54 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 		},
 		addWatchlist: function(){
-			var displayMessage = ALERTS.messages.messages[0];
-			if (this.errors().length > 0) {
-	         	$('.error-messages').empty();
-				$('<p/>').html(displayMessage.watchlist.error).appendTo('.error-messages');
-			    return
+			if (this.errors().length > 0) {				
+	            return
 	        }
-		},
-		showWatchlist: function(){
-			selectedValue = ko.computed(function () {
+						
+			console.log(ALERTS.finalWL());
+			
 				
-			});alert('here');
+				ALERTS.finalWL().push(
+					{
+					"id": 15,
+					"name": ALERTS.newWLName(),
+					"companies": [],
+					"optionList": {
+						"pcPriceDrop": false,
+						"pcPriceDropBelow": null,
+						"pcPriceRiseAbove": null,
+						"pcTradingVolume": false,
+						"pcTradingVolumeValue": null,
+						"pcReachesWeek": false,
+						"pcReachesWeekValue": 1,
+						"estChangePriceDrop": false,
+						"estChangePriceDropBelow": null,
+						"estChangePriceDropAbove": null,
+						"estChangeConsensus": false,
+						"estChangeConsensusValue": 1,
+						"estChangeEstimates": false,
+						"estChangeEstimatesValue" : 1,		
+						"kdAnounceCompTransactions": false,
+						"kdTransactionUpdates": false,
+						"kdBankruptcyUpdates": false,
+						"kdCompanyForecasts": false,
+						"kdCorporateStructureRelated": false,
+						"kdCustProdRelated": false,
+						"kdDividensSplits": false,
+						"kdListTradeRelated": false,
+						"kdPotentialRedFlags": false,
+						"kdPotentialTransactions": false,
+						"kdResultsCorpAnnouncements": false
+					}
+				}
+			
+			
+			)
+			console.log(ALERTS.finalWL());	
+			
+			
+			
 		}
-		
 
 	};
 	

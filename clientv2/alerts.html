@@ -27,8 +27,9 @@
 	<div class="grid scan intro">
 		<h1>Alerts</h1>
 		<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
-		<p>Enter a Watch List name: <input class="text" type="email" data-bind="value: name"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
+		<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
 		<div class="error-messages">
+			<p data-bind="validationMessage:newWLName"></p>
 		</div>
 	</div>
 	
@@ -117,7 +118,7 @@
 					<li>
 						<span class="checkbox left">
 							<span class="trigger">
-								<span class="name" data-bind="text: name"></span>
+								<span class="name"></span>
 							</span>
 							<input type="checkbox" data-bind="checked: displayList().optionList.pcReachesWeek">
 						</span>
