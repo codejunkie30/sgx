@@ -80,28 +80,18 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
 			
 			var self = this;
-			//this.init(function() { self.finish(self); });
 			
 			PAGE.checkStatus();
-
-            // this.premiumUser.subscribe(function(data) {
-            //     if(data) {
-
-            //     }else {
-            //         this.dataExists(false);
-            //         this.init_nonPremium();
-            //     }
-            // }, this);
-
             
             var waitForDataToInit = ko.computed({
                 read:function(){
                     var userData = this.premiumUser();
                     var companyData = this.gotCompanyData();
+                    var acctNotExpired = this.libTrialExpired();
 
-                    if(userData && companyData) {
+                    if(userData && companyData && acctNotExpired ) {
                         this.init(function() { self.finish(self); });
-                    }else if(userData == false && companyData == true) {
+                    }else if(userData != undefined && companyData == true) {
                         this.dataExists(false);
                         this.init_nonPremium();
                     }
@@ -129,7 +119,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         },
 		
 		initFinancials: function(me, data) {
-			
+
             this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
