@@ -270,6 +270,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	
         	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
         	if (value === "" || value === "-") return value;
+          if (value == null) return '-';
         	
     		var val = value;
     		
