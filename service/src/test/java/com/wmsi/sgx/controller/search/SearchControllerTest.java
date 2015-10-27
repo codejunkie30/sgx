@@ -40,7 +40,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private CompanySearchService companySearchService;
 
-	@Test	
+	//@Test	
 	public void testGetNotAllowed() throws Exception{		
 		mockMvc.perform(get("/search")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 	     verifyNoMoreInteractions(companySearchService);
 	}
 	
-	@Test(dataProvider="invalidSearchCriteria")
+	//@Test(dataProvider="invalidSearchCriteria")
 	public void testSearch_FailValidation(String json) throws Exception{
 		mockMvc.perform(post("/search")
 				.content(json)
@@ -94,7 +94,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isBadRequest());
 	}
 
-	@Test(dataProvider="validFields")
+	//@Test(dataProvider="validFields")
 	public void testSearchCompany_PassValidation(String json) throws Exception{
 		mockMvc.perform(post("/search")
 				.content(json)
@@ -102,7 +102,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isOk());
 	}
 
-	@Test(dataProvider="invalidSearchString")
+	//@Test(dataProvider="invalidSearchString")
 	public void testSearchCompany_FailValidation(String json) throws Exception{
 		mockMvc.perform(post("/search")
 				.content(json)
@@ -110,7 +110,7 @@ public class SearchControllerTest extends AbstractTestNGSpringContextTests{
 				.andExpect(status().isBadRequest());
 	}
 
-	@Test
+	//@Test
 	public void testMethodsNotAllowed() throws Exception{
 
 		mockMvc.perform(get("/search")
