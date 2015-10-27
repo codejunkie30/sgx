@@ -59,7 +59,9 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			var finendpoint = me.fqdn + "/sgx/company/financials";
     		var params = { id: me.ticker };
     		UTIL.handleAjaxRequest(finendpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
+			
 			this.resizeIframeSimple();
+			
 			return this;			
 		},
 		initPriceChart: function(parent, data) {

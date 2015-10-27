@@ -45,6 +45,9 @@
 			"purchaseAccount": {
 				"success": "Purchase account success message.",
 				"cancelFail": "Canacel/Fail purchase account message."
+			},
+			"watchlist": {
+				"error": "Watch List must be between 1 and 40 characters."	
 			}
 		}	
 	]

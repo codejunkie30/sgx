@@ -1,0 +1,15 @@
+{ 
+	"companies": [
+					{
+						"ticker": "EH5",
+						"companyName": "United Overseas Australia Ltd"						
+					},
+					{
+						"ticker": "AFG",
+						"companyName": "Alliance Financial Group Berhad"						
+					}
+			]		
+		}
+		
+	]
+}

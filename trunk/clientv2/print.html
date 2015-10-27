@@ -128,33 +128,33 @@
 								<tbody>
 									<tr>
 				                        <td width="25%"><b>Previous Open Price</b></td>
-				                        <td width="25%" class="normal right border" data-bind="text: companyInfo.openPrice, format: 'dollars'">-</td>
+				                        <td width="25%" class="normal right border" data-bind="text: companyInfo.openPrice != null ? companyInfo.openPrice : '-', format: 'dollars'">-</td>
 				                        <td width="25%"><b>Previous Day High/Low</b></td>
-				                        <td width="25%" class="normal right"><span data-bind="text: companyInfo.highPrice, format: 'dollars'"></span>-<span data-bind="text: companyInfo.lowPrice, format: 'dollars'"></span></td>
+				                        <td width="25%" class="normal right"><span data-bind="text: companyInfo.highPrice != null ? companyInfo.highPrice : '-', format: 'dollars'"></span>-<span data-bind="text: companyInfo.lowPrice, format: 'dollars'"></span></td>
 				                    </tr>
 				                    <tr class="even">
 				                        <td><b>Previous Day Volume</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.volume, format: 'volume'">-</td>
 				                        <td><b>Previous Close</b></td>
-				                        <td class="normal right" data-bind="text: companyInfo.previousClosePrice, format: 'dollars'">-</td>
+				                        <td class="normal right" data-bind="text: companyInfo.previousClosePrice != null ? companyInfo.previousClosePrice : '-', format: 'dollars'">-</td>
 				                    </tr>
 				                    <tr>
 				                        <td><b>Previous Close Date</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.previousCloseDate, format: 'date'">-</td>
 				                        <td><b>52 Week High/Low</b></td>
-				                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh, format: 'number'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'number'">-</span></td>
+				                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh != null ? companyInfo.yearHigh : '-', format: 'number'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'number'">-</span></td>
 				                    </tr>
 				                    <tr class="even">
 				                        <td><b>5-Year Beta</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.beta5Yr, format: 'number'">-</td>
 				                        <td><b>Shares Outstanding</b></td>
-				                        <td class="normal right" data-bind="text: companyInfo.sharesOutstanding, format: 'volume'">-</td>
+				                        <td class="normal right" data-bind="text: companyInfo.sharesOutstanding != null ? companyInfo.sharesOutstanding : '-', format: 'volume'">-</td>
 				                    </tr>
 				                    <tr>
 				                        <td><b>Average 3-month Volume</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.avgVolumeM3, format: 'volume'">-</td>
 				                        <td><b>Normalized Diluted EPS</b></td>
-				                        <td class="normal right" data-bind="text: companyInfo.eps, format: 'number'">-</td>
+				                        <td class="normal right" data-bind="text: companyInfo.eps != null ? companyInfo.yearHigh : '-', format: 'number'">-</td>
 				                    </tr>
 				                    <tr class="even">
 				                        <td><b>Total Market Cap</b></td>
@@ -275,26 +275,26 @@
 	        			
 	        			</td>
 	        			<td width="40%" class="right">
-	        				<div class="dark-module valuation left">
+	        				<div class="valuation left">
 								<h3>Valuation</h3>
-				
+							
 								<table cellspacing="0" class="panel">
 									<tbody>
 										<tr>
-					                        <td>Price/Book Value</td>
-											<td class="right" data-bind="text: companyInfo.priceToBookRatio != null ? companyInfo.priceToBookRatio : '-', format: 'number'">-</td>
-					                        <td>P/E Ratio</td>
-					                        <td class="right" data-bind="text: companyInfo.peRatio != null ? companyInfo.peRatio : '-', format: 'number'">-</td>
-					                    </tr>
-					                    <tr class="even">
-					                        <td>Dividend Yield</td>
-					                        <td class="right" data-bind="text: companyInfo.dividendYield != null ? companyInfo.dividendYield : '-', format: 'percent'">-</td>
-					                        <td>EV/EBITDA</td>
-					                        <td class="right" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
-					                    </tr>
-					                    <tr>
-					                    	<td colspan="4" class="right note">All data based on previous day information.</td>
-					                    </tr>
+											<td>Price/Book Value</td>
+											<td class="border right" data-bind="text: companyInfo.priceToBookRatio != null ? companyInfo.priceToBookRatio : '-', format: 'number'">-</td>
+											<td>P/E Ratio</td>
+											<td class="right" data-bind="text: companyInfo.peRatio != null ? companyInfo.peRatio : '-', format: 'number'">-</td>
+										</tr>
+										<tr class="even">
+											<td>Dividend Yield</td>
+											<td class="border right" data-bind="text: companyInfo.dividendYield != null ? companyInfo.dividendYield : '-', format: 'percent'">-</td>
+											<td>EV/EBITDA</td>
+											<td class="right" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
+										</tr>
+										<tr>
+											<td colspan="4" class="right note">All data based on previous day information.</td>
+										</tr>
 									</tbody>
 								</table>
 							</div>

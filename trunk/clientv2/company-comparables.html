@@ -46,7 +46,7 @@
 		<table data-bind="visible: results.viewModel.refinedCompanies().length > 0">
 			<thead>
 				<tr data-bind="foreach: results.viewModel.headers">
-					<th data-bind="click: function(data, event) { $parent.results.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span></th>
+					<th data-bind="click: function(data, event) { $parent.results.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.currentFormats[format].header"></span></th>
 				</tr>
 			</thead>
 			<tbody>

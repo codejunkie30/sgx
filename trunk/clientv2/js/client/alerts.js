@@ -1,9 +1,16 @@
-define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder" ], function(UTIL, ko, SEARCH) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlist.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, WL) {
 	
 	
 	var ALERTS = {
-		
+		finalWL: ko.observableArray(),
+		selectedValue: ko.observable(),
+		displayList: ko.observable(),
+		weeks: ko.observableArray(),
+		actualEstimates: ko.observableArray(),
+		consensusRec: ko.observableArray(),
+		displayListCompanies: ko.observableArray(),
 		watchList: ko.observable(true),
+		name: ko.observable(),
 		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
@@ -14,110 +21,96 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		libAlerts: ko.observable(),
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
+		messages: JSON.parse(MESSAGES),
 		
-		defaultSearch: "advanced-screener",
-
+		defaultSearch: "",
+		
 		initPage: function() {
+						
+			// extend tearsheet
+			$.extend(true, this, TS);
 			
-			this.results = SEARCH.init(this);
-
-			// some base variables
-			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
-
-
-    		// apply bindings
-    		var scrnr = this;
-    		$(".screener-header").each(function(idx, el) { ko.applyBindings(scrnr, $(el)[0]); });
-    		
-			// reset keyword
-			$(".searchtoggle .toggle:first").click();
-    		
-    		// load the default keyword/screener toggle
-    		this.changeScreenerToggle(searchType);
-    		
+			var self = this;
+			this.init(function() { self.finish(self); });
+			
 			PAGE.checkStatus();
 			
-    		// finish other page loading
-    		ko.applyBindings(this, $(".disclosure")[0]);
-
-    		return this;
 		},
 		
-		finalize: function(data) {
-
-			// get the current screener object
-			var screener = ko.dataFor($(".screener-header")[0]);
+		finish: function(me) {
+			var displayMessage = ALERTS.messages.messages[0];
 			
-			// render
-			screener.criteria.renderInputs(data);
+			this.finalWL(JSON.parse(WL).watchlists);
 			
-    		// show page
-			screener.hideLoading();
-			
-		},
-		
-		/**
-		 * change the screener options 
-		 */
-		changeScreenerToggle: function(name) {
-			
-			// loading thingy
-			this.showLoading();
-			
-			// confirm exists
-			if ($(".screener-toggles .button[data-name='" + name + "']").length == 0) name = this.defaultSearch; 
-
-			// remove all classes and add current class to results table
-			$(".screener-toggles .button").each(function(idx, el) { $(".module-results").removeClass($(this).attr("data-name") + "-clz"); });
-			$(".module-results").addClass(name + "-clz");
-
-			// toggle tabs
-			$(".screener-toggles .button, .screener-toggles .arrow").removeClass("selected");
-			$(".screener-toggles span[data-name='" + name + "']").addClass("selected");
-			
-			// hide/show options
-			$(".search-options").hide();
-			$("[data-section='" + name + "']").show();
-			
-			this.trackPage("SGX - Screener (" + $(".screener-toggles span[data-name='" + name + "']").text() + ")");
-			
-			this.searchEvents[name](this);
-			
-		},
-		
-		/**
-		 * handles keyword toogle
-		 */
-		clickEvents: {
-			
-			/**
-			 * toggle the keyword field
-			 */
-			keywordToggle: function(data, event) {
-				var me = event.currentTarget;
-				$(".searchtoggle .toggle").removeClass("selected");
-				$(".searchtoggle .s" + $(me).attr("data-name")).addClass("selected");
-				$(".searchbar input").attr("placeholder", $(me).attr("data-placeholder"));
-				$('.searchbar input').placeholder();
-			},
-			
-			/**
-			 * toggle the screener display
-			 */
-			screenerToggle: function(data, event) {
-				var name = $(event.currentTarget).attr("data-name");
-				var screener = ko.dataFor($(".screener-header")[0]);
-				screener.results.viewModel.sectors.val(null);
-				screener.changeScreenerToggle(name);
-			},
-			
-			/** 
-			 * perform a keyword search
-			 */
-			keywordSearch: function(data, event) {
-				var screener = ko.dataFor($(".screener-header")[0]);
-				screener.changeScreenerToggle("all-companies");
+			if (this.finalWL().length == 0) {
+				$('.wl-container').hide();
+			} else {
+				$('.wl-container').show();
+				PAGE.resizeIframeSimple();			
 			}
+			
+			var test = ko.computed(function(){				
+				ALERTS.displayList(ALERTS.finalWL()[ALERTS.selectedValue()-1]);
+			
+				ALERTS.weeks([
+			        {"id":1, "name": "High"},
+			        {"id":2, "name": "Low"}
+			    ]);
+				
+				ALERTS.consensusRec([
+			        {id:1, name: "Buy"},
+			        {id:2, name: "Sell"},
+			        {id:3, name: "Hold"}
+			    ]);
+				
+				ALERTS.actualEstimates([
+			        {id:1, name: "Beat"},
+			        {id:2, name: "Miss"},
+			        {id:3, name: "Flat"}
+			    ]);
+				
+				
+				
+				console.log(ALERTS.actualEstimates());
+				
+				$.each($('.alerts input[type=text]'),function(){
+					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+				});
+				
+				$('.alerts input[type=text]').change(function(){
+					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+				});
+				
+				PAGE.resizeIframeSimple();		
+			});
+			
+			
+    		// finish other page loading
+    		ko.applyBindings(this, $("body")[0]);	
+			
+			me.trackPage("SGX Company Watchlist - " + me.companyInfo.companyName);
+    		
+			ko.validation = validation;
+    		validation.init({ insertMessages: false });
+			
+			ko.validation.registerExtenders();
+			
+			ALERTS.name.extend({
+				required: { message: displayMessage.watchlist.error}}).extend({
+					minLength: { params: 1, message: displayMessage.watchlist.error },
+					maxLength: { params: 40, message: displayMessage.watchlist.error }
+				});
+			
+			this.errors = ko.validation.group(this);			
+			
+			this.errors.subscribe(function () {
+				PAGE.resizeIframeSimple();
+			});
+			
+			
+			 
+			
+			
 			
 		},
 		
@@ -150,37 +143,20 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
 			}
 		},
-		checkStatus: function(){
-			
-			var endpoint = PAGE.fqdn + "/sgx/account/info";
-			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
-			
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params,
-				jsonp,
-				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource'){
-						//top.location.href = PAGE.getPage(PAGE.pageData.getPage('premium'));
-					} else {
-						PAGE.premiumUser(true);
-						PAGE.premiumUserAccntInfo = data;
-						PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-						PAGE.timedLogout();
-					}
-					
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);			
+		addWatchlist: function(){
+			var displayMessage = ALERTS.messages.messages[0];
+			if (this.errors().length > 0) {
+	         	$('.error-messages').empty();
+				$('<p/>').html(displayMessage.watchlist.error).appendTo('.error-messages');
+			    return
+	        }
+		},
+		showWatchlist: function(){
+			selectedValue = ko.computed(function () {
+				
+			});alert('here');
 		}
+		
 
 	};
 	

@@ -182,8 +182,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	            return truncatedText; 
 	        });
 	    }
-	};
-	
+	};	
 	
 	PAGE = {
 
