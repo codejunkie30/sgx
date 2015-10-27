@@ -289,6 +289,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		for(Financial c : financials.getFinancials()){
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
+			c.setFilingCurrency(company.getFilingCurrency());
 			indexerService.save("financial", id, c, index);
 		}
 		
