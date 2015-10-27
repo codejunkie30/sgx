@@ -525,8 +525,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.currentDay(daysRemaining);
 						}
 						
-						if (data.type == 'EXPIRED'){
-              console.log('expired');							
+						if (data.type == 'EXPIRED'){									
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialPeriod(true);
 							PAGE.libAlerts(true);
