@@ -78,7 +78,7 @@
 									<td>6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'vwap'" /></td>
 									
 									<!-- has vwap -->
-									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice')">
+									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice') && companyInfo.volWeightedAvgPrice != null">
 										<span data-bind="text: companyInfo.vwapCurrency"></span> 
 										<span data-bind="text: companyInfo.volWeightedAvgPrice, format: 'dollars'"></span> 
 										<span class="normal">as of</span> 
@@ -86,7 +86,7 @@
 									</td>
 	
 									<!--  doesn't -->
-									<td class="normal" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice')">-</td>
+									<td class="normal" style="text-align:right" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice') || companyInfo.volWeightedAvgPrice == null">-</td>
 	
 									<!-- both -->
 									<td>&nbsp;</td>
