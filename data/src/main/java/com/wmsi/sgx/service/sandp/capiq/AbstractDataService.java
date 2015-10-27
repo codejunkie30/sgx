@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,29 +78,55 @@ public abstract class AbstractDataService implements DataService{
 	}
 	
 	public List<FXRecord> getFXData(String id, List<String> currencies) throws IndexerServiceException {
-
-		/**
+		
 		// not converting SGD for now
 		currencies.remove("SGD");
 		if (currencies.size() == 0) return null;
-
-		String query = "{ \"size\":10000, \"query\":{ \"constant_score\":{ \"filter\":{  \"or\": [ %s ] }}}}";
-		String term = "{ \"term\":{ \"from\": \"%s\" } }";
-		String terms = "";
 		
+		String endpoint = "/fxdata/_search?size=10000&q=from:";
+		String terms = "";
+
 		for (String s : currencies) {
-			if (terms.length() > 0) terms += ",";
-			terms += String.format(term, s);
+			if (terms.length() > 0) terms += "%20OR%20";
+			terms += s;
 		}
 		
-		query = String.format(query, terms);
-		
-		IndexQueryResponse iqr = indexerService.query("/fxdata/_search", query);
+		IndexQueryResponse iqr = indexerService.query(endpoint + terms);
 		List<FXRecord> records = iqr.getHits(FXRecord.class);
 		
 		return records;
-		*/
-		return new ArrayList<FXRecord>();
+	}
+	
+	/**
+	 * get the value for a particular field
+	 * @param name
+	 * @param records
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFieldValue(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException {
+		
+		CompanyCSVRecord actual = null;
+		
+		for (CompanyCSVRecord record : records) {
+			if (!record.getName().equals(field.getName())) continue;
+			if (actual == null || record.getPeriodDate() == null || record.getPeriodDate().after(actual.getPeriodDate())) actual = record;
+		}
+		
+		return getFieldValue(field, actual);
+	}
+	
+	/**
+	 * get the value for a particular field
+	 * @param name
+	 * @param record
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
+	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
+		return actual == null ? null : StringUtils.stripToNull(actual.getValue());
 	}
 	
 }

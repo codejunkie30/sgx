@@ -58,18 +58,16 @@ public class IndexerServiceImpl implements IndexerService{
 	}
 	
 	@Override
-	public IndexQueryResponse query(String endpoint, String json) throws IndexerServiceException {
+	public IndexQueryResponse query(String endpoint) throws IndexerServiceException {
 		
 		try{
-			
 			endpoint = "/" + indexName + endpoint;
 			URI uri = buildUri(endpoint);
-			JsonNode res = restTemplate.postForObject(uri, json, JsonNode.class);
-			
+			JsonNode res = restTemplate.getForObject(uri, JsonNode.class);
 			return new IndexQueryResponse(res);
 		}
 		catch(Exception e){
-			throw new IndexerServiceException(String.format("Executing query for {}  with params {}", endpoint, json), e);
+			throw new IndexerServiceException(String.format("Executing query for {}", endpoint), e);
 		}
 
 	}
