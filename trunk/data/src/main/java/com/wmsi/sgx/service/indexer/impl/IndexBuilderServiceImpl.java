@@ -32,6 +32,7 @@ import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
+import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndex;
@@ -406,12 +407,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		log.info("Creating FX index");
 		
 		String json = "{ \"index\": { }}\n";
-		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"date\": \"%4s-%2s-%2s\", \"multiplier\": %s }\n";
+		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"day\": \"%s\", \"multiplier\": %s }\n";
 		
 		StringBuilder buffer = new StringBuilder(); int cnt = 0;
 		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
 		    for(String line; (line = br.readLine()) != null; ) {
-		    	Object[] vals = parseFXLine(line); 
+		    	Object[] vals = FXRecord.parseFXLine(line); 
 		    	if (vals == null) continue;
 		    	buffer.append(String.format(json, vals).replace("- ", "-0"));
 		    	if (cnt % fxBatchSize == 0 && cnt > 0) {
@@ -430,18 +431,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		log.info("Finished Creating FX index with {} records", cnt);
 		
-		return false;
-	}
-	
-	public Object[] parseFXLine(String line) {
-		try {
-			String[] vals = line.replaceAll("\"", "").split(",");
-			if (!vals[1].equals("SGD")) return null; // temp hack to speed things up, only conversions to SGD
-			String[] dt = vals[2].split(" ")[0].split("/");
-			return new Object[] { vals[0], vals[1], dt[2], dt[0], dt[1], vals[3] };
-		}
-		catch(Exception e) {}
-		return null;
+		return true;
 	}
 
 	

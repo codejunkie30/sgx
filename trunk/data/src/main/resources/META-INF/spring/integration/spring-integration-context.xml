@@ -22,6 +22,7 @@
 		<int:service-activator ref="xfSplitterService" method="init"/>
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
+		<int:service-activator ref="indexerService" method="flush" />
 		<int:service-activator ref="gtiService" method="init"/>
 		<int:service-activator ref="vwapService" method="init"/>
 		<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" />

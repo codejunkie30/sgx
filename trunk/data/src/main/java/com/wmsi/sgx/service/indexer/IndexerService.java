@@ -20,7 +20,7 @@ public interface IndexerService{
 	
 	IndexQueryResponse query(String endpoint) throws IndexerServiceException;
 	
-	void refresh() throws IndexerServiceException;
+	Boolean flush() throws IndexerServiceException;
 	
 	
 }
