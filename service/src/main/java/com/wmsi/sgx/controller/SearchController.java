@@ -38,14 +38,11 @@ public class SearchController{
 		if(authentication == null|| !authentication.isAuthenticated()){
 			
 			accountType = AccountType.NOT_LOGGED_IN;	
-		}
-		if(authentication.getPrincipal() instanceof User){
+		}else{
 			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
 			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
 			accountType = accountModel.getType();
 		}
-			
-		
 		return companySearchService.search(req,accountType);
 	}
 }
