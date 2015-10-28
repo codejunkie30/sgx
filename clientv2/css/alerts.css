@@ -1,10 +1,10 @@
-#alerts select { background: #e1e1e1; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; min-width: 80px; }
-#alerts a { color: #0b236b; text-decoration: none; }
-#alerts a:hover { text-decoration: underline; }
+.alerts-wrapper select { background: #ddd; height: 22px; border: 1px solid #d4d4d4; border-radius: 4px; min-width: 80px; }
+.alerts-wrapper a { color: #0b236b; text-decoration: none; }
+.alerts-wrapper a:hover { text-decoration: underline; }
 
 .intro { margin: 12px 0; display: block; }
 .intro .error-messages p { color: #bf0052 !important; line-height: 16px; padding: 0 0 10px 0; }
-.intro input.text { border: 1px solid #c4c4c4; color: #333; display: inline-block; width: 150px; padding: 0 12px; line-height: 22px; height: 22px; }
+.intro input.text { border: 1px solid #c4c4c4; color: #333; display: inline-block; width: 160px; padding: 0 5px; line-height: 22px; height: 22px; }
 .intro  .button { display: inline-block; }
 
 .wl-container { overflow: hidden; min-height: 300px; }
