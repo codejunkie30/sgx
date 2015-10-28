@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/watchlist.json", "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, WL, AL) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet",  "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, AL) {
 
 	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	
@@ -13,6 +13,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		displayListCompanies: ko.observableArray(),
 		watchList: ko.observable(true),
 		newWLName: ko.observable(),
+		editWLName: ko.observable(),
+		showChange: ko.observable(false),
 		premiumUser: ko.observable(),	
 		premiumUserEmail: ko.observable(),		
 		premiumUserAccntInfo: ko.observable(),
@@ -33,21 +35,26 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						
 			// extend tearsheet
 			$.extend(true, this, TS);
-			
+			 this.init();
 			var self = this;
-			this.init(function() { self.finish(self); });
+			
 			
 			PAGE.checkStatus();
 				var waitForDataToInit = ko.computed({
 		          read:function(){
-		              var userData = this.premiumUser();
-		              var companyData = this.gotCompanyData();
 		
-		              if(userData && companyData) {
-		                  self.init_premium();
-		              }else if(userData == false && companyData == true) {
-		                  self.init_nonPremium();
+		              var companyData = this.gotCompanyData();
+		              var userStatus = this.userStatus();
+		
+		              if( companyData && userStatus ) {
+		
+		                  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
+		                    //this.init_nonPremium();
+		                  } else {
+		                    this.init(function() { self.finish(self); });
+		                  }
 		              }
+		
 		          },
 		          owner:this
 		      });
@@ -58,29 +65,47 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		finish: function(me) {
 			var displayMessage = ALERTS.messages.messages[0];
 			
-			this.finalWL(JSON.parse(WL).watchlists);
-			
-			if (this.finalWL().length == 0) {
-				$('.wl-container').hide();
-			} else {
-				$('.wl-container').show();
-				PAGE.resizeIframeSimple();			
-			}
+			var endpoint = me.fqdn + "/sgx/watchlist/get";
+			var postType = 'GET';
+    		var params = {};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					
+					console.log(data);
+					
+					ALERTS.finalWL(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);
 			
 			//Alerts select lists
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
 			
+			
+			
 			var watchlistDisplay = ko.computed(function(){
 				
-				//ALERTS.finalWL(JSON.parse(WL).watchlists);
-				
-				$.each(ALERTS.finalWL(), function(idx, wl){					
-					if (ALERTS.selectedValue() ==  wl.id){						
+				$.each(ALERTS.finalWL(), function(idx, wl){
+					if (ALERTS.selectedValue() ==  wl.id){
+						
 						var companies = wl.companies
 						wl.companies = ko.observableArray(companies);						
 						ALERTS.displayList(wl);
+						
+						ALERTS.editWLName(wl.name);
+						
 					}
 				});
 				
@@ -94,21 +119,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				PAGE.resizeIframeSimple();	
 			});
-			
-			
-			
-			//var endpoint = "http://sgx.fakemsi.com/js/client/data/watchlists/watchlist.json";
-//			var postType = 'GET';
-//    		var params = {};
-//			var jsonp = 'jsonp';
-//			var jsonpCallback = 'jsonpCallback';
-//    		UTIL.handleAjaxRequest(endpoint, postType, params, jsonp, function(data, textStatus, jqXHR){ console.log(data); },
-//				function(jqXHR, textStatus, errorThrown){
-//					console.log('fail');
-//					console.log(textStatus);
-//					console.log(errorThrown);
-//					console.log(jqXHR);
-//				},jsonpCallback);
+
 						
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
@@ -131,11 +142,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();
 			});
 			
-			
-			
-			
 			return this;
-			
 			
 		},
 		
@@ -187,42 +194,91 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			if (wlLength >= 3) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
 			
-					
-			ALERTS.finalWL.push({
-				"id": 15,
-				"name": ALERTS.newWLName(),
-				"companies": [],
-				"optionList": {
-					"pcPriceDrop": false,
-					"pcPriceDropBelow": null,
-					"pcPriceRiseAbove": null,
-					"pcTradingVolume": false,
-					"pcTradingVolumeValue": null,
-					"pcReachesWeek": false,
-					"pcReachesWeekValue": 1,
-					"estChangePriceDrop": false,
-					"estChangePriceDropBelow": null,
-					"estChangePriceDropAbove": null,
-					"estChangeConsensus": false,
-					"estChangeConsensusValue": 1,
-					"estChangeEstimates": false,
-					"estChangeEstimatesValue" : 1,		
-					"kdAnounceCompTransactions": false,
-					"kdTransactionUpdates": false,
-					"kdBankruptcyUpdates": false,
-					"kdCompanyForecasts": false,
-					"kdCorporateStructureRelated": false,
-					"kdCustProdRelated": false,
-					"kdDividensSplits": false,
-					"kdListTradeRelated": false,
-					"kdPotentialRedFlags": false,
-					"kdPotentialTransactions": false,
-					"kdResultsCorpAnnouncements": false
-				}
-			});		
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
+			var postType = 'POST';
+    		var params = { "message": ALERTS.newWLName() };
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					console.log(data);
+					ALERTS.finalWL(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);	
+			
 			
 			//Clears add WL after submit
 			ALERTS.newWLName(null);
+		},
+		
+		showEditWLName: function(){
+			
+		},
+		
+		editWLNameSubmit: function(){
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
+			var postType = 'POST';
+    		var params = { "watchlistName": ALERTS.editWLName(), "id": ALERTS.selectedValue()};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					console.log(data);
+					ALERTS.finalWL(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);
+				//Clears add WL after submit
+				ALERTS.newWLName(null);
+				ALERTS.showChange(false);
+			
+			
+		},
+		
+		deleteWatchlist: function(){
+			
+			var deleteName = ALERTS.editWLName();
+			
+			//PAGE.modal.open({ type: 'alert',  content: '<p>Are you sure you want to delete ' + deleteName +'</p>', width: 400 }); return; 
+			
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/delete";
+			var postType = 'POST';
+    		var params = { "message": ALERTS.selectedValue()};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					console.log(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);
+			
+			
 		}
 
 	};

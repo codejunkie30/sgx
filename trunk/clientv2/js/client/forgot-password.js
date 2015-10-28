@@ -62,7 +62,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
 						PAGE.resizeIframeSimple();	
 					} else {
-						console.log('help2');	
+						console.log(data);
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){

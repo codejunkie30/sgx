@@ -7,9 +7,11 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		init: function(screener, finalize) {
 			
 			this.screener = screener;
-			screener.criteria = this;
+			screener.criteria = this;			
 			
 			finalize(undefined);
+			
+			setTimeout(function(){ $(".search-results th.companyName").click(); }, 500);
 			
 		},
 		

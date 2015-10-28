@@ -3,7 +3,7 @@
 
 <head>
     <title>SGX</title>
-    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.4" id="print-css" />	
+    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.5" id="print-css" />	
 </head>
 
 <body class="print-page" paper-height="11in" paper-width="8.5in" paper-margin="[ 0,-32,0,0 ]">
@@ -73,7 +73,7 @@
 									<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 										<li>
 											<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
-											<span data-bind="truncatedText: headline, maxTextLength: 91, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+											<span data-bind="truncatedText: headline, maxTextLength: 60, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
 										</li>
 									</ul>
 									<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
@@ -227,8 +227,8 @@
 							</table>
 							
 							<h3>Dividends</h3>
-							<table cellspacing="0" class="panel">
-								<thead data-bind="visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
+							<table cellspacing="0" class="panel dividends">
+								<thead data-bind="visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues != null">
 									<tr>
 										<td width="25%"><b>Ex-Date</b></td>
 				         				<td width="25%"><b>Pay Date</b></td>
@@ -236,8 +236,8 @@
 				         				<td class="right" width="25%"><b>Price</b></td>
 				         			</tr>
 				         		</thead>
-				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.slice(0).reverse(), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
-				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }">
+				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.slice(0).reverse(), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues != null">
+				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }" class="dividend-row">
 										<td class="border" data-bind="text: dividendExDate, format: 'date'">-</td>
 										<td class="border" data-bind="text: dividendPayDate, format: 'date'">-</td>
 										<td class="border right" data-bind="text: dividendType">-</td>
@@ -276,20 +276,19 @@
 	        			</td>
 	        			<td width="40%" class="right">
 	        				<div class="valuation left">
-								<h3>Valuation</h3>
-							
+								<h3>Valuation</h3>							
 								<table cellspacing="0" class="panel">
 									<tbody>
 										<tr>
-											<td>Price/Book Value</td>
+											<td><b>Price/Book Value</b></td>
 											<td class="border right" data-bind="text: companyInfo.priceToBookRatio != null ? companyInfo.priceToBookRatio : '-', format: 'number'">-</td>
-											<td>P/E Ratio</td>
+											<td><b>P/E Ratio</b></td>
 											<td class="right" data-bind="text: companyInfo.peRatio != null ? companyInfo.peRatio : '-', format: 'number'">-</td>
 										</tr>
 										<tr class="even">
-											<td>Dividend Yield</td>
+											<td><b>Dividend Yield</b></td>
 											<td class="border right" data-bind="text: companyInfo.dividendYield != null ? companyInfo.dividendYield : '-', format: 'percent'">-</td>
-											<td>EV/EBITDA</td>
+											<td><b>EV/EBITDA</b></td>
 											<td class="right" data-bind="text: companyInfo.evEbitData != null ? companyInfo.evEbitData : '-', format: 'number'">-</td>
 										</tr>
 										<tr>
