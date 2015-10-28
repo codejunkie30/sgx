@@ -166,7 +166,7 @@
 										<td><b>6-month VWAP</b></td>
 										
 										<!-- has vwap -->
-										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice')">
+										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice') && companyInfo.volWeightedAvgPrice != null">
 											<span data-bind="text: companyInfo.vwapCurrency"></span> 
 											<span data-bind="text: companyInfo.volWeightedAvgPrice, format: 'dollars'"></span> 
 											<span class="normal">as of</span> 
