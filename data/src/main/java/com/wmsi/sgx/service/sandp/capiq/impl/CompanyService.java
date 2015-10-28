@@ -47,6 +47,7 @@ public class CompanyService extends AbstractDataService {
 
 			// company
 			Company company = getCompany(id, records);
+			setMisc(company, records);
 			
 			// price history
 			PriceHistory priceHistory = loadPriceHistory(id, records);
@@ -77,6 +78,19 @@ public class CompanyService extends AbstractDataService {
 		catch(Exception e) {
 			throw new ResponseParserException("Loading company: " + id, e);
 		}
+		
+	}
+	
+	/**
+	 * set some misc properties
+	 */
+	public void setMisc(Company comp, List<CompanyCSVRecord> records) {
+		
+		List<CompanyCSVRecord> tmp = CompanyCSVRecord.getByName("periodEndDate", records);
+		if (tmp.size() == 0) return;
+		
+		Collections.sort(tmp, CompanyCSVRecord.CompanyCSVRecordDateComparator);
+		comp.setFilingDate(tmp.get(0).getPeriodDate());
 		
 	}
 	

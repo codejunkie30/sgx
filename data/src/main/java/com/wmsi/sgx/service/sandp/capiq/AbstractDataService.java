@@ -3,14 +3,10 @@ package com.wmsi.sgx.service.sandp.capiq;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
@@ -20,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
@@ -38,6 +32,9 @@ public abstract class AbstractDataService implements DataService{
 	
 	@Value("${loader.companies.dir}")
 	private String companiesBase;
+	
+	@Value("${loader.fx.daysBack}")
+	private int daysBack;
 	
 	protected List<FXRecord> fxRecords;
 
@@ -117,7 +114,7 @@ public abstract class AbstractDataService implements DataService{
 		List<FXRecord> records = null;
 		
 		if (from != null && to != null && d != null) {
-			String qs = "from:" + from + "%20AND%20to:" + to + "%20AND%20day:" + FXRecord.getDayFormat().format(d) + "&size=10000";
+			String qs = "from:" + from + "%20AND%20to:" + to + "%20AND%20day:" + FXRecord.getDayFormat().print(d.getTime()) + "&size=10000";
 			records = getFXData(qs);
 		}
 		
@@ -199,7 +196,7 @@ public abstract class AbstractDataService implements DataService{
 		}
 		
 		// let's find the closest date 
-		for (int i=-7; i<=0; i++) {
+		for (int i=daysBack; i<=0; i++) {
 			Date nd = DateUtils.addDays(actual.getPeriodDate(), i);
 			for (FXRecord record : fxRecords) {
 				if (!record.matches(actual.getCurrency(), "SGD", nd)) continue;

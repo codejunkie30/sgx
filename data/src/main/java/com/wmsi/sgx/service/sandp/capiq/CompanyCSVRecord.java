@@ -1,8 +1,14 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+
+import com.wmsi.sgx.model.HistoricalValue;
 
 public class CompanyCSVRecord {
 	
@@ -83,5 +89,22 @@ public class CompanyCSVRecord {
 				+ ", name=" + name + ", value=" + value + ", period=" + period
 				+ ", periodDate=" + periodDate + ", currency=" + currency + "]";
 	}
+	
+	public static List<CompanyCSVRecord> getByName(String name, List<CompanyCSVRecord> records) {
+		List<CompanyCSVRecord> ret = new ArrayList<CompanyCSVRecord>();
+		for (CompanyCSVRecord rec : records) {
+			if (name.equals(rec.getName())) ret.add(rec);
+		}
+		return ret;	
+	}
+	
+	public static Comparator<CompanyCSVRecord> CompanyCSVRecordDateComparator = new Comparator<CompanyCSVRecord>() {
+		public int compare(CompanyCSVRecord hv1, CompanyCSVRecord hv2) {
+			Date d1 = hv1.getPeriodDate();
+			Date d2 = hv2.getPeriodDate();
+			return ObjectUtils.compare(d2, d1);
+		}
+
+	};
 	
 }
