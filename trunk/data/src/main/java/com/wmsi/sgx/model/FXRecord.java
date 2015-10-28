@@ -5,9 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.google.common.base.Objects;
 
 public class FXRecord {
+	
+	static DateTimeFormatter FMT = DateTimeFormat.forPattern("yyyyMMdd");
 
 	private String day;
 	
@@ -55,7 +60,7 @@ public class FXRecord {
 	}
 	
 	public boolean matches(String from, String to, Date when) {
-		return Objects.equal(from, getFrom()) && Objects.equal(to, getTo()) && Objects.equal(getDayFormat().format(when), getDay()); 
+		return Objects.equal(from, getFrom()) && Objects.equal(to, getTo()) && Objects.equal(getDayFormat().print(when.getTime()), getDay()); 
 	}
 
 	
@@ -81,25 +86,9 @@ public class FXRecord {
 			.toString();
 	}
 	
-	public static DateFormat getDayFormat() {
-		return new SimpleDateFormat("yyyyMMdd");
+	public static DateTimeFormatter getDayFormat() {
+		return FMT;
 	}
-	
-	public static Comparator<FXRecord> FXRecordComparator = new Comparator<FXRecord>() {
-		
-		public int compare(FXRecord hv1, FXRecord hv2) {
-			try {
-				DateFormat fmt = getDayFormat();
-				Date d1 = fmt.parse(hv1.getDay());
-				Date d2 = fmt.parse(hv2.getDay());
-				// ascending order
-				return d2.compareTo(d1);
-			}
-			catch(Exception e) {}
-			return 0;
-		}
-
-	};
 	
 	public static Object[] parseFXLine(String line) {
 		try {
