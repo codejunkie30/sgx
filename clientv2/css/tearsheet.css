@@ -403,5 +403,6 @@ div.news {
 .data-point-container .uncheck span {
     cursor: pointer;
     font-size: smaller;
-    text-decoration: none;	
+    text-decoration: none;
+    color:#0b236b;	
 }
