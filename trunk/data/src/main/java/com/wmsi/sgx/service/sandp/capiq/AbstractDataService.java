@@ -198,13 +198,6 @@ public abstract class AbstractDataService implements DataService{
 			return val.toString();
 		}
 		
-		// let's query direct for this
-		List<FXRecord> tmp = getFXData(actual.getCurrency(), "SGD", actual.getPeriodDate());
-		if (tmp.size() > 0) {
-			BigDecimal val = BigDecimal.valueOf(tmp.get(0).getMultiplier()).multiply(new BigDecimal(actual.getValue()));
-			return val.toString();
-		}
-		
 		// let's find the closest date 
 		for (int i=-7; i<=0; i++) {
 			Date nd = DateUtils.addDays(actual.getPeriodDate(), i);
@@ -213,6 +206,13 @@ public abstract class AbstractDataService implements DataService{
 				BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
 				return val.toString();
 			}
+		}
+		
+		// nothing still - let's query direct for this (high overhead for each record)
+		List<FXRecord> tmp = getFXData(actual.getCurrency(), "SGD", actual.getPeriodDate());
+		if (tmp.size() > 0) {
+			BigDecimal val = BigDecimal.valueOf(tmp.get(0).getMultiplier()).multiply(new BigDecimal(actual.getValue()));
+			return val.toString();
 		}
 		
 		
