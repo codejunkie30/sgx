@@ -1,5 +1,6 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/watchlist.json", "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, WL, AL) {
-	
+
+	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	
 	var ALERTS = {
 		finalWL: ko.observableArray(),
@@ -24,6 +25,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		currentDay: ko.observable(),
 		messages: JSON.parse(MESSAGES),
 		alerts: JSON.parse(AL),
+		sectionName:'Alerts',
 		
 		defaultSearch: "",
 		
@@ -36,6 +38,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.init(function() { self.finish(self); });
 			
 			PAGE.checkStatus();
+				var waitForDataToInit = ko.computed({
+		          read:function(){
+		              var userData = this.premiumUser();
+		              var companyData = this.gotCompanyData();
+		
+		              if(userData && companyData) {
+		                  self.init_premium();
+		              }else if(userData == false && companyData == true) {
+		                  self.init_nonPremium();
+		              }
+		          },
+		          owner:this
+		      });
+			
 			
 		},
 		
@@ -56,9 +72,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
 			
-			var wathclistDisplay = ko.computed(function(){
+			var watchlistDisplay = ko.computed(function(){
 				
-				ALERTS.finalWL(JSON.parse(WL).watchlists);
+				//ALERTS.finalWL(JSON.parse(WL).watchlists);
 				
 				$.each(ALERTS.finalWL(), function(idx, wl){					
 					if (ALERTS.selectedValue() ==  wl.id){						
@@ -76,7 +92,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 				});
 				
-				PAGE.resizeIframeSimple();		
+				PAGE.resizeIframeSimple();	
 			});
 			
 			
@@ -103,7 +119,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
     		validation.init({ insertMessages: true });
 			
-			this.newWLName.extend({
+			ALERTS.newWLName.extend({
 				required: { message: displayMessage.watchlist.error }}).extend({
 					minLength: { params: 1, message: displayMessage.watchlist.error },
 					maxLength: { params: 40, message: displayMessage.watchlist.error }
@@ -115,8 +131,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();
 			});
 			
+			
+			
+			
 			return this;
+			
+			
 		},
+		
+		init_nonPremium: function() {
+            $('#alerts-content-alternative').show();
+           // ko.applyBindings(this, $("body")[0]);
+        },
 		
 		searchEvents: {
 			
@@ -148,53 +174,55 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 		},
 		addWatchlist: function(){
-			if (this.errors().length > 0) {				
+			var displayMessage = ALERTS.messages.messages[0];
+			
+			if (this.errors().length > 0) {
+				$('.error-messages').empty();
+				$('<p/>').html(displayMessage.watchlist.error).appendTo('.error-messages');			
 	            return
 	        }
-						
-			console.log(ALERTS.finalWL());
+			$('.error-messages').empty();
 			
-				
-				ALERTS.finalWL().push(
-					{
-					"id": 15,
-					"name": ALERTS.newWLName(),
-					"companies": [],
-					"optionList": {
-						"pcPriceDrop": false,
-						"pcPriceDropBelow": null,
-						"pcPriceRiseAbove": null,
-						"pcTradingVolume": false,
-						"pcTradingVolumeValue": null,
-						"pcReachesWeek": false,
-						"pcReachesWeekValue": 1,
-						"estChangePriceDrop": false,
-						"estChangePriceDropBelow": null,
-						"estChangePriceDropAbove": null,
-						"estChangeConsensus": false,
-						"estChangeConsensusValue": 1,
-						"estChangeEstimates": false,
-						"estChangeEstimatesValue" : 1,		
-						"kdAnounceCompTransactions": false,
-						"kdTransactionUpdates": false,
-						"kdBankruptcyUpdates": false,
-						"kdCompanyForecasts": false,
-						"kdCorporateStructureRelated": false,
-						"kdCustProdRelated": false,
-						"kdDividensSplits": false,
-						"kdListTradeRelated": false,
-						"kdPotentialRedFlags": false,
-						"kdPotentialTransactions": false,
-						"kdResultsCorpAnnouncements": false
-					}
+			var wlLength = ALERTS.finalWL().length;				
+			
+			if (wlLength >= 3) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
+			
+					
+			ALERTS.finalWL.push({
+				"id": 15,
+				"name": ALERTS.newWLName(),
+				"companies": [],
+				"optionList": {
+					"pcPriceDrop": false,
+					"pcPriceDropBelow": null,
+					"pcPriceRiseAbove": null,
+					"pcTradingVolume": false,
+					"pcTradingVolumeValue": null,
+					"pcReachesWeek": false,
+					"pcReachesWeekValue": 1,
+					"estChangePriceDrop": false,
+					"estChangePriceDropBelow": null,
+					"estChangePriceDropAbove": null,
+					"estChangeConsensus": false,
+					"estChangeConsensusValue": 1,
+					"estChangeEstimates": false,
+					"estChangeEstimatesValue" : 1,		
+					"kdAnounceCompTransactions": false,
+					"kdTransactionUpdates": false,
+					"kdBankruptcyUpdates": false,
+					"kdCompanyForecasts": false,
+					"kdCorporateStructureRelated": false,
+					"kdCustProdRelated": false,
+					"kdDividensSplits": false,
+					"kdListTradeRelated": false,
+					"kdPotentialRedFlags": false,
+					"kdPotentialTransactions": false,
+					"kdResultsCorpAnnouncements": false
 				}
+			});		
 			
-			
-			)
-			console.log(ALERTS.finalWL());	
-			
-			
-			
+			//Clears add WL after submit
+			ALERTS.newWLName(null);
 		}
 
 	};
