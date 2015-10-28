@@ -485,7 +485,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$('body').prepend($('<div id="loading"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		checkStatus: function(){
-			
+
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
 			var params = {};
@@ -503,12 +503,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					} else {						
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
+                        //data.type = 'PREMIUM';
 						
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
 							
 							PAGE.libTrialPeriod(true);
-							PAGE.libTrialExpired(true);
+							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
 						}
 						
@@ -521,11 +522,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
 
 							PAGE.libLoggedIn(true);
-							PAGE.libTrialExpired(true);
+							PAGE.libTrialExpired(false);
 							PAGE.currentDay(daysRemaining);
 						}
 						
-						if (data.type == 'EXPIRED'){									
+						if (data.type == 'EXPIRED'){
+                            PAGE.libTrialExpired(true);						
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialPeriod(true);
 							PAGE.libAlerts(true);
