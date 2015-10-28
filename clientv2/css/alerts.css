@@ -7,12 +7,17 @@
 .intro input.text { border: 1px solid #c4c4c4; color: #333; display: inline-block; width: 160px; padding: 0 5px; line-height: 22px; height: 22px; }
 .intro  .button { display: inline-block; }
 
-.wl-container { overflow: hidden; min-height: 300px; }
+.wl-container { overflow: hidden; min-height: 300px; /*display: none;*/ }
+
+.wl-container .edit-watchlist { margin: 10px 0; }
+
+.watchlist a { cursor: pointer; text-decoration: none; }
+.watchlist a:hover { text-decoration: underline; }
 
 .watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
 .watchlist .companies { margin: 12px 0; }
 .watchlist .companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
-.watchlist .companies ul li { list-style-type: none; padding: 10px; display: block; }
+.watchlist .companies ul li { list-style-type: none; padding: 10px; }
 .watchlist .companies ul li.odd { background: #ebecec; }
 .watchlist .companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
 .watchlist .companies ul li .ticker { width: 123px; }
@@ -40,14 +45,14 @@
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; }
 .watchlist .results ul li .name { font-size: 13px; display: inline-block; position: relative; top: -3px; }
 
-.alerts { display: inline-block; width: 60%; }
-.alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
-.alerts .developments { overflow: hidden !important; clear: both; }
-.alerts input[type=text] { background: #f6f6f6; width: 44px; padding: 0 2px; }
-.alerts input.percent { background: url(../img/bg-percent.png) no-repeat right #f6f6f6; width: 22px !important; padding: 0 22px 0 0; text-align: right; display: inline-block; }
-.alerts h3 { background: #0b236b; height: 36px; line-height: 36px; font-size: 19px; color: #fff; font-weight: normal; padding: 0 15px; margin: 0;  }
-.alerts ul { padding: 17px 10px; margin: 0; }
-.alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
-.alerts ul li input[type="text"] { width: 32px; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; }
+.wl-container .alerts { display: inline-block; width: 60%; }
+.wl-container .alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
+.wl-container .alerts .developments { overflow: hidden !important; clear: both; }
+.wl-container .alerts input[type=text] { background: #f6f6f6; width: 44px; padding: 0 2px; }
+.wl-container .alerts input.percent { background: url(../img/bg-percent.png) no-repeat right #f6f6f6; width: 22px !important; padding: 0 22px 0 0; text-align: right; display: inline-block; }
+.wl-container .alerts h3 { background: #0b236b; height: 36px; line-height: 36px; font-size: 19px; color: #fff; font-weight: normal; padding: 0 15px; margin: 0;  }
+.wl-container .alerts ul { padding: 17px 10px; margin: 0; }
+.wl-container .alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
+.wl-container .alerts ul li input[type="text"] { width: 32px; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; }
 
 .button-wrapper { margin: 35px 0 0 10px; }

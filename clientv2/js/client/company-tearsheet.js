@@ -62,7 +62,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		},
 
 		initPriceChart: function(parent, data) {
-			
+			console.log(data);
 			var finished = function() {
 				parent.resizeIframeSimple();
 				var myFin = function() { parent.resizeIframeSimple(); };

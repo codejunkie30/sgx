@@ -33,10 +33,11 @@ table.panel { width: 600px; }
 table.panel td.property { text-align: right; }
 .general-info td { font-weight: bold; padding: 7px 8px; }
 table.panel td { padding: 7px 8px; }
+table.panel.dividends td { padding: 2px 8px; }
 td { vertical-align: top; }
 td.right { padding-left: 20px; padding-top: 20px; }
 
-.page2 td.right { padding-top: 5px !important; }
+
 
 .panel .right { text-align: right; }
 table.panel td.property, .general-info td.property, table.panel td.note, .general-info td.note { font-weight: normal; }
@@ -55,7 +56,8 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .dark-module { margin-bottom: 20px; background: #f2f2f2 none repeat scroll 0 0; }
 .module { position: relative; }
 
-.page2 .dark-module { margin-bottom: 15px !important; }
+.page2 .dark-module.
+.page2 .valuation { margin-bottom: 15px !important; }
 
 .last-updated { font-size: 12px; }
 .last-updated .date { font-weight: bold; }
@@ -66,10 +68,10 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .terms ul li { margin-bottom: 11.5px; }
 .terms p { font-size: 11.5px; }
 
-.stock-events { max-height: 610px; margin: 10px 0 25px; }
+.stock-events { max-height: 600px; margin: 10px 0 25px; }
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
-.stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 11.5px; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
+.stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 11px !important; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }
 .stock-events li span { color: #0e236b; cursor: pointer; font-weight: bold; text-decoration: none; line-height: 15px; }
 
 .recommendation { overflow: hidden; padding-top: 25px; margin: 10px 0; }

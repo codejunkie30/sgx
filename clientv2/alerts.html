@@ -25,14 +25,12 @@
 	</div>
 	<h1>Alerts</h1>
 	
-	<!--<section id="alerts-content-alternative">
-			<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName} }"></div>
+	<section id="alerts-content-alternative" data-bind="if:(userStatus() == 'UNAUTHORIZED' || userStatus() == 'EXPIRED')">
+		<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName, userStatus: userStatus} }"></div>
 	</section>
 
 
-	<section data-bind="if:premiumUser() == true">-->
-	<section>
-	
+	<section data-bind="if:premiumUser() == true">
 		<div class="grid scan intro">
 			
 			<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
@@ -41,10 +39,15 @@
 			</div>
 		</div>
 		
-		<div class="grid scan wl-container">
+		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
 				<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
-				<a href="#">EDIT</a> <a href="#">DELETE</a>
+				<!-- ko if: selectedValue() != null -->
+					<a data-bind="click: showChange">CHANGE</a> | <a data-bind="click:$root.deleteWatchlist">DELETE</a>
+				<!-- /ko -->
+				<div data-bind="visible: showChange()" class="edit-watchlist">
+					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Edit Watch List</a>
+				</div>
 				
 				<div class="companies">					
 					<div data-bind="if: displayList">
