@@ -27,15 +27,15 @@
 	<!--<div class="grid scan">
 		<h1>Estimates</h1>
 	</div>-->
-	
 
 	<section id="estimates-content-alternative">
 			<div data-bind="component:{ name:'premium-preview', 
-																	params:{sectionName: sectionName} }"></div>
+																	params:{sectionName: sectionName,
+																					userStatus: userStatus} }"></div>
 	</section>
 
 
-	<section data-bind="if:(dataExists() == false && premiumUser() == true && libTrialExpired() == false)">
+	<section data-bind="if:(dataExists() == false && (userStatus() != 'UNAUTHORIZED' && userStatus() != 'EXPIRED'))">
 		<div class="grid hidden" data-bind="css:{'display-hidden': dataExists() == 0}">
 			<p style="margin-bottom:80px; margin-top:30px">There are no estimates available for this company.</p>
 		</div>

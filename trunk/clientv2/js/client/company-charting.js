@@ -61,7 +61,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libAlerts: ko.observable(),
     libCurrency: ko.observable(),
     currentDay: ko.observable(),
-    pageInitiated: false,
 
     sectionName: 'Technical Charts',
     //reference to chart class/function
@@ -349,23 +348,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         
       var waitForDataToInit = ko.computed({
           read:function(){
-              if (this.pageInitiated) 
-                return;
-              var userData = this.premiumUser();
+
               var companyData = this.gotCompanyData();
-              var accountExpired = this.libTrialExpired();
+              var userStatus = this.userStatus();
 
-              if( companyData && userData != undefined && accountExpired !=undefined) {
+              if( companyData && userStatus ) {
 
-                if ( userData == false || (userData == true && accountExpired == true) ) {
-                  this.init_nonPremium();
-                  this.pageInitiated = true;
-                }else {
-                  this.init_premium();
-                  this.pageInitiated = true;  
-                }
-
+                  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
+                    this.init_nonPremium();
+                  }else {
+                    this.init_premium();
+                  }
               }
+
           },
           owner:this
       });

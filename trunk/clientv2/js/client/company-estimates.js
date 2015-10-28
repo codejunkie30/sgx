@@ -19,7 +19,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		annualEst: null,
 		estimates: null,
         dataExists:ko.observable(),
-        pageInitiated: false,
 
         sectionName:'Estimates',
 
@@ -86,21 +85,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             
             var waitForDataToInit = ko.computed({
                 read:function(){
-                    if (this.pageInitiated) 
-                        return;
-                    var userData = this.premiumUser();
-                    var companyData = this.gotCompanyData();
-                    var accountExpired = this.libTrialExpired();
 
-                    if( companyData && userData != undefined && accountExpired !=undefined) {
-                        
-                        if ( userData == false || (userData == true && accountExpired == true) ) {
+                    var companyData = this.gotCompanyData();
+                    var userStatus = this.userStatus();
+
+                    if( companyData && userStatus ) {
+
+                        if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
                             this.dataExists(false);
                             this.init_nonPremium();
-                            this.pageInitiated = true;
                         }else {
                           this.init(function() { self.finish(self); });
-                          this.pageInitiated = true;  
                         }
                     }
                 },
