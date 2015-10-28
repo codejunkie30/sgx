@@ -10,7 +10,7 @@
 		<span class="stock-facts"><b>StockFacts <i>Premium</i></b></span>
 		<span class="logged-in-as" data-bind="css: {'hide': (libLoggedIn() == true)}">Logged in as <span data-bind="text: premiumUserEmail"></span></span>
 		<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> days left in your trial.</span>
-		<span class="trial-expired" data-bind="css: {'hide': (libTrialExpired() == true)}">: Your trial has expired.</span>
+		<span class="trial-expired" data-bind="visible: (libTrialExpired() == true)">: Your trial has expired.</span>
 		<ul>
 			<li class="subscribe" data-bind="css: {'hide': (libSubscribe() == true)}"><a href="purchase-account.html" target="_blank">Subscribe</a></li>
 			<li class="account"><a data-bind="siteLink: { id: 'account-settings'}">Account</a></li>
