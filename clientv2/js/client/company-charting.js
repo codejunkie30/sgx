@@ -61,6 +61,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libAlerts: ko.observable(),
     libCurrency: ko.observable(),
     currentDay: ko.observable(),
+    pageInitiated: false,
 
     sectionName: 'Technical Charts',
     //reference to chart class/function
@@ -348,14 +349,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         
       var waitForDataToInit = ko.computed({
           read:function(){
+              if (this.pageInitiated) 
+                return;
               var userData = this.premiumUser();
               var companyData = this.gotCompanyData();
-              var acctNotExpired = this.libTrialExpired()
+              var accountExpired = this.libTrialExpired();
 
-              if(userData && companyData && acctNotExpired) {
-                  self.init_premium();
-              }else if(userData != undefined && companyData == true) {
-                  self.init_nonPremium();
+              if( companyData && userData != undefined && accountExpired !=undefined) {
+
+                if ( userData == false || (userData == true && accountExpired == true) ) {
+                  this.init_nonPremium();
+                  this.pageInitiated = true;
+                }else {
+                  this.init_premium();
+                  this.pageInitiated = true;  
+                }
+
               }
           },
           owner:this
@@ -400,7 +409,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     addSeriesRSI: function() {
 
-      var newSeries = { type: 'line', id:'RSI', name:'RSI', showInLegend:true, algorithm:'RSI', periods:14, color:'#434348' };
+      var newSeries = { type: 'line', id:'RSI', name:'RSI', showInLegend:true, algorithm:'RSI', periods:14, color:'#333333' };
       var xData = this.indicators_chart.xData.slice(0);
       var yData = this.indicators_chart.dataRSI.slice(0);
 
@@ -440,12 +449,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var defaultSeriesConfig = {
         //simple Moving Area
-        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 15 },
-        'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 40 },
+        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 15, color:'#5f6062' },
+        'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 40, color:'#ffcc00' },
         //Moving avg con40
-        'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD' },
-        'Histogram': { type: 'column', id: value, name: 'Histogram', showInLegend:true, algorithm:'histogram' },
-        'SignalLine': { type: 'line', id: value, name: 'Signal line', showInLegend:true, algorithm:'signalLine'  }
+        'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD', color:'#0094b3' },
+        'Histogram': { type: 'column', id: value, name: 'Histogram', showInLegend:true, algorithm:'histogram', color:'#bdd831' },
+        'SignalLine': { type: 'line', id: value, name: 'Signal line', showInLegend:true, algorithm:'signalLine', color:'#791e75' }
       };
 
       if( axisAction !== null ){
@@ -483,6 +492,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },
 
     postChartRedraw: function() {
+      return;
       var scroll;
       var section = $('.technical-charting');
       if(this.indicators_chart.chartElement.yAxis.length ==4 ) {

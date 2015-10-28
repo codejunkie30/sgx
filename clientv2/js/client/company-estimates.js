@@ -19,6 +19,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		annualEst: null,
 		estimates: null,
         dataExists:ko.observable(),
+        pageInitiated: false,
 
         sectionName:'Estimates',
 
@@ -29,7 +30,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		premiumUserEmail: ko.observable(),
 		premiumUserAccntInfo: ko.observable(),
 		libLoggedIn: ko.observable(),
-		libTrialPeriod: ko.observable(),
+		libTrialPeriod: ko.observable(null),
 		libTrialExpired: ko.observable(),
 		libSubscribe: ko.observable(),
 		libAlerts: ko.observable(),
@@ -85,15 +86,22 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             
             var waitForDataToInit = ko.computed({
                 read:function(){
+                    if (this.pageInitiated) 
+                        return;
                     var userData = this.premiumUser();
                     var companyData = this.gotCompanyData();
-                    var acctNotExpired = this.libTrialExpired();
+                    var accountExpired = this.libTrialExpired();
 
-                    if(userData && companyData && acctNotExpired ) {
-                        this.init(function() { self.finish(self); });
-                    }else if(userData != undefined && companyData == true) {
-                        this.dataExists(false);
-                        this.init_nonPremium();
+                    if( companyData && userData != undefined && accountExpired !=undefined) {
+                        
+                        if ( userData == false || (userData == true && accountExpired == true) ) {
+                            this.dataExists(false);
+                            this.init_nonPremium();
+                            this.pageInitiated = true;
+                        }else {
+                          this.init(function() { self.finish(self); });
+                          this.pageInitiated = true;  
+                        }
                     }
                 },
                 owner:this

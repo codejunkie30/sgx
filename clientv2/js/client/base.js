@@ -500,6 +500,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				function(data, textStatus, jqXHR){
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
+                        PAGE.libTrialExpired(false);
 					} else {						
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
