@@ -123,6 +123,8 @@ public class CompanyService extends AbstractDataService {
 		
 		if (map.size() == 0) throw new ResponseParserException("record map is empty in getCompany()");
 
+		
+		
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		JsonElement jsonElement = gson.toJsonTree(map);
 		Company comp = gson.fromJson(jsonElement, Company.class);
@@ -144,7 +146,7 @@ public class CompanyService extends AbstractDataService {
 		PriceHistory ph = new PriceHistory();
 		Map<String, List<HistoricalValue>> pricing = new HashMap<String, List<HistoricalValue>>();
 		Field field = null;
-		try { field = HistoricalValue.class.getField("value"); }
+		try { field = HistoricalValue.class.getDeclaredField("value"); }
 		catch(Exception e) {}
 		
 		pricing.put("openPrice", new ArrayList<HistoricalValue>());

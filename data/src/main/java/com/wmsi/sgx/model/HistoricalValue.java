@@ -9,6 +9,7 @@ import com.wmsi.sgx.model.annotation.FXAnnotation;
 public class HistoricalValue {
 
 	private String tickerCode;
+	
 	private Date date;
 	
 	@FXAnnotation

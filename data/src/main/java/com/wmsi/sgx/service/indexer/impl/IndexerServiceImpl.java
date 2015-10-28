@@ -74,18 +74,22 @@ public class IndexerServiceImpl implements IndexerService{
 	
 	@Override
 	@Transactional
-	public void refresh() throws IndexerServiceException {
+	public synchronized Boolean flush() throws IndexerServiceException {
 		
 		try{
 			
-			URI uri = buildUri("/_refesh");
-			ResponseEntity<Object> res = restTemplate.exchange(uri, HttpMethod.PUT, null, Object.class);
+			URI uri = buildUri("/" + indexName + "/_flush");
+			JsonNode res = restTemplate.postForObject(uri, null, JsonNode.class);
+			
+			log.info("Index Flushed");
+			
+			return true;
 			
 		}
 		catch(Exception e){
 			throw new IndexerServiceException("Executing refresh", e);
 		}
-
+		
 	}
 	
 	@Override

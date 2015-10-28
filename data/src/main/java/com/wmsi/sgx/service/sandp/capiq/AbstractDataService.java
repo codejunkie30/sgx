@@ -3,10 +3,14 @@ package com.wmsi.sgx.service.sandp.capiq;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
@@ -90,7 +96,6 @@ public abstract class AbstractDataService implements DataService{
 		
 		if (currencies.size() > 0) {
 		
-			String endpoint = "/fxdata/_search?size=10000&q=from:";
 			String terms = "";
 	
 			for (String s : currencies) {
@@ -98,14 +103,32 @@ public abstract class AbstractDataService implements DataService{
 				terms += s;
 			}
 			
-			IndexQueryResponse iqr = indexerService.query(endpoint + terms);
-			records = iqr.getHits(FXRecord.class);
+			records = getFXData("q=from:" + terms);
 			
 		}
 		
 		if (records == null) records = new ArrayList<FXRecord>();
 		
 		return records;
+	}
+	
+	public List<FXRecord> getFXData(String from, String to, Date d) throws IndexerServiceException {
+		
+		List<FXRecord> records = null;
+		
+		if (from != null && to != null && d != null) {
+			String qs = "from:" + from + "%20AND%20to:" + to + "%20AND%20day:" + FXRecord.getDayFormat().format(d) + "&size=10000";
+			records = getFXData(qs);
+		}
+		
+		if (records == null) records = new ArrayList<FXRecord>();
+		
+		return records;
+	}
+	
+	public List<FXRecord> getFXData(String querystring) throws IndexerServiceException {
+		IndexQueryResponse iqr = indexerService.query("/fxdata/_search?size=10000&" + querystring);
+		return iqr.getHits(FXRecord.class);
 	}
 	
 	/**
@@ -116,7 +139,7 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public String getFieldValue(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException {
+	public String getFieldValue(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		
 		CompanyCSVRecord actual = null;
 		
@@ -136,10 +159,9 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
+	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		String value = actual == null ? null : StringUtils.stripToNull(actual.getValue());
-		return value;
-		/**
+
 		// nothing to do
 		if (value == null) return null;
 		
@@ -147,7 +169,6 @@ public abstract class AbstractDataService implements DataService{
 		if (field.isAnnotationPresent(FXAnnotation.class)) value = getFXConverted(value, actual);
 		
 		return value;
-		*/
 	}
 	
 	/**
@@ -157,7 +178,7 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public String getFXConverted(String value, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException {
+	public String getFXConverted(String value, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 
 		// can't convert
 		if (value == null ||
@@ -168,27 +189,34 @@ public abstract class AbstractDataService implements DataService{
 		) return value;
 		
 		// temp hack for just processing SGD
-		if (actual.getCurrency().equals("SGD")) return actual.getValue();
+		if (!FXRecord.shouldConvert(actual.getCurrency())) return actual.getValue();
 		
-		// let's try and find a match
+		// let's try and find a match in cache
 		for (FXRecord record : fxRecords) {
-			if (!record.getFrom().equals(actual.getCurrency()) || !DateUtils.isSameDay(actual.getPeriodDate(), record.getDate())) continue;
+			if (!record.matches(actual.getCurrency(), "SGD", actual.getPeriodDate())) continue;
 			BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
 			return val.toString();
 		}
 		
-		// this is for runs that are ahead of the FX conversion data
-		// we go back a day - temporary hack
-		if (DateUtils.isSameDay(actual.getPeriodDate(), new Date())) {
+		// let's query direct for this
+		List<FXRecord> tmp = getFXData(actual.getCurrency(), "SGD", actual.getPeriodDate());
+		if (tmp.size() > 0) {
+			BigDecimal val = BigDecimal.valueOf(tmp.get(0).getMultiplier()).multiply(new BigDecimal(actual.getValue()));
+			return val.toString();
+		}
+		
+		// let's find the closest date 
+		for (int i=-7; i<=0; i++) {
+			Date nd = DateUtils.addDays(actual.getPeriodDate(), i);
 			for (FXRecord record : fxRecords) {
-				if (!record.getFrom().equals(actual.getCurrency()) || !DateUtils.isSameDay(DateUtils.addDays(new Date(), -1), record.getDate())) continue;
+				if (!record.matches(actual.getCurrency(), "SGD", nd)) continue;
 				BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
 				return val.toString();
 			}
 		}
 		
-		throw new ResponseParserException("No conversion available for field " + actual);
 		
+		throw new ResponseParserException("No conversion available for field " + actual);
 		
 	}
 	
