@@ -343,6 +343,7 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
           name: this.companyName+' Stock Price',
           showInLegend:true,
           data: this.priceData,
+          color:'#0b236b',
           yAxis:0,
         }]
       };
