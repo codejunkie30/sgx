@@ -266,3 +266,24 @@ where ed.toDate > getdate() and
              ,100172      --LTG estimateDeviation
        )
 
+union
+select
+	pop.tickerSymbol,
+	pop.exchangeSymbol,
+	case
+	when ed.dataItemId = 114362 then 'IndustryRecNum'
+	end as WMSIApi,
+	convert(varchar(max),ed.dataItemValue) as dataItemId,
+	case
+		when ep.periodTypeId = 1 then 'FY'+cast(ep.fiscalYear as varchar(max))
+		when ep.periodTypeId = 2 then 'FQ'+cast(ep.fiscalQuarter as varchar(max))+cast(ep.fiscalYear as varchar(max))
+	end as period,
+	ep.periodEndDate as date,
+	cISO.ISOCode
+from ##sgxpop pop
+	join ciqEstimatePeriod ep on ep.companyid=pop.companyId
+	join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
+	join ciqEstimateNumericData ed on ec.estimateConsensusId=ed.estimateConsensusId
+	left join ciqCurrency cISO on ed.currencyId=cISO.currencyId
+	where ed.toDate > getdate()
+	and ed.dataItemId in (114362) --Industry Recommendation
