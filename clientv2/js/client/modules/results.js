@@ -61,6 +61,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	
 		render: function(data) {
 
+      //go to company details page directly if only one result returns
+      if(data.size == 1) {
+        window.top.location = this.parent.pageData.getCompanyPage(data.companies[0].tickerCode);
+        return;
+      }
 			if (data.hasOwnProperty("keywords")) this.viewModel.keywords(data.keywords);
 			else this.viewModel.keywords(null);
 
@@ -87,6 +92,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			// resize
 			//PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
+      console.log(this);
       PAGE.resizeIframeSimple();
 			PAGE.hideLoading();
 		},
