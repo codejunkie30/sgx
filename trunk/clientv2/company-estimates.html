@@ -35,7 +35,7 @@
 	</section>
 
 
-	<section data-bind="if:(dataExists() == false && premiumUser() == true)">
+	<section data-bind="if:(dataExists() == false && premiumUser() == true && libTrialExpired() == false)">
 		<div class="grid hidden" data-bind="css:{'display-hidden': dataExists() == 0}">
 			<p style="margin-bottom:80px; margin-top:30px">There are no estimates available for this company.</p>
 		</div>
