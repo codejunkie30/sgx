@@ -36,6 +36,7 @@
 			"accountSettings": {
 				"introPremium": "You are currently enrolled in a StockFacts Premium account. It is set to expire on",
 				"introTrial": "You have <span class='current-day'></span> days left in your trial.",
+				"introTrialDayOne": "You have <span class='current-day'></span> day left in your trial.",
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {
