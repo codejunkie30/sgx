@@ -100,10 +100,10 @@ div.wrapper {
     margin-right: 60px;
     padding-left: 5px; }
   .technical-charting .control-box h2 {
-    font-size: 12px;
+    font-size: 11px;
+    text-transform:uppercase;
     color: #fff;
     font-weight: normal;
-    text-transform: capitalize;
     margin: 0;
     padding: 0; }
 
@@ -143,6 +143,10 @@ div.wrapper {
   width: 17px;
   display: inline-block; }
 
+.icon:first-child {
+  margin-right:2px;
+}
+
 .info-icon {
   background: url(images/info.png) no-repeat; }
 
@@ -169,13 +173,15 @@ div.wrapper {
   position: absolute;
   z-index: 100;
   width: 675px;
-  top: 434px;
+  top: 110px;
   left: 18%;
   color: #3d3d3d; }
   .modal h1 {
     margin: 0;
     margin-top: 5px;
-    font-size: 16px;
+    font-size: 21px;
+    line-height:1.4;
+    color:#3d3d3d;
     margin-bottom: 10px; }
   .modal ul {
     padding: 0;
@@ -212,7 +218,7 @@ div.wrapper {
     right: 4px;
     background: #9c9e9f;
     color: #fff;
-    padding: 0px 4px 1px 4px;
+    padding: 0px 6px 1px;
     border-radius: 2px; }
 
 .modal-controls {
