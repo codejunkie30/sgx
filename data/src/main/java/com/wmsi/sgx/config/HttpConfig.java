@@ -10,6 +10,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,18 +144,25 @@ public class HttpConfig{
     
 	@Bean(name = "esRestTemplate")	
 	public RestTemplate esRestTemplate() {
-		HttpClient httpClient = HttpClients.custom()
-				.setConnectionManager(new PoolingHttpClientConnectionManager())
-				.build();
+		HttpClient httpClient = httpClient();
+		HttpComponentsClientHttpRequestFactory rfactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+		rfactory.setReadTimeout(capIQEnv.getProperty("indexer.http.readTimeout", Integer.class));
+		rfactory.setConnectTimeout(capIQEnv.getProperty("indexer.http.connTimeout", Integer.class));
 		
-		RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
-
+		RestTemplate template = new RestTemplate(rfactory);
 		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
 		converters.add(esJsonConverter());		
 		template.setMessageConverters(converters);
 		
 		return template;
 	}
+	
+	  @Bean
+	  public HttpClient httpClient() {
+	    PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+	    connectionManager.setMaxTotal(capIQEnv.getProperty("indexer.http.threads", Integer.class));
+	    return HttpClientBuilder.create().setConnectionManager(connectionManager).build(); 
+	  }
 	
 	@Bean
 	public DefaultFtpSessionFactory ftpSessionFactory(){
