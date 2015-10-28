@@ -10,4 +10,6 @@ INNER JOIN
 ON
     pop.tickerSymbol = ti.tickerSymbol
 AND
-	ti.exchangeId = (SELECT ce.exchangeId FROM ciqExchange ce WHERE ce.exchangeSymbol = pop.exchangeSymbol);
+	ti.exchangeId = (SELECT ce.exchangeId FROM ciqExchange ce WHERE ce.exchangeSymbol = pop.exchangeSymbol)
+AND
+	ti.tradingItemStatusId = 15;
