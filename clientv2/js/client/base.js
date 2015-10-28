@@ -200,6 +200,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		tooltipHTML: TOOLTIP,
 		
 		currentFormats: null,
+
+        userStatus: KO.observable(''),
 		
 		pageData: {
 			
@@ -501,14 +503,16 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
                         PAGE.libTrialExpired(false);
+                        PAGE.userStatus('UNAUTHORIZED');
 					} else {						
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
-                        //data.type = 'PREMIUM';
+                        //data.type = 'EXIRED';
 						
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
 							
+                            PAGE.userStatus('PREMIUM');
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
@@ -522,12 +526,15 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
 
+                            PAGE.userStatus('TRIAL');
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialExpired(false);
 							PAGE.currentDay(daysRemaining);
 						}
 						
 						if (data.type == 'EXPIRED'){
+
+                            PAGE.userStatus('EXPIRED');
                             PAGE.libTrialExpired(true);						
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialPeriod(true);
