@@ -61,8 +61,6 @@ public class CompanyController{
 		ret.put("alphaFactors", getAlphas(search));
 		ret.put("gtis", getGtis(search));
 		ret.put("dividendHistory", getDividendHistory(search));
-		ret.put("financials", getFinancials(search));
-		ret.put("estimates",getEstimates(search));
 		return ret;
 	}
 	
