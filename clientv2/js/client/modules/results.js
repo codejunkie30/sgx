@@ -86,7 +86,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			if (this.viewModel.keywords() == null) $(".search-results th.companyName").click();
 			
 			// resize
-			PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
+			//PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
+      PAGE.resizeIframeSimple();
 			PAGE.hideLoading();
 		},
 		
