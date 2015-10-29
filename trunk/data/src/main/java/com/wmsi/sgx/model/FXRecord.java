@@ -1,11 +1,14 @@
 package com.wmsi.sgx.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -137,20 +140,36 @@ public class FXRecord {
 	
 	public static FXRecord getFromCache(String from, String to, Date d) {
 		
-		Map<String,List<FXRecord>> fl = FXCACHE.get(from);
-		if (fl == null) return null;
 		
-		List<FXRecord> records = fl.get(to);
+		List<FXRecord> records = getFXRecords(from, to);
 		if (records == null) return null;
 		
 		String date = getDayFormat().print(d.getTime());
-		
 		for (FXRecord record : records) {
 			if (record.getDay().equals(date)) return record;
 		}
 		
 		return null;
 	}
+	
+	public static FXRecord getLatestRate(String from, String to) {
+		List<FXRecord> records = getFXRecords(from, to);
+		if (records == null || records.isEmpty()) return null;
+		Collections.sort(records, FXRecordDayComparator);
+		return records.get(0);
+	}
+	
+	public static List<FXRecord> getFXRecords(String from, String to) {
+		Map<String,List<FXRecord>> fl = FXCACHE.get(from);
+		if (fl == null) return null;
+		return fl.get(to);
+	}
+	
+	public static Comparator<FXRecord> FXRecordDayComparator = new Comparator<FXRecord>() {
+		public int compare(FXRecord fx1, FXRecord fx2) {
+			return ObjectUtils.compare(fx2.getDay(), fx1.getDay()); // ascending order
+		}
+	};
 
 	
 }
