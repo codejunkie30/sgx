@@ -3,7 +3,7 @@
 
 <head>
     <title>SGX</title>
-    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.5" id="print-css" />	
+    <link type="text/css" rel="stylesheet" href="css/print.css?v=1.4" id="print-css" />	
 </head>
 
 <body class="print-page" paper-height="11in" paper-width="8.5in" paper-margin="[ 0,-32,0,0 ]">
@@ -73,7 +73,7 @@
 									<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 										<li>
 											<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
-											<span data-bind="truncatedText: headline, maxTextLength: 60, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+											<span data-bind="truncatedText: headline, maxTextLength: 90, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
 										</li>
 									</ul>
 									<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>

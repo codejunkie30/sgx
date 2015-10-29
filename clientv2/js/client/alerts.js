@@ -71,10 +71,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				undefined, 
-				function(data, textStatus, jqXHR){
-					
-					console.log(data);
-					
+				function(data, textStatus, jqXHR){					
 					ALERTS.finalWL(data);
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -88,8 +85,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
-			
-			
 			
 			var watchlistDisplay = ko.computed(function(){
 				
@@ -118,7 +113,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();	
 			});
 
-						
+			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
 			
@@ -286,14 +281,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},jsonpCallback);			
 		},
 		saveWatchlist: function(){
-			console.log('save');
-			console.log(ALERTS.displayList().optionList.pcPriceDrop);
+						
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
 			var postType = 'POST';
-    		var params = { 
+    		var params = {
 				"id": ALERTS.selectedValue(),
 				"name": ALERTS.editWLName(),
-				"companies": ["FQ7"],
+				"companies": [],
 				"optionList": {
 					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
 					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
@@ -331,7 +325,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined, 
 				function(data, textStatus, jqXHR){
 					console.log(data);
+									
+					
 					ALERTS.finalWL(data);
+					
+					
 					
 					console.log(params);
 					
