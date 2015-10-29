@@ -3,12 +3,15 @@ package com.wmsi.sgx.model;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 
 public class DividendValue{
 	
 	private Date dividendExDate;
 	private Date dividendPayDate;
 	private String dividendType;
+	
+	@FXAnnotation
 	private Double dividendPrice;
 	
 	public Date getDividendExDate() {
