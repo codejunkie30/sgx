@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.Response;
+import com.wmsi.sgx.model.WatchlistAddCompany;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.model.WatchlistRenameModel;
 import com.wmsi.sgx.repository.UserRepository;
@@ -70,4 +71,14 @@ public class WatchlistController {
 		
 		return watchlistService.getWatchlist(usr);
 	}	
+	
+	@RequestMapping(value = "watchlist/addCompanies")
+	public Response addCompany(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistAddCompany model){
+		User usr = userRepository.findByUsername(user.getUsername());
+		String id = model.getId();
+		List<String> companies = model.getCompanies();
+		
+		return watchlistService.addCompanies(usr, id, companies);
+		
+	}
 }

@@ -16,6 +16,7 @@ import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Watchlist;
 import com.wmsi.sgx.domain.WatchlistCompany;
 import com.wmsi.sgx.domain.WatchlistOption;
+import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.repository.WatchlistCompanyRepository;
 import com.wmsi.sgx.repository.WatchlistOptionRepository;
@@ -136,9 +137,31 @@ public class WatchlistServiceImpl implements WatchlistService {
 				
 				break;
 			}
-		}
-			
+		}		
+	}
+	
+	@Override
+	@Transactional
+	public Response addCompanies(User user, String addId, List<String> companies){
+		Long id = Long.parseLong(addId);
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		Response response = new Response();
 		
+		for(Watchlist list : watchlist){
+			if(list.getWatchlist_id().equals(id)){
+				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
+				
+				if(companies.size() <= 10){
+					setCompanies(companies, id);
+					companyRepository.delete(oldCompanies);
+					response.setMessage("success");
+					return response;
+				}				
+			}
+		}
+		
+		response.setMessage("failure");
+		return response;
 	}
 	
 	public void setOptions(Map<String, Object> map, Long id){
