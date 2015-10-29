@@ -406,6 +406,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		log.info("Creating FX index");
 		
+		FXRecord.resetFXCache();
+		
 		String json = "{ \"index\": { }}\n";
 		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"day\": \"%s\", \"multiplier\": %s }\n";
 		

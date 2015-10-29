@@ -102,6 +102,8 @@ public class FXRecord {
 	
 	public static DateTimeFormatter getDayFormat() { return FMT; }
 	
+	public static synchronized void resetFXCache() { FXCACHE = new HashMap<String,Map<String,List<FXRecord>>>(); }
+	
 	public static FXRecord parseFXLine(String line) {
 		try {
 			String[] vals = line.replaceAll("\"", "").split(",");
