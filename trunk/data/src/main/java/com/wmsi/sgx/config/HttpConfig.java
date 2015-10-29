@@ -146,8 +146,10 @@ public class HttpConfig{
 	public RestTemplate esRestTemplate() {
 		HttpClient httpClient = httpClient();
 		HttpComponentsClientHttpRequestFactory rfactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-		rfactory.setReadTimeout(capIQEnv.getProperty("indexer.http.readTimeout", Integer.class));
-		rfactory.setConnectTimeout(capIQEnv.getProperty("indexer.http.connTimeout", Integer.class));
+		
+		// may need in future
+		//rfactory.setReadTimeout(capIQEnv.getProperty("indexer.http.readTimeout", Integer.class));
+		//rfactory.setConnectTimeout(capIQEnv.getProperty("indexer.http.connTimeout", Integer.class));
 		
 		RestTemplate template = new RestTemplate(rfactory);
 		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
@@ -160,7 +162,8 @@ public class HttpConfig{
 	  @Bean
 	  public HttpClient httpClient() {
 	    PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-	    connectionManager.setMaxTotal(capIQEnv.getProperty("indexer.http.threads", Integer.class));
+		// may need in future
+	    //connectionManager.setMaxTotal(capIQEnv.getProperty("indexer.http.threads", Integer.class));
 	    return HttpClientBuilder.create().setConnectionManager(connectionManager).build(); 
 	  }
 	
