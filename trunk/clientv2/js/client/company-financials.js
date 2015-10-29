@@ -178,7 +178,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     		}
     		
     		// check for data in the row
-    		if ($(el).siblings().filter(function() { return $(this).text() != "-"; }).length <= 0) {
+    		if ($(el).siblings().filter(function() { return $(this).text() == "-"; }).length > 0) {
 				model.modal.open({ type: "alert", content: "<p>No data available for this series.</p>" });
     			return;
     		}
