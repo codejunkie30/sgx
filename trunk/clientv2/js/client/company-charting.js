@@ -1,48 +1,7 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearsheet", "client/modules/technical-chart/technical-chart-algorithms", "client/modules/technical-chart/technical-chart", "text!client/data/technicalCharts.json", "highstock" ], function(UTIL, ko, Validation, TS, Algorithms, Chart, Static_Content) {
   //here
-  ko.validation = Validation;
-  ko.validation.init({insertMessages:false});
 
-  ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
-
-  ko.validation.rules.between = {
-      validator: function(value, params) {
-          var min = params[0];
-          var max = params[1];
-
-          value = parseInt(value, 10);
-
-          if (!isNaN(value)) {
-              return value >= min && value <= max;
-          }
-          return false;   
-      },
-      message: 'Value must be between {0} and {1}'
-  };
-
-  ko.validation.registerExtenders();
-
-
-  ko.bindingHandlers.slideVisible = {
-    update: function(element, valueAccessor, allBindings) {
-        // First get the latest data that we're bound to
-        var value = valueAccessor();
-
-        // Next, whether or not the supplied model property is observable, get its current value
-        var valueUnwrapped = ko.unwrap(value);
-
-        // Grab some more data from another binding property
-        var duration = allBindings.get('slideDuration') || 300; // 400ms is default duration unless otherwise specified
-        
-        // Now manipulate the DOM element
-        if (valueUnwrapped == true)
-            $(element).slideDown(duration); // Make the element visible
-
-        else
-            $(element).slideUp(duration);   // Make the element invisible
-
-      }
-  };
+  initializeCustomParts(); //custom bindings/ validation etc
 
 
   var modalContent = JSON.parse(Static_Content).modalContent;
@@ -161,14 +120,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     financialsDropdowns: {
 
-      selectedChoices: {
-        income: ko.observable(),
-        balanceSheets: ko.observable(),
-        cashFlow: ko.observable(),
-        ratios: ko.observable(),
-        growth: ko.observable()
-      },
-
       income: financialsDropdowns.income,
 
       balanceSheets: financialsDropdowns.balanceSheets,
@@ -178,6 +129,91 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       ratios: financialsDropdowns.ratios,
 
       growth: financialsDropdowns.growth
+    },
+
+    dropdownChoices: ko.observableArray(),
+
+    aggregateDropdownChoices:{},
+
+    choiceNumTracker: {
+      income: ko.observable(0),
+      balanceSheets: ko.observable(0),
+      cashFlow: ko.observable(0),
+      ratios: ko.observable(0),
+      growth: ko.observable(0)
+    },
+
+    trackChoiceNum: function(key, action) {
+      var serviceName = this.aggregateDropdownChoices[ key ].serviceName
+      var currentDropdown = this.choiceNumTracker[ serviceName ];
+      var choiceNum = currentDropdown();
+      if( action == 'add' ) {
+        choiceNum++;
+      } else {
+        choiceNum--;
+      }
+      currentDropdown( choiceNum ) ;
+    },
+
+    flattenDropdownsObject: function() {
+      var self = this;
+      $.each(financialsDropdowns, function(key, val) {
+        $.each(val, function(idx, obj) {
+          self.aggregateDropdownChoices[obj.key] = obj;
+        });
+      });
+    },
+
+    //This takes caare of all the logic for dropdown interactions
+    //All interaction has dropdownChoice observable array as an entry point
+    //additions subtraction etc, to the array fire up related events
+    setFinancialsDropdowns: function() {
+
+      var self = this;
+      self.dropdownChoices.subscribe(function(data) {
+
+        var localScope = this; //this really is local scope for this function
+        localScope.oldData = this.oldData || []; //save old data in this function's scope
+        localScope.bypassNextNotification = localScope.bypassNextNotification || false; //need to bypass the rest of the code sometimes
+
+        if (localScope.bypassNextNotification) {
+          localScope.bypassNextNotification = false;
+          return;
+        }
+
+        var diff, action;
+        if(data.length > 5) {
+          self.modal.open({ type: 'alert',  content: '<h4>Chart Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
+          localScope.bypassNextNotification = true;
+          self.dropdownChoices( data.slice(0,5));
+          return;
+        }
+        if( data.length == 0) {
+          localScope.bypassNextNotification = true;
+          self.dropdownChoices.push(localScope.oldData[0]);
+          return;
+        }
+
+
+        if(localScope.oldData.length < data.length) { //add series Call
+          action = 'add';
+          diff = ko.utils.arrayFilter( data, function(item) {
+            return localScope.oldData.indexOf(item) < 0;
+          });
+        }else { //subtract series Call
+          action = 'subtract';
+          diff = localScope.oldData.filter(function(item) {
+            return data.indexOf(item) < 0;
+          });
+        }
+
+        self.trackChoiceNum( diff[0], action);
+
+        self.makeDataCall(diff[0], action);
+
+        this.oldData = data.slice(0);
+      });
+
     },
 
     init_nonPremium: function() {
@@ -193,10 +229,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var self = this;
       this.initModal();
       this.activeTab.subscribe(function(data){
-        if(data == 'financials' && this.financials_chart == null) {
-          this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
-          this.financialsDropdowns.selectedChoices.income({displayName: 'Net Income', serviceName: 'income', key: 'netIncome', axisName:'Income'});
+        if(data == 'financials') {
+          //this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
+          $('.technical-charting').css('height', '700px');
+          setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
         }else {
+          $('.technical-charting').css('height', '920px');
           setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
         }
       }, this);
@@ -219,54 +257,52 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
       }, this);
 
-      this.financialsDataCache = {};
-      this.financialsPayload = ko.computed({
-        read: function() {
-          var selectedObj = ko.toJS(this.financialsDropdowns.selectedChoices);
-          $.each(selectedObj, function(key, val) {
-            if (val) {
-              if( self.financialsDataCache[key] ) {
-                var cachedData = self.financialsDataCache[key];
-                self.financialsHandler( cachedData, val, self);
-              }else {
-                self.makeDataCall(val, self.financialsHandler);
-              } 
-              
-            }
-          });
-
-        },
-        owner:this
-      }),
+      this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
+      this.flattenDropdownsObject();
+      this.setFinancialsDropdowns();
+      this.dropdownChoices.push('ebitda');
 
       ko.applyBindings(this, $("body")[0]);
 
     },
 
     financialsDataCache: {},
-    getFinancialsColor: function(key){
-      var colors = { 'income':'#565a5c', 
-                      'balanceSheets': '#1e2171', 
-                      'cashFlow': '#BED600', 
-                      'ratios': '#0094B3', 
-                      'growth': '#BF0052' 
-                    };
-      return colors[key];
+
+    makeDataCall: function(dropDownKey, action) {
+
+      var self = this;
+      var serviceObj = this.aggregateDropdownChoices[ dropDownKey ];
+      //if data exists in cache, simply use it
+      var serviceName = serviceObj.serviceName;
+      if (this.financialsDataCache[ serviceName ]) {
+        this.financialsHandler(this.financialsDataCache[ serviceName ], serviceObj, action);
+        return;
+      }
+
+
+      var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
+      //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
+      var postType = 'GET';
+      var params = { id: self.ticker };
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, undefined, undefined);
+
     },
 
 
 
-    financialsHandler: function(data, serviceObj, self) {
 
-      var self = self;
+    financialsHandler: function(data, serviceObj, action, me) {
+
+      var self = me || this;
       var serviceName = serviceObj.serviceName;
       var serviceKey = serviceObj.key;
       if( !self.financialsDataCache[ serviceName ] ) {
         self.financialsDataCache[ serviceName ] = data;
-      }
+      } 
 
       var seriesData = [];
       var arrayCategories = [];
+
       $.each(data, function(key, val) {
 
         for (var i=0, len=val.length; i < len; i++) {
@@ -275,49 +311,43 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
       });
 
-      if (self.financials_chart.chartElement == null) {
-        self.financials_chart.initChart({data:seriesData,
-                                          color:self.getFinancialsColor(serviceName),
-                                          id: serviceName+'-series',
-                                          name: serviceObj.displayName});
 
-        self.financials_chart.chartReady.subscribe(function(data) {
-          self.financials_chart.chartElement.xAxis[0].setCategories(arrayCategories);
-          PAGE.resizeIframeSimple()
-        });
+      if (self.financials_chart.chartElement == null) {
+
+            self.financials_chart.initChart({data:seriesData,
+                                              id: serviceKey,
+                                              name: serviceObj.displayName});
+
+            self.financials_chart.chartReady.subscribe(function(data) {
+              self.financials_chart.chartElement.xAxis[0].setCategories(arrayCategories);
+            });
 
       } else {
 
-        var needNewAxis = true;
+        if (action == 'add') {
+          self.financials_chart.addSeries(seriesData, serviceObj);
+          self.financials_chart.redraw();
 
-        if( self.financials_chart.chartElement.get( serviceName+'-series')) {
-          var prevSeries = self.financials_chart.chartElement.get( serviceName+'-series');
-          if(prevSeries) prevSeries.remove();
-          needNewAxis = false;
+        } else {
+
+          self.financials_chart.removeSeries(serviceObj);
+          self.financials_chart.redraw();
+
         }
 
-        if(needNewAxis) {
-          self.financials_chart.chartElement
-                      .addAxis({id: serviceName,
-                                name: serviceObj.axisName,
-                                title: {text:serviceObj.axisName},
-                                opposite:true});
-        }
-
-        self.financials_chart.chartElement
-                      .addSeries({data: seriesData,
-                                  color:self.getFinancialsColor(serviceName),
-                                  id:serviceName+'-series',
-                                  name: serviceObj.displayName,
-                                  yAxis:serviceName});
       }
 
     },
 
-    makeDataCall: function(serviceObj, callback) {
-      
+
+    makeDataCall: function(dropDownKey, action) {
+
       var self = this;
-      if(!serviceObj || !callback) {
+      var serviceObj = this.aggregateDropdownChoices[ dropDownKey ];
+      //if data exists in cache, simply use it
+      var serviceName = serviceObj.serviceName;
+      if (this.financialsDataCache[ serviceName ]) {
+        this.financialsHandler(this.financialsDataCache[ serviceName ], serviceObj, action);
         return;
       }
 
@@ -326,7 +356,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var postType = 'GET';
       var params = { id: self.ticker };
 
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { callback(data, serviceObj, self);  }, undefined, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, undefined, undefined);
 
     },
 
@@ -355,7 +385,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
               if( companyData && userStatus ) {
 
                   if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
-                    this.init_nonPremium();
+                    //this.init_nonPremium();
+                    this.init_premium();
                   }else {
                     this.init_premium();
                   }
@@ -505,5 +536,87 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
 
 return TechnicalCharting;
+
+
+
+
+
+
+
+
+
+
+  function initializeCustomParts() {
+
+    ko.validation = Validation;
+    ko.validation.init({insertMessages:false});
+
+    ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
+
+    ko.validation.rules.between = {
+        validator: function(value, params) {
+            var min = params[0];
+            var max = params[1];
+
+            value = parseInt(value, 10);
+
+            if (!isNaN(value)) {
+                return value >= min && value <= max;
+            }
+            return false;   
+        },
+        message: 'Value must be between {0} and {1}'
+    };
+
+    ko.validation.registerExtenders();
+
+
+    ko.bindingHandlers.slideVisible = {
+      update: function(element, valueAccessor, allBindings) {
+          // First get the latest data that we're bound to
+          var value = valueAccessor();
+
+          // Next, whether or not the supplied model property is observable, get its current value
+          var valueUnwrapped = ko.unwrap(value);
+
+          // Grab some more data from another binding property
+          var duration = allBindings.get('slideDuration') || 300; // 400ms is default duration unless otherwise specified
+          
+          // Now manipulate the DOM element
+          if (valueUnwrapped == true)
+              $(element).slideDown(duration); // Make the element visible
+
+          else
+              $(element).slideUp(duration);   // Make the element invisible
+
+        }
+    };
+
+    ko.bindingHandlers.classToggler = {
+      update:function(element, valueAccessor, allBindings) {
+        var timer;
+        var className = valueAccessor();
+        $(element).on('click', function(event){
+
+          if(event.target == this) {
+
+            $(this).toggleClass(className);
+          }
+
+          event.stopPropagation();
+        })
+        .on('mouseenter', function(){
+          if(timer)
+            clearTimeout(timer);
+        })
+        .on('mouseleave', function(){
+          var self = this;
+          timer = setTimeout(function(){
+             $(self).removeClass(className);
+          }, 500)
+        });
+      }
+    }
+  }
 
 });
