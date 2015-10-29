@@ -174,7 +174,7 @@
 										</td>
 		
 										<!--  doesn't -->
-										<td class="normal" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice')">-</td>
+										<td class="normal" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice') || companyInfo.volWeightedAvgPrice == null">-</td>
 		
 										<!-- both -->
 										<td>&nbsp;</td>
