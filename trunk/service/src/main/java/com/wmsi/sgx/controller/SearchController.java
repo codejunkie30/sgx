@@ -35,7 +35,7 @@ public class SearchController{
 		User u = null;
 		AccountType accountType=null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication == null|| !authentication.isAuthenticated()){
+		if(authentication == null|| !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)){
 			
 			accountType = AccountType.NOT_LOGGED_IN;	
 		}else{
@@ -43,6 +43,8 @@ public class SearchController{
 			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
 			accountType = accountModel.getType();
 		}
+			
+		
 		return companySearchService.search(req,accountType);
 	}
 }
