@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,19 +11,29 @@ import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
+import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 public class DividendService extends AbstractDataService{
 	
 	@SuppressWarnings("unchecked")
 	public DividendHistory load(String id, String... parms)
 			throws ResponseParserException, CapIQRequestException {
+		
 		Assert.notEmpty(parms);
-		return getDividendData(id);
+
+		try {
+			return getDividendData(id);
+		}
+		catch(Exception e) {
+			throw new ResponseParserException("loading dividends for " + id, e);
+		}
+		
 	}
 	
-	public DividendHistory getDividendData(String id) throws ResponseParserException, CapIQRequestException {		
+	public DividendHistory getDividendData(String id) throws ResponseParserException, CapIQRequestException, IndexerServiceException {		
 		DividendHistory dH = new DividendHistory();
 		dH.setTickerCode(id);		
 		
@@ -34,12 +45,19 @@ public class DividendService extends AbstractDataService{
 		if (records == null) return dH;
 		
 		List<DividendValue> list = new ArrayList<DividendValue>();
+		
+		Field field = null;
+		try { field = DividendValue.class.getDeclaredField("dividendPrice"); }
+		catch(Exception e) {}
+		
 				
 		for (CSVRecord record : records) {
+			CompanyCSVRecord csr = new CompanyCSVRecord(record.get(6), record.get(4), new Date(record.get(2)));
+			String val = getFieldValue(field, csr);
 			DividendValue dV = new DividendValue();
-			if (StringUtils.stripToNull(record.get(2)) != null) dV.setDividendExDate(new Date(record.get(2)));
+			dV.setDividendExDate(csr.getPeriodDate());
 			if (StringUtils.stripToNull(record.get(3)) != null) dV.setDividendPayDate(new Date(record.get(3)));
-			if (StringUtils.stripToNull(record.get(4)) != null) dV.setDividendPrice(Double.parseDouble(record.get(4)));
+			if (val != null) dV.setDividendPrice(Double.parseDouble(val));
 			if (StringUtils.stripToNull(record.get(5)) != null) dV.setDividendType(record.get(5));				
 	    	list.add(dV);		    	
 		}

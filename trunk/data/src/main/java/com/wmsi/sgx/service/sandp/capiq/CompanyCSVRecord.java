@@ -26,6 +26,14 @@ public class CompanyCSVRecord {
 	private Date periodDate = new Date();
 	
 	private String currency;
+	
+	public CompanyCSVRecord() {}
+	
+	public CompanyCSVRecord(String currency, String value, Date periodDate) {
+		this.currency = currency;
+		this.value = value;
+		this.periodDate = periodDate;
+	}
 
 	public String getTicker() {
 		return StringUtils.stripToNull(ticker);
