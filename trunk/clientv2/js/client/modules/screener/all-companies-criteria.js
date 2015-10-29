@@ -11,7 +11,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 			finalize(undefined);
 			
-			setTimeout(function(){ $(".search-results th.companyName").click(); }, 500);
+			setTimeout(function(){ $(".search-results th.companyName").click(); }, 1000);
 			
 		},
 		
@@ -50,7 +50,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		
     	reset: function(finished) {
         	
-    		
+    		setTimeout(function(){ $(".search-results th.companyName").click(); }, 1000);
     		
     	},
     	

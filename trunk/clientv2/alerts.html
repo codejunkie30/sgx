@@ -66,12 +66,10 @@
 					</div>-->
 				</div>
 				<div class="search">
-					<div class="searchtoggle">
-						<span class="toggle button sname selected" placeholder="Search by company name">Company Name</span><span class="toggle button scode" placeholder="Search by stock code">Stock Code</span>
-					</div>
+					<h5>Search for companies to add to your Watchlist</h5>
 					<div>
 						<span class="searchbar">
-							<input type="text" placeholder="Search by company name" />
+							<input type="text" placeholder="Company name or stock code" />
 							<span class="search-submit" class="button" value="" alt="Search Submit"></span>
 						</span>
 					</div>
@@ -86,6 +84,11 @@
 						</span>
 					</div>
 					
+					<li data-bind="value: tickerCode">
+							<span class="add"></span>
+							<span class="name" data-bind="text:companyName">Company Name</span> (<span data-bind="text:tickerCode">M15</span>)
+						</li>
+					
 					-->
 				</div>
 				<div class="results">
@@ -93,18 +96,11 @@
 					<ul class="company">
 						<li>
 							<span class="add"></span>
-							<span class="name">Company Name</span>
+							<span class="name">Company Name (M15)</span>
 						</li>
 					</li>
 				</div>			
 			</section>
-			
-			<!--<span class="checkbox left">
-				<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
-					<span class="name" data-bind="text: name"></span>
-				</span>
-				<input type="checkbox" data-bind="checked: displayList().optionList.">
-			</span>-->
 			
 			<section class="alerts" data-bind="if: displayList">
 				<h3>Price Changes</h3>
