@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Company;
-import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
@@ -42,9 +41,6 @@ public class CompanyService extends AbstractDataService {
 			// list of records
 			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
 			
-			// fx data 
-			fxRecords = initFXRecords(id, records);
-
 			// company
 			Company company = getCompany(id, records);
 			setMisc(company, records);
@@ -94,21 +90,6 @@ public class CompanyService extends AbstractDataService {
 		
 	}
 	
-	/**
-	 * load any of the fx records needed for this record
-	 * @param records
-	 * @throws ResponseParserException
-	 */
-	public List<FXRecord> initFXRecords(String id, List<CompanyCSVRecord> records) throws ResponseParserException  {
-		List<String> currenciesList = new ArrayList<String>();
-		for (CompanyCSVRecord record : records) {
-			if (record.getCurrency() == null || currenciesList.contains(record.getCurrency())) continue;
-			currenciesList.add(record.getCurrency());
-		}
-		try { return getFXData(id, currenciesList); }
-		catch(Exception e) { throw new ResponseParserException("Loading FX data", e); }
-	}
-
 	/**
 	 * load up the base fields
 	 * @param id
