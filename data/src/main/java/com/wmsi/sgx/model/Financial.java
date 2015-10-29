@@ -48,7 +48,6 @@ public class Financial{
 	private Double dividendsPerShare;
 	
 	@ConversionAnnotation(name = "IQ_EBITDA")
-	@MillionFormatterAnnotation
 	private Double ebitda;
 	
 	@ConversionAnnotation(name = "IQ_EBITDA_1YR_ANN_GROWTH")
@@ -73,15 +72,12 @@ public class Financial{
 	private String filingCurrency;
 	
 	@ConversionAnnotation(name = "IQ_GROSS_MARGIN")
-	@MillionFormatterAnnotation
 	private Double grossMargin;
 	
 	@ConversionAnnotation(name = "IQ_GP")
-	@MillionFormatterAnnotation
 	private Double grossProfit;
 	
 	@ConversionAnnotation(name = "IQ_LT_DEBT")
-	@MillionFormatterAnnotation
 	private Double longTermDebt;
 	
 	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
@@ -127,27 +123,21 @@ public class Financial{
 	private String tickerCode;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
-	@MillionFormatterAnnotation
 	private Double totalAssets;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_CA")
-	@MillionFormatterAnnotation
 	private Double totalCurrentAssets;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_CL")
-	@MillionFormatterAnnotation
 	private Double totalCurrentLiabily;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
-	@MillionFormatterAnnotation
 	private Double totalDebtEquity;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_EQUITY")
-	@MillionFormatterAnnotation
 	private Double totalEquity;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_LIAB")
-	@MillionFormatterAnnotation
 	private Double totalLiability;
 	
 	@ConversionAnnotation(name = "IQ_TOTAL_REV")

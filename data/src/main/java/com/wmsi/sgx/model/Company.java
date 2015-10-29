@@ -162,20 +162,18 @@ public class Company {
 	private Double tbv;
 
 	@FXAnnotation
-	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
 
 	@FXAnnotation
-	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT")
 	private Double totalDebt;
 	
-	@MillionFormatterAnnotation
+	
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EBITDA")
 	private Double totalDebtEbitda;
 	
-	@MillionFormatterAnnotation
+	
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
 
