@@ -54,12 +54,10 @@ public class CompanyService extends AbstractDataService {
 
 				Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
 
+				// not sure what the difference is, but the app they should be same
 				company.setClosePrice(priceHistory.getPrice().get(0).getValue());
-
-				if (priceHistory.getPrice().size() > 1 && priceHistory.getPrice().get(1).getValue() != null) {
-					company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
-					company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
-				}
+				company.setPreviousClosePrice(priceHistory.getPrice().get(0).getValue());
+				company.setPreviousCloseDate(priceHistory.getPrice().get(0).getDate());
 
 				loadHistorical(parms[0], company);
 
