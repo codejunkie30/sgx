@@ -20,9 +20,11 @@
 
 <body style="width: auto;" class="alerts-wrapper">
 	
-	<div class="grid">
-		<span data-bind="template: 'company-header'"></span>
-	</div>
+	<header class="header">
+		<div class="grid scan">
+			<span data-bind="template: 'login-bar'"></span>
+		</div>
+	</header>
 	<h1>Alerts</h1>
 	
 	<section id="alerts-content-alternative" data-bind="if:(userStatus() == 'UNAUTHORIZED' || userStatus() == 'EXPIRED')">
@@ -43,14 +45,14 @@
 			<section class="watchlist">
 				<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
 				<!-- ko if: selectedValue() != null -->
-					<a data-bind="click: showChange">CHANGE</a> | <a data-bind="click:$root.deleteWatchlist">DELETE</a>
+					<a data-bind="click: showChange">CHANGE</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
 				<!-- /ko -->
 				<div data-bind="visible: showChange()" class="edit-watchlist">
 					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Edit Watch List</a>
 				</div>
 				
 				<div class="companies">					
-					<div data-bind="if: displayList">
+					<!--<div data-bind="if: displayList">
 						<ul data-bind="foreach: displayList().companies">
 							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<span class="ticker" data-bind="text: ticker"></span>
@@ -61,7 +63,7 @@
 								<div class="company" data-bind="text: companyName"></div>						
 							</li>
 						</ul>	
-					</div>
+					</div>-->
 				</div>
 				<div class="search">
 					<div class="searchtoggle">
@@ -288,7 +290,7 @@
 					</ul>
 				</div>
 				<div class="button-wrapper">
-					<a href="#" class="button">Save</a> <a href="#">CANCEL</a>
+					<a class="button" data-bind="click:$root.saveWatchlist">Save</a> <a href="#">CANCEL</a>
 				</div>
 			</section>
 		</div>

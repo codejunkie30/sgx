@@ -34,30 +34,26 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		initPage: function() {
 						
 			// extend tearsheet
-			$.extend(true, this, TS);
-			 this.init();
+			//$.extend(true, this, TS);
+			// this.init();
 			var self = this;
-			
 			
 			PAGE.checkStatus();
 				var waitForDataToInit = ko.computed({
-		          read:function(){
+				  read:function(){
 		
-		              var companyData = this.gotCompanyData();
-		              var userStatus = this.userStatus();
-		
-		              if( companyData && userStatus ) {
-		
-		                  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
-		                    //this.init_nonPremium();
-		                  } else {
-		                    this.init(function() { self.finish(self); });
-		                  }
-		              }
-		
-		          },
-		          owner:this
-		      });
+					 // var companyData = this.gotCompanyData();
+					  var userStatus = PAGE.userStatus();
+					  if( userStatus ) {						
+						  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
+							//this.init_nonPremium();
+						  } else {
+							this.finish(this);
+						  }
+					  }		
+				  },
+				  owner:this
+			  });
 			
 			
 		},
@@ -100,6 +96,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.each(ALERTS.finalWL(), function(idx, wl){
 					if (ALERTS.selectedValue() ==  wl.id){
 						
+						//console.log(wl.companies);
+						
 						var companies = wl.companies
 						wl.companies = ko.observableArray(companies);						
 						ALERTS.displayList(wl);
@@ -124,7 +122,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
 			
-			me.trackPage("SGX Company Watchlist - " + me.companyInfo.companyName);
+			me.trackPage("SGX Company Watchlist");
     		
 			ko.validation = validation;
 			
@@ -251,13 +249,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			
 		},
-		
-		deleteWatchlist: function(){
-			
+		confirmDelete: function(){
 			var deleteName = ALERTS.editWLName();
 			
-			//PAGE.modal.open({ type: 'alert',  content: '<p>Are you sure you want to delete ' + deleteName +'</p>', width: 400 }); return; 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
 			
+			 $('.confirm-delete').click(function(e) {				
+				ALERTS.deleteWatchlist();
+				$('.cboxWrapper').colorbox.close();
+	        });
+			
+			 $('.cancel').click(function(e) {
+				$('.cboxWrapper').colorbox.close();
+	        });		
+		},		
+		deleteWatchlist: function(){			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/delete";
 			var postType = 'POST';
     		var params = { "message": ALERTS.selectedValue()};
@@ -270,6 +276,65 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined, 
 				function(data, textStatus, jqXHR){
 					console.log(data);
+					ALERTS.finalWL(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);			
+		},
+		saveWatchlist: function(){
+			console.log('save');
+			console.log(ALERTS.displayList().optionList.pcPriceDrop);
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
+			var postType = 'POST';
+    		var params = { 
+				"id": ALERTS.selectedValue(),
+				"name": ALERTS.editWLName(),
+				"companies": ["FQ7"],
+				"optionList": {
+					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
+					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
+					"pcPriceRiseAbove": (ALERTS.displayList().optionList.pcPriceRiseAbove != null) ? ALERTS.displayList().optionList.pcPriceRiseAbove : null,
+					"pcTradingVolume": (ALERTS.displayList().optionList.pcTradingVolume != undefined) ? ALERTS.displayList().optionList.pcTradingVolume : false,
+					"pcTradingVolumeValue": (ALERTS.displayList().optionList.pcTradingVolumeValue != null) ? ALERTS.displayList().optionList.pcTradingVolumeValue : null,
+					"pcReachesWeek": (ALERTS.displayList().optionList.pcReachesWeek != undefined) ? ALERTS.displayList().optionList.pcReachesWeek : false,
+					"pcReachesWeekValue": ALERTS.displayList().optionList.pcReachesWeekValue,
+					"estChangePriceDrop": (ALERTS.displayList().optionList.estChangePriceDrop != undefined) ? ALERTS.displayList().optionList.estChangePriceDrop : false,
+					"estChangePriceDropBelow": (ALERTS.displayList().optionList.estChangePriceDropBelow != null) ? ALERTS.displayList().optionList.estChangePriceDropBelow : null,
+					"estChangePriceDropAbove": (ALERTS.displayList().optionList.estChangePriceDropAbove != null) ? ALERTS.displayList().optionList.estChangePriceDropAbove : null,
+					"estChangeConsensus": (ALERTS.displayList().optionList.estChangeConsensus != undefined) ? ALERTS.displayList().optionList.estChangeConsensus : false,
+					"estChangeConsensusValue": ALERTS.displayList().optionList.estChangeConsensusValue,
+					"estChangeEstimates": (ALERTS.displayList().optionList.estChangeEstimates != undefined) ? ALERTS.displayList().optionList.estChangeEstimates : false,
+					"estChangeEstimatesValue": ALERTS.displayList().optionList.estChangeEstimatesValue,
+					"kdAnounceCompTransactions": (ALERTS.displayList().optionList.kdAnounceCompTransactions != undefined) ? ALERTS.displayList().optionList.kdAnounceCompTransactions : false,
+					"kdTransactionUpdates": (ALERTS.displayList().optionList.kdTransactionUpdates != undefined) ? ALERTS.displayList().optionList.kdTransactionUpdates : false,
+					"kdBankruptcyUpdates": (ALERTS.displayList().optionList.kdBankruptcyUpdates != undefined) ? ALERTS.displayList().optionList.kdBankruptcyUpdates : false,
+					"kdCompanyForecasts": (ALERTS.displayList().optionList.kdCompanyForecasts != undefined) ? ALERTS.displayList().optionList.kdCompanyForecasts : false,
+					"kdCorporateStructureRelated": (ALERTS.displayList().optionList.kdCorporateStructureRelated != undefined) ? ALERTS.displayList().optionList.kdCorporateStructureRelated : false,
+					"kdCustProdRelated": (ALERTS.displayList().optionList.kdCustProdRelated != undefined) ? ALERTS.displayList().optionList.kdCustProdRelated : false,
+					"kdDividensSplits": (ALERTS.displayList().optionList.kdDividensSplits != undefined) ? ALERTS.displayList().optionList.kdDividensSplits : false,
+					"kdListTradeRelated": (ALERTS.displayList().optionList.kdListTradeRelated != undefined) ? ALERTS.displayList().optionList.kdListTradeRelated : false,
+					"kdPotentialRedFlags": (ALERTS.displayList().optionList.kdPotentialRedFlags != undefined) ? ALERTS.displayList().optionList.kdPotentialRedFlags : false,
+					"kdPotentialTransactions": (ALERTS.displayList().optionList.kdPotentialTransactions != undefined) ? ALERTS.displayList().optionList.kdPotentialTransactions : false,
+					"kdResultsCorpAnnouncements": (ALERTS.displayList().optionList.kdResultsCorpAnnouncements != undefined) ? ALERTS.displayList().optionList.kdResultsCorpAnnouncements : false
+				}			
+			};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					console.log(data);
+					ALERTS.finalWL(data);
+					
+					console.log(params);
+					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
@@ -277,8 +342,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);
-			
-			
 		}
 
 	};
