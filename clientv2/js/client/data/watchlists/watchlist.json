@@ -3,22 +3,7 @@
 		{
 			"id": 1,
 			"name": "Watchlist Name A",
-			"companies": [
-				{
-					"ticker": "CL34",
-					"companyName": "Singapore Airlines Limited",
-					"currency": "SGD",
-					"price": "2.45",
-					"change": "2.13"
-				},
-				{
-					"ticker": "T14",
-					"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited",
-					"currency": "SGD",
-					"price": "20.06",
-					"change": "2.02"
-				}
-			],
+			"companies": [ "cl34", "t14" ],
 			"optionList": {
 				"pcPriceDrop": true,
 				"pcPriceDropBelow": null,

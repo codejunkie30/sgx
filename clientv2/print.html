@@ -228,6 +228,7 @@
 							
 							<h3>Dividends</h3>
 							<table cellspacing="0" class="panel dividends">
+								<!-- ko if: $data.dividendHistory.dividendValues != null -->
 								<thead data-bind="visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues != null">
 									<tr>
 										<td width="25%"><b>Ex-Date</b></td>
@@ -249,6 +250,14 @@
 				         				<td class="custom note"><span>There is no dividend data available.</span></td>
 				         			</tr>
 				         		</tbody>
+								<!-- /ko -->
+								<!-- ko if: $data.dividendHistory.dividendValues == null -->
+									<tbody>
+					         			<tr>
+					         				<td style="padding: 10px;"><span>There is no dividend data available.</span></td>
+					         			</tr>
+				         			</tbody>
+								<!-- /ko -->
 				         	</table>
 
 
