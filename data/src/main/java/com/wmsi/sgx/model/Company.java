@@ -551,7 +551,7 @@ public class Company {
 		return marketCap;
 	}
 	
-	public void getMarketCap(marketCap) {
+	public void setMarketCap(Double marketCap) {
 		this.marketCap = marketCap;
 	}
 
