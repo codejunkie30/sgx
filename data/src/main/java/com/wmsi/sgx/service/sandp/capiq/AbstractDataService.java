@@ -136,9 +136,14 @@ public abstract class AbstractDataService implements DataService{
 		
 		// temp hack for just processing SGD
 		if (!FXRecord.shouldConvert(actual.getCurrency())) return actual.getValue();
-		
+
+		// pull it from the cache
 		FXRecord record = FXRecord.getFromCache(actual.getCurrency(), "SGD", actual.getPeriodDate());
 		
+		// offtime runs, might get future dates we can't convert grab the latest we have
+		if (record == null) record = FXRecord.getLatestRate(actual.getCurrency(), "SGD");
+		
+		// get the value
 		if (record != null) {
 			BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
 			return val.toString();
