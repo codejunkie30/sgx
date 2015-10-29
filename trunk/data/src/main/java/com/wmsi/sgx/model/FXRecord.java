@@ -1,9 +1,10 @@
 package com.wmsi.sgx.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,6 +14,8 @@ import com.google.common.base.Objects;
 public class FXRecord {
 	
 	static DateTimeFormatter FMT = DateTimeFormat.forPattern("yyyyMMdd");
+	
+	static Map<String,Map<String,List<FXRecord>>> FXCACHE = new HashMap<String,Map<String,List<FXRecord>>>();
 
 	private String day;
 	
@@ -21,6 +24,22 @@ public class FXRecord {
 	private String to;
 	
 	private Double multiplier;
+	
+	public FXRecord() {}
+	
+	public FXRecord(String from, String to, String day, Double multiplier) {
+		this.from = from;
+		this.to = to;
+		this.day = day;
+		this.multiplier = multiplier;
+	}
+	
+	public FXRecord(String from, String to, String day, String multiplier) {
+		this.from = from;
+		this.to = to;
+		this.day = day;
+		this.multiplier = Double.parseDouble(multiplier);
+	}
 	
 	public String getDay() {
 		return day;
@@ -59,11 +78,6 @@ public class FXRecord {
 		return Objects.hashCode(day, from, to, multiplier);
 	}
 	
-	public boolean matches(String from, String to, Date when) {
-		return Objects.equal(from, getFrom()) && Objects.equal(to, getTo()) && Objects.equal(getDayFormat().print(when.getTime()), getDay()); 
-	}
-
-	
 	@Override
 	public boolean equals(Object object){
 		if (object instanceof FXRecord) {
@@ -86,16 +100,30 @@ public class FXRecord {
 			.toString();
 	}
 	
-	public static DateTimeFormatter getDayFormat() {
-		return FMT;
-	}
+	public static DateTimeFormatter getDayFormat() { return FMT; }
 	
-	public static Object[] parseFXLine(String line) {
+	public static FXRecord parseFXLine(String line) {
 		try {
 			String[] vals = line.replaceAll("\"", "").split(",");
 			if (!vals[1].equals("SGD")) return null;
 			String[] dt = vals[2].split(" ")[0].split("/");
-			return new Object[] { vals[0], vals[1], dt[2] + (dt[0].length() == 1 ? "0" + dt[0] : dt[0]) + (dt[1].length() == 1 ? "0" + dt[1] : dt[1]), vals[3] };
+			FXRecord record = new FXRecord(vals[0], vals[1], dt[2] + (dt[0].length() == 1 ? "0" + dt[0] : dt[0]) + (dt[1].length() == 1 ? "0" + dt[1] : dt[1]), vals[3]);
+
+			Map<String,List<FXRecord>> from = FXCACHE.get(vals[0]);
+			if (from == null) {
+				from = new HashMap<String,List<FXRecord>>();
+				FXCACHE.put(vals[0], from);
+			}
+			
+			List<FXRecord> records = from.get(vals[1]);
+			if (records == null) {
+				records = new ArrayList<FXRecord>();
+				from.put(vals[1], records);
+			}
+			
+			records.add(record);
+			
+			return record;
 		}
 		catch(Exception e) {}
 		return null;
@@ -103,6 +131,23 @@ public class FXRecord {
 	
 	public static boolean shouldConvert(String cur) {
 		return cur == null || cur.equals("SGD") ? false : true;
+	}
+	
+	public static FXRecord getFromCache(String from, String to, Date d) {
+		
+		Map<String,List<FXRecord>> fl = FXCACHE.get(from);
+		if (fl == null) return null;
+		
+		List<FXRecord> records = fl.get(to);
+		if (records == null) return null;
+		
+		String date = getDayFormat().print(d.getTime());
+		
+		for (FXRecord record : records) {
+			if (record.getDay().equals(date)) return record;
+		}
+		
+		return null;
 	}
 
 	

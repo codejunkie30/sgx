@@ -412,9 +412,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		StringBuilder buffer = new StringBuilder(); int cnt = 0;
 		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
 		    for(String line; (line = br.readLine()) != null; ) {
-		    	Object[] vals = FXRecord.parseFXLine(line); 
-		    	if (vals == null) continue;
-		    	buffer.append(String.format(json, vals).replace("- ", "-0"));
+		    	FXRecord record = FXRecord.parseFXLine(line); 
+		    	if (record == null) continue;
+		    	buffer.append(String.format(json, record.getFrom(), record.getTo(), record.getDay(), record.getMultiplier()));
 		    	if (cnt % fxBatchSize == 0 && cnt > 0) {
 		    		log.info("FX Processed {} records", cnt);
 		    		indexerService.bulkSave("fxdata", buffer.toString(), indexName);
