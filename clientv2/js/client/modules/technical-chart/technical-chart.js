@@ -373,9 +373,66 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
     
   }
 
+  FS_Chart.prototype.redraw = function() {
+    this.chartElement.redraw();
+  }
+
+  FS_Chart.prototype.addAxis = function(serviceObj) {
+
+    var axis = this.chartElement.get(serviceObj.serviceName);
+    if( axis )
+      return;
+
+    var standardAxis = this.chartElement.yAxis.filter(function(item) {
+      return item.userOptions.opposite == false;
+    });
+    var oppositeBool = (standardAxis.length > 0)? true: false;
+
+    this.chartElement.addAxis({
+      id:serviceObj.serviceName,
+      name: serviceObj.axisName,
+      title: {text: serviceObj.axisName },
+      opposite:oppositeBool
+    }, false, false);
+
+  }
+
+  FS_Chart.prototype.removeAxis = function(serviceObj) {
+    var axis = this.chartElement.get(serviceObj.serviceName);
+    axis.remove(false);
+  }
+
+  FS_Chart.prototype.addSeries = function(data, serviceObj) {
+    var series = {
+      data: data,
+      id: serviceObj.key,
+      name: serviceObj.displayName,
+      yAxis: serviceObj.serviceName 
+    };
+
+    this.addAxis(serviceObj);
+    this.chartElement.addSeries(series, false);
+
+  }
+
+  FS_Chart.prototype.removeSeries = function(serviceObj) {
+    var series = this.chartElement.get(serviceObj.key);
+    if (series)
+      series.remove(false);
+    
+    var axis = this.chartElement.get(serviceObj.serviceName);
+    if(axis.series.length == 0) {
+      axis.remove(false);
+    }
+  }
+
   FS_Chart.prototype.getGenericChartObj = function() {
     var options =
     {
+      chart: {
+        width: 950,
+        height:500
+      },
       legend: {
         useHTML:true,
         enabled:true,
@@ -401,7 +458,8 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
           text:'Income'
         },
         id:'income',
-        name: 'Income'
+        name: 'Income',
+        opposite:false
       },
       series: []
     }

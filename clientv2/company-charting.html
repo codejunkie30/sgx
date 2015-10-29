@@ -118,30 +118,45 @@
     			<div class="content financials" data-bind="css:{'show-hidden': activeTab() == 'financials'}">
     				<div class="financials-controls">
 
-    					<select data-bind="options:financialsDropdowns.income,
-    					optionsText: 'displayName',
-    					optionsCaption:'Income Statement',
-    					value:financialsDropdowns.selectedChoices.income"></select>
+                      <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Income <span data-bind="if:choiceNumTracker.income() > 0">(<span data-bind="text: choiceNumTracker.income"></span>)</span>
+                        <ul class="dropdown" data-bind="foreach:financialsDropdowns.income">
+                          <li>
+                            <label><input type="checkbox" id="el-3" name="el-3" data-bind="attr:{value:$data.key}, checked: $parent.dropdownChoices"><span data-bind="text:$data.displayName"></span></label>
+                          </li>
+                        </ul>
+                      </div>
 
-    					<select data-bind="options:financialsDropdowns.balanceSheets,
-    					optionsText: 'displayName',
-    					value:financialsDropdowns.selectedChoices.balanceSheets,
-    					optionsCaption:'Balance Sheet'"></select>
+                      <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Balance Sheets <span data-bind="if:choiceNumTracker.balanceSheets() > 0">(<span data-bind="text: choiceNumTracker.balanceSheets"></span>)</span>
+                        <ul class="dropdown" data-bind="foreach:financialsDropdowns.balanceSheets">
+                          <li>
+                            <label><input type="checkbox" id="el-3" name="el-3" data-bind="attr:{value:$data.key}, checked: $parent.dropdownChoices"><span data-bind="text:$data.displayName"></span></label>
+                          </li>
+                        </ul>
+                      </div>
 
-    					<select data-bind="options:financialsDropdowns.cashFlow,
-    					optionsText: 'displayName',
-    					value:financialsDropdowns.selectedChoices.cashFlow,
-    					optionsCaption:'Cash Flows'"></select>
+                      <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Cash Flow <span data-bind="if:choiceNumTracker.cashFlow() > 0">(<span data-bind="text: choiceNumTracker.cashFlow"></span>)</span>
+                        <ul class="dropdown" data-bind="foreach:financialsDropdowns.cashFlow">
+                          <li>
+                            <label><input type="checkbox" id="el-3" name="el-3" data-bind="attr:{value:$data.key}, checked: $parent.dropdownChoices"><span data-bind="text:$data.displayName"></span></label>
+                          </li>
+                        </ul>
+                      </div>
 
-    					<select data-bind="options:financialsDropdowns.ratios,
-    					optionsText: 'displayName',
-    					value:financialsDropdowns.selectedChoices.ratios,
-    					optionsCaption:'Ratios'"></select>
+                      <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Ratios <span data-bind="if:choiceNumTracker.ratios() > 0">(<span data-bind="text: choiceNumTracker.ratios"></span>)</span>
+                        <ul class="dropdown" data-bind="foreach:financialsDropdowns.ratios">
+                          <li>
+                            <label><input type="checkbox" id="el-3" name="el-3" data-bind="attr:{value:$data.key}, checked: $parent.dropdownChoices"><span data-bind="text:$data.displayName"></span></label>
+                          </li>
+                        </ul>
+                      </div>
 
-    					<select data-bind="options:financialsDropdowns.growth,
-    					optionsText: 'displayName',
-    					value:financialsDropdowns.selectedChoices.growth,
-    					optionsCaption:'Growth over Prior Year(%)'"></select>
+                      <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Growth <span data-bind="if:choiceNumTracker.growth() > 0">(<span data-bind="text: choiceNumTracker.growth"></span>)</span>
+                        <ul class="dropdown" data-bind="foreach:financialsDropdowns.growth">
+                          <li>
+                            <label><input type="checkbox" id="el-3" name="el-3" data-bind="attr:{value:$data.key}, checked: $parent.dropdownChoices"><span data-bind="text:$data.displayName"></span></label>
+                          </li>
+                        </ul>
+                      </div>
 
 
     				</div>
