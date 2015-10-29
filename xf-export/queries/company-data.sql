@@ -444,3 +444,23 @@ join ciqSubType b on a.subTypeId=b.subTypeId
 join ##SGXPop pop on a.companyId=pop.companyId
 where a.primaryflag=1
 and b.childLevel in (2,3)
+
+union
+
+select 
+	pop.tickerSymbol,
+	pop.exchangeSymbol,
+	'marketCap',
+	convert(varchar(max),a.marketCap),
+	null,
+	a.pricingdate,
+	d.ISOCode
+from ciqMarketCap a
+join ciqSecurity b on a.companyid=b.companyid and b.primaryFlag=1
+join ciqTradingItem c on b.securityid=c.securityid and c.primaryFlag=1
+join ciqCurrency d on c.currencyId=d.currencyId
+join ##SGXPop pop on a.companyId=pop.companyId
+join (
+select companyid, max(pricingdate) as maxdate
+from ciqMarketCap
+group by companyid) maxdate on a.companyid=maxdate.companyid and a.pricingDate=maxdate.maxdate
