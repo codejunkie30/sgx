@@ -219,6 +219,8 @@ public class Company {
 
 	private List<DividendValue> dividendHistory;
 	
+	private Double marketCap;
+	
 	public PriceHistory fullPH;
 
 	public List<DividendValue> getDividendHistory() {
@@ -546,14 +548,11 @@ public class Company {
 	}
 
 	public Double getMarketCap() {
-		if (getSharesOutstanding() == null || closePrice == null || closePrice == 0) {
-			return null;
-		} else {
-			BigDecimal shares = new BigDecimal(getSharesOutstanding());
-			BigDecimal price = new BigDecimal(closePrice);
-			return shares.multiply(price).doubleValue();
-		}
-
+		return marketCap;
+	}
+	
+	public void getMarketCap(marketCap) {
+		this.marketCap = marketCap;
 	}
 
 	public Double getMinorityInterest() {
