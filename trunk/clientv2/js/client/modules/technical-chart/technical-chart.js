@@ -410,10 +410,10 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
     var series = {
       data: data,
       id: serviceObj.key,
+      color: serviceObj.color,
       name: serviceObj.displayName,
       yAxis: serviceObj.serviceName 
     };
-
     this.addAxis(serviceObj);
     this.chartElement.addSeries(series, false);
 
@@ -437,6 +437,7 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
         width: 950,
         height:500
       },
+
       legend: {
         useHTML:true,
         enabled:true,

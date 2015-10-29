@@ -311,11 +311,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
       });
 
+      var seriesColor = getSeriesColor( serviceKey );
+      serviceObj.color = seriesColor;
 
       if (self.financials_chart.chartElement == null) {
 
             self.financials_chart.initChart({data:seriesData,
                                               id: serviceKey,
+                                              color: seriesColor,
                                               name: serviceObj.displayName});
 
             self.financials_chart.chartReady.subscribe(function(data) {
@@ -336,6 +339,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
 
       }
+
 
     },
 
@@ -617,6 +621,23 @@ return TechnicalCharting;
         });
       }
     }
+
   }
+
+    //helper for financials series color
+    function getSeriesColor( key ){
+      this.colors = this.colors || ['#0b236b', '#bdd831', '#0094b3', '#791e75', '#5f6062'];
+      this.memo = this.memo || {};
+
+      if ( this.memo[ key ] ) {
+        this.colors.push(this.memo[ key ]);
+        delete this.memo[ key ];
+        return;
+      }
+      var color = this.colors.shift();
+      this.memo[key] = color;
+      return color;
+
+    }
 
 });
