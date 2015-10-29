@@ -145,7 +145,10 @@ public class WatchlistServiceImpl implements WatchlistService {
 		for(Map.Entry<String, Object> entry : map.entrySet()){
 			WatchlistOption newOptions = new WatchlistOption();
 			newOptions.setAlert_option(entry.getKey());
-			newOptions.setOption_value(entry.getValue().toString());
+			if(entry.getValue() == null)
+				newOptions.setOption_value("null");
+			else
+				newOptions.setOption_value(entry.getValue().toString());
 			newOptions.setWatchlistId(id);
 			optionRepository.save(newOptions);
 		}
