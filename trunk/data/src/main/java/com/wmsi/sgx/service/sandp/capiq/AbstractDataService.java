@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
+import com.wmsi.sgx.model.annotation.MillionFormatterAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
-import com.wmsi.sgx.service.indexer.IndexQueryResponse;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.impl.CSVHelperUtil;
@@ -120,6 +119,33 @@ public abstract class AbstractDataService implements DataService{
 		if (field.isAnnotationPresent(FXAnnotation.class)) value = getFXConverted(value, actual);
 		
 		return value;
+	}
+	
+	public void processMillionRangeValues(Object obj) {
+		Field[] fields = obj.getClass().getDeclaredFields();
+
+		for (Field field : fields) {
+			try {
+				field.setAccessible(true);
+				Double val = processMillionFormatterAnnotation(field, field.get(obj));
+				if (val == null)
+					continue;
+				field.set(obj, val);
+			} catch (Exception e) {
+				log.error("Getting field val: " + field.getName(), e);
+			}
+		}
+	}
+
+	public Double processMillionFormatterAnnotation(Field field, Object value) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
+		Double ret = null;
+		// nothing to do
+		if (value == null) return null;
+		
+		if (field.isAnnotationPresent(MillionFormatterAnnotation.class)) ret = ((Double)value)/1000000.0;
+		/*if(ret != null)
+			ret=Math.round(ret*10000)/10000.0;*/
+		 return ret;
 	}
 	
 	/**

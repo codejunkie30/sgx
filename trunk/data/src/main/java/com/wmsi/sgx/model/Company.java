@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
+import com.wmsi.sgx.model.annotation.MillionFormatterAnnotation;
 
 @JsonRootName("company")
 public class Company {
@@ -17,9 +18,11 @@ public class Company {
 	private Double avgBrokerReq;
 	
 	private String exchange;
-
+	
+	@MillionFormatterAnnotation
 	private Double avgTradedVolM3;
-
+	
+	@MillionFormatterAnnotation
 	private Double avgVolumeM3;
 
 	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
@@ -141,7 +144,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_SHORT_INTEREST")
 	private Double sharesSoldShort;
-
+	
+	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_OUTSTANDING_FILING_DATE")
 	private Double sharesOutstanding;
 
@@ -158,16 +162,20 @@ public class Company {
 	private Double tbv;
 
 	@FXAnnotation
+	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
 
 	@FXAnnotation
+	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT")
 	private Double totalDebt;
-
+	
+	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EBITDA")
 	private Double totalDebtEbitda;
-
+	
+	@MillionFormatterAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
 
@@ -187,6 +195,7 @@ public class Company {
 	private String tradeName;
 
 	@ConversionAnnotation(name = "IQ_VOLUME")
+	@MillionFormatterAnnotation
 	private Double volume;
 
 	private Date vwapAsOfDate;

@@ -57,6 +57,7 @@ public class FinancialsService extends AbstractDataService {
 			JsonElement jsonElement = gson.toJsonTree(financialMap);
 			financialMap.put("period", tickerNoEx);
 			Financial fin = gson.fromJson(jsonElement, Financial.class);
+			processMillionRangeValues(fin);
 			List<Financial> list = financials.getFinancials();
 			list.add(fin);			
 			financials.setFinancials(list);

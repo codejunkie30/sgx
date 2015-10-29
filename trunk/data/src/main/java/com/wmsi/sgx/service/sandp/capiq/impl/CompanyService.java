@@ -28,79 +28,81 @@ import com.wmsi.sgx.util.DateUtil;
 
 @SuppressWarnings("unchecked")
 public class CompanyService extends AbstractDataService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(CompanyService.class);
-	
+
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 
 		Assert.notEmpty(parms);
-		
+
 		try {
-		
+
 			// list of records
 			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
-			
+
 			// company
 			Company company = getCompany(id, records);
 			setMisc(company, records);
-			
+
 			// price history
 			PriceHistory priceHistory = loadPriceHistory(id, records);
 			company.fullPH = priceHistory;
-	
+
 			// misc
 			if (priceHistory.getPrice().size() > 0) {
-				
+
 				Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
-				
+
 				company.setClosePrice(priceHistory.getPrice().get(0).getValue());
-				
+
 				if (priceHistory.getPrice().size() > 1 && priceHistory.getPrice().get(1).getValue() != null) {
 					company.setPreviousClosePrice(priceHistory.getPrice().get(1).getValue());
 					company.setPreviousCloseDate(priceHistory.getPrice().get(1).getDate());
 				}
-				
+
 				loadHistorical(parms[0], company);
-				
-			}
-			else {
+
+			} else {
 				log.error("NO PRICE HISTORY: " + id);
 			}
+
+			processMillionRangeValues(company);
 			
 			return company;
-			
-		}
-		catch(Exception e) {
+
+		} catch (Exception e) {
 			throw new ResponseParserException("Loading company: " + id, e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * set some misc properties
 	 */
 	public void setMisc(Company comp, List<CompanyCSVRecord> records) {
-		
+
 		List<CompanyCSVRecord> tmp = CompanyCSVRecord.getByName("periodEndDate", records);
-		if (tmp.size() == 0) return;
-		
+		if (tmp.size() == 0)
+			return;
+
 		Collections.sort(tmp, CompanyCSVRecord.CompanyCSVRecordDateComparator);
 		comp.setFilingDate(tmp.get(0).getPeriodDate());
-		
+
 	}
-	
+
 	/**
 	 * load up the base fields
+	 * 
 	 * @param id
 	 * @param records
 	 * @return
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public Company getCompany(String id, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException {
-		
-		
+	public Company getCompany(String id, List<CompanyCSVRecord> records)
+			throws ResponseParserException, CapIQRequestException {
+
 		Field[] fields = Company.class.getDeclaredFields();
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -108,18 +110,17 @@ public class CompanyService extends AbstractDataService {
 			String name = field.getName();
 			try {
 				String val = getFieldValue(field, records);
-				if (val == null) continue;
+				if (val == null)
+					continue;
 				map.put(name, val);
-			}
-			catch(Exception e) {
+			} catch (Exception e) {
 				log.error("Getting field val: " + field.getName(), e);
 			}
 		}
-		
-		if (map.size() == 0) throw new ResponseParserException("record map is empty in getCompany()");
 
-		
-		
+		if (map.size() == 0)
+			throw new ResponseParserException("record map is empty in getCompany()");
+
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		JsonElement jsonElement = gson.toJsonTree(map);
 		Company comp = gson.fromJson(jsonElement, Company.class);
@@ -127,61 +128,65 @@ public class CompanyService extends AbstractDataService {
 		comp.setExchange(id.split(":")[1]);
 		return comp;
 	}
-	
+
 	/**
-	 * load up the price history	
+	 * load up the price history
+	 * 
 	 * @param input
 	 * @param records
 	 * @return
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public PriceHistory loadPriceHistory(String input, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException {
-		
+	public PriceHistory loadPriceHistory(String input, List<CompanyCSVRecord> records)
+			throws ResponseParserException, CapIQRequestException {
+
 		PriceHistory ph = new PriceHistory();
 		Map<String, List<HistoricalValue>> pricing = new HashMap<String, List<HistoricalValue>>();
 		Field field = null;
-		try { field = HistoricalValue.class.getDeclaredField("value"); }
-		catch(Exception e) {}
-		
+		try {
+			field = HistoricalValue.class.getDeclaredField("value");
+		} catch (Exception e) {
+		}
+
 		pricing.put("openPrice", new ArrayList<HistoricalValue>());
 		pricing.put("closePrice", new ArrayList<HistoricalValue>());
 		pricing.put("volume", new ArrayList<HistoricalValue>());
 		pricing.put("highPrice", new ArrayList<HistoricalValue>());
 		pricing.put("lowPrice", new ArrayList<HistoricalValue>());
-		
-		
+
 		for (CompanyCSVRecord record : records) {
-			
+
 			List<HistoricalValue> list = pricing.get(record.getName());
-			if (list == null || record == null) continue;
-			
+			if (list == null || record == null)
+				continue;
+
 			try {
 				String val = getFieldValue(field, record);
 				HistoricalValue hv = new HistoricalValue();
 				hv.setTickerCode(record.getTicker());
 				hv.setDate(record.getPeriodDate());
-				if (val != null) hv.setValue(Double.parseDouble(val));
+				if (val != null)
+					hv.setValue(Double.parseDouble(val));
 				list.add(hv);
-			}
-			catch(Exception e) {
+			} catch (Exception e) {
 				log.error("Trying to load hv record: " + record.toString(), e);
 			}
-			
+
 		}
-		
-		
+
 		ph.setHighPrice(pricing.get("highPrice"));
 		ph.setLowPrice(pricing.get("lowPrice"));
 		ph.setOpenPrice(pricing.get("openPrice"));
 		ph.setPrice(pricing.get("closePrice"));
 		ph.setVolume(pricing.get("volume"));
-		
+
 		return ph;
 	}
-	
-	private Company loadHistorical(final String startDate, Company comp) throws ResponseParserException, CapIQRequestException {
-		
+
+	private Company loadHistorical(final String startDate, Company comp)
+			throws ResponseParserException, CapIQRequestException {
+
 		PriceHistory historicalData = comp.fullPH;
 		List<HistoricalValue> lastYearPrice = historicalData.getPrice();
 		List<HistoricalValue> lastYearVolume = historicalData.getVolume();
@@ -209,7 +214,7 @@ public class CompanyService extends AbstractDataService {
 						isFound = true;
 						break;
 					}
-				}   
+				}
 				if (isFound == false) {
 					price2.remove(currPrice);
 				}
@@ -238,11 +243,13 @@ public class CompanyService extends AbstractDataService {
 		Double sum = 0.0;
 
 		for (HistoricalValue v : volume) {
-			if (v == null || v.getValue() == null) continue;
+			if (v == null || v.getValue() == null)
+				continue;
 			sum += v.getValue();
 		}
-			
-		if (sum == 0) return 0.0;
+
+		if (sum == 0)
+			return 0.0;
 
 		return avg(sum, volume.size(), 4);
 	}
