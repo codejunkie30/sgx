@@ -91,10 +91,16 @@ public class WatchlistServiceImpl implements WatchlistService {
 			WatchlistOption[] options = optionRepository.findById(id);
 			WatchlistCompany[] companies = companyRepository.findById(id);	
 			
-			Map<String, String> optionsMap = new HashMap<String, String>();			
-			for(WatchlistOption opt : options)
-				optionsMap.put(opt.getAlert_option(), opt.getOption_value());			
-			
+			Map<String, Object> optionsMap = new HashMap<String, Object>();			
+			for(WatchlistOption opt : options){
+				String optValue = opt.getOption_value();
+				if(optValue.equalsIgnoreCase("false") | optValue.equalsIgnoreCase("true"))
+						optionsMap.put(opt.getAlert_option(), Boolean.parseBoolean(optValue));	
+				else if(optValue.equalsIgnoreCase("null"))
+						optionsMap.put(opt.getAlert_option(), null);	
+				else
+					optionsMap.put(opt.getAlert_option(), optValue);
+			}
 			List<String> companyList = new ArrayList<String>();
 			for(WatchlistCompany comp : companies)
 				companyList.add(comp.tickerCode);
@@ -135,11 +141,11 @@ public class WatchlistServiceImpl implements WatchlistService {
 		
 	}
 	
-	public void setOptions(Map<String, String> map, Long id){
-		for(Map.Entry<String, String> entry : map.entrySet()){
+	public void setOptions(Map<String, Object> map, Long id){
+		for(Map.Entry<String, Object> entry : map.entrySet()){
 			WatchlistOption newOptions = new WatchlistOption();
 			newOptions.setAlert_option(entry.getKey());
-			newOptions.setOption_value(entry.getValue());
+			newOptions.setOption_value(entry.getValue().toString());
 			newOptions.setWatchlistId(id);
 			optionRepository.save(newOptions);
 		}
@@ -155,8 +161,8 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}
 	}
 	
-	public Map<String, String> getDefaultOptions(){
-		Map<String, String> defaultOptions = new HashMap<String, String>();
+	public Map<String, Object> getDefaultOptions(){
+		Map<String, Object> defaultOptions = new HashMap<String, Object>();
 		defaultOptions.put("pcPriceDrop", "false");
 		defaultOptions.put("pcPriceDropBelow", "null");
 		defaultOptions.put("pcPriceRiseAbove", "null");

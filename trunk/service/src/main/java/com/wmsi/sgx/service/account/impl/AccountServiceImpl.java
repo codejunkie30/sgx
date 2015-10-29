@@ -43,7 +43,7 @@ public class AccountServiceImpl implements AccountService{
 		List<Account> accounts = accountRepository.findByUsername(username);		
 		AccountModel ret = null;
 		if(accounts.size() > 0){
-			Account account = accounts.get(0);
+			Account account = accounts.get(accounts.size() - 1);
 			ret = new AccountModel();
 			ret.setEmail(account.getUser().getUsername());
 			ret.setStartDate(account.getStartDate());

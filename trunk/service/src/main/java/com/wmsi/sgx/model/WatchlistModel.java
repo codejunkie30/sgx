@@ -8,7 +8,7 @@ public class WatchlistModel {
 	public String id;
 	public String name;
 	public List<String> companies;
-	public Map<String, String> optionList;
+	public Map<String, Object> optionList;
 	public String getId() {
 		return id;
 	}
@@ -27,10 +27,10 @@ public class WatchlistModel {
 	public void setCompanies(List<String> companies) {
 		this.companies = companies;
 	}
-	public Map<String, String> getOptionList() {
+	public Map<String, Object> getOptionList() {
 		return optionList;
 	}
-	public void setOptionList(Map<String, String> optionList) {
+	public void setOptionList(Map<String, Object> optionList) {
 		this.optionList = optionList;
 	}
 	@Override
@@ -58,5 +58,6 @@ public class WatchlistModel {
 			.add("optionList", optionList)
 			.toString();
 	}
+	
 	
 }
