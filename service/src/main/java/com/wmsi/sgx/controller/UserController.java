@@ -71,7 +71,7 @@ public class UserController{
 			log.debug("Exception occrued in password reset", e);			
 		}
 		
-		return false;
+		return true;
 		
 	}
 	//Strictly used for internal testing, 
