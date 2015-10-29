@@ -22,6 +22,9 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.base}")
 	public String baseUrl;
 	
+	@Value ("${email.sender}")
+	public String emailSender;
+	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
@@ -32,7 +35,7 @@ public class EmailServiceImpl implements EmailService{
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         message.setSubject(subject);
-        message.setFrom("fcdev@wealthmsi.com");
+        message.setFrom(emailSender);
         message.setTo(to);
         
         final String htmlContent = templateEngine.process(file, ctx);
