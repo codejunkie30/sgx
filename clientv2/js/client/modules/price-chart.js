@@ -9,21 +9,25 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		init: function(element, data, finished, periodChange) {
 			
 			var self = this;
-		
 			// let's get all the price data set up
 			this.priceData = this.toHighCharts(data.price);
 			var lowPrice = this.toHighCharts(data.lowPrice);
 			var openPrice = this.toHighCharts(data.openPrice);
 			var highPrice = this.toHighCharts(data.highPrice);
+
 			$.each(this.priceData, function(idx, point) {
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
+
+        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
+          return;
+        }
 				self.chartData[key] = {}
 				self.chartData[key].close = point.y;
 				self.chartData[key].low = lowPrice[idx].y;
 				self.chartData[key].open = openPrice[idx].y;
 				self.chartData[key].high = highPrice[idx].y;
 			});
-			
+
 			// all the volume data
 			this.volumeData = this.toHighCharts(data.volume);
 
