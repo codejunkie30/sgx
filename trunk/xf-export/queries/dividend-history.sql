@@ -11,4 +11,3 @@ join ciqSecurity c on b.securityId=c.securityId
 join ciqDividendPaymentType d on a.dividendPaymentTypeId=d.dividendPaymentTypeid
 left join ciqcurrency cISO on a.currencyId=cISO.currencyId
 join ##sgxpop pop on b.tradingItemId=pop.tradingItemId
-where dividendDate > dateadd(yy,-5,getdate())
