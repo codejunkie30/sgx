@@ -460,7 +460,6 @@ background: url("../img/title-back.png");
 }
 
 /** accordian */
-
 .ui-accordion {
   border-bottom: 1px solid #ccc;
 }
@@ -518,7 +517,6 @@ background: url("../img/title-back.png");
 }
 
 /** modal */
-
 #cboxOverlay{
 	opacity: .65 !important;
 	background: #fff !important;
