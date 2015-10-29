@@ -166,7 +166,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		//var isQ4 = combinedData[combinedData.length - 1].period.indexOf("LTM4") != -1;
     		//estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
 
-            if(this.dataExists())
+            if(this.dataExists() && combinedData.length > 0 && combinedData[0].filingCurrency)
 			 this.currency(combinedData[0].filingCurrency);
 			
 			// initialize the chart without a series
