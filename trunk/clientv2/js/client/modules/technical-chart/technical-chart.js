@@ -320,6 +320,10 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
       yAxis: [{
         id:'primary-axis',
         labels: {
+          formatter:function() {
+            if(this.value == 0) return;
+            return 'S$ '+this.value;
+          },
           align: 'right',
           x: -3
         },
