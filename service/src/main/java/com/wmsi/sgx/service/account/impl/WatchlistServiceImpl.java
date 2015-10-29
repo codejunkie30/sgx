@@ -168,8 +168,8 @@ public class WatchlistServiceImpl implements WatchlistService {
 		defaultOptions.put("pcPriceRiseAbove", "null");
 		defaultOptions.put("pcTradingVolume", "false");
 		defaultOptions.put("pcTradingVolumeValue", "null");
-		defaultOptions.put("pcReachesWeek", "1");
-		defaultOptions.put("pcReachesWeekValue", "false");
+		defaultOptions.put("pcReachesWeek", "false");
+		defaultOptions.put("pcReachesWeekValue", "null");
 		defaultOptions.put("estChangePriceDrop", "null");
 		defaultOptions.put("estChangePriceDropBelow", "null");
 		defaultOptions.put("estChangePriceDropAbove", "null");
