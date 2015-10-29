@@ -52,6 +52,7 @@ public class DividendService extends AbstractDataService{
 		
 				
 		for (CSVRecord record : records) {
+			if (list.size() >= 10) break;
 			CompanyCSVRecord csr = new CompanyCSVRecord(record.get(6), record.get(4), new Date(record.get(2)));
 			String val = getFieldValue(field, csr);
 			DividendValue dV = new DividendValue();
