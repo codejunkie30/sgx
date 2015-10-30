@@ -66,7 +66,7 @@
 						</ul>	
 					</div>
 				</div>
-				<div class="search">
+				<div class="search" data-bind="if: displayList">
 					<h5>Search for companies to add to your Watchlist</h5>
 					<div>
 						<span class="searchbar">
@@ -92,16 +92,13 @@
 					
 					-->
 				</div>
-				<div class="results">
+				<div class="results" data-bind="if: displayList">
 					<h5>Your Matches</h5>
-					<ul class="company">
+					<!--<ul data-bind="foreach: companies">-->
+					<ul class="company" data-bind="foreach: displayTempCom">
 						<li>
-							<span class="add" data-bind="value: 'M15', click:$root.addCompany"></span>
-							<span class="name">Company Name (<span class="ticker">M15</span>)</span>
-						</li>
-						<li>
-							<span class="add" data-bind="value: 'C34', click:$root.addCompany"></span>
-							<span class="name">Company Name (<span class="ticker">W15</span>)</span>
+							<span class="add" data-bind="value:ticker, click:$root.addCompany"></span>
+							<span class="name" data-bind="text:companyName"> (<span class="ticker" data-bind="text:ticker"></span>)</span>
 						</li>
 					</li>
 				</div>			
