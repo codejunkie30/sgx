@@ -6,7 +6,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		finalWL: ko.observableArray(),
 		selectedValue: ko.observable(),
 		displayList: ko.observable(),
-		//companies: ko.observableArray(),
+		companies: ko.observableArray(),
 		weeks: ko.observableArray(),
 		actualEstimates: ko.observableArray(),
 		consensusRec: ko.observableArray(),
@@ -93,8 +93,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						
 						//console.log(wl.companies);
 						
-						var companies = wl.companies
-						wl.companies = ko.observableArray(companies);						
+						//var companies = wl.companies
+						//wl.companies = ko.observableArray(companies);						
+						
 						ALERTS.displayList(wl);
 						
 						ALERTS.editWLName(wl.name);
@@ -112,7 +113,35 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				PAGE.resizeIframeSimple();	
 			});
-
+			
+			
+			
+			$( ".company li" ).click(function(){
+				// For the boolean value
+				var tickerCode = $(this).attr('data-value');
+				
+				$.each(ALERTS.finalWL(), function(idx, wl){
+					console.log(wl.companies);
+					if (ALERTS.selectedValue() ==  wl.id){
+						
+						ALERTS.companies = wl.companies;
+						
+						if (ALERTS.companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+						
+						console.log(tickerCode);
+						
+						ALERTS.companies = ko.observableArray(wl.companies);						
+						//console.log(tickerCode);
+						ALERTS.companies.push(tickerCode);
+						
+						ALERTS.displayList(wl);
+						
+					}
+				});
+				
+				
+			});
+			
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
@@ -287,7 +316,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		var params = {
 				"id": ALERTS.selectedValue(),
 				"name": ALERTS.editWLName(),
-				"companies": [],
+				"companies": ALERTS.companies(),
 				"optionList": {
 					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
 					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,

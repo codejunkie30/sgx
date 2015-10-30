@@ -52,18 +52,19 @@
 				</div>
 				
 				<div class="companies">					
-					<!--<div data-bind="if: displayList">
+					<div data-bind="if: displayList">
 						<ul data-bind="foreach: displayList().companies">
 							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">
-								<span class="ticker" data-bind="text: ticker"></span>
+								<span class="ticker" data-bind="text: $data"></span>
+								<!--<span class="ticker" data-bind="text: ticker"></span>
 								<span class="currency" data-bind="text: currency"></span> 
 								<span class="price" data-bind="text: price"></span>
 								<span class="change" data-bind="text: change"></span>
 								<span class="remove"></span>
-								<div class="company" data-bind="text: companyName"></div>						
+								<div class="company" data-bind="text: companyName"></div>	-->					
 							</li>
 						</ul>	
-					</div>-->
+					</div>
 				</div>
 				<div class="search">
 					<h5>Search for companies to add to your Watchlist</h5>
@@ -94,9 +95,13 @@
 				<div class="results">
 					<h5>Your Matches</h5>
 					<ul class="company">
-						<li>
+						<li data-value="M15">
 							<span class="add"></span>
-							<span class="name">Company Name (M15)</span>
+							<span class="name">Company Name (<span class="ticker">M15</span>)</span>
+						</li>
+						<li data-value="C34">
+							<span class="add"></span>
+							<span class="name">Company Name (<span class="ticker">W15</span>)</span>
 						</li>
 					</li>
 				</div>			
