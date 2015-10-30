@@ -116,13 +116,12 @@ div.wrapper {
   font-size: 11px;
   color: red; }
 
+#technical-chart-wrapper {
+  width:718px;
+  float:right;
+}
 
 #technical-chart-container {
-  /*background: #e7e7e8;*/
-  /*position:absolute;*/
-  /*right:0;*/
- /* display: block;*/
-/* float:right;*/
   height: 475px; }
 
 .indicators, .financials {
