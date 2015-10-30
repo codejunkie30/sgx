@@ -6,4 +6,5 @@ JAVA_OPTS="-Dspring.profiles.active=<PROFILE> -XX:+CMSClassUnloadingEnabled -XX:
 	prod-sing - singapore servers
 	
 	
+Need to upgrade java crypto packages on server
 	
