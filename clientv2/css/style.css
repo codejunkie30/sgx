@@ -1066,6 +1066,7 @@ background: url("../img/title-back.png");
 .estimates-content-alternative,
 .technical-charting,
 #financials,
+#comparables .company-comparables,
 .technical-charting-alternative {
   margin-top:40px;
 }
