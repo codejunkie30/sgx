@@ -226,6 +226,10 @@
 		{
 			"id": "dividendYieldVal",
 			"definition": "Dividend Yield calculations are subjected to currency translation differences based on reported earnings in the companies' filings."
+		},
+		{
+			"id": "exchange",
+			"definition": "Exchange allows you to search for companies located in other exchanges. This option is only available to StockFacts Premium trial users and subscribers."
 		}
 	]
 }
