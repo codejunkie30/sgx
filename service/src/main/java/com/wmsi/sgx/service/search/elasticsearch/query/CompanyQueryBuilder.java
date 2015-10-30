@@ -121,8 +121,9 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			if(c.getField().equals("exchange")){
 				exchanges.add(c.getValue());
 				it.remove();
+				noOfExchangesOnUserSerached++;
 			}
-			noOfExchangesOnUserSerached++;
+			
 		}
 			
 		
@@ -138,7 +139,7 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		if(!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ))){
 			
 			List<String> exchangesWhiteList = new ArrayList<String>();
-			if(!permittedExchangesList.equals(null)|| permittedExchangesList.length()<0){
+			if(permittedExchangesList != null && permittedExchangesList.length() > 0){
 				for(int i=0; i<permittedExchangesList.split(",").length; i++){
 					exchangesWhiteList.add(permittedExchangesList.split(",")[i]);
 				}
