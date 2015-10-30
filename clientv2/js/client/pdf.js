@@ -60,7 +60,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
     		var params = { id: me.ticker };
     		UTIL.handleAjaxRequest(finendpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
 			
-			this.resizeIframeSimple();
+			//this.resizeIframeSimple();
 			
 			return this;			
 		},

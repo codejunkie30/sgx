@@ -1,15 +1,19 @@
 { 
-	"companies": [
-					{
-						"ticker": "EH5",
-						"companyName": "United Overseas Australia Ltd"						
-					},
-					{
-						"ticker": "AFG",
-						"companyName": "Alliance Financial Group Berhad"						
-					}
-			]		
+	"tempCompanies": [
+		{
+			"ticker": "CL34",
+			"companyName": "Singapore Airlines Limited",
+			"currency": "SGD",
+			"price": "1.45",
+			"change": "0.13"
+		},
+		{
+			"ticker": "T14",
+			"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited",
+			"currency": "SGD",
+			"price": "10.06",
+			"change": "0.02"
 		}
+	]	
 		
-	]
 }

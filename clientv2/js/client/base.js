@@ -611,8 +611,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						postType,
 						params, 
 						undefined, 
-						function(data, textStatus, jqXHR){	
-							console.log(data);				
+						function(data, textStatus, jqXHR){
 							PAGE.finalWL(data);
 						}, 
 						function(jqXHR, textStatus, errorThrown){
@@ -630,6 +629,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								var companies = wl.companies;
 								
 								if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+								
+								if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
 								
 								wl.companies = KO.observableArray(companies);
 								

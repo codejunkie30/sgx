@@ -51,17 +51,17 @@
 					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Edit Watch List</a>
 				</div>
 				
-				<div class="companies">					
+				<div class="wl-companies">					
 					<div data-bind="if: displayList">
-						<ul data-bind="foreach: displayList().companies">
+						<ul data-bind="foreach: companies">
 							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<span class="ticker" data-bind="text: $data"></span>
 								<!--<span class="ticker" data-bind="text: ticker"></span>
 								<span class="currency" data-bind="text: currency"></span> 
 								<span class="price" data-bind="text: price"></span>
-								<span class="change" data-bind="text: change"></span>
-								<span class="remove"></span>
-								<div class="company" data-bind="text: companyName"></div>	-->					
+								<span class="change" data-bind="text: change"></span>	-->	
+								<span class="remove" data-bind="value: $data, click:$root.deleteCompany"></span>
+								<!--<div class="company" data-bind="text: companyName"></div>	-->					
 							</li>
 						</ul>	
 					</div>
@@ -95,12 +95,12 @@
 				<div class="results">
 					<h5>Your Matches</h5>
 					<ul class="company">
-						<li data-value="M15">
-							<span class="add"></span>
+						<li>
+							<span class="add" data-bind="value: 'M15', click:$root.addCompany"></span>
 							<span class="name">Company Name (<span class="ticker">M15</span>)</span>
 						</li>
-						<li data-value="C34">
-							<span class="add"></span>
+						<li>
+							<span class="add" data-bind="value: 'C34', click:$root.addCompany"></span>
 							<span class="name">Company Name (<span class="ticker">W15</span>)</span>
 						</li>
 					</li>
