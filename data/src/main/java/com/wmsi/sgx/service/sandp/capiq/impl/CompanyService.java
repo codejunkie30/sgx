@@ -164,8 +164,12 @@ public class CompanyService extends AbstractDataService {
 				HistoricalValue hv = new HistoricalValue();
 				hv.setTickerCode(record.getTicker());
 				hv.setDate(record.getPeriodDate());
-				if (val != null)
-					hv.setValue(Double.parseDouble(val));
+				if (val != null) {
+					Double dbl = Double.parseDouble(val);
+					if (record.getName().equals("volume")) processMillionFormatter(dbl);
+					hv.setValue(dbl);
+				}
+					
 				list.add(hv);
 			} catch (Exception e) {
 				log.error("Trying to load hv record: " + record.toString(), e);
