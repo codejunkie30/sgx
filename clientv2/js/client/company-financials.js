@@ -176,9 +176,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
                 model.modal.open({ type: 'alert',  content: '<h4>Chart Company Financials <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
     			return;
     		}
-    		
+
     		// check for data in the row
-    		if ($(el).siblings().filter(function() { return $(this).text() == "-"; }).length > 0) {
+            var numOfCols = this.dataPoints().length;
+            var numOfnulls = $(el).siblings().filter(function() { return $(this).text() == "-"; }).length;
+    		if ( numOfCols == numOfnulls ) {
 				model.modal.open({ type: "alert", content: "<p>No data available for this series.</p>" });
     			return;
     		}
