@@ -419,7 +419,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 	
                 	var dd = $(this).closest(".button-dropdown");
                 	var def = typeof $(dd).attr("data-label") !== "undefined" ? $(dd).attr("data-label") : "";
-                	var text = $(this).text();
+                	var text = $(this).attr("data-value");
                 	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name");
                 	var viewModel = KO.dataFor($(dd).closest(".criteria")[0]);
                 	

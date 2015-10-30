@@ -195,9 +195,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			/**
 			 * headers and columns
+			 * first two remove industry
 			 */
-			mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-1].fields.slice());
-			mdl.fieldGroups.remove(groups[groups.length-1]);
+			mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-2].fields.slice());
+			mdl.fieldGroups.remove(groups[groups.length-2]);
 			mdl.headers = ko.computed(function() {
 				this.headersChanged();
 				this.headersChanged(false);
