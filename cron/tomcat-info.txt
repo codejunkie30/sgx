@@ -1,5 +1,9 @@
-Base server (api, data loader) - in tomcat7.conf
-	-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms1024m -Xmx1024m
+For /etc/tomcat7/tomcat7.conf
+JAVA_OPTS="-Dspring.profiles.active=<PROFILE> -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms2048m -Xmx2048m"
+
+<PROFILE OPTIONS>
+	prod-us - us servers
+	prod-sing - singapore servers
 	
-For pricing server
-	-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms2048m -Xmx2048m
+	
+	
