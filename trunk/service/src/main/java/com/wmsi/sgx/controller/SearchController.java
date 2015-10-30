@@ -35,13 +35,14 @@ public class SearchController{
 		User u = null;
 		AccountType accountType=null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication == null|| !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)){
-			
-			accountType = AccountType.NOT_LOGGED_IN;	
-		}else{
+		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
 			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
 			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
 			accountType = accountModel.getType();
+				
+		}else{
+			
+			accountType = AccountType.NOT_LOGGED_IN;
 		}
 			
 		
