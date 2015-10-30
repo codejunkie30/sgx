@@ -12,7 +12,7 @@ public class DistributionsRequest{
 	
 	@Valid
 	@NotNull(message="Fields can not be null")
-	@Size(min = 1 , max = 5, message="Field count outside of range 1 - 5")
+	@Size(min = 1 , max = 6, message="Field count outside of range 1 - 5")
 	private List<DistributionRequestField> fields;
 
 	public List<DistributionRequestField> getFields() {
