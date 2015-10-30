@@ -29,7 +29,7 @@ section .form .error-messages p { color: #bf0052 !important; line-height: 16px; 
 section.settings { text-align: left; width: 992px; }
 section.settings p a { color: #0e236b; text-decoration: none; }
 section.settings p a:hover { text-decoration: underline; }
-section.settings .intro .date { text-transform: uppercase; }
+/*section.settings .intro .date { text-transform: uppercase; }*/
 section.settings .form { background: #ebecec; padding: 0 30px 30px 30px; width: 932px; text-align: left; }
 section.settings .form-wrapper { padding: 30px 0 0 0; }
 section.settings .form-wrapper label { width: 200px; display: inline-block; color: #333; font-weight: bold; }
