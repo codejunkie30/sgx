@@ -42,7 +42,8 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 	
 	@Override
 	public String build(){
-		
+		List<String> exchanges = new ArrayList<String>();
+		exchanges = checkExchangeCriteria();
 		// Match all if no criteria
 		if(criteria == null || criteria.size() <= 0)
 			return new SearchSourceBuilder()
@@ -55,8 +56,7 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		SearchSourceBuilder builder = new SearchSourceBuilder();
 		//query = QueryBuilders.boolQuery();
 		
-		List<String> exchanges = new ArrayList<String>();
-		exchanges = checkExchangeCriteria();
+		
 		
 		for(Criteria c : criteria){
 			if(c.getField().equals("exchange")) {
