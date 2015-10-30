@@ -2,7 +2,7 @@
 #estimates nav.tabs ul li { display: inline-block; list-style-type: none; padding: 0 10px; }
 #estimates nav.tabs ul li a {  color:#0b236b; text-decoration: none; cursor:pointer; }
 #estimates nav.tabs ul li a.active { color: #4d4e50; position: relative; cursor: default; }
-#estimates nav.tabs ul li a.active:after { bottom: -12px; left: 50%;border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(255, 255, 255, 0); border-bottom-color: #ffffff; border-width: 8px; margin-left: -8px; }
+/*#estimates nav.tabs ul li a.active:after { bottom: -12px; left: 50%;border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(255, 255, 255, 0); border-bottom-color: #ffffff; border-width: 8px; margin-left: -8px; }*/
 #estimates nav.tabs ul li.annual { border-left: 1px solid #fff; }
 .summary { margin: 10px 0 15px 0; }
 .summary .left { width: 64%; margin: 0 3% 0 0; display: inline-block; }
@@ -23,3 +23,6 @@
 #estimates-content {display:none;}
 #estimates-content table tbody tr td {font-weight:normal;}
 #estimates-content-alternative {display:none; margin-top:20px; padding:20px; border:1px solid #cacdd3;}
+.data-point-container {
+  margin-top:15px;
+}
