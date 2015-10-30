@@ -128,7 +128,8 @@
 				<div class="tab">Select up to five options to chart the data points.</div>
 			</div>
 
-			<div class="no-data-message" data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0">
+			<div class="no-data-message" data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0 ||
+																												annualTab() && estimates.annually.length == 0">
 				<p>No data available.</p>
 			</div>
 			
@@ -173,7 +174,7 @@
 			<!-- /ko -->
 
 			</div>
-			<div data-bind="visible: annualTab()">
+			<div data-bind="visible: annualTab() && estimates.annually.length > 0">
 			<!-- ko foreach : annualEst -->
 			<table class="section" data-bind="css: name, attr: {id: name }">
 				<thead>
