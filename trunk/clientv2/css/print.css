@@ -58,6 +58,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 
 .page2 .dark-module.
 .page2 .valuation { margin-bottom: 15px !important; }
+.page2 .valuation h3 { margin-bottom: 0 !important; }
 
 .last-updated { font-size: 12px; }
 .last-updated .date { font-weight: bold; }
@@ -68,7 +69,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .terms ul li { margin-bottom: 11.5px; }
 .terms p { font-size: 11.5px; }
 
-.stock-events { max-height: 575px; margin: 10px 0 25px; }
+.stock-events { max-height: 560px; margin: 10px 0 25px; overflow: hidden; }
 .stock-events ul { border: 0; margin: 0;  padding: 10px; }
 .stock-events li { display: inline-block; list-style: outside none none; margin: 0 0 9px; padding-left: 26px; position: relative; }
 .stock-events li div { left: 0; position: absolute; top: 2px; background: #565a5c none repeat scroll 0 0; border-radius: 4px; color: #fff; display: inline-block; font-size: 11px !important; height: 15px; line-height: 15px; margin: 0 10px 0 0; text-align: center; width: 16px; }

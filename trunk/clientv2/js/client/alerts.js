@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet",  "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, AL) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, AL) {
 
 	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	
@@ -91,10 +91,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.each(ALERTS.finalWL(), function(idx, wl){
 					if (ALERTS.selectedValue() ==  wl.id){
 						
-						//console.log(wl.companies);
-						
-						//var companies = wl.companies
-						//wl.companies = ko.observableArray(companies);						
+						ALERTS.companies(wl.companies);
 						
 						ALERTS.displayList(wl);
 						
@@ -111,37 +108,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 				});
 				
-				PAGE.resizeIframeSimple();	
-			});
-			
-			
-			
-			$( ".company li" ).click(function(){
-				// For the boolean value
-				var tickerCode = $(this).attr('data-value');
-				
-				$.each(ALERTS.finalWL(), function(idx, wl){
-					console.log(wl.companies);
-					if (ALERTS.selectedValue() ==  wl.id){
-						
-						ALERTS.companies = wl.companies;
-						
-						if (ALERTS.companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
-						
-						console.log(tickerCode);
-						
-						ALERTS.companies = ko.observableArray(wl.companies);						
-						//console.log(tickerCode);
-						ALERTS.companies.push(tickerCode);
-						
-						ALERTS.displayList(wl);
-						
-					}
-				});
-				
+				PAGE.resizeIframeSimple();		
 				
 			});
-			
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
@@ -214,7 +183,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var wlLength = ALERTS.finalWL().length;				
 			
-			if (wlLength >= 3) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
+			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
@@ -242,10 +211,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			ALERTS.newWLName(null);
 		},
 		
-		showEditWLName: function(){
-			
-		},
-		
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
@@ -258,7 +223,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					console.log(data);
 					ALERTS.finalWL(data);
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -299,7 +263,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					console.log(data);
 					ALERTS.finalWL(data);
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -308,6 +271,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);			
+		},
+		deleteCompany: function(data){
+			ALERTS.companies.remove(data);
+		},
+		addCompany: function(data){
+			console.log(data);
+			//ALERTS.companies.push(data);
+			
 		},
 		saveWatchlist: function(){
 						
@@ -353,15 +324,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					console.log(data);
-									
-					
 					ALERTS.finalWL(data);
-					
-					
-					
-					console.log(params);
-					
+					console.log(params);					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');

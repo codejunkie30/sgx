@@ -15,16 +15,16 @@
 .watchlist a:hover { text-decoration: underline; }
 
 .watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
-.watchlist .companies { margin: 12px 0; }
-.watchlist .companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
-.watchlist .companies ul li { list-style-type: none; padding: 10px; }
-.watchlist .companies ul li.odd { background: #ebecec; }
-.watchlist .companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
-.watchlist .companies ul li .ticker { width: 123px; }
-.watchlist .companies ul li .currency { width: 58px; }
-.watchlist .companies ul li .price { width: 64px; }
-.watchlist .companies ul li .change { width: 69px; color: #b5cf34; }
-.watchlist .companies ul li .change.negative { color: #bf0052; }
+.watchlist .wl-companies { margin: 12px 0; }
+.watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
+.watchlist .wl-companies ul li { list-style-type: none; padding: 10px; }
+.watchlist .wl-companies ul li.odd { background: #ebecec; }
+.watchlist .wl-companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
+.watchlist .wl-companies ul li .ticker { width: 123px; }
+.watchlist .wl-companies ul li .currency { width: 58px; }
+.watchlist .wl-companies ul li .price { width: 64px; }
+.watchlist .wl-companies ul li .change { width: 69px; color: #b5cf34; }
+.watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
 .watchlist .search .description .screener-basic { margin-bottom: 8px; }
 .watchlist .search .searchtoggle { margin: 0; }
@@ -36,8 +36,8 @@
 .watchlist .search .searchbar input { border: none; padding: 0px; color: #494949; font: normal 12px Arial, Helvetica, sans-serif; font-style: italic; width: 186px; height: 22px; text-indent: 10px; background: none; }
 .watchlist .search .search-submit { position: absolute; top: 0px; right: 0px; width: 26px !important; height: 0; padding-top: 22px; background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important; z-index: 20; cursor: pointer; }
 
-.watchlist .companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; }
-.watchlist .companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
+.watchlist .wl-companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; }
+.watchlist .wl-companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
 
 .watchlist .results h5 { padding: 5px; margin: 15px 0 8px 0; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
 .watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; }
