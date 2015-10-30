@@ -123,13 +123,12 @@
 				<li class="annual"><a data-bind="click: $root.showEstAnnual">ANNUAL</a></li>
 			</ul>
 		</nav>
-		
 		<div class="data-point-container">
-			<div class="header">
+			<div class="header" data-bind="visible: quarterlyTab() && estimates.quarterly.length > 0">
 				<div class="tab">Select up to five options to chart the data points.</div>
 			</div>
 
-			<div data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0">
+			<div class="no-data-message" data-bind="visible: quarterlyTab() && estimates.quarterly.length == 0">
 				<p>No data available.</p>
 			</div>
 			
