@@ -166,7 +166,7 @@ public class CompanyService extends AbstractDataService {
 				hv.setDate(record.getPeriodDate());
 				if (val != null) {
 					Double dbl = Double.parseDouble(val);
-					if (record.getName().equals("volume")) processMillionFormatter(dbl);
+					if (record.getName().equals("volume")) dbl = processMillionFormatter(dbl);
 					hv.setValue(dbl);
 				}
 					
