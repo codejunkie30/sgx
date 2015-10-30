@@ -36,13 +36,13 @@
 .watchlist .search .searchbar input { border: none; padding: 0px; color: #494949; font: normal 12px Arial, Helvetica, sans-serif; font-style: italic; width: 186px; height: 22px; text-indent: 10px; background: none; }
 .watchlist .search .search-submit { position: absolute; top: 0px; right: 0px; width: 26px !important; height: 0; padding-top: 22px; background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important; z-index: 20; cursor: pointer; }
 
-.watchlist .wl-companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; }
+.watchlist .wl-companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; cursor: pointer; }
 .watchlist .wl-companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
 
 .watchlist .results h5 { padding: 5px; margin: 15px 0 8px 0; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
 .watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; }
 .watchlist .results ul li { list-style-type: none; margin-bottom: 8px; line-height: 17px; }
-.watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; }
+.watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
 .watchlist .results ul li .name { font-size: 13px; position: relative; top: -3px; }
 
 .wl-container .alerts { display: inline-block; width: 60%; }
