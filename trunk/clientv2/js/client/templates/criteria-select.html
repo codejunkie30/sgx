@@ -3,16 +3,19 @@
 	<img data-bind="tooltip: field.id" src="img/info-tab-large.png" alt="" width="20" height="20" />
 </td>
 <td colspan="3" class="middle">
-	<div class="button-dropdown" data-bind="attr: { 'data-label': field.label }">
-		<input class="copy" type="hidden" data-bind="value: val" />
-		<div class="trigger"><span class="copy" data-bind="text: field.label"></span>
-			<span class="arrow"></span>
+
+		<div class="button-dropdown" data-bind="attr: { 'data-label': field.label }">
+			<input class="copy" type="hidden" data-bind="value: val" />
+			<div class="trigger"><span class="copy" data-bind="text: field.label"></span>
+				<span class="arrow"></span>
+			</div>
+			<div class="dropdown">
+				<ul data-bind="foreach: field.buckets">
+					<li data-bind="text: $parent.field.hasOwnProperty('labels') && $parent.field.labels.hasOwnProperty(key) ? $parent.field.labels[key] : key, attr: { 'data-value': key } "></li>
+				</ul>
+			</div>
 		</div>
-		<div class="dropdown">
-			<ul data-bind="foreach: field.buckets">
-				<li data-bind="text: $parent.field.hasOwnProperty('labels') && $parent.field.labels.hasOwnProperty(key) ? $parent.field.labels[key] : key, attr: { 'data-value': key } "></li>
-			</ul>
-		</div>
-	</div>
+	
 </td>
+
 <td class="remove"><img data-bind="tooltip: 'criteriaRemove', click: criteria.clickEvents.removeCriteria" src="img/x-button.png" alt="" /></td>
