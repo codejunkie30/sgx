@@ -10,7 +10,7 @@ div.wrapper {
 
 .technical-charting {
   height:920px;
-  /*display:none;*/
+  display:none;
   position:relative;
   border-right: 1px solid #cacdd3;
   border-left: 1px solid #cacdd3;
