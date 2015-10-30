@@ -143,9 +143,13 @@ public abstract class AbstractDataService implements DataService{
 		if (value == null) return null;
 		
 		if (field.isAnnotationPresent(MillionFormatterAnnotation.class)) ret = ((Double)value)/1000000.0;
-		/*if(ret != null)
-			ret=Math.round(ret*10000)/10000.0;*/
-		 return ret;
+
+		return ret;
+	}
+	
+	public Double processMillionFormatter(Object value) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
+		if (value == null) return null;
+		return ((Double)value)/1000000.0;
 	}
 	
 	/**
