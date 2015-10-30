@@ -12,7 +12,7 @@ public class SearchRequest{
 
 	@Valid
 	@NotNull
-	@CriteriaSize(min = 0, max = 5, ignoreFields = {"industry", "targetPriceNum"})
+	@CriteriaSize(min = 0, max = 5, ignoreFields = {"industry", "targetPriceNum", "exchange" })
 	private List<Criteria> criteria;
 	
 	public List<Criteria> getCriteria() {
