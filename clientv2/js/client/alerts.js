@@ -290,6 +290,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			ALERTS.companies.push(data.ticker);
 		},
+		searchCompanies: function(){
+			var endpoint = PAGE.fqdn + "/sgx/search";
+			var postType = 'GET';
+			var params = {"field": 's'};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){					
+					console.log(data);
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);	
+			
+		},
 		saveWatchlist: function(){
 						
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
