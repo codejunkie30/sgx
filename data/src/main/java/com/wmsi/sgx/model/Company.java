@@ -19,10 +19,8 @@ public class Company {
 	
 	private String exchange;
 	
-	@MillionFormatterAnnotation
 	private Double avgTradedVolM3;
 	
-	@MillionFormatterAnnotation
 	private Double avgVolumeM3;
 
 	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
