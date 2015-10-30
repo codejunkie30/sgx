@@ -389,8 +389,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
               if( companyData && userStatus ) {
 
                   if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
-                    //this.init_nonPremium();
-                    this.init_premium();
+                    this.init_nonPremium();
+                    //this.init_premium();
                   }else {
                     this.init_premium();
                   }
