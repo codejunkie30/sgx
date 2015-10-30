@@ -265,6 +265,7 @@
 			      "shortName":"Exchange",
 			      "dataSort":"string",
 			      "isDefault":true,
+			      "notPermitted": "Singapore Stock Exchange & CATALIST",
 			      "labels": {
 					"CATALIST": "Singapore Exchange Catalist Market",
 					"JKSE": "Jakarta Stock Exchange",
