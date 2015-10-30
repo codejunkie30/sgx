@@ -93,7 +93,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			// resize
 			//PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
 
-      PAGE.resizeIframeSimple();
+     		PAGE.resizeIframeSimple();
 			PAGE.hideLoading();
 		},
 		
