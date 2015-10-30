@@ -120,7 +120,7 @@ select
              when ed.dataItemId = 100161 then 'targetPrice'
              when ed.dataItemId = 100167 then 'ltgMeanEstimate'
              when ed.dataItemId = 114353 then 'VolatilityNum'
-             when ed.dataItemId = 114362 then 'IndustryRecNum'
+             when ed.dataItemId = 114362 then 'industryRec'
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
        null as period,
