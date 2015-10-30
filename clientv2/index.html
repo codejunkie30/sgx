@@ -106,9 +106,26 @@
 			<h3 data-bind="text: name, attr: { 'customize-display': '' + customizeDisplay }"></h3>
 			<div class="panel" data-bind="foreach: fields">
 				<div class="checkbox" data-bind="tooltip: id, click: $parent.clickEvents.criteriaClick, css: { 'checked': typeof isDefault !== 'undefined' && isDefault }, attr: { 'data-id': id, 'data-default': typeof isDefault !== 'undefined' && isDefault }, click: $root.criteria.clickEvents.criteriaClick  ">
+					<!--ko if:($root.userStatus() == 'PREMIUM' || $root.userStatus() == 'TRIAL' || name!='Exchange')-->
 					<div class="trigger" data-bind="text: name"></div>
 					<input type="checkbox" />
+					<!--/ko -->
+					
+					<!-- ko if:name=='Exchange' && ($root.userStatus() == 'UNAUTHORIZED' || $root.userStatus() == 'EXPIRED')-->
+					<div class="trigger" data-bind="text:labels.CATALIST"></div>
+					<input type="checkbox" />
+					<!--/ko -->
 				</div>
+				<!-- ko if:name=='Exchange' && ($root.userStatus() == 'UNAUTHORIZED' || $root.userStatus() == 'EXPIRED')-->
+					<p class="criteria-content">Upgrade to a StockFacts Premium account to search additional exchanges, including Malaysia, Taiwan, Thailand, USA, China, Hong Kong, Indonesia and the Philippines.</p>
+					<p>
+						<span data-bind="visible:$root.userStatus()=='UNAUTHORIZED'">
+						<a data-bind="siteLink:'sign-in'">Sign in </a> |
+						<a data-bind="siteLink:'sign-up'">Start Your free trial</a>
+						</span>
+						<a href="purchase-account.html" data-bind="visible:($root.userStatus()=='TRIAL'|| $root.userStatus()=='EXPIRED')">Purchase</a>
+					</p>
+				<!--/ko-->
 			</div>
 		</div>
 		
