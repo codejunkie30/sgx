@@ -44,7 +44,7 @@
 				"invalidUser": "Your account is currently disabled."	
 			},
 			"purchaseAccount": {
-				"success": "Purchase account success message.",
+				"success": "You have successfully purchased an SGX Premium subscription.",
 				"cancelFail": "Canacel/Fail purchase account message."
 			},
 			"watchlist": {

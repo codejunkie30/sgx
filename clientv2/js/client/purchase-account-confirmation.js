@@ -20,11 +20,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				jsonp,
 				function(data, textStatus, jqXHR){
 					//Display success message					
-					if (token != undefined || data.reason != undefined){
-						$('.message').html(data.reason);
+					if (token != undefined || data.message != undefined){
+						$('.message').html(data.message);
 						
 					} else {
-						$('.message').html('Account Created');
+						$('.message').html(displayMessage.purchaseAccount.success);
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
