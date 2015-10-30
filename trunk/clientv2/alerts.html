@@ -70,8 +70,8 @@
 					<h5>Search for companies to add to your Watchlist</h5>
 					<div>
 						<span class="searchbar">
-							<input type="text" placeholder="Company name or stock code" />
-							<span class="search-submit" class="button" value="" alt="Search Submit"></span>
+							<input type="text" placeholder="Company name or stock code" data-bind="value: ''" />
+							<span class="search-submit" class="button" value="" alt="Search Submit" data-bind="click:$root.searchCompanies"></span>
 						</span>
 					</div>
 					<!--  results display data-bind="visible: viewModel.refinedCompanies().length > 0" data-bind="repeat: { foreach: viewModel.currentCompanies(), limit: viewModel.resultSize }" 
