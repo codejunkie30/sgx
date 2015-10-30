@@ -629,16 +629,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								
 								var companies = wl.companies;
 								
-								console.log(companies.length);
-								
-								if (companies.length >= 4) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+								if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
 								
 								wl.companies = KO.observableArray(companies);
 								
-								companies.push(ticker);								
-								
-								
-								
+								companies.push(ticker);	
 								
 								var endpoint = PAGE.fqdn + "/sgx/watchlist/addCompanies";
 								var postType = 'POST';
