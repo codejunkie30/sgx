@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -200,8 +200,14 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		tooltipHTML: TOOLTIP,
 		
 		currentFormats: null,
-
+		
+		newWLName: KO.observable(),
+		
         userStatus: KO.observable(''),
+		
+		finalWL: KO.observableArray(),
+		
+		selectedValue: KO.observable(),		
 		
 		pageData: {
 			
@@ -503,7 +509,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					if (data.reason == 'Full authentication is required to access this resource'){
 						PAGE.premiumUser(false);
                         PAGE.userStatus('UNAUTHORIZED');
-					} else {						
+					} else {
+					
 						PAGE.premiumUser(true);
 						PAGE.premiumUserAccntInfo = data;
                         //data.type = 'EXIRED';
@@ -561,6 +568,111 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			  activityEvents: 'click keypress scroll wheel mousewheel mousemove',
 			  sessionKeepAliveTimer: false
 			});	
+		},
+		getURLParam: function getURLParam(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+		
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+		
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
+		},
+		addWatchlist: function() {
+			
+			var settings = {
+	    			
+				maxWidth: 500,
+				height: 250,
+				
+				content: addWatchlist,
+				
+				viewModel: this.viewModel,
+				
+				type: 'content',
+				
+				postLoad: function(settings) {
+					var ticker = PAGE.getURLParam('code');					
+					
+					PAGE.selectedValue.subscribe(function(data){});
+					
+					var endpoint = PAGE.fqdn + "/sgx/watchlist/get";
+					var postType = 'GET';
+					var params = {};
+					var jsonp = 'jsonp';
+					var jsonpCallback = 'jsonpCallback';
+					UTIL.handleAjaxRequest(
+						endpoint,
+						postType,
+						params, 
+						undefined, 
+						function(data, textStatus, jqXHR){	
+							console.log(data);				
+							PAGE.finalWL(data);
+						}, 
+						function(jqXHR, textStatus, errorThrown){
+							console.log('fail');
+							console.log('sta', textStatus);
+							console.log(errorThrown);
+							console.log(jqXHR);
+						},jsonpCallback);					
+					
+					$('.button.add-wl').click(function(e){
+						
+						$.each(PAGE.finalWL(), function(idx, wl){
+							if (PAGE.selectedValue() ==  wl.id){
+								
+								var companies = wl.companies;
+								
+								console.log(companies.length);
+								
+								if (companies.length >= 4) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+								
+								wl.companies = KO.observableArray(companies);
+								
+								companies.push(ticker);								
+								
+								
+								
+								
+								var endpoint = PAGE.fqdn + "/sgx/watchlist/addCompanies";
+								var postType = 'POST';
+								var params = {"id": PAGE.selectedValue(), "companies": companies};
+								var jsonp = 'jsonp';
+								var jsonpCallback = 'jsonpCallback';
+								UTIL.handleAjaxRequest(
+									endpoint,
+									postType,
+									params, 
+									undefined, 
+									function(data, textStatus, jqXHR){	
+										if (data.message == 'success'){
+											$(".modal-container").colorbox.close();
+										}			
+										
+									}, 
+									function(jqXHR, textStatus, errorThrown){
+										console.log('fail');
+										console.log('sta', textStatus);
+										console.log(errorThrown);
+										console.log(jqXHR);
+									},jsonpCallback);								
+							}
+						});
+					});					
+					
+					KO.applyBindings(settings.viewModel, $(".modal-container")[0]);
+					
+				}
+			};
+			
+			PAGE.modal.open(settings);
+			
 		}
 		
 	};

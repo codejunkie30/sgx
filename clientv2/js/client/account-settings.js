@@ -175,11 +175,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.currency(data.currency);
-					SAVECHANGES.subExpire(data.expirationDate);
 					
-					if (data.type == 'PREMIUM'){
+					if (data.type == 'PREMIUM'){						
 						$('.settings .intro .content').html(displayMessage.accountSettings.introPremium);
 						$('.settings .intro a').remove();
+						var end = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.expirationDate));
+						
+						SAVECHANGES.subExpire(end);
+						
 					}
 					
 					if (data.type == 'TRIAL'){						
@@ -194,9 +197,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
 						else
 							$('.settings .intro .content').html(displayMessage.accountSettings.introTrialDayOne);
-						$('.settings .intro .content .current-day').html(daysRemaining);
+							$('.settings .intro .content .current-day').html(daysRemaining);
 						
-						$('.settings .intro .date').remove();
+							$('.settings .intro .date').remove();
 					}
 					
 					if (data.type == 'EXPIRED'){

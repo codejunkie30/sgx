@@ -28,7 +28,7 @@
 			<a data-bind="siteLink: { id: 'index', extra: 'code=' + ticker } " class="back">Back to StockFacts</a>
 			<div class="right">
 				<a data-bind="siteLink: { id: 'trade', extra: 'code=' + ticker } " class="view">View Retail Brokers</a>
-				<a data-bind="siteLink: { id: 'alerts', extra: 'code=' + ticker } " class="add">Add to Watchlist</a>
+				<a data-bind="click: addWatchlist" class="add">Add to Watchlist</a>
 				<a target="_blank" data-bind="attr: { 'href': printLink(ticker) }" class="down-print print-button">Download/Print</a>
 			</div>
 			<!--<a data-bind="siteLink: { id: 'trade', extra: 'code=' + ticker } ">Trade</a>-->
