@@ -11,7 +11,7 @@
 			</div>
 			<div class="dropdown">
 				<ul data-bind="foreach: field.buckets">
-					<li data-bind="text: $parent.field.hasOwnProperty('labels') && $parent.field.labels.hasOwnProperty(key) ? $parent.field.labels[key] : key, attr: { 'data-value': key } "></li>
+					<li data-bind="text: $parent.field.hasOwnProperty('itemLabels') && $parent.field.itemLabels.hasOwnProperty(key) ? $parent.field.itemLabels[key] : key, attr: { 'data-value': key } "></li>
 				</ul>
 			</div>
 		</div>
