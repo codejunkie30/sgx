@@ -46,7 +46,7 @@ public class FeedOSSubscriptionReceiver implements Receiver_Quotation_SubscribeI
 		else{
 
 			log.error("==== Subscription started");
-			DumpFunctions.dump(result);
+			//DumpFunctions.dump(result);
 
 			// create new entries in the map, one per instrument received
 			for(int i = 0; i < result.length; ++i){
@@ -177,7 +177,7 @@ public class FeedOSSubscriptionReceiver implements Receiver_Quotation_SubscribeI
 	}
 	
 	private Double getDouble(int tag, InstrumentQuotationData quot){
-		Double ret = null;
+		Double ret = 0.0;
 		Any val = quot.getTagByNumber(tag);
 		
 		if(val != null)
