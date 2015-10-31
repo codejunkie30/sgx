@@ -7,4 +7,6 @@ JAVA_OPTS="-Dspring.profiles.active=<PROFILE> -XX:+CMSClassUnloadingEnabled -XX:
 	
 	
 Need to upgrade java crypto packages on server
+
+Need to drop enets certs on /mnt/sgx-ecomm/
 	
