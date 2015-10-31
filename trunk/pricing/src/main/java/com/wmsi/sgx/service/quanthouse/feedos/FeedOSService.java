@@ -73,7 +73,7 @@ public class FeedOSService {
 				continue;
 			}
 			
-			log.error("symbol: {}, ISIN: {}", curr.get_string(), isin.get_string());			
+			//log.error("symbol: {}, ISIN: {}", curr.get_string(), isin.get_string());			
 			
 			FeedOSData fosd = new FeedOSData();
 			fosd.setTradingCurrency(curr.get_string());
