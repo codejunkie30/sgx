@@ -164,7 +164,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	if (name == "industryGroup") fieldData.buckets.push({ "data-name": "industry", count: 0, key: "Real Estate Investment Trusts (REITs)" });
             	
             	// now sort the values
-            	fieldData.buckets.sort(function(a,b) { return a.key.localeCompare(b.key); });
+            	if (fieldData.hasOwnProperty("itemLabels")) {
+            		fieldData.buckets.sort(function(a,b) {
+            			var aval = fieldData.itemLabels.hasOwnProperty(a.key) ? fieldData.itemLabels[a.key] : a.key;
+            			var bval = fieldData.itemLabels.hasOwnProperty(b.key) ? fieldData.itemLabels[b.key] : b.key;
+            			return aval.localeCompare(bval); 
+            		});
+            	}
+            	else {
+                	fieldData.buckets.sort(function(a,b) { return a.key.localeCompare(b.key); });
+            	}
+            	
         		
         	});
 
