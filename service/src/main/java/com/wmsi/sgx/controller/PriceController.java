@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.Price;
+import com.wmsi.sgx.model.PriceCall;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.repository.UserRepository;
@@ -80,7 +81,12 @@ public class PriceController {
 		
 		return prices;
 	}
-
+	
+	@RequestMapping(value="/price/pricingHistory")
+	public List<Price> getPricingHistory(@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
+		return service.getPricingHistory(market, priceCall.getId(), priceCall.getDate());
+		
+	}
 
 }
 

@@ -11,5 +11,7 @@ public interface QuanthouseService {
 	Price getPrice(String market, String id)throws QuanthouseServiceException;
 	List<Price> getIntradayPrices(String market, String id) throws QuanthouseServiceException;
 	Price getPriceAt(String market, String id, Date date)
-			throws QuanthouseServiceException, CompanyServiceException;	
+			throws QuanthouseServiceException, CompanyServiceException;
+	List<Price> getPricingHistory(String market, String id, Date date)
+			throws QuanthouseServiceException;	
 }
