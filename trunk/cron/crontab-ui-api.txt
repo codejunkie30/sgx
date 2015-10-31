@@ -1,3 +1,3 @@
-*/2 * * * * aws s3 sync s3://sgx2.sharefc.com /var/www/
+*/2 * * * * aws s3 cp --recursive s3://sgx2.sharefc.com /var/www/
 */2 * * * * /bin/bash /root/cron/api-deploy.sh >> /root/logs/build.log 2>&1
 */10 * * * * aws s3 sync /var/log/ s3://logs-wmsi/sgx/api-ui-us
