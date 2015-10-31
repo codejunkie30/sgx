@@ -89,6 +89,19 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return ret;
 	}
 	
+	@Override
+	public List<Price> getPricingHistory(String market, String id, Date date) throws QuanthouseServiceException {
+
+		List<Price> ret = new ArrayList<Price>();
+		List<TradeEvent> events = tradeEventService.getEventsForDate(market, toMarketId(id), date);
+		
+		for(TradeEvent e : events){
+			ret.add(bindPriceData(e));
+		}
+		
+		return ret;
+	}
+	
 	private String toMarketId(String id){
 		return id.concat(MARKET_EXTENTION);
 	}
