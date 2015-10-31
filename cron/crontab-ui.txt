@@ -1,1 +1,1 @@
-*/2 * * * * aws s3 sync s3://sgx2.sharefc.com /var/www/
+*/2 * * * * aws s3 cp --recursive s3://sgx2.sharefc.com /var/www/
