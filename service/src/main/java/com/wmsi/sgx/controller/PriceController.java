@@ -46,7 +46,11 @@ public class PriceController {
 	public Map<String, Price> getPrice(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody IdSearch query) throws CompanyServiceException {
 		Price p = new Price();
 		
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		AccountModel acct = new AccountModel();
+		if(user != null)
+			acct = accountService.getAccountForUsername(user.getUsername());
+		else
+			acct.setType(AccountType.TRIAL);
 		Map<String, Price> ret = new HashMap<String, Price>();
 					
 		try{			
