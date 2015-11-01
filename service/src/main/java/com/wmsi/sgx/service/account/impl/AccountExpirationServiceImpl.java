@@ -11,10 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
-import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.account.AcccountExiprationService;
-import com.wmsi.sgx.service.account.UserService;
 
 @Service
 public class AccountExpirationServiceImpl implements AcccountExiprationService{
@@ -26,9 +24,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 
 	@Autowired
 	private AccountRepository accountRepository;
-	
-	@Autowired
-	private UserService userRepository;
+
 	
 	//need to switch it to pick value from the placeholder
 	//there is some issue its not picking up value form there 

@@ -105,9 +105,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 		userService.saveUser(user);
 		
 		// Create premium account record
+		accountService.createPremiumAccount(user);
 		
-		
-		return accountService.convertToExpiry(user);
+		return true;
 	}
 	
 	@Override
