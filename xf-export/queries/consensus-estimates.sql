@@ -271,7 +271,7 @@ select
 	pop.tickerSymbol,
 	pop.exchangeSymbol,
 	case
-	when ed.dataItemId = 114362 then 'IndustryRecNum'
+	when ed.dataItemId = 114362 then 'industryRec'
 	end as WMSIApi,
 	convert(varchar(max),ed.dataItemValue) as dataItemId,
 	case
