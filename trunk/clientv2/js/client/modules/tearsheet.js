@@ -17,9 +17,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initCompanyData(data, finished); }, undefined, undefined);
 			
     		// init real-time/delayed pricing data
-    		//endpoint = this.fqdn + "/sgx/price";
-    		//params = { id: this.ticker };
-    		//UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined, undefined);
+    		endpoint = this.fqdn + "/sgx/price";
+    		params = { id: this.ticker };
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined, undefined);
 			
     		return this;
 		},
@@ -50,7 +50,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			
     		var dateField = data.price.hasOwnProperty("lastTradeTimestamp") ? data.price.lastTradeTimestamp : data.price.previousDate;
     		var date = Date.fromISO(dateField);
-    		var price = data.price.hasOwnProperty("lastPrice") ? data.price.lastPrice : data.price.closePrice;
+    		var price = data.price.hasOwnProperty("lastPrice") && data.price.lastPrice != null ? data.price.lastPrice : data.price.closePrice;
     		
     		if (typeof price === "undefined" || price == null) return;
     		
