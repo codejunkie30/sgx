@@ -1,9 +1,8 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.AccessType;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -42,8 +42,10 @@ public class AccountServiceImpl implements AccountService{
 		// TODO, ensure there is only ever one active account
 		List<Account> accounts = accountRepository.findByUsername(username);		
 		AccountModel ret = null;
+		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+		Account account;
 		if(accounts.size() > 0){
-			Account account = accounts.get(accounts.size() - 1);
+			account = accounts.get(0);
 			ret = new AccountModel();
 			ret.setEmail(account.getUser().getUsername());
 			ret.setStartDate(account.getStartDate());
@@ -114,7 +116,7 @@ public class AccountServiceImpl implements AccountService{
 		for(Account acc : accounts){
 			
 			// Deactivate trial account
-			if(acc.getType().equals(AccountType.TRIAL)){
+			if(acc.getType().equals(AccountType.TRIAL) || (acc.getType().equals(AccountType.PREMIUM))){
 				acc.setActive(false);
 				accountRepository.save(acc);
 				success  = true;
