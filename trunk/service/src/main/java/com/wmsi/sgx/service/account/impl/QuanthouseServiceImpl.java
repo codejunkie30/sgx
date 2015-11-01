@@ -114,7 +114,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		p.setCurrentDate(new Date());
 		p.setPreviousDate(comp.getPreviousCloseDate());
 		p.setLastTradeVolume(comp.getVolume());
-		p.setLastPrice(comp.getLowPrice());
+		p.setLowPrice(comp.getLowPrice());
 		p.setHighPrice(comp.getHighPrice());
 		
 		return p;
