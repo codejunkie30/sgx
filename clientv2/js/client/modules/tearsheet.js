@@ -48,7 +48,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			
 			if (!data.hasOwnProperty("price")) return;
 			
-    		var dateField = data.price.hasOwnProperty("lastTradeTimestamp") ? data.price.lastTradeTimestamp : data.price.previousDate;
+    		var dateField = data.price.hasOwnProperty("lastTradeTimestamp") && data.price.lastTradeTimestamp != null ? data.price.lastTradeTimestamp : data.price.previousDate;
     		var date = Date.fromISO(dateField);
     		var price = data.price.hasOwnProperty("lastPrice") && data.price.lastPrice != null ? data.price.lastPrice : data.price.closePrice;
     		
