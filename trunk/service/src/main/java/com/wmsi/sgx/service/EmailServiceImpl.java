@@ -25,12 +25,16 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.sender}")
 	public String emailSender;
 	
+	@Value ("${email.site.base}")
+	public String emailSite;
+	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
 		final Context ctx = new Context();
 		ctx.setVariable("token", token);
 		ctx.setVariable("baseUrl", baseUrl);
+		ctx.setVariable("emailSite", emailSite);
 		
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
