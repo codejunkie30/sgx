@@ -119,10 +119,10 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			public void subscriptionResponse(List<FeedOSData> data) {
 
 				// TODO - Remove this, for testing only
-				/*
+				
 				for(FeedOSData d : data)
 					saveEvent(d);
-				*/
+				
 				log.debug("Subscribed to {} tickers.", data != null ? data.size() : 0);
 			}
 

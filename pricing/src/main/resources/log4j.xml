@@ -36,21 +36,25 @@
 		<level value="info" />
 	</logger>
 
+<!--  
 	<logger name="org.springframework.transaction.interceptor">
 		<level value="trace" />
 	</logger>
-
-	<logger name="org.apache.http.wire">
-		<level value="info"/>
-	</logger>
 	
-		<logger name="org.hibernate">
+	<logger name="org.hibernate">
 		<level value="debug" />
 	</logger>
 
 	<logger name="org.hibernate.type">
 		<level value="trace" />
 	</logger>
+
+-->
+	<logger name="org.apache.http.wire">
+		<level value="info"/>
+	</logger>
+	
+
 	
 	<!-- Root Logger -->
 	<root>
