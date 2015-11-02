@@ -116,6 +116,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		p.setLastTradeVolume(comp.getVolume());
 		p.setLowPrice(comp.getLowPrice());
 		p.setHighPrice(comp.getHighPrice());
+		p.setTradingCurrency(comp.getFilingCurrency());
 		
 		return p;
 		
