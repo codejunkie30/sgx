@@ -122,7 +122,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         },
 		
 		initFinancials: function(me, data) {
-
+            
             this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
@@ -210,7 +210,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     	            enabled: false
     	        },
 				tooltip: {
-					useHTML: true
+					useHTML: true,
+                    valueDecimals: 3
 				},
                 xAxis: {
                     categories: [],
