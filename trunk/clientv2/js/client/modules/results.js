@@ -206,7 +206,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				$.each(this.fieldGroups, function(idx, group) {
 					var defs = $.grep(group.fields, function(obj, idx) {
 						if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isDefault") && obj.isDefault) obj.dataDisplay = true;
-						return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay; 
+						return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay && obj.id != 'exchange';   //suppress exchange
 					});
 					if (defs.length > 0) arr.push.apply(arr, defs);
 				});
