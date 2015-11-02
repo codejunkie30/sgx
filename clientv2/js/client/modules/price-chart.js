@@ -48,6 +48,15 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 	    	return ret;
 	    },
 
+    cloneDataAndFormat: function(obj) {
+      var returnObj = {};
+      $.each(obj, function(key, val) {
+        returnObj[key] = roundMe(val, 3);
+      });
+
+      return returnObj;
+    },
+
 		initChart: function(element, data, finished, periodChange) {
 			
 			var base = CHART_DEFAULTS;
@@ -58,7 +67,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		    	if (!this.hasOwnProperty("points")) return;
 		    	
 		    	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
-		    	var point = self.chartData[key];
+		    	var point = self.cloneDataAndFormat( self.chartData[key] );
+
 		    	
 		    	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
 
@@ -85,7 +95,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		    	if (this.points.length <= 1) return ret;
 
 		    	// has volume too
-		    	ret += "<span>Volume</span>: " + this.points[1].y.toFixed(3) + " mm";
+		    	ret += "<span>Volume</span>: " + roundMe(this.points[1].y, 3) + " mm";
 		    	ret += "</span>";
 		    	
 		    	return ret;
@@ -144,3 +154,12 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 	return CHART;
 	
 });
+
+
+function roundMe(val, precision) {
+  var roundingMultiplier = Math.pow(10, precision);
+  var valAsNum = isNaN(val)? 0 : parseFloat(+val);
+  var returnVal = Math.round( valAsNum*roundingMultiplier) / roundingMultiplier;
+
+  return returnVal;
+}
