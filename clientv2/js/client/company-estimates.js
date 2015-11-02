@@ -231,6 +231,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             setTimeout(function() { me.resizeIframeSimple(); }, 300);
     		
 		},
+
+        getIndustryRecommendationTxt: function(value) {
+            var txt = '';
+            if( value >= 1 && value <= 1.5 )
+                txt = 'Buy';
+            if( value > 1.5 && value <=2.5 )
+                txt = 'Outperform';
+            if( value > 2.5 && value <=3.5 ) 
+                txt = 'Hold';
+            if( value > 3.5 && value <= 4.5 ) 
+                txt = 'Underperform';
+            if( value > 4.5 && value <= 5.0)
+                txt = 'Sell';
+            return txt+' ';
+        },
 		
 		handleClick: function(model, data, event) {
 			var el = $(".checkbox", $(event.currentTarget).closest("tr"));
