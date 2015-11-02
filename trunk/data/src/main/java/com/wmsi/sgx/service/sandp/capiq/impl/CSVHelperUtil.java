@@ -42,7 +42,7 @@ public class CSVHelperUtil {
 		return null;
 	}
 
-	public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
+	/*public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
 		Map<String, List<CSVRecord>> map = new HashMap<String, List<CSVRecord>>();
 		for (CSVRecord record : records) {
 			if(record.get(0).equalsIgnoreCase(ticker) &&  (record.get(4) != null) && !record.get(4).isEmpty()){
@@ -61,6 +61,6 @@ public class CSVHelperUtil {
 		}
 		
 		return map;		
-	}
+	}*/
 	
 }
