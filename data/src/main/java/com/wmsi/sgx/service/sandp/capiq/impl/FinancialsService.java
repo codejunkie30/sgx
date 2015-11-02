@@ -37,8 +37,8 @@ public class FinancialsService extends AbstractDataService {
 		Financials financials = new Financials();
 		financials.setFinancials(new ArrayList<Financial>());
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
-		CSVHelperUtil csvHelperUtil = new CSVHelperUtil(); 
-		Map<String, List<CSVRecord>> dataMap = csvHelperUtil.getMap(tickerNoEx, getCompanyData(id, "company-data"));		
+		//CSVHelperUtil csvHelperUtil = new CSVHelperUtil(); 
+		Map<String, List<CSVRecord>> dataMap = getMap(tickerNoEx, getCompanyData(id, "company-data"));		
 
 		Iterator<Entry<String, List<CSVRecord>>> i = dataMap.entrySet().iterator();
 		
@@ -51,9 +51,11 @@ public class FinancialsService extends AbstractDataService {
 			Date period = null;
 			for (CSVRecord record : records) {				
 				financialMap.put(record.get(2), record.get(3));
-				if (period == null && StringUtils.stripToNull(record.get(5)) != null) period = new Date(record.get(5));
+				if (period == null && StringUtils.stripToNull(record.get(5)) != null)
+					period = new Date(record.get(5));
 			}
-			if (period != null) financialMap.put("periodDate", period);
+			if (period != null) 
+				financialMap.put("periodDate", period);
 			JsonElement jsonElement = gson.toJsonTree(financialMap);
 			financialMap.put("period", tickerNoEx);
 			Financial fin = gson.fromJson(jsonElement, Financial.class);
@@ -64,5 +66,26 @@ public class FinancialsService extends AbstractDataService {
 		}
 		
 		return financials;
+	}
+	
+	public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
+		Map<String, List<CSVRecord>> map = new HashMap<String, List<CSVRecord>>();
+		for (CSVRecord record : records) {
+			if(record.get(0).equalsIgnoreCase(ticker) &&  (record.get(4) != null) && !record.get(4).isEmpty()){
+ 				String key = record.get(4);
+				List<CSVRecord> r = null;
+				
+				if(map.containsKey(key)){
+					r = map.get(key);					
+				}else{
+					r = new ArrayList<CSVRecord>();
+					map.put(key, r);
+				}
+				
+				r.add(record);
+			}
+		}
+		
+		return map;		
 	}
 }

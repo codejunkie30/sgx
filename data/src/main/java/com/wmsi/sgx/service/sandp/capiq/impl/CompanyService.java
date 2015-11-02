@@ -228,7 +228,9 @@ public class CompanyService extends AbstractDataService {
 		for (int i = 0; i < price2.size(); i++) {
 			HistoricalValue vol = volume.get(i);
 			HistoricalValue pri = price2.get(i);
-			sum += vol.getValue() * pri.getValue();
+			if(vol.getValue()!=null && pri.getValue() !=null){
+				sum += vol.getValue() * pri.getValue();
+			}
 		}
 
 		if (sum == 0)
