@@ -32,7 +32,7 @@ public class TradeEventServiceImpl implements TradeEventService{
 
 	@Override	
 	public List<TradeEvent> getEventsForDate(String market, String ticker, Date date) {
-		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
+		Date d = new DateTime(date).toDate();
 		
 		return tradeEventRepository
 				.findByMarketAndTickerAndLastTradeTimeAfterOrderByLastTradeTimeDesc
