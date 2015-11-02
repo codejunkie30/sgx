@@ -45,7 +45,7 @@
 			},
 			"purchaseAccount": {
 				"success": "You have successfully purchased an SGX Premium subscription.",
-				"cancelFail": "Canacel/Fail purchase account message."
+				"cancelFail": "There was an error processing your transaction. Please try again."
 			},
 			"watchlist": {
 				"error": "Watch List must be between 1 and 40 characters."	

@@ -29,7 +29,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 							
 						setTimeout(function() {
 						    $("#txnForm").submit();
-						  }, 500);
+						  }, 1000);
 					} else {
 						$('.message').html(data.message);
 					}

@@ -19,10 +19,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
-					//Display success message					
+					//Display success message
+					
 					if (token != undefined || data.message != undefined){
-						$('.message').html(data.message);
-						
+						if (data.message == 'null') {
+							$('.message').html(displayMessage.purchaseAccount.cancelFail);
+						} else {
+							$('.message').html(data.message);
+						}												
 					} else {
 						$('.message').html(displayMessage.purchaseAccount.success);
 					}
