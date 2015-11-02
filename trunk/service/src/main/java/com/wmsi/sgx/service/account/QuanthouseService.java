@@ -8,7 +8,7 @@ import com.wmsi.sgx.service.CompanyServiceException;
 
 public interface QuanthouseService {
 
-	Price getPrice(String market, String id)throws QuanthouseServiceException;
+	Price getPrice(String market, String id)throws QuanthouseServiceException, CompanyServiceException;
 	List<Price> getIntradayPrices(String market, String id) throws QuanthouseServiceException;
 	Price getPriceAt(String market, String id, Date date)
 			throws QuanthouseServiceException, CompanyServiceException;

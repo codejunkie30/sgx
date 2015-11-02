@@ -43,14 +43,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 *            - Local Market identifier
 	 * @return The last price
 	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException 
 	 */
 	@Override
 	// @Cacheable(value = "price")
-	public Price getPrice(String market, String id) throws QuanthouseServiceException {
+	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException {
 		
-		TradeEvent event = tradeEventService.getLatestEvent(market, toMarketId(id));
-		
-		return bindPriceData(event);				
+		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), new Date());
+		if(event.size() > 0){
+			return bindPriceData(event.get(0));
+		}
+		return fallbackPrice(id);				
 	}
 	
 	@Override
