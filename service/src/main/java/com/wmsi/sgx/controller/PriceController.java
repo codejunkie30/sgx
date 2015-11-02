@@ -87,8 +87,10 @@ public class PriceController {
 	}
 	
 	@RequestMapping(value="/price/pricingHistory")
-	public List<Price> getPricingHistory(@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
-		return service.getPricingHistory(market, priceCall.getId(), priceCall.getDate());
+	public Map<String, List<Price>> getPricingHistory(@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
+		Map<String, List<Price>> ret = new HashMap<String, List<Price>>();
+		ret.put("pricingHistory", service.getPricingHistory(market, priceCall.getId(), priceCall.getDate()));
+		return ret;
 		
 	}
 
