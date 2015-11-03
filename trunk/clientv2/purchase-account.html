@@ -20,12 +20,18 @@
 
 <body style="width: auto;">
 	<section>
-		<div class="form">
+	<header>
+			<h2>StockFacts Premium</h2>
+		</header>
+		<div class="form" style="height: 250px;">
 			<form id="txnForm" name="txnForm" action="https://test.enets.sg/enets2/PaymentListener.do" method="POST">
 				<input type="hidden" name="message" data-bind="value: purchaseToken()">
 			</form>
 			<p class="message"></p>
 		</div>
+		
+		<footer>
+		</footer>
 	</section>
 	
 <!-- goes at bottom for faster page load -->

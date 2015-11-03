@@ -77,7 +77,7 @@ define(["jquery"], function($) {
                 type: postType,
                 dataType: 'jsonp',
                 scriptCharset: "utf-8",
-                contentType: 'application/json',          	
+                contentType: 'application/json',
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};
