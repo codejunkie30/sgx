@@ -7,4 +7,4 @@ WAR_NAME="sgx.war"
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $SCRIPT_DIR
 
-./deploy.sh "$REMOTE_PATH" "$ENVIRONMENT_NAME" "$WAR_NAME"
+../deploy.sh "$REMOTE_PATH" "$ENVIRONMENT_NAME" "$WAR_NAME"
