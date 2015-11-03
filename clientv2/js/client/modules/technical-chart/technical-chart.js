@@ -1,4 +1,4 @@
-define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
+define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE ) {
 
 
 
@@ -38,16 +38,15 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
 
     var self=this;
     self.xData = [], self.yData = [];
-      //$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-ohlcv.json&callback=?', function (data) {
     //$.getJSON('http://localhost:8001/fakedata?callback=?', function (data) {
     //$.getJSON('http://192.168.1.37:8001/fakedata?callback=?', function (data) {
-      //console.log(data);
+
           self.priceData = toHighChartsSimple(data.price, true);
           self.lowPrice = toHighChartsSimple(data.lowPrice);
           self.openPrice = toHighChartsSimple(data.openPrice);
           self.highPrice = toHighChartsSimple(data.highPrice);
-          
-          //self.volumeData = toHighChartsSimple(data.volume);
+          self.volumeData = toHighChartsSimple(data.volume);
+
           //get RSI relevant data
           self.dataRSI = [];
           for(var i=0, len=self.priceData.length; i < len; i++) {
@@ -70,11 +69,14 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
       var ret = [];
       $.each(data, function(idx, row) {
 
+        var xVal = row.date;
+        var yVal = row.value;
+
         if( separateAxes ){
-          self.xData.push(row.date);
-          self.yData.push(row.value);
+          self.xData.push( xVal );
+          self.yData.push( yVal );
         }
-        ret.push({x: row.date, y:row.value});
+        ret.push({x: xVal, y: yVal});
 
       });
       return ret;
@@ -91,149 +93,126 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
   }
 
 
-  HS_Chart.prototype.addSeries = function(seriesObject, isRSI) {
+  HS_Chart.prototype.addSeries = function(seriesObject) {
 
-    if( seriesObject.yAxis == undefined ){
-      var axisId = (!isRSI)? 'secondary-axis': 'rsi-axis';
-      var otherAxis = this.chartElement.get( axisId );
-      var index = otherAxis.userOptions.index;
-      seriesObject.yAxis = index;
-    }
-
+    this.addAxis(seriesObject);
     this.chartElement.addSeries(seriesObject, false);
 
   }
 
-  HS_Chart.prototype.removeSeries = function(seriesId) {
+  HS_Chart.prototype.removeSeries = function(seriesObject) {
 
-    var series = this.chartElement.get(seriesId);
-    if( !series ) return;
-    this.chartElement.get(seriesId).remove(false);
+    var series = this.chartElement.get( seriesObject.id );
+    series.remove(false);
+    var axis = this.chartElement.get( seriesObject.yAxis );
+    if( axis.series.length == 0) {
+      axis.remove(false);
+      this.repositionAxes();
+    }
+
 
   }
 
-  HS_Chart.prototype.repositionAxis = function() {
 
-    var primaryAxis = this.chartElement.get('primary-axis');
-    var secondaryAxis = this.chartElement.get('secondary-axis');
-    var rsiAxis = this.chartElement.get('rsi-axis');
+  HS_Chart.prototype.addAxis = function(seriesObject) {
 
-    if( secondaryAxis && rsiAxis ){
+    var axis = seriesObject.yAxis;
+    if( this.chartElement.get(axis) ) return;
 
-      primaryAxis.update({ height: '45%'}, false);
-      secondaryAxis.update({ height: '20%', top: '50%'}, false);
-      rsiAxis.update({ height: '20%', top: '75%'}, false);
+    var axisObject =  {
+        id: axis,
+        labels: {
+            align: 'right',
+            x: -3
+        },
+        title: {
+            text: seriesObject.axisName
+        },
+        top: '',
+        height: '',
+        offset: 0,
+        opposite:true,
+        lineWidth: 2
+      };
 
-    }
-    else if( !rsiAxis && secondaryAxis ) {
 
-      primaryAxis.update({ height: '60%'}, false);
-      secondaryAxis.update({ height: '30%', top: '65%'}, false);
-
-    }
-    else if( rsiAxis && !secondaryAxis) {
-
-      primaryAxis.update({ height: '60%'}, false);
-      rsiAxis.update({ height: '30%', top: '65%'}, false);
-
-    }
-    else {
-
-      primaryAxis.update({ height: '100%'}, false);
-
-    }
-
-  }
-
-  HS_Chart.prototype.resizeChart = function() {
-    var self = this;
-    setTimeout(function(){ 
-      var axisNumber = self.chartElement.yAxis.length;
-      if(axisNumber == 4) {
-        self.chartElement.setSize(718, 600);
-      }else {
-        if(self.chartElement.chartHeight == self.chartHeight) return;
-        self.chartElement.setSize(718, self.chartHeight);
-      }
-    }, 500);
-  }
-
-  HS_Chart.prototype.resizeChartForced = function() {
-
-    this.chartElement.setSize(718, 550, false);
-
-  }
-
-  HS_Chart.prototype.addAxisSecondary = function() {
-    this.chartElement.addAxis({
-          id: 'secondary-axis',
-          labels: {
-              align: 'right',
-              x: -3
-          },
-          title: {
-              text: 'MACD'
-          },
-          top: '',
-          height: '',
-          offset: 0,
-          opposite:true,
-          lineWidth: 2
-    }, false, false);
-
-    this.cleanupChart();
-
-  }
-
-  HS_Chart.prototype.addAxisRSI = function(overBought, overSold) {
-
-    /*Note: redundant call that forces the chart to calculate height 2 times
-            to prevent part of rsi chart from dissapearing*/
-    if(this.chartElement.yAxis.length == 3){
-      this.chartElement.setSize(718, 550, false);
-    }
-
-    this.chartElement.addAxis({
-          id:'rsi-axis',
-          labels: {
-              align: 'right',
-              x: -3
-          },
-          title: {
-              text: 'RSI'
-          },
-          min:0,
-          max:100,
-          tickInterval:25,
-           plotLines: [{
-              value: overBought,
+    if(seriesObject.id == 'RSI') {
+      axisObject.
+           plotLines = [{
+              value: 70,
               id:'overBought-plotline',
               color: 'orange',
               width: 1
            }, {
-              value: overSold,
+              value: 30,
               id:'overSold-plotline',
               color: 'orange',
               width: 1
-           }],
-          top: '',
-          height: '',
-          offset: 0,
-          opposite:true,
-          lineWidth: 2
-    }, false, false);
+           }];
+    }
 
-    this.cleanupChart();
+    this.chartElement.addAxis(axisObject, false, false);
+    this.repositionAxes();
 
   }
 
-  HS_Chart.prototype.removeAxis = function(isRSI) {
 
-    var axisId = (isRSI)? 'rsi-axis': 'secondary-axis';
-    this.chartElement.get(axisId).remove(false);
-    this.cleanupChart();
+  HS_Chart.prototype.removeAxis = function(seriesObject) {
+
+    var axis = this.chartElement.get(seriesObject.yAxis);
+    if( axis ) {
+      axis.remove(false);
+      this.repositionAxes();
+    }
 
   }
+
+
+
+
+  HS_Chart.prototype.repositionAxes = function() {
+
+    var self = this;
+    var primaryAxis = this.chartElement.get('primary-axis');
+    var secondaryAxis = this.chartElement.get('secondary-axis');
+
+    var allAxes = this.chartElement.yAxis;
+    var additionalAxis = this.chartElement.yAxis.length - 3;
+
+    switch (additionalAxis) {
+
+      case 0: 
+        primaryAxis.update({height:'68%'}, false);
+        secondaryAxis.update({height:'30%', top:'70%'}, false);
+        setTimeout(function(){ self.chartElement.setSize(718, 525) }, 500);
+      break;
+
+      case 1:
+        primaryAxis.update({height:'45%'}, false);
+        secondaryAxis.update({height:'20%', top:'50%'}, false);
+        allAxes[3].update({height:'20%', top:'75%'}, false);
+        $('section.technical-charting').animate({height:931}, 500);
+        
+        setTimeout(function(){ 
+          self.chartElement.setSize(718, 600);
+          PAGE.resizeIframeSimple( 100 ); 
+        }, 500);
+      break;
+
+      case 2:
+        primaryAxis.update({height:'40%'}, false);
+        secondaryAxis.update({height:'18%', top:'42%'}, false);
+        allAxes[3].update({height:'17.5%', top:'62%'}, false);
+        allAxes[4].update({height:'18%', top:'82.5%'}, false);
+        $('section.technical-charting').animate({height:1031}, 500);
+        setTimeout(function(){ 
+          self.chartElement.setSize(718, 700);
+          PAGE.resizeIframeSimple( 100 );
+         }, 500);
+    }
+
+  }
+
 
   HS_Chart.prototype.modifyPlotline = function(newVal, plotId) {
 
@@ -244,36 +223,13 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
 
   }
 
-  //this is a weird bug that doesn't always show but the secondary axis(MACD/Histogram) MUST be at the very end
-  //in the yAxis Array list or else you'll get wierd highchart errors. 
-  HS_Chart.prototype.repositionSecondaryAxis = function () {
-
-    var secondaryAxis = this.chartElement.get('secondary-axis');
-    var rsiAxis = this.chartElement.get('rsi-axis');
-
-    if( secondaryAxis && rsiAxis){
-      this.chartElement.yAxis.splice(2);
-      rsiAxis.userOptions.index = 2;
-      secondaryAxis.userOptions.index = 3;
-      this.chartElement.yAxis.push(rsiAxis);
-      this.chartElement.yAxis.push(secondaryAxis);
-    }
-  }
-
-  HS_Chart.prototype.cleanupChart = function(){
-
-    this.repositionSecondaryAxis(); //bugFix @todo: remove this or prevent it from running on ie8...
-    this.repositionAxis();
-    this.resizeChart();
-
-  }
 
   HS_Chart.prototype.getGenericChartObj = function() {
     var options =
       {
         chart: {
           width: 718,
-          height:500
+          height:525
         },
         rangeSelector: {
           selected: 3,
@@ -319,11 +275,8 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
       },
       yAxis: [{
         id:'primary-axis',
+        height: '68%',
         labels: {
-          formatter:function() {
-            if(this.value == 0) return;
-            return 'S$ '+this.value;
-          },
           align: 'right',
           x: -3
         },
@@ -331,6 +284,19 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
           text: 'PRICE'
         },
         lineWidth: 2
+        }, {
+          id:'secondary-axis',
+          height: '30%',
+          top: '70%',
+          labels : {
+            align:'right',
+            x: -3
+          },
+          title: {
+            text:'Volume'
+          },
+          lineWidth:2,
+          offset:0
         }
       ],
       plotOptions:{
@@ -344,16 +310,26 @@ define([ "jquery", "knockout", "highstock" ], function( $, ko ) {
       },
       series: [{
           type: 'line',
-          name: this.companyName+' Stock Price',
+          name: 'AAPL',
           showInLegend:true,
-          data: this.priceData,
           color:'#0b236b',
-          yAxis:0,
+          data: this.priceData,
+          yAxis:'primary-axis',
+        }, {
+          type:'line',
+          name:'Volume',
+          color:'#7cb5ec',
+          showInLegend: false,
+          data:this.volumeData,
+          yAxis:'secondary-axis'
         }]
       };
 
     return options;
   }
+
+
+
 
   var FS_Chart = function(chartId, companyName) {
     this.chartElement = null;
