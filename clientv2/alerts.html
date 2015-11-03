@@ -43,7 +43,7 @@
 		
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
-				<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
+				<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: displayWatchlists }"></select>
 				<!-- ko if: selectedValue() != null -->
 					<a data-bind="click: showChange">CHANGE</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
 				<!-- /ko -->
@@ -53,15 +53,14 @@
 				
 				<div class="wl-companies">					
 					<div data-bind="if: displayList">
-						<ul data-bind="foreach: companies">
-							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">
-								<span class="ticker" data-bind="text: $data"></span>
-								<!--<span class="ticker" data-bind="text: ticker"></span>
+						<ul data-bind="foreach: displayListCompanies">
+							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">							
+								<span class="ticker" data-bind="text: ticker"></span>
 								<span class="currency" data-bind="text: currency"></span> 
-								<span class="price" data-bind="text: price"></span>
-								<span class="change" data-bind="text: change"></span>	-->	
-								<span class="remove" data-bind="value: $data, click:$root.deleteCompany"></span>
-								<!--<div class="company" data-bind="text: companyName"></div>	-->					
+								<span class="price" data-bind="text: price, format: 'number'"></span>
+								<span class="change" data-bind="text: change, format: 'number', css: { 'negative': change < 0  }"></span>
+								<span class="remove" data-bind="value: ticker, click:$root.deleteCompany"></span>
+								<div class="company" data-bind="text: companyName"></div>
 							</li>
 						</ul>	
 					</div>
@@ -70,35 +69,17 @@
 					<h5>Search for companies to add to your Watchlist</h5>
 					<div>
 						<span class="searchbar">
-							<input type="text" placeholder="Company name or stock code" data-bind="value: ''" />
+							<input type="text" placeholder="Company name or stock code" data-bind="enterkey:$root.searchCompanies" />
 							<span class="search-submit" class="button" value="" alt="Search Submit" data-bind="click:$root.searchCompanies"></span>
 						</span>
 					</div>
-					<!--  results display data-bind="visible: viewModel.refinedCompanies().length > 0" data-bind="repeat: { foreach: viewModel.currentCompanies(), limit: viewModel.resultSize }" 
-						<div class="searchtoggle">
-						<span class="toggle button sname" data-bind="click: clickEvents.keywordToggle" data-name="name" data-placeholder="Search by company name" data-validator="isValidName">Company Name</span><span class="toggle button scode" data-bind="click: clickEvents.keywordToggle" data-name="code" data-placeholder="Search by stock code" data-validator="isValidTicker">Stock Code</span>
-					</div>
-					<div>
-						<span class="searchbar">
-							<input type="text" data-bind="enterkey: clickEvents.keywordSearch" />
-							<span class="search-submit" data-bind="click: clickEvents.keywordSearch" class="button" value="" alt="Search Submit"></span>
-						</span>
-					</div>
-					
-					<li data-bind="value: tickerCode">
-							<span class="add"></span>
-							<span class="name" data-bind="text:companyName">Company Name</span> (<span data-bind="text:tickerCode">M15</span>)
-						</li>
-					
-					-->
 				</div>
 				<div class="results" data-bind="if: displayList">
 					<h5>Your Matches</h5>
-					<!--<ul data-bind="foreach: companies">-->
-					<ul class="company" data-bind="foreach: displayTempCom">
+					<ul class="company" data-bind="foreach: searchResults">
 						<li>
-							<span class="add" data-bind="value:ticker, click:$root.addCompany"></span>
-							<span class="name" data-bind="text:companyName"> (<span class="ticker" data-bind="text:ticker"></span>)</span>
+							<span class="add" data-bind="value:tickerCode, click:$root.addCompany"></span>
+							<span class="name"><span data-bind="text:companyName"></span> (<span class="ticker" data-bind="text:tickerCode"></span>)</span>
 						</li>
 					</li>
 				</div>			
