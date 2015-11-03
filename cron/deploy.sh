@@ -13,7 +13,7 @@ CURRENT_BUILD_FILE=$BUILDS_PATH/${WAR_NAME}.current.build
 CURRENT_BUILD=`cat $CURRENT_BUILD_FILE`
 
 ### remote variables
-LAST_BUILD=`ssh -i ssh-key.pem ec2-user@54.196.98.231 "cat $REMOTE_PATH/last.build"`
+LAST_BUILD=`ssh -i ../ssh-key.pem ec2-user@54.196.98.231 "cat $REMOTE_PATH/last.build"`
 
 ## logging date/time
 logCommandToOut() {
@@ -37,7 +37,7 @@ if [[ "$CURRENT_BUILD" != "$LAST_BUILD" ]]; then
 	
 	## pull the latest build
 	logCommandToOut "Pulling latest build"
-	scp -i ssh-key.pem ec2-user@54.196.98.231:$REMOTE_PATH/$LAST_BUILD $BUILDS_PATH 
+	scp -i ../ssh-key.pem ec2-user@54.196.98.231:$REMOTE_PATH/$LAST_BUILD $BUILDS_PATH 
 	
 	## mark the current build
 	logCommandToOut "Updating current build"
