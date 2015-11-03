@@ -298,7 +298,12 @@ div.wrapper {
   display: inline-block; }
 
 .wrapper-dropdown.financials-dropdown {
-  width: 17%; }
+  width: 17%;
+  font-weight:bold; }
+
+.wrapper-dropdown ul {
+  font-weight: normal;
+}
 
 .wrapper-dropdown {
   font-size: 11px;

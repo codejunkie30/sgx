@@ -260,7 +260,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
       this.flattenDropdownsObject();
       this.setFinancialsDropdowns();
-      this.dropdownChoices.push('ebitda');
+      this.dropdownChoices.push('totalRevenue');
 
       ko.applyBindings(this, $("body")[0]);
 
