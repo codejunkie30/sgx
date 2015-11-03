@@ -73,7 +73,7 @@ CREATE TABLE [dbo].[password_reset](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[trade_events]    Script Date: 9/3/2015 1:55:39 PM ******/
+/****** Object:  Table [dbo].[trade_events]    Script Date: 11/3/2015 3:17:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -83,17 +83,17 @@ CREATE TABLE [dbo].[trade_events](
 	[market] [nvarchar](50) NULL,
 	[ticker] [nvarchar](10) NOT NULL,
 	[currency] [nvarchar](10) NOT NULL,
-	[price] [numeric](18, 0) NULL,
-	[volume] [numeric](18, 0) NULL,
+	[price] [numeric](18, 10) NULL,
+	[volume] [numeric](18, 10) NULL,
 	[last_trade_time] [datetime] NULL,
-	[last_trade_price] [numeric](18, 0) NULL,
-	[last_trade_volume] [numeric](18, 0) NULL,
-	[bid] [numeric](18, 0) NULL,
-	[ask] [numeric](18, 0) NULL,
-	[high_price] [numeric](18, 0) NULL,
-	[low_price] [numeric](18, 0) NULL,
-	[open_price] [numeric](18, 0) NULL,
-	[close_price] [numeric](18, 0) NULL,
+	[last_trade_price] [numeric](18, 10) NULL,
+	[last_trade_volume] [numeric](18, 10) NULL,
+	[bid] [numeric](18, 10) NULL,
+	[ask] [numeric](18, 10) NULL,
+	[high_price] [numeric](18, 10) NULL,
+	[low_price] [numeric](18, 10) NULL,
+	[open_price] [numeric](18, 10) NULL,
+	[close_price] [numeric](18, 10) NULL,
 	[trade_date] [datetime] NULL,
 	[previous_close_date] [datetime] NULL,
  CONSTRAINT [PK_prices] PRIMARY KEY CLUSTERED 
