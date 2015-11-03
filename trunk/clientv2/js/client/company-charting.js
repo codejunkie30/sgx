@@ -390,7 +390,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
                   if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
                     this.init_nonPremium();
-                    //this.init_premium();
                   }else {
                     this.init_premium();
                   }
@@ -425,13 +424,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       (this.checkBoxes[ contextValue ] == undefined)? this.checkBoxes[ contextValue ] = ko.observable(addSeriesBool): this.checkBoxes[ contextValue ](addSeriesBool);
 
-      //need secondary axis when going from 0 -> 1, need to remove it when going from >0 to 0 for convDivg
-      var initialLength = this.control.convDivg().length;
       (addSeriesBool)? contextArray.push(contextValue): contextArray.remove(contextValue);
-      var finalLength = this.control.convDivg().length;
-
-      var axisAction = (initialLength > 0 && finalLength == 0)? false: (initialLength == 0 && finalLength > 0)? true: null;
-      this.modifyIndicatorsChart( contextValue, addSeriesBool, event, axisAction );
+      this.modifyIndicatorsChart( contextValue, addSeriesBool, event );
       return true;
 
     },
@@ -439,16 +433,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     addSeriesRSI: function() {
 
-      var newSeries = { type: 'line', id:'RSI', name:'RSI', showInLegend:true, algorithm:'RSI', periods:14, color:'#333333' };
+      var self = this;
+      var newSeries = { type: 'line', id:'RSI', name:'RSI', showInLegend:true, algorithm:'RSI', periods:14, color:'#333333', yAxis:'rsi-axis', axisName:'RSI' };
       var xData = this.indicators_chart.xData.slice(0);
       var yData = this.indicators_chart.dataRSI.slice(0);
 
       newSeries.data = Algorithms['RSI'](xData, yData);
-
-      this.indicators_chart.addAxisRSI( this.rsiInput.overBought(), this.rsiInput.overSold());
-      this.indicators_chart.addSeries(newSeries, true);
+      this.indicators_chart.addSeries(newSeries);
       this.indicators_chart.redraw();
-      this.postChartRedraw();
+
+      setTimeout(function(){
+        self.indicators_chart.chartElement.get('RSI').remove(false);
+        self.indicators_chart.chartElement.addSeries(newSeries);
+      }, 500)
 
       this.rsiInput.overBought.subscribe(function(data) {
 
@@ -466,10 +463,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     removeSeriesRSI: function() {
 
-      this.indicators_chart.removeAxis(true);
+      this.indicators_chart.removeAxis({yAxis:'rsi-axis'});
       this.indicators_chart.redraw();
-      this.postChartRedraw();
-
 
     },
 
@@ -479,72 +474,43 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var defaultSeriesConfig = {
         //simple Moving Area
-        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 15, color:'#5f6062' },
-        'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:0, showInLegend:true, algorithm:'SMA', periods: 40, color:'#ffcc00' },
+        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 15, color:'#5f6062' },
+        'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 40,  color:'#ffcc00' },
         //Moving avg con40
-        'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD', color:'#0094b3' },
-        'Histogram': { type: 'column', id: value, name: 'Histogram', showInLegend:true, algorithm:'histogram', color:'#bdd831' },
-        'SignalLine': { type: 'line', id: value, name: 'Signal line', showInLegend:true, algorithm:'signalLine', color:'#791e75' }
+        'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD', yAxis: 'tertiary-axis', axisName:'MACD',  color:'#0094b3' },
+        'Histogram': { type: 'column', id: value, name: 'Histogram', showInLegend:true, algorithm:'histogram', yAxis: 'tertiary-axis', axisName:'MACD', color:'#bdd831' },
+        'SignalLine': { type: 'line', id: value, name: 'Signal line', showInLegend:true, algorithm:'signalLine', yAxis: 'tertiary-axis', axisName: 'MACD',  color:'#791e75' }
       };
 
-      if( axisAction !== null ){
-        (axisAction)? this.indicators_chart.addAxisSecondary(): this.indicators_chart.removeAxis();  //add or remove secondary axis as needed.
-        if(!axisAction) {
-          //this.removeSeriesRSI();  //redudant to fix parts of chart getting cut off on resize.
-          //this.addSeriesRSI();
-        }
-      }
-
+      var seriesObject = defaultSeriesConfig[ value ];
 
       if(addSeriesBool) {
 
-        var newSeries = defaultSeriesConfig[ value ];
         var xData = this.indicators_chart.xData.slice(0);
         var yData = this.indicators_chart.yData.slice(0);
-        var algorithm = newSeries.algorithm;
+        var algorithm = seriesObject.algorithm;
 
-        var seriesData = Algorithms[ algorithm ]( xData, yData, newSeries.periods );
-        newSeries.data = seriesData;
-        this.indicators_chart.addSeries(newSeries);
+        var seriesData = Algorithms[ algorithm ]( xData, yData, seriesObject.periods );
+        seriesObject.data = seriesData;
+
+        this.indicators_chart.addSeries(seriesObject);
 
       }
-      else if(!addSeriesBool && axisAction != false) {
+      else {
 
-        this.indicators_chart.removeSeries(value);
+        this.indicators_chart.removeSeries(seriesObject);
 
       }
 
       this.indicators_chart.redraw();
-      this.postChartRedraw();
-
       event.target.disabled = false;
 
     },
 
-    postChartRedraw: function() {
-      return;
-      var scroll;
-      var section = $('.technical-charting');
-      if(this.indicators_chart.chartElement.yAxis.length ==4 ) {
-        section.animate({ 'paddingBottom':20 }, 1000);
-        //$('.indicators-description').animate({'margin-top', 130});
-      }else {
-        section.animate({ 'paddingBottom':120 }, 1000);
-      }
-    }
-
   }
 
 
-
-
-
 return TechnicalCharting;
-
-
-
-
-
 
 
 
