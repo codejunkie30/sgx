@@ -73,7 +73,7 @@
 									<ul class="key-devs" data-bind="foreach: keyDevs(), visible: keyDevs().length > 0">
 										<li>
 											<div data-bind="text: $parent.getKeyDevLetter($index())"></div>
-											<span data-bind="truncatedText: headline, maxTextLength: 90, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
+											<span data-bind="text: headline, click: function(data, event) { $parent.keyDevClick($parent, data, event); }, attr: { id: $parent.getKeyDevID($index()) }"></span>
 										</li>
 									</ul>
 									<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
