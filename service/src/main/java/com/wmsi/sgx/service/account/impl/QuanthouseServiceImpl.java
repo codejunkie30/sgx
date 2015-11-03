@@ -1,10 +1,12 @@
 package com.wmsi.sgx.service.account.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.elasticsearch.common.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.TradeEvent;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Price;
+import com.wmsi.sgx.model.search.CompanyPrice;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.QuanthouseService;
@@ -48,8 +51,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	@Override
 	// @Cacheable(value = "price")
 	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException {
-		
-		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), new Date());
+		Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
+		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), date);
 		if(event.size() > 0){
 			return bindPriceData(event.get(0));
 		}
@@ -58,12 +61,14 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	@Override
 	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException{
-		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), date);
-		Collections.sort(event);
+		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
+		
+		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
 		if(event.size() > 0){
 			for(TradeEvent e : event){
-				if(e.getLastTradeTime().compareTo(date) < 0);
-					return bindPriceData(event.get(0));
+				if(e.getLastTradeTime().compareTo(date) < 0){
+					return bindPriceData(e);
+				}
 			}
 		}
 		
@@ -103,6 +108,38 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		}
 		
 		return ret;
+	}
+	
+	@Override
+	public List<CompanyPrice> getCompanyPrice(List<String> companies, Boolean isPremium) throws QuanthouseServiceException, CompanyServiceException{
+		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -15);
+		Date delayedTime = cal.getTime();
+		
+		for(String company : companies){
+			CompanyPrice companyPrice = new CompanyPrice();
+			Company comp = companyService.getById(company);
+			Price p = new Price();
+			
+			if(isPremium){
+				p = getPrice(MARKET_CODE, company);
+			}else{
+				p = getPriceAt(MARKET_CODE, company, delayedTime);
+			}
+			
+			companyPrice.setChange(p.getChange());
+			companyPrice.setCompanyName(comp.getCompanyName());
+			companyPrice.setCurrency(p.getTradingCurrency());
+			companyPrice.setPrice(p.getClosePrice());
+			companyPrice.setTicker(company);
+			
+			list.add(companyPrice);
+		}
+		
+		return list;
+		
 	}
 	
 	private String toMarketId(String id){
