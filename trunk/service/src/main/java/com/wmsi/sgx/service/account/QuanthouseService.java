@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.wmsi.sgx.model.Price;
+import com.wmsi.sgx.model.search.CompanyPrice;
 import com.wmsi.sgx.service.CompanyServiceException;
 
 public interface QuanthouseService {
@@ -13,5 +14,6 @@ public interface QuanthouseService {
 	Price getPriceAt(String market, String id, Date date)
 			throws QuanthouseServiceException, CompanyServiceException;
 	List<Price> getPricingHistory(String market, String id, Date date)
-			throws QuanthouseServiceException;	
+			throws QuanthouseServiceException;
+	List<CompanyPrice> getCompanyPrice(List<String> companies, Boolean isPremium) throws QuanthouseServiceException, CompanyServiceException;	
 }

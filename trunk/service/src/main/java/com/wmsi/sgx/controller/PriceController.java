@@ -20,7 +20,9 @@ import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.model.PriceCall;
+import com.wmsi.sgx.model.WatchlistAddCompany;
 import com.wmsi.sgx.model.account.AccountModel;
+import com.wmsi.sgx.model.search.CompanyPrice;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
@@ -40,7 +42,7 @@ public class PriceController {
 	@Autowired
 	private AccountService accountService;
 	
-	private String market = "XSES";
+	private String market = "XSES";	
 	
 	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody IdSearch query) throws CompanyServiceException {
@@ -69,6 +71,24 @@ public class PriceController {
 		ret.put("price", p);		
 		
 		return ret;
+	}
+	
+	@RequestMapping(value="/price/companyPrices")
+	public Map<String, List<CompanyPrice>> getCompanyPrices(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
+		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
+		
+		Boolean isPremium = false;
+		if(user != null){
+			AccountModel acct = new AccountModel();
+			acct = accountService.getAccountForUsername(user.getUsername());
+			isPremium = acct.getType().equals(AccountType.PREMIUM);
+		}
+		
+		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies(), isPremium));
+		
+		
+		return ret;
+		
 	}
 
 	@RequestMapping(value="/price/intraday")
