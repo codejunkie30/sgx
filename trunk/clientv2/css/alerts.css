@@ -20,9 +20,9 @@
 .watchlist .wl-companies ul li { list-style-type: none; padding: 10px; }
 .watchlist .wl-companies ul li.odd { background: #ebecec; }
 .watchlist .wl-companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
-.watchlist .wl-companies ul li .ticker { width: 123px; }
-.watchlist .wl-companies ul li .currency { width: 58px; }
-.watchlist .wl-companies ul li .price { width: 64px; }
+.watchlist .wl-companies ul li .ticker { width: 115px; }
+.watchlist .wl-companies ul li .currency { width: 60px; }
+.watchlist .wl-companies ul li .price { width: 75px; }
 .watchlist .wl-companies ul li .change { width: 69px; color: #b5cf34; }
 .watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
@@ -40,7 +40,7 @@
 .watchlist .wl-companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
 
 .watchlist .results h5 { padding: 5px; margin: 15px 0 8px 0; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
-.watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; }
+.watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; max-height: 375px; overflow-x: hidden; }
 .watchlist .results ul li { list-style-type: none; margin-bottom: 8px; line-height: 17px; }
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
 .watchlist .results ul li .name { font-size: 13px; position: relative; top: -3px; }
