@@ -22,6 +22,16 @@ public class KeyDev{
 	@ConversionAnnotation(name="IQ_KEY_DEV_SOURCE")
 	private String source;
 	
+	private String id;
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public Date getDate() {
 		return date;
 	}
@@ -63,32 +73,25 @@ public class KeyDev{
 	}
 
 	@Override
-	public int hashCode(){
-		return Objects.hashCode(date, headline, situation, type, source);
-	}
-	
-	@Override
-	public boolean equals(Object object){
-		if (object instanceof KeyDev) {
-			KeyDev that = (KeyDev) object;
-			return Objects.equal(this.date, that.date)
-				&& Objects.equal(this.headline, that.headline)
-				&& Objects.equal(this.situation, that.situation)
-				&& Objects.equal(this.type, that.type)
-				&& Objects.equal(this.source, that.source);
-		}
-		return false;
+	public String toString() {
+		return Objects.toStringHelper(this).add("date", date).add("headline", headline).add("situation", situation)
+				.add("type", type).add("source", source).add("id", id).toString();
 	}
 
 	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("date", date)
-			.add("headline", headline)
-			.add("situation", situation)
-			.add("type", type)
-			.add("source", source)
-			.toString();
+	public int hashCode() {
+		return Objects.hashCode(date, headline, situation, type, source, id);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof KeyDev) {
+			KeyDev that = (KeyDev) object;
+			return Objects.equal(this.date, that.date) && Objects.equal(this.headline, that.headline)
+					&& Objects.equal(this.situation, that.situation) && Objects.equal(this.type, that.type)
+					&& Objects.equal(this.source, that.source) && Objects.equal(this.id, that.id);
+		}
+		return false;
 	}
 
 	
