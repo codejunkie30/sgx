@@ -42,8 +42,17 @@ public class SearchCompany{
 	private String vwapCurrency;
 	private Date vwapAsOfDate;
 	private Double volume;
+	private String companyOrTicker;
 
 	
+	public String getCompanyOrTicker() {
+		return companyOrTicker;
+	}
+
+	public void setCompanyOrTicker(String companyOrTicker) {
+		this.companyOrTicker = companyOrTicker;
+	}
+
 	public String getExchange() {
 		return exchange;
 	}
@@ -348,7 +357,8 @@ public class SearchCompany{
 				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
 				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).add("totalRevenue", totalRevenue)
 				.add("volWeightedAvgPrice", volWeightedAvgPrice).add("vwapCurrency", vwapCurrency)
-				.add("vwapAsOfDate", vwapAsOfDate).add("volume", volume).toString();
+				.add("vwapAsOfDate", vwapAsOfDate).add("volume", volume).add("companyOrTicker", companyOrTicker)
+				.toString();
 	}
 
 	@Override
@@ -358,7 +368,7 @@ public class SearchCompany{
 				industry, industryGroup, marketCap, netProfitMargin, peRatio, percentChange, priceToBookRatio,
 				priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, targetPriceNum, tickerCode,
 				totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue,
-				volWeightedAvgPrice, vwapCurrency, vwapAsOfDate, volume);
+				volWeightedAvgPrice, vwapCurrency, vwapAsOfDate, volume, companyOrTicker);
 	}
 
 	@Override
@@ -397,7 +407,8 @@ public class SearchCompany{
 					&& Objects.equal(this.totalRevenue, that.totalRevenue)
 					&& Objects.equal(this.volWeightedAvgPrice, that.volWeightedAvgPrice)
 					&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
-					&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate) && Objects.equal(this.volume, that.volume);
+					&& Objects.equal(this.vwapAsOfDate, that.vwapAsOfDate) && Objects.equal(this.volume, that.volume)
+					&& Objects.equal(this.companyOrTicker, that.companyOrTicker);
 		}
 		return false;
 	}	

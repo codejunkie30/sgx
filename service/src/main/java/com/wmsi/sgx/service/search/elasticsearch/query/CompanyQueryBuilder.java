@@ -62,6 +62,10 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			if(c.getField().equals("exchange")) {
 				query = addQuery(query, buildExchangeQuery(exchanges));
 			}
+			else if(c.getField().equals("companyOrTicker")){
+				// Name query
+				query = addQuery(query, buildCompanyOrTickerQuery(c));				
+			}
 			else if(c.getField().equals("companyName")){
 				// Name query
 				query = addQuery(query, buildNameQuery(c));				
@@ -107,6 +111,58 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		return builder
 				.size(MAX_RESULTS)
 				.toString();
+	}
+	
+	private QueryBuilder buildCompanyOrTickerQuery(Criteria c){
+
+		String text = c.getValue();
+		
+		return QueryBuilders.boolQuery()
+
+		// Text search for full prefix match
+		.should(QueryBuilders
+			.multiMatchQuery(text, 
+				"companyName.full^2",
+				"tradeName.full")
+			.type(Type.PHRASE)
+			.boost(3))
+			
+		// Text search for prefix match
+		.should(QueryBuilders
+			.multiMatchQuery(text, 
+				"companyName.startsWith^2",
+				"tradeName.startsWith")
+			.type(Type.PHRASE_PREFIX))
+
+		// Search beginning of text
+		.should(QueryBuilders
+			.multiMatchQuery(text, 
+				"companyName.partial^2",
+				"tradeName.partial")
+			.boost(1))
+
+		// Search middle of text
+		.should(QueryBuilders
+			.multiMatchQuery(text, 
+				"companyName.partial_middle^2",
+				"tradeName.partial_middle")
+			)
+
+		// Search end of text
+		.should(QueryBuilders
+			.multiMatchQuery(text, 
+				"companyName.partial_back^2",
+				"tradeName.partial_back")
+			)
+		.should(QueryBuilders
+				.constantScoreQuery(QueryBuilders
+			.matchPhrasePrefixQuery("tickerCode.full", text))
+			.boost(4))
+
+		.should(QueryBuilders
+				.constantScoreQuery(QueryBuilders
+			.matchQuery("tickerCode.partial", text))
+			.boost(2));
 	}
 	
 	
