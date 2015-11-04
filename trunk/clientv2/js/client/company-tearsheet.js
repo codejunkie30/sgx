@@ -54,22 +54,23 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			});
 			this.factors(tmp.factors);
 			
-			var today = new Date();
-			var todaysDate = today.setHours(0,0,0,0);
-			var d = new Date();
-			console.log(d.setMinutes(d.getMinutes() - 1));
-			console.log(todaysDate);
+//			var today = new Date();
+//			var todaysDate = today.setHours(0,0,0,0);
+//			var d = new Date();
+//			console.log(d.setMinutes(d.getMinutes() - 1));
+//			console.log(todaysDate);
+//			
+////			// init charts
+//			
+//			var params = { "id": 'C07', "date": $.now() };
+//			var postType = 'GET';
+//			var endpoint = me.fqdn + "/sgx/price/pricingHistory";
 			
-//			// init charts
-			
-			var params = { "id": 'C07', "date": $.now() };
-			var postType = 'GET';
-			var endpoint = me.fqdn + "/sgx/price/pricingHistory";
 			
 			// init charts
-			//var params = { id: me.ticker };
-//			var postType = 'GET';
-//			var endpoint = me.fqdn + "/sgx/company/priceHistory";
+			var params = { id: me.ticker };
+			var postType = 'GET';
+			var endpoint = me.fqdn + "/sgx/company/priceHistory";
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
 
 			return this;
