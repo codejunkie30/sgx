@@ -4,23 +4,45 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		
 		chartData: [],
 		volumeData: [],
+		closePrice: [],
+		lowPrice: [],
+		openPrice: [],
+		highPrice: [],
 		priceData: [],
+		phVolume: [],
 		
 		init: function(element, data, finished, periodChange) {
 			
 			var self = this;
 			// let's get all the price data set up
-			this.priceData = this.toHighCharts(data.price);
-			var lowPrice = this.toHighCharts(data.lowPrice);
-			var openPrice = this.toHighCharts(data.openPrice);
-			var highPrice = this.toHighCharts(data.highPrice);
+			
+			if (PAGE.userStatus() == 'PREMIUM') {
+				for(var i = 0, len = data.pricingHistory.length; i < len; i++) {
+					this.closePrice.push(data.pricingHistory[i].closePrice);
+					this.lowPrice.push(data.pricingHistory[i].lowPrice);
+					this.openPrice.push(data.pricingHistory[i].openPrice);
+					this.highPrice.push(data.pricingHistory[i].highPrice);
+					this.phVolume.push(data.pricingHistory[i].volume);
+				}
+				
+				// let's get all the price data set up
+				this.priceData = this.toHighCharts(this.closePrice);
+				var lowPrice = this.toHighCharts(this.lowPrice);
+				var openPrice = this.toHighCharts(this.openPrice);
+				var highPrice = this.toHighCharts(this.highPrice);
+			} else {				
+				this.priceData = this.toHighCharts(data.price);
+				var lowPrice = this.toHighCharts(data.lowPrice);
+				var openPrice = this.toHighCharts(data.openPrice);
+				var highPrice = this.toHighCharts(data.highPrice);
+			}
 
 			$.each(this.priceData, function(idx, point) {
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
 
-        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
-          return;
-        }
+		        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
+		          return;
+		        }
 				self.chartData[key] = {}
 				self.chartData[key].close = point.y;
 				self.chartData[key].low = lowPrice[idx].y;
@@ -29,8 +51,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 			});
 
 			// all the volume data
-			this.volumeData = this.toHighCharts(data.volume);
-
+			if (PAGE.userStatus() == 'PREMIUM') {
+				this.volumeData = this.toHighCharts(this.phVolume);
+			} else {				
+				this.volumeData = this.toHighCharts(data.volume);
+			}
 			// set the zoom
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
 			
