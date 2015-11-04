@@ -103,8 +103,13 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		List<Price> ret = new ArrayList<Price>();
 		List<TradeEvent> events = tradeEventService.getEventsForDate(market, toMarketId(id), date);
 		
+		Double currentPrice = 0.0;
 		for(TradeEvent e : events){
-			ret.add(bindPriceData(e));
+			if(!e.getLastPrice().equals(currentPrice)){
+				log.info("Current Price: {}, Trade Event Price: {}", currentPrice, e.getLastPrice());
+				currentPrice = e.getLastPrice();
+				ret.add(bindPriceData(e));
+			}
 		}
 		
 		return ret;
