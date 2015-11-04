@@ -106,7 +106,6 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		Double currentPrice = 0.0;
 		for(TradeEvent e : events){
 			if(!e.getLastPrice().equals(currentPrice)){
-				log.info("Current Price: {}, Trade Event Price: {}", currentPrice, e.getLastPrice());
 				currentPrice = e.getLastPrice();
 				ret.add(bindPriceData(e));
 			}
