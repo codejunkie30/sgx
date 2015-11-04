@@ -305,8 +305,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					ALERTS.searchResults(data.companies);
-					if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
+					if (data.companies.length == 0){ 
+						$('<li/>').html('There are no results for your search.').appendTo('.results .company');
+						return;					
+					} else {
+						$('.results .company').empty();
+						ALERTS.searchResults(data.companies);
+						if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
+					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
