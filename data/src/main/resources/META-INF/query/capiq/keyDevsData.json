@@ -1,28 +1,7 @@
 {
 	"inputRequests": 
 	[
-		{
-			"function": "GDSP",
-			"identifier": "$id$",
-			"mnemonic": "IQ_KEY_DEV_HEADLINE"
-		},
-
-		{
-			"function": "GDSP",
-			"identifier": "$id$",
-			"mnemonic": "IQ_KEY_DEV_DATE"
-		},
-
-		{
-			"function": "GDSP",
-			"identifier": "$id$",
-			"mnemonic": "IQ_KEY_DEV_SITUATION"
-		},
-		{
-			"function": "GDSP",
-			"identifier": "$id$",
-			"mnemonic": "IQ_KEY_DEV_TYPE"
-		},
+		
 		{
 			"function": "GDSP",
 			"identifier": "$id$",

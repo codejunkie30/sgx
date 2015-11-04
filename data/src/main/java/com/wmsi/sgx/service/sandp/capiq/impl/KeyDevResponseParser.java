@@ -34,6 +34,7 @@ public class KeyDevResponseParser extends AbstractResponseParser{
 		while(i.hasNext()){
 			Entry<String, List<CapIQResult>> entry = i.next();
 			KeyDev dev = getKeyDev(entry.getValue());
+			dev.setId(entry.getKey());
 			ret.add(dev);
 		}
 
