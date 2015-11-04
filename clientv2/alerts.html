@@ -34,9 +34,8 @@
 
 	<section data-bind="if:premiumUser() == true">
 		<div class="grid scan intro">
-			
 			<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
-			<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
+			<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
 			<div class="error-messages">
 			</div>
 		</div>
@@ -269,7 +268,7 @@
 					</ul>
 				</div>
 				<div class="button-wrapper">
-					<a class="button" data-bind="click:$root.saveWatchlist">Save</a> <a href="#">CANCEL</a>
+					<a class="button" data-bind="click:$root.saveWatchlist">Save</a> <a data-bind="click:$root.clearWatchlist">CANCEL</a>
 				</div>
 			</section>
 		</div>

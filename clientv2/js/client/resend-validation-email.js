@@ -58,16 +58,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				jsonp,
 				function(data, textStatus, jqXHR){
-					if (data == 'User is disabled'){
+					console.log(data);
+					if (data.messageCode == 110){
 						$('.error-messages').empty();
-						$('<p/>').html(displayMessage.resendValidation.invalidUser).appendTo('.error-messages');
+						$('<p/>').html(displayMessage.resendValidation.emailResent).appendTo('.error-messages');
 						PAGE.resizeIframeSimple();	
+					} else if (data.messageCode == 111){
+						$('.error-messages').empty();
+						$('<p/>').html(data.message).appendTo('.error-messages');
+						PAGE.resizeIframeSimple();
+						
+					} else if (data.messageCode == 112){
+						$('.error-messages').empty();
+						$('<p/>').html(data.message).appendTo('.error-messages');
+						PAGE.resizeIframeSimple();
+					} else {
+						if (data == true){
+							$('.form').empty().addClass('rp-sent');
+							$('<p/>').html(displayMessage.resendValidation.emailResent).appendTo('.form.rp-sent');
+							PAGE.resizeIframeSimple();	
+						}
 					}
-					if (data == true){
-						$('.form').empty().addClass('rp-sent');
-						$('<p/>').html(displayMessage.resendValidation.emailResent).appendTo('.form.rp-sent');
-						PAGE.resizeIframeSimple();	
-					}
+					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
