@@ -7,12 +7,15 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
@@ -40,6 +43,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private AccountService accountService;
 	
+	@Autowired
+	private MessageSource messages;
+	
 	@Override
 	@Transactional
 	public void registerUser(UserModel dto) throws UserExistsException, MessagingException{
@@ -57,15 +63,29 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public void resendVerificationEmail(String username) throws MessagingException{
+	public ApiResponse resendVerificationEmail(String username) throws MessagingException{
 
+		ApiResponse res = new ApiResponse();
 		User user = userService.getUserByUsername(username);
+		if(user==null){
+			res.setMessage(messages.getMessage("user.doesnot.exist",null,LocaleContextHolder.getLocale()));
+			res.setMessageCode(messages.getMessage("user.doesnot.exist.code",null,LocaleContextHolder.getLocale()));
+			return res;
+		}else{
 		
-		// TODO Check for existing verification records to prevent someone spamming user by
-		// requesting resets over and over.
-		String token = userVerificationService.createVerificationToken(user);
-		
-		sendVerificationEmail(username, token);
+			if(user!=null && user.getEnabled()==false){
+			String token = userVerificationService.createVerificationToken(user);
+			
+			sendVerificationEmail(username, token);
+			res.setMessage(messages.getMessage("success",null,LocaleContextHolder.getLocale()));
+			res.setMessageCode(messages.getMessage("success.code",null,LocaleContextHolder.getLocale()));
+			return res;
+				}else{
+				res.setMessage(messages.getMessage("user.already.verified",null,LocaleContextHolder.getLocale()));
+				res.setMessageCode(messages.getMessage("user.already.verified.code",null,LocaleContextHolder.getLocale()));
+				return res;
+				}
+		}	
 	}
 	
 	@Override

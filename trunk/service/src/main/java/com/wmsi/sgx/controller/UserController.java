@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.VerifyUser;
@@ -50,10 +51,9 @@ public class UserController{
 	}
 	
 	@RequestMapping(value = "resetToken", method = RequestMethod.POST)
-	public @ResponseBody Boolean resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException{
+	public @ResponseBody ApiResponse resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException{
 		
-		registrationService.resendVerificationEmail(user.getUsername());
-		return true;
+		return registrationService.resendVerificationEmail(user.getUsername());
 	}
 
 	@RequestMapping(value = "reset", method = RequestMethod.POST)

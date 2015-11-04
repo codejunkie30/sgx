@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.account;
 
 import javax.mail.MessagingException;
 
+import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
@@ -10,7 +11,7 @@ public interface RegistrationService{
 
 	void registerUser(UserModel dto) throws UserExistsException, MessagingException;
 
-	void resendVerificationEmail(String username) throws MessagingException;
+	ApiResponse resendVerificationEmail(String username) throws MessagingException;
 
 	Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException;
 
