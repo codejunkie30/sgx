@@ -186,10 +186,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	
 	PAGE = {
 
-		//fqdn : "http://54.254.221.141", /** PROD */
-		//fqdn : "http://ec2-107-23-250-19.compute-1.amazonaws.com", /** QA */		
-		//fqdn : "http://ec2-54-208-120-235.compute-1.amazonaws.com",
-		fqdn: "https://sgx-api-us.sharefc.com",
+		//fqdn: "http://sgx-elb-sing.sharefc.com", PROD
+		fqdn: "https://sgx-api-us.sharefc.com", QA
 		
 		pqdn : window.location.hostname == "sgx.fakemsi.com" ? "http://localhost:3000/?site=" : "http://pdfx.sharefc.com/pdfx/",
 			
