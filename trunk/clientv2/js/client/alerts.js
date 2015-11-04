@@ -7,7 +7,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		selectedValue: ko.observable(),
 		displayList: ko.observable(),
 		companies: ko.observableArray(),
-		testCompanies: ko.observableArray(),
+		addWatchlistName: ko.observableArray(),
 		weeks: ko.observableArray(),
 		displayTempCom: ko.observableArray(),
 		actualEstimates: ko.observableArray(),
@@ -156,7 +156,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        }
 			$('.error-messages').empty();
 			
-			var wlLength = ALERTS.finalWL().length;				
+			var wlLength = ALERTS.finalWL().length;
+			
+			$.each(ALERTS.finalWL(), function(i, data){
+				ALERTS.addWatchlistName.push(data.name.toLowerCase());
+			});			
+			
+			var newWLNameLC = ALERTS.newWLName();
+			
+			if ($.inArray( newWLNameLC.toLowerCase(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
 			
@@ -166,13 +174,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			
+			
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
 				params, 
 				undefined, 
-				function(data, textStatus, jqXHR){
-					console.log(data);
+				function(data, textStatus, jqXHR){					
 					ALERTS.finalWL(data);
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -208,8 +216,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},jsonpCallback);
 			
 			
-		},
-		
+		},		
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
@@ -233,7 +240,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				//Clears add WL after submit
 				ALERTS.newWLName(null);
 				ALERTS.showChange(false);
-			
 			
 		},
 		confirmDelete: function(){
@@ -286,12 +292,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.resizeIframeSimple();
 			
 		},
-		searchCompanies: function(){
-			
+		searchCompanies: function(){			
 			var searchValue = $(".searchbar input").val();
 			var endpoint = PAGE.fqdn + "/sgx/search";
 			var postType = 'POST';
-			var params = {"criteria":[{"field":"companyName","value":searchValue}]};
+			var params = {"criteria":[{"field":"companyOrTicker","value":searchValue}]};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			UTIL.handleAjaxRequest(
@@ -363,6 +368,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);
+		},
+		clearWatchlist: function(){
+			PAGE.showLoading();
+			history.go(0);
+			PAGE.hideLoading();
 		}
 
 	};

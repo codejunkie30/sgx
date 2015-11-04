@@ -1,18 +1,12 @@
 { 
 	"tempCompanies": [
 		{
-			"ticker": "CL34",
-			"companyName": "Singapore Airlines Limited",
-			"currency": "SGD",
-			"price": "1.45",
-			"change": "0.13"
+			"ticker": "A34",
+			"companyName": "Amara Holdings Limited"
 		},
 		{
 			"ticker": "T14",
-			"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited",
-			"currency": "SGD",
-			"price": "10.06",
-			"change": "0.02"
+			"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited"
 		}
 	]	
 		
