@@ -29,10 +29,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 
 			this.init(function() { self.finish(self); });
 
-			PAGE.checkStatus();			
+			PAGE.checkStatus();	
+					
 		},
 		
 		finish: function(me) {
+			
+			setInterval(console.log('here again'), 5000);
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
@@ -51,10 +54,22 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			});
 			this.factors(tmp.factors);
 			
-			// init charts
-			var params = { id: me.ticker };
+			var today = new Date();
+			var todaysDate = today.setHours(0,0,0,0);
+			var d = new Date();
+			console.log(d.setMinutes(d.getMinutes() - 1));
+			console.log(todaysDate);
+			
+//			// init charts
+			
+			var params = { "id": 'C07', "date": $.now() };
 			var postType = 'GET';
-			var endpoint = me.fqdn + "/sgx/company/priceHistory";
+			var endpoint = me.fqdn + "/sgx/price/pricingHistory";
+			
+			// init charts
+			//var params = { id: me.ticker };
+//			var postType = 'GET';
+//			var endpoint = me.fqdn + "/sgx/company/priceHistory";
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
 
 			return this;

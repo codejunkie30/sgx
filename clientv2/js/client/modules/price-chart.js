@@ -4,32 +4,46 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		
 		chartData: [],
 		volumeData: [],
+		closePrice: [],
+		lowPrice: [],
+		openPrice: [],
+		highPrice: [],
 		priceData: [],
+		phVolume: [],
 		
 		init: function(element, data, finished, periodChange) {
+						
+			for(var i = 0, len = data.pricingHistory.length; i < len; i++) {
+				this.closePrice.push(data.pricingHistory[i].closePrice);
+				this.lowPrice.push(data.pricingHistory[i].lowPrice);
+				this.openPrice.push(data.pricingHistory[i].openPrice);
+				this.highPrice.push(data.pricingHistory[i].highPrice);
+				this.phVolume.push(data.pricingHistory[i].volume);
+			}
 			
 			var self = this;
 			// let's get all the price data set up
-			this.priceData = this.toHighCharts(data.price);
-			var lowPrice = this.toHighCharts(data.lowPrice);
-			var openPrice = this.toHighCharts(data.openPrice);
-			var highPrice = this.toHighCharts(data.highPrice);
-
+			this.priceData = this.toHighCharts(this.closePrice);
+			var lowPrice = this.toHighCharts(this.lowPrice);
+			var openPrice = this.toHighCharts(this.openPrice);
+			var highPrice = this.toHighCharts(this.highPrice);
+			
 			$.each(this.priceData, function(idx, point) {
+				
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
 
-        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
-          return;
-        }
+		        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
+		          return;
+		        }
 				self.chartData[key] = {}
 				self.chartData[key].close = point.y;
 				self.chartData[key].low = lowPrice[idx].y;
 				self.chartData[key].open = openPrice[idx].y;
 				self.chartData[key].high = highPrice[idx].y;
 			});
-
+			
 			// all the volume data
-			this.volumeData = this.toHighCharts(data.volume);
+			this.volumeData = this.toHighCharts(this.phVolume);
 
 			// set the zoom
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
@@ -42,7 +56,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 	    toHighCharts: function(data) {
 	    	var ret = [];
 	    	$.each(data, function(idx, row) {
-	    		ret.push({ x: Date.fromISO(row.date).getTime(), y: row.value });
+	    		ret.push({ x: Date.fromISO(row.date).getTime(), y: row });
 	    	});
 	    	ret.sort(function(a, b) { return a.x - b.x; });
 	    	return ret;
@@ -58,7 +72,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
     },
 
 		initChart: function(element, data, finished, periodChange) {
-			
 			var base = CHART_DEFAULTS;
 			var self = this;
 			
