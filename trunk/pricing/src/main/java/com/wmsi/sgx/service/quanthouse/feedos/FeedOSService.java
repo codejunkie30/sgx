@@ -59,6 +59,7 @@ public class FeedOSService {
 		InstrumentCharacteristics[] referenceInstruments = getAllReferenceInstruments(sender, instrs);
 		
 		Map<Integer, FeedOSData> data = new HashMap<Integer, FeedOSData>();
+		int nonSGX = 0;
 		
 		// Collect basic trading data
 		for(InstrumentCharacteristics chara : referenceInstruments){
@@ -69,20 +70,23 @@ public class FeedOSService {
 			Any isin = chara.getRef_values().getTagByNumber(Constants.TAG_ISIN);
 			
 			if(chara.getInternal_instrument_code() == 0){
-				log.error("Invalid instrument code");
-				continue;
+				nonSGX++;
+			}else{					
+				
+				FeedOSData fosd = new FeedOSData();
+				fosd.setTradingCurrency(curr.get_string());
+				fosd.setTradingSymbol(ticker.get_string());				
+				if(isin != null){
+					//log.error("symbol: {}, ISIN: {}", curr.get_string(), isin.get_string());
+					fosd.setIsin(isin.get_string());
+				}
+				fosd.setId(chara.getInternal_instrument_code());
+				fosd.setMarket(market);
+				data.put(chara.getInternal_instrument_code(), fosd);
 			}
-			
-			//log.error("symbol: {}, ISIN: {}", curr.get_string(), isin.get_string());			
-			
-			FeedOSData fosd = new FeedOSData();
-			fosd.setTradingCurrency(curr.get_string());
-			fosd.setTradingSymbol(ticker.get_string());
-			fosd.setIsin(isin.get_string());
-			fosd.setId(chara.getInternal_instrument_code());
-			fosd.setMarket(market);
-			data.put(chara.getInternal_instrument_code(), fosd);
 		}
+		
+		log.warn("Number of invalid instrument codes: {}", nonSGX);
 		
 		String userContext = "1";
 		
