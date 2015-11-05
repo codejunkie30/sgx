@@ -318,7 +318,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         }, {
           type:'line',
           name:'Volume',
-          color:'#7cb5ec',
+          color:'#D8E719',
           showInLegend: false,
           data:this.volumeData,
           yAxis:'secondary-axis'
