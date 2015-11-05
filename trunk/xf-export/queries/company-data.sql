@@ -464,3 +464,18 @@ join (
 select companyid, max(pricingdate) as maxdate
 from ciqMarketCap
 group by companyid) maxdate on a.companyid=maxdate.companyid and a.pricingDate=maxdate.maxdate
+
+union
+
+select 	
+	pop.tickerSymbol,
+	pop.exchangeSymbol,
+	'filingDate',
+	null,
+	null,
+	cp.filingdate,
+	null
+from ciqLatestInstanceFinPeriod cp
+join ##SGXPop pop on cp.companyId=pop.companyId
+where cp.latestPeriodFlag=1 --Last LTM
+and cp.periodTypeId=4 --LTM
