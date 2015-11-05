@@ -75,7 +75,6 @@ public class KeyDevsService extends AbstractDataService {
 		Iterable<CSVRecord> records = getCompanyData(id, "key-devs");
 		if (records == null) return null;
 		List<KeyDev> list = new ArrayList<KeyDev>();
-		long startTime = System.nanoTime();
 		
 		List<String> idsForCapIqApiCall = new ArrayList<>();
 		for (CSVRecord record : records) {
@@ -91,10 +90,6 @@ public class KeyDevsService extends AbstractDataService {
 			keyDevSource.put(dev.getId(),dev.getSource());
 		}
 		
-		long endTime = System.nanoTime();
-		
-		long duration = (endTime - startTime);
-		System.out.println(duration);
 		for (CSVRecord record : records) {
 			KeyDev keydev = new KeyDev();
 			keydev.setSource(keyDevSource.get("IQKD"+record.get(2)));
