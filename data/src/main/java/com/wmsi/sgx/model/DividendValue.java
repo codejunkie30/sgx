@@ -1,6 +1,9 @@
 package com.wmsi.sgx.model;
 
+import java.util.Comparator;
 import java.util.Date;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
@@ -63,6 +66,12 @@ public class DividendValue{
 			.add("dividendPrice", dividendPrice)
 			.toString();
 	}
+	
+	public static Comparator<DividendValue> DividendValueDateComparator = new Comparator<DividendValue>() {
+		public int compare(DividendValue dv1, DividendValue dv2) {
+			return ObjectUtils.compare(dv2.getDividendExDate(), dv1.getDividendExDate()); // ascending order
+		}
+	};	
 	
 	
 	

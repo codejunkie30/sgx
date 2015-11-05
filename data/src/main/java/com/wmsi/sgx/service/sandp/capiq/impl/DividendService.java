@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,6 @@ public class DividendService extends AbstractDataService{
 		
 				
 		for (CSVRecord record : records) {
-			if (list.size() >= 10) break;
 			CompanyCSVRecord csr = new CompanyCSVRecord(record.get(6), record.get(4), new Date(record.get(2)));
 			String val = getFieldValue(field, csr);
 			DividendValue dV = new DividendValue();
@@ -61,6 +61,11 @@ public class DividendService extends AbstractDataService{
 			if (val != null) dV.setDividendPrice(Double.parseDouble(val));
 			if (StringUtils.stripToNull(record.get(5)) != null) dV.setDividendType(record.get(5));				
 	    	list.add(dV);		    	
+		}
+		
+		if (!list.isEmpty()) {
+			Collections.sort(list, DividendValue.DividendValueDateComparator);
+			if (list.size() >= 10) list.subList(0, 9);
 		}
 		
 		dH.setDividendValues(list);
