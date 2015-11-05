@@ -287,3 +287,42 @@ from ##sgxpop pop
 	left join ciqCurrency cISO on ed.currencyId=cISO.currencyId
 	where ed.toDate > getdate()
 	and ed.dataItemId in (114362) --Industry Recommendation
+union
+--Company Level Actuals from Estimates
+select
+pop.tickerSymbol,
+pop.exchangeSymbol,
+case
+when ed.dataItemId=100186 then 'revenueActual'
+when ed.dataItemId=100221 then 'ebitActual' --(no EBITDA for estimates from mockup)
+when ed.dataItemId=100235 then 'ebtActual'
+when ed.dataItemId=100256 then 'netIncomeExclActual'
+when ed.dataItemId=100270 then 'netIncomeActual'
+when ed.dataItemId=100284 then 'epsActual'
+when ed.dataItemId=100179 then 'normalizedEpsActual'
+end as WMSIApi,
+convert(varchar(max),ed.dataItemValue),
+case
+when ep.periodTypeId = 1 then 'FY'+cast(ep.fiscalYear as varchar(max))
+when ep.periodTypeId = 2 then 'FQ'+cast(ep.fiscalQuarter as varchar(max))+cast(ep.fiscalYear as varchar(max))
+end as period,
+null as date,
+cISO.ISOCode
+from ciqEstimatePeriod ep
+join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
+join ciqEstimateNumericData ed on ec.estimateConsensusId=ed.estimateConsensusId
+join ciqEstimatePeriodRelConst rc on ep.estimatePeriodId=rc.estimatePeriodId and ep.periodtypeid=rc.periodtypeid
+join ##sgxpop pop on ep.companyId=pop.companyId
+left join ciqCurrency cISO on ed.currencyId=cISO.currencyId
+where ed.toDate > getDate()
+and ed.dataItemId in (
+100179, --EPS Normalized Actual
+100284, --EPS (GAAP) Actual
+100186, --Revenue Actual
+100221, --EBIT Actual
+100235, --EBT Normalized Actual
+100256, --Net Income Normalized Actual
+100270 --Net Income (GAAP) Actual
+)
+and ep.periodTypeId in (1,2)
+and rc.relativeConstant in (500,1000)
