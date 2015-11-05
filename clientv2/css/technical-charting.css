@@ -266,10 +266,11 @@ div.wrapper {
   display: none; 
 }
   .technical-charting-alternative .content {
-    padding: 20px;
+    padding: 10px;
     padding-bottom: 100px;
     border: 1px solid #cacdd3; }
-
+#premium .premium-wrapper .trial-box { margin: 0 15px 0 0 !important; }
+#premium .premium-wrapper .view-price .price { right: 35px !important; }
 .indicators-description {
   /*margin-top:30px;*/
   padding-top:5px;

@@ -1,8 +1,12 @@
-define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
+define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(UTIL, ko, MESSAGES) {
 		
-	var PREMIUM = {
-			
+	var PREMIUM = {		
+		messages: JSON.parse(MESSAGES),
+		price: ko.observable(),
 		initPage: function() {
+			var displayMessage = PREMIUM.messages.messages[0];
+			
+			PREMIUM.price(displayMessage.premium.price);
 			
 			PAGE.trackPage("SGX Premium");
 			
