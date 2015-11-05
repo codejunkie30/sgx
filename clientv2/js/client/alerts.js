@@ -59,9 +59,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		finish: function(me) {
 			var displayMessage = ALERTS.messages.messages[0];
-			
-			this.displayTempCom = ALERTS.tempCompanies.tempCompanies;
-			
+					
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'GET';
     		var params = {};
@@ -204,7 +202,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data){
-					ALERTS.displayListCompanies(data.companyPrice);					
+					ALERTS.displayListCompanies(data.companyPrice);
+					PAGE.resizeIframeSimple();
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
