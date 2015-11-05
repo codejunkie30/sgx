@@ -80,12 +80,6 @@ public class CompanyService extends AbstractDataService {
 	 */
 	public void setMisc(Company comp, List<CompanyCSVRecord> records) {
 
-		List<CompanyCSVRecord> tmp = CompanyCSVRecord.getByName("periodEndDate", records);
-		if (tmp.size() == 0)
-			return;
-
-		Collections.sort(tmp, CompanyCSVRecord.CompanyCSVRecordDateComparator);
-		comp.setFilingDate(tmp.get(0).getPeriodDate());
 
 	}
 
