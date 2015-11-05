@@ -175,6 +175,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             ko.applyBindings(this, $("body")[0]);
 			
     		// resize
+            setTimeout(function() { me.resizeIframeSimple(); }, 500);
 			
 			
 		},		
