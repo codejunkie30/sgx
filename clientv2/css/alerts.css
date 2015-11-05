@@ -7,6 +7,10 @@
 .intro input.text { border: 1px solid #c4c4c4; color: #333; display: inline-block; width: 160px; padding: 0 5px; line-height: 22px; height: 22px; }
 .intro  .button { display: inline-block; }
 
+#alerts { display: none; }
+
+#alerts-content-alternative { margin: 15px 0 0 0; }
+
 .wl-container { overflow: hidden; min-height: 300px; /*display: none;*/ }
 
 .wl-container .edit-watchlist { margin: 10px 0; }

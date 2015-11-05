@@ -48,6 +48,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						this.init_nonPremium();
 						ko.applyBindings(this, $("body")[0]);
 					  } else {
+						$('#alerts').show();
 						this.finish(this);
 					  }
 				  }		
@@ -242,7 +243,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		confirmDelete: function(){
 			var deleteName = ALERTS.editWLName();
 			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
 				ALERTS.deleteWatchlist();
@@ -311,6 +312,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('.results .company').empty();
 						ALERTS.searchResults(data.companies);
 						if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
+						PAGE.resizeIframeSimple();
 					}
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -318,11 +320,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log('sta', textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},undefined);	
-			
+				},undefined);
 		},
 		saveWatchlist: function(){
-						
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
 			var postType = 'POST';
     		var params = {
@@ -373,11 +373,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);
-		},
-		clearWatchlist: function(){
-			PAGE.showLoading();
-			history.go(0);
-			PAGE.hideLoading();
 		}
 
 	};

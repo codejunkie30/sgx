@@ -617,8 +617,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						} else {
 							PAGE.addCompanyExisting();	
 						}
-						
-						
 					});					
 					
 					KO.applyBindings(settings.viewModel, $(".modal-container")[0]);
@@ -629,10 +627,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			PAGE.modal.open(settings);
 			
 		},
-		addCompanyExisting: function(me){
-			console.log(me);
-			var ticker = me.company.companyInfo.tickerCode;
-			console.log('add existing');
+		addCompanyExisting: function(){
+			var ticker = PAGE.currentTicker();
 			$.each(PAGE.finalWL(), function(idx, wl){
 				if (PAGE.selectedValue() ==  wl.id){
 					
