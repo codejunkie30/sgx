@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/alerts.json", "text!client/data/watchlists/companies.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, AL, COMP) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "text!client/data/watchlists/alerts.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS, AL) {
 
 	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	
@@ -30,7 +30,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		currentDay: ko.observable(),
 		messages: JSON.parse(MESSAGES),
 		alerts: JSON.parse(AL),
-		tempCompanies: JSON.parse(COMP),
 		sectionName:'Alerts',
 		
 		defaultSearch: "",
@@ -40,21 +39,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var self = this;
 			
 			PAGE.checkStatus();
-				var waitForDataToInit = ko.computed({
-				  read:function(){
-		
-					 // var companyData = this.gotCompanyData();
-					  var userStatus = PAGE.userStatus();
-					  if( userStatus ) {						
-						  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
-							//this.init_nonPremium();
-						  } else {
-							this.finish(this);
-						  }
-					  }		
-				  },
-				  owner:this
-			  });
+			var waitForDataToInit = ko.computed({
+			  read:function(){
+				 // var companyData = this.gotCompanyData();
+				  var userStatus = PAGE.userStatus();
+				  if( userStatus && userStatus != '' ) {
+					  if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
+						this.init_nonPremium();
+						ko.applyBindings(this, $("body")[0]);
+					  } else {
+						this.finish(this);
+					  }
+				  }		
+			  },
+			  owner:this
+		  });
 			
 		},
 		
@@ -279,6 +278,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		deleteCompany: function(data){
 			ALERTS.companies.remove(data.ticker);
 			ALERTS.displayWatchlists();
+			setTimeout(function(){ ALERTS.saveWatchlist(); }, 100);
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
@@ -288,6 +288,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			ALERTS.companies.push(data.tickerCode);
 			ALERTS.displayWatchlists();
+			setTimeout(function(){ ALERTS.saveWatchlist(); }, 100);
 			PAGE.resizeIframeSimple();
 			
 		},
