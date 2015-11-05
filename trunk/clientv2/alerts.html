@@ -34,7 +34,7 @@
 
 	<section data-bind="if:premiumUser() == true">
 		<div class="grid scan intro">
-			<p>Create a #Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
+			<p>Create a Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
 			<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
 			<div class="error-messages">
 			</div>
@@ -42,12 +42,12 @@
 		
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
-				<select data-bind="options: finalWL, optionsCaption: 'Select Watch List', value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: displayWatchlists }"></select>
+				<select data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: displayWatchlists }"></select>
 				<!-- ko if: selectedValue() != null -->
-					<a data-bind="click: showChange">CHANGE</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
+					<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
 				<!-- /ko -->
 				<div data-bind="visible: showChange()" class="edit-watchlist">
-					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Edit Watch List</a>
+					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
 				</div>
 				
 				<div class="wl-companies">					
@@ -95,7 +95,7 @@
 								</span>
 								<input type="checkbox" data-bind="checked: displayList().optionList.pcPriceDrop">
 							</span>
-							<span>Price drops below <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceRiseAbove"></span>
+							<span>Price drops below <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceRiseAbove"> over last close price</span>
 						</li>
 						<li>
 							<span class="checkbox left">
@@ -104,7 +104,7 @@
 								</span>
 								<input type="checkbox" data-bind="checked: displayList().optionList.pcTradingVolume">
 							</span>
-							<span>Trading volume exceeds 30 day daily change in volume by <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.pcTradingVolumeValue"></span>
+							<span>Trading volume exceeds 30 day change in volume by <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.pcTradingVolumeValue"></span>
 						</li>
 						<li>
 							<span class="checkbox left">

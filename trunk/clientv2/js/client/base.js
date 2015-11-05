@@ -204,7 +204,15 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		finalWL: KO.observableArray(),
 		
-		selectedValue: KO.observable(),		
+		selectedValue: KO.observable(),	
+		
+		currentCompanyName: KO.observable(),	
+		
+		currentTicker: KO.observable(),		
+		
+		newWLName: KO.observable(),		
+		
+		addWatchlistName: KO.observableArray(),
 		
 		pageData: {
 			
@@ -566,35 +574,19 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			  sessionKeepAliveTimer: false
 			});	
 		},
-		getURLParam: function getURLParam(sParam) {
-			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-				sURLVariables = sPageURL.split('&'),
-				sParameterName,
-				i;
-		
-			for (i = 0; i < sURLVariables.length; i++) {
-				sParameterName = sURLVariables[i].split('=');
-		
-				if (sParameterName[0] === sParam) {
-					return sParameterName[1] === undefined ? true : sParameterName[1];
-				}
-			}
-		},
-		addWatchlist: function() {
+		addWatchlist: function(me) {
+			me.currentCompanyName(me.company.companyInfo.companyName);
+			me.currentTicker(me.company.companyInfo.tickerCode);
 			
-			var settings = {
-	    			
+			var settings = {	    			
 				maxWidth: 500,
-				height: 250,
-				
-				content: addWatchlist,
-				
-				viewModel: this.viewModel,
-				
-				type: 'content',
-				
+				height: 300,				
+				content: addWatchlist,				
+				viewModel: this.viewModel,				
+				type: 'content',				
 				postLoad: function(settings) {
-					var ticker = PAGE.getURLParam('code');					
+					
+					var ticker = me.company.companyInfo.tickerCode;					
 					
 					PAGE.selectedValue.subscribe(function(data){});
 					
@@ -620,43 +612,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 					$('.button.add-wl').click(function(e){
 						
-						$.each(PAGE.finalWL(), function(idx, wl){
-							if (PAGE.selectedValue() ==  wl.id){
-								
-								var companies = wl.companies;
-								
-								if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
-								
-								if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
-								
-								wl.companies = KO.observableArray(companies);
-								
-								companies.push(ticker);	
-								
-								var endpoint = PAGE.fqdn + "/sgx/watchlist/addCompanies";
-								var postType = 'POST';
-								var params = {"id": PAGE.selectedValue(), "companies": companies};
-								var jsonp = 'jsonp';
-								var jsonpCallback = 'jsonpCallback';
-								UTIL.handleAjaxRequest(
-									endpoint,
-									postType,
-									params, 
-									undefined, 
-									function(data, textStatus, jqXHR){	
-										if (data.message == 'success'){
-											$(".modal-container").colorbox.close();
-										}			
-										
-									}, 
-									function(jqXHR, textStatus, errorThrown){
-										console.log('fail');
-										console.log('sta', textStatus);
-										console.log(errorThrown);
-										console.log(jqXHR);
-									},jsonpCallback);								
-							}
-						});
+						if (PAGE.selectedValue() == undefined){
+							PAGE.addNewCompany();
+						} else {
+							PAGE.addCompanyExisting();	
+						}
+						
+						
 					});					
 					
 					KO.applyBindings(settings.viewModel, $(".modal-container")[0]);
@@ -665,6 +627,123 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			};
 			
 			PAGE.modal.open(settings);
+			
+		},
+		addCompanyExisting: function(me){
+			console.log(me);
+			var ticker = me.company.companyInfo.tickerCode;
+			console.log('add existing');
+			$.each(PAGE.finalWL(), function(idx, wl){
+				if (PAGE.selectedValue() ==  wl.id){
+					
+					var companies = wl.companies;
+					
+					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+					
+					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
+					
+					wl.companies = KO.observableArray(companies);
+					
+					companies.push(ticker);	
+					
+					var endpoint = PAGE.fqdn + "/sgx/watchlist/addCompanies";
+					var postType = 'POST';
+					var params = {"id": PAGE.selectedValue(), "companies": companies};
+					var jsonp = 'jsonp';
+					var jsonpCallback = 'jsonpCallback';
+					UTIL.handleAjaxRequest(
+						endpoint,
+						postType,
+						params, 
+						undefined, 
+						function(data, textStatus, jqXHR){	
+							if (data.message == 'success'){
+								$(".modal-container").colorbox.close();
+							}			
+							
+						}, 
+						function(jqXHR, textStatus, errorThrown){
+							console.log('fail');
+							console.log('sta', textStatus);
+							console.log(errorThrown);
+							console.log(jqXHR);
+						},jsonpCallback);								
+				}
+			});
+		},
+		addNewCompany: function(){
+			var ticker = PAGE.currentTicker();
+			var wlLength = PAGE.finalWL().length;
+			
+			$.each(PAGE.finalWL(), function(i, data){
+				PAGE.addWatchlistName.push(data.name.toLowerCase());
+			});			
+						
+			var newWLNameLC = PAGE.newWLName();
+			
+			if ($.inArray( newWLNameLC.toLowerCase(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); return; }
+			
+			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); return; }
+			
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
+			var postType = 'POST';
+    		var params = { "message": PAGE.newWLName() };
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+						
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+					PAGE.finalWL(data);
+					$.each(PAGE.finalWL(), function(idx, wl){
+						if (wl.name == PAGE.newWLName()){
+							var companies = wl.companies;
+				
+							if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+							
+							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
+							
+							wl.companies = KO.observableArray(companies);
+							
+							companies.push(ticker);	
+							
+							var endpoint = PAGE.fqdn + "/sgx/watchlist/addCompanies";
+							var postType = 'POST';
+							var params = {"id": wl.id, "companies": companies};
+							var jsonp = 'jsonp';
+							var jsonpCallback = 'jsonpCallback';
+							UTIL.handleAjaxRequest(
+								endpoint,
+								postType,
+								params, 
+								undefined, 
+								function(data, textStatus, jqXHR){	
+									if (data.message == 'success'){
+										$(".modal-container").colorbox.close();
+									}			
+									
+								}, 
+								function(jqXHR, textStatus, errorThrown){
+									console.log('fail');
+									console.log('sta', textStatus);
+									console.log(errorThrown);
+									console.log(jqXHR);
+								},jsonpCallback);								
+							
+						}
+					});
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);
+			
+			
 			
 		}
 		
