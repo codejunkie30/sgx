@@ -316,7 +316,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           data: this.priceData,
           yAxis:'primary-axis',
         }, {
-          type:'line',
+          type:'column',
           name:'Volume',
           color:'#D8E719',
           showInLegend: false,
