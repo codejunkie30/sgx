@@ -95,10 +95,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						
 						ALERTS.displayList(wl);
 						
-						//ALERTS.displayListCompanies();
+						ALERTS.displayListCompanies();
 						
-						ALERTS.editWLName(wl.name);
-						
+						ALERTS.editWLName(wl.name);						
 					}
 					
 				});
