@@ -12,6 +12,7 @@ public class CompanyInputRecord{
 	private String legalName;
 	private String exSymbol;
 	private String currency;
+	private String companyId;
 	private Boolean indexed = false;
 
 	public Boolean getIndexed() {
@@ -85,43 +86,40 @@ public class CompanyInputRecord{
 	public void setLegalName(String legalName) {
 		this.legalName = legalName;
 	}
+	
 
 	
-	@Override
-	public int hashCode(){
-		return Objects.hashCode(id, ticker, isin, date, tradeName, indexed);
+	public String getCompanyId() {
+		return companyId;
 	}
-	
-	@Override
-	public boolean equals(Object object){
-		if (object instanceof CompanyInputRecord) {
-			CompanyInputRecord that = (CompanyInputRecord) object;
-			return Objects.equal(this.id, that.id)
-				&& Objects.equal(this.ticker, that.ticker)
-				&& Objects.equal(this.isin, that.isin)
-				&& Objects.equal(this.date, that.date)
-				&& Objects.equal(this.tradeName, that.tradeName)
-				&& Objects.equal(this.indexed, that.indexed)
-				&& Objects.equal(this.currency, that.currency)
-				&& Objects.equal(this.exSymbol, that.exSymbol)
-				&& Objects.equal(this.legalName, that.legalName);
-		}
-		return false;
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("id", id)
-			.add("ticker", ticker)
-			.add("isin", isin)
-			.add("date", date)
-			.add("tradeName", tradeName)
-			.add("indexed", indexed)
-			.add("currency", currency)
-			.add("exSymbol", exSymbol)
-			.add("legalName", legalName)
-			.toString();
+		return Objects.toStringHelper(this).add("id", id).add("ticker", ticker).add("isin", isin).add("date", date)
+				.add("tradeName", tradeName).add("legalName", legalName).add("exSymbol", exSymbol)
+				.add("currency", currency).add("companyId", companyId).add("indexed", indexed).toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id, ticker, isin, date, tradeName, legalName, exSymbol, currency, companyId, indexed);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof CompanyInputRecord) {
+			CompanyInputRecord that = (CompanyInputRecord) object;
+			return Objects.equal(this.id, that.id) && Objects.equal(this.ticker, that.ticker)
+					&& Objects.equal(this.isin, that.isin) && Objects.equal(this.date, that.date)
+					&& Objects.equal(this.tradeName, that.tradeName) && Objects.equal(this.legalName, that.legalName)
+					&& Objects.equal(this.exSymbol, that.exSymbol) && Objects.equal(this.currency, that.currency)
+					&& Objects.equal(this.companyId, that.companyId) && Objects.equal(this.indexed, that.indexed);
+		}
+		return false;
 	}
 
 }

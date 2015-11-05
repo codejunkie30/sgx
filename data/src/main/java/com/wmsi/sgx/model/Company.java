@@ -34,7 +34,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_BV_SHARE")
 	private Double bvShare;
-
+	
+	private String companyId;
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CAPEX")
 	private Double capitalExpenditures;
@@ -218,6 +219,16 @@ public class Company {
 	private Double marketCap;
 	
 	public PriceHistory fullPH;
+	
+	
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
 
 	public List<DividendValue> getDividendHistory() {
 		return dividendHistory;
@@ -246,7 +257,8 @@ public class Company {
 		return close.divide(high, RoundingMode.HALF_UP).subtract(BigDecimal.ONE).multiply(new BigDecimal(100))
 				.doubleValue();
 	}
-
+	
+	
 	public Double getPriceVs52WeekLow() {
 
 		if (closePrice == null || closePrice == 0 || yearLow == null)
@@ -830,8 +842,9 @@ public class Company {
 		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("exchange", exchange)
 				.add("avgTradedVolM3", avgTradedVolM3).add("avgVolumeM3", avgVolumeM3).add("basicEpsIncl", basicEpsIncl)
 				.add("beta5Yr", beta5Yr).add("businessDescription", businessDescription).add("bvShare", bvShare)
-				.add("capitalExpenditures", capitalExpenditures).add("cashInvestments", cashInvestments)
-				.add("closePrice", closePrice).add("companyAddress", companyAddress).add("companyName", companyName)
+				.add("companyId", companyId).add("capitalExpenditures", capitalExpenditures)
+				.add("cashInvestments", cashInvestments).add("closePrice", closePrice)
+				.add("companyAddress", companyAddress).add("companyName", companyName)
 				.add("companyWebsite", companyWebsite).add("divShare", divShare).add("ebit", ebit).add("ebitda", ebitda)
 				.add("ebitdaMargin", ebitdaMargin).add("employees", employees).add("eps", eps)
 				.add("filingCurrency", filingCurrency).add("filingDate", filingDate).add("fiscalYearEnd", fiscalYearEnd)
@@ -851,22 +864,22 @@ public class Company {
 				.add("tradeName", tradeName).add("volume", volume).add("vwapAsOfDate", vwapAsOfDate)
 				.add("vwapCurrency", vwapCurrency).add("volWeightedAvgPrice", volWeightedAvgPrice)
 				.add("yearFounded", yearFounded).add("yearHigh", yearHigh).add("yearLow", yearLow)
-				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).add("fullPH", fullPH)
-				.toString();
+				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).add("marketCap", marketCap)
+				.add("fullPH", fullPH).toString();
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(avgBrokerReq, exchange, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr,
-				businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress,
-				companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps, filingCurrency,
-				filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry,
-				industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin,
+				businessDescription, bvShare, companyId, capitalExpenditures, cashInvestments, closePrice,
+				companyAddress, companyName, companyWebsite, divShare, ebit, ebitda, ebitdaMargin, employees, eps,
+				filingCurrency, filingDate, fiscalYearEnd, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice,
+				industry, industryGroup, lastSalePrice, lowPrice, minorityInterest, netDebt, netIncome, netProfitMargin,
 				openPrice, previousCloseDate, previousClosePrice, priceVolHistYr, returnOnEquity, sharesSoldShort,
 				sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt,
 				totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth,
 				totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh,
-				yearLow, priceHistory, dividendHistory, fullPH);
+				yearLow, priceHistory, dividendHistory, marketCap, fullPH);
 	}
 
 	@Override
@@ -878,7 +891,7 @@ public class Company {
 					&& Objects.equal(this.avgVolumeM3, that.avgVolumeM3)
 					&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl) && Objects.equal(this.beta5Yr, that.beta5Yr)
 					&& Objects.equal(this.businessDescription, that.businessDescription)
-					&& Objects.equal(this.bvShare, that.bvShare)
+					&& Objects.equal(this.bvShare, that.bvShare) && Objects.equal(this.companyId, that.companyId)
 					&& Objects.equal(this.capitalExpenditures, that.capitalExpenditures)
 					&& Objects.equal(this.cashInvestments, that.cashInvestments)
 					&& Objects.equal(this.closePrice, that.closePrice)
@@ -926,7 +939,7 @@ public class Company {
 					&& Objects.equal(this.yearFounded, that.yearFounded) && Objects.equal(this.yearHigh, that.yearHigh)
 					&& Objects.equal(this.yearLow, that.yearLow) && Objects.equal(this.priceHistory, that.priceHistory)
 					&& Objects.equal(this.dividendHistory, that.dividendHistory)
-					&& Objects.equal(this.fullPH, that.fullPH);
+					&& Objects.equal(this.marketCap, that.marketCap) && Objects.equal(this.fullPH, that.fullPH);
 		}
 		return false;
 	}
