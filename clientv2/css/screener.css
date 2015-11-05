@@ -139,7 +139,7 @@
 	margin-bottom: 10px;	
 }
 
-.screener-header .description .screener-toggles .button {
+.screener-header .description .screener-toggles .button{
 	background-color: #666aa8;	
 }
 
@@ -147,9 +147,12 @@
 	display: none;
 }
 
-.screener-header .screener-toggles .button.selected {
+.screener-header .screener-toggles .button.selected,
+.screener-header .description .screener-toggles .button-alerts  {
 	background-color: #0e236b;
 }
+
+.screener-header .description .screener-toggles .button-alerts { float: right; }
 
 .screener-header .screener-toggles .button.selected .arrow {
 	background: transparent url('../img/down-arrow.png') no-repeat center center;

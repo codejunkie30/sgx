@@ -172,8 +172,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var postType = 'POST';
     		var params = { "message": ALERTS.newWLName() };
 			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';
-			
+			var jsonpCallback = 'jsonpCallback';			
 			
 			UTIL.handleAjaxRequest(
 				endpoint,
@@ -283,7 +282,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
-			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have added 10 companies to this watchlist. Please choose another.</p>', width: 300 }); return; }
+			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watchlist.</p>', width: 300 }); return; }
 
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
 			
