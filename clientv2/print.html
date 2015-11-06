@@ -237,7 +237,7 @@
 				         				<td class="right" width="25%"><b>Price</b></td>
 				         			</tr>
 				         		</thead>
-				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.slice(0).reverse(), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues != null">
+				         		<tbody data-bind="foreach: $data.dividendHistory.dividendValues.reverse().slice(0,10), visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues != null">
 				         			<tr data-bind="css: { 'even': ($index() % 2 != 0) }" class="dividend-row">
 										<td class="border" data-bind="text: dividendExDate, format: 'date'">-</td>
 										<td class="border" data-bind="text: dividendPayDate, format: 'date'">-</td>
