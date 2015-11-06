@@ -62,4 +62,6 @@
 .button-wrapper { margin: 35px 0 0 10px; }
 .button-wrapper a { cursor: pointer; }
 
-.cboxWrapper .cancel { margin: 0 10px. }
+.cboxWrapper .cancel { margin: 0 10px; }
+
+.error-messages p { color: #bf0052 !important; line-height: 16px; font-size: 11.5px; margin: 10px 25px; }

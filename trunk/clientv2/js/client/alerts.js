@@ -71,7 +71,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				undefined, 
-				function(data, textStatus, jqXHR){					
+				function(data, textStatus, jqXHR){
 					ALERTS.finalWL(data);
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -85,13 +85,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
-			
+			var firstRun = true;
 			var watchlistDisplay = ko.computed(function(){
-				
 				$.each(ALERTS.finalWL(), function(idx, wl){
 					if (ALERTS.selectedValue() ==  wl.id){
-												
-						ALERTS.companies(wl.companies);
+						
+						if (firstRun == true) {
+							ALERTS.companies(wl.companies);							
+						}
+						firstRun = false;
 						
 						ALERTS.displayList(wl);
 						
@@ -211,8 +213,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);
-			
-			
 		},		
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
@@ -276,8 +276,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		deleteCompany: function(data){
 			ALERTS.companies.remove(data.ticker);
-			ALERTS.displayWatchlists();
-			setTimeout(function(){ ALERTS.saveWatchlist(); }, 100);
+			ALERTS.saveWatchlist();
+			setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
@@ -286,8 +286,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
 			
 			ALERTS.companies.push(data.tickerCode);
-			ALERTS.displayWatchlists();
-			setTimeout(function(){ ALERTS.saveWatchlist(); }, 100);
+			ALERTS.saveWatchlist();
+			setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
 			PAGE.resizeIframeSimple();
 			
 		},
@@ -322,6 +322,40 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},undefined);
 		},
 		saveWatchlist: function(){
+			var displayMessage = ALERTS.messages.messages[0];
+			if(ALERTS.displayList().optionList.pcPriceDrop == true){
+				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');						
+					PAGE.resizeIframeSimple();
+					return;
+				} else {
+					$('.price-drop.error-messages').empty();
+				}
+				
+			}
+			
+			if(ALERTS.displayList().optionList.pcTradingVolume == true){
+				if (ALERTS.displayList().optionList.pcTradingVolumeValue == null || ALERTS.displayList().optionList.pcTradingVolumeValue == ''){						
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');						
+					PAGE.resizeIframeSimple();
+					return;
+				}else {
+					$('.trade-volume.error-messages').empty();
+				}
+				
+			}
+			
+			if(ALERTS.displayList().optionList.estChangePriceDrop == true){
+				if ((ALERTS.displayList().optionList.estChangePriceDropBelow == null) || (ALERTS.displayList().optionList.estChangePriceDropBelow == '') || (ALERTS.displayList().optionList.estChangePriceDropAbove == null || ALERTS.displayList().optionList.estChangePriceDropAbove == '')){						
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');						
+					PAGE.resizeIframeSimple();
+					return;
+				}else {
+					$('.target-price.error-messages').empty();
+				}
+				
+			}
+			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
 			var postType = 'POST';
     		var params = {
@@ -329,7 +363,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				"name": ALERTS.editWLName(),
 				"companies": ALERTS.companies(),
 				"optionList": {
-					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
+					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop == undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
 					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
 					"pcPriceRiseAbove": (ALERTS.displayList().optionList.pcPriceRiseAbove != null) ? ALERTS.displayList().optionList.pcPriceRiseAbove : null,
 					"pcTradingVolume": (ALERTS.displayList().optionList.pcTradingVolume != undefined) ? ALERTS.displayList().optionList.pcTradingVolume : false,

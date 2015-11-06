@@ -48,7 +48,8 @@
 				"cancelFail": "There was an error processing your transaction. Please try again."
 			},
 			"watchlist": {
-				"error": "Watch List must be between 1 and 40 characters."	
+				"error": "Watch List must be between 1 and 40 characters.",
+				"blankField": "Enter a value between 1 and 100%."
 			},
 			"premium": {
 				"price": "<div><span class='sign'>$</span><span class='total'>720</span></div> <div class='sub'>for a 1 year subscription ($60/month)</div>"

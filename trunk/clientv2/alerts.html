@@ -97,6 +97,7 @@
 								<input type="checkbox" data-bind="checked: displayList().optionList.pcPriceDrop">
 							</span>
 							<span>Price drops below <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent" type="text" data-bind="value: displayList().optionList.pcPriceRiseAbove"> over last close price</span>
+							<div class="price-drop error-messages"></div>
 						</li>
 						<li>
 							<span class="checkbox left">
@@ -106,6 +107,7 @@
 								<input type="checkbox" data-bind="checked: displayList().optionList.pcTradingVolume">
 							</span>
 							<span>Trading volume exceeds 30 day change in volume by <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.pcTradingVolumeValue"></span>
+							<div class="trade-volume error-messages"></div>
 						</li>
 						<li>
 							<span class="checkbox left">
@@ -120,12 +122,6 @@
 						</li>
 					</ul>
 				</div>
-				<!--<span class="checkbox left">
-					<span class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
-						<span class="name" data-bind="text: name"></span>
-					</span>
-					<input type="checkbox" data-bind="checked: displayList().optionList.">
-				</span>-->
 				<h3>Estimates</h3>
 				<div class="estimates">
 					<ul>
@@ -137,6 +133,7 @@
 								<input type="checkbox" data-bind="checked: displayList().optionList.estChangePriceDrop">
 							</span>
 							<span>Change in target price drops below <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.estChangePriceDropBelow"> or rises above <input class="percent" type="text" type="text" data-bind="value: displayList().optionList.estChangePriceDropAbove"></span>
+							<div class="target-price error-messages"></div>
 						</li>
 						<li>
 							<span class="checkbox left">
