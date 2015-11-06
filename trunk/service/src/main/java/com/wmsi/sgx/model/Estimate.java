@@ -1,7 +1,7 @@
 package com.wmsi.sgx.model;
 
 import java.util.Date;
-import java.util.List;
+
 import com.google.common.base.Objects;
 
 public class Estimate {
@@ -32,7 +32,58 @@ public class Estimate {
 	private String tickerCode;
 	private String period;
 	private Date periodDate;
+	private Double netIncomeActual;
+	private Double netIncomeExclActual;
+	private Double ebtActual;
+	private Double revenueActual;
+	private Double normalizedEpsActual;
+	private Double epsActual;
+	private Double ebitActual;
 	
+	
+	
+	public Double getNetIncomeActual() {
+		return netIncomeActual;
+	}
+	public void setNetIncomeActual(Double netIncomeActual) {
+		this.netIncomeActual = netIncomeActual;
+	}
+	public Double getNetIncomeExclActual() {
+		return netIncomeExclActual;
+	}
+	public void setNetIncomeExclActual(Double netIncomeExclActual) {
+		this.netIncomeExclActual = netIncomeExclActual;
+	}
+	public Double getEbtActual() {
+		return ebtActual;
+	}
+	public void setEbtActual(Double ebtActual) {
+		this.ebtActual = ebtActual;
+	}
+	public Double getRevenueActual() {
+		return revenueActual;
+	}
+	public void setRevenueActual(Double revenueActual) {
+		this.revenueActual = revenueActual;
+	}
+	public Double getNormalizedEpsActual() {
+		return normalizedEpsActual;
+	}
+	public void setNormalizedEpsActual(Double normalizedEpsActual) {
+		this.normalizedEpsActual = normalizedEpsActual;
+	}
+	public Double getEpsActual() {
+		return epsActual;
+	}
+	public void setEpsActual(Double epsActual) {
+		this.epsActual = epsActual;
+	}
+	public Double getEbitActual() {
+		return ebitActual;
+	}
+	public void setEbitActual(Double ebitActual) {
+		this.ebitActual = ebitActual;
+	}
 	public Date getPeriodDate() {
 		return periodDate;
 	}
@@ -202,14 +253,19 @@ public class Estimate {
 				.add("volitality", volitality).add("industryRec", industryRec).add("avgBrokerRec", avgBrokerRec)
 				.add("normalizedEps", normalizedEps).add("eps", eps).add("revenue", revenue).add("ebit", ebit)
 				.add("ebt", ebt).add("netIncomeExcl", netIncomeExcl).add("netIncome", netIncome)
-				.add("tickerCode", tickerCode).add("period", period).add("periodDate", periodDate).toString();
+				.add("tickerCode", tickerCode).add("period", period).add("periodDate", periodDate)
+				.add("netIncomeActual", netIncomeActual).add("netIncomeExclActual", netIncomeExclActual)
+				.add("ebtActual", ebtActual).add("revenueActual", revenueActual)
+				.add("normalizedEpsActual", normalizedEpsActual).add("epsActual", epsActual)
+				.add("ebitActual", ebitActual).toString();
 	}
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(tpEstimateDeviation, tpMeanEstimate, tpMedianEstimate, tpHighEstimate, tpLowEstimate,
 				tpEstimateNum, targetPrice, ltgEstimateDeviation, ltgMeanEstimate, ltgMedianEstimate, ltgHighEstimate,
 				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEps, eps, revenue,
-				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period, periodDate);
+				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period, periodDate, netIncomeActual,
+				netIncomeExclActual, ebtActual, revenueActual, normalizedEpsActual, epsActual, ebitActual);
 	}
 	@Override
 	public boolean equals(Object object) {
@@ -235,7 +291,13 @@ public class Estimate {
 					&& Objects.equal(this.revenue, that.revenue) && Objects.equal(this.ebit, that.ebit)
 					&& Objects.equal(this.ebt, that.ebt) && Objects.equal(this.netIncomeExcl, that.netIncomeExcl)
 					&& Objects.equal(this.netIncome, that.netIncome) && Objects.equal(this.tickerCode, that.tickerCode)
-					&& Objects.equal(this.period, that.period) && Objects.equal(this.periodDate, that.periodDate);
+					&& Objects.equal(this.period, that.period) && Objects.equal(this.periodDate, that.periodDate)
+					&& Objects.equal(this.netIncomeActual, that.netIncomeActual)
+					&& Objects.equal(this.netIncomeExclActual, that.netIncomeExclActual)
+					&& Objects.equal(this.ebtActual, that.ebtActual)
+					&& Objects.equal(this.revenueActual, that.revenueActual)
+					&& Objects.equal(this.normalizedEpsActual, that.normalizedEpsActual)
+					&& Objects.equal(this.epsActual, that.epsActual) && Objects.equal(this.ebitActual, that.ebitActual);
 		}
 		return false;
 	}
