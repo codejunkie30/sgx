@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
@@ -22,6 +26,7 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.charts.BalanceSheet;
 import com.wmsi.sgx.model.charts.BalanceSheets;
 import com.wmsi.sgx.model.charts.CashFlow;
@@ -37,8 +42,10 @@ import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchResults;
+import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
@@ -51,6 +58,9 @@ public class CompanyController{
 	
 	@Autowired 
 	private ModelMapper mapper;
+	
+	@Autowired
+	private AccountService accountService;
 	
 	@RequestMapping(value="company")
 	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException {
@@ -209,12 +219,23 @@ public class CompanyController{
 
 	@RequestMapping(value="company/relatedCompanies")
 	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException{		
-		
+		User u = null;
+		AccountType accountType=null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
+			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
+			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
+			accountType = accountModel.getType();
+				
+		}else{
+			
+			accountType = AccountType.NOT_LOGGED_IN;
+		}
 		SearchResults searchResults = new SearchResults();
 		List<SearchCompany> searchCompanies = new ArrayList<SearchCompany>();
 
 		// Get related companies
-		List<Company> companies = companyService.loadRelatedCompanies(search.getId());
+		List<Company> companies = companyService.loadRelatedCompanies(search.getId(), accountType);
 		
 		if(companies != null){
 			// Convert to correct response type

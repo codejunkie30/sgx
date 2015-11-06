@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
@@ -26,7 +27,7 @@ public interface CompanyService{
 
 	AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException;
 
-	List<Company> loadRelatedCompanies(String id) throws CompanyServiceException;
+	List<Company> loadRelatedCompanies(String id, AccountType accType) throws CompanyServiceException;
 
 	List<HistoricalValue> loadVolumeHistory(String search) throws CompanyServiceException;
 
