@@ -71,8 +71,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				undefined, 
-				function(data, textStatus, jqXHR){
-					ALERTS.finalWL(data);
+				function(data, textStatus, jqXHR){					
+					function sortByName(a, b){
+					  var a = a.name.toLowerCase();
+					  var b = b.name.toLowerCase(); 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}					
+					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
@@ -85,14 +90,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
-			var firstRun = true;
+
 			var watchlistDisplay = ko.computed(function(){
 				$.each(ALERTS.finalWL(), function(idx, wl){
 					if (ALERTS.selectedValue() ==  wl.id){
+												
+						ALERTS.companies(wl.companies);							
 						
-						if (firstRun == true) {
-							ALERTS.companies(wl.companies);							
-						}
 						firstRun = false;
 						
 						ALERTS.displayList(wl);
@@ -194,6 +198,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		displayWatchlists: function(){
+			console.log(ALERTS.companies());
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
 			var params = { "companies": ALERTS.companies() };
@@ -322,6 +327,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},undefined);
 		},
 		saveWatchlist: function(){
+			console.log(ALERTS.companies());
+			console.log(ALERTS.selectedValue());
 			var displayMessage = ALERTS.messages.messages[0];
 			if(ALERTS.displayList().optionList.pcPriceDrop == true){
 				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
