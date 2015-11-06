@@ -23,16 +23,66 @@ public class Estimate {
 	private Double industryRec;
 	private Double avgBrokerRec;
 	private Double normalizedEps;
+	private Double normalizedEpsActual;
 	private Double eps;
+	private Double epsActual;
 	private Double revenue;
+	private Double revenueActual;
 	private Double ebit;
+	private Double ebitActual;
 	private Double ebt;
+	private Double ebtActual;
 	private Double netIncomeExcl;
+	private Double netIncomeExclActual;
 	private Double netIncome;
+	private Double netIncomeActual;
 	private String tickerCode;
 	private String period;
 	private Date periodDate;
 	
+	
+	public Double getNormalizedEpsActual() {
+		return normalizedEpsActual;
+	}
+	public void setNormalizedEpsActual(Double normalizedEpsActual) {
+		this.normalizedEpsActual = normalizedEpsActual;
+	}
+	public Double getEpsActual() {
+		return epsActual;
+	}
+	public void setEpsActual(Double epsActual) {
+		this.epsActual = epsActual;
+	}
+	public Double getRevenueActual() {
+		return revenueActual;
+	}
+	public void setRevenueActual(Double revenueActual) {
+		this.revenueActual = revenueActual;
+	}
+	public Double getEbitActual() {
+		return ebitActual;
+	}
+	public void setEbitActual(Double ebitActual) {
+		this.ebitActual = ebitActual;
+	}
+	public Double getEbtActual() {
+		return ebtActual;
+	}
+	public void setEbtActual(Double ebtActual) {
+		this.ebtActual = ebtActual;
+	}
+	public Double getNetIncomeExclActual() {
+		return netIncomeExclActual;
+	}
+	public void setNetIncomeExclActual(Double netIncomeExclActual) {
+		this.netIncomeExclActual = netIncomeExclActual;
+	}
+	public Double getNetIncomeActual() {
+		return netIncomeActual;
+	}
+	public void setNetIncomeActual(Double netIncomeActual) {
+		this.netIncomeActual = netIncomeActual;
+	}
 	public Date getPeriodDate() {
 		return periodDate;
 	}
@@ -202,16 +252,20 @@ public class Estimate {
 				.add("ltgMedianEstimate", ltgMedianEstimate).add("ltgHighEstimate", ltgHighEstimate)
 				.add("ltgLowEstimate", ltgLowEstimate).add("ltgEstimateNum", ltgEstimateNum)
 				.add("volitality", volitality).add("industryRec", industryRec).add("avgBrokerRec", avgBrokerRec)
-				.add("normalizedEps", normalizedEps).add("eps", eps).add("revenue", revenue).add("ebit", ebit)
-				.add("ebt", ebt).add("netIncomeExcl", netIncomeExcl).add("netIncome", netIncome)
-				.add("tickerCode", tickerCode).add("period", period).add("periodDate", periodDate).toString();
+				.add("normalizedEps", normalizedEps).add("normalizedEpsActual", normalizedEpsActual).add("eps", eps)
+				.add("epsActual", epsActual).add("revenue", revenue).add("revenueActual", revenueActual)
+				.add("ebit", ebit).add("ebitActual", ebitActual).add("ebt", ebt).add("ebtActual", ebtActual)
+				.add("netIncomeExcl", netIncomeExcl).add("netIncomeExclActual", netIncomeExclActual)
+				.add("netIncome", netIncome).add("netIncomeActual", netIncomeActual).add("tickerCode", tickerCode)
+				.add("period", period).add("periodDate", periodDate).toString();
 	}
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(tpEstimateDeviation, tpMeanEstimate, tpMedianEstimate, tpHighEstimate, tpLowEstimate,
 				tpEstimateNum, targetPrice, ltgEstimateDeviation, ltgMeanEstimate, ltgMedianEstimate, ltgHighEstimate,
-				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEps, eps, revenue,
-				ebit, ebt, netIncomeExcl, netIncome, tickerCode, period, periodDate);
+				ltgLowEstimate, ltgEstimateNum, volitality, industryRec, avgBrokerRec, normalizedEps,
+				normalizedEpsActual, eps, epsActual, revenue, revenueActual, ebit, ebitActual, ebt, ebtActual,
+				netIncomeExcl, netIncomeExclActual, netIncome, netIncomeActual, tickerCode, period, periodDate);
 	}
 	@Override
 	public boolean equals(Object object) {
@@ -233,11 +287,19 @@ public class Estimate {
 					&& Objects.equal(this.volitality, that.volitality)
 					&& Objects.equal(this.industryRec, that.industryRec)
 					&& Objects.equal(this.avgBrokerRec, that.avgBrokerRec)
-					&& Objects.equal(this.normalizedEps, that.normalizedEps) && Objects.equal(this.eps, that.eps)
-					&& Objects.equal(this.revenue, that.revenue) && Objects.equal(this.ebit, that.ebit)
-					&& Objects.equal(this.ebt, that.ebt) && Objects.equal(this.netIncomeExcl, that.netIncomeExcl)
-					&& Objects.equal(this.netIncome, that.netIncome) && Objects.equal(this.tickerCode, that.tickerCode)
-					&& Objects.equal(this.period, that.period) && Objects.equal(this.periodDate, that.periodDate);
+					&& Objects.equal(this.normalizedEps, that.normalizedEps)
+					&& Objects.equal(this.normalizedEpsActual, that.normalizedEpsActual)
+					&& Objects.equal(this.eps, that.eps) && Objects.equal(this.epsActual, that.epsActual)
+					&& Objects.equal(this.revenue, that.revenue)
+					&& Objects.equal(this.revenueActual, that.revenueActual) && Objects.equal(this.ebit, that.ebit)
+					&& Objects.equal(this.ebitActual, that.ebitActual) && Objects.equal(this.ebt, that.ebt)
+					&& Objects.equal(this.ebtActual, that.ebtActual)
+					&& Objects.equal(this.netIncomeExcl, that.netIncomeExcl)
+					&& Objects.equal(this.netIncomeExclActual, that.netIncomeExclActual)
+					&& Objects.equal(this.netIncome, that.netIncome)
+					&& Objects.equal(this.netIncomeActual, that.netIncomeActual)
+					&& Objects.equal(this.tickerCode, that.tickerCode) && Objects.equal(this.period, that.period)
+					&& Objects.equal(this.periodDate, that.periodDate);
 		}
 		return false;
 	}
