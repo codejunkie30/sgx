@@ -293,7 +293,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
             x: -3
           },
           title: {
-            text:'Volume'
+            text:'VOLUME'
           },
           lineWidth:2,
           offset:0
