@@ -20,7 +20,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		
-		initPage: function() {
+		combinedData: ko.observable(),
+		currentTicker: ko.observable(),
+		
+		initPage: function(me) {
 			this.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
@@ -28,14 +31,44 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			var self = this;
 
 			this.init(function() { self.finish(self); });
-
+			
 			PAGE.checkStatus();	
-					
+			
+			var cpUserStatus;
+			
+			PAGE.userStatus.subscribe(function(data){
+				cpUserStatus = data;
+			});
+			//this.chartInterval = function(me){
+//			
+//				if (cpUserStatus == 'TRIAL') {
+//					var d = new Date();
+//					var newTimeStamp = d.setMinutes(d.getMinutes() - 1);
+//										
+//					// init charts 1445472000000
+//					var params = { "id": CP.currentTicker, "date": newTimeStamp };
+//					var postType = 'GET';
+//					var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";
+//					
+//					UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
+//						if (data != undefined || data.pricingHistory.length > 0 ){
+//							$.each(data, function(key,data){								
+//								CP.combinedData()[key] = data;								
+//							});
+//							self.initPriceChart(self, CP.combinedData());
+//							
+//						} else {
+//							self.initPriceChart(self, CP.combinedData());
+//						}
+//					}, undefined, undefined);			
+//				}	
+//			}
+//								
+//			setInterval(self.chartInterval, 60000);	
+			
 		},
 		
 		finish: function(me) {
-			
-			//setInterval(console.log('here again'), 5000);
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
@@ -54,30 +87,18 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			});
 			this.factors(tmp.factors);
 			
-			if (PAGE.userStatus() == 'PREMIUM') {
-				var today = new Date();
-				var todaysDate = today.setHours(0,0,0,0);
-				var d = new Date();
-						
-				// init charts						
-				var params = { "id": 'C07', "date": $.now() };
-				var postType = 'GET';
-				var endpoint = me.fqdn + "/sgx/price/pricingHistory";
-				UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);			
-			} else {
-				// init charts
-				var params = { id: me.ticker };
-				var postType = 'GET';
-				var endpoint = me.fqdn + "/sgx/company/priceHistory";
-				UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);				
-			}
+			//CP.currentTicker(me.ticker);
+			
+			// init charts
+			var params = { id: CP.currentTicker() };
+			var postType = 'GET';
+			var endpoint = me.fqdn + "/sgx/company/priceHistory";
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { /*CP.combinedData(data);*/ me.initPriceChart(me, data); }, undefined, undefined);
 
 			return this;
 			
 		},
-
 		initPriceChart: function(parent, data) {
-
 			var finished = function() {
 				parent.resizeIframeSimple();
 				var myFin = function() { parent.resizeIframeSimple(); };
