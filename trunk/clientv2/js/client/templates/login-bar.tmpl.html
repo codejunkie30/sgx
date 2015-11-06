@@ -12,7 +12,7 @@
 		<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> <span data-bind="text: (currentDay() > 1)? 'days':'day'"></span> left in your trial.</span>
 		<span class="trial-expired" data-bind="visible: (libTrialExpired() == true)">: Your trial has expired.</span>
 		<ul>
-			<li class="subscribe" data-bind="css: {'hide': (libSubscribe() == true)}"><a href="purchase-account.html" target="_blank">Purchase</a></li>
+			<li class="subscribe" data-bind="css: {'hide': (libSubscribe() == true)}"><a data-bind="siteLink: { id: 'purchase-account'}">Purchase</a></li>
 			<li class="account"><a data-bind="siteLink: { id: 'account-settings'}">Account</a></li>
 			<li class="alerts" data-bind="css: {'hide': (libAlerts() == true)}"><a data-bind="siteLink: { id: 'alerts'}">Alerts</a></li>
 			<li class="last"><a data-bind="siteLink: { id: 'logout'} ">Sign Out</a></li>
