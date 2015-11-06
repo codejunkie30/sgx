@@ -6,9 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.wmsi.sgx.controller.error.ErrorResponse;
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.DividendHistory;
@@ -229,12 +228,12 @@ public class CompanyServiceImpl implements CompanyService{
 
 	@Override
 	@Cacheable(value = "relatedCompanies")
-	public List<Company> loadRelatedCompanies(String id) throws CompanyServiceException{
+	public List<Company> loadRelatedCompanies(String id, AccountType accType) throws CompanyServiceException{
 		List<Company> companies = null;
 		
 		try{
 			Company company = getById(id);
-			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company);
+			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company, accType);
 			SearchResult<Company> results = companySearch.search(query, Company.class);
 			
 			if(results != null)
