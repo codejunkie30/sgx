@@ -20,8 +20,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		
-		combinedData: ko.observable(),
-		currentTicker: ko.observable(),
+		//combinedData: ko.observable(),
+//		currentTicker: ko.observable(),
 		
 		initPage: function(me) {
 			this.showLoading();
@@ -90,7 +90,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			//CP.currentTicker(me.ticker);
 			
 			// init charts
-			var params = { id: CP.currentTicker() };
+			var params = { id: me.ticker };
 			var postType = 'GET';
 			var endpoint = me.fqdn + "/sgx/company/priceHistory";
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { /*CP.combinedData(data);*/ me.initPriceChart(me, data); }, undefined, undefined);
