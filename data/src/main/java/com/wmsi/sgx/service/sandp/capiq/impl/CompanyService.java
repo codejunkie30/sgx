@@ -3,7 +3,6 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -102,19 +101,25 @@ public class CompanyService extends AbstractDataService {
 		for (Field field : fields) {
 			String name = field.getName();
 			try {
-				String val = getFieldValue(field, records);
+				Object val = getFieldValue(field, records);
 				if (val == null) val = getFieldDate(field, records);
-				map.put(name, val);
+				if (val != null) map.put(name, val);
 			} catch (Exception e) {
 				log.error("Getting field val: " + field.getName(), e);
 			}
 		}
+		
+		System.out.println("++" +map.get("filingDate"));
 
 		if (map.size() == 0)
 			throw new ResponseParserException("record map is empty in getCompany()");
-
+		
 		Gson gson = new GsonBuilder().setDateFormat(DT_FMT_STR).create();
 		JsonElement jsonElement = gson.toJsonTree(map);
+
+		System.out.println("--" +jsonElement.getAsJsonObject().get("filingDate"));
+
+		
 		Company comp = gson.fromJson(jsonElement, Company.class);
 		comp.setTickerCode(id.split(":")[0]);
 		comp.setExchange(id.split(":")[1]);
