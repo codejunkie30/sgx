@@ -216,6 +216,7 @@ public class Company {
 
 	private List<DividendValue> dividendHistory;
 	
+	@FXAnnotation
 	private Double marketCap;
 	
 	public PriceHistory fullPH;
