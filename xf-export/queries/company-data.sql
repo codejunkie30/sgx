@@ -112,9 +112,19 @@ group by pop.tickerSymbol, pop.exchangeSymbol
 union
 
 --Shares Out
-select pop.tickerSymbol, pop.exchangeSymbol, 'sharesOutstanding', convert(varchar(max),pso.sharesOutstanding), null, null, null
-from ciqPriceEquitySharesOutstdg pso
-	join ##sgxpop pop on pso.tradingItemId=pop.tradingItemId -- Declare Pop
+select DISTINCT pop.tickerSymbol, pop.exchangeSymbol, 'sharesOutstanding', convert(varchar(max),opf.sharesOutstanding), null, null, null
+from ciqOwnPublicFloatCompanyHst opf
+join ##sgxpop pop on opf.ownedCompanyId=pop.companyId -- Declare Pop
+where opf.latestflag=1
+
+union
+
+--Float 
+select DISTINCT pop.tickerSymbol, pop.exchangeSymbol, 'floatPercentage', convert(varchar(max),opf.publicFloat), null, null, null
+from ciqOwnPublicFloatCompanyHst opf
+join ##sgxpop pop on opf.ownedCompanyId=pop.companyId -- Declare Pop
+where opf.latestflag=1
+
 union
 
 --Fiscal Period End Dates
@@ -451,19 +461,22 @@ select
 	pop.tickerSymbol,
 	pop.exchangeSymbol,
 	'marketCap',
-	convert(varchar(max),a.marketCap),
+	convert(varchar(max),mc.marketCap),
 	null,
-	a.pricingdate,
-	d.ISOCode
-from ciqMarketCap a
-join ciqSecurity b on a.companyid=b.companyid and b.primaryFlag=1
-join ciqTradingItem c on b.securityid=c.securityid and c.primaryFlag=1
-join ciqCurrency d on c.currencyId=d.currencyId
-join ##SGXPop pop on a.companyId=pop.companyId
+	pricingDate,
+	curr.ISOCode
+from ciqmarketcap mc
 join (
 select companyid, max(pricingdate) as maxdate
-from ciqMarketCap
-group by companyid) maxdate on a.companyid=maxdate.companyid and a.pricingDate=maxdate.maxdate
+from ciqmarketcap
+group by companyid) maxdt on mc.companyId=maxdt.companyId and mc.pricingDate=maxdt.maxdate
+join ciqsecurity s on mc.companyId=s.companyId
+join ciqTradingItem ti on s.securityId=ti.securityId
+join ciqCurrency curr on ti.currencyId=curr.currencyId
+join ##SGXPop pop on ti.tradingItemId=pop.tradingItemId
+where s.primaryFlag=1
+and ti.primaryFlag=1
+
 
 union
 
