@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,13 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.site.base}")
 	public String emailSite;
 	
+	private static InternetAddress IA = null; 
+	{
+		try { IA = new InternetAddress(emailSender, "SGX"); }
+		catch(Exception e){}
+	};
+	
+	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
@@ -39,7 +47,7 @@ public class EmailServiceImpl implements EmailService{
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         message.setSubject(subject);
-        message.setFrom(emailSender);
+        message.setFrom(IA);
         message.setTo(to);
         
         final String htmlContent = templateEngine.process(file, ctx);
