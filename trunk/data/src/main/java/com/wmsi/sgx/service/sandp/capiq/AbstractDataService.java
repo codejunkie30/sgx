@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
@@ -128,27 +126,21 @@ public abstract class AbstractDataService implements DataService{
 		return value;
 	}
 	
-	public String getFieldDate(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
+	public Date getFieldDate(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		if (!field.getType().isAssignableFrom(Date.class)) return null;
 
 		CompanyCSVRecord actual = null;
 		
 		for (CompanyCSVRecord record : records) {
 			if (!record.getName().equals(field.getName())) continue;
-			if (actual == null || record.getPeriodDate() == null || record.getPeriodDate().after(actual.getPeriodDate())) actual = record;
+			if (actual == null) actual = record;
 		}
 		
 		return getDateValue(field, actual);
 	}
 	
-	public String getDateValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
-		String value = actual == null ? null : StringUtils.stripToNull(actual.getValue());
-
-		// nothing to do
-		if (value == null) return null;
-
-		Date d = new Date(value);
-		return DT_FMT.format(d);
+	public Date getDateValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
+		return actual == null || StringUtils.stripToNull(actual.getValue()) != null ? null : actual.getPeriodDate();
 	}
 
 	
