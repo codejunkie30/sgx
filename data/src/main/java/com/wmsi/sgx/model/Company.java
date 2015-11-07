@@ -56,6 +56,7 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_COMPANY_WEBSITE")
 	private String companyWebsite;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DIV_SHARE")
 	private Double divShare;
 
@@ -378,13 +379,11 @@ public class Company {
 
 	public Double getDividendYield() {
 
-		if (divShare == null || closePrice == null || divShare == 0 || closePrice == 0) {
-			return null;
-		} else {
-			BigDecimal share = new BigDecimal(divShare);
-			BigDecimal close = new BigDecimal(closePrice);
-			return share.divide(close, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
-		}
+		if (divShare == null || closePrice == null || divShare == 0 || closePrice == 0) return null;
+
+		BigDecimal share = new BigDecimal(divShare);
+		BigDecimal close = new BigDecimal(closePrice);
+		return close.divide(share, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 	}
 
 	public Double getDivShare() {
