@@ -383,7 +383,7 @@ public class Company {
 
 		BigDecimal share = new BigDecimal(divShare);
 		BigDecimal close = new BigDecimal(closePrice);
-		return close.divide(share, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
+		return share.divide(close, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).doubleValue();
 	}
 
 	public Double getDivShare() {
