@@ -499,7 +499,7 @@ SELECT DISTINCT
 	pop.tickerSymbol, 
 	pop.exchangeSymbol,
 	'gvKey',
-	sec.securityId,
+	convert(varchar(max),sec.securityId),
 	null,
 	null,
 	null
