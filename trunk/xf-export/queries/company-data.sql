@@ -492,3 +492,16 @@ from ciqLatestInstanceFinPeriod cp
 join ##SGXPop pop on cp.companyId=pop.companyId
 where cp.latestPeriodFlag=1 --Last LTM
 and cp.periodTypeId=4 --LTM
+
+union
+
+SELECT DISTINCT 
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'gvKey',
+	sec.securityId,
+	null,
+	null,
+	null
+FROM ciqSecurity sec
+join ##sgxpop pop on sec.companyId=pop.companyId -- Declare Pop
