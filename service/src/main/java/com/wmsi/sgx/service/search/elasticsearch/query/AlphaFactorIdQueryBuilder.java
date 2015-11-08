@@ -18,7 +18,7 @@ public class AlphaFactorIdQueryBuilder extends AbstractQueryBuilder{
 		.query(QueryBuilders.constantScoreQuery(
 				FilterBuilders.boolFilter()
 				.must(FilterBuilders.typeFilter("alphaFactor"))
-				.must(FilterBuilders.prefixFilter("id", id))))
+				.must(FilterBuilders.prefixFilter("companyId", id))))
 		.size(MAX_RESULTS)
 		.toString();
 	}
