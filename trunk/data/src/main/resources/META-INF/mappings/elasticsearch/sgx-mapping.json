@@ -837,6 +837,12 @@
 				"type": "string",
 				"index": "not_analyzed"
 			},
+			
+			"companyId": 
+			{
+				"type": "string",
+				"index": "not_analyzed"
+			},
 
 			"date": 
 			{

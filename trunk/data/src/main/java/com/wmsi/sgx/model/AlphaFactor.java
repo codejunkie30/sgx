@@ -15,6 +15,7 @@ public class AlphaFactor{
 	private Integer size;
 	private Integer valuation;
 	private Integer volatility;
+	private Integer companyId;
 
 	public Integer getAnalystExpectations() {
 		return analystExpectations;
@@ -95,10 +96,18 @@ public class AlphaFactor{
 	public void setVolatility(Integer volatility) {
 		this.volatility = volatility;
 	}
+	
+	public Integer getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(analystExpectations, capitalEfficiency, date, earningsQuality, historicalGrowth, id, priceMomentum, size, valuation, volatility);
+		return Objects.hashCode(analystExpectations, capitalEfficiency, date, earningsQuality, historicalGrowth, id, priceMomentum, size, valuation, volatility, companyId);
 	}
 	
 	@Override
@@ -114,7 +123,8 @@ public class AlphaFactor{
 				&& Objects.equal(this.priceMomentum, that.priceMomentum)
 				&& Objects.equal(this.size, that.size)
 				&& Objects.equal(this.valuation, that.valuation)
-				&& Objects.equal(this.volatility, that.volatility);
+				&& Objects.equal(this.volatility, that.volatility)
+				&& Objects.equal(this.companyId, that.companyId);
 		}
 		return false;
 	}
@@ -132,6 +142,8 @@ public class AlphaFactor{
 			.add("size", size)
 			.add("valuation", valuation)
 			.add("volatility", volatility)
+			.add("companyId", companyId)
 			.toString();
 	}
+	
 }
