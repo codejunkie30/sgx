@@ -6,12 +6,14 @@
 	            "property":"normalizedEps",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"epsNorm",
 	            "name":"EPS Norm"
 	         },
 	         {
 	            "property":"eps",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"epsGAAP",
 	            "name":"EPS GAAP"
 	         },
 	         {
@@ -24,23 +26,27 @@
 	            "property":"ebit",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"ebit",
 	            "name":"EBIT"
 	         },
 	         {
 	            "property":"ebt",
 	            "group":"per",
+	            "glossaryTerm":"ebt",
 	            "name":"EBT"
 	         },
 	         {
 	            "property":"netIncomeExcl",
 	            "format":"percent",
 	            "group":"ratio",
+	            "glossaryTerm":"netIncome",
 	            "name":"Net Income (excluding Exceptions)"
 	         },
 	         {
 	            "property":"netIncome",
 	            "format":"cash",
 	            "group":"per",
+	            "glossaryTerm":"netIncomeGAAP",
 	            "name":"Net Income (GAAP)"
 	         }
 	      ],
@@ -54,12 +60,14 @@
 	            "property":"normalizedEps",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"epsNorm",
 	            "name":"EPS Norm"
 	         },
 	         {
 	            "property":"eps",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"epsGAAP",
 	            "name":"EPS GAAP"
 	         },
 	         {
@@ -72,23 +80,27 @@
 	            "property":"ebit",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"ebit",
 	            "name":"EBIT"
 	         },
 	         {
 	            "property":"ebt",
 	            "group":"per",
+	            "glossaryTerm":"ebt",
 	            "name":"EBT"
 	         },
 	         {
 	            "property":"netIncomeExcl",
 	            "format":"percent",
 	            "group":"ratio",
+	            "glossaryTerm":"netIncome",
 	            "name":"Net Income (excluding Exceptions)"
 	         },
 	         {
 	            "property":"netIncome",
 	            "format":"cash",
 	            "group":"per",
+	            "glossaryTerm":"netIncomeGAAP",
 	            "name":"Net Income (GAAP)"
 	         }
 	      ],
