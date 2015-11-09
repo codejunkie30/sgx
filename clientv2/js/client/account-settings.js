@@ -90,7 +90,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				//updates Currency & OptIn Status
 				this.updateSettings();
     		
-                PAGE.modal.open({ type: 'alert',  content: '<p>Your account changes have been saved.</p>', width: 300 });
+                $('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
     			return;				
 			} else {
 				if (this.errors().length > 0 && SAVECHANGES.isFormValid() == false) {

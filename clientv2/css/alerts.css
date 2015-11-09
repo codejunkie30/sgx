@@ -18,6 +18,8 @@
 .watchlist a { cursor: pointer; text-decoration: none; }
 .watchlist a:hover { text-decoration: underline; }
 
+.save { width: 978px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 5px; }
+
 .watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
 .watchlist .wl-companies { margin: 12px 0; }
 .watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }

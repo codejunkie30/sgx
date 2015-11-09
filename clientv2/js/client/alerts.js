@@ -71,12 +71,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				undefined, 
-				function(data, textStatus, jqXHR){					
+				function(data, textStatus, jqXHR){
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}					
+					}
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -183,7 +183,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){					
-					ALERTS.finalWL(data);
+					function sortByName(a, b){
+					  var a = a.name.toLowerCase();
+					  var b = b.name.toLowerCase(); 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
+					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
@@ -230,7 +235,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					ALERTS.finalWL(data);
+					function sortByName(a, b){
+					  var a = a.name.toLowerCase();
+					  var b = b.name.toLowerCase(); 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
+					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
@@ -269,7 +279,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					ALERTS.finalWL(data);
+					function sortByName(a, b){
+					  var a = a.name.toLowerCase();
+					  var b = b.name.toLowerCase(); 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
+					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
@@ -329,6 +344,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var displayMessage = ALERTS.messages.messages[0];
 			if(ALERTS.displayList().optionList.pcPriceDrop == true){
 				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
+					$('.price-drop.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');						
 					PAGE.resizeIframeSimple();
 					return;
@@ -339,7 +355,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			
 			if(ALERTS.displayList().optionList.pcTradingVolume == true){
-				if (ALERTS.displayList().optionList.pcTradingVolumeValue == null || ALERTS.displayList().optionList.pcTradingVolumeValue == ''){						
+				if (ALERTS.displayList().optionList.pcTradingVolumeValue == null || ALERTS.displayList().optionList.pcTradingVolumeValue == ''){
+					$('.trade-volume.error-messages').empty();						
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');						
 					PAGE.resizeIframeSimple();
 					return;
@@ -351,6 +368,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			if(ALERTS.displayList().optionList.estChangePriceDrop == true){
 				if ((ALERTS.displayList().optionList.estChangePriceDropBelow == null) || (ALERTS.displayList().optionList.estChangePriceDropBelow == '') || (ALERTS.displayList().optionList.estChangePriceDropAbove == null || ALERTS.displayList().optionList.estChangePriceDropAbove == '')){						
+					$('.target-price.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');						
 					PAGE.resizeIframeSimple();
 					return;
@@ -402,7 +420,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					ALERTS.finalWL(data);				
+					$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
+					function sortByName(a, b){
+					  var a = a.name.toLowerCase();
+					  var b = b.name.toLowerCase(); 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
+					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
