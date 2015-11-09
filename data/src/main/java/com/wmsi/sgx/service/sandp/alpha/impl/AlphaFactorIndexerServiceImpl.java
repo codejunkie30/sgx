@@ -13,6 +13,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.net.ftp.FTPFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.file.remote.session.Session;
@@ -27,6 +29,8 @@ import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
 
 @Service
 public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
+
+	private static final Logger log = LoggerFactory.getLogger(AlphaFactorIndexerServiceImpl.class);
 
 	@Autowired
 	private DefaultFtpSessionFactory ftpSessionFactory;
@@ -71,6 +75,8 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			// Transfer
 			File ret = new File(tmpDir + fileName);
 			
+			log.info("Downloading {} from {}", ret.getAbsolutePath(), remoteDir);
+			
 			FileOutputStream out = new FileOutputStream(ret);
 			session.read(fileName, out);
 
@@ -109,9 +115,9 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 				af.setCapitalEfficiency(toInt(record[43]));
 				af.setValuation(toInt(record[44]));
 				af.setEarningsQuality(toInt(record[45]));
-				af.setSize(toInt(record[46]));
-				af.setVolatility(toInt(record[47]));
-				af.setAnalystExpectations(toInt(record[48]));
+				af.setSize(toInt(record[45]));
+				af.setVolatility(toInt(record[46]));
+				af.setAnalystExpectations(toInt(record[47]));
 
 				ret.add(af);
 			}
