@@ -167,7 +167,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var newWLNameLC = ALERTS.newWLName();
 			
-			if ($.inArray( newWLNameLC.toLowerCase(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name already exists.</p>', width: 600 }); return; }
+			if ($.inArray( newWLNameLC.toLowerCase(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
 			
@@ -198,7 +198,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		displayWatchlists: function(){
-			console.log(ALERTS.companies());
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
 			var params = { "companies": ALERTS.companies() };
@@ -286,7 +285,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
-			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watchlist.</p>', width: 300 }); return; }
+			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watch list.</p>', width: 300 }); return; }
 
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
 			
@@ -327,8 +326,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},undefined);
 		},
 		saveWatchlist: function(){
-			console.log(ALERTS.companies());
-			console.log(ALERTS.selectedValue());
 			var displayMessage = ALERTS.messages.messages[0];
 			if(ALERTS.displayList().optionList.pcPriceDrop == true){
 				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
