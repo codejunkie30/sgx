@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout", "cryptomd5"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -46,13 +46,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		update: function(element, valueAccessor, allBindings) {
 			var precision = valueAccessor();
 			var value = allBindings().text;
-      var postFix = allBindings().postFix;
-      var formatNum = allBindings().formatNum;
+            var postFix = allBindings().postFix;
+            var formatNum = allBindings().formatNum;
 			return KO.bindingHandlers.text.update(element, function(){
 				if(value == null || value == '-') return '-';
-        var roundingMultiplier = Math.pow(10, precision);
-        var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
-        valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+            var roundingMultiplier = Math.pow(10, precision);
+            var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
+            valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
                 //ensure trailing .00;
                 valueToWrite = valueToWrite.toString();
                 if(valueToWrite.indexOf('.') != -1) {
@@ -72,7 +72,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                   valueToWrite = valueToWrite.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
                 if(postFix) {
-                  valueToWrite = valueToWrite+postFix;
+                  valueToWrite = valueToWrite+' '+postFix;
                 }
                 return valueToWrite;
 
@@ -267,6 +267,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			// extend child
 			$.extend(true, this, child);
 			
+
 			// initialize the core object
 			this.initPage();			
 			
@@ -274,6 +275,21 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 		},
 		
+        setReturnUrl: function(){
+
+            var returnUrl = this.getParentURL(window.location);
+            return CryptoJS.MD5(returnUrl).toString();
+
+        },
+
+        goToSignIn: function() {
+
+            var retUrl = this.setReturnUrl();
+            top.location.href = window.location.origin+'/sign-in.html?add='+retUrl;
+
+        },
+
+
 		hasGlossaryTerm: function(name) {
 			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
 		},
@@ -499,7 +515,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		},
 		checkStatus: function(){
 
-			var endpoint = PAGE.fqdn + "/sgx/account/info";
+            var endpoint = PAGE.fqdn + "/sgx/account/info";
+			//var endpoint = 'http://192.168.1.37:8001' + "/sgx/account/info";
 			var postType = 'POST';
 			var params = {};
 			var jsonp = 'callback';

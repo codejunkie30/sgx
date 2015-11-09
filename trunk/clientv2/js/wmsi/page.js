@@ -1,5 +1,5 @@
-define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
-	
+define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
+
 	PAGE = {
 			
 		/**
@@ -15,15 +15,15 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
 		 * @param config the page config object
 		 */
 		initPage: function() {
-			
 			// initialize analytics
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','//www.google-analytics.com/analytics.js','_gaTracker'); _gaTracker('create', this.gaClientId, { 'cookieDomain': 'none' });
 
 			// set the default page height
 			this.pageHeight = $(document).height();
-          		  
+
 			return this;
 		},
+
 		
 		/**
 		 * get the page title
@@ -102,6 +102,20 @@ define(["jquery", "wmsi/utils", "wmsi/XD"], function($, UTIL) {
         getTrueContentHeight: function() {
         	return navigator.userAgent.toLowerCase().indexOf('msie') != -1 ? document.body.offsetHeight : $("body:first,html:first").innerHeight();
         },
+
+
+        /**
+        * get a querystring parameter by name
+        * @param name the name of the querystring parameter
+        * @return the value of the querystring parameter or null if it doesn't exist
+        */
+        getParameterByName: function(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        },
+
         
         /**
          * get the property value from a js object

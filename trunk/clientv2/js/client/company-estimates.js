@@ -54,6 +54,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 quarterly:[],
                 annually: []
             };
+            this.refinedEstimates = {
+                quarterly:[],
+                annually:[]
+            }
 			this.currency("");
 
 			this.legendItems = ko.computed(function() {
@@ -139,6 +143,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
+            // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
+            // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
+
+            $.each( this.estimates.annually, function(key, val) {
+                var refinedObj = me.normalizeForDisplay( val );
+                me.refinedEstimates.annually.push( refinedObj );
+            });
+
+            $.each( this.estimates.quarterly, function(key, val) {
+                var refinedObj = me.normalizeForDisplay( val );
+                me.refinedEstimates.quarterly.push( refinedObj );
+            });
+
+
+
             //table col widths 
             this.quarterlyTableColWidth = '15%';
             this.annualTableColWidth = '15%';
@@ -178,7 +197,51 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             setTimeout(function() { me.resizeIframeSimple(); }, 500);
 			
 			
-		},		
+		},
+
+        // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
+        // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
+        normalizeForDisplay: function(object) {
+
+            var curObject = $.extend({}, object);//clone
+            var refinedObj={};  
+            $.each( curObject, function(key, val) {
+                var isActual = false;
+                var curVal;
+                //skip if key+Actual, we'll account for it later
+                if( /Actual/g.test(key) ) {
+                    //do nothing
+                }else {
+                    //check for key+Actual
+                    var actKey = key+'Actual';
+                    if( curObject.hasOwnProperty(actKey) ) {
+
+                        var newValObj = {}
+
+                        if( curObject[ actKey ] != null) {
+                            isActual = true;
+                            newValObj.value = curObject[ actKey ];
+                            newValObj.actOrEst = 'A';
+                        }else {
+                            newValObj.value = curObject[ key ];
+                            newValObj.actOrEst = 'E';
+                        }
+
+                        refinedObj[ key ] = newValObj;
+
+                    }else {
+                        refinedObj[ key ] = val;
+                    }
+
+                }
+
+            });
+            
+            return refinedObj;
+        },
+
+
+
 		initChart: function(me) {
 
     		var chart = $('#bar-chart').highcharts({
