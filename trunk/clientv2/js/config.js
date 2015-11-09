@@ -17,7 +17,8 @@
             "colorbox": 'vendor/colorbox',
             "json2": 'vendor/json2',
             "jquery-timeout": 'vendor/jquery/jquery.idleTimeout.min',
-			'jquery-store': 'vendor/store'
+			'jquery-store': 'vendor/store',
+            'cryptomd5': 'vendor/cryptomd5'
         },
         
         waitSeconds: 10,
