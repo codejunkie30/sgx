@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
@@ -30,6 +32,9 @@ import com.wmsi.sgx.util.DateUtil;
 public class CompanyService extends AbstractDataService {
 
 	private static final Logger log = LoggerFactory.getLogger(CompanyService.class);
+	
+	@Autowired
+	private AlphaFactorIndexerService alphaFactorService;
 
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -43,8 +48,7 @@ public class CompanyService extends AbstractDataService {
 
 			// company
 			Company company = getCompany(id, records);
-			setMisc(company, records);
-
+			
 			// price history
 			PriceHistory priceHistory = loadPriceHistory(id, records);
 			company.fullPH = priceHistory;
@@ -67,6 +71,8 @@ public class CompanyService extends AbstractDataService {
 
 			processMillionRangeValues(company);
 			
+			setMisc(company, records);
+			
 			return company;
 
 		} catch (Exception e) {
@@ -80,6 +86,17 @@ public class CompanyService extends AbstractDataService {
 	 */
 	public void setMisc(Company comp, List<CompanyCSVRecord> records) {
 
+		// bunches of GV keys come back, need to just get the one for AF
+		for (CompanyCSVRecord record : records) {
+			
+			if (record.getName().equals("gvKey")) {
+				if (alphaFactorService.isAlphaCompany(record.getValue())) {
+					comp.setGvKey(record.getValue());
+					break;
+				}
+			}
+			
+		}
 
 	}
 

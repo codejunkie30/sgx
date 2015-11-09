@@ -36,27 +36,28 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 	private DefaultFtpSessionFactory ftpSessionFactory;
 
 	private static final String ALPHA_FILE_PREFIX = "rank_";
+	
+	private static List<String> EXISTING_IDS = new ArrayList<String>();
 
 	@Value("${loader.workdir}")
 	private String tmpDir;
 	
 	@Value("${capiq.ftp.dir}")
 	private String remoteDir;
-	
 
 	@Override
 	public File getLatestFile() throws AlphaFactorServiceException {
 		
 		Session<FTPFile> session = ftpSessionFactory.getSession();
+		
+		
 
 		try{
 			List<String> names = new ArrayList<String>();
 			
 			// Find rank files
 			for(String n : session.listNames(remoteDir)){
-				if(n.toLowerCase().startsWith(ALPHA_FILE_PREFIX)){
-					names.add(n);
-				}
+				if(n.toLowerCase().startsWith(ALPHA_FILE_PREFIX)) names.add(n);
 			}
 
 			// Sort by name, which includes date, get latest file
@@ -68,9 +69,7 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			}
 			
 			File dir = new File(tmpDir);
-			
-			if(!dir.exists() && !dir.mkdirs())
-				throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());
+			if(!dir.exists() && !dir.mkdirs()) throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());
 
 			// Transfer
 			File ret = new File(tmpDir + fileName);
@@ -78,7 +77,7 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			log.info("Downloading {} from {}", ret.getAbsolutePath(), remoteDir);
 			
 			FileOutputStream out = new FileOutputStream(ret);
-			session.read(fileName, out);
+			session.read(remoteDir + fileName, out);
 
 			return ret;
 		}
@@ -88,6 +87,11 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 		finally{
 			session.close();
 		}
+	}
+	
+	@Override
+	public boolean isAlphaCompany(String id) {
+		return EXISTING_IDS.contains(id);
 	}
 
 	@Override
@@ -105,19 +109,21 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			String[] record = null;
 			
 			 while((record = reader.readNext()) != null){
-
+				 
 				AlphaFactor af = new AlphaFactor();
 				af.setId(record[3]);
 				af.setCompanyId(toInt(record[4]));
 				af.setDate(sdf.parse(record[0]));
-				af.setPriceMomentum(toInt(record[40]));
-				af.setHistoricalGrowth(toInt(record[41]));
-				af.setCapitalEfficiency(toInt(record[42]));
-				af.setValuation(toInt(record[43]));
-				af.setEarningsQuality(toInt(record[44]));
-				af.setSize(toInt(record[45]));
-				af.setVolatility(toInt(record[46]));
-				af.setAnalystExpectations(toInt(record[47]));
+				af.setPriceMomentum(toInt(record[41]));
+				af.setHistoricalGrowth(toInt(record[42]));
+				af.setCapitalEfficiency(toInt(record[43]));
+				af.setValuation(toInt(record[44]));
+				af.setEarningsQuality(toInt(record[45]));
+				af.setSize(toInt(record[46]));
+				af.setVolatility(toInt(record[47]));
+				af.setAnalystExpectations(toInt(record[48]));
+				
+				EXISTING_IDS.add(record[4]);
 
 				ret.add(af);
 			}
