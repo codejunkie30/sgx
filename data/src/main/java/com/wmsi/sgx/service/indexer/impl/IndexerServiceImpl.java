@@ -8,6 +8,7 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wmsi.sgx.model.indexer.Indexes;
+import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexQueryResponse;
 import com.wmsi.sgx.service.indexer.IndexerService;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
@@ -47,7 +49,13 @@ public class IndexerServiceImpl implements IndexerService{
 	@Value("${elasticsearch.index.name}")
 	private String indexAlias;
 	
+	@Value("${elasticsearch.previousDay.index.alias}")
+	private String previousDayIndexAlias="sgx_premium_previous";
+	
 	public String indexName;
+	
+	@Autowired
+	private IndexBuilderService indexBuilderService;
 	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
 	
@@ -120,12 +128,14 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		return true;
 	}
-	
+	private static final String PREVIOUS_DAY_INDEX = "previousDay"; 
+	private static final String CURRENT_DAY_INDEX = "currentDay";
 	@Override
 	@Transactional		
 	public synchronized Boolean createIndexAlias(@Header String indexName) throws IndexerServiceException {
 		URI indexUri = buildUri("/_aliases");
-		JsonNode alias = buildAliasJson(indexName);
+		String aliasType= CURRENT_DAY_INDEX;
+		JsonNode alias = buildAliasJson(indexName, aliasType);
 		
 		log.debug("Updating index aliases {}", alias);
 			
@@ -134,6 +144,32 @@ public class IndexerServiceImpl implements IndexerService{
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){	
 			throw new IndexerServiceException("Create alias request returned " + statusCode + " http response code. Could not create alias.");
+		}
+		
+		try
+		{
+			return createPreviousIndexAlias(indexBuilderService.getPreviousDayIndexName());
+			
+		}
+		catch (UnsupportedOperationException e)
+		{
+			log.debug("previous index not found, this is first index");
+		}		
+	    return true;
+	}
+			
+	public synchronized Boolean createPreviousIndexAlias(String indexName) throws IndexerServiceException {
+		URI indexUri = buildUri("/_aliases");
+		String aliasType= PREVIOUS_DAY_INDEX;
+		JsonNode alias = buildAliasJson(indexName, aliasType);
+		
+		log.debug("Updating index aliases {}", alias);
+			
+		int statusCode = postJson(indexUri, alias);
+			
+		// Check for 200 range response code
+		if(statusCode / 100 != 2){	
+			throw new IndexerServiceException("Create previous day alias request returned " + statusCode + " http response code. Could not create alias.");
 		}		
 		
 		return true;
@@ -204,21 +240,25 @@ public class IndexerServiceImpl implements IndexerService{
 		}
 	}
 	
-	private JsonNode buildAliasJson(String indexName){
+	private JsonNode buildAliasJson(String indexName, String aliasType){
 		ObjectMapper mapper = new ObjectMapper();
+		String aliasName = null;
+		if(aliasType== CURRENT_DAY_INDEX)aliasName= indexAlias;
+		if(aliasType== PREVIOUS_DAY_INDEX)aliasName= previousDayIndexAlias;
 		
+		 
 		ObjectNode removeAlias = mapper.createObjectNode();
 		ObjectNode remove = mapper.createObjectNode();
 		
 		removeAlias.put("index", indexPrefix.concat("*"));
-		removeAlias.put("alias", indexAlias);
+		removeAlias.put("alias", aliasName);
 		remove.put("remove",  removeAlias);
 		
 		ObjectNode addAlias = mapper.createObjectNode();
 		ObjectNode add = mapper.createObjectNode(); 
 
 		addAlias.put("index", indexName);
-		addAlias.put("alias", indexAlias);
+		addAlias.put("alias", aliasName);
 		add.put("add", addAlias);
 		
 		ArrayNode actions = mapper.createArrayNode();
@@ -230,7 +270,7 @@ public class IndexerServiceImpl implements IndexerService{
 
 		return alias;
 	}
-
+	
 	private <T> HttpEntity<String> buildEntityText(String txt){
 		HttpHeaders headers = new HttpHeaders();
 		Charset utf8 = Charset.forName("UTF-8");

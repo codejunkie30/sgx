@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +24,6 @@ import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
@@ -57,6 +56,9 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.InvalidIdentifierException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 import com.wmsi.sgx.service.vwap.VwapService;
+import com.wmsi.sgx.util.ElasticSearchIndexDateComparator;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Service
 public class IndexBuilderServiceImpl implements IndexBuilderService{
@@ -254,6 +256,38 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		log.info("Index cleanup complete. Removed {} old indexes", removed);
 	}
 	
+	public String getPreviousDayIndexName() throws IndexerServiceException{
+		
+		Indexes indexes = indexerService.getIndexes();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH,2 * -1);
+		Date oneDayAgo = cal.getTime();
+		
+		List<String> oneDayOldIndexes = new ArrayList<String>();
+		for(Index index : indexes.getIndexes()){
+			String indexName = index.getName();
+			String date = index.getName().substring(indexPrefix.length(), indexName.length());
+
+			Date indexDate = new Date(Long.parseLong(date));
+			
+			if(oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)){
+				oneDayOldIndexes.add(date);
+			}
+		}
+		Collections.sort(oneDayOldIndexes, new ElasticSearchIndexDateComparator());
+		
+		if (oneDayOldIndexes.size() == 0)
+		{
+			throw new UnsupportedOperationException("No previous index Found");
+		}
+		String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
+		log.debug("previoud say index found: "+previousDayIndex);
+		return previousDayIndex;
+	}
+	
+	
+
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 		
 		Company company = capIQService.getCompany(input);
