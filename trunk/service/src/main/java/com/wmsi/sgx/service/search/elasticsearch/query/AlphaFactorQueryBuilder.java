@@ -34,7 +34,7 @@ public class AlphaFactorQueryBuilder extends AbstractQueryBuilder{
 		List<String> gvKeys = new ArrayList<String>();
 		
 		for(AlphaFactor a : alphas){
-			gvKeys.add("GV_".concat(a.getId().substring(0,6)));
+			gvKeys.add(a.getCompanyId().toString());
 		}
 
 		return gvKeys;
