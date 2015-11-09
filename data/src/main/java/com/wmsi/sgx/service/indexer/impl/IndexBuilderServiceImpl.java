@@ -261,7 +261,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		Indexes indexes = indexerService.getIndexes();
 		
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH,2 * -1);
+		cal.add(Calendar.DAY_OF_MONTH,1 * -1);
 		Date oneDayAgo = cal.getTime();
 		
 		List<String> oneDayOldIndexes = new ArrayList<String>();
