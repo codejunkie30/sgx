@@ -29,6 +29,9 @@ public class SearchConfig{
 	@Value("${elasticsearch.index.name}")
 	private String indexName;
 	
+	@Value("${elasticsearch.yesterday.index}")
+	private String yesterdayIndex;
+	
 	@Value("${elasticsearch.url}")
 	private String indexUrl;
 
@@ -36,6 +39,14 @@ public class SearchConfig{
 		SearchServiceImpl serv = new SearchServiceImpl();
 		serv.setIndexName(indexName);
 		serv.setType(type);
+		return serv;
+	}
+	
+	@Bean
+	public SearchService previousEstimate(){
+		SearchServiceImpl serv = new SearchServiceImpl();
+		serv.setIndexName(yesterdayIndex);
+		serv.setType("estimate");
 		return serv;
 	}
 
