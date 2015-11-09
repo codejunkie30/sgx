@@ -110,11 +110,11 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 				af.setId(record[3]);
 				af.setCompanyId(toInt(record[4]));
 				af.setDate(sdf.parse(record[0]));
-				af.setPriceMomentum(toInt(record[41]));
-				af.setHistoricalGrowth(toInt(record[42]));
-				af.setCapitalEfficiency(toInt(record[43]));
-				af.setValuation(toInt(record[44]));
-				af.setEarningsQuality(toInt(record[45]));
+				af.setPriceMomentum(toInt(record[40]));
+				af.setHistoricalGrowth(toInt(record[41]));
+				af.setCapitalEfficiency(toInt(record[42]));
+				af.setValuation(toInt(record[43]));
+				af.setEarningsQuality(toInt(record[44]));
 				af.setSize(toInt(record[45]));
 				af.setVolatility(toInt(record[46]));
 				af.setAnalystExpectations(toInt(record[47]));
