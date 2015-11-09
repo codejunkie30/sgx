@@ -48,7 +48,7 @@
 			<div class="left">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<th></th>
+						<th style="width:24%"></th>
 						<th>Mean</th>
 						<th>Median</th>
 						<th>High/Low Estimate</th>
@@ -56,7 +56,7 @@
 						<th>No. of Estimates</th>
 					</tr>
 					<tr class="odd">
-						<td class="name">Target Price</td>
+						<td class="name">Target Price <img src="img/info.png" alt="" data-bind="tooltip: 'est_targetPrice'" /></td>
 						<td><span data-bind="text:summaryData.targetPrice, precision: 2, formatNum:true"></span></td>
 						<td><span data-bind="text:summaryData.tpMedianEstimate, precision: 2, formatNum:true"></span></td>
 						<td><span data-bind="text:summaryData.tpHighEstimate, precision: 2, formatNum:true"></span>/<span data-bind="text:summaryData.tpLowEstimate, precision: 2, formatNum:true"></span></td>
@@ -64,7 +64,7 @@
 						<td><span data-bind="text:summaryData.tpEstimateNum, precision: 0"></span></td>
 					</tr>
 					<tr>
-						<td class="name">Long Term Growth</td>
+						<td class="name">Long Term Growth <img src="img/info.png" alt="" data-bind="tooltip: 'est_longTermGrowth'" /></td>
 						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2, formatNum:true"></span></td>
 						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2, formatNum:true"></span></td>
 						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2, formatNum:true"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2, formatNum:true"></span></td>
@@ -74,11 +74,11 @@
 				</table>
 				
 				<div>
-					<h4>Price Volatility</h4>
+					<h4>Price Volatility <img src="img/info.png" alt="" data-bind="tooltip: 'est_priceVolatility'" /></h4>
 					<p><span data-bind="text:summaryData.volatility, precision: 2"></span></p>
 				</div>
 				<div>
-					<h4>Industry Recommendation</h4>
+					<h4>Industry Recommendation <img src="img/info.png" alt="" data-bind="tooltip: 'est_industryRecommendation'" /></h4>
 					<p><span data-bind="text:getIndustryRecommendationTxt(summaryData.industryRec)"></span>(<span data-bind="text:summaryData.industryRec, precision: 2"></span>)</p>
 				</div>
 			</div>
