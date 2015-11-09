@@ -8,6 +8,8 @@ import com.wmsi.sgx.model.AlphaFactor;
 public interface AlphaFactorIndexerService{
 
 	List<AlphaFactor> loadAlphaFactors(File file) throws AlphaFactorServiceException;
+	
+	boolean isAlphaCompany(String id);
 
 	File getLatestFile() throws AlphaFactorServiceException;
 }
