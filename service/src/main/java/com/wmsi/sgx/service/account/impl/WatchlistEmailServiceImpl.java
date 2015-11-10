@@ -71,7 +71,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	private SearchService estimatesSerach;
 	
 	@Override
-	@Scheduled(cron="0 0 0 ? * *")
+	@Scheduled(cron="0 20 17 ? * *")
 	public void getWatchlistEmails() throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		
@@ -151,7 +151,11 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 					if(percentChange > targetPriceRise || percentChange > Math.abs(targetPriceDrop))
 						targetPriceOptions.put(company, companyName);					
 				}
-			}			
+			}
+			
+			if(map.get("estChangeConsensus") == null || currentEstimate == null)
+				map.put("estChangeConsensus", "false");
+			
 			
 			if(map.get("estChangeConsensus").toString().equals("true") && currentEstimate.getAvgBrokerRec() != null){
 				Double brokerRec =  pastEstimate.getAvgBrokerRec();
