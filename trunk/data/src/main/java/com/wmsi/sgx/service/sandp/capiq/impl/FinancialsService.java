@@ -50,6 +50,7 @@ public class FinancialsService extends AbstractDataService {
 			financialMap.put("tickerCode", tickerNoEx);
 			Date period = null;
 			for (CSVRecord record : records) {				
+				if (StringUtils.stripToNull(record.get(3)) == null) continue;
 				financialMap.put(record.get(2), record.get(3));
 				if (period == null && StringUtils.stripToNull(record.get(5)) != null)
 					period = new Date(record.get(5));
