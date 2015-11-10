@@ -161,6 +161,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var wlLength = ALERTS.finalWL().length;
 			
+			ALERTS.addWatchlistName([]);
 			$.each(ALERTS.finalWL(), function(i, data){
 				ALERTS.addWatchlistName.push(data.name.toLowerCase());
 			});			
@@ -342,14 +343,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		saveWatchlist: function(){
 			var displayMessage = ALERTS.messages.messages[0];
+			
+			var errors = 0;
+			var pcPriceDropError = 0;
+			var pcTradingVolumeError = 0;
+			var estChangePriceDropError = 0;
+			
 			if(ALERTS.displayList().optionList.pcPriceDrop == true){
 				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
 					$('.price-drop.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');						
 					PAGE.resizeIframeSimple();
-					return;
+					pcPriceDropError = 1;
 				} else {
 					$('.price-drop.error-messages').empty();
+					pcPriceDropError = 0;
 				}
 				
 			}
@@ -359,9 +367,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.trade-volume.error-messages').empty();						
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');						
 					PAGE.resizeIframeSimple();
-					return;
+					pcTradingVolumeError = 1;
 				}else {
 					$('.trade-volume.error-messages').empty();
+					pcTradingVolumeError = 0;
 				}
 				
 			}
@@ -371,12 +380,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.target-price.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');						
 					PAGE.resizeIframeSimple();
-					return;
+					estChangePriceDropError = 1;
+					
 				}else {
 					$('.target-price.error-messages').empty();
+					estChangePriceDropError = 0;
 				}
 				
 			}
+			
+			errors = pcPriceDropError + pcTradingVolumeError + estChangePriceDropError;
+			
+			if (errors > 0) { return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/edit";
 			var postType = 'POST';
@@ -385,7 +400,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				"name": ALERTS.editWLName(),
 				"companies": ALERTS.companies(),
 				"optionList": {
-					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop == undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
+					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
 					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
 					"pcPriceRiseAbove": (ALERTS.displayList().optionList.pcPriceRiseAbove != null) ? ALERTS.displayList().optionList.pcPriceRiseAbove : null,
 					"pcTradingVolume": (ALERTS.displayList().optionList.pcTradingVolume != undefined) ? ALERTS.displayList().optionList.pcTradingVolume : false,
