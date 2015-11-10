@@ -246,8 +246,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	public Map<String, String> getKeyDevMap(){
 		Map<String, String> ret = new HashMap<String, String>();
 		ret.put("kdAnounceCompTransactions", "");
-		ret.put("kdTransactionUpdates", "");
-		ret.put("kdBankruptcyUpdates", "");
 		ret.put("kdCompanyForecasts", "");
 		ret.put("kdCorporateStructureRelated", "");
 		ret.put("kdCustProdRelated", "");

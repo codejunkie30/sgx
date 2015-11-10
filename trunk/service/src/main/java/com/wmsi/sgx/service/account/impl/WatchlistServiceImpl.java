@@ -204,8 +204,6 @@ public class WatchlistServiceImpl implements WatchlistService {
 		defaultOptions.put("estChangeEstimates", "false");
 		defaultOptions.put("estChangeEstimatesValue", "1");
 		defaultOptions.put("kdAnounceCompTransactions", "false");
-		defaultOptions.put("kdTransactionUpdates", "false");
-		defaultOptions.put("kdBankruptcyUpdates", "false");
 		defaultOptions.put("kdCompanyForecasts", "false");
 		defaultOptions.put("kdCorporateStructureRelated", "false");
 		defaultOptions.put("kdCustProdRelated", "false");
