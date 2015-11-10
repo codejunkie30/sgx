@@ -179,6 +179,7 @@ select pop.tickerSymbol,
 		when dataItemId=10 then 'grossProfit'
 		when dataItemId=15 then 'netIncome'
 		when dataItemId=4051 then 'ebitda'
+		when dataItemId=400 then 'ebit'
 		when dataItemId=142 then 'eps'
 		when dataItemId=3058 then 'dividendsPerShare'
 		when dataItemId=1002 then 'cashInvestments'
@@ -197,7 +198,7 @@ select pop.tickerSymbol,
 		when dataItemId=2004 then 'cashFinancing'
 		when dataItemId=2093 then 'netChange'
 	end as WMSIApi,
-	convert(varchar(max),fd.dataItemValue),
+	case when nmflag=1 then null else convert(varchar(max),fd.dataItemValue) end as dataitemvalue,
 	case
 		when fp.periodTypeId = 1 then 'FY'+cast(fp.fiscalYear as varchar(max))
 		when fp.periodTypeId = 4 then 'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max))
@@ -249,6 +250,7 @@ where fd.dataitemId in (
 	,10--grossProfit
 	,15--netIncome
 	,4051--ebitda
+	,400 --ebit
 	,142--eps
 	,3058--dividendsPerShare
 	,1002--cashInvestments
@@ -294,7 +296,7 @@ select pop.tickerSymbol,
 		when dataItemId=4200 then 'eps1YrAnnGrowth'
 		when dataItemId=4202 then 'commonEquity1YrAnnGrowth'
 	end as WMSIApi,
-	convert(varchar(max),fd.dataItemValue),
+	case when nmflag=1 then null else convert(varchar(max),fd.dataItemValue) end as dataitemvalue,
 	case
 		when fp.periodTypeId = 1 then 'FY'+cast(fp.fiscalYear as varchar(max))
 		when fp.periodTypeId = 4 then 'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max))
@@ -379,7 +381,7 @@ select pop.tickerSymbol, pop.exchangeSymbol,
 		when fd.dataItemId = 1310 then 'tbv'
 		when fd.dataItemId = 4364 then 'netDebt'
 	end as WMSIApi,
-	convert(varchar(max),fd.dataItemValue),
+	case when nmflag=1 then null else convert(varchar(max),fd.dataItemValue) end as dataitemvalue,
 	'LTM'+cast(fp.fiscalQuarter as varchar(max))+cast(fp.fiscalYear as varchar(max)),
 	fp.periodEndDate as date,
 	case when fd.dataItemId in (9, 3058, 4020, 2021, 4173, 1310, 4364) then cISO.ISOCode end
@@ -550,3 +552,35 @@ group by pe.tradingItemId, eow.eow
 ) edate on sdate.tradingItemId=edate.tradingItemId and sdate.mathalignment=edate.mathalignment
 ) sprice on pop.tradingItemId=sprice.tradingItemId
 group by pop.tickerSymbol, pop.exchangeSymbol
+
+union
+
+select 
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'targetPriceNum',
+	convert(varchar(max),numAnalysts),
+	null,
+	null,
+	null
+from ciqEstimateRevision er
+join ciqEstimateConsensus ec on er.estimateConsensusId=ec.estimateConsensusId
+join ciqEstimatePeriod ep on ec.estimatePeriodId=ep.estimatePeriodId
+join ##sgxpop pop on ep.companyId = pop.companyId
+join (
+select max(asofdate) as maxDate, estimateConsensusId, dataItemId, estimateRevisionTypeId
+from ciqEstimateRevision
+where estimateConsensusId in (
+select estimateConsensusId
+from ciqEstimateConsensus ec
+join ciqEstimatePeriod ep on ec.estimatePeriodID=ep.estimatePeriodId
+where ep.companyid in (select companyid from ##sgxpop)
+and advanceDate is null
+)
+and estimateRevisionTypeId=4
+group by estimateConsensusId, dataItemId, estimateRevisionTypeId
+) mdate on er.estimateConsensusId=mdate.estimateConsensusId
+and er.dataItemId=mdate.dataItemId
+and er.estimateRevisionTypeId=mdate.estimateRevisionTypeId
+and er.asOfDate=mdate.maxDate
+and er.dataitemid=100161
