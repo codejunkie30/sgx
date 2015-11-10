@@ -505,3 +505,48 @@ SELECT DISTINCT
 	null
 FROM ciqSecurity sec
 join ##sgxpop pop on sec.companyId=pop.companyId -- Declare Pop
+
+union
+
+select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(52)) as dataItemValue, null, null, null
+from ##sgxpop pop
+join (
+select sdate.tradingItemId, log(edate.priceClose/sdate.priceClose) as weeklyreturn
+from (
+select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) as mathalignment
+from ciqPriceEquity pe
+join (
+select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
+from ciqPriceEquity pe
+join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
+join (
+select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
+from master..spt_values
+WHERE type = 'P'
+AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
+and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
+) eow on pe.pricingDate <= eow.eow
+where pe.pricingDate > getdate()-400
+group by pe.tradingItemId, eow.eow
+) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
+) sdate
+join (
+select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) -1 as mathalignment
+from ciqPriceEquity pe
+join (
+select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
+from ciqPriceEquity pe
+join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
+join (
+select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
+from master..spt_values
+WHERE type = 'P'
+AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
+and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
+) eow on pe.pricingdate <= eow.eow
+where pe.pricingDate > getdate()-400
+group by pe.tradingItemId, eow.eow
+) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
+) edate on sdate.tradingItemId=edate.tradingItemId and sdate.mathalignment=edate.mathalignment
+) sprice on pop.tradingItemId=sprice.tradingItemId
+group by pop.tickerSymbol, pop.exchangeSymbol
