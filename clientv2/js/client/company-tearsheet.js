@@ -20,8 +20,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		libCurrency: ko.observable(),
 		currentDay: ko.observable(),
 		
-		//combinedData: ko.observable(),
-//		currentTicker: ko.observable(),
+		cpUserStatus: ko.observable(),
+		currentTicker: ko.observable(),
+		
 		
 		initPage: function(me) {
 			this.showLoading();
@@ -37,34 +38,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			var cpUserStatus;
 			
 			PAGE.userStatus.subscribe(function(data){
-				cpUserStatus = data;
+				CP.cpUserStatus = data;
 			});
-			//this.chartInterval = function(me){
-//			
-//				if (cpUserStatus == 'TRIAL') {
-//					var d = new Date();
-//					var newTimeStamp = d.setMinutes(d.getMinutes() - 1);
-//										
-//					// init charts 1445472000000
-//					var params = { "id": CP.currentTicker, "date": newTimeStamp };
-//					var postType = 'GET';
-//					var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";
-//					
-//					UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
-//						if (data != undefined || data.pricingHistory.length > 0 ){
-//							$.each(data, function(key,data){								
-//								CP.combinedData()[key] = data;								
-//							});
-//							self.initPriceChart(self, CP.combinedData());
-//							
-//						} else {
-//							self.initPriceChart(self, CP.combinedData());
-//						}
-//					}, undefined, undefined);			
-//				}	
-//			}
-//								
-//			setInterval(self.chartInterval, 60000);	
 			
 		},
 		
@@ -87,18 +62,18 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			});
 			this.factors(tmp.factors);
 			
-			//CP.currentTicker(me.ticker);
+			CP.currentTicker(me.ticker);
 			
 			// init charts
 			var params = { id: me.ticker };
 			var postType = 'GET';
 			var endpoint = me.fqdn + "/sgx/company/priceHistory";
-			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { /*CP.combinedData(data);*/ me.initPriceChart(me, data); }, undefined, undefined);
-
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {  me.initPriceChart(me, data);  }, undefined, undefined);
+			
 			return this;
 			
 		},
-		initPriceChart: function(parent, data) {
+		initPriceChart: function(parent, data, me) {
 			var finished = function() {
 				parent.resizeIframeSimple();
 				var myFin = function() { parent.resizeIframeSimple(); };
@@ -106,8 +81,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			};
 			
 			var update = function() { parent.initNews(parent, data);  };
-		
-			PRICE_CHART.init("#price-volume", data, finished, update);
+			//Pushes params to chart for use
+			PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
 			
 		},
 		

@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highstock" ], function(UTIL, ko, CHART_DEFAULTS) {
+define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/modules/price-chart-config-premium", "highstock" ], function(UTIL, ko, CHART_DEFAULTS, CHART_DEFAULTS_PREM) {
 	
 	var CHART = {
 		
@@ -6,23 +6,23 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
 		volumeData: [],
 		closePrice: [],
 		priceData: [],
-		//pricingHistory: [],
+		priceHistoryData: [],
+		currentTicker: ko.observable,
+		userStatus: ko.observable(),
 		
-		init: function(element, data, finished, periodChange) {
+		init: function(element, data, finished, periodChange, ticker, cpUserStatus) {
+			//Set's ticker			
+			CHART.currentTicker = ticker;
+			// Set's User Status
+			CHART.userStatus = cpUserStatus;
 			
 			var self = this;
 			// let's get all the price data set up
 			
-			//if (data.pricingHistory != undefined){
-//				this.priceData = this.toHighCharts(data.pricingHistory);
-//			} else {
-//				this.priceData = this.toHighCharts(data.price);
-//			}
 			this.priceData = this.toHighCharts(data.price);
 			var lowPrice = this.toHighCharts(data.lowPrice);
 			var openPrice = this.toHighCharts(data.openPrice);
 			var highPrice = this.toHighCharts(data.highPrice);
-			
 						
 			$.each(this.priceData, function(idx, point) {
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
@@ -67,8 +67,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
     },
 
 		initChart: function(element, data, finished, periodChange) {
+			// Premium chart options vs non premium
+			if (CHART.userStatus == 'PREMIUM'){
+				var base = CHART_DEFAULTS_PREM;
+			} else {
+				var base = CHART_DEFAULTS;
+			}
 			
-			var base = CHART_DEFAULTS;
 			var self = this;
 			
 			base.tooltip.formatter = function() {
@@ -151,11 +156,49 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "highsto
                     data: []
                 }    
              ];
+			 //Adds real time data to chart if user is premium and runs every minute
+			if (CHART.userStatus == 'PREMIUM'){
+				//Pushes to events
+				base.chart.events = {				
+					load: function () {
+						// set up the updating of the chart each second
+						var series = this.series[0];
+						var firstRun = true;
+						setInterval(function () {							
+							var today = new Date();
+							
+							//Runs data for today and then subtracts from current minute
+							if (firstRun == true) {
+								var todaysDate = today.setHours(0,0,0,0);
+							} else {
+								var todaysDate = today.setMinutes(today.getMinutes() - 1);
+							}
+
+							firstRun = false;
+							
+							var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
+							var postType = 'GET';
+							var params = { "id": CHART.currentTicker, "date": todaysDate };
+							
+							UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
+								var todaysArray = [];
+								//Runs data if it's there
+								if ( data.pricingHistory.length > 0 ){
+									$.each(data, function(key,data){
+										$.each(data,function(i,data){											
+											series.addPoint([data.currentDate, data.closePrice], true, true);
+										});					
+									});
+								}
+							}, undefined, undefined);				
+						}, 60000);
+					}
+				}
+			}
 			
 			$(element).highcharts('StockChart', base, function() {
 				if (typeof finished !== "undefined") finished();
 			});
-        
 		}
 	    
 	};
