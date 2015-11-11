@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,12 +37,12 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
 	public String emailSender;
 	@Value ("${email.watchlist.alert}")
 	public String file;
+	private Logger log = LoggerFactory.getLogger(WatchlistSenderService.class);
 	
 	@Override
 	public void send(String to, String subject,	List<AlertOption> variables, WatchlistModel watchlist, List<CompanyPrice> companyPrices) throws MessagingException {
-		
-		final Context ctx = new Context();
-		
+				
+		final Context ctx = new Context();		
 		ctx.setVariable("watchlistName", watchlist.getName());
 		ctx.setVariable("companyPrices", companyPrices);			
 		ctx.setVariable("alerts", variables);
@@ -56,6 +58,7 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
         message.setText(htmlContent, true /* isHtml */);		
         mailSender.send(mimeMessage);
 		
+        log.info("Watchlist Email sent to: {}", to);
 	}
 
 }
