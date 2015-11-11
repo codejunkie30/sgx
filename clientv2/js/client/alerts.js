@@ -433,6 +433,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
+					$('.save').remove();
 					$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
