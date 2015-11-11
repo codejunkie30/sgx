@@ -68,7 +68,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			var params = { id: me.ticker };
 			var postType = 'GET';
 			var endpoint = me.fqdn + "/sgx/company/priceHistory";
-			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {  me.initPriceChart(me, data);  }, undefined, undefined);
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {  me.initPriceChart(me, data, me);  }, undefined, undefined);
 			
 			return this;
 			
