@@ -378,6 +378,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var self = this;
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
+
       PAGE.checkStatus();
         
       var waitForDataToInit = ko.computed({
@@ -387,6 +388,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
               var userStatus = this.userStatus();
 
               if( companyData && userStatus ) {
+
+                self.trackPage("SGX Company Technical Charting - " + self.companyInfo.companyName);
 
                   if ( userStatus == 'UNAUTHORIZED' || userStatus == 'EXPIRED' ) {
                     this.init_nonPremium();
