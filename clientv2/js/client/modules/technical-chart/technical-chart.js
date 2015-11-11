@@ -38,29 +38,27 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 
     var self=this;
     self.xData = [], self.yData = [];
-    //$.getJSON('http://localhost:8001/fakedata?callback=?', function (data) {
-    //$.getJSON('http://192.168.1.37:8001/fakedata?callback=?', function (data) {
+    
+    self.priceData = toHighChartsSimple(data.price, true);
+    self.lowPrice = toHighChartsSimple(data.lowPrice);
+    self.openPrice = toHighChartsSimple(data.openPrice);
+    self.highPrice = toHighChartsSimple(data.highPrice);
+    self.volumeData = toHighChartsSimple(data.volume);
 
-          self.priceData = toHighChartsSimple(data.price, true);
-          self.lowPrice = toHighChartsSimple(data.lowPrice);
-          self.openPrice = toHighChartsSimple(data.openPrice);
-          self.highPrice = toHighChartsSimple(data.highPrice);
-          self.volumeData = toHighChartsSimple(data.volume);
+    //get RSI relevant data
+    self.dataRSI = [];
+    for(var i=0, len=self.priceData.length; i < len; i++) {
+      var arr = [];
+      arr.push(self.openPrice[i].y);
+      arr.push(self.highPrice[i].y);
+      arr.push(self.lowPrice[i].y);
+      arr.push(self.priceData[i].y);
 
-          //get RSI relevant data
-          self.dataRSI = [];
-          for(var i=0, len=self.priceData.length; i < len; i++) {
-            var arr = [];
-            arr.push(self.openPrice[i].y);
-            arr.push(self.highPrice[i].y);
-            arr.push(self.lowPrice[i].y);
-            arr.push(self.priceData[i].y);
+      self.dataRSI.push(arr);
 
-            self.dataRSI.push(arr);
+    }
 
-          }
-
-          self.dataReady(true);
+    self.dataReady(true);
 
         //});
 
