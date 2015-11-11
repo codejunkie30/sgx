@@ -21,14 +21,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 				function(data, textStatus, jqXHR){					
 					//Display success message
 					
-					console.log(data);
+					//console.log(data);
 					
 					if (data.message != undefined){
 						
 						PURCHASE.purchaseToken($.trim(data.message));
 						//PAGE.showLoading();
 						PAGE.modal.open({  width: 550, maxWidth: 550, height: 200, content: '<p>You are being redirected to a third-party site, eNets to complete this transaction.</p>' });
-						  if (isNaN($('#company-info').attr('height'))) $('#company-info').attr('height', '400px'); $('#company-info section').height('400px'); PAGE.resizeIframeSimple();
+						  if (isNaN($('#company-info').attr('height'))) $('#company-info').attr('height', '400px'); $('#company-info section').height('400px'); //PAGE.resizeIframeSimple();
 						 
 						setTimeout(function() {
 						    $("#txnForm").submit();
@@ -46,9 +46,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 			PAGE.trackPage("SGX Purchase Account");
 			
 			// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
+    	ko.applyBindings(this, $("body")[0]);
 			// resize
-			PAGE.resizeIframeSimple();
+			//PAGE.resizeIframeSimple();
     		
     		return this;
 		},
