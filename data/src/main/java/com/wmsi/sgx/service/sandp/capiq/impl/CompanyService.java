@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,7 @@ public class CompanyService extends AbstractDataService {
 	/**
 	 * set some misc properties
 	 */
-	public void setMisc(Company comp, List<CompanyCSVRecord> records) {
+	public void setMisc(Company comp, List<CompanyCSVRecord> records) throws Exception {
 
 		// bunches of GV keys come back, need to just get the one for AF
 		for (CompanyCSVRecord record : records) {
@@ -97,8 +98,38 @@ public class CompanyService extends AbstractDataService {
 			}
 			
 		}
+		
+		// get the latest value for an item
+		// these have multiple rows, we want the latest date or LTM (LTM preferred)
+		String[] fields = { "evEbitData", "totalDebtEbitda", "ebitda" };
+		for (String field : fields) {
+			setLatestFieldValue(field, comp, records);
+		}
 
 	}
+	
+	public void setLatestFieldValue(String name, Company company, List<CompanyCSVRecord> records) throws Exception {
+		
+		Field field = Company.class.getDeclaredField(name);
+		field.setAccessible(true);
+		
+		String value = null;
+		
+		for (CompanyCSVRecord record : records) {
+			if (!record.getName().equals(field.getName())) continue;
+			// assume it's the latest
+			if (record.getPeriod() == null && record.getPeriod().indexOf("LTM") != -1) {
+				value = getFieldValue(field, record);
+				break;
+			}
+		}
+		
+		Double val = null;
+		if (StringUtils.stripToNull(value) != null) val = Double.parseDouble(value);
+		field.set(company, val);
+		
+	}
+	
 
 	/**
 	 * load up the base fields
@@ -126,17 +157,11 @@ public class CompanyService extends AbstractDataService {
 			}
 		}
 		
-		System.out.println("++" +map.get("filingDate"));
-
-		if (map.size() == 0)
-			throw new ResponseParserException("record map is empty in getCompany()");
+		if (map.size() == 0) throw new ResponseParserException("record map is empty in getCompany()");
 		
 		Gson gson = new GsonBuilder().setDateFormat(DT_FMT_STR).create();
 		JsonElement jsonElement = gson.toJsonTree(map);
 
-		System.out.println("--" +jsonElement.getAsJsonObject().get("filingDate"));
-
-		
 		Company comp = gson.fromJson(jsonElement, Company.class);
 		comp.setTickerCode(id.split(":")[0]);
 		comp.setExchange(id.split(":")[1]);
