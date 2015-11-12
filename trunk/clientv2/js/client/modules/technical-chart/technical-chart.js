@@ -376,7 +376,13 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       id:serviceObj.serviceName,
       name: serviceObj.axisName,
       title: {text: serviceObj.axisName },
-      opposite:oppositeBool
+      opposite:oppositeBool,
+      labels: {
+        formatter: function(){
+          if( this.value == 0) return '0';
+          return this.axis.defaultLabelFormatter.call(this);
+        }
+      }
     }, false, false);
 
   }
@@ -441,6 +447,12 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       yAxis: {
         title: {
           text:'Income'
+        },
+        labels: {
+          formatter: function(){
+            if( this.value == 0) return '0';
+            return this.axis.defaultLabelFormatter.call(this);
+          }
         },
         id:'income',
         name: 'Income',
