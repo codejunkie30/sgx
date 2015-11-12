@@ -14,8 +14,6 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
@@ -23,19 +21,14 @@ import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlertOption;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Estimate;
-import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.KeyDev;
-import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.repository.AccountRepository;
-import com.wmsi.sgx.repository.WatchlistCompanyRepository;
-import com.wmsi.sgx.repository.WatchlistOptionRepository;
-import com.wmsi.sgx.repository.WatchlistRepository;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
-import com.wmsi.sgx.service.EmailService;
+import com.wmsi.sgx.service.KeyDevsMap;
 import com.wmsi.sgx.service.WatchlistSenderService;
 import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
@@ -70,6 +63,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	@Autowired
 	private SearchService estimatesSerach;
 	
+	@Autowired
+	private KeyDevsMap keyDevsMap;
+	
 	@Override
 	@Scheduled(cron="0 20 17 ? * *")
 	public void getWatchlistEmails() throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
@@ -97,8 +93,18 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		Map<String, String> volumeOptions = new HashMap<String, String>();
 		Map<String, String> weekOptions = new HashMap<String, String>();
 		Map<String, String> targetPriceOptions = new HashMap<String, String>();
-		Map<String, String> consensusRecOptions = new HashMap<String, String>();	
-		Map<String, String> keyDevOptions = new HashMap<String, String>();
+		Map<String, String> consensusRecOptions = new HashMap<String, String>();
+		
+		Map<String, Map<String, String>> keyDevOptions = new HashMap<String, Map<String, String>>();
+		keyDevOptions.put("kdAnounceCompTransactions", new HashMap<String, String>());
+		keyDevOptions.put("kdCompanyForecasts", new HashMap<String, String>());
+		keyDevOptions.put("kdCorporateStructureRelated", new HashMap<String, String>());
+		keyDevOptions.put("kdCustProdRelated", new HashMap<String, String>());
+		keyDevOptions.put("kdDividensSplits", new HashMap<String, String>());
+		keyDevOptions.put("kdListTradeRelated", new HashMap<String, String>());
+		keyDevOptions.put("kdPotentialRedFlags", new HashMap<String, String>());
+		keyDevOptions.put("kdPotentialTransactions", new HashMap<String, String>());
+		keyDevOptions.put("kdResultsCorpAnnouncements", new HashMap<String, String>());		
 		
 		for(String company : watchlist.getCompanies()){
 			String companyName = getCompanyName(company);
@@ -175,8 +181,18 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 						consensusRecOptions.put(company, getCompanyName(company));
 				}
 			}
-			
-			keyDevOptions = sortKeyDevs(getKeyDevs(company, new Date()), map, companyName, company);			
+			//KeyDevs
+			for(String key: keyDevsMap.getMap().keySet()){
+				if(map.get(key).toString().equals("true")){
+					for(KeyDev kd : getKeyDevs(company, new Date())){
+						if(keyDevsMap.getMap().get(key).contains(kd.getType())){
+							keyDevOptions.get(key).put(company, companyName);
+						}
+							
+							
+					}
+				}
+			}					
 		}	
 		
 		List<AlertOption> alertList = new ArrayList<AlertOption>();
@@ -222,42 +238,18 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			alert.setDescription("Change in consensus recommendation " + consensusType);
 			alertList.add(alert);
 		}
-		if(keyDevOptions.size() > 0){
-			AlertOption alert = new AlertOption();
-			alert.setCompanies(keyDevOptions);
-			alert.setDescription("Key Developments");
-			alertList.add(alert);
-		}
-		return alertList;		
-	}
-	
-	public Map<String, String> sortKeyDevs(List<KeyDev> keyDevs, Map<String, Object> map, String companyName, String tickerCode){
-		Map<String, String> keyDevOptions = new HashMap<String, String>();
-		for(KeyDev kd : keyDevs){
-			for(Map.Entry<String, String> option : getKeyDevMap().entrySet()){
-				if(map.get(option.getKey()).toString().equals("true") && kd.getType().equalsIgnoreCase(option.getValue())){
-					keyDevOptions.put(tickerCode, companyName);
-				}
+		
+		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
+			if(entry.getValue().size() > 0){
+				AlertOption alert = new AlertOption();
+				alert.setCompanies(entry.getValue());
+				alert.setDescription(keyDevsMap.getKeyDevLabel(entry.getKey()));
+				alertList.add(alert);
 			}
 		}
-		return keyDevOptions;
-	}
-	
-	public Map<String, String> getKeyDevMap(){
-		Map<String, String> ret = new HashMap<String, String>();
-		ret.put("kdAnounceCompTransactions", "");
-		ret.put("kdCompanyForecasts", "");
-		ret.put("kdCorporateStructureRelated", "");
-		ret.put("kdCustProdRelated", "");
-		ret.put("kdDividensSplits", "");
-		ret.put("kdListTradeRelated", "");
-		ret.put("kdPotentialRedFlags", "");
-		ret.put("kdPotentialTransactions", "");
-		ret.put("kdResultsCorpAnnouncements", "");
 		
-		return ret;
-		
-	}
+		return alertList;		
+	}	
 	
 	public Estimate getEstimate(List<Estimate> estimate){
 		Estimate ret = null;
