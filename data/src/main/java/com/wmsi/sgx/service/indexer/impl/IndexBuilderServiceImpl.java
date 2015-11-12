@@ -304,7 +304,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		loadCompanyGTI(company);
 		loadCompanyVWAP(company);
+		
+		// HACK - reset exchange on save (SGX doesn't believe in correct data)
+		String curExchange = company.getExchange();
+		company.setExchange(curExchange.toUpperCase().equals("CATALIST") ? "SGX" : curExchange);
 		indexerService.save("company", tickerNoExchange, company, index);
+		company.setExchange(curExchange);
 		
 		GovTransparencyIndexes gtis = gtiService.getForTicker(tickerNoExchange);
 		if(gtis != null) indexerService.save("gtis", tickerNoExchange, gtis, index);
