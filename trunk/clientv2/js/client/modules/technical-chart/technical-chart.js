@@ -52,7 +52,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 
     //get RSI relevant data
     self.dataRSI = [];
-    for(var i=0, len=self.dataLength; i < len; i++) {
+    for(var i=0, len=dataLength; i < len; i++) {
       var arr = [];
       arr.push(self.openPrice[i].y);
       arr.push(self.highPrice[i].y);
