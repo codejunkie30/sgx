@@ -31,3 +31,22 @@
 .no-data-message {
   margin-top:30px;
 }
+#estimates .data-point-container .checkbox { position:relative; }
+#estimates .data-point-container .checkbox .trigger { background: none; }
+#estimates .data-point-container .checkbox .trigger .check-icon { 
+  background: url("../img/bg-checkboxes.png") no-repeat 0 -26px; 
+  display: block;
+  width:18px; 
+  height:18px;
+  position: absolute;
+  left:10px;
+  top:20%;
+}
+
+#estimates .data-point-container .checkbox .trigger .check-icon:hover {
+  background-position: 0 -54px;
+}
+
+#estimates .data-point-container .checkbox.checked .trigger .check-icon {
+  background-position: 0 0;
+}
