@@ -1,6 +1,5 @@
 package com.wmsi.sgx.service.impl;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -19,9 +19,9 @@ import com.wmsi.sgx.service.KeyDevsMap;
 
 @Service
 public class KeyDevsMapImpl implements KeyDevsMap{
+	ClassPathResource keyDevFile;
 	private Map<String, List<String>> keyDevMap;
 	private Map<String, String> keyDevLabel;
-	private String file = "/mnt/data/keydev.csv";
 	
 	@Override
 	public Map<String, List<String>> getMap(){
@@ -34,7 +34,8 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	
 	
 	@PostConstruct
-	public void initMap(){
+	public void initMap() throws IOException{
+		keyDevFile = new ClassPathResource("data/keydev.csv");
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
 		String[] record = null;	
@@ -51,7 +52,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		
 	
 		try{
-			reader = new InputStreamReader(new FileInputStream(file));
+			reader = new InputStreamReader(keyDevFile.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			while((record = csvReader.readNext()) != null){
 				switch(record[1]){
