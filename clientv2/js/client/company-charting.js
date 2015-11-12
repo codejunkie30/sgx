@@ -293,17 +293,35 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     financialsHandler: function(data, serviceObj, action, me) {
 
+      var trimData = {};
+      var dataKey;
+      var FY_len = 0; //requirement only 4 FY in data
+     
+      $.each( data, function(key, val) {
+        dataKey = key;
+        for(var i=0, len=val.length; i < len; i++) {
+          if ( /FY/.test(val[i].absPeriod) )
+            FY_len++;
+        }
+      });
+
+      if(FY_len > 4) {
+        trimData[ dataKey ] = data[ dataKey ].slice(FY_len - 4);
+      }else {
+        trimData[ dataKey ] = data;
+      }
+
       var self = me || this;
       var serviceName = serviceObj.serviceName;
       var serviceKey = serviceObj.key;
       if( !self.financialsDataCache[ serviceName ] ) {
-        self.financialsDataCache[ serviceName ] = data;
+        self.financialsDataCache[ serviceName ] = trimData;
       } 
 
       var seriesData = [];
       var arrayCategories = [];
 
-      $.each(data, function(key, val) {
+      $.each(trimData, function(key, val) {
 
         for (var i=0, len=val.length; i < len; i++) {
           seriesData.push(val[i][serviceKey]);
