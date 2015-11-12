@@ -1,5 +1,10 @@
 package com.wmsi.sgx.controller;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +77,27 @@ public class PurchaseController {
 		RedirectView view = new RedirectView();
 		view.setUrl(cancelUrl);
 		return view;
+	}
+	
+	@RequestMapping(value = "post", method = RequestMethod.POST)
+	public void post(@ModelAttribute("response") Response response) throws IOException{
+		File file = new File("/mnt/data/purchase_logging.txt");
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		TxnRes res = unpack(response);
+		
+		String content = "Reference: " + res.getMerchantTxnRef()
+				+ " | ENets Reference " + res.getNetsTxnRef()
+				+ " | Status:  " + res.getNetsTxnStatus() 
+				+ " | Response Code: " + res.getNetsTxnRespCode() 
+				+ " | Response Message: " + res.getNetsTxnMsg()
+				+ " | Time: " + res.getNetsTxnDtm() + "\n\n";				
+		
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(content);
+		bw.close();
 	}
 	
 	public TxnRes unpack(Response response){
