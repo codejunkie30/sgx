@@ -36,6 +36,9 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 
   HS_Chart.prototype.initData = function(data){
 
+    var dataLength;
+    var dataLenArray = [];
+
     var self=this;
     self.xData = [], self.yData = [];
     
@@ -45,9 +48,11 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
     self.highPrice = toHighChartsSimple(data.highPrice);
     self.volumeData = toHighChartsSimple(data.volume);
 
+    dataLength = Math.min.apply(null, dataLenArray);
+
     //get RSI relevant data
     self.dataRSI = [];
-    for(var i=0, len=self.priceData.length; i < len; i++) {
+    for(var i=0, len=self.dataLength; i < len; i++) {
       var arr = [];
       arr.push(self.openPrice[i].y);
       arr.push(self.highPrice[i].y);
@@ -64,6 +69,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 
     function toHighChartsSimple( data, separateAxes ) {
 
+      dataLenArray.push(data.length);
       var ret = [];
       $.each(data, function(idx, row) {
 
