@@ -495,7 +495,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var defaultSeriesConfig = {
         //simple Moving Area
-        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 15, color:'#5f6062' },
+        'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 15, color:'#bdd831' },
         'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 40,  color:'#ffcc00' },
         //Moving avg con40
         'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD', yAxis: 'tertiary-axis', axisName:'MACD',  color:'#0094b3' },
