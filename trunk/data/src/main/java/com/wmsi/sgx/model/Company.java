@@ -69,6 +69,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
+	
+	private Double evEbitData;
 
 	@ConversionAnnotation(name = "IQ_EMPLOYEES")
 	private Double employees;
@@ -451,12 +453,11 @@ public class Company {
 	}
 
 	public Double getEvEbitData() {
-		if (getEnterpriseValue() == null || ebitda == null || ebitda == 0) {
-			return null;
-		}
-		BigDecimal ev = new BigDecimal(getEnterpriseValue() != null ? getEnterpriseValue() : 0);
-		BigDecimal ebitdata = new BigDecimal(ebitda);
-		return ev.divide(ebitdata, RoundingMode.HALF_UP).doubleValue();
+		return evEbitData;
+	}
+	
+	public void setEvEbitData(Double evEbitData) {
+		this.evEbitData = evEbitData;
 	}
 
 	public String getFilingCurrency() {
