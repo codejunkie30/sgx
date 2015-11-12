@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.4" />
-    <link rel="stylesheet" href="css/estimates.css?v=1.0" />
     <link rel="stylesheet" href="css/tearsheet.css?v=1.0" />
+    <link rel="stylesheet" href="css/estimates.css?v=1.0" />
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -154,6 +154,7 @@
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="checkbox left">
 								<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+									<span class="check-icon"></span>
 									<span class="name" data-bind="text: name"></span>
 									<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
 										<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
@@ -195,6 +196,7 @@
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="checkbox left">
 								<div class="trigger" data-bind="attr: { 'data-name': property, 'data-group': group }, click: function(data, event) { $root.handleClick($root, data, event); }">
+									<span class="check-icon"></span>
 									<span class="name" data-bind="text: name"></span>
 									<span data-bind="visible: $data.hasOwnProperty('glossaryTerm')">
 										<img src="img/info.png" alt="" data-bind="tooltip: $data.hasOwnProperty('glossaryTerm') ? glossaryTerm : null" />
