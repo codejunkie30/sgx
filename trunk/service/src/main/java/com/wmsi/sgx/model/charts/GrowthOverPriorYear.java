@@ -15,7 +15,11 @@ public class GrowthOverPriorYear {
 		return absPeriod;
 	}
 	public void setAbsPeriod(String absPeriod) {
-		this.absPeriod = absPeriod;
+		if(absPeriod.substring(0,3).equalsIgnoreCase("LTM")){
+			this.absPeriod = absPeriod.substring(0,3) + (absPeriod.substring(absPeriod.length()-4));
+		}
+		else 
+			this.absPeriod=absPeriod;
 	}
 	public double getTotalRevenue1YrAnnGrowth() {
 		return totalRevenue1YrAnnGrowth;
