@@ -90,8 +90,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
-
+			
 			var watchlistDisplay = ko.computed(function(){
+				
+				
 				$.each(ALERTS.finalWL(), function(idx, wl){
 					if (ALERTS.selectedValue() ==  wl.id){
 												
@@ -171,7 +173,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if ($.inArray( newWLNameLC.toLowerCase(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
-			
+
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
     		var params = { "message": ALERTS.newWLName() };
@@ -190,6 +192,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					ALERTS.finalWL(data.sort(sortByName));
+					
+					$.each(data, function(i,data){
+						if (data.name == newWLNameLC){
+							ALERTS.saveWatchlist();
+							ALERTS.selectedValue(data.id);
+							setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
+						}						
+					});
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
