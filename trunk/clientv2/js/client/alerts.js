@@ -104,6 +104,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						ALERTS.displayList(wl);
 						
 						ALERTS.displayListCompanies();
+
+						ALERTS.clearWatchListErrors();
 						
 						ALERTS.editWLName(wl.name);						
 					}
@@ -352,6 +354,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(jqXHR);
 				},undefined);
 		},
+
+		clearWatchListErrors: function() {
+			$('.error-messages').empty();
+		},
+
+
 		saveWatchlist: function(){
 			var displayMessage = ALERTS.messages.messages[0];
 			
