@@ -292,7 +292,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
 
     financialsHandler: function(data, serviceObj, action, me) {
-
+      
       var trimData = {};
       var dataKey;
       var FY_len = 0; //requirement only 4 FY in data
@@ -315,9 +315,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var serviceName = serviceObj.serviceName;
       var serviceKey = serviceObj.key;
       if( !self.financialsDataCache[ serviceName ] ) {
-        self.financialsDataCache[ serviceName ] = trimData;
+        self.financialsDataCache[ serviceName ] = trimData[ serviceName ];
       } 
-
+      
       var seriesData = [];
       var arrayCategories = [];
 
