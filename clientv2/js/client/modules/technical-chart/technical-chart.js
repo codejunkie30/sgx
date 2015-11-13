@@ -283,7 +283,11 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         height: '68%',
         labels: {
           align: 'right',
-          x: -3
+          x: -3,
+          formatter: function() {
+            if (this.value == 0) return;
+            return "S$ " + this.value;
+          }
         },
         title: {
           text: 'PRICE'
@@ -381,7 +385,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       labels: {
         formatter: function(){
           if( this.value == 0) return '0';
-          return this.axis.defaultLabelFormatter.call(this);
+          return "S$ " + this.axis.defaultLabelFormatter.call(this);
         }
       }
     }, false, false);
@@ -452,7 +456,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         labels: {
           formatter: function(){
             if( this.value == 0) return '0';
-            return this.axis.defaultLabelFormatter.call(this);
+            return "S$ " + this.axis.defaultLabelFormatter.call(this);
           }
         },
         id:'income',
