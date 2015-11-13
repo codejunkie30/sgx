@@ -305,19 +305,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},jsonpCallback);			
 		},
 		deleteCompany: function(data){
+			PAGE.showLoading();
 			ALERTS.companies.remove(data.ticker);
 			ALERTS.saveWatchlist();
-			setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
+			setTimeout(function(){ ALERTS.displayWatchlists(); PAGE.hideLoading();}, 500);
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
 			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watch list.</p>', width: 300 }); return; }
 
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
-			
+			PAGE.showLoading();
 			ALERTS.companies.push(data.tickerCode);
 			ALERTS.saveWatchlist();
-			setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
+			setTimeout(function(){ ALERTS.displayWatchlists(); PAGE.hideLoading();}, 500);
 			PAGE.resizeIframeSimple();
 			
 		},
