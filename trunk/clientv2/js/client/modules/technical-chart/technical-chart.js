@@ -18,15 +18,16 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
     //this.initData();
     
     this.dataReady.subscribe(function(data){
-      this.initChart();
+      this.initChart(companyName);
     }, this);
 
   }
 
-  HS_Chart.prototype.initChart = function() {
+  HS_Chart.prototype.initChart = function(companyName) {
       
       var self = this;
       var chartOptions = this.getGenericChartObj();
+      chartOptions.series[0].name = companyName;
       $(this.chartId).highcharts('StockChart', chartOptions);
       setTimeout(function(){ 
         self.chartElement = $(self.chartId).highcharts(); 
