@@ -67,7 +67,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		SecurityContextHolder.getContext().setAuthentication(authRequest);
 		
 		for( Account acc: accounts)	{
-			if(acc.getAlwaysActive() == false){
+			if(acc.getAlwaysActive() == false && acc.getActive() == true){
 				if(sdf.format(acc.getExpirationDate()).compareTo(sdf.format(new Date()))<0){
 					acc.setActive(false);
 					accountRepository.save(acc);
