@@ -13,7 +13,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		actualEstimates: ko.observableArray(),
 		consensusRec: ko.observableArray(),
 		displayListCompanies: ko.observableArray(),
+		searchInput: ko.observable(),
 		searchResults: ko.observableArray(),
+		searchReady: ko.observable(false),
 		watchList: ko.observable(true),
 		newWLName: ko.observable(),
 		editWLName: ko.observable(),
@@ -31,11 +33,40 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		messages: JSON.parse(MESSAGES),
 		alerts: JSON.parse(AL),
 		sectionName:'Alerts',
+		allCompanies: [],
 		
 		defaultSearch: "",
 		
 		initPage: function() {
-		
+			///
+			var self = this;
+			var endpoint = this.fqdn+'/sgx/company/names';
+			var postType = 'GET';
+			var params = {};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+
+			function makeAggregateCompanyDataCall() {
+				UTIL.handleAjaxRequest(
+					endpoint,
+					postType,
+					params, 
+					undefined, 
+					function(data, textStatus, jqXHR){
+						self.allCompanies = data.companyNameAndTickerList;
+						self.searchReady(true);
+
+					}, 
+					function(jqXHR, textStatus, errorThrown){
+						console.log('fail');
+						console.log('sta', textStatus);
+						console.log(errorThrown);
+						console.log(jqXHR);
+					},jsonpCallback);
+			}
+
+
+			///
 			var self = this;
 			
 			PAGE.checkStatus();
@@ -50,6 +81,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  } else {
 						$('#alerts').show();
 						this.finish(this);
+						setTimeout(function(){ makeAggregateCompanyDataCall() }, 500);
 					  }
 				  }		
 			  },
@@ -122,6 +154,36 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				PAGE.resizeIframeSimple();
 								
+			});
+
+
+			me.searchInput.subscribe(function(data){
+				//ratelimiting the search 200ms
+				if(this._localTimeout) {
+					clearTimeout(this._localTimeout);
+					delete this._localTimeout;
+				}
+
+				var resultArray;
+				if(data.length == 0) {
+					me.searchResults.removeAll();
+					return;
+				}
+
+				this._localTimeout = setTimeout(function(){
+
+					resultArray = ko.utils.arrayFilter(me.allCompanies, function(item){
+						//var ticketMatch = false;
+						if(item.companyName.toLowerCase().indexOf(data.toLowerCase()) != -1 || item.tickerCode.toLowerCase().indexOf(data.toLowerCase()) != -1 ) {
+							return true;
+						} else {
+							return false;
+						}
+					});
+					me.searchResults( resultArray );
+				}, 200)
+
+
 			});
 			
     		// finish other page loading
@@ -324,35 +386,42 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.resizeIframeSimple();
 			
 		},
-		searchCompanies: function(){			
-			var searchValue = $(".searchbar input").val();
-			var endpoint = PAGE.fqdn + "/sgx/search";
-			var postType = 'POST';
-			var params = {"criteria":[{"field":"companyOrTicker","value":searchValue}]};
-			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params, 
-				undefined, 
-				function(data, textStatus, jqXHR){
-					if (data.companies.length == 0){ 
-						$('<li/>').html('There are no results for your search.').appendTo('.results .company');
-						return;					
-					} else {
-						$('.results .company').empty();
-						ALERTS.searchResults(data.companies);
-						if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
-						PAGE.resizeIframeSimple();
-					}
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},undefined);
+		searchCompanies: function(){
+
+			//noop
+
+			// var searchValue = $(".searchbar input").val();
+			// var endpoint = PAGE.fqdn + "/sgx/search";
+			// var postType = 'POST';
+			// var params = {"criteria":[{"field":"companyOrTicker","value":searchValue}]};
+			// var jsonp = 'jsonp';
+			// var jsonpCallback = 'jsonpCallback';
+			// UTIL.handleAjaxRequest(
+			// 	endpoint,
+			// 	postType,
+			// 	params, 
+			// 	undefined, 
+			// 	function(data, textStatus, jqXHR){
+			// 		if (data.companies.length == 0){ 
+			// 			$('<li/>').html('There are no results for your search.').appendTo('.results .company');
+			// 			return;					
+			// 		} else {
+			// 			$('.results .company').empty();
+			// 			ALERTS.searchResults(data.companies);
+			// 			if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
+			// 			PAGE.resizeIframeSimple();
+			// 		}
+			// 	}, 
+			// 	function(jqXHR, textStatus, errorThrown){
+			// 		console.log('fail');
+			// 		console.log('sta', textStatus);
+			// 		console.log(errorThrown);
+			// 		console.log(jqXHR);
+			// 	},undefined);
+		},
+
+		autoCompleteCompanies: function() {
+
 		},
 
 		clearWatchListErrors: function() {
@@ -431,6 +500,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					"estChangePriceDropAbove": (ALERTS.displayList().optionList.estChangePriceDropAbove != null) ? ALERTS.displayList().optionList.estChangePriceDropAbove : null,
 					"estChangeConsensus": (ALERTS.displayList().optionList.estChangeConsensus != undefined) ? ALERTS.displayList().optionList.estChangeConsensus : false,
 					"estChangeConsensusValue": ALERTS.displayList().optionList.estChangeConsensusValue,
+					"estChangeEstimates": (ALERTS.displayList().optionList.estChangeEstimates != undefined) ? ALERTS.displayList().optionList.estChangeEstimates : false,
+					"estChangeEstimatesValue": ALERTS.displayList().optionList.estChangeEstimatesValue,
 					"kdAnounceCompTransactions": (ALERTS.displayList().optionList.kdAnounceCompTransactions != undefined) ? ALERTS.displayList().optionList.kdAnounceCompTransactions : false,
 					"kdCompanyForecasts": (ALERTS.displayList().optionList.kdCompanyForecasts != undefined) ? ALERTS.displayList().optionList.kdCompanyForecasts : false,
 					"kdCorporateStructureRelated": (ALERTS.displayList().optionList.kdCorporateStructureRelated != undefined) ? ALERTS.displayList().optionList.kdCorporateStructureRelated : false,

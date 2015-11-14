@@ -69,7 +69,7 @@
 					<h5>Search for companies to add to your Watch List</h5>
 					<div>
 						<span class="searchbar">
-							<input type="text" placeholder="Company name or stock code" data-bind="enterkey:$root.searchCompanies" />
+							<input type="text" placeholder="Company name or stock code" data-bind="enable:searchReady, value:searchInput, valueUpdate:'keyup'" />
 							<span class="search-submit" class="button" value="" alt="Search Submit" data-bind="click:$root.searchCompanies"></span>
 						</span>
 					</div>
@@ -144,6 +144,17 @@
 							</span>
 							<span>Change in consensus recommendation
 								<select data-bind="options: consensusRec, optionsValue: 'id', optionsText: 'name', value: displayList().optionList.estChangeConsensusValue"></select>
+						</li>
+						<li>
+							<span class="checkbox left">
+								<span class="trigger">
+									<span class="name"></span>
+								</span>
+								<input type="checkbox" data-bind="checked: displayList().optionList.estChangeEstimates">
+							</span>
+							<span>Change in estimates to actual
+								<select data-bind="options: actualEstimates, optionsValue: 'id', optionsText: 'name', value: displayList().optionList.estChangeEstimatesValue"></select>
+							</span>
 						</li>
 					</ul>
 				</div>
