@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CompanyNameAndTicker;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
@@ -30,6 +31,7 @@ import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.service.search.elasticsearch.query.AlphaFactorIdQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.CompanyNameAndTickerQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.DividendValueQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.EstimatesQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
@@ -255,6 +257,20 @@ public class CompanyServiceImpl implements CompanyService{
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading estimates", e);
+		}
+	}
+	
+	@Autowired
+	private SearchService companyNameAndTickerSearch;
+	
+	@Override
+	public List<CompanyNameAndTicker> loadCompanyNamesAndTickers() throws SearchServiceException{
+		
+		try{
+			return companyNameAndTickerSearch.search(new CompanyNameAndTickerQueryBuilder(), CompanyNameAndTicker.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new SearchServiceException("Exception searching CompanyNamesAndTickers", e);
 		}
 	}
 	

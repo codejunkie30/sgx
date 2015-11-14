@@ -17,6 +17,8 @@ import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CompanyNameAndTicker;
+import com.wmsi.sgx.model.CompanyNameAndTickerList;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
@@ -123,6 +125,14 @@ public class CompanyController{
 		List<Estimate> hits = companyService.loadEstimates(search.getId());
 		Estimates ret = new Estimates();
 		ret.setEstimates(hits);
+		return ret;
+	}
+	
+	@RequestMapping(value="company/names")
+	public CompanyNameAndTickerList getCompanyNamesAndTickers() throws SearchServiceException {		
+		List<CompanyNameAndTicker> hits = companyService.loadCompanyNamesAndTickers();
+		CompanyNameAndTickerList ret = new CompanyNameAndTickerList();
+		ret.setCompanyNameAndTickerList(hits);
 		return ret;
 	}
 	

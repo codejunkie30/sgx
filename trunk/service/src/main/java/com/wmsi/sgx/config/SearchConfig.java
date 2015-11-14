@@ -56,6 +56,11 @@ public class SearchConfig{
 	}
 	
 	@Bean
+	public SearchService companyNameAndTickerSearch(){
+		return searchService("company");
+	}
+	
+	@Bean
 	public SearchService alphaFactorSearch(){
 		return searchService("alphaFactor");
 	}
