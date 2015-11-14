@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CompanyNameAndTicker;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
@@ -48,5 +49,7 @@ public interface CompanyService{
 	List<Estimate> loadEstimates(String id) throws CompanyServiceException;
 	
 	List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException;
+
+	List<CompanyNameAndTicker> loadCompanyNamesAndTickers() throws SearchServiceException;
 
 }
