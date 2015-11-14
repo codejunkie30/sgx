@@ -43,6 +43,12 @@ public class DataConfig{
 		source.setUrl(env.getProperty("database.url"));
 		source.setUsername(env.getProperty("database.user"));
 		source.setPassword(env.getProperty("database.password"));
+		
+		source.setInitialSize(Integer.parseInt(env.getProperty("database.initialSize")));
+		source.setMaxTotal(Integer.parseInt(env.getProperty("database.maxTotal")));
+		source.setMaxIdle(Integer.parseInt(env.getProperty("database.maxIdle")));
+		source.setValidationQuery(env.getProperty("database.validationQuery"));
+		source.setTestOnReturn(true);
 
 		return source;
 	}
