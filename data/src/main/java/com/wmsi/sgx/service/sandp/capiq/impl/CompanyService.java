@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,7 +47,8 @@ public class CompanyService extends AbstractDataService {
 
 			// list of records
 			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
-
+			setConsensus(id, records);
+			
 			// company
 			Company company = getCompany(id, records);
 			
@@ -80,6 +82,24 @@ public class CompanyService extends AbstractDataService {
 			throw new ResponseParserException("Loading company: " + id, e);
 		}
 
+	}
+	
+	/**
+	 * add some consensus records straight from the csv file
+	 */
+	public void setConsensus(String id, List<CompanyCSVRecord> records) throws Exception {
+		
+		String[] fieldNames = { "avgBrokerReq", "targetPrice" };
+		List<String> fields = Arrays.asList(fieldNames);
+		
+		try {
+			List<CompanyCSVRecord> consensus = getParsedCompanyRecords(id, "consensus-estimates");
+			for (CompanyCSVRecord item : consensus) {
+				if (fields.contains(item.getName())) records.add(item);
+			}
+		}
+		catch(Exception e) {}
+		
 	}
 
 	/**
