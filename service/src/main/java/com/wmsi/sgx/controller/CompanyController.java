@@ -73,8 +73,8 @@ public class CompanyController{
 	@RequestMapping(value="company")
 	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException, ServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
-		//ret.put("company", getCompany(search));
-		//Create search request object from IdSearch
+		ret.put("company", getCompany(search));
+		/*//Create search request object from IdSearch
 		SearchRequest req = new SearchRequest();
 		Criteria c = new Criteria();
 		c.setField("tickerCodeExactMatch");
@@ -87,13 +87,13 @@ public class CompanyController{
 		sr = searchController.search(req);
 		
 		ret.put("company", sr);
-		if(ret.get("company") != null && sr.getCompanies().size()>0 ){
+		if(ret.get("company") != null && sr.getCompanies().size()>0 ){*/
 			ret.put("holders", getHolders(search));
 			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 			ret.put("alphaFactors", getAlphas(search));
 			ret.put("gtis", getGtis(search));
 			ret.put("dividendHistory", getDividendHistory(search));
-		}
+		//}
 		return ret;
 	}
 	
