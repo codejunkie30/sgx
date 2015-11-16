@@ -109,7 +109,7 @@
  	<!--  Job Completed successfully, create index and remove old indexes -->
  	<int:chain input-channel="createAlias" output-channel="loggingChannel">
  		<int:service-activator ref="indexerService" method="createIndexAlias" />
- 		<!-- <int:service-activator ref="indexBuilderService" method="deleteOldIndexes" />  -->
+ 		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" /> 
  	</int:chain>
 
 	<int:logging-channel-adapter channel="loggingChannel" level="INFO" expression=" 'Job Complete ' + payload.toString()"/>
