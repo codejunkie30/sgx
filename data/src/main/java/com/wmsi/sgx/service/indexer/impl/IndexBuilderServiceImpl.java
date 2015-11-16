@@ -69,7 +69,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	
 	@Value("${elasticsearch.index.name}")
 	private String indexAlias;
-
+	
+	@Value("${elasticsearch.index.liveIndexes}")
+	private String liveIndexes;
+	
 	@Value("${indexer.failureThreshold}")
 	private int FAILURE_THRESHOLD;
 	
@@ -230,6 +233,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		cal.add(Calendar.DAY_OF_MONTH, INDEX_REMOVAL_THRESHOLD * -1);
 		Date fiveDaysAgo = cal.getTime();
 		
+		List<String> liveIndexesList = new ArrayList<String>();
+		if(liveIndexes!="" && liveIndexes.length()>0){
+			for(int i=0; i<liveIndexes.split(",").length; i++){
+				liveIndexesList.add(liveIndexes.split(",")[i]);
+			}
+		}
 		int removed = 0;
 		
 		for(Index index : indexes.getIndexes()){
@@ -241,12 +250,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			
 			if(dif > 0){
 				// Make sure we don't delete the live index, even if it's older than the threshold
-				if(index.getAliases() != null && index.getAliases().contains(indexAlias)){
+				if(index.getAliases() != null && !(Collections.disjoint(index.getAliases(), liveIndexesList))){
 					log.warn("Found alias on index older than {} days. Skipping deletion of this index {}", INDEX_REMOVAL_THRESHOLD, indexName);
 					continue;
 				}
 
-				log.info("Deleting index {}", indexName);
+				log.info("Deleting index {} had indexDate as {}", indexName, indexDate);
 				
 				indexerService.deleteIndex(indexName);
 				removed++;
