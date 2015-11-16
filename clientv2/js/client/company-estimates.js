@@ -126,7 +126,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         },
 		
 		initFinancials: function(me, data) {
-            console.log(data);
+            
             this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
