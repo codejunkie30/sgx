@@ -37,6 +37,7 @@ import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.util.DateUtil;
+import com.wmsi.sgx.util.DefaultHashMap;
 import com.wmsi.sgx.util.MathUtil;
 
 @Service
@@ -85,7 +86,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	public List<AlertOption> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
-		Map<String, Object> map = watchlist.getOptionList();
+		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
+		map.putAll(watchlist.getOptionList());
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		String todaysDate = sdf.format(new Date());
 		String mkt = "XSES";
