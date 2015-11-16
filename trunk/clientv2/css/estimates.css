@@ -18,8 +18,9 @@
 .summary .left p { margin: 0 0 10px 0; }
 
 .summary .progress-estimate { display: block; background: #f2f2f2; text-align: center; }
-.summary .progress-estimate .recommendation { margin: 10px auto; width: 292px; }
 
+.summary .progress-estimate .recommendation { margin: 10px auto; width: 292px; }
+#estimates-content .summary .progress-estimate .right { background: none;}
 #estimates-content {display:none;}
 #estimates-content table tbody tr td {font-weight:normal;}
 #estimates-content-alternative {display:none; margin-top:20px; padding:15px; border:1px solid #cacdd3;}
