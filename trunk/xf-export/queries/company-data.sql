@@ -180,7 +180,7 @@ select pop.tickerSymbol,
 		when dataItemId=15 then 'netIncome'
 		when dataItemId=4051 then 'ebitda'
 		when dataItemId=400 then 'ebit'
-		when dataItemId=142 then 'eps'
+		when dataItemId=4380 then 'eps'
 		when dataItemId=3058 then 'dividendsPerShare'
 		when dataItemId=1002 then 'cashInvestments'
 		when dataItemId=1007 then 'totalAssets'
@@ -251,7 +251,7 @@ where fd.dataitemId in (
 	,15--netIncome
 	,4051--ebitda
 	,400 --ebit
-	,142--eps
+	,4380--eps
 	,3058--dividendsPerShare
 	,1002--cashInvestments
 	,1007--totalAssets
