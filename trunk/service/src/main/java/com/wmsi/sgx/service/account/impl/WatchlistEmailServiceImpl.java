@@ -289,6 +289,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				vol += val.getValue();
 		}
 
+		if(lastYear.size() == 0)
+			return vol;
+		
 		return avg(vol, lastYear.size(), 4);
 	}
 	
