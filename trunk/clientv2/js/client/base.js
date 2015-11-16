@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "highstock", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -81,13 +81,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	};
 
 	KO.bindingHandlers.prepend = {
-			update: function(element, valueAccessor, allBindings) {
-		        return KO.bindingHandlers.text.update(element,function(){
-		        	var value = parseInt(allBindings().text);
-		            var prep = KO.unwrap(valueAccessor());
-		            return typeof prep !== "undefined" ? prep + value : value;
-		        });
-			}
+		update: function(element, valueAccessor, allBindings) {
+			return KO.bindingHandlers.text.update(element,function(){
+				var value = parseInt(allBindings().text);
+				var prep = KO.unwrap(valueAccessor());
+				return typeof prep !== "undefined" ? prep + value : value;
+			});
+		}
 	};
 	
 	KO.bindingHandlers.accordian = {
@@ -170,19 +170,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$(element).attr("href", url).attr("target", "_parent");
 		}
 	};
-	
-	KO.bindingHandlers.truncatedText = {
-	    init: function (element, valueAccessor, allBindingsAccessor) {
-	        var originalText = KO.utils.unwrapObservable(valueAccessor()),
-	            // 10 is a default maximum length
-	            length = KO.utils.unwrapObservable(allBindingsAccessor().maxTextLength) || 100,
-	            truncatedText = originalText.length > length ? originalText.substring(0, length) + "..." : originalText;
-	        // updating text binding handler to show truncatedText
-	        KO.bindingHandlers.text.update(element, function () {
-	            return truncatedText; 
-	        });
-	    }
-	};	
 	
 	PAGE = {
 		//fqdn: "https://sgx.sharefc.com", 
@@ -274,21 +261,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			return this;
 			
 		},
-		
-        setReturnUrl: function(){
-
-            var returnUrl = this.getParentURL(window.location);
-            return CryptoJS.MD5(returnUrl).toString();
-
-        },
-
-        goToSignIn: function() {
-
-            var retUrl = this.setReturnUrl();
-            top.location.href = window.location.origin+'/sign-in.html?add='+retUrl;
-
-        },
-
 
 		hasGlossaryTerm: function(name) {
 			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
@@ -539,7 +511,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-							
                             PAGE.userStatus('PREMIUM');
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
@@ -561,7 +532,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						if (data.type == 'EXPIRED'){
-
                             PAGE.userStatus('EXPIRED');
                             PAGE.libTrialExpired(true);						
 							PAGE.libLoggedIn(true);
@@ -571,7 +541,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						PAGE.timedLogout();
 					}
-					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log(textStatus);
@@ -672,8 +641,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						function(data, textStatus, jqXHR){	
 							if (data.message == 'success'){
 								$(".modal-container").colorbox.close();
-							}			
-							
+							}
 						}, 
 						function(jqXHR, textStatus, errorThrown){
 							console.log('fail');
@@ -744,8 +712,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 									console.log('sta', textStatus);
 									console.log(errorThrown);
 									console.log(jqXHR);
-								},jsonpCallback);								
-							
+								},jsonpCallback);
 						}
 					});
 				}, 
@@ -755,9 +722,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					console.log(errorThrown);
 					console.log(jqXHR);
 				},jsonpCallback);
-			
-			
-			
 		}
 		
 	};
