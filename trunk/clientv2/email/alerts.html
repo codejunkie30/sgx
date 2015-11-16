@@ -38,7 +38,7 @@
 										<div style="margin: 0 0 20px 0;" th:each="alert : ${alerts}">
 											<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold; color: #333; margin: 0 0 5px 0;" class="category"  th:text="${alert.description}">Price Dropped Below 5% Or Rise Above 5% Last Close Price</div>
 											<th:block th:each="company : ${alert.companies}">
-												<div style="margin: 0 0 2px 0;" class="company"><a th:href="${emailSite + '?page=1&amp;code='  + company.key + '&amp;lang=en-us'}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold; color: #0b236b; text-decoration: none;"><span th:text="${company.value}">Singapore Airlines Limited</span> (<span th:text="${company.key}">C6L</span>)</a></div>
+												<div style="margin: 0 0 2px 0;" class="company"><a th:href="${emailSite + '?page=1&amp;code='  + company.key + '&amp;lang=en-us'}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #0b236b; text-decoration: none;"><span th:text="${company.value}">Singapore Airlines Limited</span> (<span th:text="${company.key}">C6L</span>)</a></div>
 											</th:block>
 										</div>									
 									</div>
@@ -87,35 +87,36 @@
 										</tr>
 									</table>
 									
-									
-									
-									<table width="550" border="0" cellpadding="11" cellspacing="0" bgcolor="#e3e5e4" th:each="company : ${companyPrices}">
-										<tr>
-											<td>
-												<table border="0" cellpadding="0" cellspacing="0">
-													<tr>
-														<td width="45">
-															<div style="background: #0e236b; padding: 3px 6px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #fff; text-align: center;" th:text="${company.ticker}">C6L</div>
-														</td>
-														<td width="12"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="12" height="1" alt="" /></td>
-														<td width="270">
-															<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #333;" th:text="${company.companyName}">Singapore Airlines Limited</div>
-														</td>
-														<td width="55"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="55" height="1" alt="" /></td>
-														<td width="145" align="right">
-															<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #333;" th:text="${company.currency}">SGD</span>
-															<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #333;" th:text="${#numbers.formatDecimal(company.price, 0, 4)}">10.06</span>
-															<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #bdd831;" th:classappend="${company.change > 0 ? positive : negative }" th:text="${company.change}">+0.02</span>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-									
-									
-									
-																	
+									<div th:each="company : ${companyPrices}">									
+										<table width="550" border="0" cellpadding="11" cellspacing="0" bgcolor="#e3e5e4">
+											<tr>
+												<td>
+													<table border="0" cellpadding="0" cellspacing="0">
+														<tr>
+															<td width="45">
+																<div style="background: #0e236b; padding: 3px 6px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold; color: #fff; text-align: center;" th:text="${company.ticker}">C6L</div>
+															</td>
+															<td width="12"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="12" height="1" alt="" /></td>
+															<td width="270">
+																<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${company.companyName}">Singapore Airlines Limited</div>
+															</td>
+															<td width="55"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="55" height="1" alt="" /></td>
+															<td width="145" align="right">
+																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${company.currency}">SGD</span>
+																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${#numbers.formatDecimal(company.price, 0, 4)}">10.06</span>
+																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #bdd831;" th:classappend="${company.change > 0 ? positive : negative }" th:text="${company.change}">+0.02</span>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<table width="550" border="0" cellpadding="0" cellspacing="0">
+											<tr>
+												<td height="8"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="5" alt="" style="display: block;" /></td>
+											</tr>
+										</table>
+									</div>
 								</td>
 							</tr>
 						</table>
