@@ -41,12 +41,15 @@ import com.wmsi.sgx.model.charts.Ratio;
 import com.wmsi.sgx.model.charts.Ratios;
 import com.wmsi.sgx.model.search.ChartDomain;
 import com.wmsi.sgx.model.search.ChartRequestModel;
+import com.wmsi.sgx.model.search.Criteria;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
+import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.SearchServiceException;
@@ -64,15 +67,33 @@ public class CompanyController{
 	@Autowired
 	private AccountService accountService;
 	
+	@Autowired
+	private SearchController searchController;
+	
 	@RequestMapping(value="company")
-	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException {
+	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException, ServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret.put("company", getCompany(search));
-		ret.put("holders", getHolders(search));
-		ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
-		ret.put("alphaFactors", getAlphas(search));
-		ret.put("gtis", getGtis(search));
-		ret.put("dividendHistory", getDividendHistory(search));
+		//ret.put("company", getCompany(search));
+		//Create search request object from IdSearch
+		SearchRequest req = new SearchRequest();
+		Criteria c = new Criteria();
+		c.setField("tickerCodeExactMatch");
+		c.setValue(search.getId());
+		List<Criteria> clist = new ArrayList<Criteria>();
+		clist.add(c);
+		req.setCriteria(clist);
+		
+		SearchResults sr = new SearchResults();
+		sr = searchController.search(req);
+		
+		ret.put("company", sr);
+		if(ret.get("company") != null && sr.getCompanies().size()>0 ){
+			ret.put("holders", getHolders(search));
+			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
+			ret.put("alphaFactors", getAlphas(search));
+			ret.put("gtis", getGtis(search));
+			ret.put("dividendHistory", getDividendHistory(search));
+		}
 		return ret;
 	}
 	
