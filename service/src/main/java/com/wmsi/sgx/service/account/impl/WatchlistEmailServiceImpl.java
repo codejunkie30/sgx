@@ -67,7 +67,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	private KeyDevsMap keyDevsMap;
 	
 	@Override
-	@Scheduled(cron="0 20 17 ? * *")
+	@Scheduled(cron="0 0 0 ? * *")
 	public void getWatchlistEmails() throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		
