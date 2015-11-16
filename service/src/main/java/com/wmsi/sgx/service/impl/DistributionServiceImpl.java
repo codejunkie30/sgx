@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.FieldValue;
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
@@ -43,11 +44,12 @@ public class DistributionServiceImpl implements DistributionService{
 
 	@Override
 	@Cacheable("distributions")
-	public Distributions getAggregations(DistributionsRequest req) throws ServiceException {
+	public Distributions getAggregations(DistributionsRequest req, AccountType accType) throws ServiceException {
 		
 		List<DistributionRequestField> fields = req.getFields();
-		Map<String, StatAggregation> intervals = getHistogramIntervals(fields);
-		SearchResult<Company> res = search(new DistributionsQueryBuilder(fields, intervals));
+		Map<String, StatAggregation> intervals = getHistogramIntervals(fields, accType);
+		SearchResult<Company> res = search(new DistributionsQueryBuilder(fields, intervals, accType));
+		//SearchResult<Company> res = search(new DistributionsQueryBuilder(fields, intervals));
 		
 		Distributions dist = (Distributions) mapper.map(res.getAggregations(), Distributions.class);		
 		dist.setFieldValues(getFieldValues(res, fields));
@@ -65,12 +67,12 @@ public class DistributionServiceImpl implements DistributionService{
 		return false;
 	}
 	
-	private Map<String, StatAggregation> getHistogramIntervals(List<DistributionRequestField> fields) throws ServiceException{
+	private Map<String, StatAggregation> getHistogramIntervals(List<DistributionRequestField> fields, AccountType accType) throws ServiceException{
 		
 		if(!hasNumericFields(fields))
 			return null;
 		
-		Aggregations stats = getStatsAggregations(fields);		
+		Aggregations stats = getStatsAggregations(fields, accType);		
 		Map<String, StatAggregation> aggs = new HashMap<String, StatAggregation>();
 		
 		for(Aggregation a : stats.getAggregations()){			
@@ -112,8 +114,8 @@ public class DistributionServiceImpl implements DistributionService{
 		return values;
 	}
 		
-	private Aggregations getStatsAggregations(List<DistributionRequestField> fields) throws ServiceException{
-		return loadAggregations(new StatsQueryBuilder(fields));
+	private Aggregations getStatsAggregations(List<DistributionRequestField> fields, AccountType accType) throws ServiceException{
+		return loadAggregations(new StatsQueryBuilder(fields,accType));
 	}
 
 	public Aggregations loadAggregations(QueryBuilder query) throws ServiceException {

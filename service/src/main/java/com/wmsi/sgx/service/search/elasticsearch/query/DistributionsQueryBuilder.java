@@ -12,7 +12,9 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.range.RangeBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Value;
 
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.search.StatAggregation;
@@ -22,11 +24,16 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 	private List<String> fields;
 	private Map<String, StatAggregation> ranges;
+	private AccountType accType;
 	
-	public DistributionsQueryBuilder(List<DistributionRequestField> f, Map<String, StatAggregation> r){
+	@Value("${list.permitted.exchanges}")
+	private String permittedExchangesList="SGX,CATALIST";
+	
+	public DistributionsQueryBuilder(List<DistributionRequestField> f, Map<String, StatAggregation> r, AccountType accType){
 
 		ranges = r;
 		fields = new ArrayList<String>();
+		this.accType = accType;
 		
 		for(DistributionRequestField req : f){
 			fields.add(req.getField());
@@ -35,11 +42,23 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 	@Override
 	public String build() {
-
-		SearchSourceBuilder query = new SearchSourceBuilder()
-				.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter()))
-				.fetchSource(fields.toArray(new String[0]), null)
-				.size(MAX_RESULTS);
+		List<String> exchangesWhiteList = new ArrayList<String>();
+		for(int i=0; i<permittedExchangesList.split(",").length; i++){
+			exchangesWhiteList.add(permittedExchangesList.split(",")[i]);
+		}
+		
+		SearchSourceBuilder query;
+		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)){
+			query = new SearchSourceBuilder()
+					.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter()))
+					.fetchSource(fields.toArray(new String[0]), null)
+					.size(MAX_RESULTS);
+			
+		}else{
+			query = new SearchSourceBuilder().query(QueryBuilders.constantScoreQuery(FilterBuilders.boolFilter().must(FilterBuilders.termsFilter("exchange", exchangesWhiteList))))
+					.fetchSource(fields.toArray(new String[0]), null)
+					.size(MAX_RESULTS);
+		}
 
 		for(String field : fields){
 
