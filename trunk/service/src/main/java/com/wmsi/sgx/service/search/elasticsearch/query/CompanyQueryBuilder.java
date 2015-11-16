@@ -77,6 +77,12 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 				builder.sort("_score");
 				builder.sort("tickerCode");
 				
+			}else if(c.getField().equals("tickerCodeExactMatch")){
+
+				// Build ticker query. Add sort for score followed by ticker
+				query = addQuery(query, buildTickerCodeExactMatchQuery(c));
+				
+				
 			}
 			else if(c.getField().equals("percentChange")){
 
@@ -332,6 +338,18 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			.matchQuery("tickerCode.partial", text))
 			.boost(2));
 	}
+	
+	private QueryBuilder buildTickerCodeExactMatchQuery(Criteria c){
+			
+			String text = c.getValue();
+			
+			return QueryBuilders.boolQuery()
+					
+			// Text search for prefix match
+			.should(QueryBuilders
+					.constantScoreQuery(QueryBuilders
+				.matchQuery("tickerCode.full", text)));
+		}
 
 	private QueryBuilder buildExchangeQuery(List<String> exchanges){
 		
