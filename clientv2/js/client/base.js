@@ -524,7 +524,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							
 							var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-
+							
+							if (daysRemaining == 0) { daysRemaining = 1 }
+							
                             PAGE.userStatus('TRIAL');
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialExpired(false);
