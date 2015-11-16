@@ -126,7 +126,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         },
 		
 		initFinancials: function(me, data) {
-            
+            console.log(data);
             this.dataExists(data.estimates.length);
             this.summaryData = data.estimates[0];  //index 0 is summaryData
 
@@ -143,21 +143,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
-            // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
-            // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
-
-            $.each( this.estimates.annually, function(key, val) {
-                var refinedObj = me.normalizeForDisplay( val );
-                me.refinedEstimates.annually.push( refinedObj );
-            });
-
-            $.each( this.estimates.quarterly, function(key, val) {
-                var refinedObj = me.normalizeForDisplay( val );
-                me.refinedEstimates.quarterly.push( refinedObj );
-            });
-
-
-
             //table col widths 
             this.quarterlyTableColWidth = '15%';
             this.annualTableColWidth = '15%';
@@ -171,9 +156,24 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             }
 
             if(this.estimates.annually.length > 0) {
-
+                this.estimates.annually.sort(function(a, b){
+                    return a.periodDate > b.periodDate;
+                });
                 this.annualTableColWidth = 69/this.estimates.annually.length+'%';
             }
+
+            // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
+            // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
+
+            $.each( this.estimates.annually, function(key, val) {
+                var refinedObj = me.normalizeForDisplay( val );
+                me.refinedEstimates.annually.push( refinedObj );
+            });
+
+            $.each( this.estimates.quarterly, function(key, val) {
+                var refinedObj = me.normalizeForDisplay( val );
+                me.refinedEstimates.quarterly.push( refinedObj );
+            });
 
 
         	
