@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AlertOption;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Estimate;
@@ -73,7 +74,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		List<Account> accounts = accountRepository.findAll();
 		
 		for( Account acc: accounts)	{
-			if(acc.getActive() == true && acc.getType().equals(AccountType.PREMIUM)){
+			if(acc.getActive() == true){
 				List<WatchlistModel> list =	watchlistService.getWatchlist(acc.getUser());
 				if(list.size() > 0)
 					for(WatchlistModel watchlist : list){
@@ -81,6 +82,22 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
 							senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies(), true));
 					}
+			}
+		}
+	}
+	@Override
+	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
+		List<Account> accounts = accountRepository.findAll();			
+		for( Account acct: accounts){
+			if(acct.getActive() == true && acct.getUser().getUsername().equals(usr.getUsername())){
+				List<WatchlistModel> list = watchlistService.getWatchlist(usr);
+				if(list.size() > 0)
+					for(WatchlistModel watchlist : list){
+						List<AlertOption> options = parseWatchlist(watchlist, acct);
+						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
+							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies(), true));
+					}
+				break;
 			}
 		}
 	}

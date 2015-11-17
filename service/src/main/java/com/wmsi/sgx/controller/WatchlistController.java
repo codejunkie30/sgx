@@ -1,6 +1,8 @@
 package com.wmsi.sgx.controller;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,11 @@ import com.wmsi.sgx.model.WatchlistRenameModel;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.repository.WatchlistRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.account.QuanthouseServiceException;
+import com.wmsi.sgx.service.account.WatchlistEmailService;
 import com.wmsi.sgx.service.account.WatchlistService;
+import com.wmsi.sgx.service.search.SearchServiceException;
 
 @RestController
 @RequestMapping(method = RequestMethod.POST, produces="application/json" )
@@ -30,6 +36,15 @@ public class WatchlistController {
 	
 	@Autowired 
 	private UserRepository userRepository;
+	
+	@Autowired
+	private WatchlistEmailService emailService;
+	
+	@RequestMapping(value="watchlist/sendEmail")
+	public void sendEmail(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
+		User usr = userRepository.findByUsername(user.getUsername());
+		emailService.getEmailsForUser(usr);
+	}
 	
 	@RequestMapping(value = "watchlist/create")
 	public List<WatchlistModel> createWatchlist(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
