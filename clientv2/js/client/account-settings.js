@@ -12,7 +12,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		isFormValid: ko.observable(true),
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
-
+			
 			var displayMessage = SAVECHANGES.messages.messages[0];
 
 			this.accountSettings(displayMessage);			
@@ -175,6 +175,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.currency(data.currency);
+					
+					if (data.type == '' || data.type == undefined || data.type == 'UNAUTHORIZED'){
+						var home = PAGE.getPage(PAGE.pageData.getPage('index'));
+						top.location.href = home;
+					}					
 					
 					if (data.type == 'PREMIUM'){						
 						$('.settings .intro .content').html(displayMessage.accountSettings.introPremium);

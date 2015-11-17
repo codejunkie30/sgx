@@ -28,8 +28,8 @@
 .watchlist .wl-companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
 .watchlist .wl-companies ul li .ticker { width: 115px; }
 .watchlist .wl-companies ul li .currency { width: 60px; }
-.watchlist .wl-companies ul li .price { width: 70px; }
-.watchlist .wl-companies ul li .change { width: 75px; color: #b5cf34; }
+.watchlist .wl-companies ul li .price { width: 75px; }
+.watchlist .wl-companies ul li .change { width: 70px; color: #b5cf34; }
 .watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
 .watchlist .search .description .screener-basic { margin-bottom: 8px; }
