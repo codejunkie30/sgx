@@ -421,14 +421,35 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			// 	},undefined);
 		},
 
-		autoCompleteCompanies: function() {
-
+		sendEmail: function() {
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/sendEmail";
+			var postType = 'POST';
+    		var params = {};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				},jsonpCallback);
 		},
 
 		clearWatchListErrors: function() {
 			$('.error-messages').empty();
 		},
-
+		
+		clearWatchListErrors: function() {
+			$('.error-messages').empty();
+		},
+		
 
 		saveWatchlist: function(){
 			var displayMessage = ALERTS.messages.messages[0];

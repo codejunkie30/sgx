@@ -63,6 +63,7 @@
 
 .button-wrapper { margin: 35px 0 0 10px; }
 .button-wrapper a { cursor: pointer; }
+.button-wrapper a.email { margin-left: 10px; }
 
 .cboxWrapper .cancel { margin: 0 10px; }
 
