@@ -15,6 +15,7 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
 import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
@@ -51,5 +52,7 @@ public interface CompanyService{
 	List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException;
 
 	List<CompanyNameAndTicker> loadCompanyNamesAndTickers() throws SearchServiceException;
+	
+	Boolean isCompanyNonPremium(String tickerCode) throws SearchServiceException;
 
 }

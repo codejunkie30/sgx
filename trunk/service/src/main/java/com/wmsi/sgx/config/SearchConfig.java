@@ -61,6 +61,11 @@ public class SearchConfig{
 	}
 	
 	@Bean
+	public SearchService isCompanyNonPremium(){
+		return searchService("company");
+	}
+	
+	@Bean
 	public SearchService alphaFactorSearch(){
 		return searchService("alphaFactor");
 	}

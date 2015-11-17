@@ -7,6 +7,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
@@ -16,6 +18,7 @@ import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.repository.AccountRepository;
+import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.AccountService;
 
@@ -106,6 +109,20 @@ public class AccountServiceImpl implements AccountService{
 		
 		return createAccount(user, AccountType.PREMIUM, PREMIUM_EXPIRATION_DAYS);
 		
+	}
+	
+	@Override
+	public Boolean isPremiumUser(){
+		User u = null;
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
+			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
+			AccountModel accountModel =getAccountForUsername(u.getUsername());
+			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL)
+				return true;
+		}
+		return false;
 	}
 	
 	@Override
