@@ -500,7 +500,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource'){
+					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password'){
 						PAGE.premiumUser(false);
                         PAGE.userStatus('UNAUTHORIZED');
 					} else {
