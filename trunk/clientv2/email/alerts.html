@@ -103,7 +103,7 @@
 															<td width="55"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="55" height="1" alt="" /></td>
 															<td width="145" align="right">
 																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${company.currency}">SGD</span>
-																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${#numbers.formatDecimal(company.price, 1, 4)}">10.06</span>
+																<span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #333;" th:text="${company.price}">10.06</span>
 																<span th:style="'font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color:' + ${company.change >= 0 ? '#bdd831' : '#bf0052'}" th:text="${company.change}">+0.02</span>
 															</td>
 														</tr>
