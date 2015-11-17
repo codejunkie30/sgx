@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,15 +43,12 @@ import com.wmsi.sgx.model.charts.Ratio;
 import com.wmsi.sgx.model.charts.Ratios;
 import com.wmsi.sgx.model.search.ChartDomain;
 import com.wmsi.sgx.model.search.ChartRequestModel;
-import com.wmsi.sgx.model.search.Criteria;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
-import com.wmsi.sgx.model.search.SearchRequest;
 import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
-import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.SearchServiceException;
@@ -68,37 +67,38 @@ public class CompanyController{
 	private AccountService accountService;
 	
 	@Autowired
-	private SearchController searchController;
+	private MessageSource messages;
+	
 	
 	@RequestMapping(value="company")
-	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException, ServiceException {
+	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret.put("company", getCompany(search));
-		/*//Create search request object from IdSearch
-		SearchRequest req = new SearchRequest();
-		Criteria c = new Criteria();
-		c.setField("tickerCodeExactMatch");
-		c.setValue(search.getId());
-		List<Criteria> clist = new ArrayList<Criteria>();
-		clist.add(c);
-		req.setCriteria(clist);
 		
-		SearchResults sr = new SearchResults();
-		sr = searchController.search(req);
-		
-		ret.put("company", sr);
-		if(ret.get("company") != null && sr.getCompanies().size()>0 ){*/
+		if(accountService.isPremiumUser()){
+			ret.put("company", getCompany(search));
 			ret.put("holders", getHolders(search));
 			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 			ret.put("alphaFactors", getAlphas(search));
 			ret.put("gtis", getGtis(search));
 			ret.put("dividendHistory", getDividendHistory(search));
-		//}
+		}else{
+			if(companyService.isCompanyNonPremium(search.getId())){
+				ret.put("company", getCompany(search));
+				ret.put("holders", getHolders(search));
+				ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
+				ret.put("alphaFactors", getAlphas(search));
+				ret.put("gtis", getGtis(search));
+				ret.put("dividendHistory", getDividendHistory(search));	
+			}else{
+				ret.put("errorCode", (messages.getMessage("user.company.no.access.errorCode",null,LocaleContextHolder.getLocale())));
+				ret.put("errorMessage", (messages.getMessage("user.company.no.access",null,LocaleContextHolder.getLocale())));
+			}
+		}
 		return ret;
 	}
 	
 	@RequestMapping(value="company/techChart")
-	public Map<String, Object> getTechChart(@RequestBody IdSearch search) throws CompanyServiceException {
+	public Map<String, Object> getTechChart(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("company", getCompany(search));
 		ret.put("dividendHistory", getDividendHistory(search));
@@ -109,6 +109,8 @@ public class CompanyController{
 	
 	@RequestMapping(value="company/info")
 	public Map<String, Company> getCompany(@RequestBody IdSearch search) throws CompanyServiceException{
+		
+		
 		Map<String, Company> ret = new HashMap<String, Company>();
 		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;

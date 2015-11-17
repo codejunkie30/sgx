@@ -1,9 +1,11 @@
 package com.wmsi.sgx.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
+import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.charts.BalanceSheet;
 import com.wmsi.sgx.model.charts.CashFlow;
@@ -36,6 +39,7 @@ import com.wmsi.sgx.service.search.elasticsearch.query.DividendValueQueryBuilder
 import com.wmsi.sgx.service.search.elasticsearch.query.EstimatesQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.FinancialsQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.HistoricalValueQueryBuilder;
+import com.wmsi.sgx.service.search.elasticsearch.query.IsCompanyPremiumQueryBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuilder;
 
 @Service
@@ -43,11 +47,15 @@ public class CompanyServiceImpl implements CompanyService{
 
 	@Autowired
 	private SearchService companySearch;
+	
+	@Value("${list.permitted.exchanges}")
+	private String permittedExchangesList;
 
 	@Override
 	@Cacheable(value = "company")
 	public Company getById(String id) throws CompanyServiceException {
 		try{
+	
 			return companySearch.getById(id, Company.class);
 		}
 		catch(SearchServiceException e){
@@ -273,6 +281,31 @@ public class CompanyServiceImpl implements CompanyService{
 			throw new SearchServiceException("Exception searching CompanyNamesAndTickers", e);
 		}
 	}
+	@Autowired
+	private SearchService isCompanyNonPremium;
+	
+	@Override
+	public Boolean isCompanyNonPremium(String tickerCode) throws SearchServiceException{
+		try{
+			List<IsCompanyNonPremiumModel> list = isCompanyNonPremium.search(new IsCompanyPremiumQueryBuilder(tickerCode), IsCompanyNonPremiumModel.class).getHits();
+			List<String> exchangeWhiteList = new ArrayList<>();
+			if(permittedExchangesList != null && permittedExchangesList.length() > 0){
+				for(int i=0; i<permittedExchangesList.split(",").length; i++){
+					exchangeWhiteList.add(permittedExchangesList.split(",")[i]);
+				}
+			}
+			for(IsCompanyNonPremiumModel ispm : list){
+				if(exchangeWhiteList.contains(ispm.getExchange())){
+					return true;
+				}
+			}
+			return false;
+		}
+		catch(SearchServiceException e){
+			throw new SearchServiceException("Exception searching isCompanyPremium", e);
+		}
+	}
+	
 	
 	@Override
 	public List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException {

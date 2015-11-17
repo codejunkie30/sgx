@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.CompanyNameAndTicker;
+import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
 import com.wmsi.sgx.service.search.Aggregations;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
 import com.wmsi.sgx.service.search.elasticsearch.QueryResponse;
@@ -87,7 +88,7 @@ public class ESResponse implements QueryResponse{
 		
 		if(!n.path("fields").isMissingNode()){
 			JsonNode fields = flattenFieldValues(n.path("fields"));
-			if(clz.equals(CompanyNameAndTicker.class)){
+			if(clz.equals(CompanyNameAndTicker.class)||clz.equals(IsCompanyNonPremiumModel.class)){
 				hit=objectMapper.convertValue(fields, clz);
 			}
 			else{
