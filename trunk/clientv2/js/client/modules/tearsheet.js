@@ -14,7 +14,15 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			var endpoint = this.fqdn + "/sgx/company";
 			var postType = 'GET';
 			var params = { id: this.ticker };
-			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initCompanyData(data, finished); }, undefined, undefined);
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { 
+				if (data.errorCode == 4004) {
+					var home = PAGE.getPage(PAGE.pageData.getPage('index'));
+					top.location.href = home;
+					return;	
+				}
+				var parent = self; parent.initCompanyData(data, finished); 
+				
+				}, undefined, undefined);
 			
     		// init real-time/delayed pricing data
     		endpoint = this.fqdn + "/sgx/price";
