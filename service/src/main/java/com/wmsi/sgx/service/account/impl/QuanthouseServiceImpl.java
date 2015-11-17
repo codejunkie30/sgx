@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -132,11 +133,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			}else{
 				p = getPriceAt(MARKET_CODE, company, delayedTime);
 			}
-			
+			DecimalFormat df = new DecimalFormat("0.####");
 			companyPrice.setChange(p.getChange());
 			companyPrice.setCompanyName(comp.getCompanyName());
 			companyPrice.setCurrency(p.getTradingCurrency());
-			companyPrice.setPrice(p.getLastPrice());
+			companyPrice.setPrice(Double.valueOf(df.format(p.getLastPrice())));
 			companyPrice.setTicker(company);
 			
 			list.add(companyPrice);
