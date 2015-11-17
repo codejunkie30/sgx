@@ -139,9 +139,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			if(map.get("pcPriceDrop").toString().equals("true")){	
 				String priceDrop = map.get("pcPriceDropBelow").toString();
 				String priceRise = map.get("pcPriceRiseAbove").toString();				
-				Double priceChange = qh.getPercentChange();
+				Double priceChange = Math.abs(qh.getPercentChange());
 				
-				if(!priceDrop.equals("null") && Double.parseDouble(priceDrop) > priceChange){
+				if(!priceDrop.equals("null") && Double.parseDouble(priceDrop) < priceChange){
 					priceOptions.put(company, companyName);
 				}else if(!priceRise.equals("null") && Double.parseDouble(priceRise) < priceChange){
 					priceOptions.put(company, companyName);
