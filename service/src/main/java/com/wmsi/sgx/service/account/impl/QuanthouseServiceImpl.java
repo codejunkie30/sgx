@@ -136,7 +136,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			companyPrice.setChange(p.getChange());
 			companyPrice.setCompanyName(comp.getCompanyName());
 			companyPrice.setCurrency(p.getTradingCurrency());
-			companyPrice.setPrice(p.getClosePrice());
+			companyPrice.setPrice(p.getLastPrice());
 			companyPrice.setTicker(company);
 			
 			list.add(companyPrice);
@@ -155,6 +155,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		Company comp = companyService.getById(id);
 		p.setClosePrice(comp.getClosePrice());
 		p.setOpenPrice(comp.getOpenPrice());
+		p.setLastPrice(comp.getClosePrice());
 		p.setCurrentDate(new Date());
 		p.setPreviousDate(comp.getPreviousCloseDate());
 		p.setLastTradeVolume(comp.getVolume());
