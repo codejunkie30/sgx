@@ -118,7 +118,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		var params = { id: me.ticker };
             var jsonp = 'callback';
             var jsonpCallback = 'jsonpCallback';
-
+            function jsonpCallback(){
+                console.log('called');
+            }
     		UTIL.handleAjaxRequest(endpoint,
                                     postType,
                                     params, 
@@ -131,7 +133,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                                         console.log(errorThrows);
                                         console.log(jqXHR);
                                     }, 
-                                    jsonpCallback);
+                                    undefined);
     		
 		},
 
