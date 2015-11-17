@@ -116,7 +116,22 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'GET';
     		var params = { id: me.ticker };
-    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
+            var jsonp = 'callback';
+            var jsonpCallback = 'jsonpCallback';
+
+    		UTIL.handleAjaxRequest(endpoint,
+                                    postType,
+                                    params, 
+                                    jsonp, 
+                                    function(data, textStatus, jqXHR) { 
+                                        me.initFinancials(me, data);  
+                                    }, 
+                                    function(jqXHR, textStatus, errorThrown){
+                                        console.log(textStatus);
+                                        console.log(errorThrows);
+                                        console.log(jqXHR);
+                                    }, 
+                                    jsonpCallback);
     		
 		},
 
