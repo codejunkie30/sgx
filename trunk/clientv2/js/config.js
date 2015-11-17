@@ -1,7 +1,7 @@
 (function() {
 
     require({
-        urlArgs: "v=1.19",
+        urlArgs: "v=1.20",
         paths: {
             "jquery": 'vendor/jquery/jquery.1.11.3.min',
             "jquery-ui": 'vendor/jquery/jquery-ui-1.11.4/jquery-ui.min',
@@ -20,9 +20,9 @@
 			'jquery-store': 'vendor/store',
             'cryptomd5': 'vendor/cryptomd5'
         },
-        
+
         waitSeconds: 180,
-        
+
         shim: {
             "jquery": {
                 exports: '$'
@@ -58,7 +58,6 @@
 			'jquery-timeout': {
                 deps: ['jquery']				
 			}
-            
         }
         
     });
