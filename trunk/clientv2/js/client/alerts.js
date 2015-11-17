@@ -522,8 +522,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					"estChangePriceDropAbove": (ALERTS.displayList().optionList.estChangePriceDropAbove != null) ? ALERTS.displayList().optionList.estChangePriceDropAbove : null,
 					"estChangeConsensus": (ALERTS.displayList().optionList.estChangeConsensus != undefined) ? ALERTS.displayList().optionList.estChangeConsensus : false,
 					"estChangeConsensusValue": ALERTS.displayList().optionList.estChangeConsensusValue,
-					"estChangeEstimates": (ALERTS.displayList().optionList.estChangeEstimates != undefined) ? ALERTS.displayList().optionList.estChangeEstimates : false,
-					"estChangeEstimatesValue": ALERTS.displayList().optionList.estChangeEstimatesValue,
 					"kdAnounceCompTransactions": (ALERTS.displayList().optionList.kdAnounceCompTransactions != undefined) ? ALERTS.displayList().optionList.kdAnounceCompTransactions : false,
 					"kdCompanyForecasts": (ALERTS.displayList().optionList.kdCompanyForecasts != undefined) ? ALERTS.displayList().optionList.kdCompanyForecasts : false,
 					"kdCorporateStructureRelated": (ALERTS.displayList().optionList.kdCorporateStructureRelated != undefined) ? ALERTS.displayList().optionList.kdCorporateStructureRelated : false,
