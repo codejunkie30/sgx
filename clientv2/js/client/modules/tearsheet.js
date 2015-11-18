@@ -34,7 +34,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 		
 		initCompanyData: function(data, finished) {
 			
-			$.extend(true, this, data);			
+			$.extend(true, this, data);
 			
 			// too long a variable name
 			this.companyInfo = this.company.companyInfo;
