@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/data/validurls.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, ValidUrls, TOOLTIP, PAGEINFO, addWatchlist) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -214,6 +214,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		newWLName: KO.observable(),		
 		
 		addWatchlistName: KO.observableArray(),
+
+        validUrls: JSON.parse(ValidUrls).urls,
 		
 		pageData: {
 			
@@ -279,6 +281,30 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		hasGlossaryTerm: function(name) {
 			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
 		},
+
+        setReturnUrl: function(){
+
+            var ret = null;
+            var returnUrl = this.getParentURL(window.location);
+            for(var i=0, len=this.validUrls.length; i < len; i++) {
+                if (returnUrl == this.validUrls[i].address) {
+                    ret = this.validUrls[i].hash;
+                    break;
+                }
+            }
+
+            if( ret ) {
+                return ret;
+            }
+
+        },
+
+        goToSignIn: function() {
+
+            var retUrl = this.setReturnUrl();
+            top.location.href = window.location.origin+'/sign-in.html?add='+retUrl;
+
+        },
 		
         getFormatted: function(fmt, value, decimals) {
         	

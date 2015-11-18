@@ -1,0 +1,38 @@
+{
+  "urls":
+  [
+    {
+      "address":"http://qaxwww.sgx.com/wps/portal/sgxweb/home/company_disclosure/stockfacts/",
+      "hash": "213ed98a028"
+    },
+    {
+      "address":"http://fake-sgx.com/iframe.html",
+      "hash": "a72d5fe7b2"
+    },
+    {
+      "address": "http://fakesgx.com/",
+      "hash": "a7fd9f45ad"
+    },
+    {
+      "address": "sgx.sharefc.com/iframe.html",
+      "hash": "62f4367101ca"
+    },
+    {
+      "address": "sgx2.sharefc.com/iframe.html",
+      "hash": "76d89dfd3a"
+    },
+    {
+      "address": "http://sgx.wealthmsi.com/iframe.html",
+      "hash": "165255a90"
+    },
+    {
+      "address":"http://fake.sgx.com",
+      "hash":"7718d57847a"
+    },
+    {
+      "address":"http://sgx.fakemsi.com",
+      "hash":"8a887cbfc24e"
+    }
+
+  ]
+}
