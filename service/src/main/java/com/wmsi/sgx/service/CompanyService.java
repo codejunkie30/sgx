@@ -54,5 +54,10 @@ public interface CompanyService{
 	List<CompanyNameAndTicker> loadCompanyNamesAndTickers() throws SearchServiceException;
 	
 	Boolean isCompanyNonPremium(String tickerCode) throws SearchServiceException;
+	
+	Company getPreviousById(String id) throws CompanyServiceException;
+
+	List<Estimate> loadPreviousEstimates(String id)
+			throws CompanyServiceException;
 
 }
