@@ -1,7 +1,8 @@
 	<div class="login-bar" data-bind="css: {'non-premium': (premiumUser() == false)}">
 		<span class="stock-facts"><b>StockFacts <i>Premium</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'premium'} ">Learn more &raquo;</a> </span>
 		<div class="right">
-			<a class="button" data-bind="siteLink: { id: 'sign-in'}">Sign in</a>
+			<!--<a class="button" data-bind="siteLink: { id: 'sign-in'}">Sign in</a>-->
+			<a class="button" data-bind="click:goToSignIn">Sign in</a>
 			<a class="button" data-bind="siteLink: { id: 'sign-up'} ">Start your free trial</a>
 		</div>
 	</div>
