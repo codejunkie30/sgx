@@ -62,6 +62,18 @@ public class CompanyServiceImpl implements CompanyService{
 			throw new CompanyServiceException("Could not load company by id", e);
 		}
 	}
+	
+	@Autowired
+	private SearchService previousCompany;
+	@Override
+	public Company getPreviousById(String id) throws CompanyServiceException {
+		try{
+			return previousCompany.getById(id, Company.class);
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Could not load company by id", e);
+		}
+	}
 
 	@Autowired
 	private SearchService keyDevsSearch;
@@ -262,6 +274,19 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Estimate> loadEstimates(String id) throws CompanyServiceException {
 		try{
 			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Exception loading estimates", e);
+		}
+	}
+	
+	@Autowired
+	private SearchService previousEstimate;
+	
+	@Override
+	public List<Estimate> loadPreviousEstimates(String id) throws CompanyServiceException {
+		try{
+			return previousEstimate.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
 		}
 		catch(SearchServiceException e){
 			throw new CompanyServiceException("Exception loading estimates", e);

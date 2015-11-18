@@ -42,17 +42,26 @@ public class SearchConfig{
 		return serv;
 	}
 	
-	@Bean
-	public SearchService previousEstimate(){
+	public SearchService previousSearch(String type){
 		SearchServiceImpl serv = new SearchServiceImpl();
 		serv.setIndexName(yesterdayIndex);
-		serv.setType("estimate");
+		serv.setType(type);
 		return serv;
+	}
+	
+	@Bean
+	public SearchService previousEstimate(){
+		return previousSearch("estimate");
 	}
 
 	@Bean
 	public SearchService companySearch(){
 		return searchService("company");
+	}
+	
+	@Bean
+	public SearchService previousCompany(){
+		return previousSearch("company");
 	}
 	
 	@Bean

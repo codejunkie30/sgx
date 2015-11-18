@@ -60,9 +60,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	private QuanthouseService quanthouseService;
 	
 	@Autowired
-	private SearchService previousEstimate;
-	
-	@Autowired
 	private SearchService estimatesSerach;
 	
 	@Autowired
@@ -130,16 +127,21 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		for(String company : watchlist.getCompanies()){
 			String companyName = getCompanyName(company);
 			Company comp = companyService.getById(company);
-			Price qh = quanthouseService.getPrice(mkt, company);
+			Company previousComp = companyService.getPreviousById(company);
 			List<Estimate> estimates = companyService.loadEstimates(company);
-			List<Estimate> pastEstimates = companyService.loadEstimates(company);			
+			List<Estimate> pastEstimates = companyService.loadPreviousEstimates(company);			
 			Estimate currentEstimate = getEstimate(estimates);
 			Estimate pastEstimate = getEstimate(pastEstimates);	
 			
 			if(map.get("pcPriceDrop").toString().equals("true")){	
 				String priceDrop = map.get("pcPriceDropBelow").toString();
-				String priceRise = map.get("pcPriceRiseAbove").toString();				
-				Double priceChange = Math.abs(qh.getPercentChange());
+				String priceRise = map.get("pcPriceRiseAbove").toString();
+				
+				Double priceChange = 0.0D;
+
+				if(comp != null && previousComp != null){
+					priceChange = Math.abs(MathUtil.percentChange(previousComp.getClosePrice(), comp.getClosePrice(), 4));
+				}
 				
 				if(!priceDrop.equals("null") && Double.parseDouble(priceDrop) < priceChange){
 					priceOptions.put(company, companyName);
@@ -151,14 +153,14 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			if(map.get("pcTradingVolume").toString().equals("true")){				
 				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);
-				if((Double.parseDouble(map.get("pcTradingVolumeValue").toString()) * 0.01 + 1.0) * volume < qh.getLastTradeVolume()){
+				if((Double.parseDouble(map.get("pcTradingVolumeValue").toString()) * 0.01 + 1.0) * volume < comp.getVolume()){
 					volumeOptions.put(company, companyName);
 				}
 			}
 			
 			if(map.get("pcReachesWeek").toString().equals("true")){
 				String weekValue = map.get("pcReachesWeekValue").toString();
-				Double closePrice = qh.getClosePrice();
+				Double closePrice = comp.getClosePrice();
 				if((weekValue.equals("high") && comp.getPriceVs52WeekHigh() < closePrice) || (weekValue.equals("low") && comp.getPriceVs52WeekLow() > closePrice))
 					weekOptions.put(company, companyName);
 			}
