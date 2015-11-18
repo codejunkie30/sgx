@@ -151,10 +151,14 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 			
 			if(map.get("pcTradingVolume").toString().equals("true")){				
-				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);				
-				Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
-				if(Math.abs(Double.parseDouble(map.get("pcTradingVolumeValue").toString())) < priceChange){
+				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);
+				if(volume == 0.0)
 					volumeOptions.put(company, companyName);
+				else{
+					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
+					if(Math.abs(Double.parseDouble(map.get("pcTradingVolumeValue").toString())) < priceChange){
+						volumeOptions.put(company, companyName);
+					}
 				}
 			}
 			
