@@ -103,7 +103,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
 		map.putAll(watchlist.getOptionList());
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		String todaysDate = sdf.format(new Date());
 		String mkt = "XSES";
 		
@@ -151,9 +151,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 			
 			if(map.get("pcTradingVolume").toString().equals("true")){				
-				
-				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);
-				if((Double.parseDouble(map.get("pcTradingVolumeValue").toString()) * 0.01 + 1.0) * volume < comp.getVolume()){
+				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);				
+				Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
+				if(Math.abs(Double.parseDouble(map.get("pcTradingVolumeValue").toString())) < priceChange){
 					volumeOptions.put(company, companyName);
 				}
 			}
@@ -301,14 +301,13 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	private Double getLastMonthsVolume(List<HistoricalValue> lastYear, String startDate) {
-
 		String oneMonthsAgo = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -30);
 		
 		Double vol = 0.0;
 
 		for (HistoricalValue val : lastYear) {
-			if (val.getDate().compareTo(DateUtil.toDate(oneMonthsAgo)) >= 0)
-				vol += val.getValue();
+			if (val.getDate().compareTo(DateUtil.toDate(oneMonthsAgo)) >= 0){
+				vol += val.getValue();}
 		}
 
 		if(lastYear.size() == 0)
