@@ -66,7 +66,7 @@
 			                        <td>Average 3-month Volume</td>
 			                        <td class="normal right border" data-bind="text: companyInfo.avgVolumeM3, format: 'volume'">-</td>
 			                        <td>Normalized Diluted EPS</td>
-			                        <td class="normal right" data-bind="text: companyInfo.eps, format: 'number'">-</td>
+									<td class="normal right" data-bind="text: companyInfo.eps != null ? companyInfo.eps : '-', format: 'number'">-</td>
 			                    </tr>
 			                    <tr class="even">
 			                        <td>Total Market Cap <img src="img/info.png" alt="" data-bind="tooltip: 'totalMarketCap'" /></td>
