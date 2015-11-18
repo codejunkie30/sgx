@@ -160,6 +160,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
+
+
             //table col widths 
             this.quarterlyTableColWidth = '15%';
             this.annualTableColWidth = '15%';
@@ -169,7 +171,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                     return a.periodDate > b.periodDate;
                 });
 
-                this.quarterlyTableColWidth = 69/this.estimates.quarterly.length+'%';
+                this.quarterlyTableColWidth = 69/4+'%';
             }
 
             if(this.estimates.annually.length > 0) {
@@ -178,6 +180,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 });
                 this.annualTableColWidth = 69/this.estimates.annually.length+'%';
             }
+
+            this.estimates.quarterly.splice(4); //limiting up to 4 records (1 actual and 3 estimates)
+            this.estimates.annually.splice(4);
 
             // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
             // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
@@ -191,7 +196,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 var refinedObj = me.normalizeForDisplay( val );
                 me.refinedEstimates.quarterly.push( refinedObj );
             });
-
 
         	
         	//if (estimates.length == 5) return estimates;
