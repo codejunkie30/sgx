@@ -51,3 +51,8 @@
 #estimates .data-point-container .checkbox.checked .trigger .check-icon {
   background-position: 0 0;
 }
+.filing-currency-info {
+  margin-top:-10px;
+  margin-bottom:20px;
+  font-style: italic;
+}
