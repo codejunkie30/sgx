@@ -133,7 +133,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			}else{
 				p = getPriceAt(MARKET_CODE, company, delayedTime);
 			}
-			DecimalFormat df = new DecimalFormat("0.####");
+			DecimalFormat df = new DecimalFormat("0.###");
 			companyPrice.setChange(p.getChange());
 			companyPrice.setCompanyName(comp.getCompanyName());
 			companyPrice.setCurrency(p.getTradingCurrency());
