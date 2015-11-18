@@ -48,20 +48,21 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			var value = allBindings().text;
             var postFix = allBindings().postFix;
             var formatNum = allBindings().formatNum;
+
 			return KO.bindingHandlers.text.update(element, function(){
 				if(value == null || value == '-') return '-';
-            var roundingMultiplier = Math.pow(10, precision);
-            var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
-            valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+                var roundingMultiplier = Math.pow(10, precision);
+                var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
+                valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
                 //ensure trailing .00;
                 valueToWrite = valueToWrite.toString();
                 if(valueToWrite.indexOf('.') != -1) {
-                	if(valueToWrite.split('.')[1].length != 2) {
-                		valueToWrite += '0';
+                	if(valueToWrite.split('.')[1].length != precision) {
+                		valueToWrite += getZeroes(precision - valueToWrite.split('.')[1].length);
                 	}
                 } else {
 
-                	valueToWrite += '.00';
+                	valueToWrite += '.'+getZeroes(precision);
                 }
 
                 if(precision == 0){
@@ -72,13 +73,26 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                   valueToWrite = valueToWrite.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
                 if(postFix) {
-                  valueToWrite = valueToWrite+' '+postFix;
+                  if( postFix != '%')
+                    valueToWrite += ' ';
+                  valueToWrite += postFix;
                 }
                 return valueToWrite;
 
               });
+
 		}
+
 	};
+
+    function getZeroes(len) {
+        var retVal = '';
+        if (!(len > 0) ) return;
+        for (var i = 0; i < len; i++) {
+            retVal+= '0';
+        }
+        return retVal;
+    }
 
 	KO.bindingHandlers.prepend = {
 		update: function(element, valueAccessor, allBindings) {
