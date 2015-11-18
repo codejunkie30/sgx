@@ -48,8 +48,8 @@
 			<div class="left">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<th style="width:25%"></th>
-						<th>Mean</th>
+						<th style="width:24%"></th>
+						<th style="width:12%">Mean</th>
 						<th>Median</th>
 						<th>High/Low Estimate</th>
 						<th>Std. Dev</th>
@@ -64,10 +64,10 @@
 						<td><span data-bind="text:summaryData.tpEstimateNum, precision: 0"></span></td>
 					</tr>
 					<tr>
-						<td class="name">Long Term Growth % <img src="img/info.png" alt="" data-bind="tooltip: 'est_longTermGrowth'" /></td>
-						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2, formatNum:true"></span></td>
-						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2, formatNum:true"></span></td>
-						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2, formatNum:true"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2, formatNum:true"></span></td>
+						<td class="name">Long Term Growth <img src="img/info.png" alt="" data-bind="tooltip: 'est_longTermGrowth'" /></td>
+						<td><span data-bind="text:summaryData.ltgMeanEstimate, precision: 2, formatNum:true, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2, formatNum:true, postFix:'%'"></span></td>
+						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2, formatNum:true, postFix:'%'"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2, formatNum:true, postFix:'%'"></span></td>
 						<td><span data-bind="text:summaryData.ltgEstimateDeviation, precision: 2"></span></td>
 						<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 2"></span></td>
 					</tr>
