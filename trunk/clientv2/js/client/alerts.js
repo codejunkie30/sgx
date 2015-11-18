@@ -278,7 +278,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		displayWatchlists: function(){
-			if (ALERTS.companies().length == 0){ return }
+			if (ALERTS.companies().length == 0){ $('.wl-companies ul').empty(); return }
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
 			var params = { "companies": ALERTS.companies() };
