@@ -30,6 +30,8 @@
 
 		<span class="button back-button standalone"><a data-bind="siteLink: 'index'">Back to StockFacts</a></span>
 		
+		<p class="terms-premium">SGX StockFacts Premium Subscriber <a data-bind="click:$root.termsPremium">click here</a> for StockFacts Premium Terms and Conditions.</p>
+		
 		<p><strong>Your use of SGX StockFacts is subject to the below terms and conditions:</strong></p>
 		
 		<ul>
@@ -62,7 +64,7 @@
 <script type="text/javascript">
 
 	function loadPage() {
-		require([ "client/base", "client/simple" ],
+		require([ "client/base", "client/terms-conditions" ],
 			function(base, pg) {
 				$(document).ready(function(e) {
 					var page = base.init(pg);

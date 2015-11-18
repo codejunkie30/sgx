@@ -221,6 +221,9 @@ a.button { color: #fff !important; text-decoration: none; }
 
 .button-reset { color: #1e2171 !important; }
 
+.terms-premium a { color: #0e236b; text-decoration: underline; cursor: pointer; }
+.terms-premium a:hover { text-decoration: none; }
+
 .action-btn {
   color: #0e236b;
   display: inline-block;
