@@ -297,7 +297,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log('sta', textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},jsonpCallback);
+				},undefined);
 		},		
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
