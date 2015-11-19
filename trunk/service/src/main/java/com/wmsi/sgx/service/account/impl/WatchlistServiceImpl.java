@@ -21,6 +21,8 @@ import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.repository.WatchlistCompanyRepository;
 import com.wmsi.sgx.repository.WatchlistOptionRepository;
 import com.wmsi.sgx.repository.WatchlistRepository;
+import com.wmsi.sgx.service.CompanyService;
+import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.WatchlistService;
 
 @Service
@@ -34,6 +36,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 	
 	@Autowired
 	private WatchlistCompanyRepository companyRepository;
+	
+	@Autowired
+	private CompanyService companyService;
 	
 	@Override
 	public void renameWatchlist(User user, String watchlistName, String id){
@@ -79,6 +84,34 @@ public class WatchlistServiceImpl implements WatchlistService {
 				optionRepository.delete(options);
 			}
 		}
+	}
+	
+	@Override
+	@Transactional
+	public List<String> cleanWatchlist(User user){
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		List<String> ret = new ArrayList<String>();
+		
+		for(Watchlist list : watchlist){
+			Long id = list.getWatchlist_id();
+			WatchlistCompany[] companies = companyRepository.findById(id);
+			List<String> existingCompanies = new ArrayList<String>();
+			for(WatchlistCompany comp : companies){
+				try{
+					companyService.getById(comp.getTickerCode());
+					existingCompanies.add(comp.getTickerCode());
+				}catch(CompanyServiceException e){
+					ret.add(comp.getTickerCode());
+				}
+				
+				
+				}
+			if(companies.length != existingCompanies.size())
+				addCompanies(user, id.toString(), existingCompanies);
+			
+		}
+		return ret;
+		
 	}
 	
 	@Override

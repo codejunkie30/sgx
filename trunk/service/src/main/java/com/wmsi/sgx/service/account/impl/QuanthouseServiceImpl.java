@@ -121,18 +121,25 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		
 		for(String company : companies){
 			CompanyPrice companyPrice = new CompanyPrice();
-			Company comp = companyService.getById(company);
+			companyPrice.setPrice(0.0);
+			companyPrice.setChange(0.0);
+			companyPrice.setCurrency("SGD");
 			Price p = new Price();
-			
-			p = fallbackPrice(company);
-			
 			DecimalFormat df = new DecimalFormat("0.###");
-			companyPrice.setChange(p.getChange());
-			companyPrice.setCompanyName(comp.getCompanyName());
-			companyPrice.setCurrency(p.getTradingCurrency());
-			companyPrice.setPrice(Double.valueOf(df.format(p.getLastPrice())));
-			companyPrice.setTicker(company);
 			
+			try{
+				Company comp = companyService.getById(company);
+				p = fallbackPrice(company);
+				companyPrice.setChange(p.getChange());
+				companyPrice.setCompanyName(comp.getCompanyName());
+				companyPrice.setCurrency(p.getTradingCurrency());
+				if(p.getLastPrice() != null)
+					companyPrice.setPrice(Double.valueOf(df.format(p.getLastPrice())));
+				
+			}catch(CompanyServiceException e){
+				break;
+			}
+			companyPrice.setTicker(company);
 			list.add(companyPrice);
 		}
 		
