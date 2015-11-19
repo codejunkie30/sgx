@@ -17,14 +17,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
-import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AlertOption;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.KeyDev;
-import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.CompanyService;
@@ -105,7 +103,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		String todaysDate = sdf.format(new Date());
-		String mkt = "XSES";
 		
 		Map<String, String> priceOptions = new HashMap<String, String>();
 		Map<String, String> volumeOptions = new HashMap<String, String>();
@@ -125,9 +122,17 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		keyDevOptions.put("kdResultsCorpAnnouncements", new HashMap<String, String>());		
 		
 		for(String company : watchlist.getCompanies()){
+			Company comp = null;
+			Company previousComp = null;
+			
+			try{
+				comp = companyService.getById(company);
+				previousComp = companyService.getPreviousById(company);
+			}catch(CompanyServiceException e){
+				break;
+			}
+			
 			String companyName = getCompanyName(company);
-			Company comp = companyService.getById(company);
-			Company previousComp = companyService.getPreviousById(company);
 			List<Estimate> estimates = companyService.loadEstimates(company);
 			List<Estimate> pastEstimates = companyService.loadPreviousEstimates(company);			
 			Estimate currentEstimate = getEstimate(estimates);

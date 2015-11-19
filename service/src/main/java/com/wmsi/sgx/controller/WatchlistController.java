@@ -1,5 +1,7 @@
 package com.wmsi.sgx.controller;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
@@ -63,10 +65,12 @@ public class WatchlistController {
 		return watchlistService.getWatchlist(usr);
 	}
 	@RequestMapping(value = "watchlist/get")
-	public List<WatchlistModel> getAllWatchList(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
+	public Map<String, Object> getAllWatchList(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
 		User usr = userRepository.findByUsername(user.getUsername());
-		
-		return watchlistService.getWatchlist(usr);		
+		Map<String, Object> ret = new HashMap<String,Object>();
+		ret.put("removed", watchlistService.cleanWatchlist(usr));
+		ret.put("watchlists", watchlistService.getWatchlist(usr));		
+		return ret;
 	}
 	
 	@RequestMapping(value = "watchlist/edit")

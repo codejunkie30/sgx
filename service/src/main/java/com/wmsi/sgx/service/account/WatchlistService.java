@@ -14,4 +14,5 @@ public interface WatchlistService {
 	void editWatchlist(User user, WatchlistModel model);
 	void renameWatchlist(User user, String watchlistName, String id);
 	Response addCompanies(User user, String addId, List<String> companies);
+	List<String> cleanWatchlist(User user);
 }
