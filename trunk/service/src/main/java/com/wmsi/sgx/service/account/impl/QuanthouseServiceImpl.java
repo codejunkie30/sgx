@@ -119,20 +119,13 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	public List<CompanyPrice> getCompanyPrice(List<String> companies, Boolean isPremium) throws QuanthouseServiceException, CompanyServiceException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
 		
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, -15);
-		Date delayedTime = cal.getTime();
-		
 		for(String company : companies){
 			CompanyPrice companyPrice = new CompanyPrice();
 			Company comp = companyService.getById(company);
 			Price p = new Price();
 			
-			if(isPremium){
-				p = getPrice(MARKET_CODE, company);
-			}else{
-				p = getPriceAt(MARKET_CODE, company, delayedTime);
-			}
+			p = fallbackPrice(company);
+			
 			DecimalFormat df = new DecimalFormat("0.###");
 			companyPrice.setChange(p.getChange());
 			companyPrice.setCompanyName(comp.getCompanyName());
@@ -154,11 +147,12 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private Price fallbackPrice(String id) throws CompanyServiceException{
 		Price p = new Price();
 		Company comp = companyService.getById(id);
-		p.setClosePrice(comp.getClosePrice());
+		Company prevComp = companyService.getPreviousById(id);
+		p.setClosePrice(prevComp.getClosePrice());
 		p.setOpenPrice(comp.getOpenPrice());
 		p.setLastPrice(comp.getClosePrice());
-		p.setCurrentDate(new Date());
-		p.setPreviousDate(comp.getPreviousCloseDate());
+		p.setCurrentDate(comp.getPreviousCloseDate());
+		p.setPreviousDate(prevComp.getPreviousCloseDate());
 		p.setLastTradeVolume(comp.getVolume());
 		p.setLowPrice(comp.getLowPrice());
 		p.setHighPrice(comp.getHighPrice());
