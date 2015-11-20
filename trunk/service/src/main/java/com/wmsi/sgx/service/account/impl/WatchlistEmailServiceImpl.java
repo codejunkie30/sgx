@@ -232,7 +232,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		if(priceOptions.size() > 0){
 			AlertOption alert = new AlertOption();
 			alert.setCompanies(priceOptions);
-			alert.setDescription("Price Drops Below " + map.get("pcPriceDropBelow").toString() + "% Or Rises Over " + map.get("pcPriceRiseAbove").toString() + "% Last Close Price");
+			alert.setDescription("Price drops Below " + map.get("pcPriceDropBelow").toString() + "% or rises over " + map.get("pcPriceRiseAbove").toString() + "% last close price");
 			alertList.add(alert);
 		}
 		
@@ -251,7 +251,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		if(targetPriceOptions.size() > 0){
 			AlertOption alert = new AlertOption();
 			alert.setCompanies(targetPriceOptions);
-			alert.setDescription("Change in target price " + map.get("estChangePriceDropBelow").toString() + "% or rises above " + map.get("estChangePriceDropAbove").toString());
+			alert.setDescription("Change in target price " + map.get("estChangePriceDropBelow").toString() + "% or rises above " + map.get("estChangePriceDropAbove").toString() + "%");
 			alertList.add(alert);
 		}
 		if(consensusRecOptions.size() > 0){
