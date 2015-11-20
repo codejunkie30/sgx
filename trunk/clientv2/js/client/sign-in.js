@@ -47,11 +47,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.errors = validation.group(this);			
 			
 			this.errors.subscribe(function () {
-				//PAGE.resizeIframeSimple();
+				PAGE.resizeIframeSimple();
 			});
 						
 			// resize
-    	//this.resizeIframeSimple();			
+    		this.resizeIframeSimple();			
 						
 			// validation
 			$('.form input').placeholder();
@@ -60,7 +60,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		signIn: function(me){
 
-			var self = this;
 			var displayMessage = SIGNIN.messages.messages[0];			
 			var endpoint = me.fqdn + "/sgx/login";
 			var postType = 'POST';
@@ -79,34 +78,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined, 
 				function(data, textStatus, jqXHR){
 					if (data == '' || data == undefined){
-						var returnAddress;
-						//top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
-						var hash = self.getURLParam('add');
-						if(hash) {
-							for(var i=0,len=self.validUrls.length; i < len; i++) {
-								if( hash == self.validUrls[i].hash){
-									returnAddress = self.validUrls[i].address;
-									break;
-								}
-							}
-						}
-						console.log(returnAddress);
-						if(returnAddress) {
-							top.location.href = returnAddress;
-						}
+
+						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 
 					} else {
 						
 						if (data.reason == 'Invalid username or password'){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
-							//PAGE.resizeIframeSimple();
+							PAGE.resizeIframeSimple();
 							return;
 						}
 						if (data.reason == 'User account is locked'){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
-							//PAGE.resizeIframeSimple();
+							PAGE.resizeIframeSimple();
 							return;
 						}
 						if (data.reason == 'User is disabled'){
@@ -117,14 +103,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								endpoint,
 								params,
 								function(data, textStatus, jqXHR){
-									//PAGE.resizeIframeSimple();
+									PAGE.resizeIframeSimple();
 								}, 
 								function(jqXHR, textStatus, errorThrown){
 									console.log('fail');
 								});
 							
 							$('.error-messages .resend-email').show();
-							//PAGE.resizeIframeSimple();	
+							PAGE.resizeIframeSimple();	
 						}					
 					}
 				}, 
