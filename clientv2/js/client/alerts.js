@@ -92,7 +92,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		finish: function(me) {
 			var displayMessage = ALERTS.messages.messages[0];
-					
+			
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'GET';
     		var params = {};
@@ -104,12 +104,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
+					
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.watchlists.sort(sortByName));
+					// Code for removed Ticker codes. Will display list if removed array is greater than zero
+					//var arr = ['123,456'];					
+//					var removedTicker = arr.toString();
+//					if (data.removed.lenth > 0) {
+//						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
+//					}
+					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
 					console.log('fail');
