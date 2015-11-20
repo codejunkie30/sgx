@@ -506,14 +506,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			//var endpoint = 'http://192.168.1.37:8001' + "/sgx/account/info";
 			var postType = 'POST';
 			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
+			var appType = 'application/json';
 			
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
+				appType,
 				params,
-				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password'){
 						PAGE.premiumUser(false);
@@ -563,7 +562,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},jsonpCallback);			
+				});			
 		},
 		timedLogout: function(){
 			$('body').idleTimeout({

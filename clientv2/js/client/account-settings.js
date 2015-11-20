@@ -123,7 +123,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
-				undefined,
 				function(data, textStatus, jqXHR){
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -131,7 +130,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				},jsonpCallback);			
+				});			
 		},
 		
 		updatePassword: function(){
@@ -145,7 +144,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
-				undefined,
 				function(data, textStatus, jqXHR){
 					$('.error-messages').empty();
 				}, 
@@ -154,23 +152,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				},jsonpCallback);
-			
+				});
 			
 		},
 		
 		accountSettings: function(displayMessage){
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';			
+			var appType = 'application/json';
+			var params = {};						
 			
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
+				appType,
 				params,
-				jsonp,
 				function(data, textStatus, jqXHR){
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
@@ -221,7 +217,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},jsonpCallback);
+				});
 			
 		},
 			
