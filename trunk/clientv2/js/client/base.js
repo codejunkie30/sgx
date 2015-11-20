@@ -186,8 +186,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	};
 	
 	PAGE = {
-		//fqdn: "https://sgx.sharefc.com", 
-		fqdn: "https://sgx-api-us.sharefc.com",
+		fqdn: "",
+		//fqdn: "https://sgx-api-us.sharefc.com",
 		
 		pqdn : window.location.hostname == "sgx.fakemsi.com" ? "http://localhost:3000/?site=" : "http://pdfx.sharefc.com/pdfx/",
 			
