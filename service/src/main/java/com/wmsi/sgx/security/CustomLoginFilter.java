@@ -74,28 +74,29 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		Map<String, String[]> parms = request.getParameterMap();
 		
+		/*if (request.getMethod() == "POST"  && (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))) {
+			if(request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login"))){
+				user = objectMapper.readValue(parms.get("json")[0], User.class);
+				userSet=true;
+			}
+		}*/
 		
-		if ((request.getMethod() == "GET" || request.getMethod() == "POST") &&   (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))) {
+		
+		if (request.getMethod() == "POST"  && (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))) {
 			
 			if(request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login"))){
 				user = objectMapper.readValue(parms.get("json")[0], User.class);
 				userSet=true;
 			}
-			
-			
-
+			// Convert json query string value to request body
+			/*GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
+					MediaType.APPLICATION_JSON_VALUE);
+*/
 			// Execute request, writing response to wrapper so we can manipulate
 			// the results.
 			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
-			if(request.getMethod() == "GET"){
-				// Convert json query string value to  post request body
-				GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
-						MediaType.APPLICATION_JSON_VALUE);
-				super.doFilter(postRequestWrapper, wrapper, chain);
-			}else
-				super.doFilter(request, wrapper, chain);
-				
-			
+			//super.doFilter(postRequestWrapper, wrapper, chain);
+			super.doFilter(req, wrapper, chain);
 			response.setContentType("text/javascript;UTF-8");
 			String callback = parms.get("callback")[0];
 
@@ -112,7 +113,6 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			out.close();
 		}else{
 			super.doFilter(req, res, chain);
-			
 		}
 	}
 
