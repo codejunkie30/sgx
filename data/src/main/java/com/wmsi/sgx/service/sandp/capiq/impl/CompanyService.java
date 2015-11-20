@@ -138,7 +138,7 @@ public class CompanyService extends AbstractDataService {
 		for (CompanyCSVRecord record : records) {
 			if (!record.getName().equals(field.getName())) continue;
 			// assume it's the latest
-			if (record.getPeriod() == null && record.getPeriod().indexOf("LTM") != -1) {
+			if (record.getPeriod() == null || record.getPeriod().indexOf("LTM") != -1) {
 				value = getFieldValue(field, record);
 				break;
 			}
