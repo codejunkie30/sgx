@@ -432,7 +432,7 @@ from (
 		join ##sgxpop pop on c.companyId=pop.companyId
 		left join ciqState st on c.stateId=st.stateId
 		left join ciqCountryGeo cty on c.countryId=cty.countryId
-		left join ciqLatestInstanceFinPeriod fp on c.companyId=fp.companyId and fp.latestPeriodFlag=1 and fp.periodTypeId=4
+		left join ciqLatestInstanceFinPeriod fp on c.companyId=fp.companyId and fp.latestPeriodFlag=1 and fp.periodTypeId=1
 		left join ciqCurrency cISO on fp.currencyId=cISO.currencyId
 		left join ciqBusinessDescription bd on c.companyId=bd.companyId
 	) pvt
