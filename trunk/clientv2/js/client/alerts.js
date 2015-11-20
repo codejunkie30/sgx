@@ -114,7 +114,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					// Code for removed Ticker codes. Will display list if removed array is greater than zero
 					//var arr = ['123,456'];					
 //					var removedTicker = arr.toString();
-//					if (data.removed.lenth > 0) {
+//					if (data.removed.length > 0) {
 //						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 //					}
 					
