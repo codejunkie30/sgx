@@ -75,7 +75,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		Map<String, String[]> parms = request.getParameterMap();
 		
 		
-		if (request.getMethod() == "GET" && parms.containsKey("json") && parms.containsKey("callback")) {
+		if (request.getMethod() == "GET"  && (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))) {
 			
 			if(request.getServletPath().equals("/sgx/login")|| (request.getServletPath().equals("/login"))){
 				user = objectMapper.readValue(parms.get("json")[0], User.class);
