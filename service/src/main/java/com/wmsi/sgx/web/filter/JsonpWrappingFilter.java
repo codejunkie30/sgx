@@ -34,21 +34,18 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 		log.debug("Jsonp Wrapper Filter invoked");
 		
 		Map<String, String[]> parms = request.getParameterMap();
-		
-		if(parms.containsKey(JSON_PARAM_NAME) && parms.containsKey(JSONP_CALLBACK_PARAM)){
 
+		if(request.getMethod() == "GET" && parms.containsKey(JSON_PARAM_NAME) && parms.containsKey(JSONP_CALLBACK_PARAM)){
+		
+			log.debug("Converting jsonp GET request to POST with body");
+
+			// Convert json query string value to request body
+			GetToPostRequestWrapper postRequestWrapper = 
+					new GetToPostRequestWrapper(request, JSON_PARAM_NAME, MediaType.APPLICATION_JSON_VALUE);
+			
 			// Execute request, writing response to wrapper so we can manipulate the results.
 			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
-
-			if (request.getMethod() == "GET") {
-
-				log.debug("Converting jsonp GET request to POST with body");
-
-				// Convert json query string value to request body
-				GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, JSON_PARAM_NAME, MediaType.APPLICATION_JSON_VALUE);
-				filterChain.doFilter(postRequestWrapper, wrapper);
-
-			}
+			filterChain.doFilter(postRequestWrapper, wrapper);
 			
 			String callback = parms.get(JSONP_CALLBACK_PARAM)[0];
 			
@@ -68,9 +65,8 @@ public class JsonpWrappingFilter extends OncePerRequestFilter{
 			out.close();
 			
 			log.debug("Jsonp request converted successfully");
-			
 		}
-		else {			
+		else{			
 			// Normal request
 			filterChain.doFilter(request, response);
 		}
