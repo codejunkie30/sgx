@@ -109,10 +109,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		},
 		
 		finish: function(me) {
-
 			
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
-			
 			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'GET';
     		var params = { id: me.ticker };
@@ -330,7 +328,22 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 txt = 'Underperform';
             if( value > 4.5 && value <= 5.0)
                 txt = 'Sell';
-            return txt+' ';
+            return (txt == '')? '': txt+' ';
+        },
+
+        getVolatilityEsitmateText: function(value) {
+            var txt = '';
+            if( value >= 1 && value <= 1.5 )
+                txt = 'Low';
+            if( value > 1.5 && value <=2.5 )
+                txt = 'Below Average';
+            if( value > 2.5 && value <=3.5 ) 
+                txt = 'Average';
+            if( value > 3.5 && value <= 4.5 ) 
+                txt = 'Above Average';
+            if( value > 4.5 && value <= 5.0)
+                txt = 'High';
+            return (txt == '')? '': txt+' ';
         },
 		
 		handleClick: function(model, data, event) {
