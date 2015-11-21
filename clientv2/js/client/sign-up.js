@@ -105,7 +105,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
-				params,
+				params, 
+				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('confirm');
@@ -126,14 +127,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});
+				},jsonpCallback);
 		},
 		termsConditionsModal: function(){
 			var displayMessage = SIGNUP.messages.messages[0];
 			PAGE.modal.open({  width: 950, maxWidth: 950, height: 425, scrolling: true, content: displayMessage.signUp.termsConditions }); 
 			return;
 		}
-
 	};
 	
 	return SIGNUP;

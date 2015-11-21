@@ -101,26 +101,26 @@ define(["jquery"], function($) {
         	
         },
 		
-		handleAjaxRequestAccount: function(endpoint, postType, appType, data, successFN, errorFN) {
-        	
-        	var config = {
-                url: endpoint,
-                type: postType,
-                dataType: 'json',
-                scriptCharset: "utf-8",
-                contentType: appType,
-                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
-                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
-        	};
-        	
-        	// add data request
-        	if (typeof data !== "undefined") {
-        		config.data = { 'json': JSON.stringify(data) };
-        	}
-			
-        	$.ajax(config);
-        	
-        },
+		//handleAjaxRequestAccount: function(endpoint, postType, appType, data, successFN, errorFN) {
+//        	
+//        	var config = {
+//                url: endpoint,
+//                type: postType,
+//                dataType: 'json',
+//                scriptCharset: "utf-8",
+//                contentType: appType,
+//                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+//                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+//        	};
+//        	
+//        	// add data request
+//        	if (typeof data !== "undefined") {
+//        		config.data = { 'json': JSON.stringify(data) };
+//        	}
+//			
+//        	$.ajax(config);
+//        	
+//        },
 		
 		
 		// Handles logout - Used since no data or type is needed
