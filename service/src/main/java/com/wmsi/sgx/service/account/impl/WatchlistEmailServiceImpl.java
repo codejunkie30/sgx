@@ -145,7 +145,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				Double priceChange = 0.0D;
 
 				if(comp != null && previousComp != null){
-					priceChange = Math.abs(MathUtil.percentChange(previousComp.getClosePrice(), comp.getClosePrice(), 4));
+					if(previousComp.getClosePrice() == null && comp.getClosePrice() != null)
+						priceChange = 100.0D;
+					else if(previousComp.getClosePrice() != null && comp.getClosePrice() != null)
+						priceChange = Math.abs(MathUtil.percentChange(previousComp.getClosePrice(), comp.getClosePrice(), 4));
 				}
 				
 				if(!priceDrop.equals("null") && Double.parseDouble(priceDrop) < priceChange){
@@ -157,9 +160,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);
-				if(volume == 0.0)
+				if(volume == 0.0 && comp.getVolume() != null)
 					volumeOptions.put(company, companyName);
-				else{
+				else if(volume > 0.0){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
 					if(Math.abs(Double.parseDouble(map.get("pcTradingVolumeValue").toString())) < priceChange){
 						volumeOptions.put(company, companyName);
