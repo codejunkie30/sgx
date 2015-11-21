@@ -154,18 +154,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(jqXHR.statusCode() );
 				});
 			
+			
 		},
 		
 		accountSettings: function(displayMessage){
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
-			var appType = 'application/json';
-			var params = {};						
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';			
 			
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
-				appType,
 				params,
 				function(data, textStatus, jqXHR){
 					SAVECHANGES.userEmail(data.email);

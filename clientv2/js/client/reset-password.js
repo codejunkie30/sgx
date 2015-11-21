@@ -82,8 +82,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var token = this.getURLParam('ref');
 			var endpoint = PAGE.fqdn + "/sgx/user/password?ref="+token;
 			var postType = 'POST';
-			var appType = 'application/json';
 			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword() };
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
@@ -91,10 +92,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var displayMessage = RESETPASS.messages.messages[0];
 			
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
-				appType,
 				params,
 				function(data, textStatus, jqXHR){					
 					if (data == true){

@@ -111,12 +111,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					ALERTS.finalWL(data.watchlists.sort(sortByName));
-					// Code for removed Ticker codes. Will display list if removed array is greater than zero
-					//var arr = ['123,456'];					
-//					var removedTicker = arr.toString();
-//					if (data.removed.length > 0) {
-//						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
-//					}
+					var arr = data.removed;					
+					var removedTicker = arr.toString();
+					if (arr.lenth > 0) {
+						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
+					}
 					
 				}, 
 				function(jqXHR, textStatus, errorThrown){
