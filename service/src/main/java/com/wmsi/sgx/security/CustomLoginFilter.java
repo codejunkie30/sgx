@@ -142,7 +142,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			
 			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
 			
-			super.doFilter(req, res, chain);
+			super.doFilter(request, wrapper, chain);
 				
 			
 			response.setContentType("text/javascript;UTF-8");
