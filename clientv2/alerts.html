@@ -43,7 +43,7 @@
 		
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
-				<select data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: displayWatchlists }"></select>
+				<select data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
 				<!-- ko if: selectedValue() != null -->
 					<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
 				<!-- /ko -->
@@ -52,7 +52,7 @@
 				</div>
 				
 				<div class="wl-companies">					
-					<div data-bind="if: displayList">
+					<div data-bind="if: displayListCompanies().length > 0">
 						<ul data-bind="foreach: displayListCompanies">
 							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">							
 								<span class="ticker" data-bind="text: ticker"></span>

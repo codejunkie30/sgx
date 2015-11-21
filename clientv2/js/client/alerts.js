@@ -45,7 +45,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var params = {};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
-
+			//self.searchReady(true);
 			function makeAggregateCompanyDataCall() {
 				UTIL.handleAjaxRequest(
 					endpoint,
@@ -80,8 +80,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						ko.applyBindings(this, $("body")[0]);
 					  } else {
 						$('#alerts').show();
-						this.finish(this);
-						setTimeout(function(){ makeAggregateCompanyDataCall() }, 500);
+						/*
+						* Get all company Names callback
+						*/
+						this.finish(this, makeAggregateCompanyDataCall); 
+						//setTimeout(function(){ makeAggregateCompanyDataCall() }, 500);
 					  }
 				  }		
 			  },
@@ -89,8 +92,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		  });
 			
 		},
-		
-		finish: function(me) {
+
+		/*
+		* Get all company Names callback
+		*/
+		finish: function(me, callback) {
 			var displayMessage = ALERTS.messages.messages[0];
 			
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
@@ -111,6 +117,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					ALERTS.finalWL(data.watchlists.sort(sortByName));
+					callback();
 					var arr = data.removed;					
 					var removedTicker = arr.toString();
 					if (arr.lenth > 0) {
@@ -141,8 +148,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						firstRun = false;
 						
 						ALERTS.displayList(wl);
-						
-						ALERTS.displayListCompanies();
 
 						ALERTS.clearWatchListErrors();
 						
@@ -213,6 +218,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
 			});
+
+			ALERTS.companies.subscribe(function(data){
+				ALERTS.displayWatchlists(data);
+			});
+
 			
 			return this;
 			
@@ -284,12 +294,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			ALERTS.newWLName(null);
 		},
 		
-		displayWatchlists: function(){
-			if (ALERTS.companies().length == 0){ $('.wl-companies ul').empty(); return }
+		displayWatchlists: function(data){
+			
+			if (Object.prototype.toString.call(data) == '[object Array]' && data.length == 0){ 
+				$('.wl-companies ul').empty(); 
+				return;
+			}
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
-			var params = { "companies": ALERTS.companies() };
-			
+			var params = { "companies": data };
+			function jsonpCallback(){
+				'jsonpCallback was called';
+			}
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -304,8 +320,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log('sta', textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},undefined);
-		},		
+				},'jsonpCallback');
+		},
+
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
