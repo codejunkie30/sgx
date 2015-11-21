@@ -123,6 +123,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
+				undefined,
 				function(data, textStatus, jqXHR){
 				}, 
 				function(jqXHR, textStatus, errorThrown){
@@ -130,7 +131,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});			
+				},jsonpCallback);			
 		},
 		
 		updatePassword: function(){
@@ -144,6 +145,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
+				undefined,
 				function(data, textStatus, jqXHR){
 					$('.error-messages').empty();
 				}, 
@@ -152,7 +154,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});
+				},jsonpCallback);
 			
 			
 		},
@@ -168,7 +170,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
+				jsonp,
 				function(data, textStatus, jqXHR){
+					
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.currency(data.currency);
@@ -218,7 +222,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				});
+				},jsonpCallback);
 			
 		},
 			

@@ -501,18 +501,18 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$('body').prepend($('<div id="loading"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		checkStatus: function(){
-
             var endpoint = PAGE.fqdn + "/sgx/account/info";
 			//var endpoint = 'http://192.168.1.37:8001' + "/sgx/account/info";
 			var postType = 'POST';
 			var params = {};
-			var appType = 'application/json';
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
 			
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
-				appType,
 				params,
+				jsonp,
 				function(data, textStatus, jqXHR){
 					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password'){
 						PAGE.premiumUser(false);
@@ -562,7 +562,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				});			
+				},jsonpCallback);			
 		},
 		timedLogout: function(){
 			$('body').idleTimeout({

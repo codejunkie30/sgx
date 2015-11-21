@@ -59,7 +59,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		signIn: function(me){
-
 			var displayMessage = SIGNIN.messages.messages[0];			
 			var endpoint = me.fqdn + "/sgx/login";
 			var postType = 'POST';
@@ -78,7 +77,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined, 
 				function(data, textStatus, jqXHR){
 					if (data == '' || data == undefined){
-
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 
 					} else {

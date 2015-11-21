@@ -95,7 +95,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
-				params,
+				params, 
+				undefined,
 				function(data, textStatus, jqXHR){					
 					if (data == true){
 						$('.form').empty().addClass('confirm');
@@ -114,7 +115,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				});
+				},jsonpCallback);
 		},
 		getURLParam: function getURLParam(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -130,7 +131,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}
 			}
 		}
-
 	};
 	
 	return RESETPASS;
