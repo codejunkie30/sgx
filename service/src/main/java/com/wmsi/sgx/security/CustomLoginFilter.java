@@ -1,10 +1,13 @@
 package com.wmsi.sgx.security;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.wmsi.sgx.web.filter.GenericResponseWrapper;
 import com.wmsi.sgx.web.filter.GetToPostRequestWrapper;
+import com.wmsi.sgx.web.filter.PostRequestMapper;
 import com.wmsi.sgx.web.filter.User;
 
 
@@ -120,9 +124,25 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 				GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
 						MediaType.APPLICATION_JSON_VALUE);
 				super.doFilter(postRequestWrapper, wrapper, chain);
-			}else
-				super.doFilter(request, wrapper, chain);
+			}else{
 				
+				StringBuilder sb = new StringBuilder();
+				String s;
+				
+				while((s = request.getReader().readLine()) != null){
+					sb.append(s);
+				}
+				
+				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+				
+				if(jsonObject.startsWith("json="))
+					jsonObject = jsonObject.replaceFirst("json=", "");
+				
+				PostRequestMapper postRequestWrapper = new PostRequestMapper(request, jsonObject,
+						MediaType.APPLICATION_JSON_VALUE);
+												
+				super.doFilter(postRequestWrapper, wrapper, chain);
+			}	
 			
 			response.setContentType("text/javascript;UTF-8");
 			String callback = parms.get("callback")[0];
@@ -174,6 +194,20 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			AuthenticationException failed) throws IOException, ServletException {
 		restAuthenticationFailureHandler.onAuthenticationFailure(request, response, failed);
 
+	}
+	
+	class LocalInputStream extends ServletInputStream{
+
+		private InputStream in;
+		
+		public LocalInputStream(InputStream i){
+			in = i;
+		}
+		
+		@Override
+		public int read() throws IOException {
+			return in.read();
+		}
 	}
 
 }
