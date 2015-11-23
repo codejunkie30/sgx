@@ -51,6 +51,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
+			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -60,7 +61,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
 						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
-						PAGE.resizeIframeSimple();	
+						PAGE.resizeIframeSimple();
+						PAGE.hideLoading();
 					} else {
 						console.log(data);
 					}
