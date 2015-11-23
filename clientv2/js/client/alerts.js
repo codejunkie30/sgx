@@ -257,7 +257,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		var params = { "message": ALERTS.newWLName() };
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';			
-			
+			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -269,6 +269,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
+					PAGE.hideLoading();
 					ALERTS.finalWL(data.sort(sortByName));
 					
 					$.each(data, function(i,data){
@@ -402,6 +403,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		var params = { "message": ALERTS.selectedValue()};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
+			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -413,6 +415,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
+					PAGE.hideLoading();
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
