@@ -89,7 +89,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        }
 			
 			var displayMessage = RESETPASS.messages.messages[0];
-			
+			PAGE.showLoading();
 			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
@@ -98,12 +98,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if (data == true){
 						$('.form').empty().addClass('confirm');
 						$('<p/>').html(displayMessage.resetPass.success).appendTo('.form.confirm');
-						PAGE.resizeIframeSimple();					
+						PAGE.resizeIframeSimple();
+						PAGE.hideLoading();		
 					} else {
 						if (data.details.errorCode == 4005){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.resetPass.invaldToken).appendTo('.error-messages');
-							PAGE.resizeIframeSimple();	
+							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
 						} 
 					}		
 				}, 
