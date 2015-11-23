@@ -219,7 +219,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			//KeyDevs
 			for(String key: keyDevsMap.getMap().keySet()){
 				if(map.get(key).toString().equals("true")){
-					for(KeyDev kd : getKeyDevs(company, new Date())){
+					for(KeyDev kd : getKeyDevs(company, getStartOfDay(new Date()))){
 						if(keyDevsMap.getMap().get(key).contains(kd.getType())){
 							keyDevOptions.get(key).put(company, companyName);
 						}
@@ -310,6 +310,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	
 	public String getCompanyName(String company) throws CompanyServiceException{
 		return companyService.getById(company).getCompanyName();
+	}
+	
+	public Date getStartOfDay(Date date) {
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(date);
+	    calendar.set(Calendar.HOUR_OF_DAY, 0);
+	    calendar.set(Calendar.MINUTE, 0);
+	    calendar.set(Calendar.SECOND, 0);
+	    calendar.set(Calendar.MILLISECOND, 0);
+	    return calendar.getTime();
 	}
 	
 	private Double getLastMonthsVolume(List<HistoricalValue> lastYear, String startDate) {
