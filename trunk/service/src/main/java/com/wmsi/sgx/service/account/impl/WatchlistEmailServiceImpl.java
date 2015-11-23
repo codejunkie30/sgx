@@ -200,7 +200,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				map.put("estChangeConsensus", "false");
 			
 			if(map.get("estChangeConsensus").toString().equals("true") && currentEstimate.getAvgBrokerRec() != null){
-				Double brokerRec =  currentEstimate.getAvgBrokerRec() != null ? currentEstimate.getAvgBrokerRec() : 0.0;
+				Double brokerRec =  currentEstimate.getAvgBrokerRec();
 				Double lastBrokerRec = pastEstimate != null && pastEstimate.getAvgBrokerRec() != null ? pastEstimate.getAvgBrokerRec() : 0.0;				
 				int pastBrokerRec = (int) Math.round(lastBrokerRec);
 				int currentBrokerRec = (int) Math.round(brokerRec);
