@@ -600,7 +600,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						params, 
 						undefined, 
 						function(data, textStatus, jqXHR){
-							PAGE.finalWL(data);
+							PAGE.finalWL(data.watchlists);
 						}, 
 						function(jqXHR, textStatus, errorThrown){
 							console.log('fail');
