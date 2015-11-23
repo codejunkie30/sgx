@@ -130,7 +130,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			try{
 				Company comp = companyService.getById(company);
 				p = fallbackPrice(company);
-				companyPrice.setChange(p.getChange());
+				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
 				companyPrice.setCompanyName(comp.getCompanyName());
 				companyPrice.setCurrency(p.getTradingCurrency());
 				if(p.getLastPrice() != null)
