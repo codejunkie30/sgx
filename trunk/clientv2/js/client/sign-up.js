@@ -89,8 +89,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var endpoint = me.fqdn + "/sgx/user/create";
 			var postType = 'POST';
 			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined || this.termsConditions() == false) {
 				if (this.termsConditions() == false) { 
@@ -102,11 +100,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.showLoading();
 			
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
-				params, 
-				jsonp,
+				params,
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('confirm');
@@ -127,7 +124,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				},jsonpCallback);
+				});
 		},
 		termsConditionsModal: function(){
 			var displayMessage = SIGNUP.messages.messages[0];

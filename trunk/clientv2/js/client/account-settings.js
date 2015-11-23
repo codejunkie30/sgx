@@ -162,15 +162,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		accountSettings: function(displayMessage){
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
-			var params = {};
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';			
+			var params = {};			
 			
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
 				params,
-				jsonp,
 				function(data, textStatus, jqXHR){
 					
 					SAVECHANGES.userEmail(data.email);
@@ -222,7 +219,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(textStatus);
 					console.log(errorThrown);
 					console.log(jqXHR);
-				},jsonpCallback);
+				});
 			
 		},
 			
