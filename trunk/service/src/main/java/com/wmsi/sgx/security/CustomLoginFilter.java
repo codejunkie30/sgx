@@ -1,5 +1,6 @@
 package com.wmsi.sgx.security;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,7 +45,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		this.objectMapper = objectMapper;
 	}
 
-	// @Override
+	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		if (userSet == false) {
@@ -67,6 +68,14 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			logger.info("User " + user);
 		}
 
+		/*
+		 * if(userSet==false){ Gson gson = new Gson(); StringBuilder sb = new
+		 * StringBuilder(); String s;
+		 * 
+		 * while((s = request.getReader().readLine()) != null){ sb.append(s); }
+		 * user = (User)gson.fromJson(sb.toString(), User.class); }
+		 */
+
 		// UsernamePasswordAuthenticationToken authRequest = new
 		// UsernamePasswordAuthenticationToken(user.getUsername(),
 		// user.getPassword());
@@ -84,14 +93,15 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
+		BufferedReader br = request.getReader();
 		Map<String, String[]> parms = request.getParameterMap();
-
+		GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
 		if ((request.getMethod() == "GET" || request.getMethod() == "POST")
 				&& (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))
 				&& !(request.getServletPath().equals("/login"))) {
 			// Execute request, writing response to wrapper so we can manipulate
 			// the results.
-			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
+			
 			if (request.getMethod() == "GET") {
 				// Convert json query string value to post request body
 				GetToPostRequestWrapper postRequestWrapper = new GetToPostRequestWrapper(request, "json",
@@ -130,32 +140,72 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			wrapper.setContentType("text/javascript;UTF-8");
 
 			out.close();
-		} else {
+		} else if ((request.getMethod() == "GET" || request.getMethod() == "POST")
+					&& (!parms.containsKey("callback") || !parms.containsValue("jsonpCallback"))
+					&& !(request.getServletPath().equals("/login"))) {
+				
+				StringBuilder sb = new StringBuilder();
+				String s;
 
-			GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
+				while ((s = br.readLine()) != null) {
+					sb.append(s);
+				}
 
-			super.doFilter(request, wrapper, chain);
+				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
 
-			response.setContentType("text/javascript;UTF-8");
-			String callback = parms.get("callback")[0];
+				if (jsonObject.startsWith("json="))
+					jsonObject = jsonObject.replaceFirst("json=", "");
 
-			// Wrap json with jsonp callback
-			OutputStream out = response.getOutputStream();
+				PostRequestMapper postRequestWrapper = new PostRequestMapper(request, jsonObject,
+						MediaType.APPLICATION_JSON_VALUE);
 
-			out.write((callback + "(").getBytes());
-			out.write(wrapper.getData());
-			out.write(");".getBytes());
-			// levaing this here just in case(paranoid checking)
-			wrapper.setContentType("text/javascript;UTF-8");
+				super.doFilter(postRequestWrapper, response, chain);
 
-			out.close();
+			} else if ((request.getMethod() == "GET" || request.getMethod() == "POST")
+					&& (!parms.containsKey("callback") || !parms.containsValue("jsonpCallback"))
+					&& (request.getServletPath().equals("/login"))) {
+				
+				Gson gson = new Gson();				
+				StringBuilder sb = new StringBuilder();
+				String s;
 
-		}
+				while ((s = br.readLine()) != null) {
+					sb.append(s);
+				}
+
+				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+
+				if (jsonObject.startsWith("json="))
+					jsonObject = jsonObject.replaceFirst("json=", "");
+
+				PostRequestMapper postRequestWrapper = new PostRequestMapper(request, jsonObject,
+						MediaType.APPLICATION_JSON_VALUE);
+
+				user = (User) gson.fromJson(jsonObject, User.class);
+				if(user!= null){
+					userSet = true;
+				}
+
+				super.doFilter(postRequestWrapper, response, chain);
+				
+				OutputStream out = response.getOutputStream();
+
+				out.write(wrapper.getData());
+				
+
+			} else {
+
+				super.doFilter(req, res, chain);
+			}
 	}
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			Authentication authResult) throws IOException, ServletException {
+		if(request.getServletPath().equals("/login"))
+		{
+			response.setStatus(200, "Success");			
+		}
 		restAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
 	}
 
