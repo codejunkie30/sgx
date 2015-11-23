@@ -64,6 +64,13 @@
 							</li>
 						</ul>	
 					</div>
+					<div data-bind="if:displayListCompanies().length == 0">
+						<ul>
+							<li class="alerts-companies-standin" style="height:60px;">
+								
+							</li>
+						</ul>
+					</div>
 				</div>
 				<div class="search" data-bind="if: displayList">
 					<h5>Search for companies to add to your Watch List</h5>
@@ -74,7 +81,7 @@
 						</span>
 					</div>
 				</div>
-				<div class="results" data-bind="if: displayList">
+				<div class="results" data-bind="if: displayList" style="height:300px">
 					<h5>Your Matches</h5>
 					<ul class="company" data-bind="foreach: searchResults">
 						<li>

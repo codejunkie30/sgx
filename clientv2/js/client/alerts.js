@@ -12,7 +12,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		displayTempCom: ko.observableArray(),
 		actualEstimates: ko.observableArray(),
 		consensusRec: ko.observableArray(),
-		displayListCompanies: ko.observableArray(),
+		displayListCompanies: ko.observableArray([]),
 		searchInput: ko.observable(),
 		searchResults: ko.observableArray(),
 		searchReady: ko.observable(false),
@@ -34,6 +34,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		alerts: JSON.parse(AL),
 		sectionName:'Alerts',
 		allCompanies: [],
+		skipUpdateCompanies: ko.observable(false),
 		
 		defaultSearch: "",
 		
@@ -41,32 +42,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			///
 			var self = this;
 			var endpoint = this.fqdn+'/sgx/company/names';
-			var postType = 'GET';
-			var params = {};
-			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';
-			//self.searchReady(true);
+			
 			function makeAggregateCompanyDataCall() {
-				UTIL.handleAjaxRequest(
-					endpoint,
-					postType,
-					params, 
-					undefined, 
-					function(data, textStatus, jqXHR){
-						self.allCompanies = data.companyNameAndTickerList;
-						self.searchReady(true);
 
-					}, 
-					function(jqXHR, textStatus, errorThrown){
-						console.log('fail');
-						console.log('sta', textStatus);
-						console.log(errorThrown);
-						console.log(jqXHR);
-					},jsonpCallback);
+				$.getJSON(endpoint+"?callback=?").done(function(data){
+					self.allCompanies = data.companyNameAndTickerList;
+					self.searchReady(true);
+
+				}).fail(function(jqXHR, textStatus, errorThrown){
+					console.log('error making makeAggregateCompanyDataCall');
+					console.log('fail');
+					console.log('sta', textStatus);
+					console.log(errorThrown);
+					console.log(jqXHR);
+				});
+
 			}
 
-
-			///
 			var self = this;
 			
 			PAGE.checkStatus();
@@ -84,7 +76,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						* Get all company Names callback
 						*/
 						this.finish(this, makeAggregateCompanyDataCall); 
-						//setTimeout(function(){ makeAggregateCompanyDataCall() }, 500);
+
 					  }
 				  }		
 			  },
@@ -97,8 +89,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		* Get all company Names callback
 		*/
 		finish: function(me, callback) {
+
+			PAGE.showLoading();
 			var displayMessage = ALERTS.messages.messages[0];
-			
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'GET';
     		var params = {};
@@ -110,7 +103,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					
+					PAGE.hideLoading();
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
@@ -121,7 +114,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					var arr = data.removed;					
 					var removedTicker = arr.toString();
 					if (arr.length > 0) {
-						console.log('here');
 						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
 					
@@ -221,7 +213,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 
 			ALERTS.companies.subscribe(function(data){
-				ALERTS.displayWatchlists(data);
+				if ( !ALERTS.skipUpdateCompanies() ){  
+					setTimeout(function(){ ALERTS.displayWatchlists(data); }, 400);
+				}
+				else 
+					ALERTS.skipUpdateCompanies(false);
 			});
 
 			
@@ -294,34 +290,65 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//Clears add WL after submit
 			ALERTS.newWLName(null);
 		},
+
+		_hideLoading: function() {
+			$('#loading-alerts').remove();
+			$('#grayout').remove();
+		},
+		
+		_showLoading: function() {
+			var container = $('.wl-companies');
+			container.prepend($('<div id="grayout" class="grayout"></div>'));
+			$('.wl-companies').prepend($('<div id="loading-alerts"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
+		},
 		
 		displayWatchlists: function(data){
+			
+			var self = this;
 			
 			if (Object.prototype.toString.call(data) == '[object Array]' && data.length == 0){ 
 				$('.wl-companies ul').empty(); 
 				return;
 			}
+			self._showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
 			var params = { "companies": data };
 			function jsonpCallback(){
 				'jsonpCallback was called';
 			}
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params, 
-				undefined, 
-				function(data){
-					ALERTS.displayListCompanies(data.companyPrice);
-					PAGE.resizeIframeSimple();
-				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},'jsonpCallback');
+
+
+			$.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) })
+
+			.done(function(data){
+				ALERTS.displayListCompanies(data.companyPrice);
+				self._hideLoading();
+				setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
+
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log('error making makeAggregateCompanyDataCall');
+				console.log('fail');
+				console.log('sta', textStatus);
+				console.log(errorThrown);
+				console.log(jqXHR);
+			});
+			// UTIL.handleAjaxRequest(
+			// 	endpoint,
+			// 	postType,
+			// 	params, 
+			// 	undefined, 
+			// 	function(data){
+			// 		ALERTS.displayListCompanies(data.companyPrice);
+			// 		self._hideLoading();
+			// 		PAGE.resizeIframeSimple();
+			// 	}, 
+			// 	function(jqXHR, textStatus, errorThrown){
+			// 		console.log('fail');
+			// 		console.log('sta', textStatus);
+			// 		console.log(errorThrown);
+			// 		console.log(jqXHR);
+			// 	},'jsonpCallback');
 		},
 
 		editWLNameSubmit: function(){
@@ -395,55 +422,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},jsonpCallback);			
 		},
 		deleteCompany: function(data){
-			PAGE.showLoading();
+
+			ALERTS.skipUpdateCompanies(true); //because saveWatchLists also updates the companies display
 			ALERTS.companies.remove(data.ticker);
 			ALERTS.saveWatchlist();
-			setTimeout(function(){ ALERTS.displayWatchlists(); PAGE.hideLoading();}, 500);
 			PAGE.resizeIframeSimple();
 		},
 		addCompany: function(data){
 			if (ALERTS.companies().length >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watch list.</p>', width: 300 }); return; }
 
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
-			PAGE.showLoading();
+			//PAGE.showLoading();
+			ALERTS.skipUpdateCompanies(true);
 			ALERTS.companies.push(data.tickerCode);
 			ALERTS.saveWatchlist();
-			setTimeout(function(){ ALERTS.displayWatchlists(); PAGE.hideLoading();}, 500);
-			PAGE.resizeIframeSimple();
+			//setTimeout(function(){ ALERTS.displayWatchlists(); PAGE.hideLoading();}, 500);
+			//PAGE.resizeIframeSimple();
 			
 		},
 		searchCompanies: function(){
 
 			//noop
 
-			// var searchValue = $(".searchbar input").val();
-			// var endpoint = PAGE.fqdn + "/sgx/search";
-			// var postType = 'POST';
-			// var params = {"criteria":[{"field":"companyOrTicker","value":searchValue}]};
-			// var jsonp = 'jsonp';
-			// var jsonpCallback = 'jsonpCallback';
-			// UTIL.handleAjaxRequest(
-			// 	endpoint,
-			// 	postType,
-			// 	params, 
-			// 	undefined, 
-			// 	function(data, textStatus, jqXHR){
-			// 		if (data.companies.length == 0){ 
-			// 			$('<li/>').html('There are no results for your search.').appendTo('.results .company');
-			// 			return;					
-			// 		} else {
-			// 			$('.results .company').empty();
-			// 			ALERTS.searchResults(data.companies);
-			// 			if ($('.watchlist .results ul').height() < 375) { $('.watchlist .results ul').css('overflow','hidden'); } else { $('.watchlist .results ul').css('overflow','auto'); }
-			// 			PAGE.resizeIframeSimple();
-			// 		}
-			// 	}, 
-			// 	function(jqXHR, textStatus, errorThrown){
-			// 		console.log('fail');
-			// 		console.log('sta', textStatus);
-			// 		console.log(errorThrown);
-			// 		console.log(jqXHR);
-			// 	},undefined);
 		},
 
 		sendEmail: function() {
@@ -478,7 +478,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		saveWatchlist: function(){
 			var displayMessage = ALERTS.messages.messages[0];
-			
+			PAGE.showLoading();
 			var errors = 0;
 			var pcPriceDropError = 0;
 			var pcTradingVolumeError = 0;
@@ -568,6 +568,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				function(data, textStatus, jqXHR){
 					$('.save').remove();
 					$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
+					PAGE.hideLoading();
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
