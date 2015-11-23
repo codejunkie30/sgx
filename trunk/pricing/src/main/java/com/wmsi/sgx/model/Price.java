@@ -7,7 +7,7 @@ import com.wmsi.sgx.util.MathUtil;
 
 public class Price{
 
-	private static final int DECIMAL_PLACES = 4;
+	private static final int DECIMAL_PLACES = 3;
 
 	private Double bidPrice;
 	private Double askPrice;
