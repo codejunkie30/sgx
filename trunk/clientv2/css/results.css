@@ -144,3 +144,4 @@
 }
 
 .customize-display-modal { width: 550px; height: 460px; }
+.customize-display-modal span { display: inline-block; width: 46%; }
