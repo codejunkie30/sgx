@@ -459,14 +459,14 @@ and b.childLevel in (2,3)
 
 union
 
-select 
-	pop.tickerSymbol,
-	pop.exchangeSymbol,
-	'marketCap',
-	convert(varchar(max),mc.marketCap),
-	null,
-	pricingDate,
-	curr.ISOCode
+select
+pop.tickerSymbol,
+pop.exchangeSymbol,
+'marketCap',
+convert(varchar(max),mc.marketCap),
+null,
+pricingDate,
+curr.ISOCode
 from ciqmarketcap mc
 join (
 select companyid, max(pricingdate) as maxdate
@@ -475,7 +475,7 @@ group by companyid) maxdt on mc.companyId=maxdt.companyId and mc.pricingDate=max
 join ciqsecurity s on mc.companyId=s.companyId
 join ciqTradingItem ti on s.securityId=ti.securityId
 join ciqCurrency curr on ti.currencyId=curr.currencyId
-join ##SGXPop pop on ti.tradingItemId=pop.tradingItemId
+join ##SGXPop pop on s.companyid=pop.companyid
 where s.primaryFlag=1
 and ti.primaryFlag=1
 
