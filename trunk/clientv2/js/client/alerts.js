@@ -120,7 +120,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					callback();
 					var arr = data.removed;					
 					var removedTicker = arr.toString();
-					if (arr.lenth > 0) {
+					if (arr.length > 0) {
+						console.log('here');
 						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
 					
