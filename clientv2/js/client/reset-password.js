@@ -83,8 +83,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var endpoint = PAGE.fqdn + "/sgx/user/password?ref="+token;
 			var postType = 'POST';
 			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword() };
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
@@ -92,11 +90,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var displayMessage = RESETPASS.messages.messages[0];
 			
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
-				params, 
-				undefined,
+				params,
 				function(data, textStatus, jqXHR){					
 					if (data == true){
 						$('.form').empty().addClass('confirm');
@@ -115,7 +112,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(jqXHR.statusCode() );
-				},jsonpCallback);
+				});
 		},
 		getURLParam: function getURLParam(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
