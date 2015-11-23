@@ -182,8 +182,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("estChangePriceDrop").toString().equals("true") && currentEstimate != null){
 				Double targetPriceDrop = Double.parseDouble(map.get("estChangePriceDropBelow").toString());
-				Double targetPriceRise = Double.parseDouble(map.get("estChangePriceDropAbove").toString());				
-				Double pastTp = pastEstimate.getTargetPrice();
+				Double targetPriceRise = Double.parseDouble(map.get("estChangePriceDropAbove").toString());
+				Double pastTp = null;
+				if(pastEstimate != null)
+					pastTp = pastEstimate.getTargetPrice();
 				Double currentTp = currentEstimate.getTargetPrice();
 				Double percentChange = 0.0D;
 				
@@ -199,8 +201,8 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			
 			if(map.get("estChangeConsensus").toString().equals("true") && currentEstimate.getAvgBrokerRec() != null){
-				Double brokerRec =  pastEstimate.getAvgBrokerRec();
-				Double lastBrokerRec = pastEstimate.getAvgBrokerRec() != null ? pastEstimate.getAvgBrokerRec() : 0.0;				
+				Double brokerRec =  currentEstimate.getAvgBrokerRec();
+				Double lastBrokerRec = pastEstimate != null ? pastEstimate.getAvgBrokerRec() : 0.0;				
 				int pastBrokerRec = (int) Math.round(lastBrokerRec);
 				int currentBrokerRec = (int) Math.round(brokerRec);
 				
