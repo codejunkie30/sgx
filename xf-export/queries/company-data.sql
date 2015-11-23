@@ -432,7 +432,7 @@ from (
 		join ##sgxpop pop on c.companyId=pop.companyId
 		left join ciqState st on c.stateId=st.stateId
 		left join ciqCountryGeo cty on c.countryId=cty.countryId
-		left join ciqLatestInstanceFinPeriod fp on c.companyId=fp.companyId and fp.latestPeriodFlag=1 and fp.periodTypeId=1
+		left join ciqLatestInstanceFinPeriod fp on c.companyId=fp.companyId and fp.latestPeriodFlag=1 and fp.periodTypeId=4
 		left join ciqCurrency cISO on fp.currencyId=cISO.currencyId
 		left join ciqBusinessDescription bd on c.companyId=bd.companyId
 	) pvt
@@ -555,6 +555,7 @@ group by pop.tickerSymbol, pop.exchangeSymbol
 
 union
 
+--target price num of analysts
 select 
 	pop.tickerSymbol, 
 	pop.exchangeSymbol,
@@ -564,23 +565,72 @@ select
 	null,
 	null
 from ciqEstimateRevision er
-join ciqEstimateConsensus ec on er.estimateConsensusId=ec.estimateConsensusId
-join ciqEstimatePeriod ep on ec.estimatePeriodId=ep.estimatePeriodId
-join ##sgxpop pop on ep.companyId = pop.companyId
-join (
-select max(asofdate) as maxDate, estimateConsensusId, dataItemId, estimateRevisionTypeId
-from ciqEstimateRevision
-where estimateConsensusId in (
-select estimateConsensusId
-from ciqEstimateConsensus ec
-join ciqEstimatePeriod ep on ec.estimatePeriodID=ep.estimatePeriodId
-where ep.companyid in (select companyid from ##sgxpop)
-and advanceDate is null
-)
-and estimateRevisionTypeId=4
-group by estimateConsensusId, dataItemId, estimateRevisionTypeId
-) mdate on er.estimateConsensusId=mdate.estimateConsensusId
-and er.dataItemId=mdate.dataItemId
-and er.estimateRevisionTypeId=mdate.estimateRevisionTypeId
-and er.asOfDate=mdate.maxDate
-and er.dataitemid=100161
+	join ciqEstimateConsensus ec on er.estimateConsensusId=ec.estimateConsensusId
+	join ciqEstimatePeriod ep on ec.estimatePeriodId=ep.estimatePeriodId
+	join ##sgxpop pop on ep.companyId = pop.companyId
+	join (
+		select max(asofdate) as maxDate, estimateConsensusId, dataItemId, estimateRevisionTypeId
+		from ciqEstimateRevision
+		where estimateConsensusId in (
+			select estimateConsensusId
+			from ciqEstimateConsensus ec
+				join ciqEstimatePeriod ep on ec.estimatePeriodID=ep.estimatePeriodId
+			where ep.companyid in (select companyid from ##sgxpop)
+				and advanceDate is null
+			)
+			and estimateRevisionTypeId=4
+			group by estimateConsensusId, dataItemId, estimateRevisionTypeId
+		) mdate on er.estimateConsensusId=mdate.estimateConsensusId
+			and er.dataItemId=mdate.dataItemId
+			and er.estimateRevisionTypeId=mdate.estimateRevisionTypeId
+			and er.asOfDate=mdate.maxDate
+			and er.dataitemid=100161
+where ec.tradingItemId in (
+		select tradingitemid
+		from ciqTradingItem ti
+		join ciqSecurity sec on ti.securityId=sec.securityId
+		where ti.primaryFlag=1
+		and sec.primaryFlag=1
+		and sec.companyId  in (select companyid from ##sgxpop)
+		)
+union
+
+--ltg num of analysts
+
+select 
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'ltgNum',
+	convert(varchar(max),numAnalysts),
+	null,
+	null,
+	null
+from ciqEstimateRevision er
+	join ciqEstimateConsensus ec on er.estimateConsensusId=ec.estimateConsensusId
+	join ciqEstimatePeriod ep on ec.estimatePeriodId=ep.estimatePeriodId
+	join ##sgxpop pop on ep.companyId = pop.companyId
+	join (
+		select max(asofdate) as maxDate, estimateConsensusId, dataItemId, estimateRevisionTypeId
+		from ciqEstimateRevision
+		where estimateConsensusId in (
+			select estimateConsensusId
+			from ciqEstimateConsensus ec
+				join ciqEstimatePeriod ep on ec.estimatePeriodID=ep.estimatePeriodId
+			where ep.companyid in (select companyid from ##sgxpop)
+				and advanceDate is null
+			)
+			and estimateRevisionTypeId=4
+			group by estimateConsensusId, dataItemId, estimateRevisionTypeId
+		) mdate on er.estimateConsensusId=mdate.estimateConsensusId
+			and er.dataItemId=mdate.dataItemId
+			and er.estimateRevisionTypeId=mdate.estimateRevisionTypeId
+			and er.asOfDate=mdate.maxDate
+			and er.dataitemid=100167
+where ec.tradingItemId in (
+		select tradingitemid
+		from ciqTradingItem ti
+		join ciqSecurity sec on ti.securityId=sec.securityId
+		where ti.primaryFlag=1
+		and sec.primaryFlag=1
+		and sec.companyId  in (select companyid from ##sgxpop)
+		)
