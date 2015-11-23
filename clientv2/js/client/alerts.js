@@ -275,7 +275,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if (data.name == newWLNameLC){
 							ALERTS.saveWatchlist();
 							ALERTS.selectedValue(data.id);
-							setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
+							
+							//setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
 						}						
 					});
 				}, 
