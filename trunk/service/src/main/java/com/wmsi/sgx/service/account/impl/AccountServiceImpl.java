@@ -70,11 +70,12 @@ public class AccountServiceImpl implements AccountService{
 	public AccountModel updateAccount(UpdateAccountModel dto){
 		
 		List<Account> accounts = accountRepository.findByUsername(dto.getEmail());		
-		
+		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+		if(accounts.size() > 0){
 		accounts.get(0).setContactOptIn(dto.getContactOptIn());
 		accounts.get(0).setCurrency(dto.getCurrency());
 		accountRepository.save(accounts.get(0));
-		
+		}
 		return getAccountForUsername(dto.getEmail());
 		
 	}
