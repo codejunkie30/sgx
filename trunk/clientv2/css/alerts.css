@@ -21,11 +21,11 @@
 .save { width: 978px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 5px; }
 
 .watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
-.watchlist .wl-companies { margin: 12px 0; }
+.watchlist .wl-companies { margin: 12px 0;position:relative;}
 .watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
 .watchlist .wl-companies ul li { list-style-type: none; padding: 10px; }
 .watchlist .wl-companies ul li.odd { background: #ebecec; }
-.watchlist .wl-companies ul li span { font-size: 25px; color: #444; font-weight: bold; display: inline-block; }
+.watchlist .wl-companies ul li span { font-size: 22px; color: #444; font-weight: bold; display: inline-block; }
 .watchlist .wl-companies ul li .ticker { width: 115px; }
 .watchlist .wl-companies ul li .currency { width: 60px; }
 .watchlist .wl-companies ul li .price { width: 75px; }
@@ -68,3 +68,15 @@
 .cboxWrapper .cancel { margin: 0 10px; }
 
 .error-messages p { color: #bf0052 !important; line-height: 16px; font-size: 11.5px; margin: 10px 25px; }
+#loading-alerts{ position:absolute; top:40%; left:42%; z-index:51;}
+.grayout {
+  position: absolute;
+  z-index: 50;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity=80);
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  background-color: #fff; }
