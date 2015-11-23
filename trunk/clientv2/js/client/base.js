@@ -103,6 +103,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			});
 		}
 	};
+
+
+    KO.bindingHandlers.prependIf = {
+        update: function(element, valueAccessor, allBindings) {
+            return KO.bindingHandlers.text.update(element,function(){
+                var value = allBindings().text;
+                var prep = KO.unwrap(valueAccessor());
+                var conditional = KO.unwrap(allBindings().conditional);
+                return conditional ? prep + value : value;
+            });
+        }
+    };
+
+
 	
 	KO.bindingHandlers.accordian = {
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {

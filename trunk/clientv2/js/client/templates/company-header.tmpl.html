@@ -14,7 +14,7 @@
 			<div class="pricing">
 				<span class="currency" data-bind="text: priceData().currency"></span> 
 				<span class="price" data-bind="text: priceData().price, format: 'number'"></span>
-				<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }"></span>
+				<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }, prependIf: '+', conditional: priceData().change > 0"></span>
 			</div>			
 			<div class="as-of">
 				Last Price: 
