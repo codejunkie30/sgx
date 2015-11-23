@@ -67,7 +67,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
-						
+			PAGE.showLoading();
 			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
@@ -75,6 +75,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				function(data, textStatus, jqXHR){
 					if (data == '' || data == undefined){
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
+						PAGE.hideLoading();
 
 					} else {
 						
@@ -82,12 +83,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.invalidUserPass).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
 							return;
 						}
 						if (data.reason == 'User account is locked'){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
 							return;
 						}
 						if (data.reason == 'User is disabled'){
@@ -106,6 +109,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							
 							$('.error-messages .resend-email').show();
 							PAGE.resizeIframeSimple();	
+							PAGE.hideLoading();
 						}					
 					}
 				}, 
