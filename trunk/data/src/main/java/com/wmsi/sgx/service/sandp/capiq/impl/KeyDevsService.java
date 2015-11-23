@@ -90,7 +90,13 @@ public class KeyDevsService extends AbstractDataService {
 			keyDevSource.put(dev.getId(),dev.getSource());
 		}
 		
+		List<String> ids = new ArrayList<String>();
 		for (CSVRecord record : records) {
+			
+			// remove duplicates
+			if (ids.contains(record.get(2))) continue;
+			ids.add(record.get(2));
+			
 			KeyDev keydev = new KeyDev();
 			keydev.setSource(keyDevSource.get("IQKD"+record.get(2)));
 			keydev.setDate(new Date(record.get(3)));
