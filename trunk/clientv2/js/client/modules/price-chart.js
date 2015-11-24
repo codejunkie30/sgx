@@ -184,9 +184,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
 			var postType = 'GET';
 			var params = { "id": CHART.currentTicker, "date": todaysDate };
-			console.log(todaysDate);
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
-				console.log(data);
 				var todaysArray = [];
 				//Runs data if it's there
 				if ( data.pricingHistory.length > 0 ){
