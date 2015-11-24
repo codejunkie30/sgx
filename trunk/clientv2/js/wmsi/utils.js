@@ -152,7 +152,7 @@ define(["jquery"], function($) {
          * @param er the error message return from the server
          */
         genericAjaxError: function(data, status, er) {
-        	alert("NO error method provided");
+        	console.log("NO error method provided");
         	console.log(status);
         	console.log(data);
         	console.log(er);

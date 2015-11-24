@@ -737,7 +737,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
 			//Developer to use in case of custom error handling
-        },
+        }
 		
 	};
 	
