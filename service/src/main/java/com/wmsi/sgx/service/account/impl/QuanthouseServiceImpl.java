@@ -119,6 +119,9 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	public List<CompanyPrice> getCompanyPrice(List<String> companies, Boolean isPremium) throws QuanthouseServiceException, CompanyServiceException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
 		
+		if(companies == null)
+			return list;
+		
 		for(String company : companies){
 			CompanyPrice companyPrice = new CompanyPrice();
 			companyPrice.setPrice(0.0);
