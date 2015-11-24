@@ -58,7 +58,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				jsonp,
 				function(data, textStatus, jqXHR){
-					console.log(data);
 					if (data.messageCode == 110){
 						$('.error-messages').empty();
 						$('<p/>').html(displayMessage.resendValidation.emailResent).appendTo('.error-messages');
