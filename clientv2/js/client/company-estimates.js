@@ -163,17 +163,18 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             //table col widths 
             this.quarterlyTableColWidth = '15%';
             this.annualTableColWidth = '15%';
+
             //sort quarterly data and get th width
             if(this.estimates.quarterly.length > 0) {
                 this.estimates.quarterly.sort(function(a, b){
-                    return a.periodDate > b.periodDate;
+                    return a.periodDate > b.periodDate ? 1: a.periodDate == b.periodDate? 0: -1;
                 });
 
             }
 
             if(this.estimates.annually.length > 0) {
                 this.estimates.annually.sort(function(a, b){
-                    return a.periodDate > b.periodDate;
+                    return a.periodDate > b.periodDate ? 1: a.periodDate == b.periodDate? 0: -1;
                 });
             }
 
