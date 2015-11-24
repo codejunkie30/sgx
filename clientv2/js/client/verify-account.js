@@ -36,11 +36,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 						}
 					}
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				}, jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 			
 			
 			

@@ -12,9 +12,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 				function(data, textStatus, jqXHR){
 					PAGE.resizeIframeSimple();
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-				});
+				PAGE.customSGXError);
 				
 			PAGE.trackPage("SGX Logout");
 			// finish other page loading

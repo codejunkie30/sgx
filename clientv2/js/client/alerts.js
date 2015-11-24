@@ -51,10 +51,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 				}).fail(function(jqXHR, textStatus, errorThrown){
 					console.log('error making makeAggregateCompanyDataCall');
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
 				});
 
 			}
@@ -118,12 +114,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 			
 			//Alerts select lists
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
@@ -281,12 +273,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}						
 					});
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);	
+				PAGE.customSGXError,
+				jsonpCallback);	
 			
 			
 			//Clears add WL after submit
@@ -330,10 +318,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making makeAggregateCompanyDataCall');
-				console.log('fail');
-				console.log('sta', textStatus);
-				console.log(errorThrown);
-				console.log(jqXHR);
+				PAGE.customErrorMessage();
 			});
 			// UTIL.handleAjaxRequest(
 			// 	endpoint,
@@ -372,12 +357,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 				//Clears add WL after submit
 				ALERTS.newWLName(null);
 				ALERTS.showChange(false);
@@ -418,12 +399,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.hideLoading();
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);			
+				PAGE.customSGXError,
+				jsonpCallback);			
 		},
 		deleteCompany: function(data){
 
@@ -463,12 +440,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined, 
 				function(data, textStatus, jqXHR){
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 		},
 
 		clearWatchListErrors: function() {
@@ -581,10 +554,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
+					PAGE.customErrorMessage();
 				},jsonpCallback);
 		}
 

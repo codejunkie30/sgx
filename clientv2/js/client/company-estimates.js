@@ -120,19 +120,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 console.log('called');
             }
     		UTIL.handleAjaxRequest(endpoint,
-                                    postType,
-                                    params, 
-                                    jsonp, 
-                                    function(data, textStatus, jqXHR) { 
-                                        me.initFinancials(me, data);  
-                                    }, 
-                                    function(jqXHR, textStatus, errorThrown){
-                                        console.log(textStatus);
-                                        console.log(errorThrows);
-                                        console.log(jqXHR);
-                                    }, 
-                                    undefined);
-    		
+				postType,
+				params, 
+				jsonp, 
+				function(data, textStatus, jqXHR) { 
+					me.initFinancials(me, data);  
+				}, 
+				PAGE.customSGXError,
+				undefined);
+	    		
 		},
 
         init_nonPremium: function() {

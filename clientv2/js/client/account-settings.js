@@ -126,12 +126,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined,
 				function(data, textStatus, jqXHR){
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-					console.log(jqXHR.statusCode() );
-				},jsonpCallback);			
+				PAGE.customSGXError
+				,jsonpCallback);			
 		},
 		
 		updatePassword: function(){
@@ -149,12 +145,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				function(data, textStatus, jqXHR){
 					$('.error-messages').empty();
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-					console.log(jqXHR.statusCode() );
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 			
 			
 		},
@@ -214,12 +206,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.resizeIframeSimple();
 										
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				});
+				PAGE.customSGXError);
 			
 		},
 			

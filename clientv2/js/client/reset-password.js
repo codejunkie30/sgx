@@ -109,12 +109,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						} 
 					}		
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-					console.log(jqXHR.statusCode() );
-				});
+				PAGE.customSGXError);
 		},
 		getURLParam: function getURLParam(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
