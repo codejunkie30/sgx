@@ -245,7 +245,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var postType = 'GET';
       var params = { id: this.ticker };
 
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.initIndicatorsChart(data)  }, undefined, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.initIndicatorsChart(data)  }, PAGE.customSGXError, undefined);
 
       this.editEnableRSI.subscribe(function(data) {
         if(data)
@@ -284,7 +284,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
       var postType = 'GET';
       var params = { id: self.ticker };
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, undefined, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
     },
 
@@ -378,7 +378,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var postType = 'GET';
       var params = { id: self.ticker };
 
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, undefined, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
     },
 
