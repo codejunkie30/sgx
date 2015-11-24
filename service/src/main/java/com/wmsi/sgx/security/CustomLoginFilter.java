@@ -92,7 +92,10 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
+		
+		if(request.getServletPath().startsWith("/purchase"))
+			super.doFilter(req, res, chain);
+		
 		BufferedReader br = request.getReader();
 		Map<String, String[]> parms = request.getParameterMap();
 		GenericResponseWrapper wrapper = new GenericResponseWrapper(response);
@@ -142,7 +145,8 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			out.close();
 		} else if ((request.getMethod() == "GET" || request.getMethod() == "POST")
 					&& (!parms.containsKey("callback") || !parms.containsValue("jsonpCallback"))
-					&& !(request.getServletPath().equals("/login"))) {
+					&& !(request.getServletPath().equals("/login"))
+							&& !(request.getServletPath().startsWith("/purchase"))) {
 				
 				StringBuilder sb = new StringBuilder();
 				String s;
