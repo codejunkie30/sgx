@@ -304,10 +304,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
 			var postType = 'GET';
 			var params = { "companies": data };
-			function jsonpCallback(){
-				'jsonpCallback was called';
-			}
-
 
 			$.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) })
 
@@ -316,10 +312,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				self._hideLoading();
 				setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
 
-			}).fail(function(jqXHR, textStatus, errorThrown){
-				console.log('error making makeAggregateCompanyDataCall');
-				PAGE.customErrorMessage();
-			});
+			}).fail(PAGE.customSGXError);
 			// UTIL.handleAjaxRequest(
 			// 	endpoint,
 			// 	postType,
@@ -553,9 +546,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					PAGE.customErrorMessage();
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 		}
 
 	};

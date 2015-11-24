@@ -194,7 +194,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 						});					
 					});
 				}
-			}, undefined, undefined);	
+			}, PAGE.customSGXError, undefined);	
 		}
 	    
 	};

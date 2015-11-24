@@ -27,7 +27,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
     		// init real-time/delayed pricing data
     		endpoint = this.fqdn + "/sgx/price";
     		params = { id: this.ticker };
-    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initPriceData(parent, data); }, undefined, undefined);
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { var parent = self; parent.initPriceData(parent, data); }, PAGE.customSGXError, undefined);
 			
     		return this;
 		},

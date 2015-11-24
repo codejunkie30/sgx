@@ -50,7 +50,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			$(".search-results").hide();
 			
-			UTIL.handleAjaxRequest(this.parent.fqdn + endpoint, postType, params, undefined, success, this.fail, undefined);
+			UTIL.handleAjaxRequest(this.parent.fqdn + endpoint, postType, params, undefined, success, PAGE.customSGXError, undefined);
 		},
 
     	fail: function(xhr, ajaxOptions, thrownErr) {
