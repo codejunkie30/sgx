@@ -48,6 +48,7 @@ public class DataConfig{
 		source.setMaxTotal(Integer.parseInt(env.getProperty("database.maxTotal")));
 		source.setMaxIdle(Integer.parseInt(env.getProperty("database.maxIdle")));
 		source.setValidationQuery(env.getProperty("database.validationQuery"));
+		source.setMaxConnLifetimeMillis(Integer.parseInt(env.getProperty("database.maxConnLifetimeMillis")));
 		source.setTestOnReturn(true);
 
 		return source;
