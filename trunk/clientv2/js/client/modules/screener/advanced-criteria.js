@@ -142,7 +142,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     			return;
     		}
     		
-        	UTIL.handleAjaxRequest(endpoint, postType, data, undefined, tmpF, undefined, undefined);
+        	UTIL.handleAjaxRequest(endpoint, postType, data, undefined, tmpF, PAGE.customSGXError, undefined);
 
     	},
     	
