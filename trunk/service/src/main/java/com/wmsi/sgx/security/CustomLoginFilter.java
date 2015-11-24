@@ -67,18 +67,6 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 			logger.info("User " + user);
 		}
-
-		/*
-		 * if(userSet==false){ Gson gson = new Gson(); StringBuilder sb = new
-		 * StringBuilder(); String s;
-		 * 
-		 * while((s = request.getReader().readLine()) != null){ sb.append(s); }
-		 * user = (User)gson.fromJson(sb.toString(), User.class); }
-		 */
-
-		// UsernamePasswordAuthenticationToken authRequest = new
-		// UsernamePasswordAuthenticationToken(user.getUsername(),
-		// user.getPassword());
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(),
 				user.getPassword());
 		authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
@@ -94,7 +82,9 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		
 		if(request.getServletPath().startsWith("/purchase"))
-			super.doFilter(req, res, chain);
+			{super.doFilter(req, res, chain);
+				return;
+			}
 		
 		BufferedReader br = request.getReader();
 		Map<String, String[]> parms = request.getParameterMap();
@@ -102,8 +92,6 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		if ((request.getMethod() == "GET" || request.getMethod() == "POST")
 				&& (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))
 				&& !(request.getServletPath().equals("/login"))) {
-			// Execute request, writing response to wrapper so we can manipulate
-			// the results.
 			
 			if (request.getMethod() == "GET") {
 				// Convert json query string value to post request body
