@@ -31,11 +31,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 						$('.message').html(displayMessage.purchaseAccount.success);
 					}
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				}, jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 			
 			PAGE.trackPage("SGX Purchase Account Confirmation");
 			

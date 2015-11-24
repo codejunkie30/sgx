@@ -81,12 +81,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);
+				PAGE.customSGXError,
+				jsonpCallback);
 			
 		}
 	};

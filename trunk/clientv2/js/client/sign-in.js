@@ -76,7 +76,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if (data == '' || data == undefined){
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 						PAGE.hideLoading();
-
 					} else {
 						
 						if (data.reason == 'Invalid username or password'){
@@ -103,9 +102,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								function(data, textStatus, jqXHR){
 									PAGE.resizeIframeSimple();
 								}, 
-								function(jqXHR, textStatus, errorThrown){
-									console.log('fail');
-								});
+								PAGE.customSGXError);
 							
 							$('.error-messages .resend-email').show();
 							PAGE.resizeIframeSimple();	
@@ -113,12 +110,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}					
 					}
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				});
+				PAGE.customSGXError);
 			
 		},
 		getURLParam: function getURLParam(sParam) {

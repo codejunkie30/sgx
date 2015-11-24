@@ -569,11 +569,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.timedLogout();
 					}
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log(textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				});			
+				PAGE.customSGXError);			
 		},
 		timedLogout: function(){
 			$('body').idleTimeout({
@@ -616,12 +612,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						function(data, textStatus, jqXHR){
 							PAGE.finalWL(data.watchlists);
 						}, 
-						function(jqXHR, textStatus, errorThrown){
-							console.log('fail');
-							console.log('sta', textStatus);
-							console.log(errorThrown);
-							console.log(jqXHR);
-						},jsonpCallback);					
+						PAGE.customSGXError,
+						jsonpCallback);					
 					
 					$('.button.add-wl').click(function(e){
 						
@@ -670,12 +662,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								$(".modal-container").colorbox.close();
 							}
 						}, 
-						function(jqXHR, textStatus, errorThrown){
-							console.log('fail');
-							console.log('sta', textStatus);
-							console.log(errorThrown);
-							console.log(jqXHR);
-						},jsonpCallback);								
+						PAGE.customSGXError,
+						jsonpCallback);								
 				}
 			});
 		},
@@ -735,21 +723,21 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 									
 								}, 
 								function(jqXHR, textStatus, errorThrown){
-									console.log('fail');
-									console.log('sta', textStatus);
-									console.log(errorThrown);
-									console.log(jqXHR);
+									PAGE.customErrorMessage();
 								},jsonpCallback);
 						}
 					});
 				}, 
-				function(jqXHR, textStatus, errorThrown){
-					console.log('fail');
-					console.log('sta', textStatus);
-					console.log(errorThrown);
-					console.log(jqXHR);
-				},jsonpCallback);
-		}
+				PAGE.customSGXError,
+				jsonpCallback);
+		},
+		/**
+         * used for custom error function passed to handleAjaxRequest & handleAjaxRequestAccount
+         * @param customMessage will be the message passed in to let the user know what the error is
+         */
+		customSGXError: function(jqXHR, textStatus, errorThrown) {
+			//Developer to use in case of custom error handling
+        },
 		
 	};
 	
