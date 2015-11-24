@@ -40,11 +40,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		forgotPass: function(me){
+			// Adding logout out for error of user account being cached
+			var endpoint = PAGE.fqdn + "/sgx/logout";
+			var params = {};
+			
+			UTIL.handleAjaxRequestLogout(
+				endpoint,
+				params,
+				function(data, textStatus, jqXHR){
+					PAGE.resizeIframeSimple();
+				}, 
+				PAGE.customSGXError);
+			
 			var endpoint = me.fqdn + "/sgx/user/reset";
 			var postType = 'POST';
 			var params = { username: FORGOTPASS.email() };
-			var jsonp = 'callback';
-			var jsonpCallback = 'jsonpCallback';
 			
 			var displayMessage = FORGOTPASS.messages.messages[0];
 			
@@ -52,23 +62,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	            return
 	        }
 			PAGE.showLoading();
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestAccount(
 				endpoint,
 				postType,
-				params, 
-				jsonp,
+				params,
 				function(data, textStatus, jqXHR){
 					if (data == true){
 						$('.form').empty().addClass('rp-sent');
 						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
 						PAGE.resizeIframeSimple();
 						PAGE.hideLoading();
-					} else {
-						console.log(data);
 					}
 				}, 
-				PAGE.customSGXError,
-				jsonpCallback);
+				PAGE.customSGXError);
 		}
 	};
 	
