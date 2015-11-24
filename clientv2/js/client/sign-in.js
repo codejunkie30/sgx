@@ -109,8 +109,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							PAGE.hideLoading();
 						}					
 					}
-				}, 
-				PAGE.customSGXError);
+				},PAGE.customSGXError);
 			
 		},
 		getURLParam: function getURLParam(sParam) {
