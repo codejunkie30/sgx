@@ -458,11 +458,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
         		$(".search-criteria tbody").children().remove();
                 	
-            	/** handle sorting
-            	var sorter = $(".module-results thead th.companyName");
-            	if (!$(sorter).hasClass("sort") && !$(sorter).hasClass("asc")) $(sorter).click();
-            	*/
-            	
             	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
             	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
 

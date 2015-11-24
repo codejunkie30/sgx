@@ -11,7 +11,9 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 			finalize(undefined);
 			
-			setTimeout(function(){ $(".search-results th.companyName").click(); }, 1000);
+			setTimeout(function(){ 
+				if (screener.results.viewModel.keywords() == null) $(".search-results th.companyName").click(); 
+			}, 1000);
 			
 		},
 		
@@ -50,7 +52,9 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		
     	reset: function(finished) {
         	
-    		setTimeout(function(){ $(".search-results th.companyName").click(); }, 1000);
+    		setTimeout(function(){
+    			if (CRITERIA.screener.results.viewModel.keywords() == null) $(".search-results th.companyName").click(); 
+    		}, 1000);
     		
     	},
     	

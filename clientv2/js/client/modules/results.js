@@ -86,7 +86,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			// remove sort options
 			$(".search-results th.asc, .search-results th.desc").removeClass("asc").removeClass("desc");
-
+			
 			// default sort
 			if (this.viewModel.keywords() == null) $(".search-results th.companyName").click();
 			
