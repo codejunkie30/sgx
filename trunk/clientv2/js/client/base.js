@@ -278,11 +278,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 			// extend parent
 			$.extend(true, this, PAGEIMPL);
-
+			
+			// initialize the core object (something broke somewhere and this stopped being called)
+			PAGEIMPL.initPage();
+			
 			// extend child
 			$.extend(true, this, child);
 			
-
 			// initialize the core object
 			this.initPage();			
 			
