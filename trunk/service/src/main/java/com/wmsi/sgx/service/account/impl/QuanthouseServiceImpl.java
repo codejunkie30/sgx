@@ -157,12 +157,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private Price fallbackPrice(String id) throws CompanyServiceException{
 		Price p = new Price();
 		Company comp = companyService.getById(id);
-		Company prevComp = companyService.getPreviousById(id);
-		p.setClosePrice(prevComp.getClosePrice());
+		try{
+			Company prevComp = companyService.getPreviousById(id);
+			p.setClosePrice(prevComp.getClosePrice());
+			p.setPreviousDate(prevComp.getPreviousCloseDate());
+		}catch(CompanyServiceException e){
+			p.setClosePrice(comp.getClosePrice());
+			p.setPreviousDate(comp.getPreviousCloseDate());
+		}
 		p.setOpenPrice(comp.getOpenPrice());
 		p.setLastPrice(comp.getClosePrice());
-		p.setCurrentDate(comp.getPreviousCloseDate());
-		p.setPreviousDate(prevComp.getPreviousCloseDate());
+		p.setCurrentDate(comp.getPreviousCloseDate());		
 		p.setLastTradeTimestamp(comp.getPreviousCloseDate());
 		p.setLastTradeVolume(comp.getVolume());
 		p.setLowPrice(comp.getLowPrice());
