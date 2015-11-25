@@ -37,8 +37,8 @@
 		<div class="grid scan intro">
 			<p>Create a Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
 			<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
-			<div class="error-messages">
-			</div>
+			<span class="error-messages" data-bind="validationMessage:newWLName">
+			</span>
 		</div>
 		
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
