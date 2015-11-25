@@ -285,7 +285,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           align: 'right',
           x: -3,
           formatter: function() {
-            if (this.value == 0) return;
+            if (this.value == 0) return this.value;
             return "S$ " + this.value;
           }
         },
@@ -299,7 +299,11 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           top: '70%',
           labels : {
             align:'right',
-            x: -3
+            x: -3,
+            formatter: function() {
+              if(this.value == 0) return this.value;
+              return this.value + ' mm';
+            }
           },
           title: {
             text:'VOLUME'
