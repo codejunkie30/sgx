@@ -55,7 +55,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	
 	//need to switch it to pick value from the placeholder
 	//there is some issue its not picking up value form there 
-	@Scheduled(cron="0 20 14 ? * *")
+	//@Scheduled(cron="0 20 14 ? * *")
 	
 	public void checkAccountExpiration() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
@@ -84,7 +84,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		
 	}
 	
-	@Scheduled(cron="0 20 15 ? * *")
+	//@Scheduled(cron="0 20 15 ? * *")
 	public void sendAccountExpirationHalfWayEmail() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		for( Account acc: accounts)	{
