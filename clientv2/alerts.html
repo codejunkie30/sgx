@@ -58,7 +58,7 @@
 								<span class="ticker" data-bind="text: ticker"></span>
 								<span class="currency" data-bind="text: currency"></span> 
 								<span class="price" data-bind="text: price, format: 'number'"></span>
-								<span class="change" data-bind="text: change, format: 'number', css: { 'negative': change < 0  }"></span>
+								<span class="change" data-bind="text: change, format: 'number', css: { 'negative': change < 0  }, prependIf: '+', conditional: change > 0"></span>
 								<span class="remove" data-bind="value: ticker, click:$root.deleteCompany"></span>
 								<div class="company" data-bind="text: companyName"></div>
 							</li>
