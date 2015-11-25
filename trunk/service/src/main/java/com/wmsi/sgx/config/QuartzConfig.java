@@ -59,7 +59,7 @@ public class QuartzConfig {
     public CronTriggerFactoryBean processAccountExpiredEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
         cronTriggerFactoryBean.setJobDetail(processAccountExpiredEmailService().getObject());
-        cronTriggerFactoryBean.setCronExpression("0 50 11 1/1 * ? *");
+        cronTriggerFactoryBean.setCronExpression("0 50 18 1/1 * ? *");
         return cronTriggerFactoryBean;
     }
 	
@@ -69,7 +69,7 @@ public class QuartzConfig {
         CronTriggerFactoryBean cronTriggerFactoryBean1 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean1.setJobDetail(processHalfWayTrialEmailService().getObject());
         //cronTriggerFactoryBean1.setCronExpression("0 19 21 ? * *");
-        cronTriggerFactoryBean1.setCronExpression("0 50 12 1/1 * ? *");
+        cronTriggerFactoryBean1.setCronExpression("0 40 19 1/1 * ? *");
         return cronTriggerFactoryBean1;
     }
 	
