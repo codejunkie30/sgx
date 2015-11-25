@@ -90,7 +90,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var displayMessage = ALERTS.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'GET';
-    		var params = {};
+    	var params = {};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			UTIL.handleAjaxRequest(
@@ -122,25 +122,52 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
 			
-			var watchlistDisplay = ko.computed(function(){
+			// var watchlistDisplay = ko.computed(function(){
 				
-				
-				$.each(ALERTS.finalWL(), function(idx, wl){
-					if (ALERTS.selectedValue() ==  wl.id){
+			// 	console.log('moo');
+			// 	$.each(ALERTS.finalWL(), function(idx, wl){
+			// 		if (ALERTS.selectedValue() ==  wl.id){
 												
-						ALERTS.companies(wl.companies);							
+			// 			ALERTS.companies(wl.companies);							
 						
-						firstRun = false;
+			// 			firstRun = false;
 						
-						ALERTS.displayList(wl);
+			// 			ALERTS.displayList(wl);
 
-						ALERTS.clearWatchListErrors();
+			// 			ALERTS.clearWatchListErrors();
 						
-						ALERTS.editWLName(wl.name);						
-					}
+			// 			ALERTS.editWLName(wl.name);						
+			// 		}
 					
-				});
+			// 	});
 				
+			// 	$.each($('.alerts input[type=text]'),function(){
+			// 		if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+			// 	});
+				
+			// 	$('.alerts input[type=text]').change(function(){
+			// 		if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+			// 	});
+				
+			// 	PAGE.resizeIframeSimple();
+								
+			// });
+
+			this.selectedValue.subscribe(function(data){
+
+				var watchlists = this.finalWL();
+
+				for(var i = 0, len = watchlists.length; i < len; i++) {
+					var wl = watchlists[i]
+					if( wl.id == data) {
+						ALERTS.companies(wl.companies);
+						ALERTS.displayList(wl);
+						ALERTS.clearWatchListErrors();
+						ALERTS.editWLName(wl.name);			
+						break;
+					}
+				}
+
 				$.each($('.alerts input[type=text]'),function(){
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 				});
@@ -150,8 +177,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				});
 				
 				PAGE.resizeIframeSimple();
-								
-			});
+
+			}, this);
+
+
 
 
 			me.searchInput.subscribe(function(data){
@@ -205,6 +234,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 
 			ALERTS.companies.subscribe(function(data){
+				//console.log(ALERTS.skipUpdateCompanies());
 				if ( !ALERTS.skipUpdateCompanies() ){  
 					setTimeout(function(){ ALERTS.displayWatchlists(data); }, 400);
 				}
@@ -246,7 +276,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
-    		var params = { "message": ALERTS.newWLName() };
+    	var params = { "message": ALERTS.newWLName() };
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';			
 			PAGE.showLoading();
@@ -266,7 +296,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
-							ALERTS.saveWatchlist();
+							//ALERTS.saveWatchlist();
 							ALERTS.selectedValue(data.id);
 							
 							//setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
@@ -313,22 +343,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
 
 			}).fail(PAGE.customSGXError);
-			// UTIL.handleAjaxRequest(
-			// 	endpoint,
-			// 	postType,
-			// 	params, 
-			// 	undefined, 
-			// 	function(data){
-			// 		ALERTS.displayListCompanies(data.companyPrice);
-			// 		self._hideLoading();
-			// 		PAGE.resizeIframeSimple();
-			// 	}, 
-			// 	function(jqXHR, textStatus, errorThrown){
-			// 		console.log('fail');
-			// 		console.log('sta', textStatus);
-			// 		console.log(errorThrown);
-			// 		console.log(jqXHR);
-			// 	},'jsonpCallback');
 		},
 
 		editWLNameSubmit: function(){
@@ -374,7 +388,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		deleteWatchlist: function(){			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/delete";
 			var postType = 'POST';
-    		var params = { "message": ALERTS.selectedValue()};
+    	var params = { "message": ALERTS.selectedValue()};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			PAGE.showLoading();
@@ -393,7 +407,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				PAGE.customSGXError,
-				jsonpCallback);			
+				undefined);			
 		},
 		deleteCompany: function(data){
 
@@ -448,7 +462,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		saveWatchlist: function(){
 			var displayMessage = ALERTS.messages.messages[0];
-			PAGE.showLoading();
 			var errors = 0;
 			var pcPriceDropError = 0;
 			var pcTradingVolumeError = 0;
@@ -530,6 +543,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
+			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
