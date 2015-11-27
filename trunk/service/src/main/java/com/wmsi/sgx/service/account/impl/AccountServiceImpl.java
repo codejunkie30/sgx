@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +29,8 @@ public class AccountServiceImpl implements AccountService{
 	@Autowired
 	private AccountRepository accountRepository;
 
-	private static final int TRIAL_EXPIRATION_DAYS = 14;
+	@Value ("${full.trial.duration}")
+	private int TRIAL_EXPIRATION_DAYS;
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 	
 	/*
