@@ -29,7 +29,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	private static final Logger log = LoggerFactory.getLogger(AccountExpirationServiceImpl.class);
 
 	@Value ("${halfway.trial.duration}")
-	private static final int TRIAL_HALFWAY_EXPIRATION_DAYS = 7;
+	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
 	public AccountExpirationServiceImpl() {
 		super();
 	}
