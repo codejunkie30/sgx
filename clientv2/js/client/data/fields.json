@@ -251,33 +251,6 @@
 			      "resultDisplay": "industry"
 			   }
 			]		
-		},
-		{
-			"name": "Exchange",
-			"customizeDisplay": true,
-			"fields": [
-			   {
-			      "id":"exchange",
-			      "format": "string",
-			      "name":"Exchange",
-			      "template":"select",
-			      "label":"Select Exchange",
-			      "shortName":"Exchange",
-			      "dataSort":"string",
-			      "isDefault":true,
-			      "dataDisplay": false,
-			      "notPermitted": "Singapore Stock Exchange",
-			      "itemLabels": {
-					"CATALIST": "Singapore Exchange Catalist Market",
-					"JKSE": "Jakarta Stock Exchange",
-					"KLSE": "Bursa Malaysia",
-					"PSE": "Philippines Stock Exchange",
-					"SET": "The Stock Exchange of Thailand",
-					"SGX": "Singapore Exchange",
-					"TSEC": "Taiwan Stock Exchange"
-			      }
-			   }
-			]		
 		}
 	]
 }
