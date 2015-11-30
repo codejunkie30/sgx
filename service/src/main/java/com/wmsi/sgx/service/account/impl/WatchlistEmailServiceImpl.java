@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
@@ -63,23 +62,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	@Autowired
 	private KeyDevsMap keyDevsMap;
 	
-	@Override
-	@Scheduled(cron="0 0 0 ? * *")
-	public void getWatchlistEmails() throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
-		List<Account> accounts = accountRepository.findAll();
-		
-		for( Account acc: accounts)	{
-			if(acc.getActive() == true){
-				List<WatchlistModel> list =	watchlistService.getWatchlist(acc.getUser());
-				if(list.size() > 0)
-					for(WatchlistModel watchlist : list){
-						List<AlertOption> options = parseWatchlist(watchlist, acc);
-						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
-							senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies(), true));
-					}
-			}
-		}
-	}
+	
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();			
@@ -97,6 +80,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 	}
 	
+	@Override
 	public List<AlertOption> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
 		map.putAll(watchlist.getOptionList());

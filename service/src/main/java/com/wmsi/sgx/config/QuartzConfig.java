@@ -21,6 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.wmsi.sgx.service.account.impl.AccountExpiedCheck;
 import com.wmsi.sgx.service.account.impl.HalfWayTrialEmailService;
+import com.wmsi.sgx.service.account.impl.WatchlistEmailServiceHelper;
 
 @Configuration
 public class QuartzConfig {
@@ -55,7 +56,14 @@ public class QuartzConfig {
     }
 	
 	@Bean
-    // Configure cron to fire trigger every 1 minute
+    public JobDetailFactoryBean processWatchListEmailService() {
+        JobDetailFactoryBean jobDetailFactory2 = new JobDetailFactoryBean();
+        jobDetailFactory2.setJobClass(WatchlistEmailServiceHelper.class);
+        jobDetailFactory2.setDurability(true);
+        return jobDetailFactory2;
+    }
+	
+	@Bean
     public CronTriggerFactoryBean processAccountExpiredEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
         cronTriggerFactoryBean.setJobDetail(processAccountExpiredEmailService().getObject());
@@ -64,13 +72,20 @@ public class QuartzConfig {
     }
 	
 	@Bean
-    // Configure cron to fire trigger every 1 minute
     public CronTriggerFactoryBean processHalfWayTrialEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean1 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean1.setJobDetail(processHalfWayTrialEmailService().getObject());
-        //cronTriggerFactoryBean1.setCronExpression("0 19 21 ? * *");
-        cronTriggerFactoryBean1.setCronExpression("0 40 19 1/1 * ? *");
+        cronTriggerFactoryBean1.setCronExpression("0 40 21 1/1 * ? *");
         return cronTriggerFactoryBean1;
+    }
+	
+	@Bean
+    // Configure cron to fire trigger every 1 minute
+    public CronTriggerFactoryBean processWatchListEmailTrigger() {
+        CronTriggerFactoryBean cronTriggerFactoryBean2 = new CronTriggerFactoryBean();
+        cronTriggerFactoryBean2.setJobDetail(processWatchListEmailService().getObject());
+        cronTriggerFactoryBean2.setCronExpression("0 40 21 1/1 * ? *");
+        return cronTriggerFactoryBean2;
     }
 	
 	 @Bean
@@ -89,7 +104,8 @@ public class QuartzConfig {
  
         Trigger[] triggers = {
         		processAccountExpiredEmailTrigger().getObject(),
-        		processHalfWayTrialEmailTrigger().getObject()
+        		processHalfWayTrialEmailTrigger().getObject(),
+        		processWatchListEmailTrigger().getObject()
         };
  
         quartzScheduler.setTriggers(triggers);
