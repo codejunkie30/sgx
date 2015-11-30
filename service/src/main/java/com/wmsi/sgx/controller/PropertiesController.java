@@ -19,7 +19,7 @@ public class PropertiesController {
 	@Value("${full.trial.duration}")
 	public String trialDuration;
 	
-	@RequestMapping(value = "properties/trialDuration", method=RequestMethod.GET)
+	@RequestMapping(value = "properties/trialDuration", method=RequestMethod.POST)
 	public TrialResponse getTrialDays(){
 		TrialResponse ret = new TrialResponse();
 		ret.setHalfwayDays(halfwayDuration);
