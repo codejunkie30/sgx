@@ -7,6 +7,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		termsConditions: ko.observable(false),
 		receiveEmails: ko.observable(false),
 		messages: JSON.parse(MESSAGES),
+		trialDays: ko.observable(),
 		
 		initPage: function() {
     		// finish other page loading
@@ -20,6 +21,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}, this);
 			
 			PAGE.trackPage("SGX Sign Up");
+			
+			//Gets Trial Day Duration
+			PAGE.getTrialDuration();
 			
     		ko.applyBindings(this, $("body")[0]);
 			
@@ -125,6 +129,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var displayMessage = SIGNUP.messages.messages[0];
 			PAGE.modal.open({  width: 950, maxWidth: 950, height: 425, scrolling: true, content: displayMessage.signUp.termsConditions }); 
 			return;
+		},
+		getTrialDuration: function(){
+			var endpoint = PAGE.fqdn + "/sgx/properties/trialDuration";
+			var postType = 'GET';
+			var params = {};
+			var jsonp = 'callback';
+			var jsonpCallback = 'jsonpCallback';
+			
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				undefined,
+				function(data, textStatus, jqXHR){
+					SIGNUP.trialDays(data.trialDays);
+				}, 
+				PAGE.customSGXError
+				,jsonpCallback);
 		}
 	};
 	

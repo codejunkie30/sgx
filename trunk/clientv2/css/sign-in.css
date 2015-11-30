@@ -5,7 +5,8 @@ section .form { background: #ebecec; text-align: center; }
 section .form.confirm,
 section .form.rp-sent,
 section .form.sign-up { min-height: 175px; padding: 25px; }
-section .form h4 { padding: 14px 0; font-weight: normal; }
+section .form h4, 
+section .form h4 span { padding: 14px 0; font-weight: normal; }
 section .form p { padding: 15px 0; margin: 0; }
 section .form p.forgot,
 section .form p.link { padding: 0 0 15px 0; margin: 0; }
