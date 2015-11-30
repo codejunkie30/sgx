@@ -84,7 +84,7 @@ public class QuartzConfig {
     public CronTriggerFactoryBean processWatchListEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean2 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean2.setJobDetail(processWatchListEmailService().getObject());
-        cronTriggerFactoryBean2.setCronExpression("0 40 21 1/1 * ? *");
+        cronTriggerFactoryBean2.setCronExpression("0 0 0 1/1 * ? *");
         return cronTriggerFactoryBean2;
     }
 	
