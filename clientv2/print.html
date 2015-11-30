@@ -30,7 +30,7 @@
 									<span class="currency" data-bind="text: priceData().currency"></span>  
 									<span class="lastPrice formattable" data-bind="text: priceData().price, format: 'number'">--</span>
 									&nbsp;
-									<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }">--</span>
+									<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0 }, prependIf: '+', conditional: priceData().change > 0">--</span>
 								</div>
 								<div class="last-updated">
 									Last Price:&nbsp;
