@@ -7,6 +7,15 @@
 <web-app>
 
 	<error-page>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
 		<location>/error.html</location>
 	</error-page>
