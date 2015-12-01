@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService{
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setContactOptIn(dto.getContactOptIn());
 		
-		return userReposistory.save(user);
+		return saveUser(user);
 	}
 	
 	private User saveChangePasswordUser(User user, ChangePasswordModel dto){
