@@ -2,20 +2,20 @@ package com.wmsi.sgx.security;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -193,11 +193,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-			Authentication authResult) throws IOException, ServletException {
-		if(request.getServletPath().equals("/login"))
-		{
-			response.setStatus(200, "Success");			
-		}
+			Authentication authResult) throws IOException, ServletException {		
 		restAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
 	}
 
@@ -207,19 +203,4 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		restAuthenticationFailureHandler.onAuthenticationFailure(request, response, failed);
 
 	}
-
-	class LocalInputStream extends ServletInputStream {
-
-		private InputStream in;
-
-		public LocalInputStream(InputStream i) {
-			in = i;
-		}
-
-		@Override
-		public int read() throws IOException {
-			return in.read();
-		}
-	}
-
 }
