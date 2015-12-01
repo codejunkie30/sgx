@@ -30,7 +30,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws JsonGenerationException, JsonMappingException, IOException{		
 		objectMapper.writeValue(response.getOutputStream(), "");
 		
-		/*WebAuthenticationDetails auth = (WebAuthenticationDetails) authentication.getDetails();
+		WebAuthenticationDetails auth = (WebAuthenticationDetails) authentication.getDetails();
 		if(request.getServletPath().equals("/login")){
 			UserLogin login = new UserLogin();
 			login.setUsername(authentication.getName());
@@ -38,7 +38,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 			login.setSuccess(true);
 			userService.recordLogin(login);
 
-		}*/
+		}
 		return;
 	}
 	
