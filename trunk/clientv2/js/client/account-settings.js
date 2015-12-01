@@ -182,19 +182,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					
 					if (data.type == 'TRIAL'){						
 						var start = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.startDate));
-						var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));
+						var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));						
 						var now = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(new Date()));
 
 						var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
 						var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-
-						if(daysRemaining > 1)
-							$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
-						else
-							$('.settings .intro .content').html(displayMessage.accountSettings.introTrialDayOne);
-							$('.settings .intro .content .current-day').html(daysRemaining);
-						
+						if (daysRemaining >= 1) {
+							if(daysRemaining > 1)
+								$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
+							else
+								$('.settings .intro .content').html(displayMessage.accountSettings.introTrialDayOne);
+								$('.settings .intro .content .current-day').html(daysRemaining);
+							
+								$('.settings .intro .date').remove();
+						} else {
+							$('.settings .intro .content').html(displayMessage.accountSettings.introExpired);
 							$('.settings .intro .date').remove();
+						}
 					}
 					
 					if (data.type == 'EXPIRED'){
