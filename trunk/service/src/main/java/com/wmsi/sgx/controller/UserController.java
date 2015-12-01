@@ -26,6 +26,7 @@ import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.VerifiedUserException;
+import com.wmsi.sgx.service.account.impl.CreateUserReponse;
 
 @Controller
 @RequestMapping("/user")
@@ -39,8 +40,13 @@ public class UserController{
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public @ResponseBody Boolean register(@Valid @RequestBody UserModel user) throws UserExistsException, MessagingException{
 		
-		registrationService.registerUser(user);
-
+		CreateUserReponse res =registrationService.registerUser(user);
+		try{
+		registrationService.sendVerificationEmail(res.getUsername(),res.getToken());
+		}
+		catch(Exception e){
+			log.debug("Exception occrued in sending email", e);			
+		}
 		return true;
 	}
 	
