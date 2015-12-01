@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -14,13 +15,21 @@ import com.google.common.base.Objects;
 
 @Entity(name = "UserLogin")
 @Table(name = "user_login")
+@IdClass(UserComposite.class)
 public class UserLogin{
 
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(generator = "userLoginGenerator")
 	@GenericGenerator(name = "userLoginGenerator", strategy = "increment")
 	private Long id;
-
+	
+	@Id
 	@Column(name = "username", nullable = false)
 	private String username;
 
@@ -29,7 +38,8 @@ public class UserLogin{
 
 	@Column(name = "ipaddress", nullable = false)
 	private String ipAddress;
-
+	
+	@Id
 	@Column(name = "date", nullable = false)
 	private Date date = new Date();
 
