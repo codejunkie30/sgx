@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[accounts](
 	[always_active] [bit] NOT NULL,
 	[contact_opt_in] [bit] NOT NULL,
 	[start_dt] [datetime] NOT NULL,
-	[expiration_dt] [datetime] NOT NULL,
+	[expiration_dt] [datetime] NULL,
 	[created_by] [bigint] NOT NULL,
 	[created_dt] [datetime] NOT NULL,
 	[updated_by] [bigint] NOT NULL,
