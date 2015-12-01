@@ -99,7 +99,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	public void sendAccountExpirationHalfWayEmail() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		for( Account acc: accounts)	{
-			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL && acc.getExpirationDate() != null){
+			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL && acc.getExpirationDate() == null){
 				int comparatorVal = DateTimeComparator.getDateOnlyInstance()
 						.compare((new DateTime(acc.getStartDate()).plusDays(TRIAL_HALFWAY_EXPIRATION_DAYS)), new DateTime());
 				if(comparatorVal==0){
