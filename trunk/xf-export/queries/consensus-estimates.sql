@@ -286,7 +286,6 @@ select
              when ed.dataItemId = 100168 then 'ltgMedianEstimate'
              when ed.dataItemId = 100169 then 'ltgHighEstimate'
              when ed.dataItemId = 100170 then 'ltgLowEstimate'
-             when ed.dataItemId = 100171 then 'ltgEstimatesNum'
              when ed.dataItemId = 100172 then 'ltgEstimateDeviation'
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
@@ -326,7 +325,6 @@ where ed.toDate > getdate() and
              100168 --LTG medianEstimate
              ,100169 --LTG highEstimate
              ,100170      --LTG lowEstimate
-             ,100171      --LTG estimatesNum
              ,100172      --LTG estimateDeviation
        )
 	and ec.tradingItemId in (
@@ -399,6 +397,46 @@ where ed.toDate > getDate()
 	and ep.periodTypeId in (1,2)
 	and rc.relativeConstant in (500,1000)
 	and ec.tradingItemId in (
+		select tradingitemid
+		from ciqTradingItem ti
+		join ciqSecurity sec on ti.securityId=sec.securityId
+		where ti.primaryFlag=1
+		and sec.primaryFlag=1
+		and sec.companyId  in (select companyid from ##sgxpop)
+		)
+		
+union
+
+select 
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'ltgEstimateNum',
+	convert(varchar(max),numAnalysts),
+	null,
+	null,
+	null
+from ciqEstimateRevision er
+	join ciqEstimateConsensus ec on er.estimateConsensusId=ec.estimateConsensusId
+	join ciqEstimatePeriod ep on ec.estimatePeriodId=ep.estimatePeriodId
+	join ##sgxpop pop on ep.companyId = pop.companyId
+	join (
+		select max(asofdate) as maxDate, estimateConsensusId, dataItemId, estimateRevisionTypeId
+		from ciqEstimateRevision
+		where estimateConsensusId in (
+			select estimateConsensusId
+			from ciqEstimateConsensus ec
+				join ciqEstimatePeriod ep on ec.estimatePeriodID=ep.estimatePeriodId
+			where ep.companyid in (select companyid from ##sgxpop)
+				and advanceDate is null
+			)
+			and estimateRevisionTypeId=4
+			group by estimateConsensusId, dataItemId, estimateRevisionTypeId
+		) mdate on er.estimateConsensusId=mdate.estimateConsensusId
+			and er.dataItemId=mdate.dataItemId
+			and er.estimateRevisionTypeId=mdate.estimateRevisionTypeId
+			and er.asOfDate=mdate.maxDate
+			and er.dataitemid=100167
+where ec.tradingItemId in (
 		select tradingitemid
 		from ciqTradingItem ti
 		join ciqSecurity sec on ti.securityId=sec.securityId
