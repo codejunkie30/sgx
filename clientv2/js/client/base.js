@@ -554,10 +554,19 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							
 							if (daysRemaining == 0) { daysRemaining = 1 }
 							
-                            PAGE.userStatus('TRIAL');
-							PAGE.libLoggedIn(true);
-							PAGE.libTrialExpired(false);
-							PAGE.currentDay(daysRemaining);
+							if (daysRemaining >= 1) {
+	                            PAGE.userStatus('TRIAL');
+								PAGE.libLoggedIn(true);
+								PAGE.libTrialExpired(false);
+								PAGE.currentDay(daysRemaining);
+							} else {
+								PAGE.userStatus('EXPIRED');
+	                            PAGE.libTrialExpired(true);						
+								PAGE.libLoggedIn(true);
+								PAGE.libTrialPeriod(true);
+								PAGE.libAlerts(true);
+								PAGE.libCurrency(true);	
+							}
 						}
 						
 						if (data.type == 'EXPIRED'){
