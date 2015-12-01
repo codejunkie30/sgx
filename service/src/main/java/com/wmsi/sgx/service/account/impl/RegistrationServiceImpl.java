@@ -1,7 +1,5 @@
 package com.wmsi.sgx.service.account.impl;
 
-import java.text.MessageFormat;
-
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
@@ -17,7 +15,6 @@ import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
-import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AccountCreationException;
@@ -48,8 +45,8 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	@Transactional
-	public void registerUser(UserModel dto) throws UserExistsException, MessagingException{
-	
+	public CreateUserReponse registerUser(UserModel dto) throws UserExistsException, MessagingException{
+		CreateUserReponse res = new CreateUserReponse();
 		// Create the user record in the database.
 		User user = userService.createUser(dto);
 
@@ -57,8 +54,10 @@ public class RegistrationServiceImpl implements RegistrationService{
 		user.addRole(Role.ROLE_USER);
 		
 		String token = userVerificationService.createVerificationToken(user);
-		
-		sendVerificationEmail(user.getUsername(), token);
+		res.setToken(token);
+		res.setUsername(user.getUsername());
+		//sendVerificationEmail(user.getUsername(), token);
+		return res;
 	}
 	
 	@Override
@@ -194,8 +193,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	private String resetEmailBody;	
 	@Value ("${email.reset.confirm}")
 	private String resetConfirmEmailBody;
-
-	private void sendVerificationEmail(String email, String token) throws MessagingException{
+	
+	@Override
+	public void sendVerificationEmail(String email, String token) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Premium: Verify Your Email Address", token, emailBody);
 	}
 	

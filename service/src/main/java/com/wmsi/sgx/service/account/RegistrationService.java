@@ -4,12 +4,12 @@ import javax.mail.MessagingException;
 
 import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
-import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.account.UserModel;
+import com.wmsi.sgx.service.account.impl.CreateUserReponse;
 
 public interface RegistrationService{
 
-	void registerUser(UserModel dto) throws UserExistsException, MessagingException;
+	CreateUserReponse registerUser(UserModel dto) throws UserExistsException, MessagingException;
 
 	ApiResponse resendVerificationEmail(String username) throws MessagingException;
 
@@ -24,5 +24,6 @@ public interface RegistrationService{
 	Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException, MessagingException;
 
 	Boolean changePassword(UserModel user) throws UserNotFoundException, MessagingException;
-
+	
+	void sendVerificationEmail(String email, String token) throws MessagingException;
 }
