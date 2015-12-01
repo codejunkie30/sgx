@@ -1,6 +1,7 @@
  package com.wmsi.sgx.service.account.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AcccountExiprationService;
+import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class AccountExpirationServiceImpl implements AcccountExiprationService{
@@ -30,6 +32,10 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 
 	@Value ("${halfway.trial.duration}")
 	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
+	
+	@Value ("${full.trial.duration}")
+	private int TRIAL_EXPIRATION_DAYS;
+	
 	public AccountExpirationServiceImpl() {
 		super();
 	}
@@ -69,7 +75,11 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive() == true){
-				if(sdf.format(acc.getExpirationDate()).compareTo(sdf.format(new Date()))<0){
+				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate() :
+					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, TRIAL_EXPIRATION_DAYS));
+				
+				
+				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
 					acc.setActive(false);
 					accountRepository.save(acc);
 					try{
@@ -89,7 +99,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	public void sendAccountExpirationHalfWayEmail() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		for( Account acc: accounts)	{
-			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL){
+			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL && acc.getExpirationDate() != null){
 				int comparatorVal = DateTimeComparator.getDateOnlyInstance()
 						.compare((new DateTime(acc.getStartDate()).plusDays(TRIAL_HALFWAY_EXPIRATION_DAYS)), new DateTime());
 				if(comparatorVal==0){

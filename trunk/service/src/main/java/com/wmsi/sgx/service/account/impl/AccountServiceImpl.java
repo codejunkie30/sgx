@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.AccountService;
+import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -31,6 +33,7 @@ public class AccountServiceImpl implements AccountService{
 
 	@Value ("${full.trial.duration}")
 	private int TRIAL_EXPIRATION_DAYS;
+	
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 	
 	/*
@@ -54,7 +57,12 @@ public class AccountServiceImpl implements AccountService{
 			ret = new AccountModel();
 			ret.setEmail(account.getUser().getUsername());
 			ret.setStartDate(account.getStartDate());
-			ret.setExpirationDate(account.getExpirationDate());
+			if(account.getExpirationDate() != null)
+				ret.setExpirationDate(account.getExpirationDate());
+			else{
+				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, TRIAL_EXPIRATION_DAYS));
+				ret.setExpirationDate(expiration);
+			}
 			if(account.getActive().equals(false)){
 				ret.setType(AccountType.EXPIRED);
 			}else{
@@ -152,7 +160,10 @@ public class AccountServiceImpl implements AccountService{
 		acc.setType(type);
 		acc.setUser(user);
 		acc.setStartDate(new Date());
-		acc.setExpirationDate(new DateTime().plusDays(expirationDays).toDate());
+		if(type == AccountType.TRIAL)
+			acc.setExpirationDate(null);
+		else
+			acc.setExpirationDate(new DateTime().plusDays(expirationDays).toDate());
 		acc.setActive(true);
 		acc.setAlwaysActive(false);
 		acc.setContactOptIn(user.getContactOptIn());
