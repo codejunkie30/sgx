@@ -33,6 +33,9 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.site.base}")
 	public String emailSite;
 	
+	@Value ("${halfway.trial.duration}")
+	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
+	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
@@ -40,6 +43,7 @@ public class EmailServiceImpl implements EmailService{
 		ctx.setVariable("token", token);
 		ctx.setVariable("baseUrl", baseUrl);
 		ctx.setVariable("emailSite", emailSite);
+		ctx.setVariable("halfway", TRIAL_HALFWAY_EXPIRATION_DAYS);
 		
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
