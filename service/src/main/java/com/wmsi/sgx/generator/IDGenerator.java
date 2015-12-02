@@ -44,7 +44,7 @@ public class IDGenerator implements IdentifierGenerator, Configurable {
     		
     	}
     	catch(Exception e) {
-    		log.error("Trying to generate nextval", e);
+    		log.error("Trying to generate nextval: " + query, e);
     	}
 
         return null;
