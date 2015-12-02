@@ -94,7 +94,7 @@
 							</div>
 							<hr />
 							<div class="bold">Consensus Target Price</div>
-							<div class="consensus-price"><span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
+							<div class="consensus-price"><span data-bind="text: companyInfo.filingCurrency"></span> <span data-bind="text: companyInfo.targetPrice, format: 'number'">-</span></div>
 					</div>
 					<div class="center" data-bind="visible: !companyInfo.hasOwnProperty('targetPriceNum') || companyInfo.targetPriceNum < 3">
 						<h4>No Recommendation</h4>

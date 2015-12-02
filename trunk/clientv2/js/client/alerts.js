@@ -392,23 +392,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		},
 
-		sendEmail: function() {
-			var endpoint = PAGE.fqdn + "/sgx/watchlist/sendEmail";
-			var postType = 'POST';
-    		var params = {};
-			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';
-			UTIL.handleAjaxRequest(
-				endpoint,
-				postType,
-				params, 
-				undefined, 
-				function(data, textStatus, jqXHR){
-				}, 
-				PAGE.customSGXError,
-				jsonpCallback);
-		},
-
 		clearWatchListErrors: function() {
 			$('.error-messages').empty();
 		},
