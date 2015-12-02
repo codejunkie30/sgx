@@ -18,7 +18,7 @@ public class Price{
 
 	@Id
 	@GeneratedValue(generator = "priceGenerator")
-	@GenericGenerator(name = "priceGenerator", strategy = "increment")
+	@GenericGenerator(name = "priceGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@ManyToOne(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)

@@ -37,7 +37,7 @@ public class PasswordReset{
 
 	@Id
 	@GeneratedValue(generator = "passwordResetGenerator")
-	@GenericGenerator(name = "passwordResetGenerator", strategy = "increment")
+	@GenericGenerator(name = "passwordResetGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@ManyToOne

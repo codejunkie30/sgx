@@ -24,7 +24,7 @@ public class Watchlist {
 	
 	@Id
 	@GeneratedValue(generator = "watchlistGenerator")
-	@GenericGenerator(name = "watchlistGenerator", strategy = "increment")
+	@GenericGenerator(name = "watchlistGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long watchlist_id;
 	
 	@Column(name = "date_created", nullable = false)

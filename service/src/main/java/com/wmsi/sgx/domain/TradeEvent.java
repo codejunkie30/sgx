@@ -18,7 +18,7 @@ public class TradeEvent implements Comparable<TradeEvent>{
 
 	@Id
 	@GeneratedValue(generator = "priceGenerator")
-	@GenericGenerator(name = "priceGenerator", strategy = "increment")
+	@GenericGenerator(name = "priceGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@Column(name = "market")

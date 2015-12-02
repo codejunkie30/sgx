@@ -15,7 +15,7 @@ import com.google.common.base.Objects;
 public class WatchlistOption {
 	@Id
 	@GeneratedValue(generator = "watchlistOptionGenerator")
-	@GenericGenerator(name = "watchlistOptionGenerator", strategy = "increment")
+	@GenericGenerator(name = "watchlistOptionGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 	
 	

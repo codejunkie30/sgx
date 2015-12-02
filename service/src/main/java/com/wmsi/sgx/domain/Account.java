@@ -25,7 +25,7 @@ public class Account extends AbstractAuditable{
 
 	@Id
 	@GeneratedValue(generator = "accountGenerator")
-	@GenericGenerator(name = "accountGenerator", strategy = "increment")
+	@GenericGenerator(name = "accountGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 	
 	@ManyToOne

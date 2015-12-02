@@ -23,7 +23,7 @@ public class User extends AbstractAuditable{
 
 	@Id
 	@GeneratedValue(generator = "userGenerator")
-	@GenericGenerator(name = "userGenerator", strategy = "increment")
+	@GenericGenerator(name = "userGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@Column(name = "username", nullable = false, unique = true)	
