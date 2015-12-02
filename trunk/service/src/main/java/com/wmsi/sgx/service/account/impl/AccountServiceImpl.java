@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService{
 			if(account.getExpirationDate() != null)
 				ret.setExpirationDate(account.getExpirationDate());
 			else{
-				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, TRIAL_EXPIRATION_DAYS));
+				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, account.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
 				ret.setExpirationDate(expiration);
 			}
 			if(account.getActive().equals(false)){
