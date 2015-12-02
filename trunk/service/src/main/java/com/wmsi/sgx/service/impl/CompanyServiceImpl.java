@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +22,7 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
+import com.wmsi.sgx.model.KeyDev;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.charts.BalanceSheet;
 import com.wmsi.sgx.model.charts.CashFlow;
@@ -44,6 +47,7 @@ import com.wmsi.sgx.service.search.elasticsearch.query.RelatedCompaniesQueryBuil
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
+	private static final Logger log = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
 	@Autowired
 	private SearchService companySearch;
@@ -85,7 +89,12 @@ public class CompanyServiceImpl implements CompanyService{
 			return keyDevsSearch.getById(id, KeyDevs.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading key devs", e);
+			log.error("Exception loading key devs: {}", id);
+			KeyDevs ret = new KeyDevs();
+			ret.setTickerCode(id);
+			ret.setKeyDevs(new ArrayList<KeyDev>());
+			return ret;
+			//throw new CompanyServiceException("Exception loading key devs", e);
 		}
 	}
 
