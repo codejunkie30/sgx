@@ -208,7 +208,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	                // Allow: Ctrl+A
 	                (event.keyCode == 65 && event.ctrlKey === true) ||
 	                // Allow: . ,
-	                (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+	                (event.keyCode == 190 || event.keyCode == 110) ||
 	                // Allow: home, end, left, right
 	                (event.keyCode >= 35 && event.keyCode <= 39)) {
 	                // let it happen, don't do anything
