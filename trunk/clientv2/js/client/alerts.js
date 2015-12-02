@@ -499,7 +499,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
-					if( callback ) callback();
+					if( callback && typeof callback === 'function') { callback() };
 					ALERTS.finalWL(data.sort(sortByName));
 				}, 
 				PAGE.customSGXError,
