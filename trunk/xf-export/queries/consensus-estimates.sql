@@ -272,7 +272,7 @@ select
              when ed.dataItemId = 100168 then 'ltgMedianEstimate'
              when ed.dataItemId = 100169 then 'ltgHighEstimate'
              when ed.dataItemId = 100170 then 'ltgLowEstimate'
-             when ed.dataItemId = 100171 then 'ltgEstimatesNum'
+             when ed.dataItemId = 100171 then 'ltgEstimateNum'
              when ed.dataItemId = 100172 then 'ltgEstimateDeviation'
        end as WMSIApi,
        convert(varchar(max),ed.dataItemValue) as dataItemId,
