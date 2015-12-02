@@ -667,7 +667,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			};
 			
 			PAGE.modal.open(settings);
-			
+			PAGE.resizeIframeSimple();
 		},
 		addCompanyExisting: function(){
 			var ticker = PAGE.currentTicker();
