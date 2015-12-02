@@ -237,7 +237,7 @@ div.news {
 }
 
 .consensus-price span {
-	display: block;
+	display: inline-block;
 	padding-top: 8px;
     font-size: 18px;
     font-weight: bold;

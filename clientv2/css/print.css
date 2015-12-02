@@ -82,7 +82,7 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .recommendation.opt-3 { background: url("../img/consensus-step-3.jpg") no-repeat; }
 .recommendation.opt-4 { background: url("../img/consensus-step-4.jpg") no-repeat; }
 .recommendation.opt-5 { background: url("../img/consensus-step-5.jpg") no-repeat; }
-.consensus-price span { display: block; padding-top: 8px;  font-size: 18px; font-weight: bold; line-height: 22px; }
+.consensus-price span { display: inline-block; padding-top: 8px; font-size: 18px; font-weight: bold; line-height: 22px; }
 .recommendation .inline-block { display: inline-block; }
 
 .company-header { margin: 10px 0; }
