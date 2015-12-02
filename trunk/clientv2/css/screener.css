@@ -275,6 +275,43 @@ table.search-criteria .remove {
   font: bold 12px/18px Arial, Helvetica, sans-serif;
   background: url("../img/bg-checkboxes.png") no-repeat 0 -26px;
 }
+
+.customize-display-modal .checkbox{
+  height:auto;
+}
+
+.customize-display-modal .checkbox .trigger {
+  background: none;
+  position:relative;
+}
+
+.customize-display-modal .checkbox .trigger span{
+  font: bold 12px/18px Arial, Helvetica, sans-serif;
+  display:inline;
+  width:100%;
+}
+
+.customize-display-modal .checkbox .trigger .check-overlay {
+  position:absolute;
+  left:0;
+  top:0;
+  width:18px;
+  height:18px;
+  background: url("../img/bg-checkboxes.png") no-repeat 0 -26px;
+}
+
+.customize-display-modal .checkbox .trigger .check-overlay:hover {
+  background-position: 0 -54px;
+}
+
+.customize-display-modal .checkbox.checked .trigger .check-overlay {
+  background-position: 0 0;
+}
+
+.customize-display-modal .checkbox.checked .trigger .check-overlay:hover {
+  background-position: 0 0;
+}
+
 .checkbox .trigger:hover {
   background-position: 0 -54px;
 }

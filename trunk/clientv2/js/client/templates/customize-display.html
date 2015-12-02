@@ -8,7 +8,7 @@
 			<h6 style="margin-bottom: 8px;" data-bind="text: name"></h6>
 			<!-- ko foreach: fields -->
 				<div class="checkbox" data-bind="css: { 'checked': $data.hasOwnProperty('dataDisplay') && dataDisplay }">
-					<div class="trigger" data-bind="text: name"></div>
+					<div class="trigger"><div class="check-overlay"></div><span data-bind="text:name"></span></div>
 					<input type="checkbox" />
 				</div>
 			<!-- /ko -->		
