@@ -55,7 +55,7 @@
 .wl-container .alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
 .wl-container .alerts .developments { overflow: hidden !important; clear: both; }
 .wl-container .alerts input[type=text] { background: #f6f6f6; width: 44px; padding: 0 2px; }
-.wl-container .alerts input.percent { background: url(../img/bg-percent.png) no-repeat right #f6f6f6; width: 22px !important; padding: 0 22px 0 0; text-align: right; display: inline-block; }
+.wl-container .alerts input.percent { background: url(../img/bg-percent.png) no-repeat right #f6f6f6; width: 38px !important; padding: 0 22px 0 0; text-align: right; display: inline-block; }
 .wl-container .alerts h3 { background: #0b236b; height: 36px; line-height: 36px; font-size: 19px; color: #fff; font-weight: normal; padding: 0 15px; margin: 0;  }
 .wl-container .alerts ul { padding: 17px 10px; margin: 0; }
 .wl-container .alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
