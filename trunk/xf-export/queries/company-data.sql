@@ -617,3 +617,37 @@ join ##sgxpop pop on mkc.companyid = pop.companyid
 where fp.latestperiodflag=1 --Latest Period
 and fp.periodtypeid=4 --LTM
 and fd.dataitemid=4051 --EBITDA
+
+union
+
+--Volatility
+select
+pop.tickerSymbol,
+pop.exchangeSymbol,
+case
+when ed.dataItemId=114353 then 'volatility'
+end as WMSIApi,
+convert(varchar(max),ed.dataItemValue),
+case
+when ep.periodTypeId = 1 then 'FY'+cast(ep.fiscalYear as varchar(max))
+when ep.periodTypeId = 2 then 'FQ'+cast(ep.fiscalQuarter as varchar(max))+cast(ep.fiscalYear as varchar(max))
+end as period,
+ep.periodEndDate as date,
+cISO.ISOCode
+from ciqEstimatePeriod ep
+join ciqEstimateConsensus ec on ep.estimatePeriodId=ec.estimatePeriodId
+join ciqEstimateNumericData ed on ec.estimateConsensusId=ed.estimateConsensusId
+join ##sgxpop pop on ep.companyId=pop.companyId
+left join ciqCurrency cISO on ed.currencyId=cISO.currencyId
+where ed.toDate > getDate()
+and ed.dataItemId in (114353) --Volatility
+and ep.advanceDate is null
+and ec.tradingItemId in (
+select tradingitemid
+from ciqTradingItem ti
+join ciqSecurity sec on ti.securityId=sec.securityId
+where ti.primaryFlag=1
+and sec.primaryFlag=1
+and sec.companyId in (select companyid from ##sgxpop)
+)
+
