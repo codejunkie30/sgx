@@ -12,7 +12,7 @@ public class Asset{
 
 		@Id
 		@GeneratedValue(generator = "assetGenerator")
-		@GenericGenerator(name = "assetGenerator", strategy = "increment")
+		@GenericGenerator(name = "assetGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 		private Long id;
 
 		@Column(name = "ticker")

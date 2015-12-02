@@ -28,7 +28,7 @@ public class Authority{
 	
 	@Id
 	@GeneratedValue(generator = "authorityGenerator")
-	@GenericGenerator(name = "authorityGenerator", strategy = "increment")
+	@GenericGenerator(name = "authorityGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 	
 	@ManyToOne(optional=true)

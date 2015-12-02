@@ -20,7 +20,7 @@ public class PremiumVerification{
 
 	@Id
 	@GeneratedValue(generator = "premiumVerificationGenerator")
-	@GenericGenerator(name = "premiumVerificationGenerator", strategy = "increment")
+	@GenericGenerator(name = "premiumVerificationGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@ManyToOne

@@ -26,7 +26,7 @@ public class UserLogin{
 	
 	@Id
 	@GeneratedValue(generator = "userLoginGenerator")
-	@GenericGenerator(name = "userLoginGenerator", strategy = "increment")
+	@GenericGenerator(name = "userLoginGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 	
 	@Id

@@ -20,7 +20,7 @@ public class UserVerification{
 
 	@Id
 	@GeneratedValue(generator = "userVerificationGenerator")
-	@GenericGenerator(name = "userVerificationGenerator", strategy = "increment")
+	@GenericGenerator(name = "userVerificationGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
 	private Long id;
 
 	@ManyToOne
