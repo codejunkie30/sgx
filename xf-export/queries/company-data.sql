@@ -67,7 +67,7 @@ group by pop.tickerSymbol, pop.exchangeSymbol, cISO.ISOCode
 union
 
 --1-Year Price Volatility Calculation
-select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(52)) as dataItemValue, null, null, null
+select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(52)*100) as dataItemValue, null, null, null
 from ##sgxpop pop
 	join (
 		select sdate.tradingItemId, log(edate.priceClose/sdate.priceClose) as weeklyreturn
@@ -270,6 +270,7 @@ where fd.dataitemId in (
 	,2093--netChange
 	)
 union
+
 --Non Currency Items Fin Statement - 5 Years
 select pop.tickerSymbol,
 	pop.exchangeSymbol,
@@ -277,7 +278,7 @@ select pop.tickerSymbol,
 		when dataItemId=4377 then 'payoutRatio'
 		when dataItemId=4178 then 'returnAssets'
 		when dataItemId=4363 then 'returnCapital'
-		when dataItemId=4128 then 'returnEquity'
+		when dataItemId=4128 then 'returnOnEquity'
 		when dataItemId=4074 then 'grossMargin'
 		when dataItemId=4047 then 'ebitdaMargin'
 		when dataItemId=4094 then 'netIncomeMargin'
@@ -290,7 +291,7 @@ select pop.tickerSymbol,
 		when dataItemId=4034 then 'totalDebtEquity'
 		when dataItemId=4192 then 'totalDebtEbitda'
 		when dataItemId=4190 then 'ebitdaInterest'
-		when dataItemId=4194 then 'totalRevenue1YrAnnGrowth'
+		when dataItemId=4194 then 'totalRev1YrAnnGrowth'
 		when dataItemId=4196 then 'ebitda1YrAnnGrowth'
 		when dataItemId=4199 then 'netIncome1YrAnnGrowth'
 		when dataItemId=4200 then 'eps1YrAnnGrowth'
