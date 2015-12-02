@@ -36,6 +36,8 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	@Value ("${full.trial.duration}")
 	private int TRIAL_EXPIRATION_DAYS;
 	
+	private static final int PREMIUM_EXPIRATION_DAYS = 365;
+	
 	public AccountExpirationServiceImpl() {
 		super();
 	}
@@ -76,7 +78,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive() == true){
 				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate() :
-					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, TRIAL_EXPIRATION_DAYS));
+					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
 				
 				
 				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
