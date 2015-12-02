@@ -593,3 +593,26 @@ where ec.tradingItemId in (
 		and sec.primaryFlag=1
 		and sec.companyId  in (select companyid from ##sgxpop)
 		)
+		
+union		
+		
+select 
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'evEbitData',
+	convert(varchar(max),mkc.tev/fd.dataitemvalue),
+	null,
+	null,
+	null
+from ciqmarketcap mkc
+join (
+select companyid, max(pricingdate) as maxdate
+from ciqmarketcap a
+group by companyid
+) mxdt on mxdt.companyid=mkc.companyid and mxdt.maxdate=mkc.pricingdate
+join ciqLatestInstanceFinPeriod fp on fp.companyid=mkc.companyid
+join ciqFinancialData fd on fd.financialPeriodId=fp.financialPeriodId
+join ##sgxpop pop on mkc.companyid = pop.companyid 
+where fp.latestperiodflag=1 --Latest Period
+and fp.periodtypeid=4 --LTM
+and fd.dataitemid=4051 --EBITDA
