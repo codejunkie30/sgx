@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -119,8 +120,8 @@ public class UserServiceImpl implements UserService{
 		
 		return reset.getToken();
 	}
-	
-	private static final int PASSWORD_TTL_SECS = 180 * 60; // Three hours;
+	@Value ("${password.reset.timer}")
+	private int PASSWORD_TTL_SECS;
 	
 	@Override
 	@Transactional
