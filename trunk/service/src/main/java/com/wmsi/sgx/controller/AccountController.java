@@ -117,29 +117,30 @@ public class AccountController{
 	@RequestMapping(value = "errorCode", method = RequestMethod.POST, produces="application/json")
 	public Response getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
 		String error = errorCode.getErrorCode();
-		String msg =  null;
+		String msg =  "null";
 		
-		switch(error) {
-			case "0":
-				msg = "Cancelled";
-				break;
-			case "1202":
-				msg = "Credit Card Number not allowed";
-				break;
-			case "1203":
-				msg = "Credit Card Expired";
-				break;
-			case "1223":
-				msg = "Duplicate transaction";
-				break;
-			default:
-				msg = "null";
-		}
+		if(error != null)
+			switch(error) {
+				case "0":
+					msg = "Cancelled";
+					break;
+				case "1202":
+					msg = "Credit Card Number not allowed";
+					break;
+				case "1203":
+					msg = "Credit Card Expired";
+					break;
+				case "1223":
+					msg = "Duplicate transaction";
+					break;
+				default:
+					msg = "null";
+			}
 		
-			Response response = new Response();
-			response.setMessage(msg);
-			
-			return response;
+		Response response = new Response();
+		response.setMessage(msg);
+		
+		return response;
 		
 	}
 	
