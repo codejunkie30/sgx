@@ -69,13 +69,13 @@
 						<td><span data-bind="text:summaryData.ltgMedianEstimate, precision: 2, formatNum:true, postFix:'%'"></span></td>
 						<td><span data-bind="text:summaryData.ltgHighEstimate, precision: 2, formatNum:true, postFix:'%'"></span>/<span data-bind="text:summaryData.ltgLowEstimate, precision: 2, formatNum:true, postFix:'%'"></span></td>
 						<td><span data-bind="text:summaryData.ltgEstimateDeviation, precision: 2"></span></td>
-						<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 2"></span></td>
+						<td><span data-bind="text:summaryData.ltgEstimateNum, precision: 0"></span></td>
 					</tr>
 				</table>
 				
 				<div>
 					<h4>Price Volatility <img src="img/info.png" alt="" data-bind="tooltip: 'est_priceVolatility'" /></h4>
-					<p><span data-bind="text:getVolatilityEsitmateText(companyInfo.priceVolHistYr)"></span>(<span data-bind="text:companyInfo.priceVolHistYr, precision: 2"></span>)</p>
+					<p><span data-bind="text:getVolatilityEsitmateText(companyInfo.volatility)"></span>(<span data-bind="text:companyInfo.volatility, precision: 2"></span>)</p>
 				</div>
 				<div>
 					<h4>Industry Recommendation <img src="img/info.png" alt="" data-bind="tooltip: 'est_industryRecommendation'" /></h4>
