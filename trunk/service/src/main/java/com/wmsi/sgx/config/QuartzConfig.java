@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.quartz.Trigger;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -62,29 +63,37 @@ public class QuartzConfig {
         jobDetailFactory2.setDurability(true);
         return jobDetailFactory2;
     }
+	@Value ("${quartz.expired.email}")
+	public String expiredTimer;
 	
 	@Bean
     public CronTriggerFactoryBean processAccountExpiredEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
         cronTriggerFactoryBean.setJobDetail(processAccountExpiredEmailService().getObject());
-        cronTriggerFactoryBean.setCronExpression("0 50 18 1/1 * ? *");
+        cronTriggerFactoryBean.setCronExpression(expiredTimer);
         return cronTriggerFactoryBean;
     }
+	
+	@Value ("${quartz.halfway.email}")
+	public String halfwayTimer;
 	
 	@Bean
     public CronTriggerFactoryBean processHalfWayTrialEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean1 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean1.setJobDetail(processHalfWayTrialEmailService().getObject());
-        cronTriggerFactoryBean1.setCronExpression("0 40 21 1/1 * ? *");
+        cronTriggerFactoryBean1.setCronExpression(halfwayTimer);
         return cronTriggerFactoryBean1;
     }
+	
+	@Value ("${quartz.watchlist.email}")
+	public String watchlistTimer;
 	
 	@Bean
     // Configure cron to fire trigger every 1 minute
     public CronTriggerFactoryBean processWatchListEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean2 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean2.setJobDetail(processWatchListEmailService().getObject());
-        cronTriggerFactoryBean2.setCronExpression("0 0 0 1/1 * ? *");
+        cronTriggerFactoryBean2.setCronExpression(watchlistTimer);
         return cronTriggerFactoryBean2;
     }
 	
