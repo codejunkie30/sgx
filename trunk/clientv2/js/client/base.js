@@ -647,7 +647,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						params, 
 						undefined, 
 						function(data, textStatus, jqXHR){
-							PAGE.finalWL(data.watchlists);
+							function sortByName(a, b){
+							  var a = a.name.toLowerCase();
+							  var b = b.name.toLowerCase(); 
+							  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+							}
+							PAGE.finalWL(data.watchlists.sort(sortByName));
+							//PAGE.finalWL(data.watchlists);
 						}, 
 						PAGE.customSGXError,
 						jsonpCallback);					
