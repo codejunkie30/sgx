@@ -71,6 +71,7 @@ public class Company{
 	private Integer yearFounded;
 	private Double yearHigh;
 	private Double yearLow;
+	private Double volatility;
 	
 	
 	public String getExchange() {
@@ -595,9 +596,17 @@ public class Company{
 		this.yearLow = yearLow;
 	}
 
+	public Double getVolatility() {
+		return volatility;
+	}
+
+	public void setVolatility(Double volatility) {
+		this.volatility = volatility;
+	}
+
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(avgBrokerReq, exchange, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, filingCurrency, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, volWeightedAvgPrice, vwapAsOfDate, vwapCurrency, yearFounded, yearHigh, yearLow);
+		return Objects.hashCode(avgBrokerReq, exchange, avgTradedVolM3, avgVolumeM3, basicEpsIncl, beta5Yr, businessDescription, bvShare, capitalExpenditures, cashInvestments, closePrice, companyAddress, companyName, companyWebsite, dividendYield, ebit, ebitda, ebitdaMargin, employees, enterpriseValue, eps, evEbitData, fiscalYearEnd, filingDate, filingCurrency, floatPercentage, gtiScore, gtiRankChange, gvKey, highPrice, industry, industryGroup, lowPrice, marketCap, netIncome, netProfitMargin, openPrice, peRatio, previousCloseDate, previousClosePrice, priceToBookRatio, priceVolHistYr, priceVs52WeekHigh, priceVs52WeekLow, returnOnEquity, sharesOutstanding, sharesSoldShort, targetPrice, targetPriceNum, tickerCode, totalAssets, totalDebt, totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth, totalRevenue, volume, volWeightedAvgPrice, vwapAsOfDate, vwapCurrency, yearFounded, yearHigh, yearLow, volatility);
 	}
 	
 	@Override
@@ -668,7 +677,8 @@ public class Company{
 				&& Objects.equal(this.vwapCurrency, that.vwapCurrency)
 				&& Objects.equal(this.yearFounded, that.yearFounded)
 				&& Objects.equal(this.yearHigh, that.yearHigh)
-				&& Objects.equal(this.yearLow, that.yearLow);
+				&& Objects.equal(this.yearLow, that.yearLow)
+				&& Objects.equal(this.volatility, that.volatility);
 		}
 		return false;
 	}
@@ -741,6 +751,7 @@ public class Company{
 			.add("yearFounded", yearFounded)
 			.add("yearHigh", yearHigh)
 			.add("yearLow", yearLow)
+			.add("volatility", volatility)
 			.toString();
 	}
 	
