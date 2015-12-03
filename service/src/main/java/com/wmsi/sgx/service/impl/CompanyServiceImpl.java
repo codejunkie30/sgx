@@ -16,6 +16,7 @@ import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.CompanyNameAndTicker;
 import com.wmsi.sgx.model.DividendHistory;
+import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
@@ -251,7 +252,12 @@ public class CompanyServiceImpl implements CompanyService{
 			return dividendHistorySearch.getById(id, DividendHistory.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading dividend history", e);
+			log.error("Exception loading dividend history: {}", id);
+			DividendHistory ret = new DividendHistory();
+			ret.setTickerCode(id);
+			ret.setDividendValues(new ArrayList<DividendValue>());
+			return ret;
+			//throw new CompanyServiceException("Exception loading dividend history", e);
 		}
 	}
 
