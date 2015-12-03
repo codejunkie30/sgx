@@ -19,8 +19,10 @@ import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Financial;
+import com.wmsi.sgx.model.GovTransparencyIndex;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
+import com.wmsi.sgx.model.Holder;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
 import com.wmsi.sgx.model.KeyDev;
@@ -109,7 +111,12 @@ public class CompanyServiceImpl implements CompanyService{
 			return holdersSearch.getById(id, Holders.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading key devs", e);
+			log.error("Exception loading holders: {}", id);
+			Holders ret = new Holders();
+			ret.setTickerCode(id);
+			ret.setHolders(new ArrayList<Holder>());
+			return ret;
+			//throw new CompanyServiceException("Exception loading key devs", e);
 		}
 	}
 
@@ -123,7 +130,10 @@ public class CompanyServiceImpl implements CompanyService{
 			return financialSearch.search(new FinancialsQueryBuilder(id), Financial.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading financials", e);
+			log.error("Exception loading financials: {}", id);
+			List<Financial> ret = new ArrayList<Financial>();
+			return ret;
+			//throw new CompanyServiceException("Exception loading financials", e);
 		}
 	}
 	
@@ -138,7 +148,12 @@ public class CompanyServiceImpl implements CompanyService{
 			return gtiSearch.getById(id, GovTransparencyIndexes.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading key devs", e);
+			log.error("Exception loading gti: {}", id);
+			GovTransparencyIndexes ret = new GovTransparencyIndexes();
+			ret.setTickerCode(id);
+			ret.setGtis(new ArrayList<GovTransparencyIndex>());
+			return ret;
+			//throw new CompanyServiceException("Exception loading key devs", e);
 		}
 	}	
 
@@ -153,7 +168,9 @@ public class CompanyServiceImpl implements CompanyService{
 			return priceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading closed price history", e);
+			log.error("Exception loading closed price history: {}", id);
+			return new ArrayList<HistoricalValue>();
+			//throw new CompanyServiceException("Exception loading closed price history", e);
 		}
 	}
 	
@@ -168,7 +185,9 @@ public class CompanyServiceImpl implements CompanyService{
 			return highPriceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading high price history", e);
+			log.error("Exception loading high price history: {}", id);
+			return new ArrayList<HistoricalValue>();
+			//throw new CompanyServiceException("Exception loading high price history", e);
 		}
 	}
 	
@@ -183,7 +202,9 @@ public class CompanyServiceImpl implements CompanyService{
 			return lowPriceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading low price history", e);
+			log.error("Exception loading low price history: {}", id);
+			return new ArrayList<HistoricalValue>();
+			//throw new CompanyServiceException("Exception loading low price history", e);
 		}
 	}
 	
@@ -198,7 +219,9 @@ public class CompanyServiceImpl implements CompanyService{
 			return openPriceHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading open price history", e);
+			log.error("Exception loading open price history: {}", id);
+			return new ArrayList<HistoricalValue>();
+			//throw new CompanyServiceException("Exception loading open price history", e);
 		}
 	}
 	
@@ -214,7 +237,9 @@ public class CompanyServiceImpl implements CompanyService{
 			return volumeHistorySearch.search(query, HistoricalValue.class).getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Exception loading volume history", e);
+			log.error("Exception loading volume history: {}", id);
+			return new ArrayList<HistoricalValue>();
+			//throw new CompanyServiceException("Exception loading volume history", e);
 		}
 	}
 
@@ -235,7 +260,8 @@ public class CompanyServiceImpl implements CompanyService{
 				hits = results.getHits();
 			}
 			catch(SearchServiceException e){
-				throw new CompanyServiceException("Exception loading alpha factors", e);
+				log.error("Exception loading alpha factors: {}", id);
+				//throw new CompanyServiceException("Exception loading alpha factors", e);
 			}
 		}
 
@@ -275,7 +301,9 @@ public class CompanyServiceImpl implements CompanyService{
 				companies =  results.getHits();
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Could not load related companies", e);
+			log.error("Could not load related companies: {}", id);
+			companies = new ArrayList<Company>();
+			//throw new CompanyServiceException("Could not load related companies", e);
 		}		
 		
 		return companies;
