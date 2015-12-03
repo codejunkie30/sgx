@@ -303,7 +303,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		if(company == null) return;
 		
-		company.setFilingCurrency(input.getCurrency());
+		if (company.getFilingCurrency() == null) company.setFilingCurrency(input.getCurrency());
 		company.setTradeName(input.getTradeName());
 		
 		PriceHistory historicalData = company.fullPH;
