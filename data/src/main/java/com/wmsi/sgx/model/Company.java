@@ -221,6 +221,8 @@ public class Company {
 
 	private List<DividendValue> dividendHistory;
 	
+	private Double peRatio;
+	
 	@FXAnnotation
 	private Double marketCap;
 	
@@ -607,18 +609,11 @@ public class Company {
 	}
 
 	public Double getPeRatio() {
-		if (closePrice == null || eps == null || eps == 0) {
-			return null;
-		} else {
-			BigDecimal price = new BigDecimal(closePrice);
-			BigDecimal dilutedEps = new BigDecimal(eps);
-			BigDecimal peratio = price.divide(dilutedEps, RoundingMode.HALF_UP);
-			if (peratio.compareTo(BigDecimal.ZERO) == -1) {
-				return null;
-			} else {
-				return peratio.doubleValue();
-			}
-		}
+		return peRatio;
+	}
+
+	public void setPeRatio(Double peRatio) {
+		this.peRatio = peRatio;
 	}
 
 	public Date getPreviousCloseDate() {
@@ -876,7 +871,7 @@ public class Company {
 				.add("vwapCurrency", vwapCurrency).add("volWeightedAvgPrice", volWeightedAvgPrice)
 				.add("yearFounded", yearFounded).add("yearHigh", yearHigh).add("yearLow", yearLow)
 				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).add("marketCap", marketCap)
-				.add("fullPH", fullPH).add("volatility", volatility).toString();
+				.add("fullPH", fullPH).add("volatility", volatility).add("peRatio", peRatio).toString();
 	}
 
 	@Override
@@ -890,7 +885,7 @@ public class Company {
 				sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt,
 				totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth,
 				totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh,
-				yearLow, priceHistory, dividendHistory, marketCap, fullPH, volatility);
+				yearLow, priceHistory, dividendHistory, marketCap, fullPH, volatility, peRatio);
 	}
 
 	@Override
@@ -952,7 +947,8 @@ public class Company {
 					&& Objects.equal(this.dividendHistory, that.dividendHistory)
 					&& Objects.equal(this.marketCap, that.marketCap) 
 					&& Objects.equal(this.fullPH, that.fullPH)
-					&& Objects.equal(this.volatility, that.volatility);
+					&& Objects.equal(this.volatility, that.volatility)
+					&& Objects.equal(this.peRatio, that.peRatio);
 		}
 		return false;
 	}
