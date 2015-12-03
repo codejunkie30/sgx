@@ -214,6 +214,8 @@ public class Company {
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_YEARLOW")
 	private Double yearLow;
+	
+	private Double volatility;
 
 	private List<HistoricalValue> priceHistory;
 
@@ -838,6 +840,14 @@ public class Company {
 		this.yearLow = yearLow;
 	}
 
+	public Double getVolatility() {
+		return volatility;
+	}
+
+	public void setVolatility(Double volatility) {
+		this.volatility = volatility;
+	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("avgBrokerReq", avgBrokerReq).add("exchange", exchange)
@@ -866,7 +876,7 @@ public class Company {
 				.add("vwapCurrency", vwapCurrency).add("volWeightedAvgPrice", volWeightedAvgPrice)
 				.add("yearFounded", yearFounded).add("yearHigh", yearHigh).add("yearLow", yearLow)
 				.add("priceHistory", priceHistory).add("dividendHistory", dividendHistory).add("marketCap", marketCap)
-				.add("fullPH", fullPH).toString();
+				.add("fullPH", fullPH).add("volatility", volatility).toString();
 	}
 
 	@Override
@@ -880,7 +890,7 @@ public class Company {
 				sharesOutstanding, targetPriceNum, targetPrice, tickerCode, tbv, totalAssets, totalDebt,
 				totalDebtEbitda, totalDebtEquity, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth,
 				totalRevenue, tradeName, volume, vwapAsOfDate, vwapCurrency, volWeightedAvgPrice, yearFounded, yearHigh,
-				yearLow, priceHistory, dividendHistory, marketCap, fullPH);
+				yearLow, priceHistory, dividendHistory, marketCap, fullPH, volatility);
 	}
 
 	@Override
@@ -940,7 +950,9 @@ public class Company {
 					&& Objects.equal(this.yearFounded, that.yearFounded) && Objects.equal(this.yearHigh, that.yearHigh)
 					&& Objects.equal(this.yearLow, that.yearLow) && Objects.equal(this.priceHistory, that.priceHistory)
 					&& Objects.equal(this.dividendHistory, that.dividendHistory)
-					&& Objects.equal(this.marketCap, that.marketCap) && Objects.equal(this.fullPH, that.fullPH);
+					&& Objects.equal(this.marketCap, that.marketCap) 
+					&& Objects.equal(this.fullPH, that.fullPH)
+					&& Objects.equal(this.volatility, that.volatility);
 		}
 		return false;
 	}
