@@ -29,7 +29,8 @@ public class HalfWayTrialEmailService implements Job{
 	
 	private static final Logger log = LoggerFactory.getLogger(HalfWayTrialEmailService.class);
 
-	private static final int TRIAL_HALFWAY_EXPIRATION_DAYS = 7;
+	@Value ("${halfway.trial.duration}")
+	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
 	
 	@Autowired
 	AccountRepository accountRepository;
