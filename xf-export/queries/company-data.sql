@@ -281,7 +281,7 @@ select pop.tickerSymbol,
 		when dataItemId=4128 then 'returnOnEquity'
 		when dataItemId=4074 then 'grossMargin'
 		when dataItemId=4047 then 'ebitdaMargin'
-		when dataItemId=4094 then 'netIncomeMargin'
+		when dataItemId=4094 then 'netProfitMargin'
 		when dataItemId=4177 then 'assetTurns'
 		when dataItemId=4030 then 'currentRatio'
 		when dataItemId=4121 then 'quickRatio'
