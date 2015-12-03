@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.account.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
+import com.wmsi.sgx.util.DateUtil;
 
 
 @Service
@@ -40,6 +43,11 @@ public class AccountExpiedCheck implements Job{
 	@Value ("${email.trialExpired.notice}")
 	private String trialExpiredEmailBody;
 	
+	@Value ("${full.trial.duration}")
+	private int TRIAL_EXPIRATION_DAYS;
+	
+	private static final int PREMIUM_EXPIRATION_DAYS = 365;
+	
 	private static final Logger log = LoggerFactory.getLogger(AccountExpiedCheck.class);
 	
 	
@@ -57,7 +65,11 @@ public class AccountExpiedCheck implements Job{
 		
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive() == true){
-				if(sdf.format(acc.getExpirationDate()).compareTo(sdf.format(new Date()))<0){
+				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate() :
+					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+				
+				
+				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
 					acc.setActive(false);
 					accountRepository.save(acc);
 					try{
