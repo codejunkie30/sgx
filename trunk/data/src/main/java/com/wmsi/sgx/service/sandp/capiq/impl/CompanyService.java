@@ -121,7 +121,7 @@ public class CompanyService extends AbstractDataService {
 		
 		// get the latest value for an item
 		// these have multiple rows, we want the latest date or LTM (LTM preferred)
-		String[] fields = { "evEbitData", "totalDebtEbitda", "ebitda" };
+		String[] fields = { "evEbitData", "totalDebtEbitda", "ebitda", "returnOnEquity", "totalRev1YrAnnGrowth", "netProfitMargin" };
 		for (String field : fields) {
 			setLatestFieldValue(field, comp, records);
 		}
