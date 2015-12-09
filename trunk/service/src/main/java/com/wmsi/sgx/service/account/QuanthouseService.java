@@ -15,5 +15,7 @@ public interface QuanthouseService {
 			throws QuanthouseServiceException, CompanyServiceException;
 	List<Price> getPricingHistory(String market, String id, Date date)
 			throws QuanthouseServiceException;
-	List<CompanyPrice> getCompanyPrice(List<String> companies, Boolean isPremium) throws QuanthouseServiceException, CompanyServiceException;	
+	
+	List<CompanyPrice> getCompanyPrice(List<String> companies)
+			throws QuanthouseServiceException, CompanyServiceException;	
 }

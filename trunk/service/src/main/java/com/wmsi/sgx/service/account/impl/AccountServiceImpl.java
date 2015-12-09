@@ -65,6 +65,8 @@ public class AccountServiceImpl implements AccountService{
 			}
 			if(account.getActive().equals(false)){
 				ret.setType(AccountType.EXPIRED);
+			}else if(account.getType() == AccountType.ADMIN){
+				ret.setType(AccountType.PREMIUM);
 			}else{
 				ret.setType(account.getType());
 			}
@@ -130,7 +132,7 @@ public class AccountServiceImpl implements AccountService{
 		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
 			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
 			AccountModel accountModel =getAccountForUsername(u.getUsername());
-			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL)
+			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
 				return true;
 		}
 		return false;

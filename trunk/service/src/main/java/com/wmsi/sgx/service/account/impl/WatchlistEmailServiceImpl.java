@@ -73,7 +73,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 					for(WatchlistModel watchlist : list){
 						List<AlertOption> options = parseWatchlist(watchlist, acct);
 						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
-							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies(), true));
+							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 					}
 				break;
 			}
