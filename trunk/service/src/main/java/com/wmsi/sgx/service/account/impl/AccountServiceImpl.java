@@ -65,8 +65,6 @@ public class AccountServiceImpl implements AccountService{
 			}
 			if(account.getActive().equals(false)){
 				ret.setType(AccountType.EXPIRED);
-			}else if(account.getType() == AccountType.ADMIN){
-				ret.setType(AccountType.PREMIUM);
 			}else{
 				ret.setType(account.getType());
 			}
