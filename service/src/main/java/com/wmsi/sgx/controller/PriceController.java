@@ -56,7 +56,7 @@ public class PriceController {
 		Map<String, Price> ret = new HashMap<String, Price>();
 					
 		try{			
-			if(acct.getType().equals(AccountType.PREMIUM))
+			if(acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN))
 				p = service.getPrice(market, query.getId());
 			else{
 				Calendar cal = Calendar.getInstance();
@@ -77,14 +77,7 @@ public class PriceController {
 	public Map<String, List<CompanyPrice>> getCompanyPrices(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
 		
-		Boolean isPremium = false;
-		if(user != null){
-			AccountModel acct = new AccountModel();
-			acct = accountService.getAccountForUsername(user.getUsername());
-			isPremium = acct.getType().equals(AccountType.PREMIUM);
-		}
-		
-		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies(), isPremium));
+		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies()));
 		
 		
 		return ret;
