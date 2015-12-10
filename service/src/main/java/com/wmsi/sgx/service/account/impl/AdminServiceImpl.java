@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -106,6 +107,10 @@ public class AdminServiceImpl implements AdminService{
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
 		edit.setExpirationDate(period);
+		System.out.println(period);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		if(sdf.format(period).compareTo(sdf.format(new Date()))>0)
+			edit.setActive(true);
 		accountRepository.save(edit);
 		
 		ret.setResponseCode(0);
