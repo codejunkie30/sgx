@@ -12,5 +12,7 @@ public interface AdminService {
 	AdminResponse searchByDate(Date period);
 	AdminResponse extension(String username, Date period);
 	AdminResponse setAdmin(String username);
+	AdminResponse findByUser(String user);
+	AdminResponse removeAdmin(String username);
 	
 }

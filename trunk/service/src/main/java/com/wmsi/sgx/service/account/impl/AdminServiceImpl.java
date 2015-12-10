@@ -20,6 +20,7 @@ import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.UserRepository;
+import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.AdminService;
 import com.wmsi.sgx.util.DateUtil;
 
@@ -37,10 +38,40 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private UserRepository userReposistory;
 	
+	@Autowired
+	private AccountService accountService;
+	
 	@Override
 	public AdminResponse trialDay() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public AdminResponse findByUser(String user){
+		AdminResponse ret = new AdminResponse();		
+		User u = userReposistory.findByUsername(user);
+		List<Account> accounts = accountRepository.findByUsername(user);
+		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+		AdminAccountModel model = new AdminAccountModel();
+		if(accounts.size() != 0){
+			Account curr = accounts.get(0);
+			model.setUsername(u.getUsername());
+			model.setCreated_date(u.getCreatedDate());
+			model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
+			if(curr.getActive()){
+				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
+						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
+			}
+			ret.setData(model);
+			ret.setResponseCode(0);
+			return ret;
+		}else{
+			ret.setData("Account does not exist.");
+			ret.setResponseCode(19);
+			return ret;
+		}
 	}
 
 	@Override
@@ -111,6 +142,13 @@ public class AdminServiceImpl implements AdminService{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		if(sdf.format(period).compareTo(sdf.format(new Date()))>0)
 			edit.setActive(true);
+		
+		AdminAccountModel model = new AdminAccountModel();
+		model.setExpiration_date(period);
+		model.setCreated_date(edit.getCreatedDate());
+		model.setStatus(edit.getActive().toString());
+		model.setUsername(username);
+		
 		accountRepository.save(edit);
 		
 		ret.setResponseCode(0);
@@ -131,14 +169,53 @@ public class AdminServiceImpl implements AdminService{
 		
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
+		Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(edit.getStartDate()), Calendar.DAY_OF_MONTH, edit.getType() == AccountType.TRIAL ? 
+				TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
 		edit.setType(AccountType.ADMIN);
+		edit.setActive(true);
 		edit.setAlwaysActive(true);
 		accountRepository.save(edit);
 		
-		ret.setResponseCode(0);
-		ret.setData("Success.");
-		return ret;
+		AdminAccountModel model = new AdminAccountModel();
+		model.setExpiration_date(expiration);
+		model.setCreated_date(edit.getCreatedDate());
+		model.setStatus(edit.getType().toString());
+		model.setUsername(username);
 		
+		ret.setResponseCode(0);
+		ret.setData(model);
+		return ret;		
+	}
+	
+	@Override
+	public AdminResponse removeAdmin(String username){
+		AdminResponse ret = new AdminResponse();
+		List<Account> accounts = accountRepository.findByUsername(username);
+		
+		if(accounts.size() == 0){
+			ret.setResponseCode(19);
+			ret.setData("Account does not exist.");
+			return ret;
+		}
+		
+		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+		Account edit = accounts.get(0);
+		Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(edit.getStartDate()), Calendar.DAY_OF_MONTH, edit.getType() == AccountType.TRIAL ? 
+				TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+		edit.setType(AccountType.PREMIUM);
+		edit.setAlwaysActive(false);
+		edit.setExpirationDate(null);
+		accountRepository.save(edit);
+		
+		AdminAccountModel model = new AdminAccountModel();
+		model.setExpiration_date(expiration);
+		model.setCreated_date(edit.getCreatedDate());
+		model.setStatus(edit.getType().toString());
+		model.setUsername(username);
+		
+		ret.setResponseCode(0);
+		ret.setData(model);
+		return ret;		
 	}
 
 }

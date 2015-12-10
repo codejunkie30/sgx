@@ -30,6 +30,15 @@ public class AdminController {
 		
 	}
 	
+	@RequestMapping(value = "findUser", method = RequestMethod.POST)
+	public AdminResponse findUser(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
+			return isAdmin();
+		
+		return adminService.findByUser(response.getId());
+	}
+	
 	@RequestMapping(value = "searchDate", method = RequestMethod.POST)
 	public AdminResponse searchByDate(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
@@ -64,6 +73,19 @@ public class AdminController {
 			return isAdmin();
 		if(acct.getType() == AccountType.MASTER){
 			return adminService.setAdmin(response.getId());
+		}
+		
+		return response;
+		
+	}
+	
+	@RequestMapping(value = "removeAdmin", method = RequestMethod.POST)
+	public AdminResponse removeAdmin(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		if(acct.getType() != AccountType.MASTER)
+			return isAdmin();
+		if(acct.getType() == AccountType.MASTER){
+			return adminService.removeAdmin(response.getId());
 		}
 		
 		return response;
