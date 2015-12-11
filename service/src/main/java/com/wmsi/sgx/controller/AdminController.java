@@ -1,16 +1,20 @@
 package com.wmsi.sgx.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
+import com.wmsi.sgx.model.account.TrialResponse;
 import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.service.PropertiesService;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.AdminService;
 import com.wmsi.sgx.service.account.UserExistsException;
@@ -24,10 +28,18 @@ public class AdminController {
 	@Autowired
 	private AccountService accountService;
 	
-	@RequestMapping(value = "setTrial", method = RequestMethod.POST)
-	public AdminResponse setTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		return null;
-		
+	@Autowired 
+	private PropertiesService propertiesService;
+	
+	@Autowired
+	private TrialProperty getTrial;
+	
+	@RequestMapping(value= "setTrial", method = RequestMethod.POST)
+	public AdminResponse setTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){		
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
+			return isAdmin();
+		return adminService.trialDay(response);
 	}
 	
 	@RequestMapping(value = "findUser", method = RequestMethod.POST)

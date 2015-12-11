@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
+
 @Service
 public class EmailServiceImpl implements EmailService{
 	
@@ -33,8 +35,8 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.site.base}")
 	public String emailSite;
 	
-	@Value ("${halfway.trial.duration}")
-	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
@@ -43,7 +45,7 @@ public class EmailServiceImpl implements EmailService{
 		ctx.setVariable("token", token);
 		ctx.setVariable("baseUrl", baseUrl);
 		ctx.setVariable("emailSite", emailSite);
-		ctx.setVariable("halfway", TRIAL_HALFWAY_EXPIRATION_DAYS);
+		ctx.setVariable("halfway", getTrial.getHalfwayDays());
 		
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");

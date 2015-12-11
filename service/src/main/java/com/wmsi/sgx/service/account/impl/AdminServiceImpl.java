@@ -12,14 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
+import com.wmsi.sgx.model.account.TrialResponse;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.UserRepository;
+import com.wmsi.sgx.service.PropertiesService;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.AdminService;
 import com.wmsi.sgx.util.DateUtil;
@@ -27,8 +30,8 @@ import com.wmsi.sgx.util.DateUtil;
 @Service
 public class AdminServiceImpl implements AdminService{
 	
-	@Value ("${full.trial.duration}")
-	private int TRIAL_EXPIRATION_DAYS;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 
@@ -41,10 +44,27 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private AccountService accountService;
 	
+	@Autowired 
+	private PropertiesService propertiesService;
+	
+	
 	@Override
-	public AdminResponse trialDay() {
-		// TODO Auto-generated method stub
-		return null;
+	public AdminResponse trialDay(TrialResponse response) {
+		AdminResponse ret = new AdminResponse();
+		if(response.getHalfwayDays() == null || response.getTrialDays() == null){
+			ret.setData("Invalid/missing trial or halfway days.");
+			ret.setResponseCode(23);
+			return ret;
+		}
+		propertiesService.setProperty("full.trial.duration", response.getTrialDays());
+		propertiesService.setProperty("halfway.trial.duration", response.getHalfwayDays());
+		getTrial.destroy();
+		getTrial.init();
+		propertiesService.save();
+		
+		ret.setResponseCode(0);
+		ret.setData("Success.");
+		return ret;
 	}
 	
 	@Override
@@ -61,7 +81,7 @@ public class AdminServiceImpl implements AdminService{
 			model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
 			if(curr.getActive()){
 				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
-						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
 			}
 			ret.setData(model);
@@ -90,7 +110,7 @@ public class AdminServiceImpl implements AdminService{
 				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
 				if(curr.getActive()){
 					Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
-							.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+							.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 					model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
 				}
 				retList.add(model);
@@ -170,7 +190,7 @@ public class AdminServiceImpl implements AdminService{
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
 		Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(edit.getStartDate()), Calendar.DAY_OF_MONTH, edit.getType() == AccountType.TRIAL ? 
-				TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+				getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 		edit.setType(AccountType.ADMIN);
 		edit.setActive(true);
 		edit.setAlwaysActive(true);
@@ -201,7 +221,7 @@ public class AdminServiceImpl implements AdminService{
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
 		Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(edit.getStartDate()), Calendar.DAY_OF_MONTH, edit.getType() == AccountType.TRIAL ? 
-				TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+				getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 		edit.setType(AccountType.PREMIUM);
 		edit.setAlwaysActive(false);
 		edit.setExpirationDate(null);
