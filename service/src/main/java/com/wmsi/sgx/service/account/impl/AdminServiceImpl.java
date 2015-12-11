@@ -63,7 +63,7 @@ public class AdminServiceImpl implements AdminService{
 		propertiesService.save();
 		
 		ret.setResponseCode(0);
-		ret.setData("Success.");
+		ret.setData(response);
 		return ret;
 	}
 	
