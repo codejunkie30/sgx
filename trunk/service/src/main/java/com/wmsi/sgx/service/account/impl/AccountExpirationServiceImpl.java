@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
@@ -30,11 +31,8 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	
 	private static final Logger log = LoggerFactory.getLogger(AccountExpirationServiceImpl.class);
 
-	@Value ("${halfway.trial.duration}")
-	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
-	
-	@Value ("${full.trial.duration}")
-	private int TRIAL_EXPIRATION_DAYS;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 	
@@ -78,7 +76,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive() == true){
 				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate() :
-					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				
 				
 				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
@@ -103,7 +101,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL && acc.getExpirationDate() == null){
 				int comparatorVal = DateTimeComparator.getDateOnlyInstance()
-						.compare((new DateTime(acc.getStartDate()).plusDays(TRIAL_HALFWAY_EXPIRATION_DAYS)), new DateTime());
+						.compare((new DateTime(acc.getStartDate()).plusDays(getTrial.getHalfwayDays())), new DateTime());
 				if(comparatorVal==0){
 				try{
 					sendHalfWayTrialEmail(acc.getUser().getUsername());

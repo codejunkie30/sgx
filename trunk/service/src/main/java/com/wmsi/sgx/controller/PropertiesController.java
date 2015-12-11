@@ -2,11 +2,13 @@ package com.wmsi.sgx.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.model.account.TrialResponse;
 
 @RestController
@@ -14,16 +16,14 @@ import com.wmsi.sgx.model.account.TrialResponse;
 public class PropertiesController {
 	private static final Logger log = LoggerFactory.getLogger(PropertiesController.class);
 	
-	@Value("${halfway.trial.duration}")
-	public String halfwayDuration;
-	@Value("${full.trial.duration}")
-	public String trialDuration;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	@RequestMapping(value = "properties/trialDuration", method=RequestMethod.POST)
 	public TrialResponse getTrialDays(){
 		TrialResponse ret = new TrialResponse();
-		ret.setHalfwayDays(halfwayDuration);
-		ret.setTrialDays(trialDuration);
+		ret.setHalfwayDays(getTrial.getHalfway());
+		ret.setTrialDays(getTrial.getTrial());
 		return ret;
 		
 	}

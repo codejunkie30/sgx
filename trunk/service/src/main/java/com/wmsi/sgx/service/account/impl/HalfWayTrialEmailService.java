@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
@@ -29,8 +30,8 @@ public class HalfWayTrialEmailService implements Job{
 	
 	private static final Logger log = LoggerFactory.getLogger(HalfWayTrialEmailService.class);
 
-	@Value ("${halfway.trial.duration}")
-	private int TRIAL_HALFWAY_EXPIRATION_DAYS;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	@Autowired
 	AccountRepository accountRepository;
@@ -51,7 +52,7 @@ public class HalfWayTrialEmailService implements Job{
 		for( Account acc: accounts)	{
 			if(acc.getAlwaysActive() == false && acc.getActive()==true && acc.getType()==AccountType.TRIAL){
 				int comparatorVal = DateTimeComparator.getDateOnlyInstance()
-						.compare((new DateTime(acc.getStartDate()).plusDays(TRIAL_HALFWAY_EXPIRATION_DAYS)), new DateTime());
+						.compare((new DateTime(acc.getStartDate()).plusDays(getTrial.getHalfwayDays())), new DateTime());
 				if(comparatorVal==0){
 				try{
 					sendHalfWayTrialEmail(acc.getUser().getUsername());

@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
@@ -31,8 +32,8 @@ public class AccountServiceImpl implements AccountService{
 	@Autowired
 	private AccountRepository accountRepository;
 
-	@Value ("${full.trial.duration}")
-	private int TRIAL_EXPIRATION_DAYS;
+	@Autowired
+	private TrialProperty getTrial;
 	
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 	
@@ -60,7 +61,7 @@ public class AccountServiceImpl implements AccountService{
 			if(account.getExpirationDate() != null)
 				ret.setExpirationDate(account.getExpirationDate());
 			else{
-				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, account.getType() == AccountType.TRIAL ? TRIAL_EXPIRATION_DAYS : PREMIUM_EXPIRATION_DAYS));
+				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, account.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				ret.setExpirationDate(expiration);
 			}
 			if(account.getActive().equals(false)){
@@ -100,7 +101,7 @@ public class AccountServiceImpl implements AccountService{
 		if(accounts.size() > 0)
 			throw new AccountCreationException();
 			
-		return createAccount(user, AccountType.TRIAL, TRIAL_EXPIRATION_DAYS);
+		return createAccount(user, AccountType.TRIAL, getTrial.getTrialDays());
 		
 	}
 	

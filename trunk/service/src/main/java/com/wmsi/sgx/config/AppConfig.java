@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.wmsi.sgx.service.PropertiesService;
 
 import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.UrlTemplateResolver;
@@ -46,6 +47,9 @@ public class AppConfig{
 
 	@Autowired
 	public Environment env;
+	
+	@Autowired
+	public PropertiesService propertiesService;
 
 	@Bean
 	public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
@@ -124,6 +128,37 @@ public class AppConfig{
 		SpringTemplateEngine engine = new SpringTemplateEngine();
 		engine.setTemplateResolver(this.emailTemplateResolver());
 		return engine;
+	}
+	
+	
+	public class TrialProperty {
+		private String trialDuration;
+		private String halfwayDuration;
+		
+		public void init(){
+			trialDuration = propertiesService.getProperty("full.trial.duration");
+			halfwayDuration = propertiesService.getProperty("halfway.trial.duration");			
+		}		
+		public void destroy(){
+			trialDuration = null;
+		}		
+		public String getTrial(){
+			return trialDuration;
+		}
+		public String getHalfway(){
+			return halfwayDuration;
+		}
+		public int getTrialDays(){
+			return Integer.parseInt(trialDuration);
+		}
+		public int getHalfwayDays(){
+			return Integer.parseInt(halfwayDuration);
+		}
+	}
+	
+	@Bean(destroyMethod="destroy", initMethod="init")
+	public TrialProperty getTrial(){
+		return new TrialProperty();
 	}
 
 }
