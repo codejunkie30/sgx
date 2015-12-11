@@ -8,16 +8,15 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -58,7 +57,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 			}
 			// user = (User)gson.fromJson(sb.toString(), User.class);
 
-			String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+			String jsonObject = UriUtils.decode(sb.toString(), "UTF-8");
 
 			if (jsonObject.startsWith("json="))
 				jsonObject = jsonObject.replaceFirst("json=", "");
@@ -107,7 +106,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 					sb.append(s);
 				}
 
-				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+				String jsonObject = UriUtils.decode(sb.toString(), "UTF-8");
 
 				if (jsonObject.startsWith("json="))
 					jsonObject = jsonObject.replaceFirst("json=", "");
@@ -143,7 +142,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 					sb.append(s);
 				}
 
-				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+				String jsonObject = UriUtils.decode(sb.toString(), "UTF-8");
 
 				if (jsonObject.startsWith("json="))
 					jsonObject = jsonObject.replaceFirst("json=", "");
@@ -165,7 +164,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 					sb.append(s);
 				}
 
-				String jsonObject = java.net.URLDecoder.decode(sb.toString(), "UTF-8");
+				String jsonObject = UriUtils.decode(sb.toString(), "UTF-8");
 
 				if (jsonObject.startsWith("json="))
 					jsonObject = jsonObject.replaceFirst("json=", "");
