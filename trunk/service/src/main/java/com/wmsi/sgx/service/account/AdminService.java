@@ -15,5 +15,6 @@ public interface AdminService {
 	AdminResponse findByUser(String user);
 	AdminResponse removeAdmin(String username);
 	AdminResponse trialDay(TrialResponse response);
+	AdminResponse getTrialDays();
 	
 }

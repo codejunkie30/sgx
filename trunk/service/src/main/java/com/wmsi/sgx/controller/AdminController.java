@@ -34,6 +34,14 @@ public class AdminController {
 	@Autowired
 	private TrialProperty getTrial;
 	
+	@RequestMapping(value="getTrial", method = RequestMethod.POST)
+	public AdminResponse getTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
+			return isAdmin();
+		return adminService.getTrialDays();
+	}
+	
 	@RequestMapping(value= "setTrial", method = RequestMethod.POST)
 	public AdminResponse setTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){		
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());

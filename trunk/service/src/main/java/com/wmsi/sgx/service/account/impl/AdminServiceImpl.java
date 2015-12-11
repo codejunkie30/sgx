@@ -47,6 +47,18 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired 
 	private PropertiesService propertiesService;
 	
+	@Override
+	public AdminResponse getTrialDays(){
+		AdminResponse ret = new AdminResponse();
+		TrialResponse resp = new TrialResponse();
+		resp.setHalfwayDays(getTrial.getHalfway());
+		resp.setTrialDays(getTrial.getTrial());
+		ret.setData(resp);
+		ret.setResponseCode(0);
+		
+		return ret;
+		
+	}
 	
 	@Override
 	public AdminResponse trialDay(TrialResponse response) {
