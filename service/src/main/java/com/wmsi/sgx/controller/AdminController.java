@@ -121,9 +121,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "excel", produces = "text/csv;charset=utf-8")
-	public void excel(HttpServletResponse response) throws IOException{
-		
-		adminService.writeCsv(response, new String[] { "Username", "Created", "Status", "Expiration" }, "admin-excel-");
+	public void excel(@AuthenticationPrincipal UserDetailsWrapper user, HttpServletResponse response) throws IOException{
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+		if(acct.getType() == AccountType.MASTER || acct.getType() == AccountType.ADMIN)
+			adminService.writeCsv(response, new String[] { "Username", "Created", "Status", "Expiration" }, "admin-excel-");
 	}
 	
 	
