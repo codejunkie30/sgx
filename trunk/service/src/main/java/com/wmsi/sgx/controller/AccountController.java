@@ -23,6 +23,7 @@ import com.wiz.enets2.transaction.umapi.Merchant;
 import com.wiz.enets2.transaction.umapi.data.CreditTxnReq;
 import com.wiz.enets2.transaction.umapi.data.TxnReq;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -77,7 +78,11 @@ public class AccountController{
 	@RequestMapping(value = "info", method = RequestMethod.POST)
 	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{
 		
-		return accountService.getAccountForUsername(user.getUsername());
+		AccountModel ret = accountService.getAccountForUsername(user.getUsername());
+		if(ret.getType() == AccountType.MASTER || ret.getType() == AccountType.ADMIN){
+			ret.setType(AccountType.PREMIUM);
+		}
+		return ret;
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
