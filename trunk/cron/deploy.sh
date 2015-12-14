@@ -14,6 +14,7 @@ CURRENT_BUILD=`cat $CURRENT_BUILD_FILE`
 
 ### remote variables
 LAST_BUILD=`ssh -i ../ssh-key.pem ec2-user@54.196.98.231 "cat $REMOTE_PATH/last.build"`
+REMOTE_FILE_GRAB="$?"
 
 ## logging date/time
 logCommandToOut() {
@@ -22,7 +23,12 @@ logCommandToOut() {
 
 logCommandToOut "existing build $CURRENT_BUILD -> server build $LAST_BUILD"
 
-if [[ "$CURRENT_BUILD" != "$LAST_BUILD" ]]; then
+if [ "$REMOTE_FILE_GRAB" != "0" ]; then
+
+	logCommandToOut "Unable to access remote build file."
+	aws sns publish --topic-arn arn:aws:sns:us-east-1:266865979071:QA_BUILD_NOTIFICATION --message "Unable to access new build information from Jenkins." --subject	"Unable to access build information ($ENVIRONMENT_NAME)"
+
+elif [[ "$CURRENT_BUILD" != "$LAST_BUILD" ]]; then
 
 	shopt -s nullglob
 	
