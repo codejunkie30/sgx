@@ -1,13 +1,19 @@
 package com.wmsi.sgx.controller;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -110,7 +116,7 @@ public class AdminController {
 		
 		return response;
 		
-	}
+	}	
 	
 	public AdminResponse isAdmin(){
 		AdminResponse ret = new AdminResponse();
@@ -118,5 +124,13 @@ public class AdminController {
 		ret.setData("Account is not authorized.");
 		return ret;
 	}
+	
+	@RequestMapping(value = "excel", produces = "text/csv;charset=utf-8")
+	public void excel(HttpServletResponse response) throws IOException{
+		
+		adminService.writeCsv(response, new String[] { "Username", "Created", "Status", "Expiration" }, "admin-excel-");
+	}
+	
+	
 	
 }
