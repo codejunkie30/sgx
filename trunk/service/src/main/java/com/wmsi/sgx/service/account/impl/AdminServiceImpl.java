@@ -1,5 +1,9 @@
 package com.wmsi.sgx.service.account.impl;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +12,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
@@ -132,6 +140,28 @@ public class AdminServiceImpl implements AdminService{
 		ret.setResponseCode(0);
 		return ret;
 	}
+	
+	private List<AdminAccountModel> getList(Date period){
+		User[] users = userReposistory.findByDate(period);
+		List<AdminAccountModel> retList = new ArrayList<AdminAccountModel>();
+		for(User u : users){
+			AdminAccountModel model = new AdminAccountModel();
+			List<Account> accounts = accountRepository.findByUsername(u.getUsername());
+			Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+			if(accounts.size() != 0){
+				Account curr = accounts.get(0);
+				model.setUsername(u.getUsername());
+				model.setCreated_date(u.getCreatedDate());
+				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
+				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
+						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
+				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
+				
+				retList.add(model);
+			}
+		}
+		return retList;
+	}
 
 	@Override
 	public AdminResponse deactivate(String username) {
@@ -170,7 +200,6 @@ public class AdminServiceImpl implements AdminService{
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
 		edit.setExpirationDate(period);
-		System.out.println(period);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		if(sdf.format(period).compareTo(sdf.format(new Date()))>0)
 			edit.setActive(true);
@@ -248,6 +277,47 @@ public class AdminServiceImpl implements AdminService{
 		ret.setResponseCode(0);
 		ret.setData(model);
 		return ret;		
+	}
+	
+	@Override
+	public void writeCsv(HttpServletResponse response, String[] header, String name)
+			throws IOException {
+		
+		
+		List<String[]> values = new ArrayList<String[]>();
+		Date date = new Date();
+		date.setTime(946684800000L);
+		
+		List<AdminAccountModel> retList = getList(date);
+		
+		for(AdminAccountModel model : retList){
+			String[] temp = new String[] { model.getUsername(), dateFmt(model.getCreated_date()), model.getStatus().toString(), dateFmt(model.getExpiration_date()) };
+			values.add(temp);
+		}
+				
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "_" + dateFmt(new Date()) + ".csv\"");
+		OutputStream resOs = response.getOutputStream();
+		OutputStream buffOs = new BufferedOutputStream(resOs);
+		OutputStreamWriter outputwriter = new OutputStreamWriter(buffOs);
+
+		CSVWriter writer = new CSVWriter(outputwriter, ',', CSVWriter.DEFAULT_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, "\r\n");
+				
+		try{
+			writer.writeNext(header);
+			writer.writeAll(values);
+			outputwriter.flush();
+		}
+
+		finally{
+			outputwriter.close();
+			writer.close();
+		}
+		
+		
+	}
+
+	private String dateFmt(Date d) {
+		return new SimpleDateFormat("yyyy-MM-dd").format(d);
 	}
 
 }
