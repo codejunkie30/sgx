@@ -1,0 +1,60 @@
+
+.user-search .btn {
+	vertical-align: top;
+}
+
+.user-search .search-by-email {
+	min-width:200px;
+}
+
+.search-by-date {
+	margin-top:20px;
+
+	.btn {
+		margin-left:10px;
+		position:relative;
+		top:-4px;
+	}
+}
+
+.modify-duration {
+	margin-top:30px;
+}
+
+.label-content {
+	margin-left:15px;
+}
+.input-label {
+	font-weight:bold;
+	margin-bottom:5px;
+	margin-top:15px;
+}
+
+.help-block {
+	font-size:.94em;
+}
+
+.screener-modal {
+	.modal-body {
+		margin-bottom:30px;
+	}
+	.input-label:first-child {
+		margin-top:10px;
+	}
+}
+
+.user-display-table {
+	margin-top:30px;
+
+	.user-status {
+		text-transform: Uppercase;
+	}
+}
+
+.users-pagination {
+	text-align:right;
+}
+
+.table-hover tr:hover {
+	cursor:pointer;
+}

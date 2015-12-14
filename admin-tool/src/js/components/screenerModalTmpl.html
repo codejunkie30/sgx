@@ -1,0 +1,60 @@
+
+
+<div class="modal fade screener-modal" tabindex="-1" role="dialog" id="myModal" data-bind="modal:showModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" data-bind="text:userData().username">casper@gmail.com</h4>
+      </div>
+      <div class="modal-body">
+        <p data-bind="text:displayText">This account has expired. OR: This account has 11 days left in trial. OR: This account is active and expires on 11/1/2016</p>
+      <hr/>
+
+      <!-- ko ifnot:userData().status() == 'ADMIN' || userData().status() == 'MASTER' -->
+
+
+  		<div class="input-label">Change to an admin account</div>
+  		<a href="#" class="btn btn-warning" data-bind="click:turnToAdmin">Turn to Admin</a>
+  		<p class="help-block">This will turn the account into an admin account.</p>
+
+          
+      <!-- ko ifnot: userData().status() == 'EXPIRED' -->
+  		<div class="input-label">Change Premium account</div>
+  		<button href="#" class="btn btn-danger" data-bind="click:deactivateAcount, disable:userData().status == 'EXPIRED'">Deactivate</button>
+  		<p class="help-block">This will expire the users account. <b>This cannot be undone</b></p>
+
+      <!-- /ko -->
+
+  		<div class="row">
+  			<div class="label-content">
+  				<div class="input-label">Change expiration date of <span data-bind="text:accountType"></span> account</div>
+  			</div>
+  			<div class="col-sm-4">
+  				<input type="text" class="form-control input-sm" data-bind="pikaday:accountExpiration, value:accountExpiration">
+  			</div>
+        <div class="col-sm-8">
+          <span class="validationMessage" data-bind="validationMessage:accountExpiration"></span>
+        </div>
+  		</div>
+    
+    <!-- /ko -->
+
+
+      <!-- ko if:userData().status() == 'ADMIN'-->
+      <div class="input-label">Remove admin account</div>
+      <a href="#" class="btn btn-warning" data-bind="click:removeAdmin">Remove Admin</a>
+      <p class="help-block">This will remove administrator rights from the account.</p>
+      <!-- /ko -->
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!-- ko ifnot:userData().status == 'ADMIN' || userData().status == 'MASTER' -->
+        <button class="btn btn-primary" data-bind="click:saveChanges, disable:dateError().length > 0">Save changes</button>
+        <!-- /ko -->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
