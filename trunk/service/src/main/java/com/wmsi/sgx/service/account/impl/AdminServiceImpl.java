@@ -96,12 +96,10 @@ public class AdminServiceImpl implements AdminService{
 			Account curr = accounts.get(0);
 			model.setUsername(u.getUsername());
 			model.setCreated_date(u.getCreatedDate());
-			model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
-			if(curr.getActive()){
-				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
-						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
-			}
+			model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");			
+			Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
+					.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
+			model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);		
 			ret.setData(model);
 			ret.setResponseCode(0);
 			return ret;
@@ -126,11 +124,9 @@ public class AdminServiceImpl implements AdminService{
 				model.setUsername(u.getUsername());
 				model.setCreated_date(u.getCreatedDate());
 				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
-				if(curr.getActive()){
-					Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
-							.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-					model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
-				}
+				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
+					.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
+				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
 				retList.add(model);
 			}
 		}
