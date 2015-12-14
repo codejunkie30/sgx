@@ -3,12 +3,15 @@ package com.wmsi.sgx.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -34,6 +37,11 @@ public class AdminController {
 	
 	@Autowired
 	private TrialProperty getTrial;
+	
+	@RequestMapping(value = "info", method = RequestMethod.POST)
+	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{		
+		return accountService.getAccountForUsername(user.getUsername());
+	}
 	
 	@RequestMapping(value="getTrial", method = RequestMethod.POST)
 	public AdminResponse getTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){
