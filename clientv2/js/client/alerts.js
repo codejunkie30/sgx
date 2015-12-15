@@ -108,7 +108,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					ALERTS.finalWL(data.watchlists.sort(sortByName));
 					callback();
 					var arr = data.removed;					
-					var removedTicker = arr.toString();
+					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
 						$('<div class="save">The companies below have been removed from one or more of your Watch Lists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
