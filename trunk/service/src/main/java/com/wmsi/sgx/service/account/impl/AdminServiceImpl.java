@@ -160,6 +160,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public AdminResponse deactivate(String username) {
 		List<Account> accounts = accountRepository.findByUsername(username);
+		User u = userReposistory.findByUsername(username);
 		AdminResponse ret = new AdminResponse();
 		Boolean deactivated = false;
 		if(accounts.size() == 0){
@@ -168,16 +169,22 @@ public class AdminServiceImpl implements AdminService{
 			return ret;
 		}
 		
+		AdminAccountModel model = new AdminAccountModel();
+		model.setUsername(u.getUsername());
+		model.setCreated_date(u.getCreatedDate());
+		
 		for(Account acc : accounts){
 			if(acc.getActive() == true){
 				acc.setActive(false);
 				acc.setExpirationDate(new Date());
+				model.setStatus("EXPIRED");
+				model.setExpiration_date(acc.getExpirationDate());
 				accountRepository.save(acc);
 				deactivated = true;
 			}
 		}
 		ret.setResponseCode(deactivated ? 0 : 20);
-		ret.setData(deactivated ? "Success." : "Account already deactivated.");
+		ret.setData(deactivated ? model : "Account already deactivated.");
 		return ret;
 	}
 
@@ -208,7 +215,7 @@ public class AdminServiceImpl implements AdminService{
 		accountRepository.save(edit);
 		
 		ret.setResponseCode(0);
-		ret.setData("Success.");
+		ret.setData(model);
 		return ret;
 	}
 	
