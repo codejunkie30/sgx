@@ -45,6 +45,16 @@
 				</div>
 			</div>			
 			<a class="button" data-bind="click:$root.startTrial, css: {'disabled-btn': (isFormValid() == undefined || termsConditions() == false || errors().length)}">Start free trial</a>
+			<div class="additional-disclosure">
+				A Tax Invoice can be provided to GST registered customers upon request for claiming of Input Tax. Please indicate the following details to be sent to <a href="mailto:Finance_AR@sgx.com">Finance_AR@sgx.com</a>:
+				<ul>
+					<li>Customer Name</li>
+					<li>Billing Address</li>
+					<li>Email Address</li>
+					<li>Billing Attention Name</li>
+					<li>ARN Number</li>
+				</ul>
+			</div>
 		</div>
 		<footer>
 			<span class="left"><a data-bind="siteLink:'premium'">Learn more about StockFacts Premium</a></span>
