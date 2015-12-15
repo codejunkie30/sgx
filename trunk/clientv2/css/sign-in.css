@@ -60,4 +60,4 @@ section footer .right { float: right; line-height: 40px; }
 section footer a { color: #0e236b; text-decoration: none; }
 section footer a:hover { text-decoration: underline; }
 
-.save { width: 978px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 5px; }
+.save { width: 970px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 0; }
