@@ -75,6 +75,7 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_EMPLOYEES")
 	private Double employees;
 
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
 
