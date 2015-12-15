@@ -58,3 +58,7 @@
 .table-hover tr:hover {
 	cursor:pointer;
 }
+
+.table-hover thead tr:hover {
+	cursor:default;
+}

@@ -114,8 +114,8 @@ function modalVM( params ) {
     API.post( API.paths.extendExpiration , successFN.bind(this), params );
 
     function successFN(response) {
-      console.log(response);
       this.userData().expiration_date( newExpirationDate );
+      this.userData().status( user.status );
       this.showModal(false);
       API.hideLoading();
       toastr.success('Your changes have been saved.');

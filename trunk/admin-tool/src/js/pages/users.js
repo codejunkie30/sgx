@@ -21,7 +21,9 @@ require('../components/register-all-components');
 function ScreenerPage() {
 	this.page = 'users';
 	this.init = function() {
-		API.verifyUser();
+		API.verifyUser(null, function(){
+			API.goToPage('/', 1500);
+		});
 	}
 	this.userEmail = ko.observable().extend({ required: true, email:true });
 	this.dateCreated = ko.observable().extend({required: true });
@@ -123,7 +125,9 @@ function ScreenerPage() {
 	this.logout = function() {
 		API.logout();
 
-	}
+	},
+
+	this.goToPage = API.goToPage
 
 }
 
