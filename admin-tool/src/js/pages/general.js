@@ -19,10 +19,11 @@ function GeneralPage() {
     }
 
     this.page = 'general';
-    this.trialDuration = ko.observable();
+    this.trialDuration = ko.observable().extend({number:true});
     this.durationInEdit = ko.observable(false);
 
     this.changeTrialDuration = function() {
+        if(this.trialDurationError().length > 0) return;
         var newDuration = this.trialDuration();
         var halfDuration = parseInt(newDuration, 10)/2 + parseInt(newDuration%2, 10);
         var params = {trialDays: newDuration, halfwayDays: halfDuration};
@@ -67,7 +68,11 @@ function GeneralPage() {
 
     this.logout = function() {
         API.logout();
-    }
+    },
+
+    this.goToPage = API.goToPage,
+
+    this.trialDurationError = ko.validation.group(this.trialDuration);
 
 }
 

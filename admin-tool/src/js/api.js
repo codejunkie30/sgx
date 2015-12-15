@@ -1,6 +1,6 @@
 
 
-// var baseUrl = 'http://localhost:8000';
+//var baseUrl = 'https://192.168.1.34:8000';
 // var baseUrl = 'https://sgx-api-us.sharefc.com/sgx';
 var baseUrl = "";
 var $overlay = $('<div id="customOverlay" class="grayout"><img src="images/ajax-loader.gif" alt="" /></div>');;
@@ -12,7 +12,7 @@ var API = {
   paths: {
     login:            baseUrl + '/sgx/login',
     logout:           baseUrl + '/sgx/logout',
-    acctInfo:         baseUrl + '/sgx/account/info',
+    acctInfo:         baseUrl + '/sgx/admin/info',
     getTrial:         baseUrl + '/sgx/properties/trialDuration',
     setTrial:         baseUrl + '/sgx/admin/setTrial',
     searchByEmail:    baseUrl + '/sgx/admin/findUser',
@@ -22,6 +22,7 @@ var API = {
     makeAdmin:        baseUrl + '/sgx/admin/setAdmin',
     removeAdmin:      baseUrl + '/sgx/admin/removeAdmin'
   },
+
 
   get: function(url, successFN, params) {
     var requestWithFetch;
@@ -51,6 +52,7 @@ var API = {
 
   },
 
+
   post: function(url, successFN, params) {
     console.log(params);
     fetch( url, {
@@ -73,25 +75,28 @@ var API = {
       });
   },
 
-  verifyUser: function() {
+
+  verifyUser: function(successCb, failureCb) {
     var self = this;
     this.post( this.paths.acctInfo, successFN, {dummy:'param'});
     this.showLoading();
 
     function successFN(response) {
       self.hideLoading();
-      console.log(response.type);
       if( response.type === 'MASTER' || response.type === 'ADMIN' ) {
-        self.hideLoading();
+        if(successCb && typeof successCb === 'function') {
+          successCb();
+        }
       }else {
-        var error = new CustomException(502, 'Unauthorized Access. Redirecting...')
-        setTimeout(function(){
-          location.href='/';
-        },1500);
+        var error = new CustomException(502, 'Unauthorized Access');
+        if(failureCb && typeof failureCb === 'function') {
+          failureCb();
+        }
         throw error;
       }
     }
   },
+
 
   logout: function() {
     API.showLoading();
@@ -107,19 +112,45 @@ var API = {
       });
 
     function successFN(response) {
-      //console.log('success');
-      location.href = '/';
+      API.goToPage('/');
     }
   },
+
 
   showLoading: function() {
     $('body').append($overlay);
   },
 
+
   hideLoading: function() {
     var overlay = document.getElementById('customOverlay');
     if(overlay) {
       $(overlay).remove();
+    }
+  },
+
+
+  goToPage: function(dest, delay) {
+    //add pathname for development
+    var isDev = location.href.indexOf('fakemsi') !== -1? true: false;
+    var newDest;
+
+    if ( !isDev ){
+      if( dest == '/')
+        newDest = '/3rdss/';
+      else 
+        newDest = '/3rdss/'+dest+'.html';
+    } else {
+      if ( dest == '/')
+        newDest = '/';
+      else 
+        newDest = dest+'.html';
+    }
+
+    if( delay ) 
+      setTimeout(function() { location.href = newDest; }, delay);
+    else {
+      location.href = newDest;
     }
   }
 
@@ -160,14 +191,13 @@ function parseJSON(response) {
 }
 
 function supplementBackend(jsonResp) {
-  console.log(jsonResp);
   if(jsonResp == "")
     return {responseCode:0};
 
   else if( jsonResp.reason == "Full authentication is required to access this resource" ){
     jsonResp.responseCode = 32;
     jsonResp.data = "Full authentication is required to access this resource";
-    setTimeout(function() { location.href="/"; }, 1500);
+    API.goToPage('/', 1500);
   }
 
   else if( jsonResp.reason == "Invalid username or password" ){

@@ -15,19 +15,27 @@ function LoginPage() {
     password: ko.observable().extend({ required:true })
   }
 
-  this.login = function() {
+  this.loginTrigger = function() {
     
     if( this.acctErrors.length > 0 ) {
       this.acctErrors.showAllMessages();
     }
-    console.log('firing login action');
+  
     var params = { username: this.account.email(), password: this.account.password() };
+    this.loginAction(params);
+  }
+
+
+  this.loginAction = function(params) {
+
     API.showLoading();
     API.post( API.paths.login, successFN.bind(this), params );
-
     function successFN(data) {
-      location.href = '/users.html';
+      API.verifyUser(function() {
+        API.goToPage('users');
+      });
     }
+
   }
 
   this.test = function() {

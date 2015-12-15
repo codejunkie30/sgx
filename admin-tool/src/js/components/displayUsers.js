@@ -25,20 +25,29 @@ function DisplayUsers(params) {
 		currentUserIndex: this.currentUserIndex
 	}
 
-	this.test = function() {
-		var curIndex = this.modalData.currentUserIndex();
-		console.log()
-		console.log(curIndex);
-		console.log(this.users()[curIndex]);
-	}
-
-	var perPage = 10;
+	var perPage = 20;
 
 	this.paginationArray = ko.observableArray([]);
 	this.setCurrentPage = function(data) {
 		if(data == this.currentPage())
 			return;
 		this.currentPage(data);
+	}
+
+
+	this.getNextPage = function() {
+		var curPage = this.currentPage();
+
+		if( this.hasNextPage() ){
+			this.setCurrentPage( curPage+1 );
+		}
+	}
+
+	this.getPreviousPage = function() {
+		var curPage = this.currentPage();
+		if( this.hasPreviousPage() ) {
+			this.setCurrentPage( curPage-1 );
+		}
 	}
 
 	this.showUserModal = function(data, index) {
@@ -55,6 +64,8 @@ function DisplayUsers(params) {
 		return num;
 	}
 
+	this.hasNextPage = ko.observable();
+	this.hasPreviousPage = ko.observable();
 
 	this.userDisplayCtrl = ko.computed(function(){
 		var start = this.currentPage() - 1;
@@ -67,6 +78,8 @@ function DisplayUsers(params) {
 			var totalPages = Math.ceil(records.length/perPage);
 			this.paginationArray( ko.utils.range(1, totalPages) );
 			this.users(filteredRecords);
+			this.hasNextPage( this.currentPage() < totalPages );
+			this.hasPreviousPage( this.currentPage() > 1 );
 		}
 	}, this);
 

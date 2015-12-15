@@ -16,8 +16,8 @@
 
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li data-bind="css:{active: page == 'users'}"><a href="/users.html">Users</a></li>
-          <li data-bind="css:{active: page == 'general'}"><a href="/general.html">General</a></li>
+          <li data-bind="css:{active: page == 'users'}"><a href="#" data-bind="click:goToPage.bind($data, 'users')">Users</a></li>
+          <li data-bind="css:{active: page == 'general'}"><a href="#" data-bind="click:goToPage.bind($data, 'general')">General</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="" data-bind="click:logout">Logout</a></li>
@@ -42,8 +42,9 @@
 
           <div class="form-group hide" data-bind="if:durationInEdit, css:{'show-inline':durationInEdit}">
             <input type="text" class="form-control" data-bind="value:trialDuration">
-            <a href="#" class="btn btn-success" data-bind="click:changeTrialDuration">Save</a>
+            <button type="button" class="btn btn-success" data-bind="click:changeTrialDuration, disable: trialDurationError().length > 0">Save</button>
             <a href="#" class="btn btn-danger" data-bind="click:cancelDurationEdit">Cancel</a>
+            <span class="validationMessage-inline" data-bind="validationMessage:trialDuration"></span>
           </div>
         </form>
         </div>
