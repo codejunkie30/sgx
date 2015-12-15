@@ -127,12 +127,12 @@ public class AdminController {
 		ret.setData("Account is not authorized.");
 		return ret;
 	}
-	
+	//Email / Status / Last Login / Last Payment / Trial Start / Trial Exp / Opted / Premium Start / Premium Expiration	
 	@RequestMapping(value = "excel", produces = "text/csv;charset=utf-8")
 	public void excel(@AuthenticationPrincipal UserDetailsWrapper user, HttpServletResponse response) throws IOException{
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() == AccountType.MASTER || acct.getType() == AccountType.ADMIN)
-			adminService.writeCsv(response, new String[] { "Username", "Created", "Status", "Expiration" }, "admin-excel-");
+			adminService.writeCsv(response, new String[] { "Email Address", "Status", "Last Login", "Last Payment", "Trial Start", "Trial Expiration", "Email Opt In", "Premium Start", "Premium Expiration" }, "admin-excel-");
 	}
 	
 	

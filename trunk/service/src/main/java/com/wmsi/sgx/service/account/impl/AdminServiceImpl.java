@@ -23,10 +23,12 @@ import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.UserLogin;
 import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.model.account.TrialResponse;
 import com.wmsi.sgx.repository.AccountRepository;
+import com.wmsi.sgx.repository.UserLoginRepository;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.service.PropertiesService;
 import com.wmsi.sgx.service.account.AccountService;
@@ -46,6 +48,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Autowired
 	private UserRepository userReposistory;
+	
+	@Autowired
+	private UserLoginRepository userLoginReposistory;
 	
 	@Autowired
 	private AccountService accountService;
@@ -135,26 +140,56 @@ public class AdminServiceImpl implements AdminService{
 		return ret;
 	}
 	
-	private List<AdminAccountModel> getList(Date period){
+	private List<String[]> getList(Date period){
 		User[] users = userReposistory.findByDate(period);
-		List<AdminAccountModel> retList = new ArrayList<AdminAccountModel>();
+		List<String[]> ret = new ArrayList<String[]>();
+		//Email / Status / Last Login / Last Payment / Trial Start / Trial Exp / Opted / Premium Start / Premium Expiration		
 		for(User u : users){
-			AdminAccountModel model = new AdminAccountModel();
+			List<UserLogin> logins = userLoginReposistory.findByUsername(u.getUsername());
 			List<Account> accounts = accountRepository.findByUsername(u.getUsername());
 			Collections.sort(accounts, new SortAccountByExpirationDateComparator());
+			String email = "null";
+			String status = "null";
+			String lastLogin = "null";
+			String lastPayment = "null";
+			String trialStart = "null";
+			String trialExpiration = "null";
+			String emailOpted = "null";
+			String premiumStart = "null";
+			String premiumExpiration = "null";
+			
 			if(accounts.size() != 0){
-				Account curr = accounts.get(0);
-				model.setUsername(u.getUsername());
-				model.setCreated_date(u.getCreatedDate());
-				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
-				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
-						.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH, curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
+				Account lastAcct = accounts.get(accounts.size() - 1);
+				Account curr = accounts.get(0);				
+				Date expCheck = getExpirationDate(curr);
 				
-				retList.add(model);
+				email = u.getUsername();
+				status = curr.getActive() ? curr.getType().toString() : "expired";
+				if(logins.size() > 0)
+					lastLogin = dateFmt(logins.get(0).getDate());
+				lastPayment = "null";
+				trialStart = dateFmt(u.getCreatedDate());
+				trialExpiration = lastAcct.getType() == AccountType.TRIAL ? dateFmt(getExpirationDate(lastAcct)) : "NULL";
+				emailOpted = u.getContactOptIn() ? "YES": "NO";
+				if(accounts.size() > 1){
+					lastPayment = dateFmt(curr.getCreatedDate());
+					premiumStart = dateFmt(curr.getCreatedDate());
+					premiumExpiration = dateFmt(expCheck);
+				}
+				
+				String[] values = new String[]{email, status, lastLogin, lastPayment, trialStart, trialExpiration, emailOpted, premiumStart, premiumExpiration};
+				ret.add(values);
 			}
 		}
-		return retList;
+		return ret;
+	}
+	
+	private Date getExpirationDate(Account acct){
+		Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil
+				.fromDate(acct.getStartDate()), Calendar.DAY_OF_MONTH, acct.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
+		Date expCheck = acct.getExpirationDate() != null ? acct.getExpirationDate() : exp;
+		
+		return expCheck;
 	}
 
 	@Override
@@ -285,17 +320,10 @@ public class AdminServiceImpl implements AdminService{
 	public void writeCsv(HttpServletResponse response, String[] header, String name)
 			throws IOException {
 		
-		
-		List<String[]> values = new ArrayList<String[]>();
 		Date date = new Date();
 		date.setTime(946684800000L);
 		
-		List<AdminAccountModel> retList = getList(date);
-		
-		for(AdminAccountModel model : retList){
-			String[] temp = new String[] { model.getUsername(), dateFmt(model.getCreated_date()), model.getStatus().toString(), dateFmt(model.getExpiration_date()) };
-			values.add(temp);
-		}
+		List<String[]> values = getList(date);
 				
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "_" + dateFmt(new Date()) + ".csv\"");
 		OutputStream resOs = response.getOutputStream();
