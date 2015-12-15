@@ -247,7 +247,9 @@ public class Company{
 	}
 
 	public void setEvEbitData(Double evEbitData) {
-		this.evEbitData = evEbitData;
+		if(evEbitData > 0){
+			this.evEbitData = evEbitData;
+		}else this.evEbitData = null;
 	}
 
 	public Date getFiscalYearEnd() {
@@ -375,8 +377,11 @@ public class Company{
 	}
 
 	public void setPeRatio(Double peRatio) {
-		this.peRatio = peRatio;
-	}
+		if(peRatio > 0){
+			this.peRatio = peRatio;
+		}else
+			this.peRatio = null;
+		}
 
 	public Date getPreviousCloseDate() {
 		return previousCloseDate;
