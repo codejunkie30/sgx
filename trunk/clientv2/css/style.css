@@ -1083,3 +1083,13 @@ background: url("../img/title-back.png");
   text-decoration: underline !important;
 }
 
+.additional-disclosure {
+  padding: 0 20px 1px;
+  text-align:left;
+  margin-top:20px;
+  padding-bottom:1px;
+}
+.additional-disclosure li {
+  text-align: left;
+}
+
