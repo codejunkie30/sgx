@@ -148,15 +148,15 @@ public class AdminServiceImpl implements AdminService{
 			List<UserLogin> logins = userLoginReposistory.findByUsername(u.getUsername());
 			List<Account> accounts = accountRepository.findByUsername(u.getUsername());
 			Collections.sort(accounts, new SortAccountByExpirationDateComparator());
-			String email = "null";
-			String status = "null";
-			String lastLogin = "null";
-			String lastPayment = "null";
-			String trialStart = "null";
-			String trialExpiration = "null";
-			String emailOpted = "null";
-			String premiumStart = "null";
-			String premiumExpiration = "null";
+			String email = "";
+			String status = "";
+			String lastLogin = "";
+			String lastPayment = "";
+			String trialStart = "";
+			String trialExpiration = "";
+			String emailOpted = "";
+			String premiumStart = "";
+			String premiumExpiration = "";
 			
 			if(accounts.size() != 0){
 				Account lastAcct = accounts.get(accounts.size() - 1);
@@ -167,9 +167,8 @@ public class AdminServiceImpl implements AdminService{
 				status = curr.getActive() ? curr.getType().toString() : "expired";
 				if(logins.size() > 0)
 					lastLogin = dateFmt(logins.get(0).getDate());
-				lastPayment = "null";
 				trialStart = dateFmt(u.getCreatedDate());
-				trialExpiration = lastAcct.getType() == AccountType.TRIAL ? dateFmt(getExpirationDate(lastAcct)) : "NULL";
+				trialExpiration = lastAcct.getType() == AccountType.TRIAL ? dateFmt(getExpirationDate(lastAcct)) : "";
 				emailOpted = u.getContactOptIn() ? "YES": "NO";
 				if(accounts.size() > 1){
 					lastPayment = dateFmt(curr.getCreatedDate());
