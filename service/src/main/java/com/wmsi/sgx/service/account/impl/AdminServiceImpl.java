@@ -164,7 +164,7 @@ public class AdminServiceImpl implements AdminService{
 				Date expCheck = getExpirationDate(curr);
 				
 				email = u.getUsername();
-				status = curr.getActive() ? curr.getType().toString() : "expired";
+				status = curr.getActive() ? curr.getType().toString() : "EXPIRED";
 				if(logins.size() > 0)
 					lastLogin = dateFmt(logins.get(0).getDate());
 				trialStart = dateFmt(u.getCreatedDate());
