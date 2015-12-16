@@ -54,7 +54,6 @@ var API = {
 
 
   post: function(url, successFN, params) {
-    console.log(params);
     fetch( url, {
       method:'post',
       credentials: 'same-origin',
@@ -85,10 +84,10 @@ var API = {
       self.hideLoading();
       if( response.type === 'MASTER' || response.type === 'ADMIN' ) {
         if(successCb && typeof successCb === 'function') {
-          successCb();
+          successCb(response.type);
         }
       }else {
-        var error = new CustomException(502, 'Unauthorized Access');
+        var error = new CustomException(502, 'This email address is not registered as an admin');
         if(failureCb && typeof failureCb === 'function') {
           failureCb();
         }
@@ -118,6 +117,7 @@ var API = {
 
 
   showLoading: function() {
+    // if (document.getElementById('customOverlay')) return;
     $('body').append($overlay);
   },
 

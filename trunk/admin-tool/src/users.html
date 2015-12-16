@@ -61,10 +61,9 @@
   <hr>
 
 <!-- ko if:searchResults().length > 0 -->
-  <display-users params="data:searchResults"></display-users>
+  <display-users params="data:searchResults, adminType: adminType"></display-users>
 <!-- /ko -->
 
-  <super-admin params="data: showSuperAdmin"></super-admin>
 
 
 

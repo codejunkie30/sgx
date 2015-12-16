@@ -31,14 +31,17 @@
       		<p class="help-block">This will expire the users account. <b>This cannot be undone</b></p>
         <!-- /ko -->
 
-        <div class="input-label">Change to an admin account</div>
-        <a href="#" class="btn btn-warning" data-bind="click:turnToAdmin">Turn to Admin</a>
-        <p class="help-block">This will turn the account into an admin account.</p>
+
+        <!-- ko if:adminType == 'MASTER' -->
+          <div class="input-label">Change to an admin account</div>
+          <a href="#" class="btn btn-warning" data-bind="click:turnToAdmin">Turn to Admin</a>
+          <p class="help-block">This will turn the account into an admin account.</p>
+        <!-- /ko -->
     
     <!-- /ko -->
 
 
-      <!-- ko if:userData().status() == 'ADMIN'-->
+      <!-- ko if:userData().status() == 'ADMIN' && adminType == 'MASTER' -->
       <div class="input-label">Remove admin account</div>
       <a href="#" class="btn btn-warning" data-bind="click:removeAdmin">Remove Admin</a>
       <p class="help-block">This will remove administrator rights from the account.</p>
@@ -48,7 +51,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <!-- ko ifnot:userData().status == 'ADMIN' || userData().status == 'MASTER' -->
+        <!-- ko ifnot:userData().status() == 'ADMIN' || userData().status() == 'MASTER' -->
         <button class="btn btn-primary" data-bind="click:saveChanges, disable:dateError().length > 0">Save changes</button>
         <!-- /ko -->
       </div>

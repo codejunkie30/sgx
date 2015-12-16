@@ -5,7 +5,7 @@ require('../bindingHandlers/dateFormat');    //modal
 
 
 function DisplayUsers(params) {
-	
+	this.adminType = params.adminType;
 	this.users = ko.observableArray([]);
 	this.currentPage = ko.observable(1);
 	this.showModal = ko.observable(false);

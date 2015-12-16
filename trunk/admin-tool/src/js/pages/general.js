@@ -6,21 +6,28 @@ var API = require('../api');
 
 
 function GeneralPage() {
-
+    var self = this;
     this.init = function(){
-        API.showLoading();
-        API.get( API.paths.getTrial, successFN.bind(this));
-
-        function successFN(response) {
-            console.log(response);
-            API.hideLoading();
-            this.trialDuration(response.trialDays);
-        }
+        API.verifyUser(
+            this.getTrialDuration.bind(this),
+            function() {
+                API.goToPage('/', 1500);
+            }
+        );
     }
 
     this.page = 'general';
     this.trialDuration = ko.observable().extend({number:true});
     this.durationInEdit = ko.observable(false);
+
+    this.getTrialDuration = function() {
+        API.showLoading();
+        API.get( API.paths.getTrial, successFN.bind(this));
+        function successFN(response) {
+            API.hideLoading();
+            this.trialDuration(response.trialDays);
+        }
+    }
 
     this.changeTrialDuration = function() {
         if(this.trialDurationError().length > 0) return;
@@ -50,12 +57,7 @@ function GeneralPage() {
 
 
     this.exportReport = function() {
-        var params = {'runtime':'javascript'}
-        API.post('/api/testpost', successFN, params );
-
-        function successFN(data) {
-            console.log(data);
-        }
+        window.open('/sgx/admin/excel');
     }
 
     this.trialDurationDisplay = ko.computed({

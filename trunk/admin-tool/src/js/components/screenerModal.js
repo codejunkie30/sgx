@@ -22,6 +22,8 @@ function modalVM( params ) {
 
 	$.extend(this, params.data);
 
+  this.adminType = params.adminType();
+
   this.accountExpiration = ko.observable().extend({mustBeGreaterDate: true});
 
   this.dateError = ko.validation.group(this.accountExpiration);
@@ -61,9 +63,9 @@ function modalVM( params ) {
     API.post( API.paths.deactivate, successFN.bind(this), params );
 
     function successFN(response) {
+      var userObj = response.data;
       toastr.success('Account successfully deactivated.');
-      this.userData().expiration_date(null);
-      this.userData().status('EXPIRED');
+      this.refreshUserData( userObj );
       API.hideLoading();
       this.showModal(false);
     }
@@ -78,10 +80,10 @@ function modalVM( params ) {
     API.post( API.paths.makeAdmin, successFN.bind(this), params );
 
     function successFN(response) {
-      var user = response.data;
+      var userObj = response.data;
       API.hideLoading();
       toastr.success('Account successfully made admin.');
-      this.userData().status( user.status );
+      this.refreshUserData( userObj );
       this.showModal(false);
     }
 
@@ -95,10 +97,10 @@ function modalVM( params ) {
     API.post( API.paths.removeAdmin, successFN.bind(this), params );
     
     function successFN(response) {
-      var user = response.data;
+      var userObj = response.data;
       API.hideLoading();
       toastr.success('Admin rights successfully removed.');
-      this.userData().status( user.status );
+      this.refreshUserData( userObj );
       this.showModal(false);
     }
 
@@ -114,13 +116,18 @@ function modalVM( params ) {
     API.post( API.paths.extendExpiration , successFN.bind(this), params );
 
     function successFN(response) {
-      this.userData().expiration_date( newExpirationDate );
-      this.userData().status( user.status );
+      var userObj = response.data;
+      this.refreshUserData( userObj );
       this.showModal(false);
       API.hideLoading();
       toastr.success('Your changes have been saved.');
     }
 
+  }
+
+  this.refreshUserData = function( userObj ) {
+    this.userData().expiration_date( userObj.expiration_date );
+    this.userData().status( userObj.status.toUpperCase() );
   }
 
   this.getDisplayText = function(user){

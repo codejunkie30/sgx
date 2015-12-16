@@ -19,11 +19,18 @@ require('../components/register-all-components');
 //var data = require('../data');
 
 function ScreenerPage() {
+	var self = this;
 	this.page = 'users';
+	this.adminType = ko.observable();
 	this.init = function() {
-		API.verifyUser(null, function(){
-			API.goToPage('/', 1500);
-		});
+		API.verifyUser(
+			function( ADMIN_TYPE ){ //success callback
+				self.adminType( ADMIN_TYPE );
+			}, 
+			function(){  			//failure callback
+				API.goToPage('/', 1500);
+			}
+		);
 	}
 	this.userEmail = ko.observable().extend({ required: true, email:true });
 	this.dateCreated = ko.observable().extend({required: true });
