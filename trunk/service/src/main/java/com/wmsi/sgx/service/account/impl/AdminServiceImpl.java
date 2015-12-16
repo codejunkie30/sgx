@@ -169,7 +169,7 @@ public class AdminServiceImpl implements AdminService{
 					lastLogin = dateFmt(logins.get(0).getDate());
 				trialStart = dateFmt(u.getCreatedDate());
 				trialExpiration = lastAcct.getType() == AccountType.TRIAL ? dateFmt(getExpirationDate(lastAcct)) : "";
-				emailOpted = u.getContactOptIn() ? "YES": "NO";
+				emailOpted = curr.getContactOptIn() ? "YES": "NO";
 				if(accounts.size() > 1){
 					lastPayment = dateFmt(curr.getCreatedDate());
 					premiumStart = dateFmt(curr.getCreatedDate());
