@@ -161,7 +161,7 @@ CREATE TABLE [dbo].[users](
 ) ON [PRIMARY]
 
 GO
-INSERT [dbo].[accounts] ([id], [user_id], [type], [active], [always_active], [contact_opt_in], [start_dt], [expiration_dt], [created_by], [created_dt], [updated_by], [updated_dt]) VALUES (1, 1, N'TRIAL', 1, 1, 0, CAST(N'2015-09-03 13:42:45.300' AS DateTime), CAST(N'2015-09-17 13:42:45.307' AS DateTime), 1, CAST(N'2015-09-03 13:42:45.347' AS DateTime), 1, CAST(N'2015-09-03 13:42:45.347' AS DateTime))
+INSERT [dbo].[accounts] ([id], [user_id], [type], [active], [always_active], [contact_opt_in], [start_dt], [expiration_dt], [created_by], [created_dt], [updated_by], [updated_dt]) VALUES (1, 1, N'MASTER', 1, 1, 0, CAST(N'2015-09-03 13:42:45.300' AS DateTime), CAST(N'2015-09-17 13:42:45.307' AS DateTime), 1, CAST(N'2015-09-03 13:42:45.347' AS DateTime), 1, CAST(N'2015-09-03 13:42:45.347' AS DateTime))
 INSERT [dbo].[authorities] ([id], [user_id], [authority]) VALUES (2, 1, N'ROLE_TRIAL')
 INSERT [dbo].[authorities] ([id], [user_id], [authority]) VALUES (1, 1, N'ROLE_USER')
 INSERT [dbo].[user_verification] ([id], [user_id], [token], [redeemed], [date]) VALUES (1, 1, N'1k4j58ochv51b96vl1pkj9dcqt', 1, CAST(N'2015-09-03 13:41:09.913' AS DateTime))
