@@ -12,3 +12,26 @@ Need to upgrade java crypto packages on server
 	mv UnlimitedJCEPolicy/* .
 
 Need to drop enets certs on /mnt/sgx-ecomm/
+
+Secure/HttpOnly
+
+	http://support.filecatalyst.com/index.php?/Knowledgebase/Article/View/209/0/securing-session-cookies-in-tomcat-with--httponly-and-securetrueFZ
+
+	context.xml (Context)
+		useHttpOnly="true"
+
+	server.xml (Connector)
+		secure="true"
+		proxyPort="443"
+
+
+	nginx
+
+    	index index.html;
+    	proxy_set_header        X-Real-IP $remote_addr;
+    	proxy_set_header        X-Forwarded-Host $host;
+    	proxy_set_header        X-Forwarded-Server $host;
+    	proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_set_header        Host $http_host;
+    	proxy_pass              http://localhost:8080;
+    	proxy_set_header X-Forwarded-Proto https;
