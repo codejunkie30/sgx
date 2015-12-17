@@ -132,7 +132,7 @@ var API = {
 
   goToPage: function(dest, delay) {
     //add pathname for development
-    var isDev = location.href.indexOf('fakemsi') !== -1? true: false;
+    var isDev = (location.href.indexOf('fakemsi') !== -1 || location.hostname === 'localhost') ? true: false;
     var newDest;
 
     if ( !isDev ){
