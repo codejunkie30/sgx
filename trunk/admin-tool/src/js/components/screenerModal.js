@@ -9,7 +9,7 @@ var moment = require('moment');
 
 ko.validation.rules['mustBeGreaterDate'] = {
   validator: function(val) {
-    var today = moment();
+    var today = moment().startOf('day').subtract(1, 'minutes');
     var newDay = moment(val, 'MM-DD-YYYY');
     return newDay.isAfter(today);
   },  
