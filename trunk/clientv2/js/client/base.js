@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment","knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment) {
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -571,17 +571,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						if (data.type == 'TRIAL'){
-							var start = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.startDate));
-							var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));
-							var now = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(new Date()));
-							
-							var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
-							var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
-							
-							if (daysRemaining == 0) { daysRemaining = 1 }
-							
+              var start = moment(data.startDate);
+              var end = moment(data.expirationDate);
+              var trialPeriod = end.diff(start, 'days');
+              var daysRemaining = end.diff(moment().startOf('day'), 'days');
+
 							if (daysRemaining >= 1) {
-	                            PAGE.userStatus('TRIAL');
+	              PAGE.userStatus('TRIAL');
 								PAGE.libLoggedIn(true);
 								PAGE.libTrialExpired(false);
 								PAGE.currentDay(daysRemaining);
@@ -596,8 +592,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						if (data.type == 'EXPIRED'){
-                            PAGE.userStatus('EXPIRED');
-                            PAGE.libTrialExpired(true);						
+              PAGE.userStatus('EXPIRED');
+              PAGE.libTrialExpired(true);						
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialPeriod(true);
 							PAGE.libAlerts(true);
