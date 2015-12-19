@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService{
 	 */
 	
 	@Override
-	@Secured("ROLE_USER")
+	//@Secured("ROLE_USER")
 	public AccountModel getAccountForUsername(String username){
 		
 		// TODO, ensure there is only ever one active account
@@ -77,7 +77,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 	
 	@Override
-	@Secured("ROLE_USER")
+	//@Secured("ROLE_USER")
 	public AccountModel updateAccount(UpdateAccountModel dto){
 		
 		List<Account> accounts = accountRepository.findByUsername(dto.getEmail());		

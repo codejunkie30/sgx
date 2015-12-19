@@ -11,13 +11,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Immutable;
+import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Objects;
 
 @Entity(name = "authorities")
 @Table(name="authorities")
 @Immutable
-public class Authority{
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Authority.class)
+public class Authority {
 
 	public Authority(){}
 	

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -20,6 +21,8 @@ import com.wmsi.sgx.model.WatchlistRenameModel;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.repository.WatchlistRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
 import com.wmsi.sgx.service.account.WatchlistEmailService;
@@ -42,31 +45,34 @@ public class WatchlistController {
 	@Autowired
 	private WatchlistEmailService emailService;
 	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;	
+	
 	@RequestMapping(value="watchlist/sendEmail")
-	public void sendEmail(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
-		User usr = userRepository.findByUsername(user.getUsername());
+	public void sendEmail(HttpServletRequest request, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		emailService.getEmailsForUser(usr);
 	}
 	
 	@RequestMapping(value = "watchlist/create")
-	public List<WatchlistModel> createWatchlist(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
-		User usr = userRepository.findByUsername(user.getUsername());		
+	public List<WatchlistModel> createWatchlist(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());		
 		String watchlistName = response.getMessage();
 		
 		return watchlistService.createWatchlist(usr, watchlistName);		
 	}
 	
 	@RequestMapping(value = "watchlist/delete")
-	public List<WatchlistModel> deleteWatchlist(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
-		User usr = userRepository.findByUsername(user.getUsername());		
+	public List<WatchlistModel> deleteWatchlist(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());		
 		String id = response.getMessage();
 		watchlistService.deleteWatchlist(usr, id);		
 		
 		return watchlistService.getWatchlist(usr);
 	}
 	@RequestMapping(value = "watchlist/get")
-	public Map<String, Object> getAllWatchList(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody Response response){
-		User usr = userRepository.findByUsername(user.getUsername());
+	public Map<String, Object> getAllWatchList(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		Map<String, Object> ret = new HashMap<String,Object>();
 		ret.put("removed", watchlistService.cleanWatchlist(usr));
 		ret.put("watchlists", watchlistService.getWatchlist(usr));		
@@ -74,16 +80,16 @@ public class WatchlistController {
 	}
 	
 	@RequestMapping(value = "watchlist/edit")
-	public List<WatchlistModel> editWatchList(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistModel model){
-		User usr = userRepository.findByUsername(user.getUsername());
+	public List<WatchlistModel> editWatchList(HttpServletRequest request, @RequestBody WatchlistModel model){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		watchlistService.editWatchlist(usr, model);
 		
 		return watchlistService.getWatchlist(usr);		
 	}
 	
 	@RequestMapping(value = "watchlist/rename")
-	public List<WatchlistModel> renameWatchList(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistRenameModel model){
-		User usr = userRepository.findByUsername(user.getUsername());
+	public List<WatchlistModel> renameWatchList(HttpServletRequest request, @RequestBody WatchlistRenameModel model){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		String name = model.getWatchlistName();
 		String id = model.getId();
 		watchlistService.renameWatchlist(usr, name, id );
@@ -92,12 +98,22 @@ public class WatchlistController {
 	}	
 	
 	@RequestMapping(value = "watchlist/addCompanies")
-	public Response addCompany(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistAddCompany model){
-		User usr = userRepository.findByUsername(user.getUsername());
+	public Response addCompany(HttpServletRequest request, @RequestBody WatchlistAddCompany model){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		String id = model.getId();
 		List<String> companies = model.getCompanies();
 		
 		return watchlistService.addCompanies(usr, id, companies);
 		
+	}
+	
+	public User findUserFromToken(HttpServletRequest request){
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		User user = null;
+		if(token != null)
+		 return user = tokenHandler.parseUserFromToken(token);
+		return null;
 	}
 }
