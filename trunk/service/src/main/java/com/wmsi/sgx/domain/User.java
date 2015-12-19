@@ -15,10 +15,14 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Objects;
 
 @Entity(name = "Users")
 @Table(name="users", uniqueConstraints= {@UniqueConstraint(columnNames={"username"})})
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = User.class)
 public class User extends AbstractAuditable{
 
 	@Id
@@ -63,7 +67,6 @@ public class User extends AbstractAuditable{
 		
 		return added;
 	}
-	
 	/**
 	 * Remove a role type for this user
 	 * @param role

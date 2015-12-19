@@ -20,20 +20,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wmsi.sgx.security.CustomLoginFilter;
 import com.wmsi.sgx.security.CustomUserDetailsService;
 import com.wmsi.sgx.security.RestAuthenticationEntryPoint;
 import com.wmsi.sgx.security.RestAuthenticationFailureHandler;
 import com.wmsi.sgx.security.RestAuthenticationSuccessHandler;
 import com.wmsi.sgx.security.RestLogoutSuccessHandler;
 import com.wmsi.sgx.security.SecureTokenGenerator;
+import com.wmsi.sgx.security.token.StatelessLoginFilter;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.service.account.UserService;
 
-/*@Configuration
+@Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.security"})
 @EnableWebSecurity
 @EnableWebMvcSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)*/
-public class SecurityConfig {
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	public DataSource dataSource;
@@ -43,6 +45,9 @@ public class SecurityConfig {
 
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
+	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
 	
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -57,43 +62,33 @@ public class SecurityConfig {
 	@Autowired
 	public RestAuthenticationEntryPoint authenticationEntry;
 	
-	/*@Override
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http
 		
 		.exceptionHandling().authenticationEntryPoint(authenticationEntry)
+		
 
-		.and()
-		.authorizeRequests()
-		.antMatchers("/user/**").permitAll()
-		.antMatchers("/company/**").permitAll()
-		.antMatchers("/search/**").permitAll()
-		.antMatchers("/price/**").permitAll()
-		.antMatchers("/account/**").hasRole("USER")
-		.antMatchers("/purchase/**").permitAll()
-		.antMatchers("/watchlist/**").hasRole("USER")
-		.antMatchers("/properties/**").permitAll()
-		.antMatchers("/admin/**").hasRole("USER")
-		.anyRequest().authenticated()
+		
 
 		.and()
 
 		.csrf().disable()
 		
 		.formLogin()		     
-			.loginProcessingUrl("/login").permitAll()
+			.loginProcessingUrl("/login")
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.successHandler(authenticationSuccessHandler)
 			.failureHandler(authenticationFailureHandler)
 			
 		.and()
-		.addFilterBefore(this.customLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-		.logout().logoutUrl("/logout").permitAll()
+		.addFilterBefore(this.statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+		.logout().logoutUrl("/logout")
 		.logoutSuccessHandler(logoutSuccessHandler);
 		
-	}*/
+	}
 
 	@Autowired
 	public RestLogoutSuccessHandler logoutSuccessHandler;
@@ -103,12 +98,17 @@ public class SecurityConfig {
 
 	@Autowired
 	public RestAuthenticationFailureHandler authenticationFailureHandler;
+	
+	
 
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return customUserDetailsService;
 	}
-
+	
+	@Autowired
+	private UserService userService;
+	
 	@Bean
 	public DaoAuthenticationProvider authProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -123,17 +123,17 @@ public class SecurityConfig {
 	}
 	
 	
-	/*@Bean
+	@Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }*/
+    }
 	
 	@Bean
-	CustomLoginFilter customLoginFilter() throws Exception {
-		CustomLoginFilter customLoginFilter = new CustomLoginFilter(authenticationSuccessHandler, authenticationFailureHandler, objectMapper);
-		//customLoginFilter.setAuthenticationManager(this.authenticationManagerBean());
-	  return customLoginFilter;
+	StatelessLoginFilter statelessLoginFilter() throws Exception {
+		StatelessLoginFilter statelessLoginFilter = new StatelessLoginFilter(authenticationSuccessHandler, authenticationFailureHandler, tokenAuthenticationService, objectMapper, userService);
+		statelessLoginFilter.setAuthenticationManager(this.authenticationManagerBean());		
+	  return statelessLoginFilter;
 	}
 
 }

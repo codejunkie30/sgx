@@ -1,5 +1,6 @@
 package com.wmsi.sgx.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.distribution.Distributions;
 import com.wmsi.sgx.model.distribution.DistributionsRequest;
 import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
@@ -29,16 +32,23 @@ public class DistributionsController{
 	
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;	
 
 	@RequestMapping(value="search/distributions", method = RequestMethod.POST)
-	public Distributions postChartHistograms(@Valid @RequestBody DistributionsRequest req) throws ServiceException{		
+	public Distributions postChartHistograms(@Valid @RequestBody DistributionsRequest req, HttpServletRequest request) throws ServiceException{		
 		User u = null;
 		AccountType accountType=null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
-			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
-			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
-			accountType = accountModel.getType();
+		
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		
+		if(token != null){
+		u = tokenHandler.parseUserFromToken(token);
+		AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
+		accountType = accountModel.getType();
 				
 		}else{
 			

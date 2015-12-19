@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	@Transactional
-	@PreAuthorize("hasRole('ROLE_USER')")
+	//@PreAuthorize("hasRole('ROLE_USER')")
 	public Boolean changePassword(UserModel dto) throws UserNotFoundException{
 		
 		User user = getUserByUsername(dto.getEmail());

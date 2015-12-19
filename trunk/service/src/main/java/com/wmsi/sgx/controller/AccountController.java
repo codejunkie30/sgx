@@ -1,29 +1,25 @@
 package com.wmsi.sgx.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.wiz.enets2.transaction.umapi.CreditMerchant;
 import com.wiz.enets2.transaction.umapi.Merchant;
 import com.wiz.enets2.transaction.umapi.data.CreditTxnReq;
 import com.wiz.enets2.transaction.umapi.data.TxnReq;
-import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -32,7 +28,8 @@ import com.wmsi.sgx.model.account.PasswordChangeModel;
 import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.security.SecureTokenGenerator;
-import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.PremiumVerificationService;
 import com.wmsi.sgx.service.account.RegistrationService;
@@ -71,14 +68,14 @@ public class AccountController{
 	@Value ("${enets.cancel.endpoint}")
 	public String cancel;
 	
-	//@Autowired
-	//private AccountPurchaseService accountPurchaseService;	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;		
 	
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
-	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{
+	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{
 		
-		AccountModel ret = accountService.getAccountForUsername(user.getUsername());
+		AccountModel ret = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(ret.getType() == AccountType.MASTER || ret.getType() == AccountType.ADMIN){
 			ret.setType(AccountType.PREMIUM);
 		}
@@ -86,21 +83,21 @@ public class AccountController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(@AuthenticationPrincipal UserDetailsWrapper user, @Valid @RequestBody PasswordChangeModel pass) throws UserNotFoundException, MessagingException{
-	
+	public @ResponseBody Boolean changePassword(HttpServletRequest request, @Valid @RequestBody PasswordChangeModel pass) throws UserNotFoundException, MessagingException{
+		User user = findUserFromToken(request);
 		String username = user.getUsername();
 		
 		UserModel dto = new UserModel();
 		dto.setEmail(username);
 		dto.setPassword(pass.getPassword());
 		dto.setPasswordMatch(pass.getPasswordMatch());
-		dto.setContactOptIn(user.getUser().getContactOptIn());
+		dto.setContactOptIn(user.getContactOptIn());
 		return registrationService.changePassword(dto);
 	}
 	
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public @ResponseBody AccountModel updateAccount(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException{
-		
+	public @ResponseBody AccountModel updateAccount(HttpServletRequest request, @RequestBody UpdateAccountModel dto) throws UserNotFoundException{
+		User user = findUserFromToken(request);
 		String username = user.getUsername();
 		dto.setEmail(username);
 		return accountService.updateAccount(dto);
@@ -108,8 +105,8 @@ public class AccountController{
 	}
 	
 	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST, produces="application/json")
-	public Response getMessage(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
-		
+	public Response getMessage(HttpServletRequest request, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
+		User user = findUserFromToken(request);
 		String username = user.getUsername();
 		User usr = userRepository.findByUsername(username);
 		String token = premiumService.createPremiumToken(usr);
@@ -175,4 +172,13 @@ public class AccountController{
 		return sMsg;
 	}
 	
+	public User findUserFromToken(HttpServletRequest request){
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		User user = null;
+		if(token != null)
+		 return user = tokenHandler.parseUserFromToken(token);
+		return null;
+	}
 }

@@ -2,10 +2,10 @@ package com.wmsi.sgx.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.model.account.TrialResponse;
-import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.PropertiesService;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.AdminService;
@@ -38,30 +40,33 @@ public class AdminController {
 	@Autowired
 	private TrialProperty getTrial;
 	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;	
+	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
-	public @ResponseBody AccountModel account(@AuthenticationPrincipal UserDetailsWrapper user) throws UserExistsException{		
-		return accountService.getAccountForUsername(user.getUsername());
+	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{		
+		return accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 	}
 	
 	@RequestMapping(value="getTrial", method = RequestMethod.POST)
-	public AdminResponse getTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse getTrial(HttpServletRequest request, @RequestBody TrialResponse response){
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		return adminService.getTrialDays();
 	}
 	
 	@RequestMapping(value= "setTrial", method = RequestMethod.POST)
-	public AdminResponse setTrial(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody TrialResponse response){		
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse setTrial(HttpServletRequest request, @RequestBody TrialResponse response){		
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		return adminService.trialDay(response);
 	}
 	
 	@RequestMapping(value = "findUser", method = RequestMethod.POST)
-	public AdminResponse findUser(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse findUser(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		
@@ -69,8 +74,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "searchDate", method = RequestMethod.POST)
-	public AdminResponse searchByDate(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse searchByDate(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		return adminService.searchByDate(response.getDateParam());
@@ -78,8 +83,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "deactivate", method = RequestMethod.POST)
-	public AdminResponse deactivate(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse deactivate(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		return adminService.deactivate(response.getId());
@@ -87,8 +92,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "extension", method = RequestMethod.POST)
-	public AdminResponse extension(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse extension(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
 		return adminService.extension(response.getId(), response.getDateParam());
@@ -96,8 +101,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "setAdmin", method = RequestMethod.POST)
-	public AdminResponse setAdmin(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse setAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
 		if(acct.getType() == AccountType.MASTER){
@@ -109,8 +114,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "removeAdmin", method = RequestMethod.POST)
-	public AdminResponse removeAdmin(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public AdminResponse removeAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
 		if(acct.getType() == AccountType.MASTER){
@@ -129,10 +134,20 @@ public class AdminController {
 	}
 	//Email / Status / Last Login / Last Payment / Trial Start / Trial Exp / Opted / Premium Start / Premium Expiration	
 	@RequestMapping(value = "excel", produces = "text/csv;charset=utf-8")
-	public void excel(@AuthenticationPrincipal UserDetailsWrapper user, HttpServletResponse response) throws IOException{
-		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
+	public void excel(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 		if(acct.getType() == AccountType.MASTER || acct.getType() == AccountType.ADMIN)
 			adminService.writeCsv(response, new String[] { "Email Address", "Status", "Last Login", "Last Payment", "Trial Start", "Trial Expiration", "Email Opt In", "Premium Start", "Premium Expiration" }, "admin-excel-");
+	}
+	
+	public User findUserFromToken(HttpServletRequest request){
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		User user = null;
+		if(token != null)
+		 return user = tokenHandler.parseUserFromToken(token);
+		return null;
 	}
 	
 	

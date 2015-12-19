@@ -42,7 +42,8 @@ import org.thymeleaf.templateresolver.UrlTemplateResolver;
 		@PropertySource(value="classpath:META-INF/properties/${spring.profiles.active:dummy}.application.properties"),
 		@PropertySource(value="${config.file:classpath:META-INF/properties/dummy.application.properties}", ignoreResourceNotFound=false)
 	})
-@Import(value = {WebAppConfig.class, DataConfig.class, SearchConfig.class, SecurityConfig.class })
+//@Import(value = {WebAppConfig.class, DataConfig.class, SearchConfig.class, SecurityConfig.class })
+@Import(value = {WebAppConfig.class, DataConfig.class, SearchConfig.class, StatelessSecurityConfig.class})
 public class AppConfig{
 
 	@Autowired

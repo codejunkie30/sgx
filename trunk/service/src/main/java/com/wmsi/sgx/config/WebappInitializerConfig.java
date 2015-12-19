@@ -12,7 +12,8 @@ public class WebappInitializerConfig extends AbstractAnnotationConfigDispatcherS
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[]{AppConfig.class, DataConfig.class, SearchConfig.class, SecurityConfig.class, QuartzConfig.class};
+		//return new Class[]{AppConfig.class, DataConfig.class, SearchConfig.class, SecurityConfig.class, QuartzConfig.class};
+		return new Class[]{AppConfig.class, DataConfig.class, SearchConfig.class, StatelessSecurityConfig.class, QuartzConfig.class};
 	}
 
 	@Override

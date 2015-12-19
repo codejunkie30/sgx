@@ -1,11 +1,12 @@
 package com.wmsi.sgx.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,20 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.model.PriceCall;
 import com.wmsi.sgx.model.WatchlistAddCompany;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.search.CompanyPrice;
 import com.wmsi.sgx.model.search.IdSearch;
-import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
+
 
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
@@ -42,12 +45,15 @@ public class PriceController {
 	@Autowired
 	private AccountService accountService;
 	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
+	
 	private String market = "XSES";	
 	
 	@RequestMapping(value="/price")
-	public Map<String, Price> getPrice(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody IdSearch query) throws CompanyServiceException {
+	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException {
 		Price p = new Price();
-		
+		User user = findUserFromToken(request);
 		AccountModel acct = new AccountModel();
 		if(user != null)
 			acct = accountService.getAccountForUsername(user.getUsername());
@@ -74,7 +80,7 @@ public class PriceController {
 	}
 	
 	@RequestMapping(value="/price/companyPrices")
-	public Map<String, List<CompanyPrice>> getCompanyPrices(@AuthenticationPrincipal UserDetailsWrapper user, @RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
+	public Map<String, List<CompanyPrice>> getCompanyPrices(@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
 		
 		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies()));
@@ -105,6 +111,16 @@ public class PriceController {
 		ret.put("pricingHistory", service.getPricingHistory(market, priceCall.getId(), priceCall.getDate()));
 		return ret;
 		
+	}
+	
+	public User findUserFromToken(HttpServletRequest request){
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		User user = null;
+		if(token != null)
+		 return user = tokenHandler.parseUserFromToken(token);
+		return null;
 	}
 
 }
