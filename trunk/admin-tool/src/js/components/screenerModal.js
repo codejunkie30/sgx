@@ -135,7 +135,7 @@ function modalVM( params ) {
     switch(ko.unwrap(user.status)) {
       case 'TRIAL':
         var a = moment(user.expiration_date());
-        var b = moment();
+        var b = moment().startOf('day');
         var daysLeft = a.diff(b, 'days');
         this.accountType('Trial');
         return 'This account has '+daysLeft+' days left in trial.';
