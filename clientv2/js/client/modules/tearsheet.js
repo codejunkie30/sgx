@@ -12,7 +12,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 
 			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = { id: this.ticker };
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { 
 				if (data.errorCode == 4004) {

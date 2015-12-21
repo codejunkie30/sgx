@@ -51,7 +51,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			this.factors(tmp.factors);
 			
 			// init charts
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = { id: me.ticker };
 			var tearendpoint = me.fqdn + "/sgx/company/priceHistory";
 			UTIL.handleAjaxRequest(tearendpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
@@ -90,7 +90,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			$(div).attr("start-dt", start).attr("end-dt", end);
 			
 			var endpoint = parent.fqdn + "/sgx/search/keydevs";
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = { tickerCode: parent.ticker, from: Highcharts.dateFormat("%Y-%m-%e", start), to: Highcharts.dateFormat("%Y-%m-%e", end) };
 			
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {

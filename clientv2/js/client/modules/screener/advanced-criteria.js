@@ -104,7 +104,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     		var tmpF = finished;
     		var endpoint = this.screener.fqdn + "/sgx/search/distributions";
-			var postType = 'GET';
+			var postType = 'POST';
     		var processFields = [], ignoreFields = []; 
 
     		// some fields require additional steps, remove these from this service
@@ -149,7 +149,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         handleDistributions: function(data) {
         	
         	var textFields = [];
-        	
+        	if(!data) return;
         	// text ranges
         	$.each(data.distributions, function(idx, dist) {
         		

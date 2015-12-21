@@ -89,17 +89,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.showLoading();
 			var displayMessage = ALERTS.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
-			var postType = 'GET';
+			var postType = 'POST';
     	var params = {};
-			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params, 
-				undefined, 
 				function(data, textStatus, jqXHR){
 					PAGE.hideLoading();
+					console.log(data);
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
@@ -114,8 +112,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					
 				}, 
-				PAGE.customSGXError,
-				jsonpCallback);
+				PAGE.customSGXError);
 			
 			//Alerts select lists
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
@@ -238,14 +235,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
     	var params = { "message": ALERTS.newWLName() };
-			var jsonp = 'jsonp';
-			var jsonpCallback = 'jsonpCallback';			
 			PAGE.showLoading();
-			UTIL.handleAjaxRequest(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
-				params, 
-				undefined, 
+				params,
 				function(data, textStatus, jqXHR){					
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
@@ -264,8 +258,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}						
 					});
 				}, 
-				PAGE.customSGXError,
-				jsonpCallback);	
+				PAGE.customSGXError);	
 			
 			
 			//Clears add WL after submit
@@ -293,10 +286,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			self._showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/price/companyPrices";
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = { "companies": data };
 
 			$.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) })
+			//$.getJSON(endpoint, JSON.stringify(params) )
 
 			.done(function(data){
 				ALERTS.displayListCompanies(data.companyPrice);

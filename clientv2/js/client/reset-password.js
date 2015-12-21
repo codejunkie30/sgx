@@ -90,7 +90,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var displayMessage = RESETPASS.messages.messages[0];
 			PAGE.showLoading();
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,

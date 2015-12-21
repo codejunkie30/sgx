@@ -543,19 +543,24 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$('body').prepend($('<div id="loading"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		checkStatus: function(){
-            var endpoint = PAGE.fqdn + "/sgx/account/info";
-			//var endpoint = 'http://192.168.1.37:8001' + "/sgx/account/info";
+      var endpoint = PAGE.fqdn + "/sgx/account/info";
+      // var endpoint = 'https://localhost:2443' + "/sgx/account/info";
+      // var endpoint = 'https://sgx.mymsi.com:3443/sgx/account/info';
 			var postType = 'POST';
 			var params = {};
-			
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password'){
+					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password' || 
+                data.reason == 'Authentication token not Valid'){
 						PAGE.premiumUser(false);
-                        PAGE.userStatus('UNAUTHORIZED');
+            PAGE.userStatus('UNAUTHORIZED');
+            var currentPg = PAGE.getParameterByName('page');
+            if ( currentPg == 11 || currentPg == 18) {
+              top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
+            }
 					} else {
 					
 						PAGE.premiumUser(true);
@@ -633,7 +638,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					PAGE.selectedValue.subscribe(function(data){});
 					
 					var endpoint = PAGE.fqdn + "/sgx/watchlist/get";
-					var postType = 'GET';
+					var postType = 'POST';
 					var params = {};
 					var jsonp = 'jsonp';
 					var jsonpCallback = 'jsonpCallback';
@@ -649,7 +654,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 							}
 							PAGE.finalWL(data.watchlists.sort(sortByName));
-							//PAGE.finalWL(data.watchlists);
 						}, 
 						PAGE.customSGXError,
 						jsonpCallback);					
@@ -771,7 +775,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				jsonpCallback);
 		},
 		/**
-         * used for custom error function passed to handleAjaxRequest & handleAjaxRequestAccount
+         * used for custom error function passed to handleAjaxRequest & handleAjaxRequestJSON
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {

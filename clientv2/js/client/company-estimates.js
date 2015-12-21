@@ -112,7 +112,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
 			var endpoint = me.fqdn + "/sgx/company/estimates";
-			var postType = 'GET';
+			var postType = 'POST';
     		var params = { id: me.ticker };
             var jsonp = 'callback';
             var jsonpCallback = 'jsonpCallback';

@@ -61,6 +61,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		signIn: function(me){
 			var displayMessage = SIGNIN.messages.messages[0];			
 			var endpoint = me.fqdn + "/sgx/login";
+			// var endpoint = 'https://localhost:2443/sgx/login';
+			// var endpoint = 'https://sgx.mymsi.com:3443/sgx/login';
 			var postType = 'POST';
 			var params = {username:me.email(), password:me.password()};
 			
@@ -68,12 +70,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	            return
 	        }
 			PAGE.showLoading();
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					if (data == '' || data == undefined){
+					console.log(data);
+					if (typeof data === 'string' && data.length > 10){
+						UTIL.saveAuthToken(data);
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 						PAGE.hideLoading();
 					} else {

@@ -104,7 +104,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.showLoading();
 			
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,
@@ -132,7 +132,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		getTrialDuration: function(){
 			var endpoint = PAGE.fqdn + "/sgx/properties/trialDuration";
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = {};
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';

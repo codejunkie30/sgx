@@ -157,7 +157,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var postType = 'POST';
 			var params = {};			
 			
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,

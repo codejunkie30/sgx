@@ -242,7 +242,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       //this.trackPage("SGX Company Financials - " + this.companyInfo.companyName);
       
       var endpoint = this.fqdn + "/sgx/company/priceHistory";
-      var postType = 'GET';
+      var postType = 'POST';
       var params = { id: this.ticker };
 
       UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.initIndicatorsChart(data)  }, PAGE.customSGXError, undefined);
@@ -282,7 +282,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
       //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
-      var postType = 'GET';
+      var postType = 'POST';
       var params = { id: self.ticker };
       UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
@@ -375,7 +375,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
       //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
-      var postType = 'GET';
+      var postType = 'POST';
       var params = { id: self.ticker };
 
       UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
