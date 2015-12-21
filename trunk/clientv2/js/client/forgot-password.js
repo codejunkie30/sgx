@@ -62,7 +62,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	            return
 	        }
 			PAGE.showLoading();
-			UTIL.handleAjaxRequestAccount(
+			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
 				params,

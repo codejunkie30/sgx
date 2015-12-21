@@ -1,5 +1,5 @@
 
-define(["jquery"], function($) {
+define(["jquery", "moment"], function($, moment) {
 	
 	UTILS = {
 			
@@ -58,6 +58,30 @@ define(["jquery"], function($) {
 			}
 			return context[func].apply(this||window, args);
 		},
+
+        //X-AUTH-TOKEN
+        saveAuthToken: function(token) {
+            if(!token) return;
+            //hopefully store is in at this time
+            store.set('token', {value: token, expiration: moment().add(1,'hours').valueOf()});
+        },
+
+
+        retrieveAuthToken: function() {
+            var token = store.get('token');
+            if(token && moment().valueOf() < token.expiration ) {
+                return token.value;
+            }else {
+                return false;
+            }
+
+
+        },
+
+        deleteAuthToken: function() {
+            store.remove('token')  
+        },
+
 		
 		/**
 		 * handle an ajax request
@@ -72,37 +96,45 @@ define(["jquery"], function($) {
         
 		handleAjaxRequest: function(endpoint, postType, data, jsonp, successFN, errorFN, jsonpCallback) {
         	
-        	var config = {
-                url: endpoint,
-                type: postType,
-                dataType: 'jsonp',
-                scriptCharset: "utf-8",
-                contentType: 'application/json',
-                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
-                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
-        	};
+   //      	var config = {
+   //              url: endpoint,
+   //              type: postType,
+   //              dataType: 'jsonp',
+   //              scriptCharset: "utf-8",
+   //              contentType: 'application/json',
+   //              success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+   //              error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+   //      	};
         	
-        	// add data request
-        	if (typeof data !== "undefined") {
-        		config.data = { 'json': JSON.stringify(data) };
-        	}
+   //      	// add data request
+   //      	if (typeof data !== "undefined") {
+   //      		config.data = { 'json': JSON.stringify(data) };
+   //      	}
         	
-			// add jsonp callback is exists
-        	if (typeof jsonp !== "undefined") {
-        		config.jsonp = jsonp;
-        	}
+			// // add jsonp callback is exists
+   //      	if (typeof jsonp !== "undefined") {
+   //      		config.jsonp = jsonp;
+   //      	}
+
+   //          var token = this.retrieveAuthToken();
+   //          if (token !== false) {
+   //              config.beforeSend=function(request) {
+   //                  request.setRequestHeader('X-AUTH-TOKEN', token.value);
+   //              }
+   //          }
 			
-        	// add callback function name if exists
-        	if (typeof jsonpCallback !== "undefined") {
-        		config.jsonpCallback = jsonpCallback;
-        	}
+   //      	// add callback function name if exists
+   //      	if (typeof jsonpCallback !== "undefined") {
+   //      		config.jsonpCallback = jsonpCallback;
+   //      	}
         	
-        	$.ajax(config);
+   //      	$.ajax(config);
+
+            UTILS.handleAjaxRequestJSON(endpoint, postType, data, successFN, errorFN);
         	
         },
 		
-		handleAjaxRequestAccount: function(endpoint, postType, data, successFN, errorFN) {
-        	
+		handleAjaxRequestJSON: function(endpoint, postType, data, successFN, errorFN) {
         	var config = {
                 url: endpoint,
                 type: postType,
@@ -113,9 +145,17 @@ define(["jquery"], function($) {
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};
         	
+            var token = UTILS.retrieveAuthToken();
+            if (token !== false) {
+                config.beforeSend=function(request) {
+                    request.setRequestHeader('x-auth-token', token);
+                }
+            }
+
         	// add data request
         	if (typeof data !== "undefined") {
-        		config.data = { 'json': JSON.stringify(data) };
+        		config.data = JSON.stringify(data);
+                //config.data = JSON.stringify(data);
         	}
 			
         	$.ajax(config);
@@ -142,7 +182,6 @@ define(["jquery"], function($) {
          */
         genericAjaxSuccess: function(data) {
         	alert("NO success method provided");
-        	console.log(data);
         },
         
         /**

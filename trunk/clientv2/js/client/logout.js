@@ -11,6 +11,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 				params,
 				function(data, textStatus, jqXHR){
 					PAGE.resizeIframeSimple();
+					UTIL.deleteAuthToken();
 				}, 
 				PAGE.customSGXError);
 				

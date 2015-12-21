@@ -182,7 +182,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		},
 		getPremData: function(todaysDate){			
 			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
-			var postType = 'GET';
+			var postType = 'POST';
 			var params = { "id": CHART.currentTicker, "date": todaysDate };
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
 				var todaysArray = [];

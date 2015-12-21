@@ -38,7 +38,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			var results = this;
 			results.parent.showLoading();
 			
-			var postType = 'GET';
+			var postType = 'POST';
 			var success = function(data) { 
 				data.scrollPos = scrollPos;
 				data.endpoint = endpoint;
