@@ -24,6 +24,16 @@ public class AccountModel{
 	private String currency;
 	
 	private String token;
+	
+	private String reason;
+	
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public String getToken() {
 		return token;
@@ -103,24 +113,28 @@ public class AccountModel{
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("email", email).add("startDate", startDate)
-				.add("expirationDate", expirationDate).add("type", type)
-				.add("lastLoginDate", lastLoginDate).add("lastPaymentDate", lastPaymentDate)
-				.add("contactOptIn", contactOptIn).add("currency", currency).toString();
+				.add("expirationDate", expirationDate).add("type", type).add("lastLoginDate", lastLoginDate)
+				.add("lastPaymentDate", lastPaymentDate).add("contactOptIn", contactOptIn).add("currency", currency)
+				.add("token", token).add("reason", reason).toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn, currency);
+		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn,
+				currency, token, reason);
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if(object instanceof AccountModel){
+		if (object instanceof AccountModel) {
 			AccountModel that = (AccountModel) object;
 			return Objects.equal(this.email, that.email) && Objects.equal(this.startDate, that.startDate)
 					&& Objects.equal(this.expirationDate, that.expirationDate) && Objects.equal(this.type, that.type)
-					&& Objects.equal(this.lastLoginDate, that.lastLoginDate) && Objects.equal(this.lastPaymentDate, that.lastPaymentDate)
-					&& Objects.equal(this.contactOptIn, that.contactOptIn)&& Objects.equal(this.currency, that.currency);
+					&& Objects.equal(this.lastLoginDate, that.lastLoginDate)
+					&& Objects.equal(this.lastPaymentDate, that.lastPaymentDate)
+					&& Objects.equal(this.contactOptIn, that.contactOptIn)
+					&& Objects.equal(this.currency, that.currency) && Objects.equal(this.token, that.token)
+					&& Objects.equal(this.reason, that.reason);
 		}
 		return false;
 	}
