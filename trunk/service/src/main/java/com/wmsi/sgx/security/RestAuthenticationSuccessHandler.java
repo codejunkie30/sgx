@@ -28,7 +28,8 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 		
 	@Override
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws JsonGenerationException, JsonMappingException, IOException{		
-		objectMapper.writeValue(response.getOutputStream(), "");
+		objectMapper.writeValue(response.getOutputStream(), response.getHeader("X-AUTH-TOKEN"));
+		
 		
 		WebAuthenticationDetails auth = (WebAuthenticationDetails) authentication.getDetails();
 		if(request.getServletPath().equals("/login")){

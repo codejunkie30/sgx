@@ -76,9 +76,13 @@ public class AccountController{
 	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{
 		
 		AccountModel ret = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		if(findUserFromToken(request) != null){
+			ret.setToken(request.getHeader("X-AUTH-TOKEN"));
+		}
 		if(ret.getType() == AccountType.MASTER || ret.getType() == AccountType.ADMIN){
 			ret.setType(AccountType.PREMIUM);
 		}
+		
 		return ret;
 	}
 

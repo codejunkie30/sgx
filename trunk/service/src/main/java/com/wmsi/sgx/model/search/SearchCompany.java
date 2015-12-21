@@ -250,7 +250,11 @@ public class SearchCompany{
 	}
 
 	public void setPeRatio(Double peRatio) {
-		this.peRatio = peRatio;
+		if(peRatio > 0){
+			this.peRatio = peRatio;
+		}else
+			this.peRatio = null;
+		
 	}
 
 	public void setPercentChange(Double percentChange) {

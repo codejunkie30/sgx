@@ -13,13 +13,14 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 
 	private final TokenHandler tokenHandler;
+	private static final long ONE_HOUR = 1000 * 60 * 60;
 
 	public TokenAuthenticationService() {
 		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary("9SyECk96oDsTmXfogIieDI0cD/8FpnojlYSUJT5U9I/FGVmBz5oskmjOR8cbXTvoPjX+Pq/T/b1PqpHX0lYm0oCBjXWICA=="));
 	}
 
 	public void addAuthentication(HttpServletResponse response, User user) {
-		//user.setExpires(System.currentTimeMillis() + TEN_DAYS);
+		user.setExpires(System.currentTimeMillis() + ONE_HOUR);
 		response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user));
 	}
 

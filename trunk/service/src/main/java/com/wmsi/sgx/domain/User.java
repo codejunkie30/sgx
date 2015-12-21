@@ -11,11 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.common.base.Objects;
@@ -48,6 +48,17 @@ public class User extends AbstractAuditable{
 		cascade={CascadeType.ALL},
 		orphanRemoval=true)
 	private Set<Authority> authorities;	
+
+	@Transient
+	private long expires;
+	
+	public long getExpires() {
+		return expires;
+	}
+
+	public void setExpires(long expires) {
+		this.expires = expires;
+	}
 	
 	/**
 	 * Add a Role type for this user
