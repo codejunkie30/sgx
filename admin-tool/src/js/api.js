@@ -1,7 +1,7 @@
 
 
 //var baseUrl = 'https://192.168.1.34:8000';
-// var baseUrl = 'https://sgx-api-us.sharefc.com/sgx';
+// var baseUrl = 'https:localhost:3443';
 var baseUrl = "";
 var $overlay = $('<div id="customOverlay" class="grayout"><img src="images/ajax-loader.gif" alt="" /></div>');;
 var toastr = require('toastr');
