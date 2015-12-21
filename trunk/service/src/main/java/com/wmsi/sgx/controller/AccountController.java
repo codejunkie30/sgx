@@ -74,15 +74,20 @@ public class AccountController{
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
 	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{
-		
-		AccountModel ret = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		AccountModel ret= new AccountModel();
+		if(request.getHeader("X-AUTH-TOKEN")== null){
+			ret.setReason("Full authentication is required to access this resource");
+			return ret;
+		}
 		if(findUserFromToken(request) != null){
+			ret = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 			ret.setToken(request.getHeader("X-AUTH-TOKEN"));
-		}
-		if(ret.getType() == AccountType.MASTER || ret.getType() == AccountType.ADMIN){
-			ret.setType(AccountType.PREMIUM);
-		}
 		
+		if(ret.getType() == AccountType.MASTER || ret.getType() == AccountType.ADMIN)
+			ret.setType(AccountType.PREMIUM);
+			return ret;
+		}
+		ret.setReason("Authentication token not Valid");
 		return ret;
 	}
 
