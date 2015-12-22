@@ -17,6 +17,6 @@ public interface AccountService{
 	
 	AccountModel updateAccount(UpdateAccountModel dto);
 	
-	Boolean isPremiumUser();
+	Boolean isPremiumUser(User u);
 
 }

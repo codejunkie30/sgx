@@ -13,7 +13,7 @@ public class AuditorAwareImpl implements AuditorAware<User>{
 	@Override
 	public User getCurrentAuditor() {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		/*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if(authentication == null){
 		//if(authentication == null || !authentication.isAuthenticated()){
@@ -25,11 +25,12 @@ public class AuditorAwareImpl implements AuditorAware<User>{
 		if(authentication.getPrincipal() instanceof User){
 			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
 		}
-		else{
+		else{*/
 			// Default to system user anonymous
+		User u = null;
 			u = new User();
 			u.setId(1L);						
-		}
+		
 		return u;
 		
 	}
