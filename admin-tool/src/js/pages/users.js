@@ -24,10 +24,10 @@ function ScreenerPage() {
 	this.adminType = ko.observable();
 	this.init = function() {
 		API.verifyUser(
-			function( ADMIN_TYPE ){ //success callback
+			function( ADMIN_TYPE ){ 							//success callback
 				self.adminType( ADMIN_TYPE );
 			}, 
-			function(){  			//failure callback
+			function(){  													//failure callback
 				API.goToPage('/', 1500);
 			}
 		);
@@ -142,9 +142,6 @@ function ScreenerPage() {
 function _transformData(resultArray) {
 
 	var transformedData = resultArray.map(function(item){
-			if( !(item.created_date < item.expiration_date) ) {
-				item.status = 'EXPIRED';
-			}
 			item.expiration_date = ko.observable(item.expiration_date);
 			item.status = ko.observable(item.status.toUpperCase());
 			return item;
