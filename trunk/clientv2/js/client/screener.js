@@ -43,8 +43,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		},
 		
 		finalize: function(data) {
-			
-			if(!data) return;
+		
 			// get the current screener object
 			var screener = ko.dataFor($(".screener-header")[0]);
 			
