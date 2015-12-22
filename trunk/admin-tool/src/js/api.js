@@ -5,7 +5,7 @@
 var baseUrl = "";
 var $overlay = $('<div id="customOverlay" class="grayout"><img src="images/ajax-loader.gif" alt="" /></div>');;
 var toastr = require('toastr');
-
+var tokenHandler = require('./helpers/tokenHandler');
 
 var API = {
 
@@ -24,10 +24,43 @@ var API = {
   },
 
 
+  getOptions: function(){
+    var options = {
+      method:'get',
+      credentials:'same-origin'
+    };
+    var adminToken = tokenHandler.retrieveAuthToken();
+    if( adminToken !== false ) {
+      options.headers = {
+        'x-auth-token': adminToken
+      }
+    }
+
+    return options;
+  },
+
+  postOptions: function(params) {
+    var options = {
+      method:'post',
+      credentials: 'same-origin',
+      body: JSON.stringify(params),
+      headers: {
+        'Content-type':'application/json; charset=utf-8'
+        }
+      }
+
+    var adminToken = tokenHandler.retrieveAuthToken();
+    if( adminToken !== false ) {
+      options.headers['x-auth-token'] =  adminToken;
+    }
+    return options;
+  },
+
+
   get: function(url, successFN, params) {
     var requestWithFetch;
     if( params === null || params === undefined) {
-      requestWithFetch = fetch(url, {credentials:'same-origin'});
+      requestWithFetch = fetch(url, this.getOptions());
     } else {
       var extra='';
       $.each(params, function(key, val) {
@@ -35,7 +68,7 @@ var API = {
         extra+= key+'='+encodeURIComponent(val);
       });
 
-      requestWithFetch = fetch(url + extra, {credentials:'same-origin'});
+      requestWithFetch = fetch(url + extra, this.getOptions());
     }
 
     requestWithFetch
@@ -54,14 +87,7 @@ var API = {
 
 
   post: function(url, successFN, params) {
-    fetch( url, {
-      method:'post',
-      credentials: 'same-origin',
-      body: JSON.stringify(params),
-      headers: {
-        'Content-type':'application/json; charset=utf-8'
-      }
-    })
+    fetch( url, this.postOptions(params))
       .then(checkStatus)
       .then(parseJSON)
       .then(supplementBackend)
@@ -76,6 +102,12 @@ var API = {
 
 
   verifyUser: function(successCb, failureCb) {
+    //if token not present go into failureCB immediately
+    if( !tokenHandler.retrieveAuthToken()) {
+      failureCb();
+      return;
+    }
+
     var self = this;
     this.post( this.paths.acctInfo, successFN, {dummy:'param'});
     this.showLoading();
@@ -111,6 +143,7 @@ var API = {
       });
 
     function successFN(response) {
+      tokenHandler.deleteAuthToken();
       API.goToPage('/');
     }
   },
@@ -191,13 +224,20 @@ function parseJSON(response) {
 }
 
 function supplementBackend(jsonResp) {
-  if(jsonResp == "")
-    return {responseCode:0};
+  if(typeof jsonResp == 'string'){
+    return {responseCode:0, data: jsonResp};
+  }
 
   else if( jsonResp.reason == "Full authentication is required to access this resource" ){
     jsonResp.responseCode = 32;
     jsonResp.data = "Full authentication is required to access this resource";
     API.goToPage('/', 1500);
+  }
+
+  else if ( jsonResp.reason == 'Authentication token not Valid') {
+    jsonResp.responseCode = 35;
+    jsonResp.data = "Authentication token not Valid.";
+    API.goToPage('/', 2000);
   }
 
   else if( jsonResp.reason == "Invalid username or password" ){

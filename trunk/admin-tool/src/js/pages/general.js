@@ -3,6 +3,7 @@
 var ko = require('knockout');
 ko.validation = require('knockout.validation');
 var API = require('../api');
+var tokenHandler = require('../helpers/tokenHandler');
 
 
 function GeneralPage() {
@@ -57,7 +58,7 @@ function GeneralPage() {
 
 
     this.exportReport = function() {
-        window.open('/sgx/admin/excel');
+        window.open('/sgx/admin/excel?'+'at='+tokenHandler.retrieveAuthToken());
     }
 
     this.trialDurationDisplay = ko.computed({

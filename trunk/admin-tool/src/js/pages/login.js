@@ -4,6 +4,7 @@ var ko = require('knockout');
 ko.validation = require('knockout.validation');
 var toastr = require('toastr');
 var API = require('../api');
+var tokenHandler = require('../helpers/tokenHandler');
 
 ko.validation.init({ insertMessages: false });
 
@@ -31,6 +32,8 @@ function LoginPage() {
     API.showLoading();
     API.post( API.paths.login, successFN.bind(this), params );
     function successFN(data) {
+      console.log(data.data);
+      tokenHandler.saveAuthToken(data.data)
       API.verifyUser(function() {
         API.goToPage('users');
       });

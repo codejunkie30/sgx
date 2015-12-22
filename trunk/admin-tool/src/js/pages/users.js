@@ -142,6 +142,9 @@ function ScreenerPage() {
 function _transformData(resultArray) {
 
 	var transformedData = resultArray.map(function(item){
+			if( !(item.created_date < item.expiration_date) ) {
+				item.status = 'EXPIRED';
+			}
 			item.expiration_date = ko.observable(item.expiration_date);
 			item.status = ko.observable(item.status.toUpperCase());
 			return item;
