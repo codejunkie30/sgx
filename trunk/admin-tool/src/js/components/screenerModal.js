@@ -117,9 +117,6 @@ function modalVM( params ) {
 
     function successFN(response) {
       var userObj = response.data;
-      if (!(userObj.expiration_date > userObj.created_date)) {
-        userObj.status('Expired');
-      }
       this.refreshUserData( userObj );
       this.showModal(false);
       API.hideLoading();
