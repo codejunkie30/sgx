@@ -69,6 +69,7 @@ public class AccountServiceImpl implements AccountService{
 			}else{
 				ret.setType(account.getType());
 			}
+			
 			ret.setContactOptIn(account.getContactOptIn());
 			ret.setCurrency(account.getCurrency());
 		}
@@ -124,16 +125,12 @@ public class AccountServiceImpl implements AccountService{
 	}
 	
 	@Override
-	public Boolean isPremiumUser(){
-		User u = null;
+	public Boolean isPremiumUser(User u){
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
-			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
-			AccountModel accountModel =getAccountForUsername(u.getUsername());
-			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
+		AccountModel accountModel =getAccountForUsername(u.getUsername());	
+		if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
 				return true;
-		}
+		
 		return false;
 	}
 	

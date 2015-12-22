@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,7 +46,8 @@ import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.model.search.IdSearch;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.model.search.SearchResults;
-import com.wmsi.sgx.security.UserDetailsWrapper;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.AccountService;
@@ -69,12 +70,24 @@ public class CompanyController{
 	@Autowired
 	private MessageSource messages;
 	
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
+	
 	
 	@RequestMapping(value="company")
-	public Map<String, Object> getAll(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException {
+	public Map<String, Object> getAll(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
+		Boolean isPremiumUser = false;
+		User u = null;
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		
+		if(token != null)
+			u = tokenHandler.parseUserFromToken(token);
+		isPremiumUser = accountService.isPremiumUser(u);
 		Map<String, Object> ret = new HashMap<String, Object>();
 		
-		if(accountService.isPremiumUser()){
+		if(isPremiumUser){
 			ret.put("company", getCompany(search));
 			ret.put("holders", getHolders(search));
 			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
@@ -251,15 +264,17 @@ public class CompanyController{
 	}
 
 	@RequestMapping(value="company/relatedCompanies")
-	public SearchResults getRelatedCompanies(@RequestBody IdSearch search) throws CompanyServiceException{		
+	public SearchResults getRelatedCompanies(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException{		
 		User u = null;
 		AccountType accountType=null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication.getPrincipal() instanceof UserDetailsWrapper){
-			u = ((UserDetailsWrapper) authentication.getPrincipal()).getUser();
-			AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
-			accountType = accountModel.getType();
-				
+		String token = request.getHeader("X-AUTH-TOKEN");
+		
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		
+		if(token != null){
+		u = tokenHandler.parseUserFromToken(token);
+		AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
+		accountType = accountModel.getType();	
 		}else{
 			
 			accountType = AccountType.NOT_LOGGED_IN;
