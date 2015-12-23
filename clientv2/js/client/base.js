@@ -560,6 +560,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
             var currentPg = PAGE.getParameterByName('page');
             if ( currentPg == 11 || currentPg == 18) {
               top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
+              return;
             }
 					} else {
 					
