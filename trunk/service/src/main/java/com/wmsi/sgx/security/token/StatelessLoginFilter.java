@@ -93,6 +93,10 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 			{super.doFilter(req, res, chain);
 				return;
 			}
+		if(request.getServletPath().startsWith("/admin/excel"))
+		{super.doFilter(req, res, chain);
+			return;
+		}
 		
 		BufferedReader br = request.getReader();
 		Map<String, String[]> parms = request.getParameterMap();

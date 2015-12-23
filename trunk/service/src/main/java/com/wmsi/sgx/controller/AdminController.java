@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -134,8 +135,12 @@ public class AdminController {
 	}
 	//Email / Status / Last Login / Last Payment / Trial Start / Trial Exp / Opted / Premium Start / Premium Expiration	
 	@RequestMapping(value = "excel", produces = "text/csv;charset=utf-8")
-	public void excel(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+	public void excel(@RequestParam("at") String token,HttpServletRequest request, HttpServletResponse response) throws IOException{
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		User user = null;
+		if(token != null)
+			user = tokenHandler.parseUserFromToken(token);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() == AccountType.MASTER || acct.getType() == AccountType.ADMIN)
 			adminService.writeCsv(response, new String[] { "Email Address", "Status", "Last Login", "Last Payment", "Trial Start", "Trial Expiration", "Email Opt In", "Premium Start", "Premium Expiration" }, "admin-excel-");
 	}
