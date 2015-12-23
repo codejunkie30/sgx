@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Panel</title>
   <link rel="stylesheet" href="css/vendor.css">
-<link href="css/main.css?6e1bd9bfc5aef88919ce" rel="stylesheet"></head>
+<link href="css/main.css?aa13b19828542c1d868d" rel="stylesheet"></head>
 <body>
 <div id="users">
 
@@ -61,10 +61,9 @@
   <hr>
 
 <!-- ko if:searchResults().length > 0 -->
-  <display-users params="data:searchResults"></display-users>
+  <display-users params="data:searchResults, adminType: adminType"></display-users>
 <!-- /ko -->
 
-  <super-admin params="data: showSuperAdmin"></super-admin>
 
 
 
@@ -75,5 +74,5 @@
 
   </div>
 </div>
-<script src="js/bundle.js?6e1bd9bfc5aef88919ce"></script></body>
+<script src="js/bundle.js?aa13b19828542c1d868d"></script></body>
 </html>
