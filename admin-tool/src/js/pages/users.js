@@ -5,7 +5,6 @@ ko.validation = require('knockout.validation');
 var API = require('../api');
 var toastr = require('toastr');
 var moment = require('moment');
-var _ = require('lodash');
 
 require('bootstrap');
 

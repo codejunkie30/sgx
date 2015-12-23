@@ -64,7 +64,7 @@ function modalVM( params ) {
 
     function successFN(response) {
       var userObj = response.data;
-      toastr.success('Account successfully deactivated.');
+      toastr.success('Your changes have been saved.');
       this.refreshUserData( userObj );
       API.hideLoading();
       this.showModal(false);
@@ -110,6 +110,13 @@ function modalVM( params ) {
 
     var user = this.userData().username;
     var newExpirationDate = moment( this.accountExpiration(), 'MM-DD-YYYY').valueOf();
+    var today = moment().startOf('day').valueOf();
+
+    if(newExpirationDate === today) { //if expiration date same as today. Expire the account immediately.
+      this.deactivateAcount();
+      return;
+    }
+    
     var params = { id: user, dateParam: newExpirationDate };
 
     API.showLoading();
