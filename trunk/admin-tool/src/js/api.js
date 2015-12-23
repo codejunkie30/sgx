@@ -103,7 +103,7 @@ var API = {
 
   verifyUser: function(successCb, failureCb) {
     //if token not present go into failureCB immediately
-    if( !tokenHandler.retrieveAuthToken()) {
+    if( !tokenHandler.retrieveAuthToken() && failureCb) {
       failureCb();
       return;
     }
