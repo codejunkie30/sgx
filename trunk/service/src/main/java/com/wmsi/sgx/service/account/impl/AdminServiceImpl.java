@@ -325,7 +325,6 @@ public class AdminServiceImpl implements AdminService{
 		List<String[]> values = getList(date);
 				
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "_" + dateFmt(new Date()) + ".csv\"");
-		response.setContentType("Content-type: text/csv; charset=UTF-8");
 		OutputStream resOs = response.getOutputStream();
 		OutputStream buffOs = new BufferedOutputStream(resOs);
 		OutputStreamWriter outputwriter = new OutputStreamWriter(buffOs);
