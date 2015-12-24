@@ -34,7 +34,7 @@
         <div class="panel-body">
         <!--<h4>Trial duration</h4>-->
         <p>This will change the trial duration for all new and existing accounts. <br/> It will not impact expired accounts.</p>
-        <form class="form-inline">
+        <div class="form-inline">
           <div class="form-group" data-bind="ifnot:durationInEdit">
             <input type="text" class="form-control" data-bind="value:trialDurationDisplay" disabled>
             <a href="#" class="btn btn-default" data-bind="click:initiateDurationEdit">Change</a>
@@ -46,7 +46,7 @@
             <a href="#" class="btn btn-danger" data-bind="click:cancelDurationEdit">Cancel</a>
             <span class="validationMessage-inline" data-bind="validationMessage:trialDuration"></span>
           </div>
-        </form>
+        </div>
         </div>
       </div>
       </section>
