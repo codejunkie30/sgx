@@ -86,7 +86,7 @@ public class AccountServiceImpl implements AccountService{
 		if(accounts.size() > 0){
 		accounts.get(0).setContactOptIn(dto.getContactOptIn());
 		accounts.get(0).setCurrency(dto.getCurrency());
-		accountRepository.save(accounts.get(0));
+		accountRepository.accountserviceUpdateAccount(accounts.get(0).getContactOptIn(), accounts.get(0).getCurrency(), accounts.get(0).getUser().getId());
 		}
 		return getAccountForUsername(dto.getEmail());
 		
@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService{
 			// Deactivate trial account
 			if(acc.getType().equals(AccountType.TRIAL)){
 				acc.setActive(false);
-				accountRepository.save(acc);
+				accountRepository.updateActive(acc.getActive(), acc.getUser().getId());
 			}
 		}
 		
@@ -144,7 +144,7 @@ public class AccountServiceImpl implements AccountService{
 			// Deactivate trial account
 			if(acc.getType().equals(AccountType.TRIAL) || (acc.getType().equals(AccountType.PREMIUM))){
 				acc.setActive(false);
-				accountRepository.save(acc);
+				accountRepository.updateActive(acc.getActive(), acc.getUser().getId());
 				success  = true;
 			}
 		}
