@@ -213,6 +213,7 @@ public class AdminServiceImpl implements AdminService {
 
 		for (Account acc : accounts) {
 			if (acc.getActive() == true) {
+				deactivated = true;
 				acc.setActive(false);
 				acc.setExpirationDate(new Date());
 				model.setStatus("EXPIRED");
