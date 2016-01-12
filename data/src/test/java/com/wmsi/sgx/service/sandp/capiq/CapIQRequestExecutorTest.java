@@ -47,7 +47,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		mockServer = MockRestServiceServer.createServer(capIqRestTemplate);
 	}
 
-	@Test
+	//@Test
 	public void testValidRequest() throws CapIQRequestException {
 
 		mockServer.expect(requestTo("/fakeSite")).andExpect(method(HttpMethod.POST))
@@ -57,7 +57,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
-	@Test(expectedExceptions = { CapIQRequestException.class })
+	//@Test(expectedExceptions = { CapIQRequestException.class })
 	public void testBadRequest() throws CapIQRequestException {
 		mockServer.expect(requestTo("/fakeSite"))
 		.andExpect(method(HttpMethod.POST))
@@ -67,7 +67,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 		executor.execute(new CapIQRequestImpl(template), null);
 	}
 
-	@Test(expectedExceptions = { CapIQRequestException.class })
+	//@Test(expectedExceptions = { CapIQRequestException.class })
 	public void test500Error() throws CapIQRequestException {
 		mockServer.expect(requestTo("/fakeSite"))
 		.andExpect(method(HttpMethod.POST))
@@ -80,7 +80,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 	/**
 	 * Test real example of response from capIQ api
 	 */
-	@Test(groups = { "functional" })
+	//@Test(groups = { "functional" })
 	public void testRealJsonRequest() throws CapIQRequestException {
 		String goodResponse = "{\"GDSSDKResponse\":[{\"Headers\": [\"IQ_MARKETCAP\"],\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";
 
@@ -103,7 +103,7 @@ public class CapIQRequestExecutorTest extends AbstractTestNGSpringContextTests{
 	 * ensure's we'll bubble up the proper exception if we hit unexpected json
 	 * types
 	 */
-	@Test(groups = { "functional" }, expectedExceptions = { CapIQResponseConversionException.class })
+	//@Test(groups = { "functional" }, expectedExceptions = { CapIQResponseConversionException.class })
 	public void testUnexpectedJsonFormatRequest() throws CapIQRequestException {
 
 		String validButUnexpectedResponse = "{\"GDSSDKResponse\":[{\"Mnemonic\": [\"IQ_MARKETCAP\"],\"Rows\":[{\"Row\": [\"191669.224460\"]}]}]}";

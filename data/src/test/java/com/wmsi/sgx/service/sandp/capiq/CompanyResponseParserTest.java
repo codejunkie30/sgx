@@ -20,7 +20,7 @@ public class CompanyResponseParserTest{
 	private CompanyResponseParser companyResponseParser = new CompanyResponseParser();	
 	private ObjectMapper mapper = TestUtils.getObjectMapper();
 	
-	@Test
+	//@Test
 	public void testConvert() throws ResponseParserException, JsonParseException, JsonMappingException, IOException, ParseException{
 	
 		CapIQResponse response = CompanyTestUtils.getCompanyResponse();
@@ -29,14 +29,14 @@ public class CompanyResponseParserTest{
 		CompanyTestUtils.verify(company);
 	}	
 
-	@Test(expectedExceptions=InvalidIdentifierException.class)
+	//@Test(expectedExceptions=InvalidIdentifierException.class)
 	public void testInvalidIdentifier() throws JsonParseException, JsonMappingException, IOException, ResponseParserException {
 		Resource json = new ClassPathResource("data/capiq/invalidIdentifierResponse.json");
 		CapIQResponse response = mapper.readValue(json.getInputStream(), CapIQResponse.class);		
 		companyResponseParser.convert(response);
 	}
 
-	@Test(expectedExceptions=ResponseParserException.class, expectedExceptionsMessageRegExp="Error result in capIq request.*")
+	//@Test(expectedExceptions=ResponseParserException.class, expectedExceptionsMessageRegExp="Error result in capIq request.*")
 	public void testErrorResponse() throws JsonParseException, JsonMappingException, IOException, ResponseParserException {
 		Resource json = new ClassPathResource("data/capiq/errorResponse.json");
 		CapIQResponse response = mapper.readValue(json.getInputStream(), CapIQResponse.class);		

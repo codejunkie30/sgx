@@ -26,7 +26,7 @@ public class KeyDevsServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private KeyDevsService keyDevsService;
 
-	@Test
+	//@Test
 	public void testLoadKeyDevs() throws ResponseParserException, CapIQRequestException, ParseException {
 
 		KeyDevs devs = keyDevsService.load("A7S", "05/06/2014");

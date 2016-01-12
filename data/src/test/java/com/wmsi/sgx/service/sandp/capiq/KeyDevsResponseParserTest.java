@@ -14,7 +14,7 @@ public class KeyDevsResponseParserTest{
 
 	private KeyDevResponseParser keyDevResponseParser = new KeyDevResponseParser();
 	
-	@Test
+	//@Test
 	public void testConvert() throws ResponseParserException, JsonParseException, JsonMappingException, IOException, ParseException{
 		
 		KeyDevs devs = keyDevResponseParser.convert(KeyDevsTestUtils.getResponse());		

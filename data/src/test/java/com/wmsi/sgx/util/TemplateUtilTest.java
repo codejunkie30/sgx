@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class TemplateUtilTest{
 
-	@Test
+	//@Test
 	public void testBind(){	
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("f", "template");
@@ -17,7 +17,7 @@ public class TemplateUtilTest{
 		assertEquals("This is a template test", bound);		
 	}
 
-	@Test
+	//@Test
 	public void testNullParms(){	
 		String bound = TemplateUtil.bind("This is a $f$ test", null);
 		assertEquals("This is a $f$ test", bound);		

@@ -29,9 +29,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		};
 	}
 	
-	@Test(
-		groups = {"integration"},
-		dataProvider="testTickers")
+	//@Test(groups = {"integration"},dataProvider="testTickers")
 	public void testGetCompanyInfo(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -42,9 +40,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompany(rec);
 	}
 	
-	@Test(
-		groups = {"integration"},
-		dataProvider="testTickers")
+	//@Test(groups = {"integration"},dataProvider="testTickers")
 	public void testGetCompanyFinancials(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -55,9 +51,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getCompanyFinancials(rec, "SGD");
 	}
 	
-	@Test(
-		groups = {"integration"},
-		dataProvider="testTickers")
+	//@Test(groups = {"integration"},dataProvider="testTickers")
 	public void testGetHistoricalData(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
@@ -68,9 +62,7 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 		capIQService.getHistoricalData(rec);
 	}
 
-	@Test(
-		groups = {"integration"},
-		dataProvider="testTickers")
+	//@Test(groups = {"integration"},dataProvider="testTickers")
 	public void testGetKeyDevs(String ticker, String date) throws CapIQRequestException, ResponseParserException{
 		CompanyInputRecord rec = CompanyInputRecordBuilder
 				.companyInputRecord()
