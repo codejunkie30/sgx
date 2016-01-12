@@ -14,7 +14,7 @@ public class IndexerServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private IndexerService indexerService;
 	
-	@Test(groups={"integration"})
+	//@Test(groups={"integration"})
 	public void testGetAllIndexes() throws IndexerServiceException{
 		Indexes indexes  = indexerService.getIndexes();
 		System.out.println(indexes);

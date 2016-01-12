@@ -41,7 +41,7 @@ public class IndexBuilderServiceTest{
 		indexBuilderService = impl;
 	}
 	
-	@Test
+	//@Test
 	public void testIndex() throws CapIQRequestException, IndexerServiceException, ResponseParserException{
 		
 		when(restTemplate.exchange(any(String.class), any(HttpMethod.class), any(HttpEntity.class), any(Class.class) ))

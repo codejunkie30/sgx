@@ -24,7 +24,7 @@ public class HoldersServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private HoldersService holdersService;
 	
-	@Test
+	//@Test
 	public void testHolders() throws CapIQRequestException, ResponseParserException{
 
 		Holders holders = holdersService.load("A7S");

@@ -39,7 +39,7 @@ public class HistoricalServiceTest extends AbstractTestNGSpringContextTests{
 	
 	SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 	
-	@Test
+	//@Test
 	public void testLoadHistory() throws CapIQRequestException, ParseException, ResponseParserException{
 		PriceHistory history = historicalService.load("A7S", "05/06/2013", "05/06/2014");
 		

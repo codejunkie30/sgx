@@ -37,7 +37,7 @@ public class CompanyServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private CompanyService companyService;
 	
-	@Test
+	//@Test
 	public void testLoadCompany() throws ResponseParserException, CapIQRequestException, ParseException{
 
 		Company company = companyService.load("A7S", "05/06/2014");

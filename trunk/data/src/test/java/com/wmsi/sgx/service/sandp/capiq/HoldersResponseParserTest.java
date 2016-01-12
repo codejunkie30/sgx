@@ -9,7 +9,7 @@ public class HoldersResponseParserTest{
 
 	private HoldersResponseParser holdersResponseParser = new HoldersResponseParser();
 	
-	@Test
+	//@Test
 	public void testConvert() throws ResponseParserException {
 		
 		Holders holders = holdersResponseParser.convert(HoldersTestUtils.getResponse());

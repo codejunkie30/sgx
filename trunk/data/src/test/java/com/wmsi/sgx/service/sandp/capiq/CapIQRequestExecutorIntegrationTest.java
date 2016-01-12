@@ -22,7 +22,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 	@Autowired
 	private RequestExecutor capIqRequestExecutor;
 	
-	@Test(groups={"integration"})
+	//@Test(groups={"integration"})
 	public void testValidRequest() throws CapIQRequestException{
 		
 		String validQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"$id$\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
@@ -41,7 +41,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		assertEquals(response.getResults().get(0).getIdentifier(), "IBM");
 	}
 
-	@Test(groups={"integration"})
+	//@Test(groups={"integration"})
 	public void testInvalidId() throws CapIQRequestException{
 		String invalidQuery = "{\"inputRequests\":[{\"function\":\"GDSP\", \"identifier\":\"$id$\",\"mnemonic\":\"IQ_MARKETCAP\"}]}";
 		
@@ -57,7 +57,7 @@ public class CapIQRequestExecutorIntegrationTest extends AbstractTestNGSpringCon
 		assertNotNull(response.getResults().get(0).getErrorMsg());
 	}
 
-	@Test(groups={"integration"})
+	//@Test(groups={"integration"})
 	public void testErrorMsgResponse() throws CapIQRequestException{
 		
 		Resource template = new ByteArrayResource(new byte[]{});

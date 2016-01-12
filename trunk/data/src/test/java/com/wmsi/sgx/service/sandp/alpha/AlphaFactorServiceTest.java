@@ -16,12 +16,12 @@ public class AlphaFactorServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private AlphaFactorIndexerService service;
 	
-	@Test(groups="integration")
+	//@Test(groups="integration")
 	public void testGetLatestFile() throws AlphaFactorServiceException, IOException{
 		service.getLatestFile();
 	}
 	
-	@Test(groups="integration")
+	//@Test(groups="integration")
 	public void testLoadAlphaFactors() throws IOException, AlphaFactorServiceException {
 		File f = service.getLatestFile();
 		service.loadAlphaFactors(f);		

@@ -25,7 +25,7 @@ public class FinancialsServiceTest extends AbstractTestNGSpringContextTests{
 	@Autowired
 	private FinancialsService financialsService; 
 	
-	@Test
+	//@Test
 	public void testLoadFinancials() throws ResponseParserException, CapIQRequestException, ParseException{		
 		Financials financials = financialsService.load("A7S", "05/06/2014");
 		FinancialsTestUtils.verify(financials);		
