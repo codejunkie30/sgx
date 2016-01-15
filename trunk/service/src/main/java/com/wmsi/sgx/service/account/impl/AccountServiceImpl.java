@@ -126,11 +126,11 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Override
 	public Boolean isPremiumUser(User u){
-		
-		AccountModel accountModel =getAccountForUsername(u.getUsername());	
-		if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
-				return true;
-		
+		if(u!=null){
+			AccountModel accountModel =getAccountForUsername(u.getUsername());	
+			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
+					return true;
+		}
 		return false;
 	}
 	
