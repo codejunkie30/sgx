@@ -47,6 +47,8 @@ function ScreenerPage() {
 		console.log(this.searchResults());
 	}
 
+	//email search
+
 	this.searchByEmailTrigger = function() {
 		if (this.emailInputError().length > 0 ){
 			this.emailInputError.showAllMessages();
@@ -69,6 +71,35 @@ function ScreenerPage() {
 			this.searchResults( result );
 		}
 	}
+
+	// transaction id Search
+
+  this.transactionId = ko.observable().extend({required:true});
+
+  this.searchByTransactionIdTrigger = function() {
+    if(this.transactionIdError().length > 0) {
+      this.transactionIdError.showAllMessages();
+      return;
+    }
+
+    var id = this.transactionId();
+    this.searchByTransactionIdAction(id);
+  };
+
+  this.searchByTransactionIdAction = function(id) {
+  	return;
+    API.showLoading();
+    API.post( API.paths.searchTranId, successFN.bind(this), {transactionId: id} );
+
+    function successFN(response) {
+      API.hideLoading();
+      var result = _transformData([response.data]);
+      this.searchResults( result );
+    } 
+
+  };
+
+  // date search
 
 	this.searchByDateTrigger = function() {
 		if(this.dateInputError().length > 0) {
@@ -120,6 +151,7 @@ function ScreenerPage() {
 
 	this.emailInputError = ko.validation.group(this.userEmail);
 	this.dateInputError = ko.validation.group(this.dateCreated);
+	this.transactionIdError = ko.validation.group(this.transactionId);
 
 	//information passed to the user modal
 	this.userInfo = {
@@ -141,6 +173,11 @@ function ScreenerPage() {
 function _transformData(resultArray) {
 
 	var transformedData = resultArray.map(function(item){
+			if (item.status.toUpperCase() == 'PREMIUM') {
+				if (item.transactionId === undefined) {
+					item.transactionId = '000777';
+				} 
+			}
 			item.expiration_date = ko.observable(item.expiration_date);
 			item.status = ko.observable(item.status.toUpperCase());
 			return item;
