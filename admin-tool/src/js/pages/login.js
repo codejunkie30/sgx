@@ -32,7 +32,6 @@ function LoginPage() {
     API.showLoading();
     API.post( API.paths.login, successFN.bind(this), params );
     function successFN(data) {
-      console.log(data.data);
       tokenHandler.saveAuthToken(data.data)
       API.verifyUser(function() {
         API.goToPage('users');
