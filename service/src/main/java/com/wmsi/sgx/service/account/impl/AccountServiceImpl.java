@@ -80,8 +80,11 @@ public class AccountServiceImpl implements AccountService{
 			ret.setCurrency(account.getCurrency());
 			if(account.getType() == AccountType.PREMIUM || account.getType() == AccountType.ADMIN 
 					|| account.getType() == AccountType.MASTER){
+				EnetsTransactionDetails enetsTrasactionDetail = enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId());
+				if(enetsTrasactionDetail != null){
+					ret.setEnetsTranId((enetsTrasactionDetail.getTrans_id()));
+				}
 				
-				ret.setEnetsTranId((enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId()).getTrans_id()));
 			}
 		}
 			
