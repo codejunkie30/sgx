@@ -18,5 +18,7 @@ public interface AccountService{
 	AccountModel updateAccount(UpdateAccountModel dto);
 	
 	Boolean isPremiumUser(User u);
+	
+	User findUserForTransactionId(String transId);
 
 }

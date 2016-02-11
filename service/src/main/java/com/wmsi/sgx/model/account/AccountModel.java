@@ -27,6 +27,8 @@ public class AccountModel{
 	
 	private String reason;
 	
+	private String enetsTranId;
+	
 	public String getReason() {
 		return reason;
 	}
@@ -110,18 +112,26 @@ public class AccountModel{
 		this.currency = currency;
 	}
 
+	public String getEnetsTranId() {
+		return enetsTranId;
+	}
+
+	public void setEnetsTranId(String enetsTranId) {
+		this.enetsTranId = enetsTranId;
+	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("email", email).add("startDate", startDate)
 				.add("expirationDate", expirationDate).add("type", type).add("lastLoginDate", lastLoginDate)
 				.add("lastPaymentDate", lastPaymentDate).add("contactOptIn", contactOptIn).add("currency", currency)
-				.add("token", token).add("reason", reason).toString();
+				.add("token", token).add("reason", reason).add("enetsTranId", enetsTranId).toString();
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(email, startDate, expirationDate, type, lastLoginDate, lastPaymentDate, contactOptIn,
-				currency, token, reason);
+				currency, token, reason, enetsTranId);
 	}
 
 	@Override
@@ -134,7 +144,7 @@ public class AccountModel{
 					&& Objects.equal(this.lastPaymentDate, that.lastPaymentDate)
 					&& Objects.equal(this.contactOptIn, that.contactOptIn)
 					&& Objects.equal(this.currency, that.currency) && Objects.equal(this.token, that.token)
-					&& Objects.equal(this.reason, that.reason);
+					&& Objects.equal(this.reason, that.reason) && Objects.equal(this.enetsTranId, that.enetsTranId);
 		}
 		return false;
 	}
