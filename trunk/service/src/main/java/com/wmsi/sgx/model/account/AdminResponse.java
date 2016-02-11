@@ -10,6 +10,8 @@ public class AdminResponse {
 	public String id;
 	public Object data;
 	public int responseCode;
+	private String TransId;
+	private String Username;
 	
 	public int getTrialDuration() {
 		return trialDuration;
@@ -47,34 +49,38 @@ public class AdminResponse {
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
-	@Override
-	public int hashCode(){
-		return Objects.hashCode(trialDuration, trialDay, dateParam, id, data, responseCode);
+	public String getTransId() {
+		return TransId;
 	}
-	
-	@Override
-	public boolean equals(Object object){
-		if (object instanceof AdminResponse) {
-			AdminResponse that = (AdminResponse) object;
-			return Objects.equal(this.trialDuration, that.trialDuration)
-				&& Objects.equal(this.trialDay, that.trialDay)
-				&& Objects.equal(this.dateParam, that.dateParam)
-				&& Objects.equal(this.id, that.id)
-				&& Objects.equal(this.data, that.data)
-				&& Objects.equal(this.responseCode, that.responseCode);
-		}
-		return false;
+	public void setTransId(String transId) {
+		TransId = transId;
+	}
+	public String getUsername() {
+		return Username;
+	}
+	public void setUsername(String username) {
+		Username = username;
 	}
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("trialDuration", trialDuration)
-			.add("trialDay", trialDay)
-			.add("dateParam", dateParam)
-			.add("id", id)
-			.add("data", data)
-			.add("responseCode", responseCode)
-			.toString();
+		return Objects.toStringHelper(this).add("trialDuration", trialDuration).add("trialDay", trialDay)
+				.add("dateParam", dateParam).add("id", id).add("data", data).add("responseCode", responseCode)
+				.add("TransId", TransId).add("Username", Username).toString();
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(trialDuration, trialDay, dateParam, id, data, responseCode, TransId, Username);
+	}
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof AdminResponse) {
+			AdminResponse that = (AdminResponse) object;
+			return Objects.equal(this.trialDuration, that.trialDuration) && Objects.equal(this.trialDay, that.trialDay)
+					&& Objects.equal(this.dateParam, that.dateParam) && Objects.equal(this.id, that.id)
+					&& Objects.equal(this.data, that.data) && Objects.equal(this.responseCode, that.responseCode)
+					&& Objects.equal(this.TransId, that.TransId) && Objects.equal(this.Username, that.Username);
+		}
+		return false;
 	}
 	
 	

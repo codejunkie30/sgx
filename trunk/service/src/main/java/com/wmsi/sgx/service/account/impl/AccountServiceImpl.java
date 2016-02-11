@@ -16,14 +16,17 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.repository.AccountRepository;
+import com.wmsi.sgx.repository.EnetsRepository;
 import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.AccountService;
+import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.util.DateUtil;
 
 @Service
@@ -31,6 +34,9 @@ public class AccountServiceImpl implements AccountService{
 
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private EnetsRepository enetsRepository;
 
 	@Autowired
 	private TrialProperty getTrial;
@@ -72,9 +78,19 @@ public class AccountServiceImpl implements AccountService{
 			
 			ret.setContactOptIn(account.getContactOptIn());
 			ret.setCurrency(account.getCurrency());
+			if(account.getType() == AccountType.PREMIUM || account.getType() == AccountType.ADMIN 
+					|| account.getType() == AccountType.MASTER){
+				
+				ret.setEnetsTranId((enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId()).getTrans_id()));
+			}
 		}
 			
 			return ret;
+	}
+	
+	@Override
+	public User findUserForTransactionId(String transId){
+		return enetsRepository.findByTransactionId(transId);
 	}
 	
 	@Override

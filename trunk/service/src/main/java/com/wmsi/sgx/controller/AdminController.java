@@ -49,6 +49,24 @@ public class AdminController {
 		return accountService.getAccountForUsername(findUserFromToken(request).getUsername());
 	}
 	
+	@RequestMapping(value = "transId", method = RequestMethod.POST)
+	public @ResponseBody AdminResponse enetstransId(HttpServletRequest HttpRequest, @RequestBody AdminResponse request) {	
+		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(HttpRequest).getUsername());
+		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
+			return isAdmin();
+		AdminResponse response = new AdminResponse();
+		User u = accountService.findUserForTransactionId(request.getTransId());
+		if(u != null){
+			response.setData(accountService.getAccountForUsername(u.getUsername()));
+			response.setResponseCode(0);
+		}else{
+			response.setData("Invalid transaction id");
+			response.setResponseCode(41);
+		}
+		
+		return response;
+	}
+	
 	@RequestMapping(value="getTrial", method = RequestMethod.POST)
 	public AdminResponse getTrial(HttpServletRequest request, @RequestBody TrialResponse response){
 		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());

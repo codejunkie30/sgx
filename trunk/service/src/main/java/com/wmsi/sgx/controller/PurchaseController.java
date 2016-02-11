@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +20,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.wiz.enets2.transaction.umapi.CreditMerchant;
 import com.wiz.enets2.transaction.umapi.Merchant;
 import com.wiz.enets2.transaction.umapi.data.TxnRes;
+import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.Response;
+import com.wmsi.sgx.repository.EnetsRepository;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.PremiumVerificationException;
 import com.wmsi.sgx.service.account.PremiumVerificationService;
@@ -45,6 +48,9 @@ public class PurchaseController {
 	PremiumVerificationService premiumService;
 	
 	@Autowired
+	EnetsRepository enetsRepository;
+	
+	@Autowired
 	AccountService accountService;
 	
 	@RequestMapping(value = "success", method = RequestMethod.POST)
@@ -55,6 +61,13 @@ public class PurchaseController {
 		User usr = premiumService.verifyPremiumToken(token);
 		accountService.createPremiumAccount(usr);
 		
+		EnetsTransactionDetails enets = new EnetsTransactionDetails();
+		enets.setTrans_dt(new Date());
+		enets.setTrans_id(res.getNetsTxnRef());
+		enets.setUser(usr);
+		enets.setActive(true);
+		
+		enetsRepository.save(enets);
 		RedirectView view = new RedirectView();
 		view.setUrl(successUrl);
 		return view;
