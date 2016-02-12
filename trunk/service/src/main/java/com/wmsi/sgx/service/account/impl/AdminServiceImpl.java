@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.activity.ActivityCompletedException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
+import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.model.account.TrialResponse;
@@ -123,6 +125,20 @@ public class AdminServiceImpl implements AdminService {
 			ret.setResponseCode(19);
 			return ret;
 		}
+	}
+	
+	@Override
+	public AdminAccountModel convertAccountModelToAdminAccountModel(AccountModel accModel){
+		AdminAccountModel model = new AdminAccountModel();
+		model.setCreated_date(accModel.getStartDate());
+		model.setTransId(accModel.getEnetsTranId());
+		model.setStatus(accModel.getType().name());
+		model.setUsername(accModel.getEmail());
+		model.setExpiration_date(accModel.getExpirationDate());
+		
+		return model;
+		
+		
 	}
 
 	@Override
