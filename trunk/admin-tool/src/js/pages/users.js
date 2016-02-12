@@ -87,9 +87,8 @@ function ScreenerPage() {
   };
 
   this.searchByTransactionIdAction = function(id) {
-  	return;
     API.showLoading();
-    API.post( API.paths.searchTranId, successFN.bind(this), {transactionId: id} );
+    API.post( API.paths.searchTranId, successFN.bind(this), {transId: id} );
 
     function successFN(response) {
       API.hideLoading();
@@ -174,8 +173,8 @@ function _transformData(resultArray) {
 
 	var transformedData = resultArray.map(function(item){
 			if (item.status.toUpperCase() == 'PREMIUM') {
-				if (item.transactionId === undefined) {
-					item.transactionId = '000777';
+				if (item.transId === undefined || item.transId === null) {
+					item.transId = 'N/A';
 				} 
 			}
 			item.expiration_date = ko.observable(item.expiration_date);

@@ -39,7 +39,6 @@ function GeneralPage() {
         API.post( API.paths.setTrial, successFN.bind(this), params );
 
         function successFN(response) {
-            console.log(response);
             API.hideLoading();
             this.durationInEdit(false);
         }

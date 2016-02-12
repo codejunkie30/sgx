@@ -21,7 +21,7 @@ var API = {
     extendExpiration: baseUrl + '/sgx/admin/extension',
     makeAdmin:        baseUrl + '/sgx/admin/setAdmin',
     removeAdmin:      baseUrl + '/sgx/admin/removeAdmin',
-    searchTranId:     baseUrl + '/sgx/admin/searchtransactionid'
+    searchTranId:     baseUrl + '/sgx/admin/transId'
   },
 
 
