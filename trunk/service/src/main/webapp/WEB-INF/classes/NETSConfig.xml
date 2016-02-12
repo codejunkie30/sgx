@@ -1,5 +1,5 @@
 <config>
-	<merchPrivKey>/mnt/sgx-ecomm/19012016131241-priv.pgp.asc</merchPrivKey>
+	<merchPrivKey>/mnt/sgx-ecomm/26062015093347-priv.pgp.asc</merchPrivKey>
 	<merchKeyPass>Wmsi2015!</merchKeyPass>
 	<netsPubKey>/mnt/sgx-ecomm/nets-full-pub.pgp.asc</netsPubKey>
 	
