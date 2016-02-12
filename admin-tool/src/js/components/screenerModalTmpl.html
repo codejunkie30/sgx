@@ -10,7 +10,7 @@
       <div class="modal-body">
         <p data-bind="text:displayText">This account has expired. OR: This account has 11 days left in trial. OR: This account is active and expires on 11/1/2016</p>
         <!-- ko if: userData().status() == 'PREMIUM' -->
-          <p class="transaction-id">Transaction ID: <span data-bind="text:userData().transactionId"></span></p>
+          <p class="transaction-id">Transaction ID: <span data-bind="text:userData().transId"></span></p>
         <!-- /ko -->
       <hr/>
 
