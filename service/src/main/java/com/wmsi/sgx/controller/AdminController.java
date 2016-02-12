@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
+import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -57,7 +58,8 @@ public class AdminController {
 		AdminResponse response = new AdminResponse();
 		User u = accountService.findUserForTransactionId(request.getTransId());
 		if(u != null){
-			response.setData(accountService.getAccountForUsername(u.getUsername()));
+			AccountModel acc = accountService.getAccountForUsername(u.getUsername());
+			response.setData(adminService.convertAccountModelToAdminAccountModel(acc));
 			response.setResponseCode(0);
 		}else{
 			response.setData("Invalid transaction id");
