@@ -8,6 +8,8 @@ public class AdminAccountModel {
 	public Date created_date;
 	public Date expiration_date;
 	public String status;
+	public String transId;
+	public Date enetsTransDt;
 	public String getUsername() {
 		return username;
 	}
@@ -32,30 +34,39 @@ public class AdminAccountModel {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	@Override
-	public int hashCode(){
-		return Objects.hashCode(username, created_date, expiration_date, status);
-	}
 	
-	@Override
-	public boolean equals(Object object){
-		if (object instanceof AdminAccountModel) {
-			AdminAccountModel that = (AdminAccountModel) object;
-			return Objects.equal(this.username, that.username)
-				&& Objects.equal(this.created_date, that.created_date)
-				&& Objects.equal(this.expiration_date, that.expiration_date)
-				&& Objects.equal(this.status, that.status);
-		}
-		return false;
+	public String getTransId() {
+		return transId;
+	}
+	public void setTransId(String transId) {
+		this.transId = transId;
+	}
+	public Date getEnetsTransDt() {
+		return enetsTransDt;
+	}
+	public void setEnetsTransDt(Date enetsTransDt) {
+		this.enetsTransDt = enetsTransDt;
 	}
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("username", username)
-			.add("created_date", created_date)
-			.add("expiration_date", expiration_date)
-			.add("status", status)
-			.toString();
+		return Objects.toStringHelper(this).add("username", username).add("created_date", created_date)
+				.add("expiration_date", expiration_date).add("status", status).add("transId", transId)
+				.add("enetsTransDt", enetsTransDt).toString();
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(username, created_date, expiration_date, status, transId, enetsTransDt);
+	}
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof AdminAccountModel) {
+			AdminAccountModel that = (AdminAccountModel) object;
+			return Objects.equal(this.username, that.username) && Objects.equal(this.created_date, that.created_date)
+					&& Objects.equal(this.expiration_date, that.expiration_date)
+					&& Objects.equal(this.status, that.status) && Objects.equal(this.transId, that.transId)
+					&& Objects.equal(this.enetsTransDt, that.enetsTransDt);
+		}
+		return false;
 	}
 	
 	
