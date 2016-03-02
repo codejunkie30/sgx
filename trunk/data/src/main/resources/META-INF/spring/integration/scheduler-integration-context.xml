@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp-3.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-3.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int:inbound-channel-adapter id="cronProducer" channel="triggerChannel"
+		expression="'cronTest'">
+		<int:poller cron="${loader.cron}" />
+	</int:inbound-channel-adapter>
+	
+	<int-file:inbound-channel-adapter channel="fileTriggerChannel"
+		directory="${loader.trigger.dir}" 
+		filename-pattern="${loader.trigger.name}">
+		<int:poller fixed-rate="5000" />
+	</int-file:inbound-channel-adapter>
+	
+	<!-- Little trick to delete trigger file -->
+	<int-file:file-to-bytes-transformer 
+		input-channel="fileTriggerChannel" 
+		output-channel="triggerChannel"
+    	delete-files="true"/>
+    
+	<int:header-enricher input-channel="triggerChannel" output-channel="indexRequestChannel">
+		<int:header name="jobId" expression="T(java.lang.System).currentTimeMillis()"/>
+    	<int:header name="jobDate" expression="new java.util.Date()"/>
+	</int:header-enricher>
+</beans>
