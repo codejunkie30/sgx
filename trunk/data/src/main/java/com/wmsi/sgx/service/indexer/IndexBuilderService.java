@@ -16,11 +16,11 @@ public interface IndexBuilderService{
 
 	void deleteOldIndexes() throws IndexerServiceException;
 
-	Boolean isJobSuccessful(List<CompanyInputRecord> records);
+	Boolean isJobSuccessful(List<CompanyInputRecord> records, String indexName) throws IndexerServiceException;
 
 	List<CompanyInputRecord> readTickers(String indexName, Date jobDate) throws IndexerServiceException;
 	
 	Boolean createFXIndex(String indexName, int fxBatchSize) throws IndexerServiceException;
-	String getPreviousDayIndexName() throws IndexerServiceException;
+	String getPreviousDayIndexName(String indexName) throws IndexerServiceException;
 
 }

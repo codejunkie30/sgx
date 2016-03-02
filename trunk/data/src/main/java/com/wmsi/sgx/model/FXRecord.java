@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.ObjectUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.integration.annotation.Header;
 
 import com.google.common.base.Objects;
 
@@ -107,13 +108,14 @@ public class FXRecord {
 	
 	public static synchronized void resetFXCache() { FXCACHE = new HashMap<String,Map<String,List<FXRecord>>>(); }
 	
-	public static FXRecord parseFXLine(String line) {
+	public static FXRecord parseFXLine(String line, String indexName) {
 		try {
 			String[] vals = line.replaceAll("\"", "").split(",");
-			if (!vals[1].equals("SGD")) return null;
-			String[] dt = vals[2].split(" ")[0].split("/");
+			if (!vals[1].equals(indexName.substring(0,3).toUpperCase())) return null;
+			String[] dt = vals[2].split("\\s+")[0].split("/");
 			FXRecord record = new FXRecord(vals[0], vals[1], dt[2] + (dt[0].length() == 1 ? "0" + dt[0] : dt[0]) + (dt[1].length() == 1 ? "0" + dt[1] : dt[1]), vals[3]);
-
+			
+			
 			Map<String,List<FXRecord>> from = FXCACHE.get(vals[0]);
 			if (from == null) {
 				from = new HashMap<String,List<FXRecord>>();
@@ -134,8 +136,8 @@ public class FXRecord {
 		return null;
 	}
 	
-	public static boolean shouldConvert(String cur) {
-		return cur == null || cur.equals("SGD") ? false : true;
+	public static boolean shouldConvert(String cur, @Header String indexName) {
+		return cur == null || cur.equals(indexName.substring(0,3).toUpperCase()) ? false : true;
 	}
 	
 	public static FXRecord getFromCache(String from, String to, Date d) {

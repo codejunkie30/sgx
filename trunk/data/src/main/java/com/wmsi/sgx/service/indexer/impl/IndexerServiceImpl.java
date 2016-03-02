@@ -108,6 +108,8 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		URI indexUri = buildUri("/" + indexName);
 		
+		log.info("index name " + indexName);
+		
 		ClientHttpResponse headResponse = restTemplate.getRequestFactory().createRequest(indexUri, HttpMethod.HEAD).execute();
 		boolean indexExists = headResponse.getStatusCode() == HttpStatus.OK;
 		
@@ -148,12 +150,12 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		try
 		{
-			return createPreviousIndexAlias(indexBuilderService.getPreviousDayIndexName());
+			return createPreviousIndexAlias(indexBuilderService.getPreviousDayIndexName(indexName));
 			
 		}
 		catch (UnsupportedOperationException e)
 		{
-			log.debug("previous index not found, this is first index");
+			log.info("previous index not found, this is first index");
 		}		
 	    return true;
 	}
@@ -230,6 +232,10 @@ public class IndexerServiceImpl implements IndexerService{
         
         return true;
 	}
+	
+	public String getIndexName(){
+		return this.indexName;
+	}
 
 	private URI buildUri(String path) throws IndexerServiceException{
 		try{
@@ -243,14 +249,15 @@ public class IndexerServiceImpl implements IndexerService{
 	private JsonNode buildAliasJson(String indexName, String aliasType){
 		ObjectMapper mapper = new ObjectMapper();
 		String aliasName = null;
-		if(aliasType== CURRENT_DAY_INDEX)aliasName= indexAlias;
-		if(aliasType== PREVIOUS_DAY_INDEX)aliasName= previousDayIndexAlias;
+		
+		if(aliasType== CURRENT_DAY_INDEX)aliasName= indexName.substring(0,11);
+		if(aliasType== PREVIOUS_DAY_INDEX)aliasName= indexName.substring(0,11)+"_previous";
 		
 		 
 		ObjectNode removeAlias = mapper.createObjectNode();
 		ObjectNode remove = mapper.createObjectNode();
 		
-		removeAlias.put("index", indexPrefix.concat("*"));
+		removeAlias.put("index", indexName.substring(0,11).concat("*"));
 		removeAlias.put("alias", aliasName);
 		remove.put("remove",  removeAlias);
 		
@@ -293,5 +300,4 @@ public class IndexerServiceImpl implements IndexerService{
 		headers.setAcceptCharset(Collections.singletonList(utf8));
 		return new HttpEntity<T>(json, headers);		
 	}
-
 }

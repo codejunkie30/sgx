@@ -121,7 +121,7 @@ public abstract class AbstractDataService implements DataService{
 		if (value == null) return null;
 		
 		// fx convert
-		if (field.isAnnotationPresent(FXAnnotation.class)) value = getFXConverted(value, actual);
+		if (field.isAnnotationPresent(FXAnnotation.class)) value = getFXConverted(value, actual, indexerService.getIndexName());
 		
 		return value;
 	}
@@ -182,19 +182,19 @@ public abstract class AbstractDataService implements DataService{
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
 	 */
-	public String getFXConverted(String value, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
-
+	public String getFXConverted(String value, CompanyCSVRecord actual, String indexName) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
+		String dataTobeConvertedInCurrency = indexName.substring(0,3).toUpperCase();
 		// can't convert
 		if (value == null || actual.getCurrency() == null || actual.getPeriodDate() == null) return value;
 		
 		// temp hack for just processing SGD
-		if (!FXRecord.shouldConvert(actual.getCurrency())) return actual.getValue();
+		if (!FXRecord.shouldConvert(actual.getCurrency(), indexName)) return actual.getValue();
 
 		// pull it from the cache
-		FXRecord record = FXRecord.getFromCache(actual.getCurrency(), "SGD", actual.getPeriodDate());
+		FXRecord record = FXRecord.getFromCache(actual.getCurrency(), dataTobeConvertedInCurrency, actual.getPeriodDate());
 		
 		// offtime runs, might get future dates we can't convert grab the latest we have
-		if (record == null) record = FXRecord.getLatestRate(actual.getCurrency(), "SGD");
+		if (record == null) record = FXRecord.getLatestRate(actual.getCurrency(), dataTobeConvertedInCurrency);
 		
 		// get the value
 		if (record != null) {

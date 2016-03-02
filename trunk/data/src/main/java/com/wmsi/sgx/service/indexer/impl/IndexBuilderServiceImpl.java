@@ -106,7 +106,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		log.info("Reading tickers from input file...");
 		log.info("Tickers loaded from: {}", tickerFile);
-		
+		log.info("index name" , indexName);
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
 		
@@ -192,9 +192,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 	/**
 	 * Determine if the index job succeeded by checking the number of 
 	 * records that failed to index against a pre-determined threshold. 
+	 * @throws IndexerServiceException 
 	 */
 	@Override
-	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records){
+	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName) throws IndexerServiceException{
 		
 		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
 		
@@ -215,6 +216,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 			if(failed > 0)
 				log.debug("Failed records:\n{}", StringUtils.collectionToDelimitedString(failedRecords, "\n"));
 			
+		}
+		
+		if(success)
+		{
+			indexerService.createIndexAlias(indexName);
+			deleteOldIndexes();			
 		}
 		
 		return success;
@@ -265,7 +272,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		log.info("Index cleanup complete. Removed {} old indexes", removed);
 	}
 	
-	public String getPreviousDayIndexName() throws IndexerServiceException{
+	public String getPreviousDayIndexName(String idxName) throws IndexerServiceException{
 		
 		Indexes indexes = indexerService.getIndexes();
 		
@@ -277,7 +284,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		for(Index index : indexes.getIndexes()){
 			String indexName = index.getName();
 			String date = index.getName().substring(indexPrefix.length(), indexName.length());
-
 			Date indexDate = new Date(Long.parseLong(date));
 			
 			if(oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)){
@@ -290,7 +296,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		{
 			throw new UnsupportedOperationException("No previous index Found");
 		}
-		String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
+		//String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
+		String previousDayIndex = idxName.substring(0,indexPrefix.length())+oneDayOldIndexes.get(0);
 		log.debug("previoud say index found: "+previousDayIndex);
 		return previousDayIndex;
 	}
@@ -333,7 +340,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		if(dH != null) indexerService.save("dividendHistory", tickerNoExchange, dH, index);
 
 		String currency = company.getFilingCurrency();
-		if(StringUtils.isEmpty(currency)) currency = "SGD";
+		if(StringUtils.isEmpty(currency)) currency = index.substring(0,3).toUpperCase();
 		Financials financials = capIQService.getCompanyFinancials(input, currency);
 		
 		for(Financial c : financials.getFinancials()){
@@ -462,7 +469,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		StringBuilder buffer = new StringBuilder(); int cnt = 0;
 		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
 		    for(String line; (line = br.readLine()) != null; ) {
-		    	FXRecord record = FXRecord.parseFXLine(line); 
+		    	FXRecord record = FXRecord.parseFXLine(line, indexName); 
 		    	if (record == null) continue;
 		    	buffer.append(String.format(json, record.getFrom(), record.getTo(), record.getDay(), record.getMultiplier()));
 		    	if (cnt % fxBatchSize == 0 && cnt > 0) {
@@ -483,7 +490,4 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		
 		return true;
 	}
-
-	
-	
 }

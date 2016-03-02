@@ -2,6 +2,8 @@ package com.wmsi.sgx.service.indexer;
 
 import java.io.IOException;
 
+import org.springframework.integration.annotation.Header;
+
 import com.wmsi.sgx.model.indexer.Indexes;
 
 public interface IndexerService{
@@ -21,6 +23,8 @@ public interface IndexerService{
 	IndexQueryResponse query(String endpoint) throws IndexerServiceException;
 	
 	Boolean flush() throws IndexerServiceException;
+	
+	String getIndexName();
 	
 	
 }

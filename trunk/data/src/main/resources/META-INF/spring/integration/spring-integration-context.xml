@@ -13,7 +13,7 @@
 
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
 		<int:header-enricher>
-			<int:header name="indexName" expression="'${elasticsearch.index.prefix}' + headers.jobId" />
+			<int:header name="indexName" expression="'${elasticsearch.index.prefix}' + headers.jobId" overwrite="true"/>
 			<int:header name="indexDate" expression="headers.jobDate" />	
 			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
 		</int:header-enricher>	
@@ -101,7 +101,7 @@
 		ref="indexBuilderService"
 		method="isJobSuccessful">
 				
-    	<int:mapping value="true" channel="createAlias"/>
+    	<int:mapping value="true" channel="indexRequestChannel1"/>
     	<int:mapping value="false" channel="failedJobChannel"/>
     	    	
 	</int:router>
