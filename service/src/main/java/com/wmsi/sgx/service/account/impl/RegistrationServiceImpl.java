@@ -169,7 +169,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 	@Override
 	@Transactional
-	@PreAuthorize("hasRole('ROLE_USER') and authentication.name == #user.email")
+	//@PreAuthorize("hasRole('ROLE_USER') and authentication.name == #user.email")
 	public Boolean changePassword(UserModel user) throws UserNotFoundException, MessagingException{
 		
 		Boolean success = userService.changePassword(user);
