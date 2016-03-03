@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Panel</title>
   <link rel="stylesheet" href="css/vendor.css">
-<link href="css/main.css?59bc52f8dda8ed104c7b" rel="stylesheet"></head>
+<link href="css/main.css?1056b5c7855f71fd176f" rel="stylesheet"></head>
 <body>
 <div id="users">
 
@@ -37,6 +37,17 @@
         </div>
         <a href="#" class="btn btn-primary" data-bind="click:searchByEmailTrigger">Go</a>
         <span class="validationMessage-inline" data-bind="validationMessage:userEmail"></span>
+
+        <div class="search-by-transactionId">
+          <h5>Search by transaction Id</h5>
+            <div class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control transaction-id-input" placeholder="Enter a transaction Id" data-bind="value:transactionId">
+              </div>
+              <a href="#" class="btn btn-primary" data-bind="click:searchByTransactionIdTrigger">Go</a>
+              <span class="validationMessage-inline" data-bind="validationMessage:transactionId"></span>
+            </div>
+        </div>
 
         <div class="search-by-date">
           <h5>Search by date created</h5>
@@ -74,5 +85,5 @@
 
   </div>
 </div>
-<script src="js/bundle.js?59bc52f8dda8ed104c7b"></script></body>
+<script src="js/bundle.js?1056b5c7855f71fd176f"></script></body>
 </html>
