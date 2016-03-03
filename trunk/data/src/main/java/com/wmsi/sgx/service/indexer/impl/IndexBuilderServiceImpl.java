@@ -227,7 +227,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		return success;
 	}
 	
-	private static final int INDEX_REMOVAL_THRESHOLD = 5;
+	private static final int INDEX_REMOVAL_THRESHOLD = 4;
 	
 	@Override
 	public void deleteOldIndexes() throws IndexerServiceException{
@@ -281,20 +281,27 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		Date oneDayAgo = cal.getTime();
 		
 		List<String> oneDayOldIndexes = new ArrayList<String>();
+		
 		for(Index index : indexes.getIndexes()){
-			String indexName = index.getName();
-			String date = index.getName().substring(indexPrefix.length(), indexName.length());
-			Date indexDate = new Date(Long.parseLong(date));
 			
-			if(oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)){
-				oneDayOldIndexes.add(date);
+			String indexName = index.getName();
+			if(indexName.substring(0,11).equals(idxName.substring(0,11))){
+
+				String date = index.getName().substring(indexPrefix.length(), indexName.length());
+				Date indexDate = new Date(Long.parseLong(date));
+				
+				if(oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)){
+					oneDayOldIndexes.add(date);
+				}
 			}
 		}
 		Collections.sort(oneDayOldIndexes, new ElasticSearchIndexDateComparator());
 		
 		if (oneDayOldIndexes.size() == 0)
 		{
-			throw new UnsupportedOperationException("No previous index Found");
+			log.info("No previous index Found, Previous index is set to current index");
+			return idxName;
+			//throw new UnsupportedOperationException("No previous index Found");
 		}
 		//String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
 		String previousDayIndex = idxName.substring(0,indexPrefix.length())+oneDayOldIndexes.get(0);

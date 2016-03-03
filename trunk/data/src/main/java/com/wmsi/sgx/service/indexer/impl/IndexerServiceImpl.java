@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.wmsi.sgx.model.indexer.Index;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexQueryResponse;
@@ -163,8 +164,12 @@ public class IndexerServiceImpl implements IndexerService{
 	public synchronized Boolean createPreviousIndexAlias(String indexName) throws IndexerServiceException {
 		URI indexUri = buildUri("/_aliases");
 		String aliasType= PREVIOUS_DAY_INDEX;
-		JsonNode alias = buildAliasJson(indexName, aliasType);
-		
+		JsonNode alias;
+		if(indexName.equals(this.indexName)){
+			alias = firstTimePreviousIndexGeneration(indexName);
+		}else{
+			alias = buildAliasJson(indexName, aliasType);
+		}
 		log.debug("Updating index aliases {}", alias);
 			
 		int statusCode = postJson(indexUri, alias);
@@ -275,6 +280,26 @@ public class IndexerServiceImpl implements IndexerService{
 		ObjectNode alias = mapper.createObjectNode();
 		alias.put("actions",  actions);
 
+		return alias;
+	}
+	
+	private JsonNode firstTimePreviousIndexGeneration(String indexName){
+		ObjectMapper mapper = new ObjectMapper();
+		String aliasName = indexName.substring(0,11).concat("_previous");
+		
+		ObjectNode addAlias = mapper.createObjectNode();
+		ObjectNode add = mapper.createObjectNode();
+		
+		addAlias.put("index", indexName);
+		addAlias.put("alias", aliasName);
+		add.put("add", addAlias);
+		
+		ArrayNode actions = mapper.createArrayNode();
+		actions.add(add);
+		
+		ObjectNode alias = mapper.createObjectNode();
+		alias.put("actions",  actions);
+		
 		return alias;
 	}
 	
