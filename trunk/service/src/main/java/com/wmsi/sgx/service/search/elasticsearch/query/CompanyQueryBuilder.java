@@ -191,14 +191,14 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		
 		//Add the Exchange criteria back on the criteria Object after 
 		//retrieving the number of exchanges on which user wants to search
-		if(noOfExchangesOnUserSerached>0 || (noOfExchangesOnUserSerached==0 && (!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ))))){
+		if(noOfExchangesOnUserSerached>0 || (noOfExchangesOnUserSerached==0 && (!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ) || acctType.equals(AccountType.ADMIN) || acctType.equals(AccountType.MASTER))))){
 			Criteria c =  new Criteria();
 			c.setField("exchange");
 			criteria.add(c);
 		}
 		
 		
-		if(!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ))){
+		if(!((acctType == AccountType.PREMIUM) || (acctType == AccountType.TRIAL ) || acctType.equals(AccountType.ADMIN) || acctType.equals(AccountType.MASTER))){
 			
 			List<String> exchangesWhiteList = new ArrayList<String>();
 			if(permittedExchangesList != null && permittedExchangesList.length() > 0){

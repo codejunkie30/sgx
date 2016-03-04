@@ -398,7 +398,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     			params.push(param);
 
     			// special case
-    			if (name == "avgBrokerReq") params.push({ field: "targetPriceNum", from: "3" });
+    			//TODO explain why it was set to 3 before, it just created a lot of problems
+    			if (name == "avgBrokerReq") params.push({ field: "targetPriceNum", from: "0" });
     			
     		});
     		

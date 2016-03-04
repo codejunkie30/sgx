@@ -41,7 +41,7 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 		
 		if(mk == null)
 			return null; // Can't compare without it. 
-		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)){
+		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)|| accType.equals(AccountType.ADMIN) || accType.equals(AccountType.MASTER)){
 			return new SearchSourceBuilder()
 					.query(QueryBuilders
 						.functionScoreQuery(
