@@ -20,5 +20,7 @@ public interface AccountService{
 	Boolean isPremiumUser(User u);
 	
 	User findUserForTransactionId(String transId);
+	
+	Boolean setCurrencyIndex(String curr);
 
 }

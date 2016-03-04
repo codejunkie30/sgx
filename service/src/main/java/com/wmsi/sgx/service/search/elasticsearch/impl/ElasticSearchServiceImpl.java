@@ -15,7 +15,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 
 	private QueryExecutor executor;
 	private ObjectMapper mapper;
-	
+	private String indexName;
 	public void setExecutor(QueryExecutor executor) {
 		this.executor = executor;
 	}
@@ -23,10 +23,14 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	public void setMapper(ObjectMapper m){
 		this.mapper = m;
 	}
+	
+	public void setIndexName(String indexName){
+		this.indexName=indexName;
+	}
 
 	@Override
 	public <T> SearchResult<T> search(String index, String type, String query, Class<T> clz) throws ElasticSearchException{
-		Query esQuery = getQuery(index, type, query);
+		Query esQuery = getQuery(this.indexName, type, query);
 		QueryResponse response = query(esQuery);
 		
 		SearchResult<T> result = new SearchResult<T>();		
@@ -41,7 +45,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	@Override
 	public <T> T get(String index, String type, String id, Class<T> clz ) throws ElasticSearchException{
 		SourceQuery query = new SourceQuery(id);
-		query.setIndex(index);
+		query.setIndex(this.indexName);
 		query.setType(type);
 		return executor.executeGet(query, clz);
 	}
@@ -54,7 +58,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	
 	private Query getQuery(String index, String type, String query){
 		SearchQuery esQuery = new SearchQuery();
-		esQuery.setIndex(index);
+		esQuery.setIndex(this.indexName);
 		
 		if(StringUtils.isNotEmpty(type))
 			esQuery.setType(type);

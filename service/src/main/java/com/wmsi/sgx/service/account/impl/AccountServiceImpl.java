@@ -27,6 +27,7 @@ import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.UserNotFoundException;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.util.DateUtil;
 
 @Service
@@ -40,6 +41,9 @@ public class AccountServiceImpl implements AccountService{
 
 	@Autowired
 	private TrialProperty getTrial;
+	
+	@Autowired
+	private ElasticSearchService esSearchService;
 	
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 	
@@ -94,6 +98,11 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public User findUserForTransactionId(String transId){
 		return enetsRepository.findByTransactionId(transId);
+	}
+	
+	public Boolean setCurrencyIndex(String esIndexName){
+		esSearchService.setIndexName(esIndexName);
+		return false;
 	}
 	
 	@Override

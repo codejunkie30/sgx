@@ -10,13 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.util.UriUtils;
@@ -26,7 +24,9 @@ import com.google.gson.Gson;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.security.RestAuthenticationFailureHandler;
 import com.wmsi.sgx.security.RestAuthenticationSuccessHandler;
+import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.UserService;
+import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.web.filter.GenericResponseWrapper;
 import com.wmsi.sgx.web.filter.GetToPostRequestWrapper;
 import com.wmsi.sgx.web.filter.PostRequestMapper;
@@ -49,6 +49,12 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 	com.wmsi.sgx.domain.User user;
 	
 	private static String token = "";
+	
+	@Autowired
+	private ElasticSearchService elasticSearchService;
+	
+	@Autowired
+	private AccountService accountService;
 
 
 	public StatelessLoginFilter(RestAuthenticationSuccessHandler restAuthenticationSuccessHandler,
@@ -75,7 +81,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		//SecurityContextHolder.getContext().setAuthentication(loginToken);
 		return authentication;
 	}
-	
+
 	@Override
 	public void doFilter(javax.servlet.ServletRequest req, javax.servlet.ServletResponse res,
 			javax.servlet.FilterChain chain) throws IOException, ServletException {
@@ -87,6 +93,11 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		User tyestuser = null;
+		if(request.getHeader("currency") != null){
+			elasticSearchService.setIndexName(request.getHeader("currency").concat("_premium"));
+		}else{
+			elasticSearchService.setIndexName("sgd_premium");
+		}
 		if(token != null)
 		 tyestuser = tokenHandler.parseUserFromToken(token);
 		if(request.getServletPath().startsWith("/purchase"))
@@ -216,10 +227,6 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		//final UserAuthentication userAuthentication = new UserAuthentication(user);
 		// Add the authentication to the Security context
 		tokenAuthenticationService.addAuthentication(response, user);
-		
-		logger.info("user " + user.getUsername() );
-		
-		
 		restAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
 	}
 	
