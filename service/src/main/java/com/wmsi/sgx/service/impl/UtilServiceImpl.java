@@ -39,12 +39,16 @@ public class UtilServiceImpl implements UtilService {
 	}
 	
 	@Override
-	public Map<String, String> convertCurrencyCSVtoMap(String file){
+	public Map<Object, Object> convertCurrencyCSVtoMap(String file){
 		Iterable<CSVRecord> records = getRecords(file);
-		Map<String, String> map = new HashMap<String, String>();
-		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		int i=0;
 		for(CSVRecord record : records){
-			map.put(record.get(0),record.get(1));
+			Map<Object, Object> map2 = new HashMap<Object, Object>();
+			map2.put("id",record.get(0));
+			map2.put("name",record.get(1));
+			map.put(i,map2);
+			i++;
 		}
 		
 		return map;

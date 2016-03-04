@@ -23,7 +23,9 @@ public class DataController {
 
 	@RequestMapping("currencyList")
 	public String getCurrencyList() {
-		Map<String, String> map = utilService.convertCurrencyCSVtoMap(fileLocation);
+		Map<Object, Object> map = utilService.convertCurrencyCSVtoMap(fileLocation);
+		
+		
 		Gson gson = new Gson(); 
 		return gson.toJson(map); 
 	}
