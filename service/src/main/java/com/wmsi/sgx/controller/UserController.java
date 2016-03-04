@@ -45,7 +45,7 @@ public class UserController{
 		registrationService.sendVerificationEmail(res.getUsername(),res.getToken());
 		}
 		catch(Exception e){
-			log.debug("Exception occrued in sending email", e);			
+			log.error("Exception occrued in sending email", e);			
 		}
 		return true;
 	}

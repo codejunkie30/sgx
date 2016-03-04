@@ -38,7 +38,7 @@ public class StatsQueryBuilder extends AbstractQueryBuilder{
 		}
 		
 		SearchSourceBuilder query=new SearchSourceBuilder();
-		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)){
+		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)|| accType.equals(AccountType.ADMIN) || accType.equals(AccountType.MASTER)){
 			query.query(QueryBuilders.constantScoreQuery(
 					FilterBuilders.matchAllFilter()))
 					.fetchSource(false)

@@ -48,7 +48,7 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 		}
 		
 		SearchSourceBuilder query;
-		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL)){
+		if(accType.equals(AccountType.PREMIUM) || accType.equals(AccountType.TRIAL) || accType.equals(AccountType.ADMIN) || accType.equals(AccountType.MASTER) ){
 			query = new SearchSourceBuilder()
 					.query(QueryBuilders.constantScoreQuery(FilterBuilders.matchAllFilter()))
 					.fetchSource(fields.toArray(new String[0]), null)

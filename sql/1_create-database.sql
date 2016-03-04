@@ -121,6 +121,8 @@ CREATE TABLE [dbo].[user_login](
 ) ON [PRIMARY]
 
 GO
+INSERT [dbo].[user_login] ([id], [username], [success], [ipaddress], [date]) VALUES (1, N'sadasd', 1, N'10.10.10.10', CAST(N'2016-12-12 00:00:00.000' AS DateTime))
+GO
 /****** Object:  Table [dbo].[user_verification]    Script Date: 9/3/2015 1:55:39 PM ******/
 SET ANSI_NULLS ON
 GO
