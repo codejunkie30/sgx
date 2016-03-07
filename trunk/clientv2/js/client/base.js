@@ -599,7 +599,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							});
 							
 							if (UTILS.retrieveState() == false){
-								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency.toLowerCase());
+								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
 								UTILS.saveState('changed');					
 							} else {
 								PAGE.selectedCurrency(UTILS.retrieveCurrency());
@@ -607,29 +607,51 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						if (data.type == 'TRIAL'){
-			              var start = moment(data.startDate);
-			              var end = moment(data.expirationDate);
-			              var trialPeriod = end.diff(start, 'days');
-			              var daysRemaining = end.diff(moment().startOf('day'), 'days');
-
+				            var start = moment(data.startDate);
+				            var end = moment(data.expirationDate);
+				            var trialPeriod = end.diff(start, 'days');
+				            var daysRemaining = end.diff(moment().startOf('day'), 'days');
 							if (daysRemaining >= 1) {
-	              				PAGE.userStatus('TRIAL');
+								PAGE.userStatus('TRIAL');
 								PAGE.libLoggedIn(true);
 								PAGE.libTrialExpired(false);
 								PAGE.currentDay(daysRemaining);
 							} else {
 								PAGE.userStatus('EXPIRED');
-	                            PAGE.libTrialExpired(true);						
+								PAGE.libTrialExpired(true);						
 								PAGE.libLoggedIn(true);
 								PAGE.libTrialPeriod(true);
 								PAGE.libAlerts(true);
 								PAGE.libCurrency(true);	
 							}
+							
+							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
+							
+							PAGE.selectedCurrency.subscribe(function(newValue) {
+								if (initialRun == false){								
+									UTILS.saveCurrency(newValue);
+									setTimeout(function(){
+										top.location.reload(true);
+									}, 50);
+									
+								} else {
+									UTILS.saveCurrency(PAGE.selectedCurrency());
+									initialRun = false;
+								}
+							});
+							
+							if (UTILS.retrieveState() == false){
+								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency.toLowerCase());
+								UTILS.saveState('changed');					
+							} else {
+								PAGE.selectedCurrency(UTILS.retrieveCurrency());
+							}
+						
 						}
 						
 						if (data.type == 'EXPIRED'){
-              PAGE.userStatus('EXPIRED');
-              PAGE.libTrialExpired(true);						
+				            PAGE.userStatus('EXPIRED');
+				            PAGE.libTrialExpired(true);						
 							PAGE.libLoggedIn(true);
 							PAGE.libTrialPeriod(true);
 							PAGE.libAlerts(true);
