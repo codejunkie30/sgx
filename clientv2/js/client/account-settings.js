@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "text!client/data/currency.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, CUR) {
 	
 	var SAVECHANGES = {			
 		newPassword: ko.observable(),
@@ -6,17 +6,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		showChange: ko.observable(false),
 		userEmail: ko.observable(),
 		contactOptIn: ko.observable(),
-		currency: ko.observable(),
+		getCurrencies: ko.observableArray(),
+		selectedCurrency: ko.observable(),
 		subType: ko.observable(),
 		subExpire: ko.observable(),
+		currency: ko.observableArray(),
 		isFormValid: ko.observable(true),
 		messages: JSON.parse(MESSAGES),
+		currencyDD: JSON.parse(CUR),
 		initPage: function() {
+			
 			
 			var displayMessage = SAVECHANGES.messages.messages[0];
 
-			this.accountSettings(displayMessage);			
+			this.accountSettings(displayMessage);
 			
+			this.getCurrencies(this.currencyDD.currencyList);
+						
 			SAVECHANGES.showChange.subscribe(function(newValue){	
 				SAVECHANGES.isFormValid(false);			
 				this.isFormValid = ko.computed(function() {
@@ -85,7 +91,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		saveChanges: function(me){
-						
+			
+			
+				
 			if (SAVECHANGES.showChange() == false){
 				//updates Currency & OptIn Status
 				this.updateSettings();
@@ -116,7 +124,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		updateSettings: function(){
 			var endpoint = PAGE.fqdn + "/sgx/account/update";
 			var postType = 'POST';
-			var params = { contactOptIn: SAVECHANGES.contactOptIn(), currency: 'SGD' }; //SAVECHANGES.currency()
+			var params = { contactOptIn: SAVECHANGES.contactOptIn(), currency: SAVECHANGES.selectedCurrency(), tempCurrency: SAVECHANGES.selectedCurrency() }; //SAVECHANGES.currency()
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -126,6 +134,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				undefined,
 				function(data, textStatus, jqXHR){
+					console.log(data);
 				}, 
 				PAGE.customSGXError
 				,jsonpCallback);			
@@ -152,6 +161,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 		},
 		
+		//getCurrency: function(){
+//			var endpoint = PAGE.fqdn + "/sgx/currencyList";
+//			var postType = 'POST';
+//			var params = {};
+//			UTIL.handleAjaxRequestJSON(
+//				endpoint,
+//				postType,
+//				params,
+//				function(data, textStatus, jqXHR){
+//					
+//					SAVECHANGES.currency([data]);
+//					console.log(SAVECHANGES.currency());
+//					console.log(data);
+//				}, 
+//				PAGE.customSGXError);
+//		},
+				
 		accountSettings: function(displayMessage){
 			var endpoint = PAGE.fqdn + "/sgx/account/info";
 			var postType = 'POST';
@@ -165,7 +191,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
-					SAVECHANGES.currency(data.currency);
+					SAVECHANGES.selectedCurrency(data.currency);
 					
 					if (data.type == '' || data.type == undefined || data.type == 'UNAUTHORIZED'){
 						var home = PAGE.getPage(PAGE.pageData.getPage('index'));

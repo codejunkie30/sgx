@@ -17,10 +17,8 @@
 			<li class="alerts" data-bind="css: {'hide': (libAlerts() == true)}"><a data-bind="siteLink: { id: 'alerts'}">Alerts</a></li>
 			<li class="last"><a data-bind="siteLink: { id: 'logout'} ">Sign Out</a></li>
 		</ul>
-		<!--<div class="right" data-bind="css: {'hide': (libCurrency() == true)}">
+		<div class="right" data-bind="css: {'hide': (libCurrency() == true)}">
 			<span class="currency">Currency</span>
-			<select>
-				<option>Singapore (SGD)</option>
-			</select>
-		</div>-->	
+			<select data-bind="options: getCurrencies(), value: selectedCurrency, optionsValue: 'id', optionsText: 'name'"></select>
+		</div>
 	</div>	
