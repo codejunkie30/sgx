@@ -51,7 +51,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * @throws CompanyServiceException 
 	 */
 	@Override
-	@Cacheable(value = "price")
+	//@Cacheable(value = "price")
 	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException {
 		Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
 		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), date);

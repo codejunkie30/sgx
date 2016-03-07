@@ -27,7 +27,7 @@ public class AlphaFactorServiceImpl implements AlphaFactorService{
 	private SearchService companySearch;
 
 	@Override
-	//@Cacheable(value="alphaFactorSearch")
+	@Cacheable(value="alphaFactorSearch")
 	public <T> List<T> search(AlphaFactorSearchRequest search, Class<T> clz) throws AlphaFactorServiceException {
 		try{
 			QueryBuilder query = new AlphaFactorSearchQueryBuilder(search);

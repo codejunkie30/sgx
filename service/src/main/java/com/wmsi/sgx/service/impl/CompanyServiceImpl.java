@@ -105,7 +105,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService holdersSearch;
 
 	@Override
-	//@Cacheable(value = "holders")
+	@Cacheable(value = "holders")
 	public Holders loadHolders(String id) throws CompanyServiceException {
 		try{
 			return holdersSearch.getById(id, Holders.class);
@@ -142,7 +142,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService gtiSearch;
 	
 	@Override
-	//@Cacheable(value = "gtis")
+	@Cacheable(value = "gtis")
 	public GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException {
 		try{
 			return gtiSearch.getById(id, GovTransparencyIndexes.class);
@@ -247,7 +247,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService alphaFactorSearch;
 	
 	@Override
-	//@Cacheable(value = "alphaFactor")
+	@Cacheable(value = "alphaFactor")
 	public AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException {
 
 		List<AlphaFactor> hits = null;
