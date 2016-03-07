@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService keyDevsSearch;
 	
 	@Override
-	//@Cacheable(value = "keyDevs")
+	@Cacheable(value = "keyDevs")
 	public KeyDevs loadKeyDevs(String id) throws CompanyServiceException {
 		try{
 			return keyDevsSearch.getById(id, KeyDevs.class);

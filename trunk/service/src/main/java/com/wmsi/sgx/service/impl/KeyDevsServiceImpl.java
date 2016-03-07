@@ -26,7 +26,7 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 	private SearchService keyDevsSearch;
 
 	@Override
-	//@Cacheable("keyDevsSearch")
+	@Cacheable("keyDevsSearch")
 	public KeyDevs search(KeyDevsRequest req) throws ServiceException {
 
 		try{
