@@ -1,4 +1,6 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment","knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment", "text!client/data/currency.json", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment, CUR) {
+	
+	var initialRun = true;
 	
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -255,6 +257,14 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		addWatchlistName: KO.observableArray(),
 		
+		currencyDD: JSON.parse(CUR),
+		
+		getCurrencies: KO.observableArray(),
+		
+		selectedCurrency: KO.observable(),
+		
+		changedCurrency: KO.observable(false),
+		
 		pageData: {
 			
 			pages: {}, 
@@ -485,7 +495,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 		});
                 	}
                 	
-                	//$(".copy", dd).text(text);
                 	viewModel.val(text);
                 	$("span.copy", dd).text(text);
                 	
@@ -543,9 +552,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$('body').prepend($('<div id="loading"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		checkStatus: function(){
-      var endpoint = PAGE.fqdn + "/sgx/account/info";
-      // var endpoint = 'https://localhost:2443' + "/sgx/account/info";
-      // var endpoint = 'https://sgx.mymsi.com:3443/sgx/account/info';
+      		var endpoint = PAGE.fqdn + "/sgx/account/info";
+		      // var endpoint = 'https://localhost:2443' + "/sgx/account/info";
+		      // var endpoint = 'https://sgx.mymsi.com:3443/sgx/account/info';
 			var postType = 'POST';
 			var params = {};
 			UTIL.handleAjaxRequestJSON(
@@ -574,16 +583,37 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
+							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
+							
+							PAGE.selectedCurrency.subscribe(function(newValue) {
+								if (initialRun == false){								
+									UTILS.saveCurrency(newValue);
+									setTimeout(function(){
+										top.location.reload(true);
+									}, 50);
+									
+								} else {
+									UTILS.saveCurrency(PAGE.selectedCurrency());
+									initialRun = false;
+								}
+							});
+							
+							if (UTILS.retrieveState() == false){
+								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency.toLowerCase());
+								UTILS.saveState('changed');					
+							} else {
+								PAGE.selectedCurrency(UTILS.retrieveCurrency());
+							}
 						}
 						
 						if (data.type == 'TRIAL'){
-              var start = moment(data.startDate);
-              var end = moment(data.expirationDate);
-              var trialPeriod = end.diff(start, 'days');
-              var daysRemaining = end.diff(moment().startOf('day'), 'days');
+			              var start = moment(data.startDate);
+			              var end = moment(data.expirationDate);
+			              var trialPeriod = end.diff(start, 'days');
+			              var daysRemaining = end.diff(moment().startOf('day'), 'days');
 
 							if (daysRemaining >= 1) {
-	              PAGE.userStatus('TRIAL');
+	              				PAGE.userStatus('TRIAL');
 								PAGE.libLoggedIn(true);
 								PAGE.libTrialExpired(false);
 								PAGE.currentDay(daysRemaining);
@@ -676,6 +706,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			PAGE.modal.open(settings);
 			PAGE.resizeIframeSimple();
 		},
+		
 		addCompanyExisting: function(){
 			var ticker = PAGE.currentTicker();
 			$.each(PAGE.finalWL(), function(idx, wl){

@@ -46,9 +46,7 @@
 			<div class="form-wrapper">
 				<label>Default Currency</label>
 				<span>
-					<select>
-						<option>Singapore (SGD)</option>
-					</select>
+					<select data-bind="options: getCurrencies, value: selectedCurrency, optionsValue: 'id', optionsText: 'name'"></select>
 				</span>
 			</div>
 			<div class="form-wrapper">

@@ -81,7 +81,45 @@ define(["jquery", "moment"], function($, moment) {
         deleteAuthToken: function() {
             store.remove('token')  
         },
+	
+		
+		saveCurrency: function(currency) {
+            if(!currency) return;
+            //hopefully store is in at this time
+            store.set('currency', {value: currency});
+        },
 
+
+        retrieveCurrency: function() {
+			var currency = store.get('currency');
+			if(currency != undefined ) {
+                return currency.value;
+            }else {
+                return false;
+            }
+        },
+		
+		 deleteCurrency: function() {
+            store.remove('currency')  
+        },
+		
+		saveState: function(initialLoad) {
+            if(!initialLoad) return;
+            //hopefully store is in at this time
+            store.set('initialLoad', {value: initialLoad});
+        },
+
+        retrieveState: function() {
+			var initialLoad = store.get('initialLoad');
+			if(initialLoad != undefined ) {
+                return initialLoad.value.toLowerCase();
+            }else {
+                return false;
+            }
+        },
+		deleteState: function() {
+            store.remove('initialLoad')  
+        },
 		
 		/**
 		 * handle an ajax request
@@ -95,40 +133,6 @@ define(["jquery", "moment"], function($, moment) {
 		 */
         
 		handleAjaxRequest: function(endpoint, postType, data, jsonp, successFN, errorFN, jsonpCallback) {
-        	
-   //      	var config = {
-   //              url: endpoint,
-   //              type: postType,
-   //              dataType: 'jsonp',
-   //              scriptCharset: "utf-8",
-   //              contentType: 'application/json',
-   //              success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
-   //              error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
-   //      	};
-        	
-   //      	// add data request
-   //      	if (typeof data !== "undefined") {
-   //      		config.data = { 'json': JSON.stringify(data) };
-   //      	}
-        	
-			// // add jsonp callback is exists
-   //      	if (typeof jsonp !== "undefined") {
-   //      		config.jsonp = jsonp;
-   //      	}
-
-   //          var token = this.retrieveAuthToken();
-   //          if (token !== false) {
-   //              config.beforeSend=function(request) {
-   //                  request.setRequestHeader('X-AUTH-TOKEN', token.value);
-   //              }
-   //          }
-			
-   //      	// add callback function name if exists
-   //      	if (typeof jsonpCallback !== "undefined") {
-   //      		config.jsonpCallback = jsonpCallback;
-   //      	}
-        	
-   //      	$.ajax(config);
 
             UTILS.handleAjaxRequestJSON(endpoint, postType, data, successFN, errorFN);
         	
@@ -145,13 +149,27 @@ define(["jquery", "moment"], function($, moment) {
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};
         	
+			
+			
             var token = UTILS.retrieveAuthToken();
-            if (token !== false) {
+            var currency = UTILS.retrieveCurrency();
+			var initialLoad = UTILS.retrieveState();
+			
                 config.beforeSend=function(request) {
-                    request.setRequestHeader('x-auth-token', token);
+					if (token !== false) {
+                    	request.setRequestHeader('x-auth-token', token);
+					}
+					if (currency !== false) {
+						request.setRequestHeader('currency', currency);
+					}
+					
+					if (initialLoad !== false) {
+						request.setRequestHeader('initial-load', initialLoad);
+					}
                 }
-            }
-
+            
+			
+			
         	// add data request
         	if (typeof data !== "undefined") {
         		config.data = JSON.stringify(data);

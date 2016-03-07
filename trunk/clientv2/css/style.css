@@ -291,10 +291,10 @@ header.header { margin: 10px 0 0 0; }
 .header .login-bar span,
 .header .login-bar ul,
 .header .login-bar ul li,
-.header .login-bar select { display: inline-block; line-height: 29px !important; }
+.header .login-bar select { display: inline-block; line-height: 20px !important; height: 20px !important; }
 .header .login-bar .stock-facts { margin: 0 0 0 12px; line-height: 29px !important; }
 .header .login-bar.logged-in .stock-facts { font-weight: bold; padding: 0 12px }
-.header .login-bar .logged-in-as { background: #b3c6cf; font-weight: bold; padding: 1px 9px 0px; margin: 0 0 0 12px; font-size:9pt; }
+.header .login-bar .logged-in-as { background: #b3c6cf; font-weight: bold; padding: 1px 9px 7px 6px; margin: 0 0 0 12px; font-size:9pt; }
 .header .login-bar .logged-in-as span {font-size:9pt;}
 .header .login-bar span {line-height: 28px !important;}
 .header .login-bar ul { margin: 0 !important; padding: 0 6px; }
@@ -304,7 +304,7 @@ header.header { margin: 10px 0 0 0; }
 .header .login-bar ul li.last { border-right: 0; }
 .header .login-bar .currency { font-weight: bold; }
 .header .login-bar select,
-.settings select { background: #d9d9d9; border: 1px solid #b6b6b6; font-size: 7.5pt; font-weight: bold; }
+.settings select { font-size: 8pt; font-weight: bold; }
 .header .login-bar .right { float: right; margin: 0 12px 0 0; }
 .header .login-bar .button { color: #fff; line-height: 20px; height: 20px; margin: 4px 0 4px 8px; }
 .header .login-bar .button:hover { text-decoration: none; }
