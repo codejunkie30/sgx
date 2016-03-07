@@ -265,6 +265,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		changedCurrency: KO.observable(false),
 		
+		
+		
+		
 		pageData: {
 			
 			pages: {}, 
@@ -293,7 +296,84 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 		},
 		
-        "numberFormats-SGD": {
+		"numberFormats-hkd": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in HK$ mm", decimals: 1, format: "HK$ $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in HK$", decimals: 3 },
+			cents: { header: "in HK$", decimals: 3, format: "HK$ $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-idr": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in Rp mm", decimals: 1, format: "Rp $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in Rp", decimals: 3 },
+			cents: { header: "in Rp", decimals: 3, format: "Rp $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-myr": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in RM mm", decimals: 1, format: "RM $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in RM", decimals: 3 },
+			cents: { header: "in RM", decimals: 3, format: "RM $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-php": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in ₱ mm", decimals: 1, format: "₱ $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in ₱", decimals: 3 },
+			cents: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-thb": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in ฿ mm", decimals: 1, format: "฿ $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in ฿", decimals: 3 },
+			cents: { header: "in ฿", decimals: 3, format: "฿ $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-tws": {
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in NT$ mm", decimals: 1, format: "NT$ $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in NT$", decimals: 3 },
+			cents: { header: "in NT$", decimals: 3, format: "NT$ $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},
+		"numberFormats-usd": {	
+        	lookup: { header: "" },
+        	string: { header: "" },
+			millions: { header: "in $ mm", decimals: 1, format: "$ $VALUE mm" },
+			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
+			dollars: { header: "in $", decimals: 3 },
+			cents: { header: "in $", decimals: 3, format: "$ $VALUE" },
+			percent: { header: "in %", decimals:2, format: "$VALUE%" },
+        	number: { header: "", decimals: 3 },
+        	number1: { header: "", decimals: 1 }
+		},		
+        "numberFormats-sgd": {
         	lookup: { header: "" },
         	string: { header: "" },
         	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
@@ -306,8 +386,16 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
 		
 		init: function(child) {
+			var currencyFormat;
+			if (UTILS.retrieveCurrency() == false){
+				currencyFormat = 'sgd';
+			} else {
+				currencyFormat = UTILS.retrieveCurrency();
+			}
 			
-			this.currentFormats = PAGE["numberFormats-SGD"];
+			console.log(UTILS.retrieveCurrency());
+			
+			this.currentFormats = PAGE["numberFormats-"+currencyFormat];
 
 			// set up the page mappings
 			eval("this.pageData." + PAGEINFO);
@@ -334,7 +422,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
 		
         getFormatted: function(fmt, value, decimals) {
-        	
+        	console.log(fmt);
+			console.log(value);
+			console.log(decimals);
         	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
         	if (value === "" || value === "-") return value;
           if (value == null) return '-';
