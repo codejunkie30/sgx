@@ -59,7 +59,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private String permittedExchangesList;
 
 	@Override
-	@Cacheable(value = "company")
+	////@Cacheable(value = "company")
 	public Company getById(String id) throws CompanyServiceException {
 		try{
 	
@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService keyDevsSearch;
 	
 	@Override
-	@Cacheable(value = "keyDevs")
+	//@Cacheable(value = "keyDevs")
 	public KeyDevs loadKeyDevs(String id) throws CompanyServiceException {
 		try{
 			return keyDevsSearch.getById(id, KeyDevs.class);
@@ -105,7 +105,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService holdersSearch;
 
 	@Override
-	@Cacheable(value = "holders")
+	//@Cacheable(value = "holders")
 	public Holders loadHolders(String id) throws CompanyServiceException {
 		try{
 			return holdersSearch.getById(id, Holders.class);
@@ -124,7 +124,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService financialSearch;
 	
 	@Override
-	@Cacheable(value = "financials")
+	//@Cacheable(value = "financials")
 	public List<Financial> loadFinancials(String id) throws CompanyServiceException {
 		try{
 			return financialSearch.search(new FinancialsQueryBuilder(id), Financial.class).getHits();
@@ -142,7 +142,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService gtiSearch;
 	
 	@Override
-	@Cacheable(value = "gtis")
+	//@Cacheable(value = "gtis")
 	public GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException {
 		try{
 			return gtiSearch.getById(id, GovTransparencyIndexes.class);
@@ -161,7 +161,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService priceHistorySearch;
 
 	@Override
-	@Cacheable(value = "priceHistory")
+	//@Cacheable(value = "priceHistory")
 	public List<HistoricalValue> loadPriceHistory(String id) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -178,7 +178,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService highPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "highPriceHistory")
+	//@Cacheable(value = "highPriceHistory")
 	public List<HistoricalValue> loadHighPriceHistory(String id) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -195,7 +195,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService lowPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "lowPriceHistory")
+	//@Cacheable(value = "lowPriceHistory")
 	public List<HistoricalValue> loadLowPriceHistory(String id) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -212,7 +212,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService openPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "openPriceHistory")
+	//@Cacheable(value = "openPriceHistory")
 	public List<HistoricalValue> loadOpenPriceHistory(String id) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -230,7 +230,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService volumeHistorySearch;
 
 	@Override
-	@Cacheable(value = "volumeHistory")
+	//@Cacheable(value = "volumeHistory")
 	public List<HistoricalValue> loadVolumeHistory(String id) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -247,7 +247,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService alphaFactorSearch;
 	
 	@Override
-	@Cacheable(value = "alphaFactor")
+	//@Cacheable(value = "alphaFactor")
 	public AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException {
 
 		List<AlphaFactor> hits = null;
@@ -271,7 +271,7 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private SearchService dividendHistorySearch;
 	@Override
-	@Cacheable(value = "dividendHistory")
+	//@Cacheable(value = "dividendHistory")
 	public DividendHistory loadDividendHistory(String id) throws CompanyServiceException {
 		try{
 			DividendValueQueryBuilder query = new DividendValueQueryBuilder(id);
@@ -288,7 +288,7 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Override
-	@Cacheable(value = "relatedCompanies")
+	//@Cacheable(value = "relatedCompanies")
 	public List<Company> loadRelatedCompanies(String id, AccountType accType) throws CompanyServiceException{
 		List<Company> companies = null;
 		
@@ -313,7 +313,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService estimatesSerach;
 	
 	@Override
-	@Cacheable(value = "estimate")
+	//@Cacheable(value = "estimate")
 	public List<Estimate> loadEstimates(String id) throws CompanyServiceException {
 		try{
 			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
