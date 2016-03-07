@@ -386,17 +386,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
 		
 		init: function(child) {
-			var currencyFormat;
 			if (UTILS.retrieveCurrency() == false){
-				currencyFormat = 'sgd';
+				this.currentFormats = PAGE["numberFormats-sgd"];
 			} else {
-				currencyFormat = UTILS.retrieveCurrency();
+				var currencyFormat = UTILS.retrieveCurrency();
+				this.currentFormats = PAGE["numberFormats-"+currencyFormat];
 			}
 			
-			console.log(UTILS.retrieveCurrency());
-			
-			this.currentFormats = PAGE["numberFormats-"+currencyFormat];
-
 			// set up the page mappings
 			eval("this.pageData." + PAGEINFO);
 			
@@ -422,9 +418,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
 		
         getFormatted: function(fmt, value, decimals) {
-        	console.log(fmt);
-			console.log(value);
-			console.log(decimals);
         	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
         	if (value === "" || value === "-") return value;
           if (value == null) return '-';
