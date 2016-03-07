@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.wmsi.sgx.domain.TradeEvent;
 import com.wmsi.sgx.model.Company;
@@ -50,7 +51,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * @throws CompanyServiceException 
 	 */
 	@Override
-	// @Cacheable(value = "price")
+	@Cacheable(value = "price")
 	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException {
 		Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
 		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), date);
