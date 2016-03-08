@@ -18,4 +18,6 @@ public interface QuanthouseService {
 	
 	List<CompanyPrice> getCompanyPrice(List<String> companies)
 			throws QuanthouseServiceException, CompanyServiceException;	
+	
+	void setCurrency(String currency);
 }

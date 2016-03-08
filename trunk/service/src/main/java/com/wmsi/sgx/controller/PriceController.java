@@ -55,6 +55,7 @@ public class PriceController {
 		Price p = new Price();
 		User user = findUserFromToken(request);
 		AccountModel acct = new AccountModel();
+		setCurrency(request);
 		if(user != null)
 			acct = accountService.getAccountForUsername(user.getUsername());
 		else
@@ -79,10 +80,12 @@ public class PriceController {
 		return ret;
 	}
 	
+	
+	
 	@RequestMapping(value="/price/companyPrices")
-	public Map<String, List<CompanyPrice>> getCompanyPrices(@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
+	public Map<String, List<CompanyPrice>> getCompanyPrices(HttpServletRequest request,@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
-		
+		setCurrency(request);
 		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies()));
 		
 		
@@ -91,9 +94,9 @@ public class PriceController {
 	}
 
 	@RequestMapping(value="/price/intraday")
-	public List<Price> getIntradayPrices(@RequestBody IdSearch query) {
+	public List<Price> getIntradayPrices(HttpServletRequest request,@RequestBody IdSearch query) {
 		List<Price> prices = null;
-		
+		setCurrency(request);
 		try{
 			prices = service.getIntradayPrices(market, query.getId());
 			
@@ -106,8 +109,9 @@ public class PriceController {
 	}
 	
 	@RequestMapping(value="/price/pricingHistory")
-	public Map<String, List<Price>> getPricingHistory(@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
+	public Map<String, List<Price>> getPricingHistory(HttpServletRequest request,@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
 		Map<String, List<Price>> ret = new HashMap<String, List<Price>>();
+		setCurrency(request);
 		ret.put("pricingHistory", service.getPricingHistory(market, priceCall.getId(), priceCall.getDate()));
 		return ret;
 		
@@ -121,6 +125,13 @@ public class PriceController {
 		if(token != null)
 		 return user = tokenHandler.parseUserFromToken(token);
 		return null;
+	}
+	
+	public void setCurrency(HttpServletRequest request){
+		if(request.getHeader("currency") != null){
+			service.setCurrency(request.getHeader("currency"));
+		}else
+			service.setCurrency("SGD");
 	}
 
 }
