@@ -286,7 +286,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           x: -3,
           formatter: function() {
             if (this.value == 0) return this.value;
-            return "S$ " + this.value;
+            return PAGE.currentFormats.chart.format + this.value;
           }
         },
         title: {
@@ -389,7 +389,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       labels: {
         formatter: function(){
           if( this.value == 0) return '0';
-          return "S$ " + this.axis.defaultLabelFormatter.call(this);
+          return PAGE.currentFormats.chart.format + this.axis.defaultLabelFormatter.call(this);
         }
       }
     }, false, false);
@@ -460,7 +460,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         labels: {
           formatter: function(){
             if( this.value == 0) return '0';
-            return "S$ " + this.axis.defaultLabelFormatter.call(this);
+            return PAGE.currentFormats.chart.format + this.axis.defaultLabelFormatter.call(this);
           }
         },
         id:'income',
