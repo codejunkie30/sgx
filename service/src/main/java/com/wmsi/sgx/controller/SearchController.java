@@ -41,7 +41,11 @@ public class SearchController{
 		String token = request.getHeader("X-AUTH-TOKEN");
 		
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
-		
+		String currency ;
+		if(request.getHeader("currency") != null)
+			currency= request.getHeader("currency");
+		else
+			currency="sgd";
 		if(token != null){
 		u = tokenHandler.parseUserFromToken(token);
 		AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
@@ -52,6 +56,6 @@ public class SearchController{
 		}
 			
 		
-		return companySearchService.search(req,accountType);
+		return companySearchService.search(req,accountType,currency);
 	}
 }

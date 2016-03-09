@@ -25,29 +25,29 @@ public interface CompanyService{
 
 	Holders loadHolders(String id) throws CompanyServiceException;
 
-	Company getById(String id) throws CompanyServiceException;
+	Company getById(String id,String currency) throws CompanyServiceException;
 
-	AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException;
+	AlphaFactor loadAlphaFactors(String id,String currency) throws CompanyServiceException;
 
-	List<Company> loadRelatedCompanies(String id, AccountType accType) throws CompanyServiceException;
+	List<Company> loadRelatedCompanies(String id, AccountType accType,String currency) throws CompanyServiceException;
 
-	List<HistoricalValue> loadVolumeHistory(String search) throws CompanyServiceException;
+	List<HistoricalValue> loadVolumeHistory(String search,String currency) throws CompanyServiceException;
 
-	List<HistoricalValue> loadPriceHistory(String search) throws CompanyServiceException;
+	List<HistoricalValue> loadPriceHistory(String search,String currency) throws CompanyServiceException;
 	
-	List<HistoricalValue> loadHighPriceHistory(String search) throws CompanyServiceException;
+	List<HistoricalValue> loadHighPriceHistory(String search,String currency) throws CompanyServiceException;
 	
-	List<HistoricalValue> loadLowPriceHistory(String search) throws CompanyServiceException;
+	List<HistoricalValue> loadLowPriceHistory(String search,String currency) throws CompanyServiceException;
 	
-	List<HistoricalValue> loadOpenPriceHistory(String search) throws CompanyServiceException;
+	List<HistoricalValue> loadOpenPriceHistory(String search,String currency) throws CompanyServiceException;
 
-	List<Financial> loadFinancials(String id) throws CompanyServiceException;
+	List<Financial> loadFinancials(String id,String currency) throws CompanyServiceException;
 
 	GovTransparencyIndexes loadGtis(String id) throws CompanyServiceException;
 
-	DividendHistory loadDividendHistory(String id) throws CompanyServiceException;
+	DividendHistory loadDividendHistory(String id,String currency) throws CompanyServiceException;
 	
-	List<Estimate> loadEstimates(String id) throws CompanyServiceException;
+	List<Estimate> loadEstimates(String id,String currency) throws CompanyServiceException;
 	
 	List<?> loadChartData(ChartRequestModel search) throws CompanyServiceException, SearchServiceException;
 

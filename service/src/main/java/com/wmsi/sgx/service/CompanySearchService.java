@@ -6,6 +6,6 @@ import com.wmsi.sgx.model.search.SearchResults;
 
 public interface CompanySearchService {	
 	
-	SearchResults search(SearchRequest req, AccountType accountType) throws ServiceException;
+	SearchResults search(SearchRequest req, AccountType accountType,String currency) throws ServiceException;
 
 }

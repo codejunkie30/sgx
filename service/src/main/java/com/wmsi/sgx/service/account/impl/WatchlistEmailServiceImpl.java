@@ -62,6 +62,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	@Autowired
 	private KeyDevsMap keyDevsMap;
 	
+	//Alerts does not have currency conversion feature default currency is used here
+	public String defaultCurrency="sgd";
+	
 	
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
@@ -110,14 +113,14 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			Company previousComp = null;
 			
 			try{
-				comp = companyService.getById(company);
+				comp = companyService.getById(company,defaultCurrency);
 				previousComp = companyService.getPreviousById(company);
 			}catch(CompanyServiceException e){
 				break;
 			}
 			
 			String companyName = getCompanyName(company);
-			List<Estimate> estimates = companyService.loadEstimates(company);
+			List<Estimate> estimates = companyService.loadEstimates(company,defaultCurrency);
 			List<Estimate> pastEstimates = companyService.loadPreviousEstimates(company);			
 			Estimate currentEstimate = getEstimate(estimates);
 			Estimate pastEstimate = getEstimate(pastEstimates);	
@@ -143,7 +146,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 			
 			if(map.get("pcTradingVolume").toString().equals("true")){				
-				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company), todaysDate);
+				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
 				if(volume == 0.0 && comp.getVolume() != null)
 					volumeOptions.put(company, companyName);
 				else if(volume > 0.0){
@@ -294,7 +297,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	public String getCompanyName(String company) throws CompanyServiceException{
-		return companyService.getById(company).getCompanyName();
+		return companyService.getById(company,defaultCurrency).getCompanyName();
 	}
 	
 	public Date getStartOfDay(Date date) {

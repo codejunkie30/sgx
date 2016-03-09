@@ -80,7 +80,6 @@ public class CompanyController{
 		Boolean isPremiumUser = false;
 		User u = null;
 		String token = request.getHeader("X-AUTH-TOKEN");
-		
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		
 		if(token != null)
@@ -92,17 +91,17 @@ public class CompanyController{
 			ret.put("company", getCompany(search,request));
 			ret.put("holders", getHolders(search));
 			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
-			ret.put("alphaFactors", getAlphas(search));
+			ret.put("alphaFactors", getAlphas(search,request));
 			ret.put("gtis", getGtis(search));
-			ret.put("dividendHistory", getDividendHistory(search));
+			ret.put("dividendHistory", getDividendHistory(search,request));
 		}else{
 			if(companyService.isCompanyNonPremium(search.getId())){
 				ret.put("company", getCompany(search,request));
 				ret.put("holders", getHolders(search));
 				ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
-				ret.put("alphaFactors", getAlphas(search));
+				ret.put("alphaFactors", getAlphas(search,request));
 				ret.put("gtis", getGtis(search));
-				ret.put("dividendHistory", getDividendHistory(search));	
+				ret.put("dividendHistory", getDividendHistory(search,request));	
 			}else{
 				ret.put("errorCode", (messages.getMessage("user.company.no.access.errorCode",null,LocaleContextHolder.getLocale())));
 				ret.put("errorMessage", (messages.getMessage("user.company.no.access",null,LocaleContextHolder.getLocale())));
@@ -115,20 +114,21 @@ public class CompanyController{
 	public Map<String, Object> getTechChart(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("company", getCompany(search,request));
-		ret.put("dividendHistory", getDividendHistory(search));
+		ret.put("dividendHistory", getDividendHistory(search,request));
 		ret.put("financials", getFinancials(search, request));
-		ret.put("estimates",getEstimates(search));
+		ret.put("estimates",getEstimates(search,request));
 		return ret;
 	}
 	
 	@RequestMapping(value="company/info")
 	public Map<String, Company> getCompany(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException{
 		
+		String currency =setCurrency(request);
 		
 		Map<String, Company> ret = new HashMap<String, Company>();
-		Company comp = companyService.getById(search.getId());
+		Company comp = companyService.getById(search.getId(),currency);
 		comp.setFilingCurrency(request.getHeader("currency"));
-		ret.put("companyInfo", companyService.getById(search.getId()));
+		ret.put("companyInfo", companyService.getById(search.getId(),currency));
 		return ret;
 	}
 	
@@ -152,8 +152,9 @@ public class CompanyController{
 	}
 	
 	@RequestMapping(value="company/financials")
-	public Financials getFinancials(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {		
-		List<Financial> hits = companyService.loadFinancials(search.getId());
+	public Financials getFinancials(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
+		String currency = setCurrency(request);
+		List<Financial> hits = companyService.loadFinancials(search.getId(),currency);
 		for(Financial fn : hits ){
 			fn.setFilingCurrency(request.getHeader("currency"));
 		}
@@ -163,8 +164,9 @@ public class CompanyController{
 	}
 	
 	@RequestMapping(value="company/estimates")
-	public Estimates getEstimates(@RequestBody IdSearch search) throws CompanyServiceException {		
-		List<Estimate> hits = companyService.loadEstimates(search.getId());
+	public Estimates getEstimates(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
+		String currency = setCurrency(request);
+		List<Estimate> hits = companyService.loadEstimates(search.getId(),currency);
 		Estimates ret = new Estimates();
 		ret.setEstimates(hits);
 		return ret;
@@ -248,25 +250,26 @@ public class CompanyController{
 	}
 
 	@RequestMapping("company/priceHistory")
-	public PriceHistory getHistory(@RequestBody IdSearch search) throws CompanyServiceException {
+	public PriceHistory getHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
+		String currency = setCurrency(request);
 		PriceHistory ret = new PriceHistory();
-		ret.setPrice(companyService.loadPriceHistory(search.getId()));
-		ret.setHighPrice(companyService.loadHighPriceHistory(search.getId()));
-		ret.setLowPrice(companyService.loadLowPriceHistory(search.getId()));
-		ret.setOpenPrice(companyService.loadOpenPriceHistory(search.getId()));
-		ret.setVolume(companyService.loadVolumeHistory(search.getId()));
+		ret.setPrice(companyService.loadPriceHistory(search.getId(),currency));
+		ret.setHighPrice(companyService.loadHighPriceHistory(search.getId(),currency));
+		ret.setLowPrice(companyService.loadLowPriceHistory(search.getId(),currency));
+		ret.setOpenPrice(companyService.loadOpenPriceHistory(search.getId(),currency));
+		ret.setVolume(companyService.loadVolumeHistory(search.getId(),currency));
 		return ret;
 	}
 	
 	@RequestMapping("company/dividendHistory")
-	public DividendHistory getDividendHistory(@RequestBody IdSearch search) throws CompanyServiceException {
+	public DividendHistory getDividendHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		DividendHistory ret = new DividendHistory();
-		return companyService.loadDividendHistory(search.getId());
+		return companyService.loadDividendHistory(search.getId(),setCurrency(request));
 	}
 
 	@RequestMapping(value="company/alphaFactor")
-	public AlphaFactor getAlphas(@RequestBody IdSearch search) throws CompanyServiceException {		
-		return companyService.loadAlphaFactors(search.getId());
+	public AlphaFactor getAlphas(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {		
+		return companyService.loadAlphaFactors(search.getId(),setCurrency(request));
 	}
 
 	@RequestMapping(value="company/relatedCompanies")
@@ -289,7 +292,7 @@ public class CompanyController{
 		List<SearchCompany> searchCompanies = new ArrayList<SearchCompany>();
 
 		// Get related companies
-		List<Company> companies = companyService.loadRelatedCompanies(search.getId(), accountType);
+		List<Company> companies = companyService.loadRelatedCompanies(search.getId(), accountType,setCurrency(request));
 		
 		if(companies != null){
 			// Convert to correct response type
@@ -298,5 +301,12 @@ public class CompanyController{
 		
 		searchResults.setCompanies(searchCompanies);
 		return searchResults;		
+	}
+	
+	public String setCurrency(HttpServletRequest request){
+		if(request.getHeader("currency") != null)
+			return request.getHeader("currency");
+		else
+			return "sgd";
 	}
 }

@@ -85,7 +85,7 @@ public class PriceController {
 	@RequestMapping(value="/price/companyPrices")
 	public Map<String, List<CompanyPrice>> getCompanyPrices(HttpServletRequest request,@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
-		setCurrency(request);
+		
 		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies()));
 		
 		
