@@ -43,8 +43,8 @@ public class DistributionServiceImpl implements DistributionService{
 	private ModelMapper mapper;
 
 	@Override
-	//@Cacheable("distributions")
-	public Distributions getAggregations(DistributionsRequest req, AccountType accType) throws ServiceException {
+	@Cacheable(value = "distributions", key = "#currency")
+	public Distributions getAggregations(DistributionsRequest req, String currency, AccountType accType) throws ServiceException {
 		
 		List<DistributionRequestField> fields = req.getFields();
 		Map<String, StatAggregation> intervals = getHistogramIntervals(fields, accType);

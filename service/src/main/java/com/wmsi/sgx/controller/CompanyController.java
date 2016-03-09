@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -88,7 +89,7 @@ public class CompanyController{
 		Map<String, Object> ret = new HashMap<String, Object>();
 		
 		if(isPremiumUser){
-			ret.put("company", getCompany(search));
+			ret.put("company", getCompany(search,request));
 			ret.put("holders", getHolders(search));
 			ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 			ret.put("alphaFactors", getAlphas(search));
@@ -96,7 +97,7 @@ public class CompanyController{
 			ret.put("dividendHistory", getDividendHistory(search));
 		}else{
 			if(companyService.isCompanyNonPremium(search.getId())){
-				ret.put("company", getCompany(search));
+				ret.put("company", getCompany(search,request));
 				ret.put("holders", getHolders(search));
 				ret.put("keyDevs", getKeyDevs(search).getKeyDevs());
 				ret.put("alphaFactors", getAlphas(search));
@@ -111,20 +112,22 @@ public class CompanyController{
 	}
 	
 	@RequestMapping(value="company/techChart")
-	public Map<String, Object> getTechChart(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException {
+	public Map<String, Object> getTechChart(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
-		ret.put("company", getCompany(search));
+		ret.put("company", getCompany(search,request));
 		ret.put("dividendHistory", getDividendHistory(search));
-		ret.put("financials", getFinancials(search));
+		ret.put("financials", getFinancials(search, request));
 		ret.put("estimates",getEstimates(search));
 		return ret;
 	}
 	
 	@RequestMapping(value="company/info")
-	public Map<String, Company> getCompany(@RequestBody IdSearch search) throws CompanyServiceException{
+	public Map<String, Company> getCompany(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException{
 		
 		
 		Map<String, Company> ret = new HashMap<String, Company>();
+		Company comp = companyService.getById(search.getId());
+		comp.setFilingCurrency(request.getHeader("currency"));
 		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;
 	}
@@ -149,8 +152,11 @@ public class CompanyController{
 	}
 	
 	@RequestMapping(value="company/financials")
-	public Financials getFinancials(@RequestBody IdSearch search) throws CompanyServiceException {		
+	public Financials getFinancials(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {		
 		List<Financial> hits = companyService.loadFinancials(search.getId());
+		for(Financial fn : hits ){
+			fn.setFilingCurrency(request.getHeader("currency"));
+		}
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
 		return ret;
