@@ -6,6 +6,6 @@ import com.wmsi.sgx.model.distribution.DistributionsRequest;
 
 public interface DistributionService{
 
-	Distributions getAggregations(DistributionsRequest req, AccountType accType) throws ServiceException;
+	Distributions getAggregations(DistributionsRequest req, String currency, AccountType accType) throws ServiceException;
 
 }

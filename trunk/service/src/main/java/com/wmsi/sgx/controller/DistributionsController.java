@@ -43,6 +43,8 @@ public class DistributionsController{
 		
 		String token = request.getHeader("X-AUTH-TOKEN");
 		
+		String currency = request.getHeader("currency");
+		
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		
 		if(token != null){
@@ -55,6 +57,6 @@ public class DistributionsController{
 			accountType = AccountType.NOT_LOGGED_IN;
 		}
 			
-		return distributionService.getAggregations(req,accountType);
+		return distributionService.getAggregations(req, currency, accountType);
 	}	
 }
