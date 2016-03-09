@@ -305,7 +305,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in HK$", decimals: 3, format: "HK$ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "HK$ "}
 		},
 		"numberFormats-idr": {
         	lookup: { header: "" },
@@ -316,7 +317,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in Rp", decimals: 3, format: "Rp $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "Rp "}
 		},
 		"numberFormats-myr": {
         	lookup: { header: "" },
@@ -327,7 +329,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in RM", decimals: 3, format: "RM $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "RM "}
 		},
 		"numberFormats-php": {
         	lookup: { header: "" },
@@ -338,7 +341,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "₱ "}
 		},
 		"numberFormats-thb": {
         	lookup: { header: "" },
@@ -349,9 +353,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in ฿", decimals: 3, format: "฿ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "฿ "}
 		},
-		"numberFormats-tws": {
+		"numberFormats-twd": {
         	lookup: { header: "" },
         	string: { header: "" },
 			millions: { header: "in NT$ mm", decimals: 1, format: "NT$ $VALUE mm" },
@@ -360,18 +365,20 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			cents: { header: "in NT$", decimals: 3, format: "NT$ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "NT$ "}
 		},
 		"numberFormats-usd": {	
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in $ mm", decimals: 1, format: "$ $VALUE mm" },
+			millions: { header: "in $ mm", decimals: 1, format: "$$VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in $", decimals: 3 },
-			cents: { header: "in $", decimals: 3, format: "$ $VALUE" },
+			cents: { header: "in $", decimals: 3, format: "$$VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "$"}
 		},		
         "numberFormats-sgd": {
         	lookup: { header: "" },
@@ -382,7 +389,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	cents: { header: "in S$", decimals: 3, format: "S$ $VALUE" },
         	percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
-        	number1: { header: "", decimals: 1 }
+        	number1: { header: "", decimals: 1 },
+			chart: {format: "S$ "}
         },
 		
 		init: function(child) {

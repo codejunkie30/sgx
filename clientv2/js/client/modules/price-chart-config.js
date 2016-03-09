@@ -88,7 +88,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		        labels: {
                         formatter: function() {
                         	if (this.value == 0) return;
-                            return "S$ " + this.value;
+                            return PAGE.currentFormats.chart.format + this.value;
                         },
                         style: {
                         	color: "#000000",

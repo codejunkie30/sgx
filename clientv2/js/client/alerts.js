@@ -58,6 +58,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var self = this;
 			
 			PAGE.checkStatus();
+			PAGE.libCurrency(true);
 			var waitForDataToInit = ko.computed({
 			  read:function(){
 				 // var companyData = this.gotCompanyData();
@@ -182,6 +183,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
 			
+			$('.login-bar .currency').hide();
 			me.trackPage("SGX Company Watchlist");
     		
 

@@ -96,13 +96,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    	// is a trading day
 		    	ret += "<span class='chart-mouseover'>";
 		    	ret += "<br />";
-		    	ret += "<span>Open</span>: S$ " + point.open;
+		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + point.open;
 		    	ret += "<br />";
-		    	ret += "<span>Close</span>: S$ " + point.close;
+		    	ret += "<span>Close</span>: " + PAGE.currentFormats.chart.format + point.close;
 		    	ret += "<br />";
-		    	ret += "<span>Low</span>: S$ " + point.low;
+		    	ret += "<span>Low</span>: " + PAGE.currentFormats.chart.format + point.low;
 		    	ret += "<br />";
-		    	ret += "<span>High</span>: S$ " + point.high;
+		    	ret += "<span>High</span>: " + PAGE.currentFormats.chart.format + point.high;
 		    	ret += "<br />";
 
 		    	// no volume for this period
