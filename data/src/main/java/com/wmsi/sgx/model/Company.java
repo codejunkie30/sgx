@@ -154,7 +154,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_TARGET_PRICE_NUM_CIQ")
 	private Double targetPriceNum;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_PRICE_TARGET_CIQ")
 	private Double targetPrice;
 
