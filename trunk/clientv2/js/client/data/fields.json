@@ -241,7 +241,7 @@
 		},
 		{
 			"name": "Industry",
-			"customizeDisplay": true,
+			"customizeDisplay": false,
 			"fields": [
 			   {
 			      "id":"industryGroup",
@@ -251,7 +251,6 @@
 			      "label":"Select Industry",
 			      "isDefault":true,
 				  "isHeaderDefault":true,
-			      "dataDisplay": false,
 			      "shortName":"Industry",
 			      "dataSort":"string",
 			      "resultDisplay": "industry"
