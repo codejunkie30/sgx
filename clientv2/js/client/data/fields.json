@@ -10,6 +10,7 @@
 			      "name":"Total Market Cap",
 			      "template":"number",
 			      "isDefault":true,
+				  "isHeaderDefault":true,
 			      "shortName":"Mkt. Cap.",
 				  "distribution-buckets":600
 			   },
@@ -91,6 +92,7 @@
 			      "name":"Total Revenue",
 			      "template":"number",
 			      "isDefault":true,
+				  "isHeaderDefault":true,
 			      "shortName":"Tot. Rev.",
 				  "distribution-buckets":650
 			   },
@@ -174,6 +176,7 @@
 			      "name":"P/E Ratio",
 			      "template":"number",
 			      "isDefault":true,
+				  "isHeaderDefault":true,
 			      "shortName":"P/E",
 				  "distribution-buckets":700
 			   },
@@ -183,6 +186,7 @@
 			      "name":"Dividend Yield",
 			      "template":"number",
 			      "isDefault":true,
+                  "isHeaderDefault":true,
 			      "shortName":"Div. Yld.",
 				  "distribution-buckets":750
 			   },
@@ -246,9 +250,38 @@
 			      "template":"select",
 			      "label":"Select Industry",
 			      "isDefault":true,
+				  "isHeaderDefault":true,
 			      "shortName":"Industry",
 			      "dataSort":"string",
 			      "resultDisplay": "industry"
+			   }
+			]		
+		},
+		{
+			"name": "Exchange",
+			"customizeDisplay": false,
+			"fields": [
+			   {
+			      "id":"exchange",
+			      "format": "string",
+			      "name":"Exchange",
+			      "template":"select",
+			      "label":"Select Exchange",
+			      "shortName":"Exchange",
+			      "dataSort":"string",
+			      "isDefault":true,
+				  "isHeaderDefault":false,
+			      "dataDisplay": false,
+			      "notPermitted": "Singapore Stock Exchange",
+			      "itemLabels": {
+					"CATALIST": "Singapore Exchange Catalist Market",
+					"JKSE": "Jakarta Stock Exchange",
+					"KLSE": "Bursa Malaysia",
+					"PSE": "Philippines Stock Exchange",
+					"SET": "The Stock Exchange of Thailand",
+					"SGX": "Singapore Exchange",
+					"TSEC": "Taiwan Stock Exchange"
+			      }
 			   }
 			]		
 		}

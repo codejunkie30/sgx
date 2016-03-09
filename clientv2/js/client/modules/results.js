@@ -197,15 +197,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * headers and columns
 			 * first two remove industry
 			 */
-			mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-1].fields.slice());
-			mdl.fieldGroups.remove(groups[groups.length-1]);
 			mdl.headers = ko.computed(function() {
 				this.headersChanged();
 				this.headersChanged(false);
 				var arr = this.staticFields.slice();
 				$.each(this.fieldGroups, function(idx, group) {
 					var defs = $.grep(group.fields, function(obj, idx) {
-						if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isDefault") && obj.isDefault) obj.dataDisplay = true;
+						if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isHeaderDefault") && obj.isHeaderDefault) obj.dataDisplay = true;
 						return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay;
 					});
 					if (defs.length > 0) arr.push.apply(arr, defs);
