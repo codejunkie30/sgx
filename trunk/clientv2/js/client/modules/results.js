@@ -156,7 +156,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 								var chkmdl = ko.dataFor($(this)[0]);
                         		// can't check anymore
 								if (chkmdl.id != 'exchange') {
-                        			if ($(".modal-container .checked").length >=5) { alert("Please remove a column before adding a new one."); return; }
+                        			if ($(".modal-container .checked").length >=4) { alert("Please remove a column before adding a new one."); return; }
                         		}
                         		// check it
                         		$(this).addClass("checked");	
