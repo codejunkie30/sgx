@@ -40,6 +40,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 	@Autowired
 	private CompanyService companyService;
 	
+	//Alerts does not have currency conversion feature default currency is used here
+	public String defaultCurrency="sgd";
+	
 	@Override
 	public void renameWatchlist(User user, String watchlistName, String id){
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
@@ -98,7 +101,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			List<String> existingCompanies = new ArrayList<String>();
 			for(WatchlistCompany comp : companies){
 				try{
-					companyService.getById(comp.getTickerCode());
+					companyService.getById(comp.getTickerCode(),defaultCurrency);
 					existingCompanies.add(comp.getTickerCode());
 				}catch(CompanyServiceException e){
 					ret.add(comp.getTickerCode());

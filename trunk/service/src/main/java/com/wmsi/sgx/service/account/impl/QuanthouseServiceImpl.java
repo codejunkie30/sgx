@@ -41,6 +41,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private FxConversionRepository fxConversionRepository;
 	
 	public String currency;
+	public String defaultCurrency="sgd";
 	public double currencyMultiplier;
 	
 	@Override
@@ -166,8 +167,10 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			DecimalFormat df = new DecimalFormat("0.###");
 			
 			try{
-				Company comp = companyService.getById(company);
+				Company comp = companyService.getById(company,defaultCurrency);
 				p = fallbackPrice(company);
+				// set to default currency as currency conversion does not apply on watchlist
+				p.setTradingCurrency(defaultCurrency);
 				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
 				companyPrice.setCompanyName(comp.getCompanyName());
 				companyPrice.setCurrency(p.getTradingCurrency());
@@ -191,7 +194,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	private Price fallbackPrice(String id) throws CompanyServiceException{
 		Price p = new Price();
-		Company comp = companyService.getById(id);
+		Company comp = companyService.getById(id,defaultCurrency);
 		try{
 			Company prevComp = companyService.getPreviousById(id);
 			p.setClosePrice(prevComp.getClosePrice());

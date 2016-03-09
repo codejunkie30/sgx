@@ -59,8 +59,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private String permittedExchangesList;
 
 	@Override
-	////@Cacheable(value = "company")
-	public Company getById(String id) throws CompanyServiceException {
+	@Cacheable(value = "company", key ="#currency")
+	public Company getById(String id,String currency) throws CompanyServiceException {
 		try{
 	
 			return companySearch.getById(id, Company.class);
@@ -124,8 +124,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService financialSearch;
 	
 	@Override
-	//@Cacheable(value = "financials")
-	public List<Financial> loadFinancials(String id) throws CompanyServiceException {
+	@Cacheable(value = "financials", key = "#currency")
+	public List<Financial> loadFinancials(String id,String currency) throws CompanyServiceException {
 		try{
 			return financialSearch.search(new FinancialsQueryBuilder(id), Financial.class).getHits();
 		}
@@ -161,8 +161,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService priceHistorySearch;
 
 	@Override
-	//@Cacheable(value = "priceHistory")
-	public List<HistoricalValue> loadPriceHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "priceHistory", key = "#currency")
+	public List<HistoricalValue> loadPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
 			return priceHistorySearch.search(query, HistoricalValue.class).getHits();
@@ -178,8 +178,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService highPriceHistorySearch;
 
 	@Override
-	//@Cacheable(value = "highPriceHistory")
-	public List<HistoricalValue> loadHighPriceHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "highPriceHistory", key = "#currency")
+	public List<HistoricalValue> loadHighPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
 			return highPriceHistorySearch.search(query, HistoricalValue.class).getHits();
@@ -195,8 +195,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService lowPriceHistorySearch;
 
 	@Override
-	//@Cacheable(value = "lowPriceHistory")
-	public List<HistoricalValue> loadLowPriceHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "lowPriceHistory", key = "#currency")
+	public List<HistoricalValue> loadLowPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
 			return lowPriceHistorySearch.search(query, HistoricalValue.class).getHits();
@@ -212,8 +212,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService openPriceHistorySearch;
 
 	@Override
-	//@Cacheable(value = "openPriceHistory")
-	public List<HistoricalValue> loadOpenPriceHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "openPriceHistory", key = "#currency")
+	public List<HistoricalValue> loadOpenPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
 			return openPriceHistorySearch.search(query, HistoricalValue.class).getHits();
@@ -230,8 +230,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService volumeHistorySearch;
 
 	@Override
-	//@Cacheable(value = "volumeHistory")
-	public List<HistoricalValue> loadVolumeHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "volumeHistory", key = "#currency")
+	public List<HistoricalValue> loadVolumeHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
 			return volumeHistorySearch.search(query, HistoricalValue.class).getHits();
@@ -248,10 +248,10 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	@Override
 	@Cacheable(value = "alphaFactor")
-	public AlphaFactor loadAlphaFactors(String id) throws CompanyServiceException {
+	public AlphaFactor loadAlphaFactors(String id,String currency) throws CompanyServiceException {
 
 		List<AlphaFactor> hits = null;
-		Company info = getById(id);
+		Company info = getById(id,currency);
 
 		if(info != null && !StringUtils.isEmpty(info.getGvKey())){
 			try{
@@ -271,8 +271,8 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private SearchService dividendHistorySearch;
 	@Override
-	//@Cacheable(value = "dividendHistory")
-	public DividendHistory loadDividendHistory(String id) throws CompanyServiceException {
+	@Cacheable(value = "dividendHistory", key = "#currency")
+	public DividendHistory loadDividendHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			DividendValueQueryBuilder query = new DividendValueQueryBuilder(id);
 			return dividendHistorySearch.getById(id, DividendHistory.class);
@@ -288,12 +288,12 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Override
-	//@Cacheable(value = "relatedCompanies")
-	public List<Company> loadRelatedCompanies(String id, AccountType accType) throws CompanyServiceException{
+	@Cacheable(value = "relatedCompanies", key = "#currency")
+	public List<Company> loadRelatedCompanies(String id, AccountType accType,String currency ) throws CompanyServiceException{
 		List<Company> companies = null;
 		
 		try{
-			Company company = getById(id);
+			Company company = getById(id,currency);
 			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company, accType);
 			SearchResult<Company> results = companySearch.search(query, Company.class);
 			
@@ -313,8 +313,8 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService estimatesSerach;
 	
 	@Override
-	//@Cacheable(value = "estimate")
-	public List<Estimate> loadEstimates(String id) throws CompanyServiceException {
+	@Cacheable(value = "estimate", key = "#currency")
+	public List<Estimate> loadEstimates(String id,String currency) throws CompanyServiceException {
 		try{
 			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();
 		}
