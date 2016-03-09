@@ -153,10 +153,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                     			$(this).removeClass("checked");
                     		}
                     		else {
-
+								var chkmdl = ko.dataFor($(this)[0]);
                         		// can't check anymore
-                        		if ($(".modal-container .checked").length >= 4) { alert("Please remove a column before adding a new one."); return; }
-                        		
+								if (chkmdl.id != 'exchange') {
+                        			if ($(".modal-container .checked").length >=5) { alert("Please remove a column before adding a new one."); return; }
+                        		}
                         		// check it
                         		$(this).addClass("checked");	
 
@@ -197,10 +198,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * headers and columns
 			 * first two remove industry
 			 */
+			mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-2].fields.slice());
+			mdl.fieldGroups.remove(groups[groups.length-2]);
 			mdl.headers = ko.computed(function() {
 				this.headersChanged();
 				this.headersChanged(false);
 				var arr = this.staticFields.slice();
+				
 				$.each(this.fieldGroups, function(idx, group) {
 					var defs = $.grep(group.fields, function(obj, idx) {
 						if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isHeaderDefault") && obj.isHeaderDefault) obj.dataDisplay = true;

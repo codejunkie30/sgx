@@ -658,7 +658,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.premiumUser(false);
             PAGE.userStatus('UNAUTHORIZED');
             var currentPg = PAGE.getParameterByName('page');
-            if ( currentPg == 11 || currentPg == 18) {
+            if (currentPg == 18) {
               top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
               return;
             }
