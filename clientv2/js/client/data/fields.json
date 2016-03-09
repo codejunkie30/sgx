@@ -241,7 +241,7 @@
 		},
 		{
 			"name": "Industry",
-			"customizeDisplay": false,
+			"customizeDisplay": true,
 			"fields": [
 			   {
 			      "id":"industryGroup",
@@ -251,6 +251,7 @@
 			      "label":"Select Industry",
 			      "isDefault":true,
 				  "isHeaderDefault":true,
+			      "dataDisplay": false,
 			      "shortName":"Industry",
 			      "dataSort":"string",
 			      "resultDisplay": "industry"
@@ -259,7 +260,7 @@
 		},
 		{
 			"name": "Exchange",
-			"customizeDisplay": false,
+			"customizeDisplay": true,
 			"fields": [
 			   {
 			      "id":"exchange",
@@ -269,7 +270,7 @@
 			      "label":"Select Exchange",
 			      "shortName":"Exchange",
 			      "dataSort":"string",
-			      "isDefault":true,
+			      "isDefault":false,
 				  "isHeaderDefault":false,
 			      "dataDisplay": false,
 			      "notPermitted": "Singapore Stock Exchange",
