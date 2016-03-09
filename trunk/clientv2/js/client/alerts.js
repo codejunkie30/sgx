@@ -98,7 +98,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				function(data, textStatus, jqXHR){
 					PAGE.hideLoading();
-					console.log(data);
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
