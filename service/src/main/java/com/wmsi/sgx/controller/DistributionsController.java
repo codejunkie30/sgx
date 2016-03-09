@@ -3,6 +3,8 @@ package com.wmsi.sgx.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wiz.enets2.transaction.umapi.logging.logger;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.distribution.Distributions;
@@ -26,6 +29,7 @@ import com.wmsi.sgx.service.account.AccountService;
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class DistributionsController{
+	private static final Logger log = LoggerFactory.getLogger(DistributionsController.class);
 	
 	@Autowired 
 	private DistributionService distributionService;
@@ -44,7 +48,7 @@ public class DistributionsController{
 		String token = request.getHeader("X-AUTH-TOKEN");
 		
 		String currency = request.getHeader("currency");
-		
+		log.info("Initial currency ", currency);
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		
 		if(token != null){
