@@ -1,4 +1,4 @@
-define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE ) {
+define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGES ) {
 
 
 
@@ -200,7 +200,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         
         setTimeout(function(){ 
           self.chartElement.setSize(718, 600);
-          PAGE.resizeIframeSimple( 100 ); 
+          PAGES.resizeIframeSimple( 100 ); 
         }, 500);
       break;
 
@@ -212,7 +212,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         $('section.technical-charting').animate({height:1031}, 500);
         setTimeout(function(){ 
           self.chartElement.setSize(718, 700);
-          PAGE.resizeIframeSimple( 100 );
+          PAGES.resizeIframeSimple( 100 );
          }, 500);
     }
 
