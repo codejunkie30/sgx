@@ -47,7 +47,11 @@ public class DistributionsController{
 		
 		String token = request.getHeader("X-AUTH-TOKEN");
 		
-		String currency = request.getHeader("currency");
+		String currency ;
+		if(request.getHeader("currency") != null)
+			currency= request.getHeader("currency");
+		else
+			currency="sgd";
 		log.info("Initial currency ", currency);
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		

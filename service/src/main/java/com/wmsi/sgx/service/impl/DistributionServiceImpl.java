@@ -43,7 +43,7 @@ public class DistributionServiceImpl implements DistributionService{
 	private ModelMapper mapper;
 
 	@Override
-	//@Cacheable(value = "distributions", key = "#currency")
+	@Cacheable(value = "distributions", key = "#currency")
 	public Distributions getAggregations(DistributionsRequest req, String currency, AccountType accType) throws ServiceException {
 		
 		List<DistributionRequestField> fields = req.getFields();
