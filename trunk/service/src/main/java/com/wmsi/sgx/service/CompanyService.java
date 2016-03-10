@@ -25,7 +25,7 @@ public interface CompanyService{
 
 	Holders loadHolders(String id) throws CompanyServiceException;
 
-	Company getById(String id,String currency) throws CompanyServiceException;
+	Company getById(String id) throws CompanyServiceException;
 
 	AlphaFactor loadAlphaFactors(String id,String currency) throws CompanyServiceException;
 

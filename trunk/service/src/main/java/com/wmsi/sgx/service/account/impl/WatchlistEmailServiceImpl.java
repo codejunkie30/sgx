@@ -113,7 +113,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			Company previousComp = null;
 			
 			try{
-				comp = companyService.getById(company,defaultCurrency);
+				comp = companyService.getById(company);
 				previousComp = companyService.getPreviousById(company);
 			}catch(CompanyServiceException e){
 				break;
@@ -297,7 +297,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	public String getCompanyName(String company) throws CompanyServiceException{
-		return companyService.getById(company,defaultCurrency).getCompanyName();
+		return companyService.getById(company).getCompanyName();
 	}
 	
 	public Date getStartOfDay(Date date) {

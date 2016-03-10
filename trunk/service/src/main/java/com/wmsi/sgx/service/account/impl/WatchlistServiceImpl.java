@@ -101,7 +101,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			List<String> existingCompanies = new ArrayList<String>();
 			for(WatchlistCompany comp : companies){
 				try{
-					companyService.getById(comp.getTickerCode(),defaultCurrency);
+					companyService.getById(comp.getTickerCode());
 					existingCompanies.add(comp.getTickerCode());
 				}catch(CompanyServiceException e){
 					ret.add(comp.getTickerCode());
