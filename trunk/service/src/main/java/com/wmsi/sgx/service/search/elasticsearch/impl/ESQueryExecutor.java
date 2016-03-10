@@ -25,17 +25,17 @@ public class ESQueryExecutor implements QueryExecutor{
 	public QueryResponse executeQuery(Query q) throws ElasticSearchException{
 		
 		try{
-			log.debug("Executing query on {}", indexUrl);
+			log.info("Executing query on {}", indexUrl);
 			
 			JsonNode query = q.toJson();
 			String url = indexUrl.concat(q.getURI().toString());
 			
-			log.debug("URI: {}", q.getURI());
-			log.debug("Query: {}", query);
+			log.info("URI: {}", q.getURI());
+			log.info("Query: {}", query);
 			
 			JsonNode res = restTemplate.postForObject(url, query, JsonNode.class);
 			
-			log.debug("Query returned successfully");
+			log.info("Query returned successfully");
 			log.trace("ES Response: {}", res);
 			
 			return new ESResponse(res);
