@@ -17,7 +17,7 @@
 			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
 		</int:header-enricher>
 		<int:service-activator ref="indexerService" method="createIndex" />
-		<!-- <int:service-activator ref="indexBuilderService" method="buildAlphaFactors" /> -->
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
 		<int:service-activator ref="indexerService" method="flush" />
 	</int:chain>
