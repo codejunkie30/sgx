@@ -227,7 +227,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		return success;
 	}
 	
-	private static final int INDEX_REMOVAL_THRESHOLD = 4;
+	private static final int INDEX_REMOVAL_THRESHOLD = 2;
 	
 	@Override
 	public void deleteOldIndexes() throws IndexerServiceException{
