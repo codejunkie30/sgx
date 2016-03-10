@@ -311,7 +311,7 @@ header.header { margin: 10px 0 0 0; }
 
 .header .profile { background: #0b236b; margin: 18px 0; }
 .header .profile .left { float: left; margin: 28px 0 10px 22px; }
-.header .profile .right { float: right; margin: 20px 18px 0 0; }
+.header .profile .right { float: right; margin: 0 18px 0 0; }
 .header .profile h1 { margin: 0 0 10px 0 !important; }
 .header .profile h1, .header .profile h1 span  { color: #fff; font-size: 27px; line-height: 27px !important; }
 .header .profile .breadcrumb { color: #fff; }
@@ -322,6 +322,9 @@ header.header { margin: 10px 0 0 0; }
 .header .profile .as-of,
 .header .profile .as-of .date,
 .header .profile .as-of .time { color: #fff !important; }
+.header .profile .right.price { width: 30% !important; }
+.header .profile .right .current-currency { color: #fff; padding: 8px; }
+.header .profile .right .current-currency span { color: #fff !important; }
 
 .header .profile .profile-bar { background: #031753; padding: 8px 0 8px 22px; display: block; clear: both; }
 .header .profile .profile-bar a { background: url(../img/bg-profile-bar.png) no-repeat; color: #fff; text-decoration: none; font-size: 9pt !important; height: 17px; line-height: 17px; }

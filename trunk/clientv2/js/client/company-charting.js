@@ -18,7 +18,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libTrialExpired: ko.observable(),
     libSubscribe: ko.observable(),
     libAlerts: ko.observable(),
-    libCurrency: ko.observable(),
+    libCurrency: ko.observable(false),
     currentDay: ko.observable(),
 
     sectionName: 'Technical Charts',
