@@ -2,7 +2,7 @@ package com.wmsi.sgx.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account.AccountType;
@@ -26,9 +26,10 @@ public class CompanySearchServiceImpl implements CompanySearchService {
 	@Value("${list.permitted.exchanges}")
 	private String permittedExchangesFile;
 	
+	
 	@Override
-	@CachePut(value="searchCompany", key="#currency")
-	public SearchResults search(SearchRequest req, AccountType accountType,String currency) throws ServiceException {
+	@Cacheable(value="searchCompany", key = "{#currency, #accType}")
+	public SearchResults search(SearchRequest req, AccountType accountType,String currency, String accType) throws ServiceException {
 
 		try {
 			
