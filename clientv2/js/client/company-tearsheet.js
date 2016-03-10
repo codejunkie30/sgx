@@ -17,7 +17,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		libTrialExpired: ko.observable(),
 		libSubscribe: ko.observable(),
 		libAlerts: ko.observable(),
-		libCurrency: ko.observable(),
+		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 		
 		cpUserStatus: ko.observable(),

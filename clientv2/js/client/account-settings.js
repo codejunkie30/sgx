@@ -135,6 +135,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined,
 				function(data, textStatus, jqXHR){
 					console.log(data);
+					UTILS.saveCurrency(SAVECHANGES.selectedCurrency());
 				}, 
 				PAGE.customSGXError
 				,jsonpCallback);			

@@ -33,7 +33,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		libTrialExpired: ko.observable(),
 		libSubscribe: ko.observable(),
 		libAlerts: ko.observable(),
-		libCurrency: ko.observable(),
+		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 		quarterlyTab: ko.observable(true),
 	    annualTab: ko.observable(false),

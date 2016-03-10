@@ -40,6 +40,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		initPage: function() {
 			///
+			$("<div />").addClass('right-this').appendTo(".header .login-bar.premium");
 			var self = this;
 			var endpoint = this.fqdn+'/sgx/company/names';
 			
@@ -59,6 +60,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.checkStatus();
 			PAGE.libCurrency(true);
+			
 			var waitForDataToInit = ko.computed({
 			  read:function(){
 				 // var companyData = this.gotCompanyData();
@@ -86,7 +88,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		* Get all company Names callback
 		*/
 		finish: function(me, callback) {
-
+			
+			$("<div />").addClass('right-this').appendTo(".header .login-bar.premium");
+			$('<span/>').addClass('currency').text('Currency').appendTo(".login-bar.premium .right");
+			$('<span/>').addClass('currency-select').text('Singapore Dollar').appendTo(".login-bar.premium .right");
+			
 			PAGE.showLoading();
 			var displayMessage = ALERTS.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
@@ -182,9 +188,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);	
 			
-			$('.login-bar .currency').hide();
+
 			me.trackPage("SGX Company Watchlist");
     		
+						$("<div />").addClass('right-this').appendTo(".header .login-bar.premium");
 
 			
     	ko.validation.init({insertMessages: false});

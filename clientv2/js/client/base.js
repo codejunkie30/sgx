@@ -714,6 +714,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								PAGE.libTrialPeriod(true);
 								PAGE.libAlerts(true);
 								PAGE.libCurrency(true);	
+								PAGE.libCurrSelect(true);	
 							}
 							
 							PAGE.getCurrencies(PAGE.currencyDD.currencyList);

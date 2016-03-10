@@ -15,7 +15,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		libTrialExpired: ko.observable(),
 		libSubscribe: ko.observable(),
 		libAlerts: ko.observable(),
-		libCurrency: ko.observable(),
+		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 		initPage: function() {
 			this.showLoading();

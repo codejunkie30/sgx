@@ -10,7 +10,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "client/modules/tea
 		libTrialExpired: ko.observable(),
 		libSubscribe: ko.observable(),
 		libAlerts: ko.observable(),
-		libCurrency: ko.observable(),
+		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 		
 		initPage: function() {

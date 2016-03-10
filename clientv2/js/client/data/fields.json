@@ -10,7 +10,7 @@
 			      "name":"Total Market Cap",
 			      "template":"number",
 			      "isDefault":true,
-				  "isHeaderDefault":true,
+				  "isHeader": true,
 			      "shortName":"Mkt. Cap.",
 				  "distribution-buckets":600
 			   },
@@ -92,7 +92,7 @@
 			      "name":"Total Revenue",
 			      "template":"number",
 			      "isDefault":true,
-				  "isHeaderDefault":true,
+				  "isHeader": true,
 			      "shortName":"Tot. Rev.",
 				  "distribution-buckets":650
 			   },
@@ -176,7 +176,7 @@
 			      "name":"P/E Ratio",
 			      "template":"number",
 			      "isDefault":true,
-				  "isHeaderDefault":true,
+				  "isHeader": true,
 			      "shortName":"P/E",
 				  "distribution-buckets":700
 			   },
@@ -186,7 +186,7 @@
 			      "name":"Dividend Yield",
 			      "template":"number",
 			      "isDefault":true,
-                  "isHeaderDefault":true,
+				  "isHeader": true,
 			      "shortName":"Div. Yld.",
 				  "distribution-buckets":750
 			   },
@@ -250,10 +250,11 @@
 			      "template":"select",
 			      "label":"Select Industry",
 			      "isDefault":true,
-				  "isHeaderDefault":true,
+				  "isHeader": true,
 			      "shortName":"Industry",
 			      "dataSort":"string",
-			      "resultDisplay": "industry"
+			      "resultDisplay": "industry",
+				  "isHeader": false
 			   }
 			]		
 		},
@@ -269,9 +270,8 @@
 			      "label":"Select Exchange",
 			      "shortName":"Exchange",
 			      "dataSort":"string",
-			      "isDefault":false,
-				  "isHeaderDefault":false,
-			      "dataDisplay": false,
+			      "isDefault":true,
+				  "isHeader": true,
 			      "notPermitted": "Singapore Stock Exchange",
 			      "itemLabels": {
 					"CATALIST": "Singapore Exchange Catalist Market",
