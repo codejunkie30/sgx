@@ -21,41 +21,42 @@ import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 
 @RestController()
-@RequestMapping(method=RequestMethod.POST, produces="application/json")
-public class SearchController{
+@RequestMapping(method = RequestMethod.POST, produces = "application/json")
+public class SearchController {
 
 	@Autowired
 	private CompanySearchService companySearchService;
-	
+
 	@Autowired
 	private AccountService accountService;
-	
+
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
-	
+
 	@RequestMapping("search")
-	public SearchResults search(@Valid @RequestBody SearchRequest req, HttpServletRequest request) throws ServiceException{
+	public SearchResults search(@Valid @RequestBody SearchRequest req, HttpServletRequest request)
+			throws ServiceException {
 
 		User u = null;
-		AccountType accountType=null;
+		AccountType accountType = null;
 		String token = request.getHeader("X-AUTH-TOKEN");
-		
+
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
-		String currency ;
-		if(request.getHeader("currency") != null)
-			currency= request.getHeader("currency");
+		String currency;
+		String accType;
+		if (request.getHeader("currency") != null)
+			currency = request.getHeader("currency");
 		else
-			currency="sgd";
-		if(token != null){
-		u = tokenHandler.parseUserFromToken(token);
-		AccountModel accountModel =  accountService.getAccountForUsername(u.getUsername());
-		accountType = accountModel.getType();
-		}else{
-			
+			currency = "sgd";
+		if (token != null) {
+			u = tokenHandler.parseUserFromToken(token);
+			AccountModel accountModel = accountService.getAccountForUsername(u.getUsername());
+			accountType = accountModel.getType();
+		} else {
+
 			accountType = AccountType.NOT_LOGGED_IN;
 		}
-			
-		
-		return companySearchService.search(req,accountType,currency);
+		accType = accountType.name();
+		return companySearchService.search(req, accountType, currency, accType);
 	}
 }
