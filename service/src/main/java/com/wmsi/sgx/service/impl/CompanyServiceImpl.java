@@ -59,7 +59,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private String permittedExchangesList;
 
 	@Override
-	@Cacheable(value = "company", key ="#currency")
+	@Cacheable(value = "company")
 	public Company getById(String id,String currency) throws CompanyServiceException {
 		try{
 	
@@ -124,7 +124,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService financialSearch;
 	
 	@Override
-	@Cacheable(value = "financials", key = "#currency")
+	@Cacheable(value = "financials")
 	public List<Financial> loadFinancials(String id,String currency) throws CompanyServiceException {
 		try{
 			return financialSearch.search(new FinancialsQueryBuilder(id), Financial.class).getHits();
@@ -161,7 +161,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService priceHistorySearch;
 
 	@Override
-	@Cacheable(value = "priceHistory", key = "#currency")
+	@Cacheable(value = "priceHistory")
 	public List<HistoricalValue> loadPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -178,7 +178,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService highPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "highPriceHistory", key = "#currency")
+	@Cacheable(value = "highPriceHistory")
 	public List<HistoricalValue> loadHighPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -195,7 +195,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService lowPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "lowPriceHistory", key = "#currency")
+	@Cacheable(value = "lowPriceHistory")
 	public List<HistoricalValue> loadLowPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -212,7 +212,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService openPriceHistorySearch;
 
 	@Override
-	@Cacheable(value = "openPriceHistory", key = "#currency")
+	@Cacheable(value = "openPriceHistory")
 	public List<HistoricalValue> loadOpenPriceHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -230,7 +230,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService volumeHistorySearch;
 
 	@Override
-	@Cacheable(value = "volumeHistory", key = "#currency")
+	@Cacheable(value = "volumeHistory")
 	public List<HistoricalValue> loadVolumeHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			HistoricalValueQueryBuilder query = new HistoricalValueQueryBuilder(id);
@@ -271,7 +271,7 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private SearchService dividendHistorySearch;
 	@Override
-	@Cacheable(value = "dividendHistory", key = "#currency")
+	@Cacheable(value = "dividendHistory")
 	public DividendHistory loadDividendHistory(String id,String currency) throws CompanyServiceException {
 		try{
 			DividendValueQueryBuilder query = new DividendValueQueryBuilder(id);
@@ -288,7 +288,7 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Override
-	@Cacheable(value = "relatedCompanies", key = "#currency")
+	@Cacheable(value = "relatedCompanies")
 	public List<Company> loadRelatedCompanies(String id, AccountType accType,String currency ) throws CompanyServiceException{
 		List<Company> companies = null;
 		
@@ -313,7 +313,7 @@ public class CompanyServiceImpl implements CompanyService{
 	private SearchService estimatesSerach;
 	
 	@Override
-	@Cacheable(value = "estimate", key = "#currency")
+	@Cacheable(value = "estimate")
 	public List<Estimate> loadEstimates(String id,String currency) throws CompanyServiceException {
 		try{
 			return estimatesSerach.search(new EstimatesQueryBuilder(id), Estimate.class).getHits();

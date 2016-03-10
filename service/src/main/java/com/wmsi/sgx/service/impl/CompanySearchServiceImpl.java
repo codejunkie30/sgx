@@ -27,7 +27,7 @@ public class CompanySearchServiceImpl implements CompanySearchService {
 	private String permittedExchangesFile;
 	
 	@Override
-	@Cacheable(value="searchCompany",key="#currency")
+	@Cacheable(value="searchCompany")
 	public SearchResults search(SearchRequest req, AccountType accountType,String currency) throws ServiceException {
 
 		try {
