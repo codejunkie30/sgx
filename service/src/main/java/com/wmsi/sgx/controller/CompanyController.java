@@ -127,7 +127,7 @@ public class CompanyController{
 		
 		Map<String, Company> ret = new HashMap<String, Company>();
 		Company comp = companyService.getById(search.getId());
-		comp.setFilingCurrency(request.getHeader("currency"));
+		comp.setFilingCurrency(request.getHeader("currency").toUpperCase());
 		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;
 	}
@@ -156,7 +156,7 @@ public class CompanyController{
 		String currency = setCurrency(request);
 		List<Financial> hits = companyService.loadFinancials(search.getId(),currency);
 		for(Financial fn : hits ){
-			fn.setFilingCurrency(request.getHeader("currency"));
+			fn.setFilingCurrency(request.getHeader("currency").toUpperCase());
 		}
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
