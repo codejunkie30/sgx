@@ -263,10 +263,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		selectedCurrency: KO.observable(),
 		
-		changedCurrency: KO.observable(false),
-		
-		
-		
+		changedCurrency: KO.observable(false),		
 		
 		pageData: {
 			
@@ -653,15 +650,15 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password' || 
-                data.reason == 'Authentication token not Valid'){
-						PAGE.premiumUser(false);
-            PAGE.userStatus('UNAUTHORIZED');
-            var currentPg = PAGE.getParameterByName('page');
-            if (currentPg == 18) {
-              top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
-              return;
-            }
+					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password' || data.reason == 'Authentication token not Valid'){
+					PAGE.premiumUser(false);
+           		    PAGE.userStatus('UNAUTHORIZED');
+			
+		            var currentPg = PAGE.getParameterByName('page');
+		            if (currentPg == 18) {
+		              top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
+		              return;
+		            }
 					} else {
 					
 						PAGE.premiumUser(true);
