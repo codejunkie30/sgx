@@ -156,7 +156,7 @@ public class CompanyController{
 		String currency = setCurrency(request);
 		List<Financial> hits = companyService.loadFinancials(search.getId(),currency);
 		for(Financial fn : hits ){
-			fn.setFilingCurrency(request.getHeader("currency").toUpperCase());
+			fn.setFilingCurrency(currency.toUpperCase());
 		}
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
