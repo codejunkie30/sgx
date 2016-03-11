@@ -322,9 +322,9 @@ header.header { margin: 10px 0 0 0; }
 .header .profile .as-of,
 .header .profile .as-of .date,
 .header .profile .as-of .time { color: #fff !important; }
-.header .profile .right.price { width: 30% !important; }
-.header .profile .right .current-currency { color: #fff; padding: 8px; }
-.header .profile .right .current-currency span { color: #fff !important; }
+.header .profile .right.price { width: 27% !important; }
+.header .profile .right .current-currency { color: #fff; padding: 8px; font-size: 9pt; }
+.header .profile .right .current-currency span { color: #fff !important; font-size: 9pt; text-transform: uppercase !important; }
 
 .header .profile .profile-bar { background: #031753; padding: 8px 0 8px 22px; display: block; clear: both; }
 .header .profile .profile-bar a { background: url(../img/bg-profile-bar.png) no-repeat; color: #fff; text-decoration: none; font-size: 9pt !important; height: 17px; line-height: 17px; }

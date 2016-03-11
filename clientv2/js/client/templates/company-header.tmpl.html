@@ -3,7 +3,7 @@
 	<div class="profile">
 		<div class="left">
 			<h1><span data-bind="text: company.companyInfo.companyName"></span> (<span data-bind="text: ticker"></span>)</h1>
-			<div class="breadcrumb">
+			<div class="breadcrumb" data-bind="visible: companyInfo.industryGroup != undefined">
 				Industry Tree: 
 				<a data-bind="text: companyInfo.industryGroup, siteLink: { id: 'index', extra: 'action=isearch&type=advanced-screener&industryGroup=' + industryGroup() }"></a> 
 				> 
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="price right" data-bind="visible: priceData().hasOwnProperty('price')">
-			<div class="current-currency">This company reports in this currency: <span data-bind="text: selectedCurrency()"></span></div>
+			<div class="current-currency">This company reports in this currency: <span data-bind="text: selectedCurrency() != undefined ? selectedCurrency() :  priceData().currency"></span></div>
 			<div class="pricing">
 				<span class="currency" data-bind="text: priceData().currency"></span> 
 				<span class="price" data-bind="text: priceData().price, format: 'number'"></span>
