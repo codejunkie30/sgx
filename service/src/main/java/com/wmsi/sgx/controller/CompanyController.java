@@ -127,7 +127,7 @@ public class CompanyController{
 		
 		Map<String, Company> ret = new HashMap<String, Company>();
 		Company comp = companyService.getById(search.getId());
-		comp.setFilingCurrency(request.getHeader("currency").toUpperCase());
+		comp.setFilingCurrency(currency.toUpperCase());
 		ret.put("companyInfo", companyService.getById(search.getId()));
 		return ret;
 	}
