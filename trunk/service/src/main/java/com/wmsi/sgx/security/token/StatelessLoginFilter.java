@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +23,7 @@ import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.wmsi.sgx.controller.DistributionsController;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.security.RestAuthenticationFailureHandler;
 import com.wmsi.sgx.security.RestAuthenticationSuccessHandler;
@@ -33,7 +36,9 @@ import com.wmsi.sgx.web.filter.PostRequestMapper;
 
 
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
-
+	
+	private static final Logger log = LoggerFactory.getLogger(StatelessLoginFilter.class);
+	
 	private final TokenAuthenticationService tokenAuthenticationService;
 		
 	private RestAuthenticationFailureHandler restAuthenticationFailureHandler;
