@@ -20,7 +20,7 @@
 
 .save { width: 978px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 5px; }
 
-.watchlist { display: inline-block; width: 37.5%; margin: 0 2.5% 0 0; float: left;}
+.watchlist { display: inline-block; width: 42.5%; margin: 0 2.5% 0 0; float: left;}
 .watchlist .wl-companies { margin: 12px 0;position:relative;}
 .watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
 .watchlist .wl-companies ul li { list-style-type: none; padding: 10px; }
@@ -29,7 +29,7 @@
 .watchlist .wl-companies ul li .ticker { width: 115px; }
 .watchlist .wl-companies ul li .currency { width: 60px; }
 .watchlist .wl-companies ul li .price { width: 75px; }
-.watchlist .wl-companies ul li .change { width: 70px; color: #b5cf34; }
+.watchlist .wl-companies ul li .change { width: 100px; color: #b5cf34; }
 .watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
 .watchlist .search .description .screener-basic { margin-bottom: 8px; }
@@ -51,7 +51,7 @@
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
 .watchlist .results ul li .name { font-size: 13px; position: relative; top: -3px; }
 
-.wl-container .alerts { display: inline-block; width: 60%; }
+.wl-container .alerts { display: inline-block; width: 55%; }
 .wl-container .alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
 .wl-container .alerts .developments { overflow: hidden !important; clear: both; }
 .wl-container .alerts input[type=text] { background: #f6f6f6; width: 44px; padding: 0 2px; }
