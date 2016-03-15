@@ -16,9 +16,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			
 			// extend tearsheet
 			$.extend(true, this, TS);
-			
-			console.log(this.getURLParam('curr'));
-			
+						
 			// set up some basics
 			this.sections = JSON.parse(FINANCIALS).financials;
 			this.series([]);
