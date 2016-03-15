@@ -124,7 +124,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		updateSettings: function(){
 			var endpoint = PAGE.fqdn + "/sgx/account/update";
 			var postType = 'POST';
-			var params = { contactOptIn: SAVECHANGES.contactOptIn(), currency: SAVECHANGES.selectedCurrency(), tempCurrency: SAVECHANGES.selectedCurrency() }; //SAVECHANGES.currency()
+			var params = { contactOptIn: SAVECHANGES.contactOptIn(), currency: SAVECHANGES.selectedCurrency() }; //SAVECHANGES.currency()
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			

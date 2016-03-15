@@ -253,8 +253,7 @@
 				  "isHeader": true,
 			      "shortName":"Industry",
 			      "dataSort":"string",
-			      "resultDisplay": "industry",
-				  "isHeader": false
+			      "resultDisplay": "industry"
 			   }
 			]		
 		},
@@ -271,7 +270,7 @@
 			      "shortName":"Exchange",
 			      "dataSort":"string",
 			      "isDefault":true,
-				  "isHeader": true,
+				  "isHeader": false,
 			      "notPermitted": "Singapore Stock Exchange",
 			      "itemLabels": {
 					"CATALIST": "Singapore Exchange Catalist Market",

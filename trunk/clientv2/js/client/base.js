@@ -671,27 +671,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
-							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 							
-							PAGE.selectedCurrency.subscribe(function(newValue) {
-								if (initialRun == false & UTILS.retrieveState() == 'changed'){								
-									UTILS.saveCurrency(newValue);
-									setTimeout(function(){
-										top.location.reload(true);
-									}, 50);
-									
-								} else {
-									UTILS.saveCurrency(PAGE.selectedCurrency());
-									initialRun = false;
-								}
-							});
-							
-							if (UTILS.retrieveState() == false){
-								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
-								UTILS.saveState('changed');					
-							} else {
-								PAGE.selectedCurrency(UTILS.retrieveCurrency());
-							}
 						}
 						
 						if (data.type == 'TRIAL'){
@@ -713,28 +693,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								PAGE.libCurrency(true);	
 								PAGE.libCurrSelect(true);	
 							}
-							
-							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
-							
-							PAGE.selectedCurrency.subscribe(function(newValue) {
-								if (initialRun == false){								
-									UTILS.saveCurrency(newValue);
-									setTimeout(function(){
-										top.location.reload(true);
-									}, 50);
-									
-								} else {
-									UTILS.saveCurrency(PAGE.selectedCurrency());
-									initialRun = false;
-								}
-							});
-							
-							if (UTILS.retrieveState() == false){
-								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency.toLowerCase());
-								UTILS.saveState('changed');					
-							} else {
-								PAGE.selectedCurrency(UTILS.retrieveCurrency());
-							}
 						
 						}
 						
@@ -747,6 +705,27 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libCurrency(true);							
 						}
 						PAGE.timedLogout();
+						PAGE.getCurrencies(PAGE.currencyDD.currencyList);
+							
+						PAGE.selectedCurrency.subscribe(function(newValue) {
+							if (initialRun == false && UTILS.retrieveState() == 'changed'){								
+								UTILS.saveCurrency(newValue);
+								setTimeout(function(){
+									top.location.reload(true);
+								}, 50);
+								
+							} else {
+								UTILS.saveCurrency(PAGE.selectedCurrency());
+								initialRun = false;
+							}
+						});
+						
+						if (UTILS.retrieveState() == false){
+							PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+							UTILS.saveState('changed');					
+						} else {
+							PAGE.selectedCurrency(UTILS.retrieveCurrency());
+						}
 					}
 				}, 
 				PAGE.customSGXError);			

@@ -11,10 +11,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 			finalize(undefined);
 			
-			setTimeout(function(){ 
-				if (screener.results.viewModel.keywords() == null) $(".search-results th.companyName").click(); 
-			}, 1000);
-			
 		},
 		
 		renderInputs: function(data) {
@@ -46,7 +42,11 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		
     		// search
     		var endpoint = "/sgx/search";
-    		this.screener.results.retrieve(endpoint, params, val);
+    		this.screener.results.retrieve(endpoint, params, val, function() { 
+				setTimeout(function(){
+	    			$(".search-results th.companyName").click(); 
+	    		}, 500);
+			 });
 			
 		},
 		

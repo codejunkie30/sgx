@@ -420,9 +420,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					CRITERIA.clickEvents.removeCriteria(data, event);
 					return;
 				}
-				
+								
         		// check if we're maxed out first
-        		if ($(".search-criteria .criteria").length >= 5) {
+        		if ($(".search-criteria tbody tr[id != 'exchange']").length > 5) {
         			CRITERIA.maxCriteriaMsg();
         			return;
         		}
