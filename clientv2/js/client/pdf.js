@@ -17,11 +17,13 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			// extend tearsheet
 			$.extend(true, this, TS);
 			
+			console.log(this.getURLParam('curr'));
+			
 			// set up some basics
 			this.sections = JSON.parse(FINANCIALS).financials;
 			this.series([]);
 			this.dataPoints([]);
-			this.currency("");
+			this.currency(this.getURLParam('curr'));
 
 			this.legendItems = ko.computed(function() {
 				if (this.series().length == 0) return [];
@@ -64,7 +66,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			
 			return this;			
 		},
-		initPriceChart: function(parent, data) {
+		initPriceChart: function(parent, data, currency) {
 			var finished = function() {
 				parent.initNews(parent, data, function() { parent.checkFinished(parent) }); 
 			};
@@ -153,7 +155,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 		initFinancials: function(me, data) {
 			
     		var financials = data.financials.slice();
-    		var currency = null;
+    		var currency = this.getURLParam('curr');
     		
     		// let's make sure they're sorted
     		financials.sort(function(a, b) {
@@ -170,7 +172,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
     		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
 			
 			this.dataPoints(financials);
-			this.currency(financials[0].filingCurrency);
+			this.currency(this.getURLParam('curr'));
 			
 			var pathName = window.location.pathname;
 			var finalPath = pathName.replace('/','').replace('.html','');
@@ -197,6 +199,20 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			var ret = false;
 			try { ret = model.gtis.gtis.length > 0; } catch(err) {}
 			return ret;
+		},
+		getURLParam: function getURLParam(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+		
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+		
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
 		}
 
 	}

@@ -84,7 +84,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 		},
 		
 		printLink: function(id, extra) {
-			var local = "https://" + window.location.hostname + "/print.html?code=" + id + (typeof extra === "undefined" ? "" : extra);
+			var retCurr = UTILS.retrieveCurrency();
+			var defCurr = 'sgd';			
+			var finCurr;
+			if (retCurr != false) {
+				finCurr = retCurr ;
+			} else {
+				finCurr = defCurr ;
+			};
+			
+			var local = "https://" + window.location.hostname + "/print.html?code=" + id + (typeof extra === "undefined" ? "" : extra) + '&curr=' + finCurr;
 			var url = PAGE.pqdn + encodeURIComponent(local);
 			return url;
 		}
