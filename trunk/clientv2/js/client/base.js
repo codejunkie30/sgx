@@ -1,7 +1,5 @@
 define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment", "text!client/data/currency.json", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment, CUR) {
-	
-	var initialRun = true;
-	
+
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
 
@@ -263,7 +261,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		selectedCurrency: KO.observable(),
 		
-		changedCurrency: KO.observable(false),		
+		changedCurrency: KO.observable(false),
 		
 		pageData: {
 			
@@ -708,15 +706,17 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 							
 						PAGE.selectedCurrency.subscribe(function(newValue) {
-							if (initialRun == false && UTILS.retrieveState() == 'changed'){								
+							if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
 								UTILS.saveCurrency(newValue);
 								setTimeout(function(){
 									top.location.reload(true);
 								}, 50);
 								
 							} else {
+								if (UTILS.retrieveState() != 'changed'){
+									PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+								}
 								UTILS.saveCurrency(PAGE.selectedCurrency());
-								initialRun = false;
 							}
 						});
 						
