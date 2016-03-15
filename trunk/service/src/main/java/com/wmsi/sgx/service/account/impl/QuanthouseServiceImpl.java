@@ -2,8 +2,6 @@ package com.wmsi.sgx.service.account.impl;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +9,7 @@ import org.elasticsearch.common.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.cache.annotation.Cacheable;
 
 import com.wmsi.sgx.domain.TradeEvent;
 import com.wmsi.sgx.model.Company;
@@ -157,7 +153,14 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	private Price fallbackPrice(String id) throws CompanyServiceException{
 		Price p = new Price();
+		log.debug("company id used in Fallback function: {}",id );
 		Company comp = companyService.getById(id);
+		if(comp != null){
+			log.debug("company found inside fallbackPrice{}", comp.getTickerCode());
+		}else{
+			log.debug("NO company found inside fallbackPrice{}", comp.getTickerCode());
+		}
+		
 		try{
 			Company prevComp = companyService.getPreviousById(id);
 			p.setClosePrice(prevComp.getClosePrice());
@@ -167,7 +170,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			p.setPreviousDate(comp.getPreviousCloseDate());
 		}
 		p.setOpenPrice(comp.getOpenPrice());
-		p.setLastPrice(comp.getClosePrice());
+		p.setLastPrice(comp.getClosePrice());	
 		p.setCurrentDate(comp.getPreviousCloseDate());		
 		p.setLastTradeTimestamp(comp.getPreviousCloseDate());
 		p.setLastTradeVolume(comp.getVolume());

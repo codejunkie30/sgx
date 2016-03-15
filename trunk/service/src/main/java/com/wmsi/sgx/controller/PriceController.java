@@ -66,7 +66,9 @@ public class PriceController {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.MINUTE, -15);
 				Date delayedTime = cal.getTime();
+				log.debug("market: {}, query.getId():{}, delayedTime:{}", market, query.getId(), delayedTime);
 				p = service.getPriceAt(market, query.getId(), delayedTime);
+				
 			}
 		}
 		catch(QuanthouseServiceException e){

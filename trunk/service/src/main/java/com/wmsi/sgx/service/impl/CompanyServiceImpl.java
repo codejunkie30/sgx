@@ -62,11 +62,11 @@ public class CompanyServiceImpl implements CompanyService{
 	@Cacheable(value = "company")
 	public Company getById(String id) throws CompanyServiceException {
 		try{
-	
+			
 			return companySearch.getById(id, Company.class);
 		}
 		catch(SearchServiceException e){
-			throw new CompanyServiceException("Could not load company by id", e);
+			throw new CompanyServiceException("Could not load company by id: "+id,e);
 		}
 	}
 	
