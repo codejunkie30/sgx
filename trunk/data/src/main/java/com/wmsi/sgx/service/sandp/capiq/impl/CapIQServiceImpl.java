@@ -2,6 +2,8 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.util.Calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.DataService;
@@ -21,6 +24,7 @@ import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class CapIQServiceImpl implements CapIQService{
+	private static final Logger log = LoggerFactory.getLogger(CapIQServiceImpl.class);
 
 	@Autowired
 	private DataService companyService;
@@ -28,6 +32,7 @@ public class CapIQServiceImpl implements CapIQService{
 	
 	@Override
 	public Company getCompany(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{
+		log.debug("Company Input Record Values"+input.getTicker() + ":" + input.getExchangeSymbol(),  input.getDate());
 		Company company = companyService.load(input.getTicker() + ":" + input.getExchangeSymbol(),  input.getDate());
 		
 		if(company != null)

@@ -154,7 +154,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		long start = System.currentTimeMillis();
 		
 		try{
-			log.debug("Indexing record: {}", input.getTicker());
+			log.debug("Indexing record: {}, Index name: {}", input.getTicker(), indexName);
 			indexRecord(indexName, input);
 		}
 		catch(InvalidIdentifierException e){
@@ -313,6 +313,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 		
+		log.debug("Company Input Record: {}",input.toString() );
 		Company company = capIQService.getCompany(input);
 		
 		if(company == null) return;
