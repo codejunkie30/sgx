@@ -60,7 +60,7 @@ public class CompanyServiceImpl implements CompanyService{
 
 	@Override
 	@Cacheable(value = "company")
-	public Company getById(String id) throws CompanyServiceException {
+	public Company getById(String id, String currency) throws CompanyServiceException {
 		try{
 			
 			return companySearch.getById(id, Company.class);
@@ -251,7 +251,7 @@ public class CompanyServiceImpl implements CompanyService{
 	public AlphaFactor loadAlphaFactors(String id,String currency) throws CompanyServiceException {
 
 		List<AlphaFactor> hits = null;
-		Company info = getById(id);
+		Company info = getById(id, "SGD");
 
 		if(info != null && !StringUtils.isEmpty(info.getGvKey())){
 			try{
@@ -293,7 +293,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> companies = null;
 		
 		try{
-			Company company = getById(id);
+			Company company = getById(id, "sgd");
 			RelatedCompaniesQueryBuilder query = new RelatedCompaniesQueryBuilder(company, accType);
 			SearchResult<Company> results = companySearch.search(query, Company.class);
 			
