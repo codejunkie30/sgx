@@ -709,7 +709,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
 								UTILS.saveCurrency(newValue);
 								setTimeout(function(){
-									top.location.reload(true);
+									top.location.reload(false);
 								}, 50);
 								
 							} else {
