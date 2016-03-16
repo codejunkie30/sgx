@@ -68,16 +68,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			}, this);
 
             this.quarterlyTab.subscribe(function(data) {
-                if(data) 
-                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+                if(data) setTimeout(function() { me.resizeIframeSimple(function(){scrollPos(50);}) }, 100);
             });
             this.annualTab.subscribe(function(data) {
-                if(data)
-                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+                if(data) setTimeout(function() { me.resizeIframeSimple(function(){scrollPos(50);}) }, 100);
             });
             this.series.subscribe(function(data) {
                 if(data.length == 0) {
-                    setTimeout(function() { me.resizeIframeSimple(); }, 100);
+                    setTimeout(function() { me.resizeIframeSimple(function(){scrollPos(50);}) }, 100);
                 }
             });
 
