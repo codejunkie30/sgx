@@ -288,9 +288,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		var field = CRITERIA.getFieldById(distribution.field);
         		
         		if (field == null) return;
-        		
+				
         		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
-        		$(el).appendTo(".search-criteria tbody");
+        		if (CRITERIA.firstRun == true) {
+					$(el).appendTo(".search-criteria tbody");
+				} else {
+					$(el).insertBefore(".search-criteria tbody tr:last");
+				}
+				
         		$(el).data(field);
         		
         		var mdl = {
@@ -332,7 +337,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	this.screener.dropdowns.init(".search-criteria");
         	
         	if (this.firstRun) this.runSearch(function() { return 0; });
-               	
+			
+            CRITERIA.firstRun = false;
         },
         
         addCriteria: function(data, finished) {
