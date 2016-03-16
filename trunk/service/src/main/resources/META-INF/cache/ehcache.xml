@@ -4,7 +4,7 @@
     <diskStore path="java.io.tmpdir"/>
 		
 	<cache name="company"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -14,7 +14,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="keyDevs"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -24,7 +24,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="holders"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -34,7 +34,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="financials"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -44,7 +44,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="estimate"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -54,7 +54,7 @@
 		memoryStoreEvictionPolicy="LRU"/>	
 
 	<cache name="gtis"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -64,7 +64,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="priceHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -74,7 +74,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="highPriceHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -84,7 +84,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="lowPriceHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -94,7 +94,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="openPriceHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -104,7 +104,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="volumeHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -114,7 +114,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="dividendHistory"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -124,7 +124,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="alphaFactor"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -134,7 +134,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="alphaFactorSearch"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -144,7 +144,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="relatedCompanies"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -154,7 +154,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="searchCompany"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -164,7 +164,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 		
 	<cache name="keyDevsSearch"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
@@ -174,7 +174,7 @@
 		memoryStoreEvictionPolicy="LRU"/>
 
 	<cache name="distributions"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="100000"
 		eternal="false"
 		timeToLiveSeconds="900"
 		overflowToDisk="true"
