@@ -128,7 +128,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			DecimalFormat df = new DecimalFormat("0.###");
 			
 			try{
-				Company comp = companyService.getById(company);
+				Company comp = companyService.getById(company,"sgd");
 				p = fallbackPrice(company);
 				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
 				companyPrice.setCompanyName(comp.getCompanyName());
@@ -153,14 +153,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	private Price fallbackPrice(String id) throws CompanyServiceException{
 		Price p = new Price();
-		log.debug("company id used in Fallback function: {}",id );
-		Company comp = companyService.getById(id);
-		if(comp != null){
-			log.debug("company found inside fallbackPrice{}", comp.getTickerCode());
-		}else{
-			log.debug("NO company found inside fallbackPrice{}", comp.getTickerCode());
-		}
-		
+		Company comp = companyService.getById(id,"sgd");
 		try{
 			Company prevComp = companyService.getPreviousById(id);
 			p.setClosePrice(prevComp.getClosePrice());

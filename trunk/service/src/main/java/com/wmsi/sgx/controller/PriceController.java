@@ -50,6 +50,7 @@ public class PriceController {
 	
 	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException {
+		log.info("price requested for id: --{}--",query.getId() );
 		Price p = new Price();
 		User user = findUserFromToken(request);
 		AccountModel acct = new AccountModel();
@@ -66,7 +67,6 @@ public class PriceController {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.MINUTE, -15);
 				Date delayedTime = cal.getTime();
-				log.debug("market: {}, query.getId():{}, delayedTime:{}", market, query.getId(), delayedTime);
 				p = service.getPriceAt(market, query.getId(), delayedTime);
 				
 			}
