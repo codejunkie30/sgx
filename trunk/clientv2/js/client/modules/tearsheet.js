@@ -13,7 +13,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
 			var postType = 'POST';
-			var params = { id: this.ticker };
+			var params;
+			if ( location.pathname.split("/")[1] == "print.html" ) { params = { id: this.ticker, type : "pdf" };}
+			else {params = { id: this.ticker };}
+			 
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { 
 				if (data.errorCode == 4004) {
 					var home = PAGE.getPage(PAGE.pageData.getPage('index'));

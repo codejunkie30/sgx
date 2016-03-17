@@ -5,6 +5,8 @@ import com.google.common.base.Objects;
 public class IdSearch{
 
 	private String id;
+	
+	private String type;
 
 	public String getId() {
 		return id;
@@ -12,6 +14,14 @@ public class IdSearch{
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
