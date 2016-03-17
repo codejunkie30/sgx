@@ -48,17 +48,14 @@ public class CompanyService extends AbstractDataService {
 			// list of records
 			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
 			setConsensus(id, records);
-			log.debug("setConsesus done");
 			// company
 			Company company = getCompany(id, records);
 			
 			// price history
 			PriceHistory priceHistory = loadPriceHistory(id, records);
 			company.fullPH = priceHistory;
-			log.debug("priceHistory done");
 			// misc
 			if (priceHistory.getPrice().size() > 0) {
-				log.debug("priceHistory.getPrice().size() " + priceHistory.getPrice().size());
 				Collections.sort(priceHistory.getPrice(), HistoricalValue.HistoricalValueComparator);
 
 				// not sure what the difference is, but the app they should be same

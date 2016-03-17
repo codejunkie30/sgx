@@ -79,7 +79,7 @@ public class KeyDevsService extends AbstractDataService {
 		if (records == null) return null;
 		List<KeyDev> list = new ArrayList<KeyDev>();
 		
-		List<String> idsForCapIqApiCall = new ArrayList<>();
+		/*List<String> idsForCapIqApiCall = new ArrayList<>();
 		for (CSVRecord record : records) {
 			idsForCapIqApiCall.add("IQKD"+record.get(2));
 		}
@@ -91,7 +91,7 @@ public class KeyDevsService extends AbstractDataService {
 		try{
 			 devs = executeRequest(new CapIQRequestImpl(template), null);
 		}catch(Exception e){
-			log.error("Key Dev Sources returned ---localized Message: {}-- from capIqService for ticker {}, inpuut request used for keydev: {}" , e.getLocalizedMessage(),id, json);
+			log.error("Key Dev Sources returned ---localized Message: {}-- from capIqService for ticker {}" , e.getLocalizedMessage(),id);
 		}
 		
 		Map<String, String> keyDevSource = new HashMap<String, String>();
@@ -99,7 +99,7 @@ public class KeyDevsService extends AbstractDataService {
 			for(KeyDev dev : devs.getKeyDevs()){
 				keyDevSource.put(dev.getId(),dev.getSource());
 			}
-		}
+		}*/
 		List<String> ids = new ArrayList<String>();
 		for (CSVRecord record : records) {
 			
@@ -108,7 +108,7 @@ public class KeyDevsService extends AbstractDataService {
 			ids.add(record.get(2));
 			
 			KeyDev keydev = new KeyDev();
-			keydev.setSource(keyDevSource.get("IQKD"+record.get(2)));
+			//keydev.setSource(keyDevSource.get("IQKD"+record.get(2)));
 			keydev.setDate(new Date(record.get(3)));
 			keydev.setHeadline(record.get(4));
 			keydev.setSituation(record.get(5));
