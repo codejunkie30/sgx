@@ -67,21 +67,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			
     		var financials = data.financials.slice();
     		var currency = null;
-    		
+
     		// let's make sure they're sorted
     		financials.sort(function(a, b) {
         		var a = parseInt(a.absPeriod.replace("FY", "").replace("LTM", ""));
         		var b = parseInt(b.absPeriod.replace("FY", "").replace("LTM", ""));
         		return a - b;
         	});          		
-        	
-        	if (financials.length == 5) return financials;
+        			
+        	if (financials.length == 0) return financials;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
     		var isQ4 = financials[financials.length - 1].absPeriod.indexOf("LTM4") != -1;
     		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
-			
+
 			this.dataPoints(financials);
 			this.currency(financials[0].filingCurrency);
 			

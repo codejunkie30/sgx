@@ -568,7 +568,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 	var text = $(this).attr("data-value");
                 	var dataName = typeof $(this).attr("data-name") !== "undefined" ? $(this).attr("data-name") : $(this).closest(".criteria, .additional-criteria").attr("data-name");
                 	var viewModel = KO.dataFor($(dd).closest(".criteria")[0]);
-                	
+					var criteriaRow = $(this).closest('tr').attr('data-id');
                 	if ($("ul li", dd).first().text() != def && text != def) {
                 		$("ul", dd).prepend($("<li />").text(def)).click(function(e) {
                         	e.preventDefault();
@@ -582,7 +582,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 	}
                 	
                 	viewModel.val(text);
-                	$("span.copy", dd).text(text);
+					// Fix for exchange drop-down copy
+					if (criteriaRow == 'exchange'){
+						$("span.copy", dd).text(viewModel.criteria.fieldGroups[4].fields[0].itemLabels[text]);
+					} else {
+                		$("span.copy", dd).text(text);
+					}
                 	
                 	if (typeof finished !== "undefined") finished();
                 	
