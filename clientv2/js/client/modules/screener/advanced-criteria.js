@@ -175,7 +175,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                 	fieldData.buckets.sort(function(a,b) { return a.key.localeCompare(b.key); });
             	}
             	
-        		
         	});
 
         	// numeric ranges
@@ -288,7 +287,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		var field = CRITERIA.getFieldById(distribution.field);
         		
         		if (field == null) return;
-				
+								
         		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
         		if (CRITERIA.firstRun == true) {
 					$(el).appendTo(".search-criteria tbody");
@@ -335,7 +334,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	$(".search-criteria .criteria:even").addClass("even");
         	
         	this.screener.dropdowns.init(".search-criteria");
-        	
+        	CRITERIA.firstRun = true;
         	if (this.firstRun) this.runSearch(function() { return 0; });
 			
             CRITERIA.firstRun = false;

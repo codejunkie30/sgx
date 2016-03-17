@@ -21,7 +21,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			this.sections = JSON.parse(FINANCIALS).financials;
 			this.series([]);
 			this.dataPoints([]);
-			this.currency(this.getURLParam('curr'));
+			this.currency(this.getURLParam('currency'));
 
 			this.legendItems = ko.computed(function() {
 				if (this.series().length == 0) return [];
@@ -153,7 +153,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 		initFinancials: function(me, data) {
 			
     		var financials = data.financials.slice();
-    		var currency = this.getURLParam('curr');
+    		var currency = this.getURLParam('currency');
     		
     		// let's make sure they're sorted
     		financials.sort(function(a, b) {
@@ -170,7 +170,7 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
     		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
 			
 			this.dataPoints(financials);
-			this.currency(this.getURLParam('curr'));
+			this.currency(this.getURLParam('currency'));
 			
 			var pathName = window.location.pathname;
 			var finalPath = pathName.replace('/','').replace('.html','');

@@ -4,17 +4,17 @@
 </td>
 <td colspan="3" class="middle" data-bind="style: { 'display': $('.' + field.id + '-denied').length == 0 ? null : 'none' }">
 
-		<div class="button-dropdown" data-bind="attr: { 'data-label': field.label }">
-			<input class="copy" type="hidden" data-bind="value: val" />
-			<div class="trigger"><span class="copy" data-bind="text: field.label"></span>
-				<span class="arrow"></span>
-			</div>
-			<div class="dropdown">
-				<ul data-bind="foreach: field.buckets">
-					<li data-bind="text: $parent.field.hasOwnProperty('itemLabels') && $parent.field.itemLabels.hasOwnProperty(key) ? $parent.field.itemLabels[key] : key, attr: { 'data-value': key } "></li>
-				</ul>
-			</div>
+	<div class="button-dropdown" data-bind="attr: { 'data-label': field.label }">
+		<input class="copy" type="hidden" data-bind="value: val" />
+		<div class="trigger"><span class="copy" data-bind="text: field.label"></span>
+			<span class="arrow"></span>
 		</div>
+		<div class="dropdown">
+			<ul data-bind="foreach: field.buckets">
+				<li data-bind="text: $parent.field.hasOwnProperty('itemLabels') && $parent.field.itemLabels.hasOwnProperty(key) ? $parent.field.itemLabels[key] : key, attr: { 'data-value': key } "></li>
+			</ul>
+		</div>
+	</div>
 	
 </td>
 <td colspan="3" class="middle" data-bind="style: { 'display': $('.' + field.id + '-denied').length > 0 ? null : 'none' }">
