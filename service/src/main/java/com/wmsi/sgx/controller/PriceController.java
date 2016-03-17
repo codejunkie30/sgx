@@ -51,6 +51,9 @@ public class PriceController {
 	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException {
 		log.info("price requested for id: --{}--",query.getId() );
+		if(query.getId()== null || query.getId().isEmpty()){
+			throw new CompanyServiceException("Request company ticker is null");
+		}
 		Price p = new Price();
 		User user = findUserFromToken(request);
 		AccountModel acct = new AccountModel();
