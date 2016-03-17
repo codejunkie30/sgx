@@ -313,7 +313,6 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 		
-		log.debug("Company Input Record: {}",input.toString() );
 		Company company = capIQService.getCompany(input);
 		
 		if(company == null) return;
