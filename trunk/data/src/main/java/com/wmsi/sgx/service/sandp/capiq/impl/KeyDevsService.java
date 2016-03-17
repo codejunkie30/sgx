@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -25,6 +27,7 @@ import com.wmsi.sgx.util.TemplateUtil;
 
 @SuppressWarnings("unchecked")
 public class KeyDevsService extends AbstractDataService {
+	private Logger log = LoggerFactory.getLogger(KeyDevsService.class);
 	
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
@@ -83,13 +86,20 @@ public class KeyDevsService extends AbstractDataService {
 		
 		String json = getQuery(idsForCapIqApiCall);
 		Resource template = new ByteArrayResource(json.getBytes());
-		KeyDevs devs =  executeRequest(new CapIQRequestImpl(template), null);
 		
-		Map<String, String> keyDevSource = new HashMap<String, String>();
-		for(KeyDev dev : devs.getKeyDevs()){
-			keyDevSource.put(dev.getId(),dev.getSource());
+		KeyDevs devs = null;  
+		try{
+			 devs = executeRequest(new CapIQRequestImpl(template), null);
+		}catch(Exception e){
+			log.error("Key Dev Sources returned ---localized Message: {}-- from capIqService for ticker {}, inpuut request used for keydev: {}" , e.getLocalizedMessage(),id, json);
 		}
 		
+		Map<String, String> keyDevSource = new HashMap<String, String>();
+		if(devs != null){
+			for(KeyDev dev : devs.getKeyDevs()){
+				keyDevSource.put(dev.getId(),dev.getSource());
+			}
+		}
 		List<String> ids = new ArrayList<String>();
 		for (CSVRecord record : records) {
 			
