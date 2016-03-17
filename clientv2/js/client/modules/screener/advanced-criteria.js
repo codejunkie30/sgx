@@ -73,7 +73,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					// select industry
 					finalize = function(data) {
 						var val = UTIL.getParameterByName("industryGroup");
-						screener.criteria.firstRun = false;
+						//screener.criteria.firstRun = false;
 						tmpFn(data);
 						if (val != "") $(".button-dropdown li:contains('" + val + "')").click();
 					};
@@ -90,14 +90,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
     	reset: function(finished) {
     		
-    		this.firstRun = true;
+    		CRITERIA.firstRun = true;
         	
         	$(".search-criteria tbody").children().remove();
-        	
         	$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
         	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
         	this.getDistributions(this.getSelectedFields(), this.screener.finalize);
         	
+			
     	},
     	
     	getDistributions: function(data, finished) {
@@ -175,6 +175,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                 	fieldData.buckets.sort(function(a,b) { return a.key.localeCompare(b.key); });
             	}
             	
+        		
         	});
 
         	// numeric ranges
@@ -289,6 +290,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		if (field == null) return;
 								
         		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
+				
         		if (CRITERIA.firstRun == true) {
 					$(el).appendTo(".search-criteria tbody");
 				} else {
@@ -335,8 +337,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	
         	this.screener.dropdowns.init(".search-criteria");
         	CRITERIA.firstRun = true;
-        	if (this.firstRun) this.runSearch(function() { return 0; });
-			
+        	if (this.firstRun) this.runSearch(function() { return 0; });			
             CRITERIA.firstRun = false;
         },
         
@@ -461,11 +462,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	},
         	
         	reset: function(data, event) {
-
+				CRITERIA.firstRun = true;
         		$(".search-criteria tbody").children().remove();
-                	
-            	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
-            	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
+                setTimeout(function(){
+	            	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
+	            	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);					
+				},250);
 
         	}
     		

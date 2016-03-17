@@ -45,7 +45,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		this.screener.results.retrieve(endpoint, params, val, function() { 
 				setTimeout(function(){
 	    			$(".search-results th.companyName").click(); 
-	    		}, 500);
+					PAGE.resizeIframeSimple();
+	    		}, 1000);
 			 });
 			
 		},

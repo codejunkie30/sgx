@@ -1,7 +1,10 @@
 define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 	var defaults = {
-        	
+        
+	    lang: {
+	      thousandsSep: ','
+	    },
 		title: undefined,
 			
 		colors: [ 'rgb(206, 217, 236)', '#BFCE00' ],
@@ -86,9 +89,10 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		        animation: false,
     		        minRange: .001,
     		        labels: {
+						format: '{value:,.0f}',
                         formatter: function() {
                         	if (this.value == 0) return;
-                            return PAGE.currentFormats.chart.format + this.value;
+                            return PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.value, 0);
                         },
                         style: {
                         	color: "#000000",
