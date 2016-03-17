@@ -180,7 +180,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
             // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
-
+			
             $.each( this.estimates.annually, function(key, val) {
                 var refinedObj = me.normalizeForDisplay( val );
                 me.refinedEstimates.annually.push( refinedObj );
@@ -191,14 +191,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 me.refinedEstimates.quarterly.push( refinedObj );
             });
 
-        	
-        	//if (estimates.length == 5) return estimates;
+        	if (combinedData.length == 0) return combinedData;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
 
     		var isQ4 = combinedData[combinedData.length - 1].period.indexOf("LTM4") != -1;
-    		estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
+    		combinedData.splice(isQ4 ? combinedData.length - 1 : 0, 1);
 
             if(this.dataExists() && combinedData.length > 0 && combinedData[0].filingCurrency)
 			 this.currency(combinedData[0].filingCurrency);

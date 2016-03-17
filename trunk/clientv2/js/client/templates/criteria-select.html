@@ -21,6 +21,9 @@
 	<span data-bind="text: field.notPermitted"></span>
 </td>
 
+
+<td class="remove">
 <!-- ko ifnot:field.name.toLowerCase() == 'exchange' -->
-<td class="remove"><img data-bind="tooltip: 'criteriaRemove', click: criteria.clickEvents.removeCriteria, style: { 'display': $('.' + field.id + '-denied').length == 0 ? null : 'none' }" src="img/x-button.png" alt="" /></td>
+	<img data-bind="tooltip: 'criteriaRemove', click: criteria.clickEvents.removeCriteria, style: { 'display': $('.' + field.id + '-denied').length == 0 ? null : 'none' }" src="img/x-button.png" alt="" />
 <!-- /ko -->
+</td>

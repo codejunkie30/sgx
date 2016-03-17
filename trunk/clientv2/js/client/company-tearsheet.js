@@ -143,10 +143,15 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		},
 		
 		keyDevClick: function(model, data, event) {
-			
+			var source;
+			if (data.source != null){
+				source = data.source
+			} else {
+				source = '-'
+			}
 			var copy = "<h4>" + data.headline + "</h4>" + 
 			   "<p class='bold'>" + 
-			   "Source: " + data.source + "<br />" +
+			   "Source: " + source + "<br />" +
 			   "Type: " + data.type + "<br />" +
 			   "From: " + model.getFormatted("date", data.date) +  
 			   "</p>" +
