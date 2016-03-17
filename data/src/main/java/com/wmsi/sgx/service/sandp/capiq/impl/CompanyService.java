@@ -51,7 +51,6 @@ public class CompanyService extends AbstractDataService {
 			log.debug("setConsesus done");
 			// company
 			Company company = getCompany(id, records);
-			log.debug("getCompany done " + company.toString());
 			
 			// price history
 			PriceHistory priceHistory = loadPriceHistory(id, records);
