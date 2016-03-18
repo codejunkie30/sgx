@@ -721,28 +721,30 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libCurrency(true);							
 						}
 						PAGE.timedLogout();
-						PAGE.getCurrencies(PAGE.currencyDD.currencyList);
-							
-						PAGE.selectedCurrency.subscribe(function(newValue) {
-							if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
-								UTILS.saveCurrency(newValue);
-								setTimeout(function(){
-									top.location.reload();
-								}, 50);
+						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
+							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 								
-							} else {
-								if (UTILS.retrieveState() != 'changed'){
-									PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+							PAGE.selectedCurrency.subscribe(function(newValue) {
+								if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
+									UTILS.saveCurrency(newValue);
+									setTimeout(function(){
+										top.location.reload();
+									}, 50);
+									
+								} else {
+									if (UTILS.retrieveState() != 'changed'){
+										PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+									}
+									UTILS.saveCurrency(PAGE.selectedCurrency());
 								}
-								UTILS.saveCurrency(PAGE.selectedCurrency());
+							});
+							
+							if (UTILS.retrieveState() == false){
+								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+								UTILS.saveState('changed');					
+							} else {
+								PAGE.selectedCurrency(UTILS.retrieveCurrency());
 							}
-						});
-						
-						if (UTILS.retrieveState() == false){
-							PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
-							UTILS.saveState('changed');					
-						} else {
-							PAGE.selectedCurrency(UTILS.retrieveCurrency());
 						}
 					}
 				}, 
