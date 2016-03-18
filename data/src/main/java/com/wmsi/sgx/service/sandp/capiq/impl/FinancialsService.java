@@ -143,13 +143,10 @@ public class FinancialsService extends AbstractDataService {
 		String dataTobeConvertedInCurrency = indexName.substring(0,3).toUpperCase();
 		// can't convert
 		if (value == null || actual.getCurrency() == null || actual.getPeriodDate() == null){ 
-			log.info("Field no change " + field.getName());
-			log.info(value + " .. " +  actual.getCurrency() + " .. " +  actual.getPeriodDate());
 			return value;
 		}
 		
 		if (!FXRecord.shouldConvert(actual.getCurrency(), indexName)) {
-			log.info("Field no change SHOULD CONVERT " + field.getName() + " .. currency " + actual.getCurrency());
 			return actual.getValue();
 		}
 
@@ -161,7 +158,6 @@ public class FinancialsService extends AbstractDataService {
 		
 		// get the value
 		if (record != null) {
-			log.info("Field MULTIPLIER " + field.getName());
 			BigDecimal val = BigDecimal.valueOf(record.getMultiplier()).multiply(new BigDecimal(actual.getValue()));
 			return val.toString();
 		}
