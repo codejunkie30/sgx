@@ -1,5 +1,6 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,19 +11,23 @@ import java.util.Date;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
+import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @SuppressWarnings("unchecked")
 public class EstimatesService extends AbstractDataService{
-
+	private static final Logger log = LoggerFactory.getLogger(EstimatesService.class);
 	
 	@Override
 	public Estimates load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -35,28 +40,41 @@ public class EstimatesService extends AbstractDataService{
 		estimates.setEstimates(new ArrayList<Estimate>());
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		
-		Iterable<CSVRecord> all = null;
-		try { all = getCompanyData(id, "consensus-estimates"); }
+		List<CompanyCSVRecord> all = null;
+		try { all = getParsedCompanyRecords(id, "consensus-estimates"); }
 		catch (Exception e) {}
 
 		// don't need estimates
 		if (all == null) return estimates;
 		
-		Map<String, List<CSVRecord>> dataMap = getMap(tickerNoEx, all);		
-		Iterator<Entry<String, List<CSVRecord>>> i = dataMap.entrySet().iterator();
+		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, all);		
+		Iterator<Entry<String, List<CompanyCSVRecord>>> i = dataMap.entrySet().iterator();
 		
 		while(i.hasNext()){
-			Entry<String, List<CSVRecord>> entry = i.next();
-			Iterable<CSVRecord> records = entry.getValue();
+			Entry<String, List<CompanyCSVRecord>> entry = i.next();
+			List<CompanyCSVRecord> records = entry.getValue();
 			Map<String, Object> estimateMap = new HashMap<String, Object>();
 			estimateMap.put("period", entry.getKey());
 			estimateMap.put("tickerCode", tickerNoEx);
-			Date periodDate = null;
-			for (CSVRecord record : records) {	
+			//Date periodDate = null;
+			Field[] fields = Estimate.class.getDeclaredFields();
+			
+			for (Field field : fields) {
+				String name = field.getName();
+				try {
+					Object val = getFieldValue(field, records);
+					if (val == null) val = getFieldDate(field, records);
+					if (val != null) estimateMap.put(name, val);
+				} catch (Exception e) {
+					log.error("Getting field val: " + field.getName(), e);
+				}
+			}
+			
+			/*for (CSVRecord record : records) {	
 				estimateMap.put(record.get(2), Double.parseDouble(record.get(3)));	
 				if (periodDate == null && StringUtils.stripToNull(record.get(5)) != null) periodDate = new Date(record.get(5));
 			}
-			if (periodDate != null) estimateMap.put("periodDate", periodDate);
+			if (periodDate != null) estimateMap.put("periodDate", periodDate);*/
 			JsonElement jsonElement = gson.toJsonTree(estimateMap);
 			Estimate est = gson.fromJson(jsonElement, Estimate.class);
 			List<Estimate> list = estimates.getEstimates();
@@ -67,18 +85,20 @@ public class EstimatesService extends AbstractDataService{
 		return estimates;
 	}
 	
-	public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
-		Map<String, List<CSVRecord>> map = new HashMap<String, List<CSVRecord>>();
-		for (CSVRecord record : records) {
-			String key = record.get(4);
-			List<CSVRecord> r = null;
+	public Map<String, List<CompanyCSVRecord> > getMap(String ticker, List<CompanyCSVRecord> records){
+		Map<String, List<CompanyCSVRecord>> map = new HashMap<String, List<CompanyCSVRecord>>();
+		for (CompanyCSVRecord record : records) {
+			if(record.getTicker().equalsIgnoreCase(ticker) &&  (record.getPeriod() != null) && !record.getPeriod().isEmpty()){
+			String key = record.getPeriod();
+			List<CompanyCSVRecord> r = null;
 			if(map.containsKey(key)) r = map.get(key);					
 			else {
-				r = new ArrayList<CSVRecord>();
+				r = new ArrayList<CompanyCSVRecord>();
 				map.put(key, r);
 			}
 				
 			r.add(record);
+			}
 		}
 		return map;		
 	}

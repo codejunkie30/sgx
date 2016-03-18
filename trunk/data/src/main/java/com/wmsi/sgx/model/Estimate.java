@@ -3,15 +3,22 @@ package com.wmsi.sgx.model;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 
 public class Estimate {
 	
 	private Double tpEstimateDeviation;
+	@FXAnnotation
 	private Double tpMeanEstimate;
+	@FXAnnotation
 	private Double tpMedianEstimate;
+	@FXAnnotation
 	private Double tpHighEstimate;
+	@FXAnnotation
 	private Double tpLowEstimate;
+	@FXAnnotation
 	private Double tpEstimateNum;
+	@FXAnnotation
 	private Double targetPrice;
 	private Double ltgEstimateDeviation;
 	private Double ltgMeanEstimate;
@@ -21,20 +28,35 @@ public class Estimate {
 	private Double ltgEstimateNum;
 	private Double volitality;
 	private Double industryRec;
+	@FXAnnotation
 	private Double avgBrokerRec;
+	@FXAnnotation
 	private Double normalizedEps;
+	@FXAnnotation
 	private Double normalizedEpsActual;
+	@FXAnnotation
 	private Double eps;
+	@FXAnnotation
 	private Double epsActual;
+	@FXAnnotation
 	private Double revenue;
+	@FXAnnotation
 	private Double revenueActual;
+	@FXAnnotation
 	private Double ebit;
+	@FXAnnotation
 	private Double ebitActual;
+	@FXAnnotation
 	private Double ebt;
+	@FXAnnotation
 	private Double ebtActual;
+	@FXAnnotation
 	private Double netIncomeExcl;
+	@FXAnnotation
 	private Double netIncomeExclActual;
+	@FXAnnotation
 	private Double netIncome;
+	@FXAnnotation
 	private Double netIncomeActual;
 	private String tickerCode;
 	private String period;
