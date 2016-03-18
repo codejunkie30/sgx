@@ -18,18 +18,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 
-        responseReceived: ko.observable(false), // Ensures we show the section only when the data is ready
-        responseEmpty: ko.observable(false), //check if response is populated or not
+        responseReceived: ko.observable(null), // Ensures we show the section only when the data is ready
+        responseEmpty: ko.observable(null), //check if response is populated or not
 
 
 		initPage: function() {
 			this.showLoading();
-            this.isData = ko.computed(function() {
-                return ko.unwrap(this.responseReceived) && !ko.unwrap(this.responseEmpty);
-            });
-            this.isNoData = ko.computed(function() {
-                return ko.unwrap(this.responseReceived) && ko.unwrap(this.responseEmpty);
-            });
 
 			// extend tearsheet
 			$.extend(true, this, TS);
@@ -381,7 +375,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
             }
 
         })
-    }(Highcharts)); 
+    }(Highcharts));
+
+
+    CF.isData = ko.computed(function() {
+        return  ko.unwrap(this.responseReceived()) && !ko.unwrap(this.responseEmpty());
+    }, CF);
+    CF.isNoData = ko.computed(function() {
+        return ko.unwrap(this.responseReceived()) && ko.unwrap(this.responseEmpty());
+    }, CF); 
 	
 	return CF;
 	
