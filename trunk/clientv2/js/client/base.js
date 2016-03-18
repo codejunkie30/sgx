@@ -229,10 +229,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     update: function (element, valueAccessor) {
       var val = KO.unwrap(valueAccessor());
       if (val === true) {
-        element.className += " " + 'show-hidden';
-
+         $(element).removeClass('hidden');
       } else {
-        //nothing
+       
       }
     }
   }
