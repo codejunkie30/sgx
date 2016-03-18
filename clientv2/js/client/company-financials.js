@@ -75,7 +75,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
         		return a - b;
         	});          		
         			
-        	if (financials.length == 0) return financials;
+        	if (financials.length == 5) return financials;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
