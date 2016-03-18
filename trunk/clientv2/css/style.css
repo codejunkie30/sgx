@@ -1098,3 +1098,14 @@ background: url("../img/title-back.png");
   text-align: left;
 }
 
+.show-hidden {
+  display: block !important; }
+
+.financials-placeholder--dataload {
+  width:100%;
+  height:200px;
+}
+
+.financials-placeholder--dataEmpty {
+  padding:20px 0 10px;
+}
