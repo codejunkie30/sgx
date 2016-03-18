@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.model.annotation.MillionFormatterAnnotation;
 
 public class Financial{
@@ -11,57 +12,59 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_ABS_PERIOD")
 	private String absPeriod;
 	
+	
 	@ConversionAnnotation(name = "IQ_ASSET_TURNS")
 	private Double assetTurns;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
 	private Double basicEpsIncl;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DAYS_INVENTORY_OUT")
 	private Double avgDaysInventory;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DAYS_PAYABLE_OUT")
 	private Double avgDaysPayable;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_CONVERSION")
 	private Double cashConversion;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_FINAN")
 	private Double cashFinancing;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_INVEST")
 	private Double cashInvesting;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_OPER")
 	private Double cashOperations;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_COMMON_EQUITY_1YR_ANN_GROWTH")
 	private Double commonEquity1YrAnnGrowth;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_COMMON")
 	private Double commonStock;
 	
 	@ConversionAnnotation(name = "IQ_CURRENT_RATIO")
 	private Double currentRatio;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DIV_SHARE")
 	private Double dividendsPerShare;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA")
 	private Double ebitda;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA_1YR_ANN_GROWTH")
 	private Double ebitda1YrAnnGrowth;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA_INT")
 	private Double ebitdaInterest;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
 	
 	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EPS_1YR_ANN_GROWTH")
 	private Double eps1YrAnnGrowth;
 	
@@ -70,28 +73,28 @@ public class Financial{
 	
 	@ConversionAnnotation(name = "IQ_FILING_CURRENCY")
 	private String filingCurrency;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_GROSS_MARGIN")
 	private Double grossMargin;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_GP")
 	private Double grossProfit;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_LT_DEBT")
 	private Double longTermDebt;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_MINORITY_INTEREST")
 	private Double minorityInterest;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NET_CHANGE")
 	private Double netChange;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI")
 	private Double netIncome;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI_1YR_ANN_GROWTH")
 	private Double netIncome1YrAnnGrowth;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI_MARGIN")
 	private Double netIncomeMargin;
 	
@@ -106,43 +109,51 @@ public class Financial{
 	
 	@ConversionAnnotation(name = "IQ_QUICK_RATIO")
 	private Double quickRatio;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RE")
 	private Double retainedEarnings;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RETURN_ASSETS")
 	private Double returnAssets;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RETURN_CAPITAL")
 	private Double returnCapital;
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RETURN_EQUITY")
 	private Double returnEquity;
 	
 	@ConversionAnnotation(name = "IQ_COMPANY_TICKER_NO_EXCH")
 	private String tickerCode;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_ASSETS")
 	private Double totalAssets;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_CA")
 	private Double totalCurrentAssets;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_CL")
 	private Double totalCurrentLiabily;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_EQUITY")
 	private Double totalEquity;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_LIAB")
 	private Double totalLiability;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV")
 	private Double totalRevenue;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_1YR_ANN_GROWTH")
 	private Double totalRevenue1YrAnnGrowth;
 
