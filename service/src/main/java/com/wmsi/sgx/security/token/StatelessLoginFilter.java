@@ -98,7 +98,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		
 		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
 		User tyestuser = null;
-		if(request.getHeader("currency") != null){
+		if(request.getHeader("currency") != null && !request.getServletPath().startsWith("/price")){
 			elasticSearchService.setIndexName(request.getHeader("currency").concat("_premium"));
 		}else{
 			elasticSearchService.setIndexName("sgd_premium");

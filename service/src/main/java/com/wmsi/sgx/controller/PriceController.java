@@ -64,7 +64,8 @@ public class PriceController {
 		Map<String, Price> ret = new HashMap<String, Price>();
 					
 		try{			
-			if(acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN))
+			if(acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN)
+					|| acct.getType().equals(AccountType.MASTER))
 				p = service.getPrice(market, query.getId());
 			else{
 				Calendar cal = Calendar.getInstance();
