@@ -42,13 +42,21 @@
 	</div>
 	
 	<div class="data-point-container section-break">
+
+		<div class="financials-placeholder" data-bind="css:{'hidden': (responseReceived() === true) }">
+			<div class="financials-placeholder--dataload">&nbsp;</div>
+		</div>
+
+		<div class="financials-placeholder--dataEmpty hidden" data-bind="showHidden: responseEmpty">
+			There is no data available for this company
+		</div>
 	
-		<div class="header">
+		<div class="header hidden" data-bind="showHidden: isData">
 			<div class="note">In millions <span data-bind="text: currency()"></span>, except per items.</div>
 			<div class="tab">Select up to five options to chart the data points.</div>
 		</div>
 		
-		<table>
+		<table class="hidden" data-bind="showHidden: isData">
 			<!-- ko foreach : sections -->
 				<thead>
 					<tr>

@@ -17,8 +17,20 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		libAlerts: ko.observable(),
 		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
+
+        responseReceived: ko.observable(false), // Ensures we show the section only when the data is ready
+        responseEmpty: ko.observable(false), //check if response is populated or not
+
+
 		initPage: function() {
 			this.showLoading();
+            this.isData = ko.computed(function() {
+                return ko.unwrap(this.responseReceived) && !ko.unwrap(this.responseEmpty);
+            });
+            this.isNoData = ko.computed(function() {
+                return ko.unwrap(this.responseReceived) && ko.unwrap(this.responseEmpty);
+            });
+
 			// extend tearsheet
 			$.extend(true, this, TS);
 
@@ -43,11 +55,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		},
 		
 		finish: function(me) {
-			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
-
-			PAGE.hideLoading();
 
 			me.trackPage("SGX Company Financials - " + me.companyInfo.companyName);
 			
@@ -65,6 +74,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		
 		initFinancials: function(me, data) {
 			
+            this.responseReceived(true);
+            PAGE.hideLoading();
+
+            if ( data.financials.length === 0) {
+                this.responseEmpty(true);
+                return;
+            }
+            
     		var financials = data.financials.slice();
     		var currency = null;
 
