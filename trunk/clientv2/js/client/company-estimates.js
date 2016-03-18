@@ -191,13 +191,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 me.refinedEstimates.quarterly.push( refinedObj );
             });
 
-        	if (combinedData.length == 0) return combinedData;
+        	//if (estimates.length == 5) return estimates;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
 
-    		var isQ4 = combinedData[combinedData.length - 1].period.indexOf("LTM4") != -1;
-    		combinedData.splice(isQ4 ? combinedData.length - 1 : 0, 1);
+            //var isQ4 = combinedData[combinedData.length - 1].period.indexOf("LTM4") != -1;
+            //estimates.splice(isQ4 ? estimates.length - 1 : 0, 1);
+
 
             if(this.dataExists() && combinedData.length > 0 && combinedData[0].filingCurrency)
 			 this.currency(combinedData[0].filingCurrency);
