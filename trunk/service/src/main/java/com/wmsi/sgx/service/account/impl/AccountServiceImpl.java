@@ -156,7 +156,8 @@ public class AccountServiceImpl implements AccountService{
 	public Boolean isPremiumUser(User u){
 		if(u!=null){
 			AccountModel accountModel =getAccountForUsername(u.getUsername());	
-			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL || accountModel.getType() == AccountType.ADMIN)
+			if(accountModel.getType()== AccountType.PREMIUM || accountModel.getType()== AccountType.TRIAL 
+					|| accountModel.getType() == AccountType.ADMIN || accountModel.getType() == AccountType.MASTER)
 					return true;
 		}
 		return false;

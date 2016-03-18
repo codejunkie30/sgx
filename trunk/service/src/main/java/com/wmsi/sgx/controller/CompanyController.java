@@ -153,9 +153,22 @@ public class CompanyController{
 	@RequestMapping(value="company/financials")
 	public Financials getFinancials(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
+		Boolean isPremiumUser = false;
+		User u = null;
+		String token = request.getHeader("X-AUTH-TOKEN");
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		
+		if(token != null)
+			u = tokenHandler.parseUserFromToken(token);
+		isPremiumUser = accountService.isPremiumUser(u);
 		List<Financial> hits = companyService.loadFinancials(search.getId(),currency);
+		
 		for(Financial fn : hits ){
-			fn.setFilingCurrency(currency.toUpperCase());
+			if(isPremiumUser){
+				fn.setFilingCurrency(currency.toUpperCase());
+			}else {
+				fn.setFilingCurrency("SGD");
+			}
 		}
 		Financials ret = new Financials();
 		ret.setFinancials(hits);
