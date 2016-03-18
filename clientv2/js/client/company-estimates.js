@@ -19,6 +19,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		annualEst: null,
 		estimates: null,
         dataExists:ko.observable(),
+        summaryDataExists: ko.observable(),
 
         sectionName:'Estimates',
 
@@ -41,7 +42,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         summaryData: null,
 		
 		initPage: function() {
-			
+			PAGE.showLoading();
             var me = this;
 			// extend tearsheet
 			$.extend(true, this, TS);
@@ -130,17 +131,38 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		},
 
         init_nonPremium: function() {
+            PAGE.hideLoading();
             $('#estimates-content-alternative').show();
             ko.applyBindings(this, $("body")[0]);
         },
 		
 		initFinancials: function(me, data) {
-            
+            PAGE.hideLoading();
+            //console.log(data);
             this.dataExists(data.estimates.length);
-            this.summaryData = data.estimates[0];  //index 0 is summaryData
+
+            var combinedData = [];
+            /********** Assumptions for summary vs table/combined data *********/
+            /* 1. The summary data and the table data are never going to be mixed into the same object: 
+                For example, if the fields ebtActual or revenueActual etc. (there are other table data fields too) 
+                are populated with data, then the summary data fields in the response object (like, ltgMeanEstimate etc) 
+                will always be null and vice versa.
+
+               2. (This also ties with 1 above but setting it down here just to be explicit)   
+               IF the field period is "", then that response object will always be taken as summary data object. 
+               Similary if it contains some string (eg. "FY2014"), that response object will always be taken as table data.
+            */
+
+            for (var i=0, len = data.estimates.length; i < len; i++) {
+                if (data.estimates[i].period === "" ) {
+                    this.summaryData = data.estimates[i];
+                    this.summaryDataExists(true);
+                } else {
+                    combinedData.push(data.estimates[i]);
+                }
+            }
 
 
-    		var combinedData = data.estimates.slice(1); //use data from index 1
     		var currency = null;
 
             for( var i = 0, len = combinedData.length; i < len; i++ ) {
@@ -152,7 +174,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
             }
 
-
+            //console.log(this.estimates);
 
             //table col widths 
             this.quarterlyTableColWidth = '15%';

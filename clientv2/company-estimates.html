@@ -38,9 +38,9 @@
 			<p style="margin-bottom:80px; margin-top:30px">There are no estimates available for this company.</p>
 		</div>
 	</section>
-	<section id="estimates-content" data-bind="if:dataExists, css:{'display-hidden':dataExists}">
+	<section id="estimates-content" data-bind="css:{'display-hidden':dataExists}">
 		
-		<div class="summary">
+		<div class="summary hidden" data-bind="if: summaryDataExists">
 			<h2>Summary</h2>
 			<p class="filing-currency-info">All dollar values shown in <span data-bind="text: companyInfo.filingCurrency"></span>.</p>
 			<div class="left">
