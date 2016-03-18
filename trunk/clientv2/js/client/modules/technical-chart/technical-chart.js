@@ -286,7 +286,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           x: -3,
           formatter: function() {
             if (this.value == 0) return this.value;
-            return PAGE.currentFormats.chart.format + this.value;
+            return PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.value, 0);
           }
         },
         title: {
@@ -432,12 +432,14 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         width: 950,
         height:500
       },
-
+		lang: {
+	      thousandsSep: ','
+	    },
       legend: {
         useHTML:true,
         enabled:true,
         labelFormatter: function() {
-          var lbl = '<span style="font-weight:bold">'+this.yAxis.userOptions.name+'</span>';
+          var lbl = '<span style="font-size:12px">'+this.yAxis.userOptions.name+'</span>';
           lbl += '<br />';
           lbl += '<span style="font-weight:normal">'+this.name+'</span>';
           return lbl;
@@ -467,6 +469,15 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         name: 'Income',
         opposite:false
       },
+	  tooltip: {
+		  valueDecimals: 3,
+		 formatter: function(){
+			 var series = '<span style="font-size:10px">'+this.key+'</span>';
+			 series += '<br />';
+			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + this.y+'</span>';
+			  return series;
+		}
+		},
       series: []
     }
 
