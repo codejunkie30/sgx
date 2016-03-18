@@ -474,7 +474,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 		 formatter: function(){
 			 var series = '<span style="font-size:10px">'+this.key+'</span>';
 			 series += '<br />';
-			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + this.y+'</span>';
+			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.y, 3)+'</span>';
 			  return series;
 		}
 		},
