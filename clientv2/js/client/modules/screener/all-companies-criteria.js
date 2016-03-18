@@ -44,7 +44,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		var endpoint = "/sgx/search";
     		this.screener.results.retrieve(endpoint, params, val, function() { 
 				setTimeout(function(){
-	    			$(".search-results th.companyName").click(); 
 					PAGE.resizeIframeSimple();
 	    		}, 1000);
 			 });

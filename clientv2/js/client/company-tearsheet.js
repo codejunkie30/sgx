@@ -79,10 +79,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 				var myFin = function() { parent.resizeIframeSimple(); };
 				parent.initNews(parent, data, myFin); 
 			};
-			
 			var update = function() { parent.initNews(parent, data);  };
 			//Pushes params to chart for use
-			PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
+			if (data.price.length > 0) { 
+				PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
+			} else {
+				parent.resizeIframeSimple();	
+			}
 			
 		},
 		

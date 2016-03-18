@@ -24,7 +24,7 @@
 	</div>
 	
 	<div class="grid profile">	
-		<div class="column-one">		
+		<div class="column-one">	
 			<div id="price-volume"></div>	
 			<div class="section-break" data-bind="tabs">			
 			    <ul>
@@ -42,7 +42,7 @@
 			                        <td width="25%">Previous Open Price</td>
 			                        <td width="25%" class="normal right border" data-bind="text: companyInfo.openPrice, format: 'dollars'">-</td>
 			                        <td width="25%">Previous Day High/Low</td>
-			                        <td width="25%" class="normal right"><span data-bind="text: companyInfo.highPrice, format: 'dollars'"></span>-<span data-bind="text: companyInfo.lowPrice, format: 'dollars'"></span></td>
+			                        <td width="25%" class="normal right"><span data-bind="text: companyInfo.highPrice != null ? companyInfo.highPrice: '', format: 'dollars'"></span>-<span data-bind="text: companyInfo.lowPrice != null ? companyInfo.lowPrice : '', format: 'dollars'"></span></td>
 			                    </tr>
 			                    <tr class="even">
 			                        <td>Previous Day Volume</td>
@@ -54,7 +54,7 @@
 			                        <td>Previous Close Date</td>
 			                        <td class="normal right border" data-bind="text: companyInfo.previousCloseDate, format: 'date'">-</td>
 			                        <td>52 Week High/Low</td>
-			                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh, format: 'dollars'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'dollars'">-</span></td>
+			                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh != null ? companyInfo.yearHigh : '', format: 'dollars'">-</span>-<span data-bind="text: companyInfo.yearLow != null ? companyInfo.yearLow: '', format: 'dollars'">-</span></td>
 			                    </tr>
 			                    <tr class="even">
 			                        <td>5-Year Beta</td>
@@ -195,6 +195,7 @@
 					</div>
 			
 					<div id="ownership">
+						<!-- ko if: $data.holders != null -->
 						<table cellspacing="0">
 							<thead>
 								<tr>
@@ -211,6 +212,10 @@
 								</tr>
 							</tbody>
 						</table>
+						<!-- /ko -->
+						<!-- ko if: $data.dividendHistory.dividendValues == null -->
+							<p style="text-align: center;">There is no owndership data available.</p>
+						<!-- /ko -->
 					</div>			
 				</div>				
 			</div>
