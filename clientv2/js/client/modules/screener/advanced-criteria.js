@@ -33,7 +33,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		changeTemplate: null,
 		textDistributions: [ "industryGroup" ],
 		firstRun: true,
-		
+		exchangeDisplay: false,
+			
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
@@ -84,20 +85,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				return;
 			}
 			
-			this.reset(finalize);
+			CRITERIA.reset(finalize);
 			
 		},
 
     	reset: function(finished) {
-    		
-    		this.firstRun = true;
-        	
-        	$(".search-criteria tbody").children().remove();
-        	
-        	$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
-        	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
-        	this.getDistributions(this.getSelectedFields(), this.screener.finalize);
-        	
+    		CRITERIA.firstRun = true;
+        	CRITERIA.exchangeDisplay = false;
+			
+			$(".search-criteria tbody").children().remove();
+			
+			$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
+			$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
+			setTimeout(function(){
+	        	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
+        	},500);
     	},
     	
     	getDistributions: function(data, finished) {
@@ -290,10 +292,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		if (field == null) return;
 				
         		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
-				
-				console.log($("<tr >").attr("data-id", "exchange").length)
-				
-        		if ($("<tr >").attr("data-id", "exchange").length == 0) {
+        		
+				if (CRITERIA.exchangeDisplay == false) {
 					$(el).appendTo(".search-criteria tbody");
 				} else {
 					$(el).insertBefore(".search-criteria tbody tr:last");
@@ -341,6 +341,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	
         	if (this.firstRun) this.runSearch(function() { return 0; });
 			
+            CRITERIA.exchangeDisplay = true;
         },
         
         addCriteria: function(data, finished) {
@@ -464,11 +465,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	},
         	
         	reset: function(data, event) {
-
-        		$(".search-criteria tbody").children().remove();
-                	
-            	$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
-            	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
+        		CRITERIA.firstRun = true;
+	        	CRITERIA.exchangeDisplay = false;
+				
+				$(".search-criteria tbody").children().remove();
+				
+				$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
+				$(".criteria-select [data-default='true']").each(function(idx, el) { CRITERIA.clickEvents.checkCriteriaItem(el); });
+				setTimeout(function(){
+		        	CRITERIA.getDistributions(CRITERIA.getSelectedFields(), CRITERIA.screener.finalize);
+	        	},500);
 
         	}
     		
