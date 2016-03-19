@@ -11,11 +11,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		subType: ko.observable(),
 		subExpire: ko.observable(),
 		currency: ko.observableArray(),
+		defaultCurrency: ko.observable(),
 		isFormValid: ko.observable(true),
 		messages: JSON.parse(MESSAGES),
 		currencyDD: JSON.parse(CUR),
 		initPage: function() {
-			
 			
 			var displayMessage = SAVECHANGES.messages.messages[0];
 
@@ -92,8 +92,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		saveChanges: function(me){
 			
-			
-				
 			if (SAVECHANGES.showChange() == false){
 				//updates Currency & OptIn Status
 				this.updateSettings();
@@ -189,7 +187,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					
+					console.log(data);
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.selectedCurrency(data.currency);
@@ -205,6 +203,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						var end = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.expirationDate));
 						
 						SAVECHANGES.subExpire(end);
+						SAVECHANGES.defaultCurrency('PREMIUM');
 						
 					}
 					
@@ -227,11 +226,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$('.settings .intro .content').html(displayMessage.accountSettings.introExpired);
 							$('.settings .intro .date').remove();
 						}
+						SAVECHANGES.defaultCurrency('TRIAL');
 					}
 					
 					if (data.type == 'EXPIRED'){
 						$('.settings .intro .content').html(displayMessage.accountSettings.introExpired);
 						$('.settings .intro .date').remove();
+						SAVECHANGES.defaultCurrency('EXPIRED');
 					}
 										
 					PAGE.timedLogout();					

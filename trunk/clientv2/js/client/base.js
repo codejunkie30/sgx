@@ -344,8 +344,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	string: { header: "" },
 			millions: { header: "in ₱ mm", decimals: 1, format: "₱ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
-			dollars: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
-			cents: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
+			dollars: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
+			cents: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
         	number1: { header: "", decimals: 1 },
@@ -682,7 +682,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-                            PAGE.userStatus('PREMIUM');
+                            PAGE.userStatus('EXPIRED');
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
