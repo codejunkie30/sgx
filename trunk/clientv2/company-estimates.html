@@ -40,7 +40,7 @@
 	</section>
 	<section id="estimates-content" data-bind="css:{'display-hidden':dataExists}">
 		
-		<div class="summary hidden" data-bind="showHidden: summaryDataExists">
+		<div class="summary hidden" data-bind="if: summaryDataExists, showHidden: summaryDataExists">
 			<h2>Summary</h2>
 			<p class="filing-currency-info">All dollar values shown in <span data-bind="text: companyInfo.filingCurrency"></span>.</p>
 			<div class="left">
