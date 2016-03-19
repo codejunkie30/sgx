@@ -40,9 +40,10 @@
 	</section>
 	<section id="estimates-content" data-bind="css:{'display-hidden':dataExists}">
 		
-		<div class="summary hidden" data-bind="if: summaryDataExists, showHidden: summaryDataExists">
+		<div class="summary">
 			<h2>Summary</h2>
 			<p class="filing-currency-info">All dollar values shown in <span data-bind="text: companyInfo.filingCurrency"></span>.</p>
+			<!-- ko if: summaryDataExists -->
 			<div class="left">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
@@ -82,6 +83,7 @@
 					</p>
 				</div>
 			</div>
+			<!-- /ko -->
 			<div class="right">
 				<div class="dark-module progress-estimate">
 					<h3 class="title">S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h3>
