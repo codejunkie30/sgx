@@ -1,7 +1,7 @@
 (function() {
 
     require({
-        urlArgs: "v=1.71",
+        urlArgs: "v=1.72",
         paths: {
             "jquery": 'vendor/jquery/jquery.1.11.3.min',
             "jquery-ui": 'vendor/jquery/jquery-ui-1.11.4/jquery-ui.min',
