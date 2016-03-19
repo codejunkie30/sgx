@@ -246,8 +246,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 					this.page(this.page.previous()); 
 					$(".pager input").focus();
 					return;
-				} 
-				PAGE.resizeIframe(PAGE.getTrueContentHeight(), this.resultsTop());
+				}
+
+        // prev values do get to this place
+        // so conditional for resize should be here
+        if (this.page.previous() <= 0 || this.page.previous() > mdl.pages()) {
+          //skip iframe resize
+        } else {
+          PAGE.resizeIframe(PAGE.getTrueContentHeight(), this.resultsTop());
+        }
 				PAGE.hideLoading();
 			} , mdl);
 			
