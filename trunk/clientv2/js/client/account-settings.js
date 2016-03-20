@@ -187,7 +187,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					console.log(data);
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
 					SAVECHANGES.selectedCurrency(data.currency);
