@@ -690,7 +690,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 						if (data.type == 'PREMIUM'){
 							PAGE.premiumUserEmail(PAGE.premiumUserAccntInfo.email);
-                            PAGE.userStatus('EXPIRED');
+                            PAGE.userStatus('PREMIUM');
 							PAGE.libTrialPeriod(true);
 							PAGE.libTrialExpired(false);
 							PAGE.libSubscribe(true);
