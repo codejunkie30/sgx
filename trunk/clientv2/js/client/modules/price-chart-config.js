@@ -92,7 +92,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 						format: '{value:,.0f}',
                         formatter: function() {
                         	if (this.value == 0) return;
-                            return PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.value, 0);
+                            return PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.value, 3);
                         },
                         style: {
                         	color: "#000000",
