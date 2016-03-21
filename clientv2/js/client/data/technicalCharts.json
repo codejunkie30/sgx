@@ -264,7 +264,7 @@
         {
             "displayName": "Total Revenue",
             "serviceName": "growth",
-            "key": "totalRevenue1YrAnnGrowth",
+            "key": "totalRev1YrAnnGrowth",
             "axisName": "Growth"
         },
         {

@@ -240,7 +240,7 @@
 	   {
 	      "dataPoints":[
 	         {
-	            "property":"totalRevenue1YrAnnGrowth",
+	            "property":"totalRev1YrAnnGrowth",
 	            "glossaryTerm": "totalRev1YrAnnGrowth",
 	            "format":"percent",
 	            "group":"ratio",
