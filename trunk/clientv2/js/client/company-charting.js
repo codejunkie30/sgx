@@ -220,6 +220,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       $('.technical-charting').remove();
       $('.technical-charting-alternative').show();
+      PAGE.hideLoading();
       ko.applyBindings(this, $("body")[0]);
       //setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
     },
@@ -383,7 +384,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },
 
     initIndicatorsChart: function(data) {
-
+      PAGE.hideLoading();
       this.indicators_chart = new Chart.HS_Chart('#technical-chart-container', this.ticker);
       this.indicators_chart.chartReady.subscribe(function(){
         setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
@@ -397,6 +398,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
 
+      PAGE.showLoading();
       PAGE.checkStatus();
         
       var waitForDataToInit = ko.computed({
