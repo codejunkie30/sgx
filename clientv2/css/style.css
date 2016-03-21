@@ -958,8 +958,8 @@ background: url("../img/title-back.png");
 }
 
 
-.custom-select select { background: transparent; width: 227px; font-size: 10px; font-weight: bold; border: 1px solid #fff; border-radius: 4px; height: 21px; -webkit-appearance: none; text-indent: 5px; }
-.custom-select { width: 200px; height: 21px; margin: 0 auto; overflow: hidden; background: url(../img/bg-select-arrow.png) no-repeat right #ddd; border: 2px solid #d4d4d4; border-radius: 4px; }
+.custom-select select { background: transparent; width: 317px; font-size: 10px; font-weight: bold; border: 1px solid #fff; border-radius: 4px; height: 21px; -webkit-appearance: none; text-indent: 5px; }
+.custom-select { width: 290px; height: 21px; margin: 0 auto; overflow: hidden; background: url(../img/bg-select-arrow.png) no-repeat right #ddd; border: 2px solid #d4d4d4; border-radius: 4px; }
 .custom-select select option { background: #f3f3f3; border-bottom: 2px solid #fff; font-weight: normal !important; }
 
 .login-bar select.currency { background: #ddd; border: 1px solid #fff; }

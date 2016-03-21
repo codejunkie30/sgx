@@ -14,7 +14,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		},
 		
 		renderInputs: function(data) {
-			
+			console.log(data);
 			// keyword value
 			var val = $.trim($(".searchbar input").val());
 			
@@ -43,9 +43,11 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		// search
     		var endpoint = "/sgx/search";
     		this.screener.results.retrieve(endpoint, params, val, function() { 
+				viewAllLength = params.criteria.length;
 				setTimeout(function(){
+					if (viewAllLength == 0) $(".search-results th.companyName").click();
 					PAGE.resizeIframeSimple();
-	    		}, 1000);
+	    		}, 500);
 			 });
 			
 		},
