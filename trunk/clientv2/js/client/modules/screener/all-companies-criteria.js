@@ -14,7 +14,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		},
 		
 		renderInputs: function(data) {
-			console.log(data);
+
 			// keyword value
 			var val = $.trim($(".searchbar input").val());
 			
