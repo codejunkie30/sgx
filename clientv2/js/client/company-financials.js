@@ -58,7 +58,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			var postType = 'POST';
     		var params = { id: me.ticker };
     		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, 
-				function(data) { 
+				function(data) {
 					me.initFinancials(me, data);  
 				}, 
 				PAGE.customSGXError,
@@ -67,7 +67,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		},
 		
 		initFinancials: function(me, data) {
-			
+
             this.responseReceived(true);
             PAGE.hideLoading();
 
@@ -86,13 +86,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
         		return a - b;
         	});          		
         			
-        	if (financials.length == 5) return financials;
+        	//if (financials.length == 5) return financials;
 
     		// we need to decide whether to use the latest year end
     		// or quarter data
     		var isQ4 = financials[financials.length - 1].absPeriod.indexOf("LTM4") != -1;
     		financials.splice(isQ4 ? financials.length - 1 : 0, 1);  
-
 			this.dataPoints(financials);
 			this.currency(financials[0].filingCurrency);
 			

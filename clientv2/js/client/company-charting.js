@@ -308,7 +308,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       if(FY_len > 4) {
         trimData[ dataKey ] = data[ dataKey ].slice(FY_len - 4);
       }else {
-        trimData[ dataKey ] = data;
+        trimData[ dataKey ] = data [dataKey];
       }
 
       var self = me || this;
