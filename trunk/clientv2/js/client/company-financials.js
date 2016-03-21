@@ -217,6 +217,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     		chart.get(name).remove();
     		chart.setSize(this.getChartWidth(chart.series.length - 1), this.getChartHeight(), true);
     		
+            if (chart.series.length === 0) {
+                setTimeout(function(){ model.resizeIframe(model.getTrueContentHeight(), $('table').position().top - 130); }, 100);
+            }
     		// latest series
     		this.series($(".checked"));
     		
