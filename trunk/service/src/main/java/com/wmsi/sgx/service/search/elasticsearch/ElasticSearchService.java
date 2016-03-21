@@ -8,5 +8,7 @@ public interface ElasticSearchService{
 
 	<T> T get(String index, String type, String id, Class<T> clz) throws ElasticSearchException;
 	
+	<T> T getUsingIndex(String index, String type, String id, Class<T> clz) throws ElasticSearchException;
+	
 	void setIndexName(String indexName);
 }

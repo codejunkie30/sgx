@@ -2,8 +2,6 @@ package com.wmsi.sgx.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
@@ -15,7 +13,6 @@ import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
-import com.wmsi.sgx.model.IsCompanyNonPremiumModel;
 import com.wmsi.sgx.model.search.ChartRequestModel;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
@@ -54,6 +51,8 @@ public interface CompanyService{
 	List<CompanyNameAndTicker> loadCompanyNamesAndTickers() throws SearchServiceException;
 	
 	Boolean isCompanyNonPremium(String tickerCode) throws SearchServiceException;
+	
+	Company getPreviousById(String id, String indexName) throws CompanyServiceException;
 	
 	Company getPreviousById(String id) throws CompanyServiceException;
 

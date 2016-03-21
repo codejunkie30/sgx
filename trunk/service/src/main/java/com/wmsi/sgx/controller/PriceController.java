@@ -30,6 +30,7 @@ import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
+import com.wmsi.sgx.service.search.SearchServiceException;
 
 
 @RestController
@@ -49,7 +50,7 @@ public class PriceController {
 	private String market = "XSES";	
 	
 	@RequestMapping(value="/price")
-	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException {
+	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException, SearchServiceException {
 		log.info("price requested for id: --{}--",query.getId() );
 		if(query.getId()== null || query.getId().isEmpty()){
 			throw new CompanyServiceException("Request company ticker is null");
@@ -84,7 +85,7 @@ public class PriceController {
 	}
 	
 	@RequestMapping(value="/price/companyPrices")
-	public Map<String, List<CompanyPrice>> getCompanyPrices(@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException{
+	public Map<String, List<CompanyPrice>> getCompanyPrices(@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
 		
 		ret.put("companyPrice", service.getCompanyPrice(companies.getCompanies()));

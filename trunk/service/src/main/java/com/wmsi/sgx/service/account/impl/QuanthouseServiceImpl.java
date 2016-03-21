@@ -20,6 +20,8 @@ import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
 import com.wmsi.sgx.service.account.TradeEventService;
+import com.wmsi.sgx.service.search.SearchService;
+import com.wmsi.sgx.service.search.SearchServiceException;
 
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
@@ -31,6 +33,9 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private SearchService companySearch;
 
 	@Autowired
 	private TradeEventService tradeEventService;
@@ -45,10 +50,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * @return The last price
 	 * @throws QuanthouseServiceException
 	 * @throws CompanyServiceException 
+	 * @throws SearchServiceException 
 	 */
 	@Override
 	//@Cacheable(value = "price")
-	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException {
+	public Price getPrice(String market, String id) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException {
 		Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
 		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), date);
 		if(event.size() > 0){
@@ -58,7 +64,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	@Override
-	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException{
+	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
 		
 		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
@@ -113,7 +119,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	@Override
-	public List<CompanyPrice> getCompanyPrice(List<String> companies) throws QuanthouseServiceException, CompanyServiceException{
+	public List<CompanyPrice> getCompanyPrice(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
 		
 		if(companies == null)
@@ -151,11 +157,16 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return id.concat(MARKET_EXTENTION);
 	}
 	
-	private Price fallbackPrice(String id) throws CompanyServiceException{
+	private Price fallbackPrice(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
-		Company comp = companyService.getById(id,"sgd");
+		Company comp = companySearch.getById(id, Company.class);
+		if(comp.getFilingCurrency().toLowerCase() != "sgd"){
+			//Its just the confusing name, calling today's company not Previous day, neeed to change the name of method
+			Company aseanCompany = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium");
+			comp = aseanCompany;
+		}
 		try{
-			Company prevComp = companyService.getPreviousById(id);
+			Company prevComp = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium_previous");
 			p.setClosePrice(prevComp.getClosePrice());
 			p.setPreviousDate(prevComp.getPreviousCloseDate());
 		}catch(CompanyServiceException e){
@@ -169,7 +180,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		p.setLastTradeVolume(comp.getVolume());
 		p.setLowPrice(comp.getLowPrice());
 		p.setHighPrice(comp.getHighPrice());
-		p.setTradingCurrency("SGD");
+		p.setTradingCurrency(comp.getFilingCurrency());
 		
 		return p;
 		
