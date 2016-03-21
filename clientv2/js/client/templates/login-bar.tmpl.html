@@ -17,7 +17,7 @@
 			<li class="alerts" data-bind="css: {'hide': (libAlerts() == true)}"><a data-bind="siteLink: { id: 'alerts'}">Alerts</a></li>
 			<li class="last"><a data-bind="siteLink: { id: 'logout'} ">Sign Out</a></li>
 		</ul>
-		<div class="right" data-bind="visible: PAGE.userStatus() != 'EXPIRED'">
+		<div class="right hidden" data-bind="css: {'show-hidden': PAGE.userStatus() != 'EXPIRED'}">
 			<span class="currency" data-bind="css: {'hide': (libCurrency() == true)}">Currency</span>
 			<select class="currency-select" data-bind="options: getCurrencies(), value: selectedCurrency, optionsValue: 'id', optionsText: 'name', css: {'hide': (libCurrency() == true)}"></select>
 			<span class="currency" data-bind="css: {'hide': (libCurrency() == false)}">Currency</span>
