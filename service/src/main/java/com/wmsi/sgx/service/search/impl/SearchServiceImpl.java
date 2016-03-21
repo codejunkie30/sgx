@@ -33,6 +33,17 @@ public class SearchServiceImpl implements SearchService{
 			throw new SearchServiceException("Error reteriving object by id", e);
 		}
 	}
+	
+	@Override
+	public <T> T getByIdUsingIndexName(String id, String indexname, Class<T> clz) throws SearchServiceException {
+		try{  
+			return elasticSearchService.getUsingIndex(indexname, type, id, clz);
+			
+		}
+		catch(ElasticSearchException e){
+			throw new SearchServiceException("Error reteriving object by id", e);
+		}
+	}
 
 	@Override
 	public <T> SearchResult<T> search(String query, Class<T> clz) throws SearchServiceException {

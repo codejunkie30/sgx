@@ -73,6 +73,16 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private SearchService previousCompany;
 	@Override
+	public Company getPreviousById(String id, String idxName) throws CompanyServiceException {
+		try{
+			return previousCompany.getByIdUsingIndexName(id, idxName, Company.class);
+		}
+		catch(SearchServiceException e){
+			throw new CompanyServiceException("Could not load company by id", e);
+		}
+	}
+	
+	@Override
 	public Company getPreviousById(String id) throws CompanyServiceException {
 		try{
 			return previousCompany.getById(id, Company.class);

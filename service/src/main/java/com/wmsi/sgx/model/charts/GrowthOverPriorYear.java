@@ -4,7 +4,9 @@ import com.google.common.base.Objects;
 
 public class GrowthOverPriorYear {
 	private String absPeriod;
-	private double totalRevenue1YrAnnGrowth;
+	private Double totalRev1YrAnnGrowth;
+	private Double totalRev3YrAnnGrowth;
+	private Double totalRev5YrAnnGrowth;
 	private double ebitda1YrAnnGrowth;
 	private double netIncome1YrAnnGrowth;
 	private double eps1YrAnnGrowth;
@@ -21,11 +23,24 @@ public class GrowthOverPriorYear {
 		else 
 			this.absPeriod=absPeriod;
 	}
-	public double getTotalRevenue1YrAnnGrowth() {
-		return totalRevenue1YrAnnGrowth;
+	
+	public Double getTotalRev1YrAnnGrowth() {
+		return totalRev1YrAnnGrowth;
 	}
-	public void setTotalRevenue1YrAnnGrowth(double totalRevenue1YrAnnGrowth) {
-		this.totalRevenue1YrAnnGrowth = totalRevenue1YrAnnGrowth;
+	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
+		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+	}
+	public Double getTotalRev3YrAnnGrowth() {
+		return totalRev3YrAnnGrowth;
+	}
+	public void setTotalRev3YrAnnGrowth(Double totalRev3YrAnnGrowth) {
+		this.totalRev3YrAnnGrowth = totalRev3YrAnnGrowth;
+	}
+	public Double getTotalRev5YrAnnGrowth() {
+		return totalRev5YrAnnGrowth;
+	}
+	public void setTotalRev5YrAnnGrowth(Double totalRev5YrAnnGrowth) {
+		this.totalRev5YrAnnGrowth = totalRev5YrAnnGrowth;
 	}
 	public double getEbitda1YrAnnGrowth() {
 		return ebitda1YrAnnGrowth;
@@ -54,21 +69,24 @@ public class GrowthOverPriorYear {
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("absPeriod", absPeriod)
-				.add("totalRevenue1YrAnnGrowth", totalRevenue1YrAnnGrowth).add("ebitda1YrAnnGrowth", ebitda1YrAnnGrowth)
+				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).add("ebitda1YrAnnGrowth", ebitda1YrAnnGrowth)
 				.add("netIncome1YrAnnGrowth", netIncome1YrAnnGrowth).add("eps1YrAnnGrowth", eps1YrAnnGrowth)
 				.add("commonEquity1YrAnnGrowth", commonEquity1YrAnnGrowth).toString();
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(absPeriod, totalRevenue1YrAnnGrowth, ebitda1YrAnnGrowth, netIncome1YrAnnGrowth,
-				eps1YrAnnGrowth, commonEquity1YrAnnGrowth);
+		return Objects.hashCode(absPeriod, totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth,
+				ebitda1YrAnnGrowth, netIncome1YrAnnGrowth, eps1YrAnnGrowth, commonEquity1YrAnnGrowth);
 	}
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof GrowthOverPriorYear) {
 			GrowthOverPriorYear that = (GrowthOverPriorYear) object;
 			return Objects.equal(this.absPeriod, that.absPeriod)
-					&& Objects.equal(this.totalRevenue1YrAnnGrowth, that.totalRevenue1YrAnnGrowth)
+					&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+					&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+					&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth)
 					&& Objects.equal(this.ebitda1YrAnnGrowth, that.ebitda1YrAnnGrowth)
 					&& Objects.equal(this.netIncome1YrAnnGrowth, that.netIncome1YrAnnGrowth)
 					&& Objects.equal(this.eps1YrAnnGrowth, that.eps1YrAnnGrowth)
@@ -76,6 +94,7 @@ public class GrowthOverPriorYear {
 		}
 		return false;
 	}
+	
 	
 	
 	

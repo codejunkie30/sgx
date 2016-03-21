@@ -49,6 +49,14 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		query.setType(type);
 		return executor.executeGet(query, clz);
 	}
+	
+	@Override
+	public <T> T getUsingIndex(String index, String type, String id, Class<T> clz ) throws ElasticSearchException{
+		SourceQuery query = new SourceQuery(id);
+		query.setIndex(index);
+		query.setType(type);
+		return executor.executeGet(query, clz);
+	}
 
 	private QueryResponse query(Query query) throws ElasticSearchException{
 		QueryResponse response = executor.executeQuery(query);
