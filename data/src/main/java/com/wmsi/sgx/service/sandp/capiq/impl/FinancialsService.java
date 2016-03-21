@@ -1,8 +1,8 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,12 +18,9 @@ import org.springframework.util.Assert;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
-import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.service.indexer.IndexerService;
-import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
@@ -62,7 +59,7 @@ public class FinancialsService extends AbstractDataService {
 			financialMap.put("absPeriod", entry.getKey());
 			financialMap.put("tickerCode", tickerNoEx);
 			
-			//Date period = null;
+			Date period = null;
 			
 			Field[] fields = Financial.class.getDeclaredFields();
 		//	Map<String, Object> fieldMapValue = new HashMap<String, Object>();
@@ -78,15 +75,15 @@ public class FinancialsService extends AbstractDataService {
 				}
 			}
 			
-			/*for (CompanyCSVRecord record : records) {
-				if (StringUtils.stripToNull(record.get(3)) == null) continue;
-				financialMap.put(record.get(2), record.get(3));
-				if (period == null && StringUtils.stripToNull(record.get(5)) != null)
-					period = new Date(record.get(5));
+			for (CompanyCSVRecord record : records) {
+				if (StringUtils.stripToNull(record.getValue()) == null) continue;
+				financialMap.put(record.getName(), record.getValue());
+				if (period == null && record.getPeriodDate() != null)
+					period = record.getPeriodDate();
 			}
 			if (period != null) 
 				financialMap.put("periodDate", period);
-			*/
+			
 			JsonElement jsonElement = gson.toJsonTree(financialMap);
 			financialMap.put("period", tickerNoEx);
 			Financial fin = gson.fromJson(jsonElement, Financial.class);
@@ -99,14 +96,14 @@ public class FinancialsService extends AbstractDataService {
 		return financials;
 	}
 	
-	/**
+/*	*//**
 	 * get the value for a particular field
 	 * @param name
 	 * @param records
 	 * @return
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
-	 */
+	 *//*
 	public String getFieldValue(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		
 		CompanyCSVRecord actual = null;
@@ -119,14 +116,14 @@ public class FinancialsService extends AbstractDataService {
 		return getFieldValue(field, actual);
 	}
 	
-	/**
+	*//**
 	 * get the value for a particular field
 	 * @param name
 	 * @param record
 	 * @return
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException
-	 */
+	 *//*
 	public String getFieldValue(Field field, CompanyCSVRecord actual) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		String value = actual == null ? null : StringUtils.stripToNull(actual.getValue());
 
@@ -164,12 +161,13 @@ public class FinancialsService extends AbstractDataService {
 		
 		throw new ResponseParserException("No conversion available for field " + actual);
 		
-	}
+	}*/
 	
 	public Map<String, List<CompanyCSVRecord> > getMap(String ticker, List<CompanyCSVRecord> records){
 		Map<String, List<CompanyCSVRecord>> map = new HashMap<String, List<CompanyCSVRecord>>();
 		for (CompanyCSVRecord record : records) {
 			if(record.getTicker().equalsIgnoreCase(ticker) &&  (record.getPeriod() != null) && !record.getPeriod().isEmpty()){
+			//if(record.getTicker().equalsIgnoreCase(ticker)){
  				String key = record.getPeriod();
 				List<CompanyCSVRecord> r = null;
 				
@@ -182,8 +180,7 @@ public class FinancialsService extends AbstractDataService {
 				
 				r.add(record);
 			}
-		}
-		
+		}	
 		return map;		
 	}
 }

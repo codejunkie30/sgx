@@ -46,7 +46,7 @@ public class CompanyService extends AbstractDataService {
 		try {
 
 			// list of records
-			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
+			List<CompanyCSVRecord> records = getParsedCompanyRecords_NoIndustryValues(id, "company-data");
 			setConsensus(id, records);
 			// company
 			Company company = getCompany(id, records);

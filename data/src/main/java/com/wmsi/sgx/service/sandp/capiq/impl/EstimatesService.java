@@ -56,7 +56,7 @@ public class EstimatesService extends AbstractDataService{
 			Map<String, Object> estimateMap = new HashMap<String, Object>();
 			estimateMap.put("period", entry.getKey());
 			estimateMap.put("tickerCode", tickerNoEx);
-			//Date periodDate = null;
+			Date periodDate = null;
 			Field[] fields = Estimate.class.getDeclaredFields();
 			
 			for (Field field : fields) {
@@ -70,11 +70,11 @@ public class EstimatesService extends AbstractDataService{
 				}
 			}
 			
-			/*for (CSVRecord record : records) {	
-				estimateMap.put(record.get(2), Double.parseDouble(record.get(3)));	
-				if (periodDate == null && StringUtils.stripToNull(record.get(5)) != null) periodDate = new Date(record.get(5));
+			for (CompanyCSVRecord record : records) {	
+				estimateMap.put(record.getName(), Double.parseDouble(record.getValue()));	
+				if (periodDate == null && record.getPeriodDate() != null) periodDate = record.getPeriodDate();
 			}
-			if (periodDate != null) estimateMap.put("periodDate", periodDate);*/
+			if (periodDate != null) estimateMap.put("periodDate", periodDate);
 			JsonElement jsonElement = gson.toJsonTree(estimateMap);
 			Estimate est = gson.fromJson(jsonElement, Estimate.class);
 			List<Estimate> list = estimates.getEstimates();
@@ -88,8 +88,12 @@ public class EstimatesService extends AbstractDataService{
 	public Map<String, List<CompanyCSVRecord> > getMap(String ticker, List<CompanyCSVRecord> records){
 		Map<String, List<CompanyCSVRecord>> map = new HashMap<String, List<CompanyCSVRecord>>();
 		for (CompanyCSVRecord record : records) {
-			if(record.getTicker().equalsIgnoreCase(ticker) &&  (record.getPeriod() != null) && !record.getPeriod().isEmpty()){
-			String key = record.getPeriod();
+			//if(record.getTicker().equalsIgnoreCase(ticker) &&  (record.getPeriod() != null) && !record.getPeriod().isEmpty()){
+			String key;
+			if(record.getPeriod() == null){
+				key = "";
+			}else
+				key = record.getPeriod();
 			List<CompanyCSVRecord> r = null;
 			if(map.containsKey(key)) r = map.get(key);					
 			else {
@@ -98,7 +102,7 @@ public class EstimatesService extends AbstractDataService{
 			}
 				
 			r.add(record);
-			}
+			
 		}
 		return map;		
 	}

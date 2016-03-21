@@ -62,6 +62,7 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
 	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_DILUT_EPS_EXCL")
 	private Double eps;
 	@FXAnnotation
@@ -155,7 +156,12 @@ public class Financial{
 	
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_1YR_ANN_GROWTH")
-	private Double totalRevenue1YrAnnGrowth;
+	private Double totalRev1YrAnnGrowth;
+	
+	@FXAnnotation
+	private Double totalRev3YrAnnGrowth;
+	@FXAnnotation
+	private Double totalRev5YrAnnGrowth;
 
 	public String getAbsPeriod() {
 		return absPeriod;
@@ -517,64 +523,118 @@ public class Financial{
 		this.totalRevenue = totalRevenue;
 	}
 
-	public Double getTotalRevenue1YrAnnGrowth() {
-		return totalRevenue1YrAnnGrowth;
+	public Double getTotalRev1YrAnnGrowth() {
+		return totalRev1YrAnnGrowth;
+	}
+
+	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
+		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+	}
+
+	public Double getTotalRev3YrAnnGrowth() {
+		return totalRev3YrAnnGrowth;
+	}
+
+	public void setTotalRev3YrAnnGrowth(Double totalRev3YrAnnGrowth) {
+		this.totalRev3YrAnnGrowth = totalRev3YrAnnGrowth;
+	}
+
+	public Double getTotalRev5YrAnnGrowth() {
+		return totalRev5YrAnnGrowth;
+	}
+
+	public void setTotalRev5YrAnnGrowth(Double totalRev5YrAnnGrowth) {
+		this.totalRev5YrAnnGrowth = totalRev5YrAnnGrowth;
 	}
 	
-	public void setTotalRevenue1YrAnnGrowth(Double totalRevenue1YrAnnGrowth) {
-		this.totalRevenue1YrAnnGrowth = totalRevenue1YrAnnGrowth;
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("absPeriod", absPeriod).add("assetTurns", assetTurns)
+				.add("basicEpsIncl", basicEpsIncl).add("avgDaysInventory", avgDaysInventory)
+				.add("avgDaysPayable", avgDaysPayable).add("cashConversion", cashConversion)
+				.add("cashFinancing", cashFinancing).add("cashInvesting", cashInvesting)
+				.add("cashOperations", cashOperations).add("commonEquity1YrAnnGrowth", commonEquity1YrAnnGrowth)
+				.add("commonStock", commonStock).add("currentRatio", currentRatio)
+				.add("dividendsPerShare", dividendsPerShare).add("ebitda", ebitda)
+				.add("ebitda1YrAnnGrowth", ebitda1YrAnnGrowth).add("ebitdaInterest", ebitdaInterest)
+				.add("ebitdaMargin", ebitdaMargin).add("eps", eps).add("eps1YrAnnGrowth", eps1YrAnnGrowth)
+				.add("filingDate", filingDate).add("filingCurrency", filingCurrency).add("grossMargin", grossMargin)
+				.add("grossProfit", grossProfit).add("longTermDebt", longTermDebt)
+				.add("minorityInterest", minorityInterest).add("netChange", netChange).add("netIncome", netIncome)
+				.add("netIncome1YrAnnGrowth", netIncome1YrAnnGrowth).add("netIncomeMargin", netIncomeMargin)
+				.add("netPpe", netPpe).add("payoutRatio", payoutRatio).add("periodDate", periodDate)
+				.add("quickRatio", quickRatio).add("retainedEarnings", retainedEarnings)
+				.add("returnAssets", returnAssets).add("returnCapital", returnCapital).add("returnEquity", returnEquity)
+				.add("tickerCode", tickerCode).add("totalAssets", totalAssets)
+				.add("totalCurrentAssets", totalCurrentAssets).add("totalCurrentLiabily", totalCurrentLiabily)
+				.add("totalDebtEquity", totalDebtEquity).add("totalEquity", totalEquity)
+				.add("totalLiability", totalLiability).add("totalRevenue", totalRevenue)
+				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
+				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).toString();
 	}
 
 	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-			.add("absPeriod", absPeriod)
-			.add("assetTurns", assetTurns)
-			.add("basicEpsIncl", basicEpsIncl)
-			.add("avgDaysInventory", avgDaysInventory)
-			.add("avgDaysPayable", avgDaysPayable)
-			.add("cashConversion", cashConversion)
-			.add("cashFinancing", cashFinancing)
-			.add("cashInvesting", cashInvesting)
-			.add("cashOperations", cashOperations)
-			.add("commonEquity1YrAnnGrowth", commonEquity1YrAnnGrowth)
-			.add("commonStock", commonStock)
-			.add("currentRatio", currentRatio)
-			.add("dividendsPerShare", dividendsPerShare)
-			.add("ebitda", ebitda)
-			.add("ebitda1YrAnnGrowth", ebitda1YrAnnGrowth)
-			.add("ebitdaInterest", ebitdaInterest)
-			.add("ebitdaMargin", ebitdaMargin)
-			.add("eps", eps)
-			.add("eps1YrAnnGrowth", eps1YrAnnGrowth)
-			.add("filingDate", filingDate)
-			.add("filingCurrency", filingCurrency)
-			.add("grossMargin", grossMargin)
-			.add("grossProfit", grossProfit)
-			.add("longTermDebt", longTermDebt)
-			.add("minorityInterest", minorityInterest)
-			.add("netChange", netChange)
-			.add("netIncome", netIncome)
-			.add("netIncome1YrAnnGrowth", netIncome1YrAnnGrowth)
-			.add("netIncomeMargin", netIncomeMargin)
-			.add("netPpe", netPpe)
-			.add("payoutRatio", payoutRatio)
-			.add("periodDate", periodDate)
-			.add("quickRatio", quickRatio)
-			.add("retainedEarnings", retainedEarnings)
-			.add("returnAssets", returnAssets)
-			.add("returnCapital", returnCapital)
-			.add("returnEquity", returnEquity)
-			.add("tickerCode", tickerCode)
-			.add("totalAssets", totalAssets)
-			.add("totalCurrentAssets", totalCurrentAssets)
-			.add("totalCurrentLiabily", totalCurrentLiabily)
-			.add("totalDebtEquity", totalDebtEquity)
-			.add("totalEquity", totalEquity)
-			.add("totalLiability", totalLiability)
-			.add("totalRevenue", totalRevenue)
-			.add("totalRevenue1YrAnnGrowth", totalRevenue1YrAnnGrowth)
-			.toString();
+	public int hashCode() {
+		return Objects.hashCode(absPeriod, assetTurns, basicEpsIncl, avgDaysInventory, avgDaysPayable, cashConversion,
+				cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio,
+				dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth,
+				filingDate, filingCurrency, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange,
+				netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio,
+				retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets,
+				totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue,
+				totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof Financial) {
+			Financial that = (Financial) object;
+			return Objects.equal(this.absPeriod, that.absPeriod) && Objects.equal(this.assetTurns, that.assetTurns)
+					&& Objects.equal(this.basicEpsIncl, that.basicEpsIncl)
+					&& Objects.equal(this.avgDaysInventory, that.avgDaysInventory)
+					&& Objects.equal(this.avgDaysPayable, that.avgDaysPayable)
+					&& Objects.equal(this.cashConversion, that.cashConversion)
+					&& Objects.equal(this.cashFinancing, that.cashFinancing)
+					&& Objects.equal(this.cashInvesting, that.cashInvesting)
+					&& Objects.equal(this.cashOperations, that.cashOperations)
+					&& Objects.equal(this.commonEquity1YrAnnGrowth, that.commonEquity1YrAnnGrowth)
+					&& Objects.equal(this.commonStock, that.commonStock)
+					&& Objects.equal(this.currentRatio, that.currentRatio)
+					&& Objects.equal(this.dividendsPerShare, that.dividendsPerShare)
+					&& Objects.equal(this.ebitda, that.ebitda)
+					&& Objects.equal(this.ebitda1YrAnnGrowth, that.ebitda1YrAnnGrowth)
+					&& Objects.equal(this.ebitdaInterest, that.ebitdaInterest)
+					&& Objects.equal(this.ebitdaMargin, that.ebitdaMargin) && Objects.equal(this.eps, that.eps)
+					&& Objects.equal(this.eps1YrAnnGrowth, that.eps1YrAnnGrowth)
+					&& Objects.equal(this.filingDate, that.filingDate)
+					&& Objects.equal(this.filingCurrency, that.filingCurrency)
+					&& Objects.equal(this.grossMargin, that.grossMargin)
+					&& Objects.equal(this.grossProfit, that.grossProfit)
+					&& Objects.equal(this.longTermDebt, that.longTermDebt)
+					&& Objects.equal(this.minorityInterest, that.minorityInterest)
+					&& Objects.equal(this.netChange, that.netChange) && Objects.equal(this.netIncome, that.netIncome)
+					&& Objects.equal(this.netIncome1YrAnnGrowth, that.netIncome1YrAnnGrowth)
+					&& Objects.equal(this.netIncomeMargin, that.netIncomeMargin)
+					&& Objects.equal(this.netPpe, that.netPpe) && Objects.equal(this.payoutRatio, that.payoutRatio)
+					&& Objects.equal(this.periodDate, that.periodDate)
+					&& Objects.equal(this.quickRatio, that.quickRatio)
+					&& Objects.equal(this.retainedEarnings, that.retainedEarnings)
+					&& Objects.equal(this.returnAssets, that.returnAssets)
+					&& Objects.equal(this.returnCapital, that.returnCapital)
+					&& Objects.equal(this.returnEquity, that.returnEquity)
+					&& Objects.equal(this.tickerCode, that.tickerCode)
+					&& Objects.equal(this.totalAssets, that.totalAssets)
+					&& Objects.equal(this.totalCurrentAssets, that.totalCurrentAssets)
+					&& Objects.equal(this.totalCurrentLiabily, that.totalCurrentLiabily)
+					&& Objects.equal(this.totalDebtEquity, that.totalDebtEquity)
+					&& Objects.equal(this.totalEquity, that.totalEquity)
+					&& Objects.equal(this.totalLiability, that.totalLiability)
+					&& Objects.equal(this.totalRevenue, that.totalRevenue)
+					&& Objects.equal(this.totalRev1YrAnnGrowth, that.totalRev1YrAnnGrowth)
+					&& Objects.equal(this.totalRev3YrAnnGrowth, that.totalRev3YrAnnGrowth)
+					&& Objects.equal(this.totalRev5YrAnnGrowth, that.totalRev5YrAnnGrowth);
+		}
+		return false;
 	}
 
 
