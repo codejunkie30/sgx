@@ -95,8 +95,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			} else {
 				finCurr = defCurr ;
 			};
-			
-			var local = "https://" + window.location.hostname + "/print.html?code=" + id + (typeof extra === "undefined" ? "" : extra) + '%26currency=' + finCurr;
+			var currency  = window.location.hostname == "localhost" || "sgx.fakemsi.com"? '&currency=' : '%26currency=';
+			var local = "https://" + window.location.hostname + "/print.html?code=" + id + (typeof extra === "undefined" ? "" : extra) + currency + finCurr;
 			var url = PAGE.pqdn + encodeURIComponent(local);
 			return url;
 		}
