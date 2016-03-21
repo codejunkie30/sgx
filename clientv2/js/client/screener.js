@@ -91,7 +91,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		changeScreenerToggle: function(name) {
 			
 			// loading thingy
-			this.showLoading();
+			if (name == 'all-companies') this.showLoading();
 			
 			// confirm exists
 			if ($(".screener-toggles .button[data-name='" + name + "']").length == 0) name = this.defaultSearch; 
@@ -112,7 +112,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			
 			this.searchEvents[name](this);
 			
-			this.hideLoading();
+			//PAGE.hideLoading();
 		},
 		
 		/**
