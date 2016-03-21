@@ -86,6 +86,33 @@ public abstract class AbstractDataService implements DataService{
 		return ret;
 	}
 	
+	// Function to avoid setting industry values for ASEAN companies as per the ASEAN companies requirements
+	public List<CompanyCSVRecord> getParsedCompanyRecords_NoIndustryValues(String ticker, String type) {
+		
+		Iterable<CSVRecord> records = getCompanyData(ticker, type); 
+		
+		List<CompanyCSVRecord> ret = new ArrayList<CompanyCSVRecord>();
+		for (CSVRecord record : records) {
+			CompanyCSVRecord rec = new CompanyCSVRecord();
+			rec.setTicker(record.get(0));
+			rec.setExchange(record.get(1));
+			rec.setName(record.get(2));
+			if(rec.getExchange() != "SGX" || rec.getExchange() != "CATALIST" ){
+				if(rec.getName().equals("industry") || rec.getName().equals("industryGroup")){
+					rec.setValue(null);
+				}
+			}else{
+				rec.setValue(record.get(3));
+			}
+			rec.setPeriod(record.get(4));
+			if (StringUtils.stripToNull(record.get(5)) != null) rec.setPeriodDate(new Date(record.get(5)));
+			rec.setCurrency(record.get(6));
+			ret.add(rec);
+		}
+
+		return ret;
+	}
+	
 	/**
 	 * get the value for a particular field
 	 * @param name
