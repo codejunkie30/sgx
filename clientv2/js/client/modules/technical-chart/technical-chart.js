@@ -1,7 +1,6 @@
 define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGES ) {
 
 
-
   function HS_Chart(chartId, companyName) {
 
     this.chartElement = null;                 //ref to chart element 
@@ -320,7 +319,14 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         }
       },
       tooltip: {
-        valueDecimals: 3
+        formatter: function() {
+          var tp = '<span style="font-size:10px">'+Highcharts.dateFormat('%A, %b %e, %Y',this.x)+'</span><br/>';
+          $.each(this.points, function() {
+            tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>'+_round(this.point.y, 3)+'</b><br/>'
+          });
+
+          return tp;
+        }
       },
       series: [{
           type: 'line',
@@ -471,15 +477,16 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         opposite:false
       },
 	  tooltip: {
-		  valueDecimals: 3,
-		 formatter: function(){
-			 var yAxisVal = Highcharts.numberFormat(this.y,3);
-             
-			 var series = '<span style="font-size:10px">'+this.key+'</span>';
-			 series += '<br />';
-			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + yAxisVal.replace(/\.?0+$/,'') +'</span>';
-			  return series;
-		}
+        formatter: function() {
+          var tp = '<span style="font-size:10px">'+this.x+'</span><br/>';
+          $.each(this.points, function() {
+            tp += '<span style="font-weight: bold; color:'+ this.series.color +'">\u25CF</span> <span style="font-size: 12px;"> '+this.series.name+': </span><span style="font-size: 12px; font-weight:bold">' + PAGE.currentFormats.chart.format + _round(this.y, 3) +'</span><br />';
+
+          });
+
+          return tp;
+        },
+        shared:true  
 		},
       series: []
     }
@@ -487,6 +494,12 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
     return options;
   }
 
+  //helper function for decimals
+  function _round(num, places) {
+    var rounder = Math.pow(10, places);
+    var roundee = num * rounder;
+    return Math.round(roundee)/rounder;
+  }
 
   return { HS_Chart: HS_Chart, 
             FS_Chart: FS_Chart};
