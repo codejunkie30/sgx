@@ -41,7 +41,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			this.volumeData = this.toHighCharts(data.volume);
 			
 			// set the zoom
-			Highcharts.setOptions({ lang: { rangeSelectorZoom: "" }});
+			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
 			
 			// initialize the chart
 			this.initChart(element, data, finished, periodChange);

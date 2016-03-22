@@ -89,7 +89,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		        animation: false,
     		        minRange: .001,
     		        labels: {
-						format: '{value:,.0f}',
                         formatter: function() {
                         	if (this.value == 0) return;
 							var yAxisVal = Highcharts.numberFormat(this.value,3);
