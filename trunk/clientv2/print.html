@@ -142,7 +142,7 @@
 				                        <td><b>Previous Close Date</b></td>
 				                        <td class="normal right border" data-bind="text: companyInfo.previousCloseDate, format: 'date'">-</td>
 				                        <td><b>52 Week High/Low</b></td>
-				                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh != null ? companyInfo.yearHigh : '-', format: 'number'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'number'">-</span></td>
+				                        <td class="normal right" class="custom right"><span data-bind="text: companyInfo.yearHigh != null ? companyInfo.yearHigh : '-', format: 'dollars'">-</span>-<span data-bind="text: companyInfo.yearLow, format: 'dollars'">-</span></td>
 				                    </tr>
 				                    <tr>
 				                        <td><b>5-Year Beta</b></td>
@@ -374,7 +374,7 @@
 		<div class="container_3">
 			<div class="row financials-section">		
 				<h2>Financials</h2>				
-				<p>In millions <span data-bind="text: currency()"></span>, except per-share items.</p>	
+				<p>In millions <span data-bind="text: currency().toUpperCase()"></span>, except per-share items.</p>	
 					<!-- ko foreach : sections -->
 				<table class="statistics">	
 						<thead>

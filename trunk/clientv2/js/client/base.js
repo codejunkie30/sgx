@@ -391,7 +391,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(child) {
 			if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
 				this.currentFormats = PAGE["numberFormats-"+UTILS.getParameterByName("currency")];
-				console.log("currency overriden for print in base " + UTILS.getParameterByName("currency"));
 			}
 			else {
 				console.log("if you see this print then something is wrong");
