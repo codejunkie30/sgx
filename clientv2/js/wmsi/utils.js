@@ -154,13 +154,18 @@ define(["jquery", "moment"], function($, moment) {
             var token = UTILS.retrieveAuthToken();
             var currency = UTILS.retrieveCurrency();
 			var initialLoad = UTILS.retrieveState();
-			
+			console.log("current path "+ location.pathname.split("/")[1] );
                 config.beforeSend=function(request) {
+                	
 					if (token !== false) {
                     	request.setRequestHeader('x-auth-token', token);
 					}
 					if (currency !== false) {
 						request.setRequestHeader('currency', currency);
+					}
+					if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
+						console.log("currency overriden for print in utils " + UTILS.getParameterByName("currency"));
+						request.setRequestHeader('currency', UTILS.getParameterByName("currency"));
 					}
 					
 					if (initialLoad !== false) {
