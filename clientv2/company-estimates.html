@@ -43,8 +43,8 @@
 		<div class="summary">
 			<h2>Summary</h2>
 			<p class="filing-currency-info">All dollar values shown in <span data-bind="text: companyInfo.filingCurrency"></span>.</p>
-			<!-- ko if: summaryDataExists -->
-			<div class="left">
+	
+			<div class="left" data-bind="if:summaryDataExists">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<th style="width:24%"></th>
@@ -83,7 +83,7 @@
 					</p>
 				</div>
 			</div>
-			<!-- /ko -->
+
 			<div class="right">
 				<div class="dark-module progress-estimate">
 					<h3 class="title">S&amp;P Capital IQ Consensus Estimates <img class="tooltip-left" src="img/info.png" data-bind="tooltip: 'consensusRec'" /></h3>
