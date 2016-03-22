@@ -160,7 +160,7 @@ public class CompanyController{
 		
 		if(token != null)
 			u = tokenHandler.parseUserFromToken(token);
-		isPremiumUser = accountService.isPremiumUser(u);
+		isPremiumUser = accountService.isPremiumUser(u) || "pdf".equals(search.getType());;
 		List<Financial> hits = companyService.loadFinancials(search.getId(),currency);
 		
 		for(Financial fn : hits ){
