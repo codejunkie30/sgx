@@ -60,7 +60,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		if(event.size() > 0){
 			return bindPriceData(event.get(0));
 		}
-		return fallbackPrice(id);				
+		return fallbackPriceForRealTimePricing(id);				
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			}
 		}
 		
-		return fallbackPrice(id);
+		return fallbackPriceForRealTimePricing(id);
 	}
 
 	/**
@@ -134,7 +134,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			DecimalFormat df = new DecimalFormat("0.###");
 			
 			try{
-				Company comp = companyService.getById(company,"sgd");
+				//Company comp = companyService.getById(company,"sgd");
+				Company comp = companyService.getPreviousById(company, "sgd_premium");
 				p = fallbackPrice(company);
 				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
 				companyPrice.setCompanyName(comp.getCompanyName());
@@ -157,7 +158,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return id.concat(MARKET_EXTENTION);
 	}
 	
-	private Price fallbackPrice(String id) throws CompanyServiceException, SearchServiceException{
+	private Price fallbackPriceForRealTimePricing(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
 		Company comp = companySearch.getById(id, Company.class);
 		if(comp.getFilingCurrency().toLowerCase() != "sgd"){
@@ -185,7 +186,30 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return p;
 		
 	}
-
+	
+	private Price fallbackPrice(String id) throws CompanyServiceException, SearchServiceException{
+		Price p = new Price();
+		Company comp = companySearch.getById(id, Company.class);
+		try{
+			Company prevComp = companyService.getPreviousById(id);
+			p.setClosePrice(prevComp.getClosePrice());
+			p.setPreviousDate(prevComp.getPreviousCloseDate());
+		}catch(CompanyServiceException e){
+			p.setClosePrice(comp.getClosePrice());
+			p.setPreviousDate(comp.getPreviousCloseDate());
+		}
+		p.setOpenPrice(comp.getOpenPrice());
+		p.setLastPrice(comp.getClosePrice());	
+		p.setCurrentDate(comp.getPreviousCloseDate());		
+		p.setLastTradeTimestamp(comp.getPreviousCloseDate());
+		p.setLastTradeVolume(comp.getVolume());
+		p.setLowPrice(comp.getLowPrice());
+		p.setHighPrice(comp.getHighPrice());
+		p.setTradingCurrency("SGD");
+		
+		return p;
+		
+	}
 	private Price bindPriceData(TradeEvent data) {
 		Price p = new Price();
 		p.setLastPrice(data.getLastPrice());
