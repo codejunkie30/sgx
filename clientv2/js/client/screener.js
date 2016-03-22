@@ -91,7 +91,7 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		changeScreenerToggle: function(name) {
 			
 			// loading thingy
-			if (name == 'all-companies') this.showLoading();
+			this.showLoading();
 			
 			// confirm exists
 			if ($(".screener-toggles .button[data-name='" + name + "']").length == 0) name = this.defaultSearch; 
