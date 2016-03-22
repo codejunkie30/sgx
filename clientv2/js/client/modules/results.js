@@ -60,7 +60,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	},
     	
 		render: function(data) {
-
       //go to company details page directly if only one result returns
       if(data.size == 1) {
         window.top.location = this.parent.pageData.getCompanyPage(data.companies[0].tickerCode);
@@ -291,8 +290,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				var prop = field.hasOwnProperty("resultDisplay") ? field.resultDisplay : field.id;
 				
 				$(".search-results th").removeClass("asc").removeClass("desc");
+
+
 				$(curField).addClass(direction);
-				
             	// sort
             	companies.sort(function(a, b) {
             		
@@ -308,9 +308,19 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             			if (typeof a1 === "undefined") a1 = -99999999999999;
             			return b1-a1;
             		}
+          /*
+            Sort doesn't handle well when industry is null.
+            '0' to ensure they end up at the begining of the sort. 
+           */
+              if (a1 === null) {
+                a1 = '0';
+              }
+              if (b1 === null) {
+                b1 = '0';
+              }
+          /*   ----   */
 					if (a1 != null) { return a1.localeCompare(b1); }
             	});
-            	
             	mdl.companies(companies);
             	mdl.page(1);
 				
