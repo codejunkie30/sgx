@@ -46,11 +46,19 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		update: function(element, valueAccessor, allBindings) {
 			var precision = valueAccessor();
 			var value = allBindings().text;
+      //console.log(allBindings);
+      var replacement = allBindings.get('ifnoval');
             var postFix = allBindings().postFix;
             var formatNum = allBindings().formatNum;
 
 			return KO.bindingHandlers.text.update(element, function(){
-				if(value == null || value == '-') return '-';
+				if(value == null || value == '-') {
+          if (replacement !== undefined) {
+            return replacement;
+          }else {
+            return '-';
+          }
+        }
                 var roundingMultiplier = Math.pow(10, precision);
                 var newValueAsNum = isNaN(value) ? 0 : parseFloat(+value);
                 valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
@@ -223,6 +231,18 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	        });
 	    }    
 	};
+
+  // hide until data is ready
+  KO.bindingHandlers.showHidden = {
+    update: function (element, valueAccessor) {
+      var val = KO.unwrap(valueAccessor());
+      if (val === true) {
+        $(element).removeClass('hidden');
+      } else {
+        $(element).addClass('hidden');
+      }
+    }
+  }
 	
 	
 	PAGE = {
@@ -332,8 +352,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	string: { header: "" },
 			millions: { header: "in ₱ mm", decimals: 1, format: "₱ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
-			dollars: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
-			cents: { header: "in ₱", decimals: 3, format: "₱$ $VALUE" },
+			dollars: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
+			cents: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
         	number1: { header: "", decimals: 1 },
@@ -393,7 +413,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				this.currentFormats = PAGE["numberFormats-"+UTILS.getParameterByName("currency")];
 			}
 			else {
-				console.log("if you see this print then something is wrong");
 				if (UTILS.retrieveCurrency() == false){
 					this.currentFormats = PAGE["numberFormats-sgd"];
 				} else {
@@ -714,28 +733,30 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libCurrency(true);							
 						}
 						PAGE.timedLogout();
-						PAGE.getCurrencies(PAGE.currencyDD.currencyList);
-							
-						PAGE.selectedCurrency.subscribe(function(newValue) {
-							if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
-								UTILS.saveCurrency(newValue);
-								setTimeout(function(){
-									top.location.reload();
-								}, 50);
+						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
+							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 								
-							} else {
-								if (UTILS.retrieveState() != 'changed'){
-									PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+							PAGE.selectedCurrency.subscribe(function(newValue) {
+								if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
+									UTILS.saveCurrency(newValue);
+									setTimeout(function(){
+										top.location.reload();
+									}, 50);
+									
+								} else {
+									if (UTILS.retrieveState() != 'changed'){
+										PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+									}
+									UTILS.saveCurrency(PAGE.selectedCurrency());
 								}
-								UTILS.saveCurrency(PAGE.selectedCurrency());
+							});
+							
+							if (UTILS.retrieveState() == false){
+								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+								UTILS.saveState('changed');					
+							} else {
+								PAGE.selectedCurrency(UTILS.retrieveCurrency());
 							}
-						});
-						
-						if (UTILS.retrieveState() == false){
-							PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
-							UTILS.saveState('changed');					
-						} else {
-							PAGE.selectedCurrency(UTILS.retrieveCurrency());
 						}
 					}
 				}, 
