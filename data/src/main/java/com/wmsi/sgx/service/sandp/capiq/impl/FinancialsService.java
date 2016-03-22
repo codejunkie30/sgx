@@ -53,7 +53,7 @@ public class FinancialsService extends AbstractDataService {
 		financials.setFinancials(new ArrayList<Financial>());
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		//CSVHelperUtil csvHelperUtil = new CSVHelperUtil(); 
-		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedCompanyRecords(id, "company-data"));		
+		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedFinacnialRecords(id, "company-data"));		
 
 		Iterator<Entry<String, List<CompanyCSVRecord>>> i = dataMap.entrySet().iterator();
 		
@@ -64,7 +64,7 @@ public class FinancialsService extends AbstractDataService {
 			financialMap.put("absPeriod", entry.getKey());
 			financialMap.put("tickerCode", tickerNoEx);
 			
-			Date period = null;
+			Date periodEndDate = null;
 			
 			Field[] fields = Financial.class.getDeclaredFields();
 		//	Map<String, Object> fieldMapValue = new HashMap<String, Object>();
@@ -80,13 +80,12 @@ public class FinancialsService extends AbstractDataService {
 				}
 			}
 			
-			for (CompanyCSVRecord record : records) {
-				if (period == null && record.getPeriodDate() != null)
-					period = record.getPeriodDate();
+			for (CompanyCSVRecord record : records) {	
+				if (periodEndDate == null && record.getPeriodEndDate() != null) 
+					periodEndDate = record.getPeriodEndDate();
 			}
-			if (period != null) 
-				financialMap.put("periodDate", period);
-			
+			if (periodEndDate != null) 
+				financialMap.put("periodDate", periodEndDate);
 			JsonElement jsonElement = gson.toJsonTree(financialMap);
 			financialMap.put("period", tickerNoEx);
 			Financial fin = gson.fromJson(jsonElement, Financial.class);

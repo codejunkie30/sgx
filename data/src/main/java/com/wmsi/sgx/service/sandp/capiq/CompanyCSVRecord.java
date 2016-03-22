@@ -25,6 +25,7 @@ public class CompanyCSVRecord {
 	// assume it's the latest date if not set
 	private Date periodDate = new Date();
 	
+	private Date periodEndDate;
 	private String currency;
 	
 	public CompanyCSVRecord() {}
@@ -90,12 +91,29 @@ public class CompanyCSVRecord {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
+	
+	
+	public Date getPeriodEndDate() {
+		return periodEndDate;
+	}
+
+	public void setPeriodEndDate(Date periodEndDate) {
+		this.periodEndDate = periodEndDate;
+	}
+
+	public static Comparator<CompanyCSVRecord> getCompanyCSVRecordDateComparator() {
+		return CompanyCSVRecordDateComparator;
+	}
+
+	public static void setCompanyCSVRecordDateComparator(Comparator<CompanyCSVRecord> companyCSVRecordDateComparator) {
+		CompanyCSVRecordDateComparator = companyCSVRecordDateComparator;
+	}
 
 	@Override
 	public String toString() {
 		return "CompanyCSVRecord [ticker=" + ticker + ", exchange=" + exchange
 				+ ", name=" + name + ", value=" + value + ", period=" + period
-				+ ", periodDate=" + periodDate + ", currency=" + currency + "]";
+				+ ", periodDate=" + periodDate + ", periodEndDate=" + periodEndDate + ",currency=" + currency + "]";
 	}
 	
 	public static List<CompanyCSVRecord> getByName(String name, List<CompanyCSVRecord> records) {

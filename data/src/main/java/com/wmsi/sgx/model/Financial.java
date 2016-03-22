@@ -108,6 +108,8 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_PERIODDATE_IS")
 	private Date periodDate;
 	
+	private Date periodEndDate;
+	
 	@ConversionAnnotation(name = "IQ_QUICK_RATIO")
 	private Double quickRatio;
 	@FXAnnotation
@@ -162,6 +164,7 @@ public class Financial{
 	private Double totalRev3YrAnnGrowth;
 	@FXAnnotation
 	private Double totalRev5YrAnnGrowth;
+ 
 
 	public String getAbsPeriod() {
 		return absPeriod;
@@ -419,6 +422,14 @@ public class Financial{
 		this.periodDate = periodDate;
 	}
 
+	public Date getPeriodEndDate() {
+		return periodEndDate;
+	}
+
+	public void setPeriodEndDate(Date periodEndDate) {
+		this.periodEndDate = periodEndDate;
+	}
+
 	public Double getQuickRatio() {
 		return quickRatio;
 	}
@@ -546,7 +557,7 @@ public class Financial{
 	public void setTotalRev5YrAnnGrowth(Double totalRev5YrAnnGrowth) {
 		this.totalRev5YrAnnGrowth = totalRev5YrAnnGrowth;
 	}
-	
+
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("absPeriod", absPeriod).add("assetTurns", assetTurns)
@@ -563,12 +574,12 @@ public class Financial{
 				.add("minorityInterest", minorityInterest).add("netChange", netChange).add("netIncome", netIncome)
 				.add("netIncome1YrAnnGrowth", netIncome1YrAnnGrowth).add("netIncomeMargin", netIncomeMargin)
 				.add("netPpe", netPpe).add("payoutRatio", payoutRatio).add("periodDate", periodDate)
-				.add("quickRatio", quickRatio).add("retainedEarnings", retainedEarnings)
-				.add("returnAssets", returnAssets).add("returnCapital", returnCapital).add("returnEquity", returnEquity)
-				.add("tickerCode", tickerCode).add("totalAssets", totalAssets)
-				.add("totalCurrentAssets", totalCurrentAssets).add("totalCurrentLiabily", totalCurrentLiabily)
-				.add("totalDebtEquity", totalDebtEquity).add("totalEquity", totalEquity)
-				.add("totalLiability", totalLiability).add("totalRevenue", totalRevenue)
+				.add("periodEndDate", periodEndDate).add("quickRatio", quickRatio)
+				.add("retainedEarnings", retainedEarnings).add("returnAssets", returnAssets)
+				.add("returnCapital", returnCapital).add("returnEquity", returnEquity).add("tickerCode", tickerCode)
+				.add("totalAssets", totalAssets).add("totalCurrentAssets", totalCurrentAssets)
+				.add("totalCurrentLiabily", totalCurrentLiabily).add("totalDebtEquity", totalDebtEquity)
+				.add("totalEquity", totalEquity).add("totalLiability", totalLiability).add("totalRevenue", totalRevenue)
 				.add("totalRev1YrAnnGrowth", totalRev1YrAnnGrowth).add("totalRev3YrAnnGrowth", totalRev3YrAnnGrowth)
 				.add("totalRev5YrAnnGrowth", totalRev5YrAnnGrowth).toString();
 	}
@@ -579,8 +590,8 @@ public class Financial{
 				cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio,
 				dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth,
 				filingDate, filingCurrency, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange,
-				netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, quickRatio,
-				retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets,
+				netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, periodEndDate,
+				quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets,
 				totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue,
 				totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth);
 	}
@@ -617,6 +628,7 @@ public class Financial{
 					&& Objects.equal(this.netIncomeMargin, that.netIncomeMargin)
 					&& Objects.equal(this.netPpe, that.netPpe) && Objects.equal(this.payoutRatio, that.payoutRatio)
 					&& Objects.equal(this.periodDate, that.periodDate)
+					&& Objects.equal(this.periodEndDate, that.periodEndDate)
 					&& Objects.equal(this.quickRatio, that.quickRatio)
 					&& Objects.equal(this.retainedEarnings, that.retainedEarnings)
 					&& Objects.equal(this.returnAssets, that.returnAssets)
@@ -636,6 +648,7 @@ public class Financial{
 		}
 		return false;
 	}
-
+	
+	
 
 }

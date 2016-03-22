@@ -41,7 +41,7 @@ public class EstimatesService extends AbstractDataService{
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		
 		List<CompanyCSVRecord> all = null;
-		try { all = getParsedCompanyRecords(id, "consensus-estimates"); }
+		try { all = getParsedFinacnialRecords(id, "consensus-estimates"); }
 		catch (Exception e) {}
 
 		// don't need estimates
@@ -56,7 +56,7 @@ public class EstimatesService extends AbstractDataService{
 			Map<String, Object> estimateMap = new HashMap<String, Object>();
 			estimateMap.put("period", entry.getKey());
 			estimateMap.put("tickerCode", tickerNoEx);
-			Date periodDate = null;
+			Date periodEndDate = null;
 			Field[] fields = Estimate.class.getDeclaredFields();
 			
 			for (Field field : fields) {
@@ -71,9 +71,9 @@ public class EstimatesService extends AbstractDataService{
 			}
 			
 			for (CompanyCSVRecord record : records) {	
-				if (periodDate == null && record.getPeriodDate() != null) periodDate = record.getPeriodDate();
+				if (periodEndDate == null && record.getPeriodEndDate() != null) periodEndDate = record.getPeriodEndDate();
 			}
-			if (periodDate != null) estimateMap.put("periodDate", periodDate);
+			if (periodEndDate != null) estimateMap.put("periodDate", periodEndDate);
 			JsonElement jsonElement = gson.toJsonTree(estimateMap);
 			Estimate est = gson.fromJson(jsonElement, Estimate.class);
 			List<Estimate> list = estimates.getEstimates();

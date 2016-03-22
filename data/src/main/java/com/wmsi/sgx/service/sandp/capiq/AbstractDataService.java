@@ -99,11 +99,8 @@ public abstract class AbstractDataService implements DataService{
 			rec.setName(record.get(2));
 			rec.setValue(record.get(3));
 			rec.setPeriod(record.get(4));
-			if (StringUtils.stripToNull(record.get(5)) != null) 
-				rec.setPeriodDate(new Date(record.get(5)));
-			else{
-				rec.setPeriod(null);
-			}
+			if (StringUtils.stripToNull(record.get(5)) != null) rec.setPeriodEndDate(new Date(record.get(5)));
+			if (StringUtils.stripToNull(record.get(5)) != null) rec.setPeriodDate(new Date(record.get(5)));
 			rec.setCurrency(record.get(6));
 			ret.add(rec);
 		}
