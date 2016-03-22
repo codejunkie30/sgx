@@ -101,7 +101,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    	// is a trading day
 		    	ret += "<span class='chart-mouseover'>";
 		    	ret += "<br />";
-		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + openVal..replace(/\.?0+$/,'');
+		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + openVal.replace(/\.?0+$/,'');
 		    	ret += "<br />";
 		    	ret += "<span>Close</span>: " + PAGE.currentFormats.chart.format + closeVal.replace(/\.?0+$/,'');
 		    	ret += "<br />";
