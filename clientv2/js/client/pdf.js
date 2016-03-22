@@ -52,12 +52,12 @@ define(["wmsi/utils", "knockout", "client/company-financials", "client/company-t
 			
 			// init charts
 			var postType = 'POST';
-			var params = { id: me.ticker };
+			var params = { id: me.ticker, type: "pdf" };
 			var tearendpoint = me.fqdn + "/sgx/company/priceHistory";
 			UTIL.handleAjaxRequest(tearendpoint, postType, params, undefined, function(data) { me.initPriceChart(me, data); }, undefined, undefined);
 			
 			var finendpoint = me.fqdn + "/sgx/company/financials";
-    		var params = { id: me.ticker };
+    		var params = { id: me.ticker, type: "pdf" };
     		UTIL.handleAjaxRequest(finendpoint, postType, params, undefined, function(data) { me.initFinancials(me, data);  }, undefined, undefined);
 			
 			//this.resizeIframeSimple();
