@@ -286,7 +286,8 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           x: -3,
           formatter: function() {
             if (this.value == 0) return this.value;
-            return PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.value, 0);
+            var yAxisVal = Highcharts.numberFormat(this.value,3);
+            return PAGE.currentFormats.chart.format + yAxisVal.replace(/\.?0+$/,'');
           }
         },
         title: {
@@ -472,9 +473,11 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
 	  tooltip: {
 		  valueDecimals: 3,
 		 formatter: function(){
+			 var yAxisVal = Highcharts.numberFormat(this.y,3);
+             
 			 var series = '<span style="font-size:10px">'+this.key+'</span>';
 			 series += '<br />';
-			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + Highcharts.numberFormat(this.y, 3)+'</span>';
+			 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">• </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px;">' + PAGE.currentFormats.chart.format + yAxisVal.replace(/\.?0+$/,'') +'</span>';
 			  return series;
 		}
 		},

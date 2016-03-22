@@ -93,16 +93,21 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    		return ret;
 		    	}
 		    	
+				var openVal = Highcharts.numberFormat(point.open,3);
+				var closeVal = Highcharts.numberFormat(point.close,3);
+				var lowVal = Highcharts.numberFormat(point.low,3);
+				var highVal = Highcharts.numberFormat(point.high,3);
+				
 		    	// is a trading day
 		    	ret += "<span class='chart-mouseover'>";
 		    	ret += "<br />";
-		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + Highcharts.numberFormat(point.open,3);
+		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + openVal..replace(/\.?0+$/,'');
 		    	ret += "<br />";
-		    	ret += "<span>Close</span>: " + PAGE.currentFormats.chart.format + Highcharts.numberFormat(point.close,3);
+		    	ret += "<span>Close</span>: " + PAGE.currentFormats.chart.format + closeVal.replace(/\.?0+$/,'');
 		    	ret += "<br />";
-		    	ret += "<span>Low</span>: " + PAGE.currentFormats.chart.format + Highcharts.numberFormat(point.low,3);
+		    	ret += "<span>Low</span>: " + PAGE.currentFormats.chart.format +lowVal.replace(/\.?0+$/,'');
 		    	ret += "<br />";
-		    	ret += "<span>High</span>: " + PAGE.currentFormats.chart.format + Highcharts.numberFormat(point.high,3);
+		    	ret += "<span>High</span>: " + PAGE.currentFormats.chart.format + highVal.replace(/\.?0+$/,'');
 		    	ret += "<br />";
 
 		    	// no volume for this period

@@ -401,6 +401,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		clearWatchListErrors: function() {
 			$('.error-messages').empty();
 		},
+
+		sendEmail: function() {
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/sendEmail";
+			var postType = 'POST';
+    		var params = {};
+			var jsonp = 'jsonp';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(data, textStatus, jqXHR){
+				}, 
+				function(jqXHR, textStatus, errorThrown){
+					//console.log('fail');
+					//console.log('sta', textStatus);
+					//console.log(errorThrown);
+					//console.log(jqXHR);
+					alert('Email Sent');
+				},jsonpCallback);
+		},
 		
 
 		saveWatchlist: function(callback){
