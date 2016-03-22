@@ -147,7 +147,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     	            enabled: false
     	        },
 				tooltip: {
-					useHTML: true
+				  	valueDecimals: 3,
+					useHTML: true,
+					 formatter: function(){
+						 var yAxisVal = Highcharts.numberFormat(this.y,3);
+			             
+						 var series = '<span style="font-size:11px">'+this.key+'</span>';
+						 series += '<br />';
+						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + yAxisVal.replace(/\.?0+$/,'') +'</span>';
+						  return series;
+					}
 				},
                 xAxis: {
                     categories: categories,
