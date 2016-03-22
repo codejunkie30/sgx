@@ -153,7 +153,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	
 	KO.bindingHandlers.slider = {
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-			
 			$(element).slider({
 		        range: true,
 		        min: 0,
