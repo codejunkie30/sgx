@@ -53,7 +53,7 @@ public class FinancialsService extends AbstractDataService {
 		financials.setFinancials(new ArrayList<Financial>());
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		//CSVHelperUtil csvHelperUtil = new CSVHelperUtil(); 
-		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedFinacnialRecords(id, "company-data"));		
+		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedCompanyRecords(id, "company-data"));		
 
 		Iterator<Entry<String, List<CompanyCSVRecord>>> i = dataMap.entrySet().iterator();
 		

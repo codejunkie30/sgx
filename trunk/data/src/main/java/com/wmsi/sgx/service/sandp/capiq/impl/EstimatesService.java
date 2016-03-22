@@ -41,7 +41,7 @@ public class EstimatesService extends AbstractDataService{
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		
 		List<CompanyCSVRecord> all = null;
-		try { all = getParsedFinacnialRecords(id, "consensus-estimates"); }
+		try { all = getParsedCompanyRecords(id, "consensus-estimates"); }
 		catch (Exception e) {}
 
 		// don't need estimates
