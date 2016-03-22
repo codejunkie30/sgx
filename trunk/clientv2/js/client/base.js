@@ -235,7 +235,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
   // hide until data is ready
   KO.bindingHandlers.showHidden = {
     update: function (element, valueAccessor) {
-      var val = KO.unwrap(valueAccessor());
+      var val = !!KO.unwrap(valueAccessor());
       if (val === true) {
         $(element).removeClass('hidden');
       } else {
