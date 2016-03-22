@@ -1,6 +1,7 @@
 package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,12 @@ import org.springframework.util.Assert;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
+import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.service.indexer.IndexerService;
+import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
@@ -48,7 +53,7 @@ public class FinancialsService extends AbstractDataService {
 		financials.setFinancials(new ArrayList<Financial>());
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		//CSVHelperUtil csvHelperUtil = new CSVHelperUtil(); 
-		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedCompanyRecords(id, "company-data"));		
+		Map<String, List<CompanyCSVRecord>> dataMap = getMap(tickerNoEx, getParsedFinacnialRecords(id, "company-data"));		
 
 		Iterator<Entry<String, List<CompanyCSVRecord>>> i = dataMap.entrySet().iterator();
 		
@@ -76,8 +81,6 @@ public class FinancialsService extends AbstractDataService {
 			}
 			
 			for (CompanyCSVRecord record : records) {
-				if (StringUtils.stripToNull(record.getValue()) == null) continue;
-				financialMap.put(record.getName(), record.getValue());
 				if (period == null && record.getPeriodDate() != null)
 					period = record.getPeriodDate();
 			}
@@ -96,7 +99,9 @@ public class FinancialsService extends AbstractDataService {
 		return financials;
 	}
 	
-/*	*//**
+	
+	/*
+	*//**
 	 * get the value for a particular field
 	 * @param name
 	 * @param records

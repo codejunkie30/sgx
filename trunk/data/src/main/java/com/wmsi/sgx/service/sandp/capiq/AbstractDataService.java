@@ -86,6 +86,31 @@ public abstract class AbstractDataService implements DataService{
 		return ret;
 	}
 	
+	//used for Financial and Estimates only
+	public List<CompanyCSVRecord> getParsedFinacnialRecords(String ticker, String type) {
+		
+		Iterable<CSVRecord> records = getCompanyData(ticker, type); 
+		
+		List<CompanyCSVRecord> ret = new ArrayList<CompanyCSVRecord>();
+		for (CSVRecord record : records) {
+			CompanyCSVRecord rec = new CompanyCSVRecord();
+			rec.setTicker(record.get(0));
+			rec.setExchange(record.get(1));
+			rec.setName(record.get(2));
+			rec.setValue(record.get(3));
+			rec.setPeriod(record.get(4));
+			if (StringUtils.stripToNull(record.get(5)) != null) 
+				rec.setPeriodDate(new Date(record.get(5)));
+			else{
+				rec.setPeriod(null);
+			}
+			rec.setCurrency(record.get(6));
+			ret.add(rec);
+		}
+
+		return ret;
+	}
+	
 	// Function to avoid setting industry values for ASEAN companies as per the ASEAN companies requirements
 	public List<CompanyCSVRecord> getParsedCompanyRecords_NoIndustryValues(String ticker, String type) {
 		
