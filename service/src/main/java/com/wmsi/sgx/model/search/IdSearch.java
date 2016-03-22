@@ -7,6 +7,8 @@ public class IdSearch{
 	private String id;
 	
 	private String type;
+	
+	private String currency;
 
 	public String getId() {
 		return id;
@@ -22,6 +24,14 @@ public class IdSearch{
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	@Override
