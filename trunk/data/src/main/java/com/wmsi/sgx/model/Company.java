@@ -31,7 +31,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_BUSINESS_DESCRIPTION")
 	private String businessDescription;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_BV_SHARE")
 	private Double bvShare;
 	
@@ -43,7 +44,8 @@ public class Company {
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CASH_ST_INVEST")
 	private Double cashInvestments;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CLOSEPRICE")
 	private Double closePrice;
 
@@ -63,10 +65,12 @@ public class Company {
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBIT")
 	private Double ebit;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA")
 	private Double ebitda;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_EBITDA_MARGIN")
 	private Double ebitdaMargin;
 	
@@ -107,7 +111,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_INDUSTRY_GROUP")
 	private String industryGroup;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_LASTSALEPRICE")
 	private Double lastSalePrice;
 
@@ -135,7 +140,8 @@ public class Company {
 
 	@ConversionAnnotation(name = "IQ_PRICEDATE")
 	private Date previousCloseDate;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_CLOSE_PRICE")
 	private Double previousClosePrice;
 
@@ -173,20 +179,23 @@ public class Company {
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT")
 	private Double totalDebt;
 	
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EBITDA")
 	private Double totalDebtEbitda;
 	
-	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_DEBT_EQUITY")
 	private Double totalDebtEquity;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_1YR_ANN_GROWTH")
 	private Double totalRev1YrAnnGrowth;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_3YR_ANN_GROWTH")
 	private Double totalRev3YrAnnGrowth;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_TOTAL_REV_5YR_ANN_GROWTH")
 	private Double totalRev5YrAnnGrowth;
 
