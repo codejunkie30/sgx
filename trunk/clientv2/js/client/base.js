@@ -873,6 +873,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 			var newWLNameLC = PAGE.newWLName();
 			
+			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); return; }
 			
 			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); return; }
