@@ -1106,6 +1106,7 @@ background: url("../img/title-back.png");
   height:200px;
 }
 
-.financials-placeholder--dataEmpty {
+.financials-placeholder--dataEmpty, .comparable-companies--dataEmpty {
   padding:20px 0 10px;
 }
+
