@@ -24,12 +24,19 @@
 	<div class="grid scan">
 		<span data-bind="template: 'company-header'"></span>
 	</div>
+	<!-- ko if: responseReceived -->
+	<div class="data-point-container section-break hidden" data-bind="showHidden: results.viewModel.refinedCompanies().length <= 0">
+		<div class="comparable-companies--dataEmpty">
+			There is no data available for this company
+		</div>
+	</div>
+	<!-- /ko -->
 
-	<div class="grid search-results company-comparables">
+	<div class="grid search-results company-comparables" data-bind="visible: results.viewModel.refinedCompanies().length > 0">
 		
 		<!-- header -->
 		<div class="title">
-			<h3 data-bind="visible: results.viewModel.refinedCompanies().length <= 0">No results found</h3>
+<!-- 			<h3 data-bind="visible: results.viewModel.refinedCompanies().length <= 0">No results found</h3> -->
 			<h3 data-bind="visible: results.viewModel.refinedCompanies().length > 0"><span data-bind="text: results.viewModel.refinedCompanies().length"></span> companies found</h3>
 		</div>
 		

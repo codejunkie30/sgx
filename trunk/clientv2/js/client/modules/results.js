@@ -33,7 +33,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			return this;
 		},
 		
-		retrieve: function(endpoint, params, keywords, scrollPos) {
+		retrieve: function(endpoint, params, keywords, scrollPos, callback) {
 
 			var results = this;
 			results.parent.showLoading();
@@ -46,6 +46,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				if (typeof keywords !== "undefined") data.keywords = keywords;
 				results.render(data); 
 				results.parent.hideLoading(); 
+
+        if (callback) {
+          callback();
+        }
 			}
 			
 			$(".search-results").hide();
@@ -92,7 +96,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			// resize
 			//PAGE.resizeIframe(PAGE.getTrueContentHeight(), -1);
 
-     		PAGE.resizeIframeSimple();
+     	PAGE.resizeIframeSimple(); 
 			PAGE.hideLoading();
 		},
 		

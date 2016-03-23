@@ -12,9 +12,10 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "client/modules/tea
 		libAlerts: ko.observable(),
 		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
+
+		responseReceived: ko.observable(false),
 		
 		initPage: function() {
-			
 			// extend tearsheet
 			$.extend(true, this, TS);
 			
@@ -32,12 +33,17 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "client/modules/tea
 			
     		ko.applyBindings(this, $("body")[0]);
 
-			me.trackPage("SGX Company Comparables - " + me.companyInfo.companyName);
+				me.trackPage("SGX Company Comparables - " + me.companyInfo.companyName);
 
 			// make the call
     		var endpoint = "/sgx/company/relatedCompanies";
     		var params = { id: me.ticker };
-    		me.results.retrieve(endpoint, params, undefined, function() { return 0 });
+    		me.results.retrieve(endpoint, params, undefined, function() { return 0 }, 
+    			function() { 
+    				me.responseReceived(true);
+    				var top = $('.profile').position().top;
+    				PAGE.resizeIframeSimple(); 
+    			});
 
 		}
 
