@@ -374,9 +374,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		deleteCompany: function(data){
 
-			ALERTS.saveWatchlist( function() { ALERTS.companies.remove(data.ticker); } );
+            var deletecompaniesObservableList = ALERTS.companies;
+            deletecompaniesObservableList.remove(data.ticker);
+            ALERTS.saveWatchlist( function(){deletecompaniesObservableList });
 			PAGE.resizeIframeSimple();
-
 		},
 
 		addCompany: function(data){
@@ -385,7 +386,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
 			
 			//callback to update companies after the call succeeds.
-			ALERTS.saveWatchlist( function(){ ALERTS.companies.push(data.tickerCode); });
+			var addcompaniesObservableList = ALERTS.companies;
+			addcompaniesObservableList.push(data.tickerCode);
+			ALERTS.saveWatchlist( function(){ addcompaniesObservableList });
 			
 		},
 		searchCompanies: function(){
