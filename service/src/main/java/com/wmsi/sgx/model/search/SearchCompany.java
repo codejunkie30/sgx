@@ -138,8 +138,6 @@ public class SearchCompany{
 	}
 
 	public String getIndustry() {
-		if(exchange == "SGX" || exchange == "CATALIST")
-			return null;
 		return industry;
 	}
 
