@@ -236,6 +236,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var newWLNameLC = ALERTS.newWLName();
 			
+			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
