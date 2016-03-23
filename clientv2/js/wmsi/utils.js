@@ -154,22 +154,25 @@ define(["jquery", "moment"], function($, moment) {
             var token = UTILS.retrieveAuthToken();
             var currency = UTILS.retrieveCurrency();
 			var initialLoad = UTILS.retrieveState();
-                config.beforeSend=function(request) {
-                	
-					if (token !== false) {
-                    	request.setRequestHeader('x-auth-token', token);
-					}
-					if (currency !== false) {
-						request.setRequestHeader('currency', currency);
-					}
-					if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
-						request.setRequestHeader('currency', UTILS.getParameterByName("currency"));
-					}
-					
-					if (initialLoad !== false) {
-						request.setRequestHeader('initial-load', initialLoad);
-					}
-                }
+
+            config.beforeSend=function(request) {
+            	//make sure responses are not cached
+                request.setRequestHeader('cache-control', 'no-cache');
+
+				if (token !== false) {
+                	request.setRequestHeader('x-auth-token', token);
+				}
+				if (currency !== false) {
+					request.setRequestHeader('currency', currency);
+				}
+				if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
+					request.setRequestHeader('currency', UTILS.getParameterByName("currency"));
+				}
+				
+				if (initialLoad !== false) {
+					request.setRequestHeader('initial-load', initialLoad);
+				}
+            }
             
 			
 			
