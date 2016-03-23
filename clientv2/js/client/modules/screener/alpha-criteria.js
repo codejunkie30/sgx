@@ -88,7 +88,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
 		},
 
     	reset: function() {
-
+			
     		// remove all selected values
     		this.paused = true;
     		$(".alpha-factors .right-label").click();
@@ -112,8 +112,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
     	
     	runSearch: function() {
     		
-    		this.screener.showLoading();
-    		
     		var endpoint = "/sgx/search/alphaFactors";
     		var params = {};
     		
@@ -127,8 +125,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
     		}
     		
     		// search
-    		this.screener.results.retrieve(endpoint, params);
-    		
+    		this.screener.results.retrieve(endpoint, params);    		
     	}
 		
 	};

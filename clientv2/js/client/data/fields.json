@@ -188,7 +188,7 @@
 			      "isDefault":true,
 				  "isHeader": true,
 			      "shortName":"Div. Yld.",
-				  "distribution-buckets":750
+				  "distribution-buckets":810
 			   },
 			   {
 			      "id":"priceToBookRatio",
