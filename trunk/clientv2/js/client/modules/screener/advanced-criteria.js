@@ -92,7 +92,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	reset: function(finished) {
     		CRITERIA.firstRun = true;
         	CRITERIA.exchangeDisplay = false;
-			
+			PAGE.showLoading();
+			console.log('r1')
 			$(".search-criteria tbody").children().remove();
 			
 			$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
@@ -467,7 +468,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	reset: function(data, event) {
         		CRITERIA.firstRun = true;
 	        	CRITERIA.exchangeDisplay = false;
-				
+				PAGE.showLoading();
 				$(".search-criteria tbody").children().remove();
 				
 				$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
