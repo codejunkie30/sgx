@@ -299,7 +299,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				$(curField).addClass(direction);
             	// sort
             	companies.sort(function(a, b) {
-            		
             		var a1 = "asc" == direction ? a[prop] : b[prop];
             		var b1 = "asc" == direction ? b[prop] : a[prop];
             		
@@ -308,24 +307,24 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				b1 = "asc" == direction ? results.formatField(field, b, field.id).toLowerCase() : results.formatField(field, a, field.id).toLowerCase();
             		}
             		else if (field.format != "string") {
-            			if (typeof b1 === "undefined") b1 = -99999999999999;
-            			if (typeof a1 === "undefined") a1 = -99999999999999;
+            			if (typeof b1 === "undefined" || b1 === null) b1 = -99999999999999;
+            			if (typeof a1 === "undefined" || a1 === null) a1 = -99999999999999;
             			return b1-a1;
             		}
-          /*
-            Sort doesn't handle well when industry is null.
-            '0' to ensure they end up at the begining of the sort. 
-           */
-            if (prop.toLowerCase() === 'industry'){
-              if (a1 === null) {
-                a1 = '0';
-              }
-              if (b1 === null) {
-                b1 = '0';
-              }
-            }
-          /*   ----   */
-					if (a1 != null) { return a1.localeCompare(b1); }
+              /*
+                Sort doesn't handle well when industry is null.
+                '0' to ensure they end up at the begining of the sort. 
+               */
+                if (prop.toLowerCase() === 'industry'){
+                  if (a1 === null) {
+                    a1 = '0';
+                  }
+                  if (b1 === null) {
+                    b1 = '0';
+                  }
+                }
+              /*   ----   */
+    					if (a1 != null) { return a1.localeCompare(b1); }
             	});
             	mdl.companies(companies);
             	mdl.page(1);
