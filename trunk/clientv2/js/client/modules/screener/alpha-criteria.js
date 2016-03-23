@@ -122,7 +122,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
     		
     		// just search all companies
     		if ($.isEmptyObject(params)) {
-    			params.criteria = [];
+    			params.criteria = [{ field: "exchange", value: "SGX" },{ field: "exchange", value: "CATALIST" }];
     			endpoint = "/sgx/search";
     		}
     		
