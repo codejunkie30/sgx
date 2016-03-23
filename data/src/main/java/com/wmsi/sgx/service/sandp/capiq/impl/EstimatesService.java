@@ -2,15 +2,14 @@ package com.wmsi.sgx.service.sandp.capiq.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Date;
 
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
-import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.service.sandp.capiq.AbstractDataService;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
@@ -51,34 +49,39 @@ public class EstimatesService extends AbstractDataService{
 		Iterator<Entry<String, List<CompanyCSVRecord>>> i = dataMap.entrySet().iterator();
 		
 		while(i.hasNext()){
+			
 			Entry<String, List<CompanyCSVRecord>> entry = i.next();
 			List<CompanyCSVRecord> records = entry.getValue();
 			Map<String, Object> estimateMap = new HashMap<String, Object>();
-			estimateMap.put("period", entry.getKey());
-			estimateMap.put("tickerCode", tickerNoEx);
-			Date periodEndDate = null;
-			Field[] fields = Estimate.class.getDeclaredFields();
+			String period = entry.getKey();
 			
-			for (Field field : fields) {
-				String name = field.getName();
-				try {
-					Object val = getFieldValue(field, records);
-					if (val == null) val = getFieldDate(field, records);
-					if (val != null) estimateMap.put(name, val);
-				} catch (Exception e) {
-					log.error("Getting field val: " + field.getName(), e);
+			if(isValidPeriod(period)){
+				estimateMap.put("period", entry.getKey());
+				estimateMap.put("tickerCode", tickerNoEx);
+				Date periodEndDate = null;
+				Field[] fields = Estimate.class.getDeclaredFields();
+				
+				for (Field field : fields) {
+					String name = field.getName();
+					try {
+						Object val = getFieldValue(field, records);
+						if (val == null) val = getFieldDate(field, records);
+						if (val != null) estimateMap.put(name, val);
+					} catch (Exception e) {
+						log.error("Getting field val: " + field.getName(), e);
+					}
 				}
+				
+				for (CompanyCSVRecord record : records) {	
+					if (periodEndDate == null && record.getPeriodEndDate() != null) periodEndDate = record.getPeriodEndDate();
+				}
+				if (periodEndDate != null) estimateMap.put("periodDate", periodEndDate);
+				JsonElement jsonElement = gson.toJsonTree(estimateMap);
+				Estimate est = gson.fromJson(jsonElement, Estimate.class);
+				List<Estimate> list = estimates.getEstimates();
+				list.add(est);
+				estimates.setEstimates(list);
 			}
-			
-			for (CompanyCSVRecord record : records) {	
-				if (periodEndDate == null && record.getPeriodEndDate() != null) periodEndDate = record.getPeriodEndDate();
-			}
-			if (periodEndDate != null) estimateMap.put("periodDate", periodEndDate);
-			JsonElement jsonElement = gson.toJsonTree(estimateMap);
-			Estimate est = gson.fromJson(jsonElement, Estimate.class);
-			List<Estimate> list = estimates.getEstimates();
-			list.add(est);
-			estimates.setEstimates(list);
 		}
 		
 		return estimates;
@@ -104,5 +107,26 @@ public class EstimatesService extends AbstractDataService{
 			
 		}
 		return map;		
+	}
+	
+	public Boolean isValidPeriod(String period){
+		
+		if (period == ""){
+			return true;
+		}else{
+			
+			Calendar prevYear = Calendar.getInstance();
+			prevYear.add(Calendar.YEAR, -1);
+			int lastYear = prevYear.get(Calendar.YEAR);
+			try{
+				int yearFromPeriod = Integer.parseInt(period.substring(period.length()-4));
+				if(yearFromPeriod >lastYear){
+					return true;
+				}
+			}catch (NumberFormatException e) {
+				return false;
+			}
+		}
+		return false;
 	}
 }
