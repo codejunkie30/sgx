@@ -73,6 +73,13 @@ public class CompanyService extends AbstractDataService {
 			
 			setMisc(company, records);
 			
+			// SGX not allowed to show ASEAN companies in alpha factor or Industry search
+			if(!company.getExchange().equals("SGX") && !company.getExchange().equals("CATALIST")){
+				company.setIndustry(null);
+				company.setIndustryGroup(null);
+				company.setGvKey(null);
+			}
+			
 			return company;
 
 		} catch (Exception e) {
