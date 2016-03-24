@@ -427,8 +427,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			var data = $(trigger).data();
 			var name = $(trigger).text().trim();
 
+            var currentTable = $(el).parents('table')[0];
+            var currentRowHeads = $(currentTable).find('thead .col-title');
+
             var categories = [];
-             $.each($(".data-point-container thead .col-title"), function(key, val) {
+             $.each(currentRowHeads, function(key, val) {
                 var txt = "";
                 $("span", $(this)).each(function(i, e) {
                     if (i > 0) txt += "<br />";
