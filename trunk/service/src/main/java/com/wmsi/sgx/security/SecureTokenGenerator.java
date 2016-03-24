@@ -11,7 +11,7 @@ import java.security.SecureRandom;
  */
 public class SecureTokenGenerator{
 
-	private static final int BITS = 130;
+	private static final int BITS = 90;
 	private static final int BASE = 32;
 
 	private SecureRandom random = new SecureRandom();
