@@ -233,43 +233,43 @@
 		},
 		{
 			"id": "est_targetPrice",
-			"definition": "It is the stock price analysts expect to see within a period of 0-18 months. Target price is a non-periodic estimate and will not have Actuals available."
+			"definition": "It is the stock price analysts expect to see within a period of 0-18 months. Target price is a non-periodic estimate and will not have Actuals available.<br/>Estimates will be displayed when there are 3 or more analyst contributions."
 		},
 		{
 			"id": "est_longTermGrowth",
-			"definition": "Most analysts define LTG as an estimated average rate of earnings growth for the next 3-5 years. The exact time frame will differ from broker to broker. The metric is a compound annual growth rate based on current and projected EPS values."
+			"definition": "Most analysts define Long Term Growth as an estimated average rate of earnings growth for the next 3-5 years.<br/>The exact time frame will differ from broker to broker. The metric is a compound annual growth rate based on current and projected EPS values.<br/>Estimates will be displayed when there are 3 or more analyst contributions."
 		}, 
 		{
 			"id":"est_priceVolatility",
-			"definition":"Most analysts define Price Volatility as the uncertainty or risk related to price fluctuation. If the price of a stock moves up and down rapidly over short period of time, it has high volatility. If the price almost never changes, it has low volatility."
+			"definition":"Most analysts define Price Volatility as the uncertainty or risk related to price fluctuation.<br/>If stock price fluctuates rapidly over short period of time, it has high volatility. If the stock price remains stable with little changes, it has low volatility.<br/><div>Range</div><div>1.0 - 1.5&nbsp;&nbsp;Low</div><div>1.5 - 2.5&nbsp;&nbsp;Below Average</div><div>2.5 - 3.5&nbsp;&nbsp;Average</div><div>3.5 - 4.5&nbsp;&nbsp;Above Average</div><div>4.5 - 5.0&nbsp;&nbsp;High</div>"
 		},
 		{
 			"id":"est_industryRecommendation",
-			"definition":"It is the opinion expressed by the analysts on the stock performance over a short term period. Capital IQ will standardize all the individual recommendations across the brokers on a 1- 5 point scale."
+			"definition":"It is the opinion expressed by the broker analysts on the stock performance over a short term period.<br/>Capital IQ will standardize all the individual recommendations across the brokers on a 1- 5 point scale.<br/><div>Mean Rating Range&nbsp;&nbsp;Consensus Rating</div><div>1.0 - 1.5&nbsp;&nbsp;Buy</div><div>1.5 - 2.5&nbsp;&nbsp;Outperform</div><div>2.5 - 3.5&nbsp;&nbsp;Hold</div><div>3.5 - 4.5&nbsp;&nbsp;Underperform</div><div>4.5 - 5.0&nbsp;&nbsp;Sell</div><div>Zero&nbsp;&nbsp;No Recommendation</div>"
 		}, 
 		{
 			"id":"epsNorm",
-			"definition": "Earnings Per Share Excluding Exceptional Items.<br/> Most analysts define EPS Normalized as the adjusted EPS for pre-and after-tax unusual gains or losses (Exceptional Items) divided by the number of Diluted Weighted Average Shares Outstanding (WASO).<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate \"Actual Value\"."
+			"definition": "Earnings Per Share Excluding Exceptional Items.<br/>Most analysts define EPS Normalized as the adjusted EPS for pre-and after-tax unusual gains or losses (Exceptional Items) divided by the number of Diluted Weighted Average Shares Outstanding (WASO).<br/>All Estimates with suffix - E indicate \"Estimated Value\" and suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		},
 		{
 			"id":"epsGAAP",
-			"definition":"Earnings Per Share GAAP. <br/>Analysts calculate EPS according to Generally Accepted Accounting Principles, as reported by companies."
+			"definition":"Earnings Per Share GAAP.<br/>Analysts calculate EPS according to Generally Accepted Accounting Principles, as reported by companies.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		},
 		{
 			"id":"ebit",
-			"definition":"Earnings Before Interest & Taxes.<br/>Most analysts define EBIT as Operating Income normalized for unusual items such as merger/restructuring charges, gain/losses related to legal settlements and non-recurring gain/losses on the sale or write-down of assets."
+			"definition":"Earnings Before Interest & Taxes (EBIT).<br/>Most analysts define EBIT as Operating Income normalized for unusual items such as merger/restructuring charges, gain/losses related to legal settlements and non-recurring gain/losses on the sale or write-down of assets.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		}, 
 		{
 			"id":"ebt",
-			"definition":"Earnings Before Taxes Excluding Exceptional Items.<br/> Most analysts define EBT (Excl Excep) as a measure of a company's profits before taxes. This measure deducts all expenses from revenue including interest expenses and operating expenses but it also excludes Exceptional items."
+			"definition":"Earnings Before Taxes Excluding Exceptional Items (EBT).<br/>Most analysts define EBT (Excl Excep) as a measure of a company's profits before taxes. This measure deducts all expenses from revenue including interest expenses and operating expenses but it also excludes Exceptional items.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		}, 
 		{
 			"id":"netIncome",
-			"definition":"Net Income Excluding Exceptional Items. Most analysts define Net Income (Excl Excep) as a measure of net profit adjusted for pre-and after-tax unusual gains or losses (Exceptional Items).<br/>Exceptional items: Exceptional items are losses or gains that are non-recurring and unusual. They are separately disclosed so that investors get a better picture of underlying trends. "
+			"definition":"Net Income Excluding Exceptional Items.<br/>Most analysts define Net Income (Excl Excep) as a measure of net profit adjusted for pre-and after-tax unusual gains or losses (Exceptional Items).<br/>Exceptional items: Exceptional items are losses or gains that are non-recurring and unusual. They are separately disclosed so that investors get a better picture of underlying trends.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		},
 		{
 			"id":"netIncomeGAAP",
-			"definition":"Most analysts define EBT (GAAP) as a measure of a company's profits before taxes. EBT (GAAP) is calculated and reported by companies according to Generally Accepted Accounting Principles."
+			"definition":"Net Income (GAAP)<br/>Analysts define Net Income (GAAP) as a measure of net profit as reported by companies according to Generally Accepted Accounting Principles.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		},
 		{
 			"id":"revenue",

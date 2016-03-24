@@ -583,6 +583,8 @@ background: url("../img/title-back.png");
   font-size: 10px;
 }
 
+.tooltip-content div {font-size: 10px; margin: 0 0 4px 0; } 
+
 .tooltip-arrow {
   background: url("../img/tooltip-arrow.png") no-repeat;
   position: absolute;
