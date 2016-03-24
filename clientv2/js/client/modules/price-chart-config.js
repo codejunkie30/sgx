@@ -1,10 +1,6 @@
 define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 	var defaults = {
-        
-	    lang: {
-	      thousandsSep: ','
-	    },
 		title: undefined,
 			
 		colors: [ 'rgb(206, 217, 236)', '#BFCE00' ],
@@ -91,8 +87,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		        labels: {
                         formatter: function() {
                         	if (this.value == 0) return;
-							var yAxisVal = Highcharts.numberFormat(this.value,3);
-                            return PAGE.currentFormats.chart.format + yAxisVal.replace(/\.?0+$/,'');
+                            return PAGE.currentFormats.chart.format + _round(this.value, 3);
                         },
                         style: {
                         	color: "#000000",
@@ -152,6 +147,13 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 	};
 	
 	return defaults
-
-
+//helper function for decimals
+  function _round(num, places) {
+    var rounder = Math.pow(10, places);
+    var roundee = num * rounder;
+    return _numberWithCommas(Math.round(roundee)/rounder);
+  }
+function _numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 });
