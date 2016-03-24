@@ -22,3 +22,6 @@ DELETE FROM watchlist
 DELETE FROM watchlist_company
 
 DELETE FROM watchlist_option
+
+DELETE FROM enets 
+Where user_id != '1'
