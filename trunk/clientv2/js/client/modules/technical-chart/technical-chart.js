@@ -498,12 +498,10 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
   function _round(num, places) {
     var rounder = Math.pow(10, places);
     var roundee = num * rounder;
-    return _numberWithCommas(Math.round(roundee)/rounder);
+    return (Math.round(roundee)/rounder)
+           .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  function _numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
 
   return { HS_Chart: HS_Chart, 
             FS_Chart: FS_Chart};
