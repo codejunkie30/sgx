@@ -120,7 +120,7 @@ public class EstimatesService extends AbstractDataService{
 			int lastYear = prevYear.get(Calendar.YEAR);
 			try{
 				int yearFromPeriod = Integer.parseInt(period.substring(period.length()-4));
-				if(yearFromPeriod >lastYear){
+				if(yearFromPeriod >=lastYear){
 					return true;
 				}
 			}catch (NumberFormatException e) {
