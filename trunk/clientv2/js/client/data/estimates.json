@@ -20,6 +20,7 @@
 	            "property":"revenue",
 	            "format":"cash",
 	            "group":"pure",
+	            "glossaryTerm":"revenue",
 	            "name":"Revenue"
 	         },
 	         {

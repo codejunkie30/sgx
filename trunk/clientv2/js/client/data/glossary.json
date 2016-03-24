@@ -273,7 +273,7 @@
 		},
 		{
 			"id":"revenue",
-			"definition":"Analysts define Revenue as the total proceeds from the sale of products and/or services.<br/><br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate \"Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
+			"definition":"Analysts define Revenue as the total proceeds from the sale of products and/or services.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate \"Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
 		}
 	]
 }
