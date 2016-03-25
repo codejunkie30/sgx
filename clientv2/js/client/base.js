@@ -731,7 +731,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							PAGE.libAlerts(true);
 							PAGE.libCurrency(true);							
 						}
+						
 						PAGE.timedLogout();
+						
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
 							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 								
@@ -739,7 +741,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
 									UTILS.saveCurrency(newValue);
 									setTimeout(function(){
-										top.location.reload();
+										location.reload();
 									}, 50);
 									
 								} else {
@@ -756,6 +758,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							} else {
 								PAGE.selectedCurrency(UTILS.retrieveCurrency());
 							}
+						} else {
+							UTILS.saveCurrency('sgd')
 						}
 					}
 				}, 
