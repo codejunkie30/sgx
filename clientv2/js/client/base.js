@@ -678,14 +678,16 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				params,
 				function(data, textStatus, jqXHR){
 					if (data.reason == 'Full authentication is required to access this resource' || data.reason == 'Invalid username or password' || data.reason == 'Authentication token not Valid'){
-					PAGE.premiumUser(false);
-           		    PAGE.userStatus('UNAUTHORIZED');
-			
-		            var currentPg = PAGE.getParameterByName('page');
-		            if (currentPg == 18) {
-		              top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
-		              return;
-		            }
+						PAGE.premiumUser(false);
+	           		    PAGE.userStatus('UNAUTHORIZED');
+						
+						//UTILS.saveCurrency('sgd');
+						
+			            var currentPg = PAGE.getParameterByName('page');
+			            if (currentPg == 18) {
+			              top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
+			              return;
+			            }
 					} else {
 					
 						PAGE.premiumUser(true);
@@ -758,8 +760,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 							} else {
 								PAGE.selectedCurrency(UTILS.retrieveCurrency());
 							}
-						} else {
-							UTILS.saveCurrency('sgd')
+							
+							PAGE.currentFormats = PAGE["numberFormats-"+UTILS.retrieveCurrency()];
 						}
 					}
 				}, 
