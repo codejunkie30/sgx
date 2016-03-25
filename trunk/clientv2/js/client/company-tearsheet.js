@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/data/factors.json", "client/modules/tearsheet" ], function(UTIL, ko, PRICE_CHART, FACTORS, TS) {
+define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/data/factors.json", "client/modules/tearsheet", "client/base" ], function(UTIL, ko, PRICE_CHART, FACTORS, TS, BASE) {
 	
 	/**
 	 * no op
@@ -22,6 +22,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 		cpUserStatus: ko.observable(),
 		currentTicker: ko.observable(),
+
+		ajaxInAction: ko.observableArray([]),
 		
 		
 		initPage: function(me) {
@@ -30,26 +32,39 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			$.extend(true, this, TS);
 
 			var self = this;
+			PAGE.ajaxInAction.push('initPage');
 
-			this.init(function() { self.finish(self); });
+			this.init(function() { self.finish(self, function(){ PAGE.ajaxInAction.remove('initPage')}); });
 			
-			PAGE.checkStatus();	
+			PAGE.checkStatus();
+
+			PAGE.ajaxInAction.push('checkStatus');
+
 			
 			var cpUserStatus;
 			
 			PAGE.userStatus.subscribe(function(data){
 				CP.cpUserStatus = data;
+				if (data) {
+					PAGE.ajaxInAction.remove('checkStatus');
+				}
 			});
 			
 		},
 		
-		finish: function(me) {
+		finish: function(me, cb) {
 			
     		// finish other page loading
-    		ko.applyBindings(this, $("body")[0]);
+    	ko.applyBindings(this, $("body")[0]);
 			
+			if (cb && typeof cb === 'function') {
+				cb();
+			}
+
 			PAGE.hideLoading();
 			
+
+
 			// track the view
 			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);			
 			
@@ -63,17 +78,26 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			this.factors(tmp.factors);
 			
 			CP.currentTicker(me.ticker);
+
+			PAGE.ajaxInAction.push('priceHistoryCall');
+			var cb = function() {
+				PAGE.ajaxInAction.remove('priceHistoryCall');
+			}
 			
 			// init charts
 			var params = { id: me.ticker };
 			var postType = 'POST';
 			var endpoint = me.fqdn + "/sgx/company/priceHistory";
-			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {  me.initPriceChart(me, data, me);  }, PAGE.customSGXError, undefined);
+			UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {  me.initPriceChart(me, data, me, cb);  }, PAGE.customSGXError, undefined);
 			
 			return this;
 			
 		},
-		initPriceChart: function(parent, data, me) {
+		initPriceChart: function(parent, data, me, cb) {
+
+			if (cb && typeof cb === 'function') {
+				cb();
+			}
 			var finished = function() {
 				parent.resizeIframeSimple();
 				var myFin = function() { parent.resizeIframeSimple(); };
@@ -102,6 +126,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			if (start == curStart && end == curEnd) return;
 			
 			$(div).attr("start-dt", start).attr("end-dt", end);
+
+			PAGE.ajaxInAction.push('keydevs');
+			var cb = function() {
+				PAGE.ajaxInAction.remove('keydevs');
+			}
 			
 			var endpoint = parent.fqdn + "/sgx/search/keydevs";
 			var postType = 'POST';
@@ -132,6 +161,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 	
 				// everything is done
 				if (typeof finishedDrawing !== "undefined") finishedDrawing();
+
+				if (cb && typeof cb === 'function') {
+					cb();
+				}
 				
 			}, PAGE.customSGXError, undefined);
 			
@@ -191,7 +224,17 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		}
 		
 	};
-	
+	CP.ajaxOngoingCalls = ko.computed(function() {
+		return CP.ajaxInAction().length > 0;
+	}).extend({throttle:250});
+
+	CP.ajaxOngoingCalls.subscribe(function(data) {
+		if (data) {
+			BASE.showLoading();
+		} else {
+			BASE.hideLoading();
+		}
+	})
 	
 	return CP;
 
