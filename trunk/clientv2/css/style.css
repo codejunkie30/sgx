@@ -177,6 +177,9 @@ table th, table td {
   vertical-align: top;
 }
 
+#charting .grid,
+#comparables .grid { padding-left: 0 !important; }
+
 .grid .column-one, .grid .column-two {
     display:inline-block;
 	vertical-align: top;
