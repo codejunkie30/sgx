@@ -92,13 +92,13 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 #price-volume { width: 660px; height: 420px; }
 
 .financials-section { overflow: hidden; }
-.financials-section .left { width: 47.5%; padding: 0 2.5% 0 0; float: left; }
-.financials-section .right { width: 47.5%; padding: 0 0 0 2.5%; float: left; }
+.financials-section .left { width: 55.5%; padding: 0 2.5% 0 0; float: left; margin-right: auto;}
+.financials-section .right { width: 39.5%; padding: 0 0 0 2.5%; float: left; margin-left: auto;}
 .financials-section td { word-wrap:break-word; padding: 4px; font: normal 11.5px/11.5px Arial, Helvetica, sans-serif !important; text-align: center; height: auto; }
 .financials-section h4 { font-size: 13px; border-bottom: 1px dotted #d6d6d6; color: #4d4e50; display: inline-block; margin: 0 0 10px; }
 .financials-section tr td:first-child { font-weight: bold !important; text-align: left; }
 .financials-section td.right { padding-left: 5%; }
-.financials-section table {table-layout: fixed; margin: 15px 0 0 0; border: medium none; border-collapse: collapse; border-spacing: 0; width: 100%; }
+.financials-section table { table-layout: fixed; margin: 15px 0 0 0; border: medium none; border-collapse: collapse; border-spacing: 0; width: 100%; }
 .financials-section p { font-size: 15px; margin-bottom: 0; }
 .financials-section th { font-size: 9pt; border-left: 4px solid #fff; text-align: left; }
 .financials-section thead tr { background: #fff; height: 10px; }
