@@ -780,7 +780,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		addWatchlist: function(me) {
 			me.currentCompanyName(me.company.companyInfo.companyName);
 			me.currentTicker(me.company.companyInfo.tickerCode);
-			
+			PAGE.newWLName('');
 			var settings = {	    			
 				maxWidth: 500,
 				height: 300,				
@@ -815,7 +815,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						jsonpCallback);					
 					
 					$('.button.add-wl').click(function(e){
-						
+						PAGE.showLoading();
 						if (PAGE.selectedValue() == undefined){
 							PAGE.addNewCompany();
 						} else {
@@ -839,9 +839,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 					var companies = wl.companies;
 					
-					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
 					
-					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
+					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
 					
 					wl.companies = KO.observableArray(companies);
 					
@@ -857,7 +857,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						postType,
 						params, 
 						undefined, 
-						function(data, textStatus, jqXHR){	
+						function(data, textStatus, jqXHR){
+              PAGE.hideLoading();	
 							if (data.message == 'success'){
 								$(".modal-container").colorbox.close();
 							}
@@ -877,10 +878,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 			var newWLNameLC = PAGE.newWLName();
 			
-			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); return; }
-			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); return; }
+			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); PAGE.hideLoading(); return; }
+			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); PAGE.hideLoading(); return; }
 			
-			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); return; }
+			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); PAGE.hideLoading(); return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
@@ -899,9 +900,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						if (wl.name == PAGE.newWLName()){
 							var companies = wl.companies;
 				
-							if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); return; }
+							if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
 							
-							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); return; }
+							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
 							
 							wl.companies = KO.observableArray(companies);
 							
@@ -917,13 +918,15 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								postType,
 								params, 
 								undefined, 
-								function(data, textStatus, jqXHR){	
+								function(data, textStatus, jqXHR){
+                  PAGE.hideLoading();	
 									if (data.message == 'success'){
 										$(".modal-container").colorbox.close();
 									}			
 									
 								}, 
 								function(jqXHR, textStatus, errorThrown){
+                  PAGE.hideLoading();
 									PAGE.customErrorMessage();
 								},jsonpCallback);
 						}
@@ -937,6 +940,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
+      PAGE.hideLoading();
 			//Developer to use in case of custom error handling
         }
 		
