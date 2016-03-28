@@ -271,7 +271,7 @@
 			      "dataSort":"string",
 			      "isDefault":true,
 				  "isHeader": false,
-			      "notPermitted": "Singapore Stock Exchange",
+			      "notPermitted": "Singapore Exchange",
 			      "itemLabels": {
 					"CATALIST": "Singapore Exchange Catalist Market",
 					"JKSE": "Jakarta Stock Exchange",
