@@ -387,7 +387,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         	string: { header: "" },
 			millions: { header: "in US$ mm", decimals: 1, format: "US$$VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
-			dollars: { header: "in US$", decimals: 3, format: "$$VALUE" },
+			dollars: { header: "in US$", decimals: 3, format: "US$$VALUE" },
 			cents: { header: "in US$", decimals: 3, format: "US$$VALUE" },
 			percent: { header: "in %", decimals:2, format: "$VALUE%" },
         	number: { header: "", decimals: 3 },
