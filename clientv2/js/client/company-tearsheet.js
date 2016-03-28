@@ -27,7 +27,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 		
 		initPage: function(me) {
-			this.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
 
@@ -60,10 +59,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			if (cb && typeof cb === 'function') {
 				cb();
 			}
-
-			PAGE.hideLoading();
-			
-
 
 			// track the view
 			me.trackPage("SGX Company Profile - " + me.companyInfo.companyName);			
