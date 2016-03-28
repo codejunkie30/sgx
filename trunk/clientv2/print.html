@@ -169,7 +169,7 @@
 										<!-- has vwap -->
 										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice') && companyInfo.volWeightedAvgPrice != null">
 											<span data-bind="text: companyInfo.vwapCurrency"></span> 
-											<span data-bind="text: companyInfo.volWeightedAvgPrice, format: 'dollars'"></span> 
+											<span data-bind="text: companyInfo.volWeightedAvgPrice, format: 'number'"></span> 
 											<span class="normal">as of</span> 
 											<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
 										</td>
