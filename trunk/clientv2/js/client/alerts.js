@@ -312,6 +312,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		editWLNameSubmit: function(){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
+			
+			ALERTS.addWatchlistName([]);
+
+			$.each(ALERTS.finalWL(), function(i, data){
+				ALERTS.addWatchlistName.push(data.name.toLowerCase());
+			});		
+			
+			var editedName = ALERTS.editWLName().trim();
+			if (editedName ==="" ) {  alert("Watchlist name is empty."); return; }
+			if ($.inArray( editedName.toLowerCase(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
+			
+			
     		var params = { "watchlistName": ALERTS.editWLName(), "id": ALERTS.selectedValue()};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
