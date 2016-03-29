@@ -114,7 +114,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			try{
 				comp = companyService.getById(company,"sgd");
-				previousComp = companyService.getPreviousById(company);
+				//previousComp = companyService.getPreviousById(company);
+				previousComp = companyService.getPreviousById(company, "sgd_premium_previous");
+				System.out.println("Previous " + company + " : " + previousComp);
+				System.out.println("Current "+ company + " : " + comp);
 			}catch(CompanyServiceException e){
 				break;
 			}
