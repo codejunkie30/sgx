@@ -77,7 +77,7 @@ public class PriceController {
 			}
 		}
 		catch(QuanthouseServiceException e){
-			log.error("Failed to get intra day price from QuanthouseService", e);
+			log.error("Failed to get intra day price from QuanthouseService");
 		}
 		ret.put("price", p);		
 		

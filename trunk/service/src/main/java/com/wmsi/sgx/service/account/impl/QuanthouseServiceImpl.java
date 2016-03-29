@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.account.impl;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 	private static final String MARKET_CODE = "XSES";
 	private static final String MARKET_EXTENTION = "_RY";
+	
+	private String[] currencies = {"sgd", "php", "hkd", "usd", "thb", "twd", "idr", "myr"};
 
 	@Autowired
 	private CompanyService companyService;
@@ -161,15 +164,30 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private Price fallbackPriceForRealTimePricing(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
 		Company comp = companySearch.getById(id, Company.class);
+		if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
+			comp.setFilingCurrency("SGD");
+		}
 		if(comp.getFilingCurrency().toLowerCase() != "sgd"){
 			//Its just the confusing name, calling today's company not Previous day, neeed to change the name of method
 			Company aseanCompany = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium");
 			comp = aseanCompany;
+			if(comp == null){
+				log.error("Current price can't be retrieved for "+ id);
+				return null;
+			}
 		}
 		try{
+			if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
+				comp.setFilingCurrency("SGD");
+			}
 			Company prevComp = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium_previous");
-			p.setClosePrice(prevComp.getClosePrice());
-			p.setPreviousDate(prevComp.getPreviousCloseDate());
+			if(prevComp != null){
+				p.setClosePrice(prevComp.getClosePrice());
+				p.setPreviousDate(prevComp.getPreviousCloseDate());
+			}			
+			else{
+				log.error("Previous price cannot be retrieved for "+id);
+			}
 		}catch(CompanyServiceException e){
 			p.setClosePrice(comp.getClosePrice());
 			p.setPreviousDate(comp.getPreviousCloseDate());
