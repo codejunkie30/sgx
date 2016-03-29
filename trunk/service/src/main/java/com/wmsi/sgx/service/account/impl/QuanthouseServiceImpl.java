@@ -191,7 +191,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		Price p = new Price();
 		Company comp = companySearch.getById(id, Company.class);
 		try{
-			Company prevComp = companyService.getPreviousById(id);
+			Company prevComp = companyService.getPreviousById(id, "sgd_premium_previous");
 			p.setClosePrice(prevComp.getClosePrice());
 			p.setPreviousDate(prevComp.getPreviousCloseDate());
 		}catch(CompanyServiceException e){
