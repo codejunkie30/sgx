@@ -52,7 +52,7 @@
 				"blankField": "Enter a value between 1 and 100%."
 			},
 			"premium": {
-				"price": "<div><span class='sign'>$</span><span class='total'>720</span></div> <div class='sub'>for a 1 year subscription ($60/month)</div>"
+				"price": "<div><span class='sign'>$</span><span class='total'>45</span></div> <div class='sub'>per month</div> <div class='sub'>For a 1-year subscription. From now till 31 Dec 2016 (U.P $60/month).</div>"
 			}
 		}		
 	]
