@@ -5,11 +5,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 		ticker: UTIL.getParameterByName("code"),
 		priceData: ko.observable({}),
 		gotCompanyData: ko.observable(false),
+		currencySymbol: ko.observable(),
 		
 		init: function(finished) {
 
 			var self = this;
-
 			// init profile data
 			var endpoint = this.fqdn + "/sgx/company";
 			var postType = 'POST';
@@ -75,6 +75,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
     		};
     		
     		parent.priceData(pdata);
+			
+			var dataCurrency = pdata.currency.toLowerCase();
+			var lastPriceCurrency = PAGE["numberFormats-"+dataCurrency].chart.format;
+			
+			TEARSHEET.currencySymbol(lastPriceCurrency);
 			
 		},
 		
