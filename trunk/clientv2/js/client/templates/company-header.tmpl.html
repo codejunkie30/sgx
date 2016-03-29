@@ -13,7 +13,7 @@
 		<div class="price right" data-bind="visible: priceData().hasOwnProperty('price')">
 			<div class="current-currency">This company reports in this currency: <span data-bind="text: priceData().currency"></span>.</div>
 			<div class="pricing">
-				<span class="currency" data-bind="text: priceData().currency"></span> 
+				<span class="currency" data-bind="text: currencySymbol()"></span> 
 				<span class="price" data-bind="text: priceData().price, format: 'number'"></span>
 				<span class="change" data-bind="text: priceData().change, format: 'number', css: { 'negative': priceData().change < 0  }, prependIf: '+', conditional: priceData().change > 0"></span>
 			</div>			

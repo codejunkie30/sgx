@@ -7,6 +7,7 @@ define(['knockout', 'text!./premium-preview.html', "text!client/data/messages.js
     this.sectionName = params.sectionName;
     this.userStatus = params.userStatus();
 	this.price = displayMessage.premium.price;
+	this.content = displayMessage.premium.content;
   }
 
   return {viewModel: ComponentViewModel, template: htmlString };

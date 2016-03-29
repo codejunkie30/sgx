@@ -362,10 +362,13 @@ header.header { margin: 10px 0 0 0; }
 #premium .premium-wrapper .trial-box .button { font-size: 13pt; margin: 0 15px 0 0; padding: 7px 25px; text-decoration: none; }
 #premium .premium-wrapper .trial-box .not { color: #0e236b; font-size: 10pt; text-transform: uppercase; text-decoration: none; }
 #premium .premium-wrapper .trial-box .not:hover { text-decoration: underline; }
-#premium .premium-wrapper .view-price { position: relative; background:url(../img/bg-premium-views-price.png) no-repeat; display: inline-block; height: 333px; width: 539px; }
+#premium .premium-wrapper .view-price { position: relative; top:-30px; background:url(../img/bg-premium-views-price-lg.png) no-repeat; display: inline-block; height: 380px; width: 538px; }
+#premium .premium-wrapper #preview-comp.view-price { top: -90px !important; }
 #premium .premium-wrapper #preview-comp {  }
-#premium .premium-wrapper .view-price .price { position: absolute; right: 15px; top: 20px; width: 100px; }
-#premium .premium-wrapper .view-price .sub { font-size: 14px; color: #666; position: relative; top: -8px; }
+#premium .premium-wrapper .view-price .price { position: absolute; right: 20px; top: 30px; width: 110px; }
+#premium .premium-wrapper .view-price .content { position: absolute; right: 19px; top: 110px; width: 155px; }
+#premium .premium-wrapper .view-price .sub-month { font-size: 14px; color: #666; position: relative; top: -8px; }
+#premium .premium-wrapper .view-price .sub-content { font-size: 13px; color: #666; position: relative; top: -8px; text-align: center; }
 #premium .premium-wrapper .view-price .price .total { font-size: 39px; color: #666; }
 #premium .premium-wrapper .view-price .price .sign { font-size: 27px; color: #666; }
 
