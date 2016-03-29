@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "text!client/data/currency.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, CUR) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "text!client/data/currency.json", "moment", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, CUR, moment) {
 	
 	var SAVECHANGES = {			
 		newPassword: ko.observable(),
@@ -206,13 +206,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						
 					}
 					
-					if (data.type == 'TRIAL'){						
-						var start = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.startDate));
-						var end = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(data.expirationDate));						
-						var now = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(new Date()));
-
-						var trialPeriod = Math.floor(( Date.parse(end) - Date.parse(start) ) / 86400000);
-						var daysRemaining = Math.floor(( Date.parse(end) - Date.parse(now) ) / 86400000);
+					if (data.type == 'TRIAL'){
+						var start = moment(data.startDate);
+						var end = moment(data.expirationDate);
+						var trialPeriod = end.diff(start, 'days');
+						var daysRemaining = end.diff(moment().startOf('day'), 'days');
+												
 						if (daysRemaining >= 1) {
 							if(daysRemaining > 1)
 								$('.settings .intro .content').html(displayMessage.accountSettings.introTrial);
