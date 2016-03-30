@@ -1,5 +1,4 @@
 define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/data/factors.json", "client/modules/tearsheet", "client/base" ], function(UTIL, ko, PRICE_CHART, FACTORS, TS, BASE) {
-	
 	/**
 	 * no op
 	 */
@@ -27,12 +26,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 		
 		initPage: function(me) {
+
+			PAGE.ajaxInAction.push('initPage');
+			
 			// extend tearsheet
 			$.extend(true, this, TS);
 
 			var self = this;
-			PAGE.ajaxInAction.push('initPage');
-
 			this.init(function() { self.finish(self, function(){ PAGE.ajaxInAction.remove('initPage')}); });
 			
 			PAGE.checkStatus();
@@ -225,6 +225,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 
 	CP.ajaxOngoingCalls.subscribe(function(data) {
 		if (data) {
+			if (document.getElementById('loading')) return;
 			BASE.showLoading();
 		} else {
 			BASE.hideLoading();
