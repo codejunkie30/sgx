@@ -63,7 +63,7 @@ public class PurchaseController {
 		
 		EnetsTransactionDetails enets = new EnetsTransactionDetails();
 		enets.setTrans_dt(new Date());
-		enets.setTrans_id(res.getNetsTxnRef());
+		enets.setTrans_id(res.getMerchantTxnRef());
 		enets.setUser(usr);
 		enets.setActive(true);
 		
