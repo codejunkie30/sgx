@@ -20,7 +20,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libAlerts: ko.observable(),
     libCurrency: ko.observable(false),
     currentDay: ko.observable(),
-
+	currentCurrency: ko.observable(UTIL.retrieveCurrency().toUpperCase()),
+	
     sectionName: 'Technical Charts',
     //reference to chart class/function
     indicators_chart: null,
@@ -393,11 +394,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },  
 
     initPage: function() {
-
+	console.log(UTIL.retrieveCurrency());
       var self = this;
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
-
+	  
       PAGE.showLoading();
       PAGE.checkStatus();
         

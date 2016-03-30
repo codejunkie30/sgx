@@ -292,6 +292,8 @@ div.wrapper {
   margin-top: 30px;
 }
 
+.content.financials .header { margin: 0 0 10px 0; }
+
 .financials-controls select {
   width: 18%; }
 
