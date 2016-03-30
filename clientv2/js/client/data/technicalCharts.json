@@ -46,42 +46,49 @@
         {
             "displayName": "Total Revenue",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "totalRevenue",
             "axisName": "Income"
         },
         {
             "displayName": "Gross Profit",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "grossProfit",
             "axisName": "Income"
         },
         {
             "displayName": "Net Income",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "netIncome",
             "axisName": "Income"
         },
         {
             "displayName": "EBITDA",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "ebitda",
             "axisName": "Income"
         },
         {
             "displayName": "Normalized Diluted EPS",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "eps",
             "axisName": "Income"
         },
         {
             "displayName": "Payout Ratio",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "payoutRatio",
             "axisName": "Income"
         },
         {
             "displayName": "Dividends (per share)",
             "serviceName": "income",
+            "responseKey": "incomeStatements",
             "key": "dividendsPerShare",
             "axisName": "Income"
         }
@@ -90,60 +97,70 @@
         {
             "displayName": "Total Assets",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "totalAssets",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Total Current Assets",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "totalCurrentAssets",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Net PP&E",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "netPpe",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Total Current Liabilities",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "totalCurrentLiabily",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Long-Term Debt",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "longTermDebt",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Total Liabilities",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "totalLiability",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Retained Earnings",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "retainedEarnings",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Common Stock",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "commonStock",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Total Equity",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "totalEquity",
             "axisName": "Balance Sheets"
         },
         {
             "displayName": "Minority Interest",
             "serviceName": "balanceSheets",
+            "responseKey": "balanceSheet",
             "key": "minorityInterest",
             "axisName": "Balance Sheets"
         }
@@ -152,24 +169,28 @@
         {
             "displayName": "Operations",
             "serviceName": "cashFlow",
+            "responseKey": "cashFlows",
             "key": "cashOperations",
             "axisName": "Cash Flow"
         },
         {
             "displayName": "Investing",
             "serviceName": "cashFlow",
+            "responseKey": "cashFlows",
             "key": "cashInvesting",
             "axisName": "Cash Flow"
         },
         {
             "displayName": "Financing",
             "serviceName": "cashFlow",
+            "responseKey": "cashFlows",
             "key": "cashFinancing",
             "axisName": "Cash Flow"
         },
         {
             "displayName": "Net Change in Cash",
             "serviceName": "cashFlow",
+            "responseKey": "cashFlows",
             "key": "netChange",
             "axisName": "Cash Flow"
         }
@@ -178,84 +199,98 @@
         {
             "displayName": "Return on Assets",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "returnAssets",
             "axisName": "Ratios"
         },
         {
             "displayName": "Return on Capital",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "returnCapital",
             "axisName": "Ratios"
         },
         {
             "displayName": "Return on Equity",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "returnEquity",
             "axisName": "Ratios"
         },
         {
             "displayName": "Gross Margin",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "grossMargin",
             "axisName": "Ratios"
         },
         {
             "displayName": "EBITDA Margin",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "ebitdaMargin",
             "axisName": "Ratios"
         },
         {
             "displayName": "Net Income Margin",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "netIncomeMargin",
             "axisName": "Ratios"
         },
         {
             "displayName": "Total Asset Turnover",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "assetTurns",
             "axisName": "Ratios"
         },
         {
             "displayName": "Current Ratio",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "currentRatio",
             "axisName": "Ratios"
         },
         {
             "displayName": "Quick Ratio",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "quickRatio",
             "axisName": "Ratios"
         },
         {
             "displayName": "Avg Days Inventory",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "avgDaysInventory",
             "axisName": "Ratios"
         },
         {
             "displayName": "Avg Days Payable",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "avgDaysPayable",
             "axisName": "Ratios"
         },
         {
             "displayName": "Avg Cash Conversion",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "cashConversion",
             "axisName": "Ratios"
         },
         {
             "displayName": "Total Debt/Equity",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "totalDebtEquity",
             "axisName": "Ratios"
         },
         {
             "displayName": "EBITDA/Interest Expense",
             "serviceName": "ratios",
+            "responseKey": "ratios",
             "key": "ebitdaInterest",
             "axisName": "Ratios"
         }
@@ -264,30 +299,35 @@
         {
             "displayName": "Total Revenue",
             "serviceName": "growth",
+            "responseKey": "growthOverPriorYears",
             "key": "totalRev1YrAnnGrowth",
             "axisName": "Growth"
         },
         {
             "displayName": "EBITDA",
             "serviceName": "growth",
+            "responseKey": "growthOverPriorYears",
             "key": "ebitda1YrAnnGrowth",
             "axisName": "Growth"
         },
         {
             "displayName": "Net Income",
             "serviceName": "growth",
+            "responseKey": "growthOverPriorYears",
             "key": "netIncome1YrAnnGrowth",
             "axisName": "Growth"
         },
         {
             "displayName": "Normalized Diluted EPS",
             "serviceName": "growth",
+            "responseKey": "growthOverPriorYears",
             "key": "eps1YrAnnGrowth",
             "axisName": "Growth"
         },
         {
             "displayName": "Common Equity",
             "serviceName": "growth",
+            "responseKey": "growthOverPriorYears",
             "key": "commonEquity1YrAnnGrowth",
             "axisName": "Growth"
         }

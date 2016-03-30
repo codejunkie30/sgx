@@ -263,7 +263,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.flattenDropdownsObject();
       this.setFinancialsDropdowns();
       this.dropdownChoices.push('totalRevenue');
-
       ko.applyBindings(this, $("body")[0]);
 
     },
@@ -274,6 +273,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var self = this;
       var serviceObj = this.aggregateDropdownChoices[ dropDownKey ];
+
       //if data exists in cache, simply use it
       var serviceName = serviceObj.serviceName;
       if (this.financialsDataCache[ serviceName ]) {
@@ -289,8 +289,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
     },
-
-
 
 
     financialsHandler: function(data, serviceObj, action, me) {
@@ -315,9 +313,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var self = me || this;
       var serviceName = serviceObj.serviceName;
+      var responseKey = serviceObj.responseKey;
       var serviceKey = serviceObj.key;
       if( !self.financialsDataCache[ serviceName ] ) {
-        self.financialsDataCache[ serviceName ] = trimData[ serviceName ];
+        var tmpObj = {};
+        tmpObj[responseKey] = trimData[ responseKey ];
+        self.financialsDataCache[ serviceName ] = tmpObj;
       } 
       
       var seriesData = [];
@@ -360,27 +361,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       }
 
-
-    },
-
-
-    makeDataCall: function(dropDownKey, action) {
-
-      var self = this;
-      var serviceObj = this.aggregateDropdownChoices[ dropDownKey ];
-      //if data exists in cache, simply use it
-      var serviceName = serviceObj.serviceName;
-      if (this.financialsDataCache[ serviceName ]) {
-        this.financialsHandler(this.financialsDataCache[ serviceName ], serviceObj, action);
-        return;
-      }
-
-      var endpoint = this.fqdn + '/sgx/company/techCharts/'+serviceObj.serviceName;
-      //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
-      var postType = 'POST';
-      var params = { id: self.ticker };
-
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
     },
 
