@@ -26,13 +26,13 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 		
 		initPage: function(me) {
-
-			PAGE.ajaxInAction.push('initPage');
-			
+			PAGE.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
 
 			var self = this;
+			PAGE.ajaxInAction.push('initPage');
+
 			this.init(function() { self.finish(self, function(){ PAGE.ajaxInAction.remove('initPage')}); });
 			
 			PAGE.checkStatus();
