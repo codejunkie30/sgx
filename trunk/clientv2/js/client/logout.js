@@ -19,7 +19,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			
 			setTimeout(function(){
 				url = PAGE.getPage(PAGE.pageData.getPage('index'));
-				$('.form .link a').attr("href", url).attr("target", "_parent");
+				//$('.form .link a').attr("href", url).attr("target", "_parent");
 			},500);
 			
 			
