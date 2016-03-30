@@ -16,7 +16,13 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 					UTIL.deleteState();
 				}, 
 				PAGE.customSGXError);
-				
+			
+			setTimeout(function(){
+				url = PAGE.getPage(PAGE.pageData.getPage('index'));
+				$('.form .link a').attr("href", url).attr("target", "_parent");
+			},500);
+			
+			
 			PAGE.trackPage("SGX Logout");
 			// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
