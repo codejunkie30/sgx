@@ -394,7 +394,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     },  
 
     initPage: function() {
-	console.log(UTIL.retrieveCurrency());
       var self = this;
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
