@@ -118,6 +118,9 @@
     			</div><!-- content indicators end -->
 
     			<div class="content financials" data-bind="css:{'show-hidden': activeTab() == 'financials'}">
+                	<div class="header hidden" data-bind="showHidden: isData">
+                        <div class="note">In millions <span data-bind="text: currency()"></span>, except per items.</div>
+                    </div>
     				<div class="financials-controls">
 
                       <div class="wrapper-dropdown financials-dropdown" data-bind="classToggler:'active'"> Income <span data-bind="if:choiceNumTracker.income() > 0">(<span data-bind="text: choiceNumTracker.income"></span>)</span>
