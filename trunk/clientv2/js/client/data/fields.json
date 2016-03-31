@@ -219,7 +219,8 @@
 			         "minField":"targetPriceNum",
 			         "minValue":3
 			      },
-			      "distribution-type": "histogram"
+			      "distribution-type": "histogram",
+				  "distribution-buckets":700
 			   },
 			   {
 			      "id":"gtiScore",

@@ -161,8 +161,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		        slide: function(event, ui) {
 		        	var template = $(event.target).closest(".criteria");
 		        	var vm = $(template).data();
-		        	viewModel.updatesMin(vm.buckets[ui.values[0]].from);
-		        	viewModel.updatesMax(vm.buckets[ui.values[1]].to);
+					// Fix for Consensus Recomendation
+					if (tID != 'avgBrokerReq'){
+			        	viewModel.updatesMin(vm.buckets[ui.values[0]].from);
+			        	viewModel.updatesMax(vm.buckets[ui.values[1]].to);
+					}
 		        },
 		        stop: function(event, ui) {
 		        	var template = $(event.target).closest(".criteria");
