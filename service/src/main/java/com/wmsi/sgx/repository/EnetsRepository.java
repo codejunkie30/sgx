@@ -16,7 +16,7 @@ public interface EnetsRepository extends CustomRepository<EnetsTransactionDetail
 	List<EnetsTransactionDetails> findAllByUser(User user);
 	
 	@Query("from enets where active = :active and user_id=:user_id")
-	EnetsTransactionDetails findByUserAndActive(@Param("active") boolean active, @Param("user_id")long user_id);
+	List<EnetsTransactionDetails> findByUserAndActive(@Param("active") boolean active, @Param("user_id")long user_id);
 	
 	@Query("select u from Users u, enets e where u.id = e.user.id and trans_id = :trans_id")
 	User findByTransactionId(@Param("trans_id") String trans_id); 

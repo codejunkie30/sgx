@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.activity.ActivityCompletedException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
+import com.wmsi.sgx.domain.SortDatesDecendingEnetsTransactionId;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.UserLogin;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -113,9 +113,10 @@ public class AdminServiceImpl implements AdminService {
 					.toDate(DateUtil.adjustDate(DateUtil.fromDate(curr.getStartDate()), Calendar.DAY_OF_MONTH,
 							curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 			model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
-			EnetsTransactionDetails enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
-			if(enetsTrasactionDetail != null){
-				model.setTransId((enetsTrasactionDetail.getTrans_id()));
+			List<EnetsTransactionDetails> enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
+			if(enetsTrasactionDetail.size() != 0){
+				Collections.sort(enetsTrasactionDetail, new SortDatesDecendingEnetsTransactionId());
+				model.setTransId((enetsTrasactionDetail.get(0).getTrans_id()));
 			}
 			ret.setData(model);
 			ret.setResponseCode(0);
@@ -159,9 +160,10 @@ public class AdminServiceImpl implements AdminService {
 						Calendar.DAY_OF_MONTH,
 						curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
-				EnetsTransactionDetails enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
-				if(enetsTrasactionDetail != null){
-					model.setTransId((enetsTrasactionDetail.getTrans_id()));
+				List<EnetsTransactionDetails> enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
+				if(enetsTrasactionDetail.size() != 0){
+					Collections.sort(enetsTrasactionDetail, new SortDatesDecendingEnetsTransactionId());
+					model.setTransId((enetsTrasactionDetail.get(0).getTrans_id()));
 				}
 				retList.add(model);
 			}
