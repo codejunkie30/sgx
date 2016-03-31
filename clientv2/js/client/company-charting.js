@@ -20,7 +20,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
     libAlerts: ko.observable(),
     libCurrency: ko.observable(false),
     currentDay: ko.observable(),
-	currentCurrency: ko.observable(UTIL.retrieveCurrency().toUpperCase()),
 	
     sectionName: 'Technical Charts',
     //reference to chart class/function
@@ -223,7 +222,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $('.technical-charting-alternative').show();
       PAGE.hideLoading();
       ko.applyBindings(this, $("body")[0]);
-      //setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
+      setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
     },
 
     init_premium: function() {
@@ -237,7 +236,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
           setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
         }else {
           $('.technical-charting').css('height', '920px');
-          setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
         }
       }, this);
 
@@ -375,6 +373,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
     initPage: function() {
       var self = this;
+
+      /* set currency if it exists */
+      if (UTIL.retrieveCurrency()) {  
+        self.currentCurrency = ko.observable(UTIL.retrieveCurrency().toUpperCase());
+      }
+
       $.extend(true, this, TS);
       this.init();  //this is tearsheet.js init
 	  

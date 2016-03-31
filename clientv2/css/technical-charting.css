@@ -265,9 +265,9 @@ div.wrapper {
 .technical-charting-alternative {
   display: none; 
 }
-  .technical-charting-alternative .content {
+  .technical-charting-alternative .premium-preview {
     padding: 10px;
-    padding-bottom: 100px;
+    /*padding-bottom: 100px;*/
     border: 1px solid #cacdd3; }
 #premium .premium-wrapper .trial-box { margin: 0 15px 0 0 !important; }
 #premium .premium-wrapper .view-price .price { right: 35px !important; }
