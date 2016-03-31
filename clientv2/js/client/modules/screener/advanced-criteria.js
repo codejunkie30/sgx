@@ -4,6 +4,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	 * allows us to customize particular criteria
 	 * assumes working with criteria object for model
 	 */
+	 
 	ko.bindingHandlers.configureAdditionalCriteria = {
 	    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	    	var template = ko.utils.unwrapObservable(valueAccessor());
@@ -93,7 +94,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		CRITERIA.firstRun = true;
         	CRITERIA.exchangeDisplay = false;
 			PAGE.showLoading();
-			console.log('r1')
 			$(".search-criteria tbody").children().remove();
 			
 			$(".criteria-select .checkbox").each(function(idx, el) { CRITERIA.clickEvents.uncheckCriteriaItem(el); });
@@ -183,7 +183,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 
         	// numeric ranges
         	$.each(data.fieldValues, function(idx, field) {
-        		
         		var fieldData = CRITERIA.getFieldById(field.field);
         		
         		// force sort asc
@@ -195,7 +194,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		
         		// get the random distributions
         		var buckets = {};
-        		$.each(field.values, function(vIdx, val) { CRITERIA.randomizeBucket(buckets, val, type, bCount); });
+				if (this.field == 'avgBrokerReq'){ 
+					$.each(field.values, function(vIdx, val) { var val = Math.round(val * 10) / 10; CRITERIA.randomizeBucket(buckets, val, type, bCount);});
+				 } else {
+					 $.each(field.values, function(vIdx, val) {CRITERIA.randomizeBucket(buckets, val, type, bCount);});
+				 }
+
+        		
         		
         		// build the collection
         		var arr = [], start = 0;
@@ -220,27 +225,27 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         },
         
         randomizeBucket: function(bucket, val, type, cnt) {
+
         	var idx = (Math.round(val * 100000)%cnt);
         	if (type == "log") idx = (Math.round(Math.log(val * 100000))%cnt);
     		if (!bucket.hasOwnProperty(idx)) bucket[idx] = [];
+
     		bucket[idx].push(val);
         },
         
         getDistributionMatches: function(field, startVal, endVal) {
-        	
         	var ret = 0;
-        	
+			
         	// primarily for consensus
         	if (!field.hasOwnProperty("values")) {
         		for (i = startVal; i <= endVal; i++) ret += field.buckets[i].count;
         		return ret;
         	}
-        	
+			
         	var sVal = field.buckets[startVal].from, eVal = field.buckets[endVal].to;
         	$.each(field.values, function(idx, val) {
         		if (val >= sVal && val <= eVal) ret++;
         	});
-        	
         	return ret;
         	
         },
@@ -289,7 +294,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         	$.each(data.distributions, function(idx, distribution) {
 
         		var field = CRITERIA.getFieldById(distribution.field);
-        		
         		if (field == null) return;
 				
         		var el = $("<tr >").attr("data-id", field.id).html(CRITERIA[field.template + "Template"]).addClass("criteria");
@@ -312,6 +316,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				'updatesMax': ko.observable(field.max)
         		};
         		
+				if (mdl.field.minLabel != undefined && mdl.field.maxLabel != undefined){
+					mdl.updatesMin(mdl.field.minLabel);
+					mdl.updatesMax(mdl.field.maxLabel);					
+				};
+				
         		mdl.changes = ko.computed(function() {
         			return this.min() + "-" + this.max() + "-" + this.val();
         		}, mdl);
@@ -321,7 +330,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				if (this.changes() != "" && this.field.hasOwnProperty("buckets")) {
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
-        				var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
+	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
+						
+						console.log(min);
+						console.log(max);
+						console.log(this.field.buckets.length);
+						
         				return this.criteria.getDistributionMatches(this.field, min, max);
     				}
     				return 0;
@@ -403,13 +417,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				param.from = vm.min();
     				param.to = vm.max();
     			}
-
+				
     			// add to search
     			params.push(param);
 
+				
+
     			// special case
     			//TODO explain why it was set to 3 before, it just created a lot of problems
-    			if (name == "avgBrokerReq") params.push({ field: "targetPriceNum", from: "3" });
+    			if (name == "avgBrokerReq") params.push({ field: "targetPriceNum", from: "0" });
     			
     		});
     		

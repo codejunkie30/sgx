@@ -29,7 +29,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			
 			this.parent = parent;
 			this.viewModel = this.initModel(JSON.parse(fieldData).fieldGroups);
-
 			return this;
 		},
 		
@@ -100,12 +99,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			PAGE.hideLoading();
 		},
 		
-		formatField: function(field, row, id) {
-			
+		formatField: function(field, row, id, groups) {
 			if (!row.hasOwnProperty(id) || row[id] == null) return "";
-			
 	    	var val = row[id];
-	    	
     		if (field.hasOwnProperty("formatter")) {
     			
     			// handle list lookup
@@ -113,7 +109,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				val = val | 0;
     				val = field.formatter.values[val];
     			}
-
     			// needs a minimum value
     			if (field.formatter.hasOwnProperty("minField") && row.hasOwnProperty(field.formatter.minField)) {
     				if (row[field.formatter.minField] < field.formatter.minValue) val = "";
@@ -198,7 +193,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * headers and columns
 			 * first two remove industry
 			 */
-			mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-2].fields.slice());
+			//mdl.staticFields.push.apply(mdl.staticFields, groups[groups.length-2].fields.slice());
 			mdl.fieldGroups.remove(groups[groups.length-2]);
 			mdl.headers = ko.computed(function() {
 				this.headersChanged();
