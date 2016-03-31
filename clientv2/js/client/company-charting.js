@@ -222,7 +222,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $('.technical-charting-alternative').show();
       PAGE.hideLoading();
       ko.applyBindings(this, $("body")[0]);
-      setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
+      setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
     },
 
     init_premium: function() {
@@ -233,7 +233,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         if(data == 'financials') {
           //this.financials_chart = new Chart.FS_Chart('#financials-chart-container');
           $('.technical-charting').css('height', '700px');
-          setTimeout(function(){ PAGE.resizeIframeSimple(); }, 100);
+          setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
         }else {
           $('.technical-charting').css('height', '920px');
         }
