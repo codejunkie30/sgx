@@ -332,10 +332,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
 	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
 						
-						console.log(min);
-						console.log(max);
-						console.log(this.field.buckets.length);
-						
         				return this.criteria.getDistributionMatches(this.field, min, max);
     				}
     				return 0;
