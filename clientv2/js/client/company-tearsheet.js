@@ -26,7 +26,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 		
 		initPage: function(me) {
-			PAGE.showLoading();
 			// extend tearsheet
 			$.extend(true, this, TS);
 
