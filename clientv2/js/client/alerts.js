@@ -451,10 +451,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if(ALERTS.displayList().optionList.pcPriceDrop == true){
 				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
 					$('.price-drop.error-messages').empty();
-					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');						
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
-				} else {
+				} 
+				else if (isNaN(ALERTS.displayList().optionList.pcPriceDropBelow) || isNaN(ALERTS.displayList().optionList.pcPriceRiseAbove) ) {
+					$('.price-drop.error-messages').empty();
+					$('<p/>').html('Please enter valid numbers.').appendTo('.price-drop.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				} 
+				else {
 					$('.price-drop.error-messages').empty();
 					pcPriceDropError = 0;
 				}
