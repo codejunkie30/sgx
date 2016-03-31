@@ -76,7 +76,7 @@
 		ref="indexBuilderService"
 		method="isJobSuccessful">
 				
-    	<int:mapping value="true" channel="indexRequestChannel7"/>
+    	<int:mapping value="true" channel="createAlias6"/>
     	<int:mapping value="false" channel="failedJobChannel6"/>
     	    	
 	</int:router>
