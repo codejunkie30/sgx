@@ -18,6 +18,7 @@ import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
+import com.wmsi.sgx.domain.SortDatesDecendingEnetsTransactionId;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -84,9 +85,14 @@ public class AccountServiceImpl implements AccountService{
 			ret.setCurrency(account.getCurrency());
 			if(account.getType() == AccountType.PREMIUM || account.getType() == AccountType.ADMIN 
 					|| account.getType() == AccountType.MASTER){
-				EnetsTransactionDetails enetsTrasactionDetail = enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId());
+				/*EnetsTransactionDetails enetsTrasactionDetail = enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId());
 				if(enetsTrasactionDetail != null){
 					ret.setEnetsTranId((enetsTrasactionDetail.getTrans_id()));
+				}*/
+				List<EnetsTransactionDetails> enetsTrasactionDetail = enetsRepository.findByUserAndActive(account.getActive(), account.getUser().getId());
+				if(enetsTrasactionDetail.size() != 0){
+					Collections.sort(enetsTrasactionDetail, new SortDatesDecendingEnetsTransactionId());
+					ret.setEnetsTranId((enetsTrasactionDetail.get(0).getTrans_id()));
 				}
 				
 			}
