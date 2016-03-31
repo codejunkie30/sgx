@@ -11,5 +11,5 @@ ON
     pop.tickerSymbol = ti.tickerSymbol
 AND
 	ti.exchangeId = (SELECT ce.exchangeId FROM ciqExchange ce WHERE ce.exchangeSymbol = pop.exchangeSymbol)
-	join ciqTradingItem ti (NOLOCK) on pe.tradingItemId=ti.tradingItemId and ti.primaryFlag = 1
-	join ciqSecurity cs (NOLOCK)on ti.securityId = cs.securityId and ti.primaryFlag = cs.primaryFlag
+AND
+	ti.tradingItemStatusId = 15;
