@@ -411,17 +411,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
 		
 		init: function(child) {
+
 			if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
 				this.currentFormats = PAGE["numberFormats-"+UTILS.getParameterByName("currency")];
 			}
-			else {
-				if (UTILS.retrieveCurrency() == false){
-					this.currentFormats = PAGE["numberFormats-sgd"];
-				} else {
-					var currencyFormat = UTILS.retrieveCurrency();
-					this.currentFormats = PAGE["numberFormats-"+currencyFormat];
-				}
-			}
+
+      this.currentFormats = PAGE["numberFormats-"+UTILS.retrieveCurrency()];
 			
 			// set up the page mappings
 			eval("this.pageData." + PAGEINFO);
@@ -684,7 +679,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.premiumUser(false);
 	           		    PAGE.userStatus('UNAUTHORIZED');
 						
-						//UTILS.saveCurrency('sgd');
 						
 			            var currentPg = PAGE.getParameterByName('page');
 			            if (currentPg == 18) {
@@ -740,31 +734,43 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						PAGE.timedLogout();
 						
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
+
 							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
+              
+              PAGE.selectedCurrency.subscribe(function(newValue) {
+
+                if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){                
+                  UTILS.saveCurrency(newValue);
+                  setTimeout(function(){
+                    location.reload();
+                  }, 100);
+                }
+
+              });
 								
-							PAGE.selectedCurrency.subscribe(function(newValue) {
-								if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
-									UTILS.saveCurrency(newValue);
-									setTimeout(function(){
-										location.reload();
-									}, 50);
+							// PAGE.selectedCurrency.subscribe(function(newValue) {
+							// 	if (newValue != UTILS.retrieveCurrency() && UTILS.retrieveState() == 'changed'){								
+							// 		UTILS.saveCurrency(newValue);
+							// 		setTimeout(function(){
+							// 			location.reload();
+							// 		}, 50);
 									
-								} else {
-									if (UTILS.retrieveState() != 'changed'){
-										PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
-									}
-									UTILS.saveCurrency(PAGE.selectedCurrency());
-								}
-							});
+							// 	} else {
+							// 		if (UTILS.retrieveState() != 'changed'){
+							// 			PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+							// 		}
+							// 		UTILS.saveCurrency(PAGE.selectedCurrency());
+							// 	}
+							// });
 							
-							if (UTILS.retrieveState() == false){
-								PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
-								UTILS.saveState('changed');					
-							} else {
-								PAGE.selectedCurrency(UTILS.retrieveCurrency());
-							}
+							// if (UTILS.retrieveState() == false){
+							// 	PAGE.selectedCurrency(PAGE.premiumUserAccntInfo.currency);
+							// 	UTILS.saveState('changed');					
+							// } else {
+							// 	PAGE.selectedCurrency(UTILS.retrieveCurrency());
+							// }
 							
-							PAGE.currentFormats = PAGE["numberFormats-"+UTILS.retrieveCurrency()];
+							// PAGE.currentFormats = PAGE["numberFormats-"+UTILS.retrieveCurrency()];
 						}
 					}
 				}, 

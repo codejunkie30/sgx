@@ -75,9 +75,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params,
 				function(data, textStatus, jqXHR){
-					console.log(data);
-					if (typeof data === 'string' && data.length > 10){
-						UTIL.saveAuthToken(data);
+					if (data.currency === undefined || data.currency === "") {
+						data.currency = 'sgd';
+					}
+					if (typeof data.token === 'string' && data.token.length > 10){
+						UTIL.saveAuthToken(data.token);
+						UTIL.saveCurrency(data.currency);
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 						PAGE.hideLoading();
 					} else {

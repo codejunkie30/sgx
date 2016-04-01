@@ -95,7 +95,7 @@ define(["jquery", "moment"], function($, moment) {
 			if(currency != undefined ) {
                 return currency.value;
             }else {
-                return false;
+                return 'sgd';
             }
         },
 		
