@@ -162,6 +162,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		        	var template = $(event.target).closest(".criteria");
 		        	var vm = $(template).data();
 					// Fix for Consensus Recomendation
+		        	var tID = $(template[0]).attr('data-id');
 					if (tID != 'avgBrokerReq'){
 			        	viewModel.updatesMin(vm.buckets[ui.values[0]].from);
 			        	viewModel.updatesMax(vm.buckets[ui.values[1]].to);
