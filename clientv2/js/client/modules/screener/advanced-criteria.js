@@ -108,8 +108,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		var tmpF = finished;
     		var endpoint = this.screener.fqdn + "/sgx/search/distributions";
 			var postType = 'POST';
-    		var processFields = [], ignoreFields = []; 
-
+    		var processFields = [], ignoreFields = [];
     		// some fields require additional steps, remove these from this service
     		$.each(data.fields, function(idx, name) {
     			
@@ -164,7 +163,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		textFields.push(fieldData);
         		
         		// hack for industry groups
-            	if (name == "industryGroup") fieldData.buckets.push({ "data-name": "industry", count: 0, key: "Real Estate Investment Trusts (REITs)" });
+            	if (name == "industryGroup") fieldData.buckets.push({ "data-name": "industry", key: "Real Estate Investment Trusts (REITs)" });
             	
             	// now sort the values
             	if (fieldData.hasOwnProperty("itemLabels")) {
@@ -390,18 +389,19 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		
     		var endpoint = "/sgx/search";
     		var params = [];
-    		
     		$(".search-criteria .criteria:not(.inactive)").each(function(idx, el) {
 
     			var vm = ko.dataFor(el);
     			var name = vm.field.id;
-    			
+				
     			param = { 'field': name };
     			
-    			if (vm.field.template == "select") {
+    			if (vm.field.template == "select") {					
     				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) return;
-    				param.field =  vm.field.id;
-    				param.value = vm.val();
+					//Fix for REITs as it's no longer part of industryGroup
+    				(vm.val() != 'Real Estate Investment Trusts (REITs)') ? param.field = vm.field.id : param.field = 'industry';
+    				param.value = vm.val();					
+					
     			}
     			else if (vm.field.template == "change") {
     				if (vm.val() == null) return;
@@ -413,11 +413,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				param.from = vm.min();
     				param.to = vm.max();
     			}
-				
     			// add to search
     			params.push(param);
-
-				
 
     			// special case
     			//TODO explain why it was set to 3 before, it just created a lot of problems
