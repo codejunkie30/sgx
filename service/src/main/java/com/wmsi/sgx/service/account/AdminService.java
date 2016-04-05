@@ -19,7 +19,7 @@ public interface AdminService {
 	AdminResponse setAdmin(String username);
 	AdminResponse findByUser(String user);
 	AdminResponse removeAdmin(String username);
-	AdminResponse trialDay(TrialResponse response);
+	AdminResponse trialDay(TrialResponse response, String email);
 	AdminResponse getTrialDays();
 	AdminAccountModel convertAccountModelToAdminAccountModel(AccountModel accModel);
 	void writeCsv(HttpServletResponse response, String[] header, String name)
