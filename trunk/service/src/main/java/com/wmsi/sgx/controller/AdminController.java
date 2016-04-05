@@ -80,9 +80,10 @@ public class AdminController {
 	@RequestMapping(value= "setTrial", method = RequestMethod.POST)
 	public AdminResponse setTrial(HttpServletRequest request, @RequestBody TrialResponse response){		
 		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
-		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
+		
+		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN )
 			return isAdmin();
-		return adminService.trialDay(response);
+		return adminService.trialDay(response,acct.getEmail());
 	}
 	
 	@RequestMapping(value = "findUser", method = RequestMethod.POST)

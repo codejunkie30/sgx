@@ -79,15 +79,15 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse trialDay(TrialResponse response) {
+	public AdminResponse trialDay(TrialResponse response, String username) {
 		AdminResponse ret = new AdminResponse();
 		if (response.getHalfwayDays() == null || response.getTrialDays() == null) {
 			ret.setData("Invalid/missing trial or halfway days.");
 			ret.setResponseCode(23);
 			return ret;
 		}
-		propertiesService.setProperty("full.trial.duration", response.getTrialDays());
-		propertiesService.setProperty("halfway.trial.duration", response.getHalfwayDays());
+		propertiesService.setProperty("full.trial.duration", response.getTrialDays(), username);
+		propertiesService.setProperty("halfway.trial.duration", response.getHalfwayDays(), username);
 		getTrial.destroy();
 		getTrial.init();
 		//Dont need it anymore as we are pulling data from database now.

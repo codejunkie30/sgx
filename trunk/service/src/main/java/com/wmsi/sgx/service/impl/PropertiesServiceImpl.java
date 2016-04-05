@@ -59,13 +59,13 @@ public class PropertiesServiceImpl implements PropertiesService{
 		return (String) configurationsRepository.findByProperty(key).getValue();
 	}
 	@Override
-	public void setProperty(String key, Object value) {
+	public void setProperty(String key, Object value, String username) {
 		//configuration.setProperty(key, value);
 		String value1 = (String) value;
 		Configurations conf =  configurationsRepository.findByProperty(key);
 		conf.setProperty(key);
 		conf.setValue(value1);
-		conf.setModifiedBy("karsethi+25@gmail.com");
+		conf.setModifiedBy(username);
 		configurationsRepository.save(conf);
 	}
 	@Override
