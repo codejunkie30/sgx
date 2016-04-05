@@ -738,11 +738,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
 							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 
-              PAGE.selectedCurrency(UTILS.retrieveCurrency());
+              PAGE.selectedCurrency(UTILS.retrieveCurrency().toLowerCase());
 
               PAGE.selectedCurrency.subscribe(function(newValue) {
                 if (newValue != UTILS.retrieveCurrency()){                
-                  UTILS.saveCurrency(newValue);
+                  UTILS.saveCurrency(newValue.toLowerCase());
                   setTimeout(function(){
                     location.reload();
                   }, 100);
