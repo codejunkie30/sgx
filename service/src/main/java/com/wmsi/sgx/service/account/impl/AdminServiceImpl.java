@@ -90,7 +90,8 @@ public class AdminServiceImpl implements AdminService {
 		propertiesService.setProperty("halfway.trial.duration", response.getHalfwayDays());
 		getTrial.destroy();
 		getTrial.init();
-		propertiesService.save();
+		//Dont need it anymore as we are pulling data from database now.
+		//propertiesService.save();
 
 		ret.setResponseCode(0);
 		ret.setData(response);
