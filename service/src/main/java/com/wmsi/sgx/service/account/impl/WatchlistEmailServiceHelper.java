@@ -66,6 +66,7 @@ public class WatchlistEmailServiceHelper implements Job{
 								senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.error("exception while sending watchList email to "+acc.getUser().getUsername());
+								log.error("Exception" + e);
 							}
 					}
 			}
