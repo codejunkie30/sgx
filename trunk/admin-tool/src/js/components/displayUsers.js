@@ -67,6 +67,10 @@ function DisplayUsers(params) {
 	this.hasNextPage = ko.observable();
 	this.hasPreviousPage = ko.observable();
 
+	params.data.subscribe(function(data) { //set current page to 1 everytime you get new list of users
+		this.setCurrentPage(1);
+	}, this);
+
 	this.userDisplayCtrl = ko.computed(function(){
 		var start = this.currentPage() - 1;
 		var records = params.data();
