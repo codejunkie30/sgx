@@ -12,6 +12,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.wmsi.sgx.domain.Configurations;
+import com.wmsi.sgx.repository.ConfigurationsRepository;
 import com.wmsi.sgx.service.PropertiesService;
 
 @Service
@@ -24,6 +26,9 @@ public class PropertiesServiceImpl implements PropertiesService{
 	
 	@Autowired
 	public Environment env;
+	
+	@Autowired
+	public ConfigurationsRepository configurationsRepository;
 
 	@PostConstruct
 	public void init() {		
@@ -50,11 +55,18 @@ public class PropertiesServiceImpl implements PropertiesService{
 	
 	@Override
 	public String getProperty(String key) {
-		return (String) configuration.getProperty(key);
+		//return (String) configuration.getProperty(key);
+		return (String) configurationsRepository.findByProperty(key).getValue();
 	}
 	@Override
 	public void setProperty(String key, Object value) {
-		configuration.setProperty(key, value);
+		//configuration.setProperty(key, value);
+		String value1 = (String) value;
+		Configurations conf =  configurationsRepository.findByProperty(key);
+		conf.setProperty(key);
+		conf.setValue(value1);
+		conf.setModifiedBy("karsethi+25@gmail.com");
+		configurationsRepository.save(conf);
 	}
 	@Override
 	public void save() {
