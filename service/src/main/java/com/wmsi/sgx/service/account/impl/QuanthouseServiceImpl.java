@@ -32,7 +32,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private static final String MARKET_CODE = "XSES";
 	private static final String MARKET_EXTENTION = "_RY";
 	
-	private String[] currencies = {"sgd", "php", "hkd", "usd", "thb", "twd", "idr", "myr"};
+	private String[] currencies = {"sgd", "php", "hkd", "usd", "thb", "twd", "myr"};
 
 	@Autowired
 	private CompanyService companyService;

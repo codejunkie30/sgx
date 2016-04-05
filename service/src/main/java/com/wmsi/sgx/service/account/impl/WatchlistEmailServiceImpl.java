@@ -69,16 +69,17 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();			
-		for( Account acct: accounts){
-			if(acct.getActive() == true && acct.getUser().getUsername().equals(usr.getUsername())){
+		for (Account acct : accounts) {
+			if (acct.getActive() == true && acct.getUser().getUsername().equals(usr.getUsername())) {
 				List<WatchlistModel> list = watchlistService.getWatchlist(usr);
-				if(list.size() > 0)
-					for(WatchlistModel watchlist : list){
+				if (list.size() > 0)
+					for (WatchlistModel watchlist : list) {
 						List<AlertOption> options = parseWatchlist(watchlist, acct);
-						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
-							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
+						if (watchlist.getCompanies().size() > 0 && options.size() > 0)
+							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options,
+									watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 					}
-				break;
+					break;
 			}
 		}
 	}
@@ -119,7 +120,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				System.out.println("Previous " + company + " : " + previousComp);
 				System.out.println("Current "+ company + " : " + comp);
 			}catch(CompanyServiceException e){
-				break;
+				continue;
 			}
 			
 			String companyName = getCompanyName(company);
@@ -141,9 +142,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 						priceChange = Math.abs(MathUtil.percentChange(previousComp.getClosePrice(), comp.getClosePrice(), 4));
 				}
 				
-				if(!priceDrop.equals("null") && Double.parseDouble(priceDrop) < priceChange){
+				if(!priceDrop.equals("null") && Double.parseDouble(verifyStringAsNumber(priceDrop)) < priceChange){
 					priceOptions.put(company, companyName);
-				}else if(!priceRise.equals("null") && Double.parseDouble(priceRise) < priceChange){
+				}else if(!priceRise.equals("null") && Double.parseDouble(verifyStringAsNumber(priceRise)) < priceChange){
 					priceOptions.put(company, companyName);
 				}
 			}
@@ -154,7 +155,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 					volumeOptions.put(company, companyName);
 				else if(volume > 0.0){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
-					if(Math.abs(Double.parseDouble(map.get("pcTradingVolumeValue").toString())) < priceChange){
+					if(Math.abs(Double.parseDouble(verifyStringAsNumber(map.get("pcTradingVolumeValue").toString()))) < priceChange){
 						volumeOptions.put(company, companyName);
 					}
 				}
@@ -171,8 +172,8 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				map.put("estChangePriceDrop", "false");
 			
 			if(map.get("estChangePriceDrop").toString().equals("true") && currentEstimate != null){
-				Double targetPriceDrop = Double.parseDouble(map.get("estChangePriceDropBelow").toString());
-				Double targetPriceRise = Double.parseDouble(map.get("estChangePriceDropAbove").toString());
+				Double targetPriceDrop = Double.parseDouble(verifyStringAsNumber(map.get("estChangePriceDropBelow").toString()));
+				Double targetPriceRise = Double.parseDouble(verifyStringAsNumber(map.get("estChangePriceDropAbove").toString()));
 				Double pastTp = null;
 				if(pastEstimate != null)
 					pastTp = pastEstimate.getTargetPrice();
@@ -334,5 +335,14 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		BigDecimal t = new BigDecimal(total);
 		BigDecimal avg = s.divide(t, RoundingMode.HALF_UP);
 		return avg.setScale(scale, RoundingMode.HALF_UP).doubleValue();
+	}
+
+	private String verifyStringAsNumber(String value) {
+		try {
+			int val = Integer.parseInt(value);
+			return value;
+		} catch (NumberFormatException nfe) {
+			return "0.0";
+		}
 	}
 }
