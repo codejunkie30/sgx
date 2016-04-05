@@ -80,7 +80,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					if (typeof data.token === 'string' && data.token.length > 10){
 						UTIL.saveAuthToken(data.token);
-						UTIL.saveCurrency(data.currency);
+						UTIL.saveCurrency(data.currency.toLowerCase());
 						top.location.href = PAGE.getPage(PAGE.pageData.getPage('index'));
 						PAGE.hideLoading();
 					} else {
