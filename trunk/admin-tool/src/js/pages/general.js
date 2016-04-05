@@ -33,7 +33,7 @@ function GeneralPage() {
     this.changeTrialDuration = function() {
         if(this.trialDurationError().length > 0) return;
         var newDuration = this.trialDuration();
-        var halfDuration = parseInt(newDuration, 10)/2 + parseInt(newDuration%2, 10);
+        var halfDuration = Math.round(parseInt(newDuration, 10)/2);
         var params = {trialDays: newDuration, halfwayDays: halfDuration};
         API.showLoading();
         API.post( API.paths.setTrial, successFN.bind(this), params );
@@ -57,7 +57,7 @@ function GeneralPage() {
 
 
     this.exportReport = function() {
-        window.open('/sgx/admin/excel?'+'at='+tokenHandler.retrieveAuthToken());
+        window.open('/sgx/admin/excel?'+'at='+encodeURIComponent(tokenHandler.retrieveAuthToken()));
     }
 
     this.trialDurationDisplay = ko.computed({
