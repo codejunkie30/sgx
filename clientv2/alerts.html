@@ -101,9 +101,9 @@
 								<span class="trigger">
 									<span class="name"></span>
 								</span>
-								<input type="checkbox" data-bind="checked: displayList().optionList.pcPriceDrop">
+								<input type="checkbox" data-bind="checked: PCPriceCheck, value: displayList().optionList.pcPriceDrop">
 							</span>
-							<span>Price drops below <input class="percent" type="text" data-bind="numeric, value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent" type="text" data-bind="numeric, value: displayList().optionList.pcPriceRiseAbove"> over last close price</span>
+							<span>Price drops below <input class="percent pcPriceDropBelow" type="text" data-bind="numeric, value: displayList().optionList.pcPriceDropBelow"> or rises above <input class="percent pcPriceRiseAbove" type="text" data-bind="numeric, value: displayList().optionList.pcPriceRiseAbove"> over last close price</span>
 							<div class="price-drop error-messages"></div>
 						</li>
 						<li>
@@ -111,9 +111,9 @@
 								<span class="trigger">
 									<span class="name"></span>
 								</span>
-								<input type="checkbox" data-bind="checked: displayList().optionList.pcTradingVolume">
+								<input type="checkbox" data-bind="checked: PCTradeVol, value: displayList().optionList.pcTradingVolume">
 							</span>
-							<span>Trading volume exceeds 30 day change in volume by <input class="percent" type="text" type="text" data-bind="numeric, value: displayList().optionList.pcTradingVolumeValue"></span>
+							<span>Trading volume exceeds 30 day change in volume by <input class="percent pcTradingVolumeValue" type="text" type="text" data-bind="numeric, value: displayList().optionList.pcTradingVolumeValue"></span>
 							<div class="trade-volume error-messages"></div>
 						</li>
 						<li>
@@ -137,9 +137,9 @@
 								<span class="trigger">
 									<span class="name"></span>
 								</span>
-								<input type="checkbox" data-bind="checked: displayList().optionList.estChangePriceDrop">
+								<input type="checkbox" data-bind="checked: ESTChangePrice, value: displayList().optionList.estChangePriceDrop">
 							</span>
-							<span>Change in target price drops below <input class="percent" type="text" type="text" data-bind="numeric, value: displayList().optionList.estChangePriceDropBelow"> or rises above <input class="percent" type="text" type="text" data-bind="numeric, value: displayList().optionList.estChangePriceDropAbove"></span>
+							<span>Change in target price drops below <input class="percent estChangePriceDropBelow" type="text" type="text" data-bind="numeric, value: displayList().optionList.estChangePriceDropBelow"> or rises above <input class="percent estChangePriceDropAbove" type="text" type="text" data-bind="numeric, value: displayList().optionList.estChangePriceDropAbove"></span>
 							<div class="target-price error-messages"></div>
 						</li>
 						<li>

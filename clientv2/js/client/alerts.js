@@ -35,7 +35,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		alerts: JSON.parse(AL),
 		sectionName:'Alerts',
 		allCompanies: [],
-		
+		PCPriceCheck: ko.observable(),
+		PCTradeVol: ko.observable(),
+		ESTChangePrice: ko.observable(),
 		defaultSearch: "",
 		
 		initPage: function() {
@@ -139,8 +141,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						ALERTS.editWLName(wl.name);			
 						break;
 					}
-				}
-
+				}				
+				
 				$.each($('.alerts input[type=text]'),function(){
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 				});
@@ -149,11 +151,38 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 				});
 				
+				ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+				
+				ALERTS.PCPriceCheck.subscribe(function (i,v) {
+					if (ALERTS.PCPriceCheck() == false){
+						$('.pcPriceDropBelow').val(null).removeClass('percent');
+						$('.pcPriceRiseAbove').val(null).removeClass('percent');
+					};
+			    }, this);
+				
+				ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+				
+				ALERTS.PCTradeVol.subscribe(function (i,v) {
+					if (ALERTS.PCTradeVol() == false){
+						$('.pcTradingVolumeValue').val(null).removeClass('percent');
+					};
+			    }, this);
+				
+				ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+				
+				ALERTS.ESTChangePrice.subscribe(function (i,v) {
+					if (ALERTS.ESTChangePrice() == false){
+						$('.estChangePriceDropBelow').val(null).removeClass('percent');
+						$('.estChangePriceDropAbove').val(null).removeClass('percent');
+					};
+			    }, this);
+				
+				
 				PAGE.resizeIframeSimple();
 
 			}, this);
 
-
+			
 
 
 			me.searchInput.subscribe(function(data){
@@ -414,10 +443,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			$('.error-messages').empty();
 		},
 		
-		clearWatchListErrors: function() {
-			$('.error-messages').empty();
-		},
-
 		sendEmail: function() {
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/sendEmail";
 			var postType = 'POST';
@@ -448,8 +473,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var pcTradingVolumeError = 0;
 			var estChangePriceDropError = 0;
 			
-			if(ALERTS.displayList().optionList.pcPriceDrop == true){
-				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){						
+			if(ALERTS.PCPriceCheck() == true){
+				ALERTS.displayList().optionList.pcPriceDropBelow = $('.pcPriceDropBelow').val();
+				ALERTS.displayList().optionList.pcPriceRiseAbove = $('.pcPriceRiseAbove').val();
+				if ((ALERTS.displayList().optionList.pcPriceDropBelow == null || ALERTS.displayList().optionList.pcPriceDropBelow == '') || (ALERTS.displayList().optionList.pcPriceRiseAbove == null || ALERTS.displayList().optionList.pcPriceRiseAbove == '')){
 					$('.price-drop.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');
 					PAGE.resizeIframeSimple();
@@ -466,33 +493,58 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					pcPriceDropError = 0;
 				}
 				
+			} 
+			else {
+				$('.price-drop.error-messages').empty();
 			}
 			
-			if(ALERTS.displayList().optionList.pcTradingVolume == true){
+			if(ALERTS.PCTradeVol() == true){
+				ALERTS.displayList().optionList.pcTradingVolumeValue = $('.pcTradingVolumeValue').val();
 				if (ALERTS.displayList().optionList.pcTradingVolumeValue == null || ALERTS.displayList().optionList.pcTradingVolumeValue == ''){
 					$('.trade-volume.error-messages').empty();						
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');						
 					PAGE.resizeIframeSimple();
 					pcTradingVolumeError = 1;
-				}else {
+				} 
+				else if (isNaN(ALERTS.displayList().optionList.pcTradingVolumeValue) ) {
+					$('.trade-volume.error-messages').empty();
+					$('<p/>').html('Please enter valid numbers.').appendTo('.trade-volume.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				} 				
+				else {
 					$('.trade-volume.error-messages').empty();
 					pcTradingVolumeError = 0;
 				}
 				
+			} 				
+			else {
+				$('.trade-volume.error-messages').empty();
 			}
 			
-			if(ALERTS.displayList().optionList.estChangePriceDrop == true){
+			if(ALERTS.ESTChangePrice() == true){
+				ALERTS.displayList().optionList.estChangePriceDropBelow = $('.estChangePriceDropBelow').val();
+				ALERTS.displayList().optionList.estChangePriceDropAbove = $('.estChangePriceDropAbove').val();
 				if ((ALERTS.displayList().optionList.estChangePriceDropBelow == null) || (ALERTS.displayList().optionList.estChangePriceDropBelow == '') || (ALERTS.displayList().optionList.estChangePriceDropAbove == null || ALERTS.displayList().optionList.estChangePriceDropAbove == '')){						
 					$('.target-price.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');						
 					PAGE.resizeIframeSimple();
 					estChangePriceDropError = 1;
 					
-				}else {
+				}
+				else if (isNaN(ALERTS.displayList().optionList.estChangePriceDropBelow) || isNaN(ALERTS.displayList().optionList.estChangePriceDropAbove) ) {
+					$('.target-price.error-messages').empty();
+					$('<p/>').html('Please enter valid numbers.').appendTo('.target-price.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				}
+				else {
 					$('.target-price.error-messages').empty();
 					estChangePriceDropError = 0;
-				}
-				
+				}				
+			}
+			else {
+				$('.target-price.error-messages').empty();
 			}
 			
 			errors = pcPriceDropError + pcTradingVolumeError + estChangePriceDropError;
@@ -506,16 +558,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				"name": ALERTS.editWLName(),
 				"companies": ALERTS.companies(),
 				"optionList": {
-					"pcPriceDrop": (ALERTS.displayList().optionList.pcPriceDrop != undefined) ? ALERTS.displayList().optionList.pcPriceDrop : false,
-					"pcPriceDropBelow": (ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
-					"pcPriceRiseAbove": (ALERTS.displayList().optionList.pcPriceRiseAbove != null) ? ALERTS.displayList().optionList.pcPriceRiseAbove : null,
-					"pcTradingVolume": (ALERTS.displayList().optionList.pcTradingVolume != undefined) ? ALERTS.displayList().optionList.pcTradingVolume : false,
-					"pcTradingVolumeValue": (ALERTS.displayList().optionList.pcTradingVolumeValue != null) ? ALERTS.displayList().optionList.pcTradingVolumeValue : null,
+					"pcPriceDrop": (ALERTS.PCPriceCheck() == true) ? true : false,
+					"pcPriceDropBelow": (ALERTS.PCPriceCheck() == true && ALERTS.displayList().optionList.pcPriceDropBelow != null) ? ALERTS.displayList().optionList.pcPriceDropBelow : null,
+					"pcPriceRiseAbove": (ALERTS.PCPriceCheck() == true && ALERTS.displayList().optionList.pcPriceRiseAbove != null) ? ALERTS.displayList().optionList.pcPriceRiseAbove : null,
+					"pcTradingVolume": (ALERTS.PCTradeVol() == true) ? true : false,
+					"pcTradingVolumeValue": (ALERTS.PCTradeVol() == true && ALERTS.displayList().optionList.pcTradingVolumeValue != null) ? ALERTS.displayList().optionList.pcTradingVolumeValue : null,
 					"pcReachesWeek": (ALERTS.displayList().optionList.pcReachesWeek != undefined) ? ALERTS.displayList().optionList.pcReachesWeek : false,
 					"pcReachesWeekValue": ALERTS.displayList().optionList.pcReachesWeekValue,
-					"estChangePriceDrop": (ALERTS.displayList().optionList.estChangePriceDrop != undefined) ? ALERTS.displayList().optionList.estChangePriceDrop : false,
-					"estChangePriceDropBelow": (ALERTS.displayList().optionList.estChangePriceDropBelow != null) ? ALERTS.displayList().optionList.estChangePriceDropBelow : null,
-					"estChangePriceDropAbove": (ALERTS.displayList().optionList.estChangePriceDropAbove != null) ? ALERTS.displayList().optionList.estChangePriceDropAbove : null,
+					"estChangePriceDrop": (ALERTS.ESTChangePrice() == true) ? true : false,
+					"estChangePriceDropBelow": (ALERTS.ESTChangePrice() == true && ALERTS.displayList().optionList.estChangePriceDropBelow != null) ? ALERTS.displayList().optionList.estChangePriceDropBelow : null,
+					"estChangePriceDropAbove": (ALERTS.ESTChangePrice() == true && ALERTS.displayList().optionList.estChangePriceDropAbove != null) ? ALERTS.displayList().optionList.estChangePriceDropAbove : null,
 					"estChangeConsensus": (ALERTS.displayList().optionList.estChangeConsensus != undefined) ? ALERTS.displayList().optionList.estChangeConsensus : false,
 					"estChangeConsensusValue": ALERTS.displayList().optionList.estChangeConsensusValue,
 					"kdAnounceCompTransactions": (ALERTS.displayList().optionList.kdAnounceCompTransactions != undefined) ? ALERTS.displayList().optionList.kdAnounceCompTransactions : false,
@@ -529,6 +581,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					"kdResultsCorpAnnouncements": (ALERTS.displayList().optionList.kdResultsCorpAnnouncements != undefined) ? ALERTS.displayList().optionList.kdResultsCorpAnnouncements : false
 				}			
 			};
+			
+			
+			
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			PAGE.showLoading();
@@ -548,6 +603,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					if( callback && typeof callback === 'function') { callback() };
 					ALERTS.finalWL(data.sort(sortByName));
+					var resetAfter = ko.computed(function(){
+				if(ALERTS.displayList().optionList.pcPriceDrop == false){
+					ALERTS.displayList().optionList.pcPriceDropBelow = null;
+					ALERTS.displayList().optionList.pcPriceRiseAbove = null
+				}
+			});
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback);
