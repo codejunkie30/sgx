@@ -128,11 +128,12 @@ public class QuartzConfig {
 		quartzProperties.put("org.quartz.scheduler.instanceId", "AUTO");
 		quartzProperties.put("org.quartz.scheduler.makeSchedulerThreadDaemon", "true");
 		quartzProperties.put("org.quartz.threadPool.class", "org.quartz.simpl.SimpleThreadPool");
-		quartzProperties.put("org.quartz.threadPool.threadCount", "1");
+		quartzProperties.put("org.quartz.threadPool.threadCount", "5");
 		quartzProperties.put("org.quartz.threadPool.makeThreadsDaemons", "true");
 		quartzProperties.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.MSSQLDelegate");
 		quartzProperties.put("org.quartz.jobStore.isClustered", "true");
 		quartzProperties.put("org.quartz.jobStore.tablePrefix", "QRTZ_");
+		quartzProperties.put("scheduling.quartz.threadPriority", "5");
 		//quartzProperties.put("org.quartz.jobStore.clusterCheckinInterval" ,"9000000");
 		//quartzProperties.put("org.quartz.jobStore.misfireThreshold", "9000000");
 		
