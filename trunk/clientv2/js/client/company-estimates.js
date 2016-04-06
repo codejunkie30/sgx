@@ -14,7 +14,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     }
 
 	var CF = {
-			
+
 		quarterlyEst: null,
 		annualEst: null,
 		estimates: null,
@@ -26,7 +26,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		currency: ko.observable(""),
 		series: ko.observable([]),
 		legendItems: ko.computed(function() {}),
-		premiumUser: ko.observable(),	
+		premiumUser: ko.observable(),
 		premiumUserEmail: ko.observable(),
 		premiumUserAccntInfo: ko.observable(),
 		libLoggedIn: ko.observable(),
@@ -37,10 +37,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		libCurrency: ko.observable(false),
 		currentDay: ko.observable(),
 		quarterlyTab: ko.observable(true),
-	    annualTab: ko.observable(false),
+	  annualTab: ko.observable(false),
 
         summaryData: null,
-		
+
 		initPage: function() {
 			PAGE.showLoading();
             var me = this;
@@ -81,11 +81,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             });
 
 
-			
+
 			var self = this;
-			
+
 			PAGE.checkStatus();
-            
+
             var waitForDataToInit = ko.computed({
                 read:function(){
 
@@ -104,11 +104,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 },
                 owner:this
             });
-            
+
 		},
-		
+
 		finish: function(me) {
-			
+
 			me.trackPage("SGX Company Estimates - " + me.companyInfo.companyName);
 			var endpoint = me.fqdn + "/sgx/company/estimates";
 			var postType = 'POST';
@@ -120,14 +120,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             }
     		UTIL.handleAjaxRequest(endpoint,
 				postType,
-				params, 
-				jsonp, 
-				function(data, textStatus, jqXHR) { 
-					me.initFinancials(me, data);  
-				}, 
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR) {
+					me.initFinancials(me, data);
+				},
 				PAGE.customSGXError,
 				undefined);
-	    		
+
 		},
 
         init_nonPremium: function() {
@@ -136,7 +136,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             ko.applyBindings(this, $("body")[0]);
       		setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
         },
-		
+
 		initFinancials: function(me, data) {
             PAGE.hideLoading();
             //console.log(data);
@@ -144,13 +144,13 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             var combinedData = [];
             /********** Assumptions for summary vs table/combined data *********/
-            /* 1. The summary data and the table data are never going to be mixed into the same object: 
-                For example, if the fields ebtActual or revenueActual etc. (there are other table data fields too) 
-                are populated with data, then the summary data fields in the response object (like, ltgMeanEstimate etc) 
+            /* 1. The summary data and the table data are never going to be mixed into the same object:
+                For example, if the fields ebtActual or revenueActual etc. (there are other table data fields too)
+                are populated with data, then the summary data fields in the response object (like, ltgMeanEstimate etc)
                 will always be null and vice versa.
 
-               2. (This also ties with 1 above but setting it down here just to be explicit)   
-               IF the field period is "", then that response object will always be taken as summary data object. 
+               2. (This also ties with 1 above but setting it down here just to be explicit)
+               IF the field period is "", then that response object will always be taken as summary data object.
                Similary if it contains some string (eg. "FY2014"), that response object will always be taken as table data.
             */
 
@@ -177,7 +177,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             //console.log(this.estimates);
 
-            //table col widths 
+            //table col widths
             this.quarterlyTableColWidth = '15%';
             this.annualTableColWidth = '15%';
 
@@ -203,7 +203,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
             // so ebit: null and ebitActual:1200 becomes ebit: { value: 1200, actOrEst: A };
-			
+
             $.each( this.estimates.annually, function(key, val) {
                 var refinedObj = me.normalizeForDisplay( val );
                 me.refinedEstimates.annually.push( refinedObj );
@@ -225,16 +225,16 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             if(this.dataExists() && combinedData.length > 0 && combinedData[0].filingCurrency)
 			 this.currency(combinedData[0].filingCurrency);
-			
+
 			// initialize the chart without a series
 			this.initChart(me);
 
             ko.applyBindings(this, $("body")[0]);
-			
+
     		// resize
             setTimeout(function() { me.resizeIframeSimple(); }, 500);
-			
-			
+
+
 		},
 
         // Need to normalize the annually and quarterly array for display by merging val and valActual into one object with Actual or not Actual indicator
@@ -242,7 +242,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
         normalizeForDisplay: function(object) {
 
             var curObject = $.extend({}, object);//clone
-            var refinedObj={};  
+            var refinedObj={};
             $.each( curObject, function(key, val) {
                 var isActual = false;
                 var curVal;
@@ -274,7 +274,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
 
             });
-            
+
             return refinedObj;
         },
 
@@ -331,7 +331,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 }
     		});
             setTimeout(function() { me.resizeIframeSimple(); }, 300);
-    		
+
 		},
 
         getIndustryRecommendationTxt: function(value) {
@@ -340,9 +340,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 txt = 'Buy';
             if( value > 1.5 && value <=2.5 )
                 txt = 'Outperform';
-            if( value > 2.5 && value <=3.5 ) 
+            if( value > 2.5 && value <=3.5 )
                 txt = 'Hold';
-            if( value > 3.5 && value <= 4.5 ) 
+            if( value > 3.5 && value <= 4.5 )
                 txt = 'Underperform';
             if( value > 4.5 && value <= 5.0)
                 txt = 'Sell';
@@ -355,34 +355,39 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 txt = 'Low';
             if( value > 1.5 && value <=2.5 )
                 txt = 'Below Average';
-            if( value > 2.5 && value <=3.5 ) 
+            if( value > 2.5 && value <=3.5 )
                 txt = 'Average';
-            if( value > 3.5 && value <= 4.5 ) 
+            if( value > 3.5 && value <= 4.5 )
                 txt = 'Above Average';
             if( value > 4.5 && value <= 5.0)
                 txt = 'High';
             return (txt == '')? '': txt+' ';
         },
-		
+
 		handleClick: function(model, data, event) {
 			var el = $(".checkbox", $(event.currentTarget).closest("tr"));
 			model.chartData(model, el);
 		},
-		
+
 		canUncheck: function(model, name) {
 			var ret = false;
 			$.each(model.series(), function(idx, series) { if ($(".trigger", series).data().name == name) { ret = true; } });
 			return ret;
 		},
-		
+
 		chartData: function(model, el) {
-			
+      //if only one column, we'll not let the data chart
+
+      if ($(el).siblings().length -1 === 1) {
+        model.modal.open({ type: "alert", content: "<p>Not enough data available for this series.</p>" });
+        return;
+      }
 			// already checked
 			if ($(el).hasClass("checked")) {
 				model.removeSeries(model, el);
 				return;
 			}
-			
+
 			// block it
     		if ($(".checked").length >= 5) {
                 model.modal.open({ type: 'alert',  content: '<h4>Chart Company Estimates <span>(Select up to 5)</h4><p>Only five data points can be charted at a time. Remove a data point before selecting a new one.</p>' });
@@ -394,14 +399,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 				model.modal.open({ type: "alert", content: "<p>No data available for this series.</p>" });
     			return;
     		}
-    		
-			// render the chart 
+
+			// render the chart
 			this.renderChart(model, el);
-			
+
 		},
-		
+
     	removeSeries: function(model, el) {
-    		
+
     		var name = $(".trigger", el).attr("data-name");
     		var chart = $('#bar-chart').highcharts();
 
@@ -411,17 +416,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     		// remove the series from the chart
     		chart.get(name).remove();
     		chart.setSize(this.getChartWidth(chart.series.length - 1), this.getChartHeight(), true);
-    		
+
     		// latest series
     		this.series($(".checked"));
-    		
+
     	},
-    	
+
 		renderChart: function(me, el) {
-			
+
     		// check the box
     		$(el).addClass("checked");
-    		
+
     		// now update the chart
 			var chart = $('#bar-chart').highcharts();
 			var trigger = $(".trigger", el);
@@ -438,35 +443,37 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                     if (i > 0) txt += "<br />";
                     txt += $(this).text();
                 });
-                categories.push(txt); 
+                categories.push(txt);
              });
 
             chart.xAxis[0].setCategories(categories);
 
 			// create series data
-			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, 
-                                    mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
+			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); },
+                           mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
 			var seriesData = [];
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
 				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
 				seriesData.push({ y: val, events: eventsConfig });
 			});
-			
+
 			//axis info
 			chart.addAxis({
-		    	id: data.name,
-		    	title: { text: name },
-		    	opposite: me.hasLeftYAxis(),
-				labels: {
-                    formatter: function() {
-                    	var fmt = data.hasOwnProperty("format") ? data.format : ""; 
-                    	if (fmt == "cash") return Highcharts.numberFormat(this.value);
-                    	else if (fmt == "percent") return this.value + "%";
-                        return Highcharts.numberFormat(this.value, 3);
-                    }
-				}
+			    id: data.name,
+			    title: {
+			        text: name
+			    },
+			    opposite: me.hasLeftYAxis(),
+			    labels: {
+			        formatter: function() {
+			            var fmt = data.hasOwnProperty("format") ? data.format : "";
+			            if (fmt == "cash") return Highcharts.numberFormat(this.value);
+			            else if (fmt == "percent") return this.value + "%";
+			            return Highcharts.numberFormat(this.value, 3);
+			        }
+			    }
 			});
-			
+
 			var sData = {
                 name: name,
                 id: data.name + "-series",
@@ -477,7 +484,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim(),
                 color: me.getColor(chart.series)
 			};
-				
+
 			// add the series data
 			chart.addSeries(sData);
 
@@ -494,36 +501,36 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             }
 
 			chart.setSize(me.getChartWidth(chart.series.length), me.getChartHeight(), true);
-    		setTimeout(function() { me.resizeIframe(me.getTrueContentHeight(), $('#bar-chart').position().top); }, 100); 
-    		
+    		setTimeout(function() { me.resizeIframe(me.getTrueContentHeight(), $('#bar-chart').position().top); }, 100);
+
     		// latest series
     		this.series($(".checked"));
 
 		},
-		
+
     	hasLeftYAxis: function() {
     		var chart = $('#bar-chart').highcharts(), ret = false;
     		if (chart.hasOwnProperty("yAxis")) { $.each(chart.yAxis, function(idx, axis) { if (typeof axis.opposite !== "undefined" && !axis.opposite) { ret = true; } }); }
     		return ret;
     	},
-    	
+
     	getColor: function(series) {
     		var colors = [ '#565a5c', '#1e2171', '#BED600', '#0094B3', '#BF0052' ];
     		$.each(series, function(idx, data) {  colors = $.grep(colors, function(val) { return data.color != val; }); });
-    		return colors[0];    		
+    		return colors[0];
     	},
-            	
+
     	getChartWidth: function(seriesCount) {
     		var div = $("#bar-chart");
     		var width = (seriesCount * parseInt($(div).attr("series-increment"))) + parseInt($(div).attr("default-width"));
     		return width;
     	},
-    	
+
     	getChartHeight: function() {
     		var height = parseInt($("#bar-chart").attr("default-height"));
     		return height;
     	},
-    	
+
     	getSeriesType: function(group) {
     		var groups = [];
     		groups["pure"] = "column";
@@ -535,7 +542,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			$('#Annual .checkbox').each( function(){
 				if ($(this).hasClass('checked')) { ;
 					model.removeSeries(model, this);
-				}		            
+				}
 			});
 			CF.quarterlyTab(true);
 			CF.annualTab(false);
@@ -544,21 +551,21 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		},
 		showEstAnnual: function(model, el){
 			$('#Quarterly .checkbox').each( function(){
-				if ($(this).hasClass('checked')) { 
+				if ($(this).hasClass('checked')) {
 					model.removeSeries(model, this);
-				}		            
+				}
 			});
 			CF.quarterlyTab(false);
-			CF.annualTab(true);	
+			CF.annualTab(true);
 			$('.annual a').addClass('active');
 			$('.quarterly a').removeClass('active');
-		} 
+		}
 
 	};
 
     /**
      * Experimental Highcharts plugin to implement chart.alignThreshold option.
-     * Author: Torstein Hønsi
+     * Author: Torstein Hï¿½nsi
      * Last revision: 2013-12-02
      */
     (function (H) {
@@ -580,7 +587,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 });
 
                 each(this.yAxis, function (axis) {
-                    
+
                     var tickPositions = axis.tickPositions;
 
                     if (tickPositions) {
@@ -612,8 +619,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             }
 
         })
-    }(Highcharts)); 
-	
+    }(Highcharts));
+
 	return CF;
-	
+
 });
