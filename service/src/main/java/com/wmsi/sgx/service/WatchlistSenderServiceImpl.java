@@ -58,7 +58,7 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
         message.setText(htmlContent, true /* isHtml */);		
         mailSender.send(mimeMessage);
 		
-        log.info("Watchlist Email sent to: {}", to);
+        log.info("Watchlist Email sent to: {} for watchList: {}", to, watchlist.getName());
 	}
 
 }
