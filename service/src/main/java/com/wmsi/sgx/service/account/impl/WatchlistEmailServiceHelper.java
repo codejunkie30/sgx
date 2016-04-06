@@ -63,9 +63,12 @@ public class WatchlistEmailServiceHelper implements Job{
 						}
 						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
 							try {
+								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
+										options.size() + "\t "+ watchlist.getCompanies().size() );
 								senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.error("exception while sending watchList email to "+acc.getUser().getUsername());
+								log.error("Exception in email notification : ",e.getMessage() + "\n Details of Root cause " + e);
 							}
 					}
 			}
