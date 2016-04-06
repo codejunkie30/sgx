@@ -48,7 +48,7 @@ public class WatchlistEmailServiceHelper implements Job{
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		System.out.println("Entereedd cron watchlist");
+		log.info("Executing WatchlistEmailService");
 		List<Account> accounts = accountRepository.findAll();
 		for( Account acc: accounts)	{
 			if(acc.getActive() == true){
@@ -62,12 +62,12 @@ public class WatchlistEmailServiceHelper implements Job{
 							log.error("exception while parsing watchlist");
 						}
 						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
+							log.info("reached if(watchlist.getCompanies().size() > 0 && options.size() > 0) ");
 							try {
 								senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 								log.info("email sent to user {} for watchlist {}" , acc.getUser().getUsername(), watchlist.getName());
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.error("exception while sending watchList email to "+acc.getUser().getUsername());
-								log.error("Exception" + e);
 							}
 					}
 			}
