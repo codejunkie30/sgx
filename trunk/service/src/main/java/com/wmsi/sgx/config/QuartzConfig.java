@@ -133,8 +133,8 @@ public class QuartzConfig {
 		quartzProperties.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.MSSQLDelegate");
 		quartzProperties.put("org.quartz.jobStore.isClustered", "true");
 		quartzProperties.put("org.quartz.jobStore.tablePrefix", "QRTZ_");
-		quartzProperties.put("org.quartz.jobStore.clusterCheckinInterval" ,"9000000");
-		quartzProperties.put("org.quartz.jobStore.misfireThreshold", "9000000");
+		//quartzProperties.put("org.quartz.jobStore.clusterCheckinInterval" ,"9000000");
+		//quartzProperties.put("org.quartz.jobStore.misfireThreshold", "9000000");
 		
 		
 		
