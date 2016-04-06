@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.EmailAudit;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AlertOption;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.repository.AccountRepository;
+import com.wmsi.sgx.repository.EmailAuditRepository;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.WatchlistSenderService;
 import com.wmsi.sgx.service.account.QuanthouseService;
@@ -44,11 +47,23 @@ public class WatchlistEmailServiceHelper implements Job{
 	@Autowired
 	private QuanthouseService quanthouseService;
 	
+	@Autowired
+	private EmailAuditRepository emailAuditRepository;
+	
+	private static final String EMAIL_SUBJECT = "SGX StockFacts Premium Alert"; 
+	
+	private static final String EMAIL_SUCCESS = "Success";
+	
+	private static final String EMAIL_FAILED = "Failed";
+	
+	private static final String WATCHLIST_UNAVAILABLE = "Watchlist Unavailable";
+	
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceHelper.class);
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		log.info("Executing WatchlistEmailService");
+		String content = null;
 		List<Account> accounts = accountRepository.findAll();
 		for( Account acc: accounts)	{
 			if(acc.getActive() == true){
@@ -61,18 +76,41 @@ public class WatchlistEmailServiceHelper implements Job{
 						} catch (QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 							log.error("exception while parsing watchlist");
 						}
-						if(watchlist.getCompanies().size() > 0 && options.size() > 0)
+						if(watchlist.getCompanies().size() > 0 && options.size() > 0){
 							try {
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
 										options.size() + "\t "+ watchlist.getCompanies().size() );
-								senderService.send(acc.getUser().getUsername(), "SGX StockFacts Premium Alert", options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
+								
+								content = senderService.send(acc.getUser().getUsername(), EMAIL_SUBJECT, options, watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
+								
+								insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_SUCCESS, EMAIL_SUCCESS);
+								
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
-								log.error("exception while sending watchList email to "+acc.getUser().getUsername());
-								log.error("Exception in email notification : ",e.getMessage() + "\n Details of Root cause " + e);
+								log.info("exception while sending watchList email to "+acc.getUser().getUsername());
+								log.info("Exception in email notification : ",e.getMessage() + "\n Details of Root cause " + e);
+								
+								insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_FAILED, e.getMessage());
+								
 							}
+						}else{
+							insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_FAILED, WATCHLIST_UNAVAILABLE);
+						}
 					}
 			}
 		}
+	}
+
+	private void insertEmailTransaction(User user, WatchlistModel watchlist, String body, String subject, String status, String reason) {
+		log.info("Inside the insertEmailTransaction method");
+		EmailAudit emailAudit = new EmailAudit();
+		emailAudit.setUserId(user.getId());
+		emailAudit.setSubject(subject);
+		emailAudit.setBody(body);
+		emailAudit.setEmail(user.getUsername());
+		emailAudit.setReason(reason);
+		emailAudit.setStatus(status);
+		emailAudit.setWatchlistName(watchlist.getName());
+		emailAuditRepository.save(emailAudit); 
 	}
 }
 
