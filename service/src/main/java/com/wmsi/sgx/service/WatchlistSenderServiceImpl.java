@@ -40,7 +40,7 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
 	private Logger log = LoggerFactory.getLogger(WatchlistSenderService.class);
 	
 	@Override
-	public void send(String to, String subject,	List<AlertOption> variables, WatchlistModel watchlist, List<CompanyPrice> companyPrices) throws MessagingException {
+	public String send(String to, String subject,	List<AlertOption> variables, WatchlistModel watchlist, List<CompanyPrice> companyPrices) throws MessagingException {
 				
 		final Context ctx = new Context();		
 		ctx.setVariable("watchlistName", watchlist.getName());
@@ -62,6 +62,8 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
         log.info(" Email information \n " +ctx.getVariables().get("watchlistName"));
         log.info(" Email information \n " +ctx.getVariables().get("companyPrices"));
         log.info(" Email information \n " +ctx.getVariables().get("alerts"));
+        
+        return htmlContent;
 	}
 
 }
