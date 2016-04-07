@@ -15,7 +15,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 
 	private QueryExecutor executor;
 	private ObjectMapper mapper;
-	private String indexName;
+	//default value
+	private String indexName="sgd_premium";
 	public void setExecutor(QueryExecutor executor) {
 		this.executor = executor;
 	}

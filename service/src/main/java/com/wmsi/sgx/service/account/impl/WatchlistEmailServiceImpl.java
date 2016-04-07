@@ -292,7 +292,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	
 	public List<KeyDev> getKeyDevs(String company, Date date) throws CompanyServiceException{
 		List<KeyDev> ret = new ArrayList<KeyDev>();
-		List<KeyDev> kd = companyService.loadKeyDevs(company).getKeyDevs();
+		List<KeyDev> kd = companyService.loadKeyDevs(company, "sgd_premium").getKeyDevs();
 		for(KeyDev keyDev : kd){
 			if(date.compareTo(keyDev.getDate()) < 1)
 				ret.add(keyDev);

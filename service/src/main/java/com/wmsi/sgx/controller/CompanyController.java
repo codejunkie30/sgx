@@ -73,6 +73,7 @@ public class CompanyController{
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
 	
+	private String defaultIndexName = "sgd_premium";
 	
 	@RequestMapping(value="company")
 	public Map<String, Object> getAll(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
@@ -131,9 +132,17 @@ public class CompanyController{
 		return ret;
 	}
 	
+	private String getIndexName(HttpServletRequest request){
+		String index = defaultIndexName;
+				if(request.getHeader("currency") != null){
+					index = request.getHeader("currency").toLowerCase() +"_premium" ;
+				}
+		return index;		
+	}
+	
 	@RequestMapping(value="company/keyDevs")
 	public KeyDevs getKeyDevs(@RequestBody IdSearch search) throws CompanyServiceException{
-		KeyDevs keydevs = companyService.loadKeyDevs(search.getId());
+		KeyDevs keydevs = companyService.loadKeyDevs(search.getId(), defaultIndexName);
 		
 		if(keydevs.getKeyDevs() != null && keydevs.getKeyDevs().size() > 10)
 			keydevs.setKeyDevs(keydevs.getKeyDevs().subList(keydevs.getKeyDevs().size() - 10, keydevs.getKeyDevs().size()));
