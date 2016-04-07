@@ -163,12 +163,13 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	private Price fallbackPriceForRealTimePricing(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
-		Company comp = companySearch.getById(id, Company.class);
+		//first call to check the trading currency
+		Company comp = companySearch.getByIdUsingIndexName(id, "sgd_premium", Company.class);;
 		if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
 			comp.setFilingCurrency("SGD");
 		}
 		if(comp.getFilingCurrency().toLowerCase() != "sgd"){
-			//Its just the confusing name, calling today's company not Previous day, neeed to change the name of method
+			
 			Company aseanCompany = companyService.getCompanyByIdAndIndex(id, comp.getFilingCurrency().toLowerCase()+"_premium");
 			comp = aseanCompany;
 			if(comp == null){
@@ -207,7 +208,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	
 	private Price fallbackPrice(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
-		Company comp = companySearch.getById(id, Company.class);
+		Company comp = companySearch.getByIdUsingIndexName(id, "sgd_premium", Company.class);
 		try{
 			Company prevComp = companyService.getCompanyByIdAndIndex(id, "sgd_premium_previous");
 			p.setClosePrice(prevComp.getClosePrice());
