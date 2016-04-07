@@ -120,7 +120,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				System.out.println("Previous " + company + " : " + previousComp);
 				System.out.println("Current "+ company + " : " + comp);
 			}catch(CompanyServiceException e){
-				continue;
+				break;
 			}
 			
 			String companyName = getCompanyName(company);
