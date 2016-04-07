@@ -147,8 +147,8 @@ public class AccountServiceImpl implements AccountService{
 		
 		for(Account acc : accounts){
 			
-			// Deactivate trial account
-			if(acc.getType().equals(AccountType.TRIAL)){
+			// Deactivate trial and Premium accounts
+			if(acc.getType().equals(AccountType.TRIAL) || acc.getType().equals(AccountType.PREMIUM)){
 				acc.setActive(false);
 				accountRepository.updateActive(acc.getActive(), acc.getUser().getId());
 			}
