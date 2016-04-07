@@ -124,8 +124,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				break;
 			}
 			
-			//String companyName = getCompanyName(company);
-			String companyName = comp.getCompanyName();
+			String companyName = getCompanyName(company);
 			List<Estimate> estimates = companyService.loadEstimates(company,defaultCurrency);
 			List<Estimate> pastEstimates = companyService.loadPreviousEstimates(company);			
 			Estimate currentEstimate = getEstimate(estimates);
