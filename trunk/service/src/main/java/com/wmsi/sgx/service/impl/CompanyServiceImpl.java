@@ -3,6 +3,8 @@ package com.wmsi.sgx.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +59,16 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	@Value("${list.permitted.exchanges}")
 	private String permittedExchangesList;
+	
+	private String defaultIndexName = "sgd_premium";
+	
+	private String getIndexName(HttpServletRequest request){
+		String index = defaultIndexName;
+				if(request.getHeader("currency") != null){
+					index = request.getHeader("currency").toLowerCase() +"_premium" ;
+				}
+		return index;		
+	}
 
 	@Override
 	@Cacheable(value = "company")
@@ -97,9 +109,9 @@ public class CompanyServiceImpl implements CompanyService{
 	
 	@Override
 	@Cacheable(value = "keyDevs")
-	public KeyDevs loadKeyDevs(String id) throws CompanyServiceException {
+	public KeyDevs loadKeyDevs(String id, String indexName) throws CompanyServiceException {
 		try{
-			return keyDevsSearch.getById(id, KeyDevs.class);
+			return keyDevsSearch.getByIdUsingIndexName(id, indexName, KeyDevs.class);
 		}
 		catch(SearchServiceException e){
 			log.error("Exception loading key devs: {}", id);

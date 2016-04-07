@@ -2,6 +2,8 @@ package com.wmsi.sgx.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
@@ -18,7 +20,7 @@ import com.wmsi.sgx.service.search.SearchServiceException;
 
 public interface CompanyService{
 
-	KeyDevs loadKeyDevs(String id) throws CompanyServiceException;
+	KeyDevs loadKeyDevs(String id, String indexName) throws CompanyServiceException;
 
 	Holders loadHolders(String id) throws CompanyServiceException;
 
