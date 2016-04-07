@@ -228,7 +228,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		if(priceOptions.size() > 0){
 			AlertOption alert = new AlertOption();
 			alert.setCompanies(priceOptions);
-			alert.setDescription("Price drops below " + map.get("pcPriceDropBelow").toString() + "% or rises over " + map.get("pcPriceRiseAbove").toString() + "% last close price");
+			alert.setDescription("Price drops below " + map.get("pcPriceDropBelow").toString() + "% or rises above " + map.get("pcPriceRiseAbove").toString() + "% over last close price");
 			alertList.add(alert);
 		}
 		
