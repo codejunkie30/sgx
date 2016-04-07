@@ -131,8 +131,8 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			Estimate pastEstimate = getEstimate(pastEstimates);	
 			
 			if(map.get("pcPriceDrop").toString().equals("true")){	
-				String priceDrop = map.get("pcPriceDropBelow").toString();
-				String priceRise = map.get("pcPriceRiseAbove").toString();
+				String priceDrop = map.get("pcPriceDropBelow")!=null?map.get("pcPriceDropBelow").toString():"null";
+				String priceRise = map.get("pcPriceRiseAbove")!=null?map.get("pcPriceRiseAbove").toString():"null";
 				
 				Double priceChange = 0.0D;
 
@@ -150,7 +150,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				}
 			}
 			
-			if(map.get("pcTradingVolume").toString().equals("true")){				
+			if(map.get("pcTradingVolume")!=null&&map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
 				if(volume == 0.0 && comp.getVolume() != null)
 					volumeOptions.put(company, companyName);
@@ -162,7 +162,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				}
 			}
 			
-			if(map.get("pcReachesWeek").toString().equals("true")){
+			if(map.get("pcReachesWeek")!=null&&map.get("pcReachesWeek").toString().equals("true")){
 				String weekValue = map.get("pcReachesWeekValue").toString();
 				Double closePrice = comp.getClosePrice();
 				if((weekValue.equals("high") && comp.getPriceVs52WeekHigh() < closePrice) || (weekValue.equals("low") && comp.getPriceVs52WeekLow() > closePrice))
@@ -172,7 +172,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			if(map.get("estChangePriceDrop") == null)
 				map.put("estChangePriceDrop", "false");
 			
-			if(map.get("estChangePriceDrop").toString().equals("true") && currentEstimate != null){
+			if(map.get("estChangePriceDrop")!=null&&map.get("estChangePriceDrop").toString().equals("true") && currentEstimate != null){
 				Double targetPriceDrop = Double.parseDouble(verifyStringAsNumber(map.get("estChangePriceDropBelow").toString()));
 				Double targetPriceRise = Double.parseDouble(verifyStringAsNumber(map.get("estChangePriceDropAbove").toString()));
 				Double pastTp = null;
@@ -191,7 +191,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			if(map.get("estChangeConsensus") == null || currentEstimate == null)
 				map.put("estChangeConsensus", "false");
 			
-			if(map.get("estChangeConsensus").toString().equals("true") && currentEstimate != null){
+			if(map.get("estChangeConsensus")!=null&&map.get("estChangeConsensus").toString().equals("true") && currentEstimate != null){
 				Double brokerRec =  currentEstimate.getAvgBrokerRec() != null ? currentEstimate.getAvgBrokerRec() : 0.0;
 				Double lastBrokerRec = pastEstimate != null && pastEstimate.getAvgBrokerRec() != null ? pastEstimate.getAvgBrokerRec() : 0.0;				
 				int pastBrokerRec = (int) Math.round(lastBrokerRec);
