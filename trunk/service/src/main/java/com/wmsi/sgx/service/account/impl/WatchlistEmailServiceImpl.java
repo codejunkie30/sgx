@@ -114,7 +114,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			Company previousComp = null;
 			
 			try{
-				comp = companyService.getCompanyByIdAndIndex(company,"sgd");
+				comp = companyService.getCompanyByIdAndIndex(company,"sgd_premium");
 				//previousComp = companyService.getPreviousById(company);
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
 				System.out.println("Previous " + company + " : " + previousComp);
@@ -301,7 +301,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	public String getCompanyName(String company) throws CompanyServiceException{
-		return companyService.getCompanyByIdAndIndex(company,"sgd").getCompanyName();
+		return companyService.getCompanyByIdAndIndex(company,"sgd_premium").getCompanyName();
 	}
 	
 	public Date getStartOfDay(Date date) {
