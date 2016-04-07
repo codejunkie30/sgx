@@ -138,7 +138,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			
 			try{
 				//Company comp = companyService.getById(company,"sgd");
-				Company comp = companyService.getPreviousById(company, "sgd_premium");
+				Company comp = companyService.getCompanyByIdAndIndex(company, "sgd_premium");
 				p = fallbackPrice(company);
 				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
 				companyPrice.setCompanyName(comp.getCompanyName());
@@ -169,7 +169,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		}
 		if(comp.getFilingCurrency().toLowerCase() != "sgd"){
 			//Its just the confusing name, calling today's company not Previous day, neeed to change the name of method
-			Company aseanCompany = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium");
+			Company aseanCompany = companyService.getCompanyByIdAndIndex(id, comp.getFilingCurrency().toLowerCase()+"_premium");
 			comp = aseanCompany;
 			if(comp == null){
 				log.error("Current price can't be retrieved for "+ id);
@@ -180,7 +180,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
 				comp.setFilingCurrency("SGD");
 			}
-			Company prevComp = companyService.getPreviousById(id, comp.getFilingCurrency().toLowerCase()+"_premium_previous");
+			Company prevComp = companyService.getCompanyByIdAndIndex(id, comp.getFilingCurrency().toLowerCase()+"_premium_previous");
 			if(prevComp != null){
 				p.setClosePrice(prevComp.getClosePrice());
 				p.setPreviousDate(prevComp.getPreviousCloseDate());
@@ -209,7 +209,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		Price p = new Price();
 		Company comp = companySearch.getById(id, Company.class);
 		try{
-			Company prevComp = companyService.getPreviousById(id, "sgd_premium_previous");
+			Company prevComp = companyService.getCompanyByIdAndIndex(id, "sgd_premium_previous");
 			p.setClosePrice(prevComp.getClosePrice());
 			p.setPreviousDate(prevComp.getPreviousCloseDate());
 		}catch(CompanyServiceException e){

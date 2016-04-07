@@ -52,7 +52,7 @@ public interface CompanyService{
 	
 	Boolean isCompanyNonPremium(String tickerCode) throws SearchServiceException;
 	
-	Company getPreviousById(String id, String indexName) throws CompanyServiceException;
+	Company getCompanyByIdAndIndex(String id, String indexName) throws CompanyServiceException;
 	
 	Company getPreviousById(String id) throws CompanyServiceException;
 

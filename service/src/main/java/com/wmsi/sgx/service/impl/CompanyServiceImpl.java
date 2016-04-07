@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private SearchService previousCompany;
 	@Override
-	public Company getPreviousById(String id, String idxName){
+	public Company getCompanyByIdAndIndex(String id, String idxName){
 		try{
 			return previousCompany.getByIdUsingIndexName(id, idxName, Company.class);
 		}
