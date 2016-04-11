@@ -28,6 +28,9 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
 	@Autowired 
 	private TemplateEngine templateEngine;
 	
+	@Value("${email.watchlist.alert.auditAndSendEmail}")
+	private Boolean auditAndSendEmail;
+	
 	
 	@Value ("${email.base}")
 	public String baseUrl;
@@ -55,10 +58,13 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
         message.setFrom(emailSender);
         message.setTo(to);        
         final String htmlContent = templateEngine.process(file, ctx);        
-        message.setText(htmlContent, true /* isHtml */);		
-        mailSender.send(mimeMessage);
-		
-        log.info("Watchlist Email sent to: {} for watchList: {}", to, watchlist.getName());
+        message.setText(htmlContent, true /* isHtml */);	
+        if (auditAndSendEmail)
+        {
+        	mailSender.send(mimeMessage);
+        }
+        
+		log.info("Watchlist Email sent to: {} for watchList: {}", to, watchlist.getName());
         log.info(" Email information \n " +ctx.getVariables().get("watchlistName"));
         log.info(" Email information \n " +ctx.getVariables().get("companyPrices"));
         log.info(" Email information \n " +ctx.getVariables().get("alerts"));
