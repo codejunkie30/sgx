@@ -59,9 +59,6 @@ public class WatchlistEmailServiceHelper implements Job{
 	
 	private static final String WATCHLIST_UNAVAILABLE = "Watchlist Unavailable";
 	
-	@Value("${email.watchlist.alert.auditAndSendEmail}")
-	private Boolean auditAndSendEmail;
-	
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceHelper.class);
 	
 	@Override
@@ -84,10 +81,10 @@ public class WatchlistEmailServiceHelper implements Job{
 							try {
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
 										options.size() + "\t "+ watchlist.getCompanies().size() );
-								if (auditAndSendEmail) {
-									content = senderService.send(acc.getUser().getUsername(), EMAIL_SUBJECT, options,
+								
+								content = senderService.send(acc.getUser().getUsername(), EMAIL_SUBJECT, options,
 											watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
-								}
+								
 								insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_SUCCESS, EMAIL_SUCCESS);
 								
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
