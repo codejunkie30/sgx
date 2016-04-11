@@ -57,7 +57,7 @@ public class WatchlistEmailServiceHelper implements Job{
 	
 	private static final String EMAIL_FAILED = "Failed";
 	
-	private static final String WATCHLIST_UNAVAILABLE = "Watchlist Unavailable";
+	private static final String WATCHLIST_UNAVAILABLE = "Watchlist doesn't contain companies or alert options";
 	
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceHelper.class);
 	
