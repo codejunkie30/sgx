@@ -23,13 +23,13 @@
 	         },
 	         {
 	            "property":"ebitda",
-	            "format":"cash",
 	            "group":"pure",
 	            "name":"EBITDA"
 	         },
 	         {
 	            "property":"eps",
 	            "glossaryTerm":"eps",
+	            "format":"cash",
 	            "group":"per",
 	            "name":"Normalized Diluted EPS"
 	         },
@@ -93,7 +93,6 @@
 	         },
 	         {
 	            "property":"commonStock",
-	            "format":"cash",
 	            "group":"pure",
 	            "name":"Common Stock"
 	         },
