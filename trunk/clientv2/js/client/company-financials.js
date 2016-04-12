@@ -150,11 +150,22 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 				  	valueDecimals: 3,
 					useHTML: true,
 					 formatter: function(){
-						 var yAxisVal = Highcharts.numberFormat(this.y,3);
-			             
+						 var currencyFormat;
+						 var percentFormat;
+						 if (this.series.data[0].ttFormat == 'cash') { 
+						 	currencyFormat = PAGE.currentFormats.chart.format;
+							percentFormat = '';
+						 } else if (this.series.data[0].ttFormat == 'percent'){							  
+						 	currencyFormat = '';
+							percentFormat = '%';
+						} else {
+							currencyFormat = '';
+							percentFormat = '';
+						}
+						 
 						 var series = '<span style="font-size:11px">'+this.key+'</span>';
 						 series += '<br />';
-						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + yAxisVal.replace(/\.?0+$/,'') +'</span>';
+						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
 						  return series;
 					}
 				},
@@ -244,13 +255,26 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			var trigger = $(".trigger", el);
 			var data = $(trigger).data();
 			var name = $(trigger).text().trim();
+			var sectionName = $(trigger).parent().parent().parent().prev('thead').children().children('.section').text();
 
 			// create series data
 			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
 			var seriesData = [];
+			
+			var formatType;
+			$.each(me.sections, function(i, sec){
+				if(sec.name == sectionName){
+					$.each(sec.dataPoints, function(i,dp){						
+						if (dp.name == name){
+							dp.hasOwnProperty("format") ? formatType = this.format : "";
+						}
+					});
+				}
+			});
+			
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
 				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
-				seriesData.push({ y: val, events: eventsConfig });
+				seriesData.push({ y: val, events: eventsConfig, ttFormat: formatType });
 			});
 			
 			// axis info
@@ -260,10 +284,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		    	opposite: me.hasLeftYAxis(),
 				labels: {
                     formatter: function() {
-                    	var fmt = data.hasOwnProperty("format") ? data.format : ""; 
-                    	if (fmt == "cash") return Highcharts.numberFormat(this.value);
-                    	else if (fmt == "percent") return this.value + "%";
-                        return Highcharts.numberFormat(this.value, 3);
+                    	//var fmt = data.hasOwnProperty("format") ? data.format : ""; 
+                    	if (formatType == "cash") return PAGE.currentFormats.chart.format + _round(this.value,3);
+                    	else if (formatType == "percent") return _round(this.value,3) + "%";
+                        return _round(this.value,3);
                     }
 				}
 			});
@@ -397,5 +421,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     }, CF); 
 	
 	return CF;
+	
+	//helper function for decimals
+  function _round(num, places) {
+    var rounder = Math.pow(10, places);
+    var roundee = num * rounder;
+    return _numberWithCommas(Math.round(roundee)/rounder);
+  }
+	function _numberWithCommas(x) {
+	      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	  }
 	
 });
