@@ -214,6 +214,8 @@ public class Company {
 	private String vwapCurrency;
 
 	private Double volWeightedAvgPrice;
+	
+	private Double adjustedVolWeightedAvgPrice;
 
 	@ConversionAnnotation(name = "IQ_YEAR_FOUNDED")
 	private Integer yearFounded;
@@ -826,6 +828,14 @@ public class Company {
 
 	public void setVolWeightedAvgPrice(Double volWeightedAvgPrice) {
 		this.volWeightedAvgPrice = volWeightedAvgPrice;
+	}
+
+	public Double getAdjustedVolWeightedAvgPrice() {
+		return adjustedVolWeightedAvgPrice;
+	}
+
+	public void setAdjustedVolWeightedAvgPrice(Double adjustedVolWeightedAvgPrice) {
+		this.adjustedVolWeightedAvgPrice = adjustedVolWeightedAvgPrice;
 	}
 
 	public Integer getYearFounded() {
