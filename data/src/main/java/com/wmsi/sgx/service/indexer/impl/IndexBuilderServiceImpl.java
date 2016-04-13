@@ -61,27 +61,27 @@ import com.wmsi.sgx.util.ElasticSearchIndexDateComparator;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service
-public class IndexBuilderServiceImpl implements IndexBuilderService{
+public class IndexBuilderServiceImpl implements IndexBuilderService {
 	private static final Logger log = LoggerFactory.getLogger(IndexBuilderServiceImpl.class);
 
 	@Value("${elasticsearch.index.prefix}")
 	private String indexPrefix;
-	
+
 	@Value("${elasticsearch.index.name}")
 	private String indexAlias;
-	
+
 	@Value("${elasticsearch.index.liveIndexes}")
 	private String liveIndexes;
-	
+
 	@Value("${indexer.failureThreshold}")
 	private int FAILURE_THRESHOLD;
-	
+
 	@Value("${loader.ticker.file}")
 	private String tickerFile;
-	
+
 	@Value("${loader.fx.file}")
 	private String fxFile = "/mnt/data/fx-conversion.csv";
-	
+
 	@Autowired
 	private CapIQService capIQService;
 
@@ -93,35 +93,36 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 	@Autowired
 	private IndexerService indexerService;
-	
+
 	@Autowired
 	private VwapService vwapService;
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
 	}
-	
+
 	@Override
-	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate) throws IndexerServiceException {
+	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate)
+			throws IndexerServiceException {
 
 		log.info("Reading tickers from input file...");
 		log.info("Tickers loaded from: {}", tickerFile);
-		log.info("index name" , indexName);
+		log.info("index name", indexName);
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
-		
-		try{
+
+		try {
 			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
 			String date = fmt.format(jobDate);
 			reader = new InputStreamReader(new FileInputStream(tickerFile));
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext(); // skip header
 
-			String[] record = null;			
+			String[] record = null;
 			List<CompanyInputRecord> ret = new ArrayList<CompanyInputRecord>();
-			
-			while((record = csvReader.readNext()) != null){
-				
+
+			while ((record = csvReader.readNext()) != null) {
+
 				CompanyInputRecord r = new CompanyInputRecord();
 				r.setId(record[6]);
 				r.setLegalName(record[0]);
@@ -131,139 +132,140 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 				r.setTradeName(record[4].length() == 0 ? r.getLegalName() : record[4]);
 				r.setCurrency(record[8]);
 				r.setDate(date);
-				
+
 				ret.add(r);
 			}
-		
+
 			log.info("Found {} tickers to process", ret.size());
-			
+
 			return ret;
-		}
-		catch(IOException e){
+		} catch (IOException e) {
 			throw new IndexerServiceException("Error parsing ticker input file", e);
-		}
-		finally{
+		} finally {
 			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
 		}
 	}
-	
+
 	@Override
-	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException{
-		
+	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input)
+			throws IndexerServiceException, CapIQRequestException, ResponseParserException {
+
 		long start = System.currentTimeMillis();
-		
-		try{
+
+		try {
 			log.debug("Indexing record: {}, Index name: {}", input.getTicker(), indexName);
 			indexRecord(indexName, input);
-		}
-		catch(InvalidIdentifierException e){
+		} catch (InvalidIdentifierException e) {
 			// Allow bad tickers to flow through ie. don't consider it an error
 			log.error("Invalid id " + input.getTicker());
-		}
-		catch(Exception ex) {
+		} catch (Exception ex) {
 			log.error("Invalid record: " + input.getTicker(), ex);
 		}
-		
+
 		input.setIndexed(true);
-		
-		log.debug("Record {} took {} ms", input.getTicker(), (System.currentTimeMillis()-start));
-		
+
+		log.debug("Record {} took {} ms", input.getTicker(), (System.currentTimeMillis() - start));
+
 		return input;
 	}
 
 	@Override
-	public Boolean buildAlphaFactors(@Header String indexName) throws AlphaFactorServiceException, IndexerServiceException{
-		
+	public Boolean buildAlphaFactors(@Header String indexName)
+			throws AlphaFactorServiceException, IndexerServiceException {
+
 		log.info("Building alpha factors");
-		
+
 		File file = alphaFactorService.getLatestFile();
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
-		for(AlphaFactor f : factors){
+		for (AlphaFactor f : factors) {
 			indexerService.save("alphaFactor", f.getId(), f, indexName);
 		}
-		
+
 		log.info("Completed building of alpha factors");
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Determine if the index job succeeded by checking the number of 
-	 * records that failed to index against a pre-determined threshold. 
-	 * @throws IndexerServiceException 
+	 * Determine if the index job succeeded by checking the number of records
+	 * that failed to index against a pre-determined threshold.
+	 * 
+	 * @throws IndexerServiceException
 	 */
 	@Override
-	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName) throws IndexerServiceException{
-		
+	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName)
+			throws IndexerServiceException {
+
 		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
-		
+
 		List<CompanyInputRecord> failedRecords = new ArrayList<CompanyInputRecord>();
-		
-		for(CompanyInputRecord rec : records){
-			if(!rec.getIndexed())
-				failedRecords.add(rec);				
+
+		for (CompanyInputRecord rec : records) {
+			if (!rec.getIndexed())
+				failedRecords.add(rec);
 		}
-		
+
 		int failed = failedRecords.size();
 		boolean success = failed < FAILURE_THRESHOLD;
-		
+
 		log.info("Job status completed with {} failed records. Success: {}", failed, success);
-		
-		if(log.isDebugEnabled()){
-			
-			if(failed > 0)
+
+		if (log.isDebugEnabled()) {
+
+			if (failed > 0)
 				log.debug("Failed records:\n{}", StringUtils.collectionToDelimitedString(failedRecords, "\n"));
-			
+
 		}
-		
-		if(success)
-		{
+
+		if (success) {
 			indexerService.createIndexAlias(indexName);
-			deleteOldIndexes();			
+			deleteOldIndexes();
 		}
-		
+
 		return success;
 	}
-	
+
 	private static final int INDEX_REMOVAL_THRESHOLD = 5;
-	
+
 	@Override
-	public void deleteOldIndexes() throws IndexerServiceException{
-		
+	public void deleteOldIndexes() throws IndexerServiceException {
+
 		log.info("Removing indexes greater than {} days old.", INDEX_REMOVAL_THRESHOLD);
-		
+
 		Indexes indexes = indexerService.getIndexes();
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, INDEX_REMOVAL_THRESHOLD * -1);
 		Date fiveDaysAgo = cal.getTime();
-		
+
 		List<String> liveIndexesList = new ArrayList<String>();
-		if(liveIndexes!="" && liveIndexes.length()>0){
-			for(int i=0; i<liveIndexes.split(",").length; i++){
+		if (liveIndexes != "" && liveIndexes.length() > 0) {
+			for (int i = 0; i < liveIndexes.split(",").length; i++) {
 				liveIndexesList.add(liveIndexes.split(",")[i]);
 			}
 		}
 		int removed = 0;
-		
-		for(Index index : indexes.getIndexes()){
+
+		for (Index index : indexes.getIndexes()) {
 			String indexName = index.getName();
 			String date = index.getName().substring(indexPrefix.length(), indexName.length());
 
 			Date indexDate = new Date(Long.parseLong(date));
 			int dif = fiveDaysAgo.compareTo(indexDate);
-			
-			if(dif > 0){
-				// Make sure we don't delete the live index, even if it's older than the threshold
-				if(index.getAliases() != null && !(Collections.disjoint(index.getAliases(), liveIndexesList))){
-					log.warn("Found alias on index older than {} days. Skipping deletion of this index {}", INDEX_REMOVAL_THRESHOLD, indexName);
+
+			if (dif > 0) {
+				// Make sure we don't delete the live index, even if it's older
+				// than the threshold
+				if (index.getAliases() != null && !(Collections.disjoint(index.getAliases(), liveIndexesList))) {
+					log.warn("Found alias on index older than {} days. Skipping deletion of this index {}",
+							INDEX_REMOVAL_THRESHOLD, indexName);
 					continue;
 				}
 
 				log.info("Deleting index {} had indexDate as {}", indexName, indexDate);
-				
+
 				indexerService.deleteIndex(indexName);
 				removed++;
 			}
@@ -271,95 +273,101 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		log.info("Index cleanup complete. Removed {} old indexes", removed);
 	}
-	
-	public String getPreviousDayIndexName(String idxName) throws IndexerServiceException{
-		
+
+	public String getPreviousDayIndexName(String idxName) throws IndexerServiceException {
+
 		Indexes indexes = indexerService.getIndexes();
-		
+
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH,1 * -1);
+		cal.add(Calendar.DAY_OF_MONTH, 1 * -1);
 		Date oneDayAgo = cal.getTime();
-		
+
 		List<String> oneDayOldIndexes = new ArrayList<String>();
-		
-		for(Index index : indexes.getIndexes()){
-			
+
+		for (Index index : indexes.getIndexes()) {
+
 			String indexName = index.getName();
-			if(indexName.substring(0,11).equals(idxName.substring(0,11))){
+			if (indexName.substring(0, 11).equals(idxName.substring(0, 11))) {
 
 				String date = index.getName().substring(indexPrefix.length(), indexName.length());
 				Date indexDate = new Date(Long.parseLong(date));
-				
-				if(oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)){
+
+				if (oneDayAgo.equals(indexDate) || oneDayAgo.after(indexDate)) {
 					oneDayOldIndexes.add(date);
 				}
 			}
 		}
 		Collections.sort(oneDayOldIndexes, new ElasticSearchIndexDateComparator());
-		
-		if (oneDayOldIndexes.size() == 0)
-		{
+
+		if (oneDayOldIndexes.size() == 0) {
 			log.info("No previous index Found, Previous index is set to current index");
 			return idxName;
-			//throw new UnsupportedOperationException("No previous index Found");
+			// throw new UnsupportedOperationException("No previous index
+			// Found");
 		}
-		//String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
-		String previousDayIndex = idxName.substring(0,indexPrefix.length())+oneDayOldIndexes.get(0);
-		log.debug("previoud say index found: "+previousDayIndex);
+		// String previousDayIndex = indexPrefix+oneDayOldIndexes.get(0);
+		String previousDayIndex = idxName.substring(0, indexPrefix.length()) + oneDayOldIndexes.get(0);
+		log.debug("previoud say index found: " + previousDayIndex);
 		return previousDayIndex;
 	}
-	
-	
 
-	private void indexRecord(String index, CompanyInputRecord input) throws IndexerServiceException, CapIQRequestException, ResponseParserException {
-		
+	private void indexRecord(String index, CompanyInputRecord input)
+			throws IndexerServiceException, CapIQRequestException, ResponseParserException {
+
 		Company company = capIQService.getCompany(input);
-		
-		if(company == null) return;
-		
-		if (company.getFilingCurrency() == null) company.setFilingCurrency(input.getCurrency());
+
+		if (company == null)
+			return;
+
+		if (company.getFilingCurrency() == null)
+			company.setFilingCurrency(input.getCurrency());
 		company.setTradeName(input.getTradeName());
-		
+
 		PriceHistory historicalData = company.fullPH;
 		company.fullPH = null; // HACK to keep from serializing
-		
+
 		String tickerNoExchange = company.getTickerCode();
 
 		loadCompanyGTI(company);
 		loadCompanyVWAP(company);
-		
+
 		// HACK - reset exchange on save (SGX doesn't believe in correct data)
 		String curExchange = company.getExchange();
 		company.setExchange(curExchange.toUpperCase().equals("CATALIST") ? "SGX" : curExchange);
 		indexerService.save("company", tickerNoExchange, company, index);
 		company.setExchange(curExchange);
-		
+
 		GovTransparencyIndexes gtis = gtiService.getForTicker(tickerNoExchange);
-		if(gtis != null) indexerService.save("gtis", tickerNoExchange, gtis, index);
+		if (gtis != null)
+			indexerService.save("gtis", tickerNoExchange, gtis, index);
 
 		Holders h = capIQService.getHolderDetails(input);
-		if(h != null) indexerService.save("holders", tickerNoExchange, h, index);
-		
+		if (h != null)
+			indexerService.save("holders", tickerNoExchange, h, index);
+
 		KeyDevs kd = capIQService.getKeyDevelopments(input);
-		if(kd != null) indexerService.save("keyDevs", tickerNoExchange, kd, index);
-		
+		if (kd != null)
+			indexerService.save("keyDevs", tickerNoExchange, kd, index);
+
 		DividendHistory dH = capIQService.getDividendData(input);
-		if(dH != null) indexerService.save("dividendHistory", tickerNoExchange, dH, index);
+		if (dH != null)
+			indexerService.save("dividendHistory", tickerNoExchange, dH, index);
 
 		String currency = company.getFilingCurrency();
-		if(StringUtils.isEmpty(currency)) currency = index.substring(0,3).toUpperCase();
+		if (StringUtils.isEmpty(currency))
+			currency = index.substring(0, 3).toUpperCase();
 		Financials financials = capIQService.getCompanyFinancials(input, currency);
-		
-		for(Financial c : financials.getFinancials()){
+
+		for (Financial c : financials.getFinancials()) {
 			String id = c.getTickerCode().concat(c.getAbsPeriod());
 			c.setFilingCurrency(company.getFilingCurrency());
 			indexerService.save("financial", id, c, index);
 		}
-		
+
 		if (historicalData != null) {
 			List<HistoricalValue> hvs = historicalData.getPrice();
 			saveHistorical("price", hvs, tickerNoExchange, index);
-			
+
 			hvs = historicalData.getHighPrice();
 			saveHistorical("highPrice", hvs, tickerNoExchange, index);
 
@@ -376,7 +384,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 		DividendHistory dividendData = capIQService.getDividendData(input);
 		List<DividendValue> dividendValue = dividendData.getDividendValues();
 		if (dividendValue != null) {
-			for(DividendValue data : dividendValue){
+			for (DividendValue data : dividendValue) {
 				String id = tickerNoExchange.concat(Long.valueOf(data.getDividendExDate().getTime()).toString());
 				indexerService.save("dividendValue", id, data, index);
 			}
@@ -384,117 +392,113 @@ public class IndexBuilderServiceImpl implements IndexBuilderService{
 
 		Estimates estimates = capIQService.getEstimates(input);
 		if (estimates != null) {
-			for(Estimate e : estimates.getEstimates()){
+			for (Estimate e : estimates.getEstimates()) {
 				String id = e.getTickerCode().concat(e.getPeriod());
 				indexerService.save("estimate", id, e, index);
 			}
 		}
 
-		
 	}
-	
-	private void saveHistorical(String type, List<HistoricalValue> values, String ticker, String index) throws IndexerServiceException {
-		StringBuilder buffer = new StringBuilder(); 
-		for(HistoricalValue data : values){
+
+	private void saveHistorical(String type, List<HistoricalValue> values, String ticker, String index)
+			throws IndexerServiceException {
+		StringBuilder buffer = new StringBuilder();
+		for (HistoricalValue data : values) {
 			String val = Long.valueOf(data.getDate().getTime()).toString();
-			buffer.append("{ \"index\": { \"_id\": \"" + ticker.concat(val)  + "\" }}\n");
-			buffer.append("{ \"tickerCode\": \"" + ticker + "\", \"value\": " + data.getValue() + ", \"date\": " + val + "}\n");
+			buffer.append("{ \"index\": { \"_id\": \"" + ticker.concat(val) + "\" }}\n");
+			buffer.append("{ \"tickerCode\": \"" + ticker + "\", \"value\": " + data.getValue() + ", \"date\": " + val
+					+ "}\n");
 		}
-		if (buffer.length() > 0) indexerService.bulkSave(type, buffer.toString(), index);
+		if (buffer.length() > 0)
+			indexerService.bulkSave(type, buffer.toString(), index);
 		buffer.setLength(0);
 	}
-	
-	private void loadCompanyVWAP(Company company){
-		
+
+	private void loadCompanyVWAP(Company company) {
+
 		BigDecimal value = BigDecimal.ZERO;
 		BigDecimal volume = BigDecimal.ZERO;
+		BigDecimal adjustedVolume = BigDecimal.ZERO;
 		Double vwapValue = null;
-		
+		Double adjustedVwapValue = null;
+
 		VolWeightedAvgPrices vwap = vwapService.getForTicker(company.getTickerCode());
 		List<VolWeightedAvgPrice> indexes = vwap.getVwaps();
 		Date date = null;
 		String currency = null;
-		/*
-		Boolean sixMonths = false;
-		
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -6);
-		Date sixMonthsAgo = cal.getTime();
-		*/
-		if(indexes.size() > 0){			
-			//Date earliestDate = indexes.get(indexes.size() - 1).getDate();
-			//sixMonths = earliestDate.before(sixMonthsAgo);
-			
-			
+
+		if (indexes.size() > 0) {
 			date = indexes.get(0).getDate();
 			currency = indexes.get(0).getCurrency();
-			
-			
 		}
-		
-		
-		for(int i=0; i < indexes.size(); i++){		
-			
+		for (int i = 0; i < indexes.size(); i++) {
+
 			String val = indexes.get(i).getValue();
-			String vol = indexes.get(i).getVolume(); 			
-			
-			value = value.add(new BigDecimal(val));			
+			String vol = indexes.get(i).getVolume();
+			String adjustmentFactor = indexes.get(i).getAdjustmentFactorValue();
+
+			value = value.add(new BigDecimal(val));
 			volume = volume.add(new BigDecimal(vol));
+			adjustedVolume = adjustedVolume.add(new BigDecimal(adjustmentFactor).multiply(new BigDecimal(vol)));
+
+		}
+		if (volume.compareTo(BigDecimal.ZERO) != 0){
+			vwapValue = value.divide(volume, 6, RoundingMode.HALF_UP).doubleValue();
+			adjustedVwapValue = value.divide(adjustedVolume, 6, RoundingMode.HALF_UP).doubleValue();
 			
 		}
-		if(volume.compareTo(BigDecimal.ZERO) != 0)
-			vwapValue = value.divide(volume, 6,RoundingMode.HALF_UP).doubleValue();
-		
-	
-		
+		company.setAdjustedVolWeightedAvgPrice(adjustedVwapValue);
 		company.setVolWeightedAvgPrice(vwapValue);
 		company.setVwapAsOfDate(date);
 		company.setVwapCurrency(currency);
-		
+
 	}
 
-	private void loadCompanyGTI(Company company){
+	private void loadCompanyGTI(Company company) {
 		GovTransparencyIndex gti = gtiService.getLatest(company.getTickerCode());
-		
-		if(gti == null)
+
+		if (gti == null)
 			return;
-		
+
 		company.setGtiScore(gti.getTotalScore());
 		company.setGtiRankChange(gti.getRankChange());
 	}
-	
+
 	@Override
 	public Boolean createFXIndex(@Header String indexName, @Header int fxBatchSize) throws IndexerServiceException {
 
 		log.info("Creating FX index");
-		
+
 		FXRecord.resetFXCache();
-		
+
 		String json = "{ \"index\": { }}\n";
 		json += "{ \"from\": \"%s\", \"to\": \"%s\", \"day\": \"%s\", \"multiplier\": %s }\n";
-		
-		StringBuilder buffer = new StringBuilder(); int cnt = 0;
-		try(BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
-		    for(String line; (line = br.readLine()) != null; ) {
-		    	FXRecord record = FXRecord.parseFXLine(line, indexName); 
-		    	if (record == null) continue;
-		    	buffer.append(String.format(json, record.getFrom(), record.getTo(), record.getDay(), record.getMultiplier()));
-		    	if (cnt % fxBatchSize == 0 && cnt > 0) {
-		    		log.info("FX Processed {} records", cnt);
-		    		indexerService.bulkSave("fxdata", buffer.toString(), indexName);
-		    		buffer.setLength(0);
-		    	}
-		    	cnt++;
-		    }
-		    if (buffer.length() > 0) indexerService.bulkSave("fxdata", buffer.toString(), indexName);
-		    buffer.setLength(0);
-		}
-		catch(Exception e) {
+
+		StringBuilder buffer = new StringBuilder();
+		int cnt = 0;
+		try (BufferedReader br = new BufferedReader(new FileReader(fxFile))) {
+			for (String line; (line = br.readLine()) != null;) {
+				FXRecord record = FXRecord.parseFXLine(line, indexName);
+				if (record == null)
+					continue;
+				buffer.append(
+						String.format(json, record.getFrom(), record.getTo(), record.getDay(), record.getMultiplier()));
+				if (cnt % fxBatchSize == 0 && cnt > 0) {
+					log.info("FX Processed {} records", cnt);
+					indexerService.bulkSave("fxdata", buffer.toString(), indexName);
+					buffer.setLength(0);
+				}
+				cnt++;
+			}
+			if (buffer.length() > 0)
+				indexerService.bulkSave("fxdata", buffer.toString(), indexName);
+			buffer.setLength(0);
+		} catch (Exception e) {
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
 		}
-		
+
 		log.info("Finished Creating FX index with {} records", cnt);
-		
+
 		return true;
 	}
 }

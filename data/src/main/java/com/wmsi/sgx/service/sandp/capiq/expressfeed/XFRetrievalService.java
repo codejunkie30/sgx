@@ -41,7 +41,7 @@ public class XFRetrievalService {
 	private String baseFiles = "companies.csv,currencies.csv,fx-conversion.csv,notfound.csv";
 	
 	@Value("${loader.ftp.rawFiles}")
-	private String rawFiles = "company-data.csv,consensus-estimates.csv,dividend-history.csv,key-devs.csv,ownership.csv";
+	private String rawFiles = "company-data.csv,consensus-estimates.csv,dividend-history.csv,key-devs.csv,ownership.csv,adjustment-factor.csv";
 	
 	public DefaultSftpSessionFactory getSFTPSessionFactory(){
 		DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
@@ -62,7 +62,7 @@ public class XFRetrievalService {
 		removeFiles(base, baseDir);
 		removeFiles(raw, rawDir);
 		removeFiles(new File(companiesDir).list(), companiesDir);
-		log.info("Finished removing old feed files");
+//		log.info("Finished removing old feed files");
 		
 		// grab the latest
 		log.info("Retrieving new feed files from {}", ftpLocation);

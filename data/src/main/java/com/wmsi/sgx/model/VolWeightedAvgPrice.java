@@ -11,6 +11,7 @@ public class VolWeightedAvgPrice{
 	private String tickerCode;
 	private String value;
 	private String volume;	
+	private String adjustmentFactorValue;
 	
 	public Date getDate() {
 		return date;
@@ -58,6 +59,14 @@ public class VolWeightedAvgPrice{
 
 	public void setVolume(String volume) {
 		this.volume = volume;
+	}
+
+	public String getAdjustmentFactorValue() {
+		return adjustmentFactorValue;
+	}
+
+	public void setAdjustmentFactorValue(String adjustmentFactorValue) {
+		this.adjustmentFactorValue = adjustmentFactorValue;
 	}
 
 	@Override

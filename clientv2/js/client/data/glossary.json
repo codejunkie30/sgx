@@ -220,6 +220,10 @@
 			"id": "vwap",
 			"definition": "The volume-weighted average price (VWAP) is computed based on total value of securities traded for the 6 months under review divided by the total volume traded for the 6 months. This applies regardless of the number of trading days during the 6-month review period (i.e. where the securities are thinly traded or trading is halted / suspended for a period of time). VWAP is source from SGX."
 		},
+		{
+			"id": "adjVwap",
+			"definition": "The adjusted 6-month volume-weighted average price (VWAP) is computed based on total value of securities traded for the 6 months under review divided by the total adjusted volume traded for the 6 months. The traded volumes are adjusted by utilizing the adjustment factors sourced from S&P Capital IQ to account for corporate actions such as consolidations, splits, cash dividends, spin-offs and rights issues. This applies regardless of the number of trading days during the 6-month review period (i.e. where the securities are thinly traded or trading is halted / suspended for a period of time)."
+		},
 		{	"id": "totalMarketCap",
 			"definition": "Total Market Cap is computed based on the stock's close price multiplied by the ordinary shares outstanding published in the company's most recent statement filings."
 		},
