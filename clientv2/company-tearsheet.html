@@ -84,9 +84,13 @@
 										<span class="normal">as of</span> 
 										<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
 									</td>
+									
+									<td class="normal right" data-bind="visible: !companyInfo.hasOwnProperty('volWeightedAvgPrice') || companyInfo.volWeightedAvgPrice == null">
+										-
+									</td>
 	
 	
-									<td data-bind="visible: companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') && companyInfo.adjustedVolWeightedAvgPrice != null">6-month adj. VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'adjVwap'" /></td>
+									<td>6-month adj. VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'adjVwap'" /></td>
 									
 									<!-- has adj vwap -->
 									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') && companyInfo.adjustedVolWeightedAvgPrice != null">
@@ -94,7 +98,11 @@
 										<span data-bind="text: companyInfo.adjustedVolWeightedAvgPrice, format: 'number'"></span> 
 										<span class="normal">as of</span> 
 										<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
-									</td>								
+									</td>		
+									
+									<td class="normal right" data-bind="visible: !companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') || companyInfo.adjustedVolWeightedAvgPrice == null">
+										-
+									</td>										
 								</tr>
 							</tbody>
 						</table>
