@@ -313,7 +313,26 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     	        },
 				tooltip: {
 					useHTML: true,
-                    valueDecimals: 3
+                    valueDecimals: 3,
+					formatter: function(){
+						 var currencyFormat;
+						 var percentFormat;
+						 if (this.series.data[0].ttFormat == 'cash') { 
+						 	currencyFormat = PAGE.currentFormats.chart.format;
+							percentFormat = '';
+						 } else if (this.series.data[0].ttFormat == 'percent'){							  
+						 	currencyFormat = '';
+							percentFormat = '%';
+						} else {
+							currencyFormat = '';
+							percentFormat = '';
+						}
+						 
+						 var series = '<span style="font-size:11px">'+this.key+'</span>';
+						 series += '<br />';
+						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
+						  return series;
+					}
 				},
                 xAxis: {
                     categories: [],
@@ -449,12 +468,23 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             chart.xAxis[0].setCategories(categories);
 
 			// create series data
-			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); },
-                           mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
+			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
 			var seriesData = [];
+			
+			var formatType;
+			$.each(me.sections, function(i, sec){
+				if(sec.name == sectionName){
+					$.each(sec.dataPoints, function(i,dp){						
+						if (dp.name == name){
+							dp.hasOwnProperty("format") ? formatType = this.format : "";
+						}
+					});
+				}
+			});
+			
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
 				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
-				seriesData.push({ y: val, events: eventsConfig });
+				seriesData.push({ y: val, events: eventsConfig, ttFormat: formatType });
 			});
 
 			//axis info
@@ -622,5 +652,15 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     }(Highcharts));
 
 	return CF;
-
+	
+		//helper function for decimals
+  function _round(num, places) {
+    var rounder = Math.pow(10, places);
+    var roundee = num * rounder;
+    return _numberWithCommas(Math.round(roundee)/rounder);
+  }
+	function _numberWithCommas(x) {
+	      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	  }
+	
 });
