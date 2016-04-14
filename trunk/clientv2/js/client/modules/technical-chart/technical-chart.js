@@ -322,7 +322,9 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         formatter: function() {
           var tp = '<span style="font-size:10px">'+Highcharts.dateFormat('%A, %b %e, %Y',this.x)+'</span><br/>';
           $.each(this.points, function() {
-            tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>'+_round(this.point.y, 3)+'</b><br/>'
+			var currencyType;
+			(this.series.name != 'Volume') ? currencyType = PAGE.currentFormats.chart.format : currencyType = '';
+            tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>' + currencyType +_round(this.point.y, 3)+'</b><br/>'
           });
 
           return tp;
