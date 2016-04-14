@@ -499,10 +499,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 						});
 					}
 				});
-			}
-			
-			console.log(formatType);
-			
+			}			
 
 			
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
