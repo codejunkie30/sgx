@@ -471,16 +471,39 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 			var eventsConfig = { mouseOver: function() { this.series.yAxis.update({ title: { style: { fontWeight: "bold" } }, labels: { style: { fontWeight: "bold" } } }); }, mouseOut: function() { this.series.yAxis.update({ title: { style: { fontWeight: "normal" } }, labels: { style: { fontWeight: "normal" } } }); } };
 			var seriesData = [];
 			
-			var formatType;
-			$.each(me.sections, function(i, sec){
-				if(sec.name == sectionName){
-					$.each(sec.dataPoints, function(i,dp){						
-						if (dp.name == name){
-							dp.hasOwnProperty("format") ? formatType = this.format : "";
-						}
-					});
-				}
-			});
+			var formatType;			
+			var tabName;
+			if (CF.quarterlyTab() == true) { 
+				tabName = 'Quarterly'
+				
+				$.each(me.quarterlyEst, function(i, qEst){
+					if(qEst.name == tabName){
+						$.each(qEst.dataPoints, function(i,dp){						
+							if (dp.name == name){
+								dp.hasOwnProperty("format") ? formatType = this.format : "";
+							}
+						});
+					}
+				});
+				
+				
+				
+			} else { 
+				tabName = 'Annual';
+				$.each(me.annualEst, function(i, aEst){
+					if(aEst.name == tabName){
+						$.each(aEst.dataPoints, function(i,dp){						
+							if (dp.name == name){
+								dp.hasOwnProperty("format") ? formatType = this.format : "";
+							}
+						});
+					}
+				});
+			}
+			
+			console.log(formatType);
+			
+
 			
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
 				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
