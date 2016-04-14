@@ -487,21 +487,20 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 				seriesData.push({ y: val, events: eventsConfig, ttFormat: formatType });
 			});
 
-			//axis info
+
+			// axis info
 			chart.addAxis({
-			    id: data.name,
-			    title: {
-			        text: name
-			    },
-			    opposite: me.hasLeftYAxis(),
-			    labels: {
-			        formatter: function() {
-			            var fmt = data.hasOwnProperty("format") ? data.format : "";
-			            if (fmt == "cash") return Highcharts.numberFormat(this.value);
-			            else if (fmt == "percent") return this.value + "%";
-			            return Highcharts.numberFormat(this.value, 3);
-			        }
-			    }
+		    	id: data.name,
+		    	title: { text: name },
+		    	opposite: me.hasLeftYAxis(),
+				labels: {
+                    formatter: function() {
+                    	//var fmt = data.hasOwnProperty("format") ? data.format : ""; 
+                    	if (formatType == "cash") return PAGE.currentFormats.chart.format + _round(this.value,3);
+                    	else if (formatType == "percent") return _round(this.value,3) + "%";
+                        return _round(this.value,3);
+                    }
+				}
 			});
 
 			var sData = {
