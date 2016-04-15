@@ -137,6 +137,9 @@
 	font-weight: normal;
 }
 
+.profile .ui-tabs .ui-tabs-panel tr.vwap td.vwap-title { width: 27% !important; }
+.profile .ui-tabs .ui-tabs-panel tr.vwap td.normal.right { width: 23% !important; }
+
 .general-info.gray {
 	padding: 10px;
 	padding-left: 0;

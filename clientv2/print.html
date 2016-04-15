@@ -163,8 +163,8 @@
 				                        <td><b>Float</b></td>
 				                        <td class="normal right" data-bind="text: companyInfo.floatPercentage != null ? companyInfo.floatPercentage : '-', format: 'percent'">-</td>
 				                    </tr>
-				                    <tr class="even">
-										<td><b>6-month VWAP</b></td>
+				                    <tr class="even vwap">
+										<td class="vwap-title"><b>Unadj. 6-month VWAP</b></td>
 										
 										<!-- has vwap -->
 										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice') && companyInfo.volWeightedAvgPrice != null">
@@ -178,18 +178,18 @@
 											-
 										</td>
 		
-									<td><b>6-month adj. VWAP</b></td>
-									
-									<!-- has adj vwap -->
-									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') && companyInfo.adjustedVolWeightedAvgPrice != null">
-										<span data-bind="text: companyInfo.vwapCurrency"></span> 
-										<span data-bind="text: companyInfo.adjustedVolWeightedAvgPrice, format: 'number'"></span> 
-										<span class="normal">as of</span> 
-										<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
-									</td>			
-									<td class="normal right" data-bind="visible: !companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') || companyInfo.adjustedVolWeightedAvgPrice == null">
-									-
-									</td>		
+										<td class="vwap-title"><b>Adj. 6-month VWAP</b></td>
+										
+										<!-- has adj vwap -->
+										<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') && companyInfo.adjustedVolWeightedAvgPrice != null">
+											<span data-bind="text: companyInfo.vwapCurrency"></span> 
+											<span data-bind="text: companyInfo.adjustedVolWeightedAvgPrice, format: 'number'"></span> 
+											<span class="normal">as of</span> 
+											<span data-bind="text: companyInfo.vwapAsOfDate, format: 'date'"></span>
+										</td>			
+										<td class="normal right" data-bind="visible: !companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') || companyInfo.adjustedVolWeightedAvgPrice == null">
+										-
+										</td>		
 									</tr>
 								</tbody>
 							</table>
