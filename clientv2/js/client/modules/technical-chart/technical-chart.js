@@ -323,7 +323,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           var tp = '<span style="font-size:10px">'+Highcharts.dateFormat('%A, %b %e, %Y',this.x)+'</span><br/>';
           $.each(this.points, function() {
 			var currencyType;
-			(this.series.name != 'Volume') ? currencyType = PAGE.currentFormats.chart.format : currencyType = '';
+			(this.series.yAxis.axisTitle.textStr == 'PRICE') ? currencyType = PAGE.currentFormats.chart.format : currencyType = '';
             tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>' + currencyType +_round(this.point.y, 3)+'</b><br/>'
           });
 
