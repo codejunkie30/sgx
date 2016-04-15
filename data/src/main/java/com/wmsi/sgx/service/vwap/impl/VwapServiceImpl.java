@@ -44,6 +44,7 @@ public class VwapServiceImpl implements VwapService {
 
 	private VolWeightedAvgPrices vwaps;
 	private final String fmt = "dd/MM/yyyy";
+	private final String adjFmt = "MM/dd/yyyy";
 
 	@Value("${loader.companies.dir}")
 	private String companiesDir = "/mnt/data/companies/";
@@ -133,7 +134,7 @@ public class VwapServiceImpl implements VwapService {
 				vwapAdjustmentFactor.setExchangeSymbol(record[1].trim());
 				vwapAdjustmentFactor.setWmsiAPI(record[2].trim());
 				vwapAdjustmentFactor.setMaxVolume(record[3].trim());
-				vwapAdjustmentFactor.setPricingDate(DateUtil.toDate(record[5], fmt));
+				vwapAdjustmentFactor.setPricingDate(DateUtil.toDate(record[5], adjFmt));
 				vwapAdjustmentFactors.add(vwapAdjustmentFactor);
 			}
 		} catch (IOException e) {
