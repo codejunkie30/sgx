@@ -74,8 +74,8 @@
 			                        <td>Float</td>
 			                        <td class="normal right" data-bind="text: companyInfo.floatPercentage != null ? companyInfo.floatPercentage : '-', format: 'percent'"></td>
 			                    </tr>
-			                    <tr>
-									<td>6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'vwap'" /></td>
+			                    <tr class="vwap">
+									<td class="vwap-title">Unadj. 6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'vwap'" /></td>
 									
 									<!-- has vwap -->
 									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('volWeightedAvgPrice') && companyInfo.volWeightedAvgPrice != null">
@@ -90,7 +90,7 @@
 									</td>
 	
 	
-									<td>6-month adj. VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'adjVwap'" /></td>
+									<td class="vwap-title">Adj. 6-month VWAP <img src="img/info.png" alt="" data-bind="tooltip: 'adjVwap'" /></td>
 									
 									<!-- has adj vwap -->
 									<td class="normal right" data-bind="visible: companyInfo.hasOwnProperty('adjustedVolWeightedAvgPrice') && companyInfo.adjustedVolWeightedAvgPrice != null">
