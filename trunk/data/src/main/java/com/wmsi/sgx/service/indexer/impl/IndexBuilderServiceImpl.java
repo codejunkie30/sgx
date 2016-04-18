@@ -443,9 +443,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		}
 		if (volume.compareTo(BigDecimal.ZERO) != 0){
-			vwapValue = value.divide(volume, 6, RoundingMode.HALF_UP).doubleValue();
+			vwapValue = value.divide(volume, 6, RoundingMode.HALF_UP).doubleValue();			
+		}
+		if(adjustedVolume.compareTo(BigDecimal.ZERO) != 0){
 			adjustedVwapValue = value.divide(adjustedVolume, 6, RoundingMode.HALF_UP).doubleValue();
-			
 		}
 		company.setAdjustedVolWeightedAvgPrice(adjustedVwapValue);
 		company.setVolWeightedAvgPrice(vwapValue);

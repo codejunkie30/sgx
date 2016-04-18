@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -93,7 +94,7 @@ public class VwapServiceImpl implements VwapService {
 						} 							
 					}
 					if(vap.getAdjustmentFactorValue() == null){
-						vap.setAdjustmentFactorValue("1");
+						vap.setAdjustmentFactorValue("0");
 					}
 					ret.add(vap);
 				}
