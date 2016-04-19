@@ -126,7 +126,6 @@ public class VwapServiceImpl implements VwapService {
 		CSVReader csvReader = null;
 		try {
 			csvReader = new CSVReader(new FileReader(f), ',');
-			csvReader.readNext();
 
 			String[] record = null;
 			while ((record = csvReader.readNext()) != null) {
