@@ -11,6 +11,9 @@ var config = {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'js/bundle.js'
 	},
+	resolve: {
+		extensions: ['', '.js']
+	},
 	module: {
 		loaders: [
 			{
