@@ -133,7 +133,12 @@ public class Financial{
 	}
 
 	public void setCommonEquity1YrAnnGrowth(Double commonEquity1YrAnnGrowth) {
-		this.commonEquity1YrAnnGrowth = commonEquity1YrAnnGrowth;
+		if(commonEquity1YrAnnGrowth>0){
+			this.commonEquity1YrAnnGrowth = commonEquity1YrAnnGrowth;
+		}else{
+			this.commonEquity1YrAnnGrowth = null;
+		}
+		
 	}
 
 	public Double getCommonStock() {
