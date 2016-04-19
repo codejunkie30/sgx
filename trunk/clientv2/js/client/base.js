@@ -464,7 +464,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     		    else val = parts[0];
 
     		    // negative numbers
-				if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
+				if (val.indexOf("-") == 0 ){
+					if(val.substring(1) === "0"){
+						return "-";
+					}
+					val = "(" + val.substring(1) + ")";
+				}
     		    
     		    // make it pretty
     		    if (formatter.hasOwnProperty("format")) val = formatter.format.replace(new RegExp("\\$VALUE","gm"), val);
