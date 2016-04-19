@@ -6,7 +6,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	    	var prop = viewModel.hasOwnProperty("resultDisplay") ? viewModel.resultDisplay : models.prop;
 	    	var val = RESULTS.formatField(viewModel, models.row, prop);
 	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
-	    	if (val == null || val == "") val = "-";
+	    	console.log("VAL IS " + val);
+	    	if (val == null || val == "" || val == "0%"|| val == "0") val = "-";
 	    	$(element).html(val);
 	    },
 	    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -14,7 +15,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 	    	var prop = viewModel.hasOwnProperty("resultDisplay") ? viewModel.resultDisplay : models.prop;
 	    	var val = RESULTS.formatField(viewModel, models.row, prop);
 	    	if (models.prop == "companyName") val = RESULTS.companyLink(models.row);
-	    	if (val == null || val == "") val = "-";
+	    	if (val == null || val == "" || val == "0%"|| val == "0") val = "-";
 	    	$(element).html(val);
 	    }
 	};

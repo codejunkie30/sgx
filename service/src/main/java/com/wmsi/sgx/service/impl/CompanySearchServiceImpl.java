@@ -1,5 +1,7 @@
 package com.wmsi.sgx.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +17,7 @@ import com.wmsi.sgx.service.search.QueryBuilder;
 import com.wmsi.sgx.service.search.SearchResult;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
+import com.wmsi.sgx.service.search.elasticsearch.impl.ESQueryExecutor;
 import com.wmsi.sgx.service.search.elasticsearch.query.CompanyQueryBuilder;
 
 @Service
@@ -25,6 +28,8 @@ public class CompanySearchServiceImpl implements CompanySearchService {
 
 	@Value("${list.permitted.exchanges}")
 	private String permittedExchangesFile;
+	
+	private static final Logger log = LoggerFactory.getLogger(ESQueryExecutor.class);
 	
 	
 	@Override
@@ -44,6 +49,9 @@ public class CompanySearchServiceImpl implements CompanySearchService {
 		SearchResult<SearchCompany> result = companySearch.search(query, SearchCompany.class);
 
 		SearchResults results = new SearchResults();
+		
+		log.info("************Results**********\t"+result.getHits().size());
+		
 		results.setCompanies(result.getHits());
 		return results;
 	}
