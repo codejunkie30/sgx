@@ -321,7 +321,12 @@ public class Company {
 	}
 
 	public void setBasicEpsIncl(Double basicEpsIncl) {
-		this.basicEpsIncl = basicEpsIncl;
+		if(basicEpsIncl>0){
+			this.basicEpsIncl = basicEpsIncl;
+		}else{
+			this.basicEpsIncl = null;
+		}
+		
 	}
 
 	public Double getBeta5Yr() {
@@ -466,7 +471,12 @@ public class Company {
 	}
 
 	public void setEps(Double eps) {
-		this.eps = eps;
+		if(eps > 0){
+			this.eps = eps;
+		}else{
+			this.eps = null;
+		}
+		
 	}
 
 	public Double getEvEbitData() {
