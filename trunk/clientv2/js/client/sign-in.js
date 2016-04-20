@@ -91,15 +91,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							PAGE.resizeIframeSimple();
 							PAGE.hideLoading();
 							return;
-						}
-						if (data.reason == 'User account is locked'){
+						} else if (data.reason == 'User account is locked'){
 							$('.error-messages').empty();
 							$('<p/>').html(displayMessage.signIn.accountLocked).appendTo('.error-messages');
 							PAGE.resizeIframeSimple();
 							PAGE.hideLoading();
 							return;
-						}
-						if (data.reason == 'User is disabled'){
+						} else if (data.reason == 'User is disabled'){
 							var endpoint = PAGE.fqdn + "/sgx/logout";
 							var params = {};
 							
@@ -114,7 +112,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$('.error-messages .resend-email').show();
 							PAGE.resizeIframeSimple();	
 							PAGE.hideLoading();
-						}					
+						} else {
+							$('.error-messages').empty();
+							var errorMessage = 'Your login attempt failed. Please try again. Error code('+data.reason+')';							
+							$('<p/>').html(errorMessage).appendTo('.error-messages');
+							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
+						}
 					}
 				},PAGE.customSGXError);
 			
