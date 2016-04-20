@@ -187,7 +187,11 @@ public class Financial{
 	}
 
 	public void setBasicEpsIncl(Double basicEpsIncl) {
-		this.basicEpsIncl = basicEpsIncl;
+		if(basicEpsIncl > 0){
+			this.basicEpsIncl = basicEpsIncl;
+		}else{
+			this.basicEpsIncl = null;
+		}
 	}
 
 	public Double getAvgDaysInventory() {
@@ -307,7 +311,12 @@ public class Financial{
 	}
 
 	public void setEps(Double eps) {
-		this.eps = eps;
+		if(eps > 0){
+			this.eps = eps;
+		}else{
+			this.eps = null;
+		}
+		
 	}
 
 	public Double getEps1YrAnnGrowth() {
@@ -315,7 +324,12 @@ public class Financial{
 	}
 
 	public void setEps1YrAnnGrowth(Double eps1YrAnnGrowth) {
-		this.eps1YrAnnGrowth = eps1YrAnnGrowth;
+		if(eps1YrAnnGrowth > 0){
+			this.eps1YrAnnGrowth = eps1YrAnnGrowth;
+		}else{
+			this.eps1YrAnnGrowth = null;
+		}
+		
 	}
 
 	public String getFilingCurrency() {
@@ -539,7 +553,12 @@ public class Financial{
 	}
 
 	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
-		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+		if(totalRev1YrAnnGrowth > 0){
+			this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+		}else{
+			this.totalRev1YrAnnGrowth = null;
+		}
+		
 	}
 
 	public Double getTotalRev3YrAnnGrowth() {
