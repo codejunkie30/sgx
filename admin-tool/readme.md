@@ -37,3 +37,6 @@ After you've made all your changes and are ready to ship the code, run this comm
 
 All your assests will be compiled and minified and you'll have a bunch of files in the dist folder.
 Throw them in the s3 bucket and your'e done.
+
+LAST NOTE: Don't put dist folder in the repository, it can be and will be compiled everytime anew with webpack
+           Don't forget the deploy command before throwing assets in S3.
