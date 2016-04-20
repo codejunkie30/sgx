@@ -465,7 +465,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
     		    // negative numbers
 				if (val.indexOf("-") == 0 ){
-					if(val.substring(1) === "0"){
+					if(val.substring(1) === "0" && val.length==2){
 						return "-";
 					}
 					val = "(" + val.substring(1) + ")";
