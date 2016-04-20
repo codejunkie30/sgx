@@ -773,7 +773,12 @@ public class Company {
 	}
 
 	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
-		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+		if(totalRev1YrAnnGrowth>0){
+			this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
+		}else{
+			this.totalRev1YrAnnGrowth = null;
+		}
+		
 	}
 
 	public Double getTotalRev3YrAnnGrowth() {
