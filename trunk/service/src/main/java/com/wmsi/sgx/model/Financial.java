@@ -77,7 +77,12 @@ public class Financial{
 	}
 
 	public void setBasicEpsIncl(Double basicEpsIncl) {
-		this.basicEpsIncl = basicEpsIncl;
+		if(basicEpsIncl > 0){
+			this.basicEpsIncl = basicEpsIncl;
+		}else{
+			this.basicEpsIncl = null;
+		}
+		
 	}
 
 	public Double getAvgDaysInventory() {
@@ -178,7 +183,11 @@ public class Financial{
 	}
 
 	public void setEbitda1YrAnnGrowth(Double ebitda1YrAnnGrowth) {
-		this.ebitda1YrAnnGrowth = ebitda1YrAnnGrowth;
+		if(ebitda1YrAnnGrowth > 0){
+			this.ebitda1YrAnnGrowth = ebitda1YrAnnGrowth;
+		}else{
+			this.ebitda1YrAnnGrowth = null;
+		}
 	}
 
 	public Double getEbitdaInterest() {
@@ -202,7 +211,12 @@ public class Financial{
 	}
 
 	public void setEps(Double eps) {
-		this.eps = eps;
+		if(eps>0){
+			this.eps = eps;
+		}else{
+			this.eps = null;
+		}
+		
 	}
 
 	public Double getEps1YrAnnGrowth() {
@@ -210,7 +224,11 @@ public class Financial{
 	}
 
 	public void setEps1YrAnnGrowth(Double eps1YrAnnGrowth) {
-		this.eps1YrAnnGrowth = eps1YrAnnGrowth;
+		if(eps1YrAnnGrowth > 0){
+			this.eps1YrAnnGrowth = eps1YrAnnGrowth;
+		}else{
+			this.eps1YrAnnGrowth = null; 
+		}
 	}
 
 	public String getFilingCurrency() {
@@ -282,7 +300,12 @@ public class Financial{
 	}
 
 	public void setNetIncome1YrAnnGrowth(Double netIncome1YrAnnGrowth) {
-		this.netIncome1YrAnnGrowth = netIncome1YrAnnGrowth;
+		if(netIncome1YrAnnGrowth > 0){
+			this.netIncome1YrAnnGrowth = netIncome1YrAnnGrowth;
+		}else{
+			this.netIncome1YrAnnGrowth = null;
+		}
+		
 	}
 
 	public Double getNetIncomeMargin() {
