@@ -118,9 +118,16 @@ public class EstimatesService extends AbstractDataService{
 			Calendar prevYear = Calendar.getInstance();
 			prevYear.add(Calendar.YEAR, -1);
 			int lastYear = prevYear.get(Calendar.YEAR);
+			
+			
+			Calendar nextYear = Calendar.getInstance();
+			nextYear.add(Calendar.YEAR, 1);
+			int currentYearPlusOne = nextYear.get(Calendar.YEAR);
+			
 			try{
 				int yearFromPeriod = Integer.parseInt(period.substring(period.length()-4));
-				if(yearFromPeriod >=lastYear){
+				//Checking for one year previous or one year ahead
+				if(yearFromPeriod >=lastYear && yearFromPeriod <= currentYearPlusOne){
 					return true;
 				}
 			}catch (NumberFormatException e) {
