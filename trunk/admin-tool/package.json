@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "gulp && webpack-dev-server --devtool --host 192.168.1.39 eval --progress --colors --inline --content-base dist",
-    "deploy": "NODE_ENV=production && webpack -p -d --config webpack.production.config.js"
+    "deploy": "set NODE_ENV=production && webpack -p -d --config webpack.production.config.js"
   },
   "author": "",
   "license": "ISC",
