@@ -32,10 +32,18 @@ function LoginPage() {
     API.showLoading();
     API.post( API.paths.login, successFN.bind(this), params );
     function successFN(data) {
+		console.log(data);
       tokenHandler.saveAuthToken(data.token)
       API.verifyUser(function() {
-        API.goToPage('users');
+        //API.goToPage('users');
+		setTimeout(function(){
+			API.goToPage('users');
+			setInterval(function(){
+				API.goToPage('users');
+			},6000)
+		},500)
       });
+	  setTimeout
     }
 
   }
