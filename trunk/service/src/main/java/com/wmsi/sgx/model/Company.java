@@ -110,11 +110,7 @@ public class Company{
 	}
 
 	public void setBasicEpsIncl(Double basicEpsIncl) {
-		if(basicEpsIncl>0){
-			this.basicEpsIncl = basicEpsIncl;
-		}else{
-			this.basicEpsIncl = null;
-		}
+		this.basicEpsIncl = basicEpsIncl;
 	}
 
 	public Double getBeta5Yr() {
@@ -242,10 +238,7 @@ public class Company{
 	}
 
 	public void setEps(Double eps) {
-		if (eps > 0) {
-			this.eps = eps;
-		} else
-			this.eps = null;
+		this.eps = eps;
 	}
 
 	public Double getEvEbitData() {
@@ -522,12 +515,7 @@ public class Company{
 	}
 
 	public void setTotalRev1YrAnnGrowth(Double totalRev1YrAnnGrowth) {
-		if(totalRev1YrAnnGrowth > 0){
-			this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
-		}else{
-			this.totalRev1YrAnnGrowth = null;
-		}
-		
+		this.totalRev1YrAnnGrowth = totalRev1YrAnnGrowth;
 	}
 
 	public Double getTotalRev3YrAnnGrowth() {
