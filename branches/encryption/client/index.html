@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Screener - SGX</title>
+    <link rel="stylesheet" href="stylesheets/style.css?v=2.9.1" />
+	<link rel="stylesheet" href="stylesheets/vendor/colorbox/colorbox.css" />
+	<!--[if lt IE 9]>
+    	<link rel="stylesheet" href="stylesheets/ie8.css" />
+    	<script type="text/javascript" src="javascripts/vendor/json2.js"></script>
+	<![endif]-->
+    <link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+</head>
+
+<body class="screener-page">
+
+    <div id="loading">
+        <div class="loading-text">
+            <img src="img/ajax-loader.gif" />
+        </div>
+    </div>
+    
+    <div id="tooltip-template">
+    
+		<div class="tooltip tooltip-active">
+			<div class="tooltip-content"></div>
+			<div class="tooltip-arrow"></div>
+		</div>
+    
+    </div>
+    
+    <div class="container_3">
+
+        <div class="row">
+        
+            <div class="grid_3">
+                <div class="button user-guide"><img src="img/pdf.png" width="16" height="16" /> View User Guide</div>
+                <div class="page-title">StockFacts</div>
+            </div>
+    
+	        <div class="grid_3 screener-header">
+	
+				<table cellpadding="0" cellspacing="0" border="0">
+					<tbody>
+						<tr>
+							<td class="description">
+
+								<div class="screener-basic">
+								
+					                <div class="intro-headline">Your search for investment opportunity begins here.</div>
+					                
+					                <div class="searchtoggle">
+					                	<span class="toggle button sname" data-name="name" data-placeholder="Search by company name" data-validator="screener.isValidName">Company Name</span><span class="toggle button scode" data-name="code" data-placeholder="Search by stock code" data-validator="screener.isValidTicker">Stock Code</span>
+					                </div>
+					                <div>
+					                	<span class="searchbar">
+						                    <input type="text" />
+						                    <span class="search-submit" class="button" value="" alt="Search Submit"></span>
+					                	</span>
+					                </div>
+								
+								</div>
+
+					            <div class="screener-toggles">
+					                <div class="buttons">
+						            	<span class="button" data-name="advanced-screener">Search by Screener<span data-name="advanced-screener" class="arrow"></span></span>
+										<span class="button" data-name="alpha-factors">Search by Alpha Factors<span data-name="alpha-factors" class="arrow"></span></span>
+										<span class="button" data-name="all-companies">View All Companies<span data-name="all-companies" class="arrow"></span></span>
+					                </div>
+					            </div>
+							
+							</td>						
+							<td class="message">
+								<div class="promo-text">
+									<div class="intro-headline"></div>
+									<div class="copy"></div>
+								</div>
+								<div class="promo-image"><a href="javascript:void(0);"><img /></a></div>
+							</td>	
+						</tr>
+					</tbody>
+				</table>
+	
+	        </div>
+	        
+		</div>
+
+        <div class="row search-options" data-section="advanced-screener">
+        
+            <div class="grid_2">
+                <div class="module edit">
+                    <div class="title">
+                        <div class="label">Search Criteria</div>
+                    </div>
+                    <table class="search-criteria">
+                        <thead>
+                            <tr>
+                                <th width="82">Criteria</th>
+                                <th width="46">Min</th>
+                                <th width="250">Distribution</th>
+                                <th width="52">Max</th>
+                                <th width="16"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    
+                    <!-- BEGIN: templates for criteria -->
+                    <table class="template" id="criteria-templates">
+                    
+						<tr class="criteria" data-template="number">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+                             <td class="min formattable"></td>
+                             <td class="criteria-slider">
+                                 <div class="module-stock-slider">
+                                     <div class="slider-bar"></div>
+                                     <div class="stock-bar-container"></div>
+                                     <div class="bar"></div>
+                                     <div class="matches"></div>
+                                 </div>
+                             </td>
+                             <td class="max formattable"></td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+                         </tr>
+                         
+						<tr class="criteria" data-template="select">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+							<td colspan="3">
+								<div class="button-dropdown">
+									<div class="trigger"><span class="copy"></span>
+										<span class="arrow"></span>
+									</div>
+									<div class="dropdown">
+										<ul></ul>
+									</div>
+								</div>
+							</td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+						</tr>
+
+						<tr class="criteria" data-template="change">
+							<td class="label">
+								<span class="info"></span>
+								<img src="img/info-tab-large.png" alt="" class="glossary-item" width="20" height="20" />
+							</td>
+							<td colspan="3">
+								<span class="percent-value"></span>% from <span class="start-date"></span> to <span class="end-date"></span>
+							</td>
+                            <td class="remove"><img src="img/x-button.png" alt="" class="glossary-item" glossary-key="criteriaRemove" /></td>
+						</tr>
+
+                    
+                    </table>
+                    <!-- END: templates for criteria -->
+
+                </div>
+
+            </div>
+            <div class="grid_1">
+                <div class="module editSearchB">
+                    <div class="title">
+                        <div class="label">Edit Search Criteria</div>
+                        <div class="button button-reset">Reset</div>
+                    </div>
+                    
+                    <div class="module-accordion">
+                    
+                        <h3 data-display="true">Market Data</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-type="millions" data-name="marketCap" data-display="true" data-short-name="Mkt. Cap.">
+                                <div class="trigger">Total Market Cap</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="percentChange"  data-display="true" data-short-name="% Change" data-search-required="true">
+                                <div class="trigger">% Change over date range up to 1 year</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="priceVs52WeekHigh"  data-display="true" data-short-name="Price vs. High">
+                                <div class="trigger">Current Stock Price vs 52 week high</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="priceVs52WeekLow"  data-display="true" data-short-name="Price vs. Low">
+                                <div class="trigger">Current Stock Price vs 52 week low</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="number" data-name="beta5Yr"  data-display="true" data-short-name="Beta">
+                                <div class="trigger">5-Year Beta</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="volume" data-name="volume"  data-display="true" data-short-name="Volume" distribution-buckets="4000">
+                                <div class="trigger">Volume</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="millions" data-name="avgTradedVolM3"  data-display="true" data-short-name="3M Trd. Val.">
+                                <div class="trigger">Average 3 Month Traded Value</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="volume" data-name="avgVolumeM3"  data-display="true" data-short-name="3M Trd. Vol.">
+                                <div class="trigger">Average 3 Month Traded Volume</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="floatPercentage"  data-display="true" data-short-name="Free Float">
+                                <div class="trigger">Free Float</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="priceVolHistYr"  data-display="true" data-short-name="1YR Volatility">
+                                <div class="trigger">1-Year Volatility</div>
+                                <input type="checkbox" />
+                            </div>
+                            
+                        </div>
+
+                        <h3 data-display="true">Financials</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-type="millions" data-name="totalRevenue"  data-display="true" data-short-name="Tot. Rev.">
+                                <div class="trigger">Total Revenue</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="ebitdaMargin"  data-display="true" data-short-name="EBITDA Mrg.">
+                                <div class="trigger">EBITDA Margin</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="netProfitMargin"  data-display="true" data-short-name="Prof. Mrg." distribution-buckets="120">
+                                <div class="trigger">Net Profit Margin</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="dollars" data-name="eps"  data-display="true" data-short-name="EPS">
+                                <div class="trigger">Normalized Diluted EPS</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="totalDebtEquity"  data-display="true" data-short-name="D/E" distribution-buckets="200">
+                                <div class="trigger">Debt/Equity Ratio</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="totalRev1YrAnnGrowth"  data-display="true"  data-short-name="Growth 1y" distribution-buckets="400">
+                                <div class="trigger">1-Year Revenue Growth</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="totalRev3YrAnnGrowth"  data-display="true"  data-short-name="Growth 3y" distribution-buckets="400">
+                                <div class="trigger">3-Year Revenue Growth</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="totalRev5YrAnnGrowth"  data-display="true"  data-short-name="Growth 5y" distribution-buckets="400">
+                                <div class="trigger">5-Year Revenue Growth</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="percent" data-name="basicEpsIncl"  data-display="true" data-short-name="Basic EPS">
+                                <div class="trigger">Basic EPS</div>
+                                <input type="checkbox" />
+                            </div>                            
+                            <div class="checkbox" data-type="percent" data-name="returnOnEquity"  data-display="true" data-short-name="ROE">
+                                <div class="trigger">Return on Equity</div>
+                                <input type="checkbox" />
+                            </div>                            
+                        </div>
+
+                        <h3 data-display="true">Valuation</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-type="number" data-name="peRatio"  data-display="true" data-short-name="P/E">
+                                <div class="trigger">P/E Ratio</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox checked default" data-type="percent" data-name="dividendYield"  data-display="true" data-short-name="Div. Yld."  distribution-buckets="700">
+                                <div class="trigger">Dividend Yield</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="number" data-name="priceToBookRatio"  data-display="true" data-short-name="P/BV">
+                                <div class="trigger">P/BV</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="lookup" data-name="avgBrokerReq" data-display="true" data-short-name="Consensus" data-min="Buy" data-max="Sell" data-formatter='{ "type": "round-list", "values": [ "", "Buy", "Overperform", "Hold", "Underperform", "Sell"  ], "minField": "targetPriceNum", "minValue": 3 }' distribution-type="histogram">
+                                <div class="trigger">Consensus Recommendation</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="number" data-name="gtiScore" data-display="true" data-short-name="GTI Score" distribution-buckets="680">
+                                <div class="trigger">GTI Score</div>
+                                <input type="checkbox" />
+                            </div>
+                            <div class="checkbox" data-type="number" data-name="gtiRankChange" data-display="true" data-short-name="GTI Chg. Rank" distribution-buckets="680">
+                                <div class="trigger">GTI Change In Rank</div>
+                                <input type="checkbox" />
+                            </div>
+                            
+                        </div>
+                        
+                        <h3 data-display="false">Industry</h3>
+                        <div class="panel">
+                            <div class="checkbox checked default" data-name="industryGroup" data-template="select" data-label="Select Industry"  data-display="false" data-sort="string" data-short-name="Industry">
+                                <div class="trigger">Industry</div>
+                                <input type="checkbox" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+   
+   		<div class="row search-options container_3" data-section="alpha-factors">
+   		
+   		
+   			<div class="grid_3">
+				<div class="module">
+					<div class="title">
+						<div class="label">S&P Capital IQ Alpha Factor Library</div>
+					</div>
+				</div>
+   			</div>
+   		
+			<p>S&P Capital IQ Alpha Factor Library will help you filter for stocks based on commonly used institutional investment ideas, or styles. Each of the 8 styles created by S&P Capital IQ's research team represents a unique strategy or perspective, and is formed by taking a composite of several factor signals chosen for their ability to approximate these strategies by S&P Capital IQ's research team.</p>
+   				
+			<p>S&P Capital IQ's Alpha Factor Library style classifications provide an easy way to filter for companies that could be targets using institutional investment ideas. Within each style, we create a quintile group by ranking all companies by their style composite score and grouping according to their quintile membership, i.e., the top 20% of companies are ranked in the 1st quintile, and the lowest 20% of companies are ranked in the 5th quintile.</p>
+   		
+               <div class="alpha-factor">
+               
+					<div class="row">
+
+	                   <span class="slider" data-name="valuation">
+	                       <span class="slider-label">
+	                       	Valuation 
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">Under</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Over</div>
+	                       </span>
+	                   </span>
+	               
+	                   <span class="slider rt" data-name="earningsQuality">
+	                       <span class="slider-label">
+	                       	Earnings Quality
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+                   		</span>
+
+					</div>
+
+					<div class="row odd">
+
+	                   <span class="slider" data-name="analystExpectations">
+	                       <span class="slider-label">
+	                       	Analyst Expectations
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+	                   </span>
+	                   
+	                   <span class="slider rt" data-name="volatility">
+	                       <span class="slider-label">
+	                       	Volatility
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+	                   </span>
+	                   
+	                 </div>
+	                 
+	                 
+					<div class="row">
+                   
+	                   <span class="slider" data-name="capitalEfficiency">
+	                       <span class="slider-label">
+	                       	Capital Efficiency
+							<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+	                   </span>
+	                   
+	                   <span class="slider rt" data-name="size">
+	                       <span class="slider-label">
+	                       	Size
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">Small</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Large</div>
+	                       </span>
+	                   </span>
+	                   
+					</div>
+
+					<div class="row odd">
+
+	                   <span class="slider" data-name="priceMomentum">
+	                       <span class="slider-label">
+	                       	Price Momentum
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+	                   </span>
+	                   
+	                   <span class="slider rt" data-name="historicalGrowth">
+	                       <span class="slider-label">
+	                       	Growth
+	                       	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                       </span>
+	                       <span class="bar-container">
+	                           <div class="slider-left-label">High</div>
+	                           <div class="bar-progress"></div>
+	                           <div class="bar"></div>
+	                           <div class="slider-right-label">Low</div>
+	                       </span>
+	                   </span>
+	                   
+					</div>
+                                       
+               </div>
+
+            </div>
+   		
+   		</div>
+   
+    </div>
+    
+    <div class="container_3">
+    
+        <div class="grid_3">
+        
+            <div class="module module-results">
+            
+                <div class="title">
+                    <div class="label">Fetching results...</div>
+                </div>
+                <div class="toolbar">
+                
+                    <span class="column results">Select a column header to change the sort order.</span>
+                    
+                    <span class="column center additional-criteria results-display" data-name="industry">
+						<div class="button-dropdown" data-label="Select Sector">
+							<div class="trigger">
+								<span class="copy">Select Sector</span>
+								<span class="arrow"></span>
+							</div>
+							<div class="dropdown">
+								<ul></ul>
+							</div>
+						</div>                   
+                    </span>
+
+                    <span class="column right results-display">
+                    
+	                    <div class="action-btn button-customize-display">
+	                    	Customize Display
+	                    </div>
+                    
+                    </span>
+
+                </div>
+                <div class="table-wrapper results-display">
+                    <table>
+                        <thead>
+                            <tr></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="pager results-display"></div>
+
+				<div class="no-results-display hidden">
+					No companies matched your search. Try again.
+				</div>
+                
+            </div>
+
+        </div>
+        
+    </div>
+	
+    <div class="container_3">
+    
+        <div class="row">
+			<div class="grid_3">
+				Source: S&amp;P Capital IQ - <a href="terms-conditions.html" class="terms-conditions">Use of this information is subject to terms and conditions</a>
+			</div>
+		</div>
+		
+		
+	</div>	
+	
+	<div class="template change-picker">
+	
+		<div class="percentChange-container">
+
+			<h4>Percent Change <span>(up to one year)</span></h4>
+			
+			<div>
+			
+				<span class="column">
+					<strong>Start:</strong>
+					<div class="date start" min-date="-1y" max-date="-2d" default-date="-1y"></div>
+				</span>
+			
+				<span class="column">
+					<strong>End:</strong>
+					<div class="date end" min-date="-1y + 1d" max-date="-1d" default-date="-1d"></div>
+				</span>
+
+			</div>
+			
+			<div>
+				<strong>Percent Change:</strong>
+				<div>
+					<input type="text" name="value" value="1" />%
+				</div>
+			</div>
+		
+		</div>
+
+	</div>
+	
+</body>
+
+</html>
