@@ -1,0 +1,244 @@
+{
+    "GDSSDKResponse": [
+        {
+            "Headers": [
+                "IQ_HOLDER_NAME",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "Sun, Liping",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "KIM Eng Holdings Ltd., Asset Management Arm",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Dimensional Fund Advisors LP",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Lim, Chap Huat ",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Vantagepoint Investment Advisers, LLC",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Morgan Stanley, Investment Banking and Brokerage Investments",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Lion Global Investors Limited",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Phillip Capital Management (S) Ltd.",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "Goh, Bee Lan ",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "CIMB-Principal Asset Management Bhd",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_NAME",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 10,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HOLDER_SHARES",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "329152241",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "16878000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "10440000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "7808000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "5957900",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "5655000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "4567000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "4173000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "2850000",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "2545000",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_SHARES",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 10,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        },
+        {
+            "Headers": [
+                "IQ_HOLDER_PERCENT",
+                "Date"
+            ],
+            "Rows": [
+                {
+                    "Row": [
+                        "61.67935",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "3.16274",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.95634",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.46313",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.11644",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "1.05968",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "0.85580",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "0.78197",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "0.53406",
+                        ""
+                    ]
+                },
+                {
+                    "Row": [
+                        "0.47690",
+                        ""
+                    ]
+                }
+            ],
+            "NumCols": 2,
+            "Seniority": "",
+            "Mnemonic": "IQ_HOLDER_PERCENT",
+            "Function": "GDSHE",
+            "ErrMsg": null,
+            "EndDate": "",
+            "StartDate": "",
+            "NumRows": 10,
+            "CacheExpiryTime": "0",
+            "Frequency": "",
+            "Identifier": "A7S",
+            "Limit": ""
+        }
+    ]
+}

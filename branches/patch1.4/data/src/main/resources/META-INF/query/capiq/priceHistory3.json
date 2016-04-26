@@ -1,0 +1,3 @@
+{"inputRequests": [ 	
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_OPENPRICE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}}
+]}
