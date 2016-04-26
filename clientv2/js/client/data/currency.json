@@ -6,6 +6,7 @@
 		{"id":"usd", "name": "US Dollar"},
 		{"id":"thb", "name": "Thai Baht"},
 		{"id":"twd", "name": "Taiwan Dollar"},
+		{"id":"idr", "name": "Indonesian Rupiah"},
 		{"id":"myr", "name": "Malaysian Ringgit"}
 	]
 }
