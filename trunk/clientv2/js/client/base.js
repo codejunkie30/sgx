@@ -412,12 +412,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
 		
 		init: function(child) {
-
-			if ( location.pathname.split("/")[1] == "print.html" && UTILS.getParameterByName("currency")!= undefined){
-				this.currentFormats = PAGE["numberFormats-"+UTILS.getParameterByName("currency")];
+			if ( location.pathname.split("/")[1] == "print.html" && UTIL.getParameterByName("currency")!= undefined){
+				this.currentFormats = PAGE["numberFormats-"+UTIL.getParameterByName("currency")];
 			}
-
-      this.currentFormats = PAGE["numberFormats-"+UTILS.retrieveCurrency()];
+			else
+      		this.currentFormats = PAGE["numberFormats-"+UTIL.retrieveCurrency()];
 			
 			// set up the page mappings
 			eval("this.pageData." + PAGEINFO);
