@@ -6,5 +6,5 @@ FROM ciqPriceEquity cpe (NOLOCK)
 JOIN ciqTradingItem cti(NOLOCK) on cti.tradingItemId=cpe.tradingItemId 
 JOIN ciqSecurity cs (NOLOCK) on cs.securityId=cti.securityId AND cs.primaryFlag = cti.primaryFlag AND cti.primaryFlag = 1 
 JOIN ciqExchange ce(NOLOCK)  ON ce.exchangeId = cti.exchangeId 
-WHERE pricingDate>GETDATE()-180 
+WHERE pricingDate >= CAST(DATEADD(month, -6, GETDATE()) as DATE)
 AND ce.exchangeSymbol in ('SGX','Catalist') 
