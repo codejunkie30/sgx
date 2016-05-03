@@ -8,6 +8,9 @@ using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using Renci.SshNet;
 using ICSharpCode.SharpZipLib.Zip;
+//using System.Collections.Generic;
+using System.Linq;
+
 
 namespace XFDataDump
 {
@@ -32,7 +35,7 @@ namespace XFDataDump
             {
                 w.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm:ss"), cat, msg);
                 Console.WriteLine("{0} {1} {2}", DateTime.Now.ToString("MM\\/dd\\/yyyy HH:mm"), cat, msg);
-            }        
+            }
         }
 
     }
@@ -45,15 +48,29 @@ namespace XFDataDump
 
         internal static DateTime ID = DateTime.Now;
 
-        internal static string TEMP_DIR =  getPath("tmpDir");
+        internal static string TEMP_DIR = getPath("tmpDir");
+
+        internal static bool m_RemoveDuplicateTicker = getRemoveDuplicateProperty();
+
+        internal static void ToDisk(DataTable dt, string fileName)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (DataRow row in dt.Rows)
+            {
+                var fields = row.ItemArray.Select(field =>
+                  string.Concat("\"", field.ToString().Replace("\"", "\"\""), "\""));
+                sb.AppendLine(string.Join(",", fields));
+            }
+            File.WriteAllText(fileName, sb.ToString());
+
+        }
 
         static void Main()
         {
-             SqlConnection conn = null;
+            SqlConnection conn = null;
 
             try
             {
-
                 // open (and keep open connection) need for temporary table
                 LOG.Debug("Opening Database Connection");
                 conn = new SqlConnection(ConfigurationManager.ConnectionStrings["xf.target"].ConnectionString);
@@ -68,9 +85,24 @@ namespace XFDataDump
                 DataTable tickerData = getTickerData(new string[] { "name", "tickerSymbol", "exchangeSymbol", "isin", "short_name" }, ConfigurationManager.AppSettings["tickerURL"].ToString(), "SGX");
                 writeToDB(tickerData, conn);
 
+
+                //Assembla ticket #935, add switch to disable this
                 // ASEAN ticker file - write to DB
-                tickerData = getTickerData(new string[] { "exchangeSymbol", "tickerSymbol", "name" }, ConfigurationManager.AppSettings["xtraTickerURL"].ToString(), "ASEAN");
-                writeToDB(tickerData, conn);
+                var aseanTickerData = getTickerData(new string[] { "exchangeSymbol", "tickerSymbol", "name" }, ConfigurationManager.AppSettings["xtraTickerURL"].ToString(), "ASEAN");
+
+                if (m_RemoveDuplicateTicker)
+                {
+                    //Get Array from SGX Tickers
+                    var sgxTickerArray = tickerData.AsEnumerable().Select(row => row["tickerSymbol"].ToString()).ToArray();
+                    //ToDisk(aseanTickerData, "c:\\asean_test_before.csv"); //For debugging
+
+                    //Filter ASEAN Ticker Data
+                    aseanTickerData = aseanTickerData.AsEnumerable()
+                                                     .Where(r => !sgxTickerArray.Contains(r.Field<string>("tickerSymbol")))
+                                                     .CopyToDataTable();
+                    //ToDisk(aseanTickerData, "c:\\asean_test_after.csv"); //For debugging
+                }
+                writeToDB(aseanTickerData, conn);
 
                 // match S&P companies to lists provided
                 LOG.Info("Updating Ticker Table");
@@ -202,9 +234,10 @@ namespace XFDataDump
         {
 
             string[] files = Directory.GetFiles(tmpDir);
-            string url = ConfigurationManager.AppSettings["ftpURL"].ToString();
-            string user = ConfigurationManager.AppSettings["ftpUsername"].ToString();
-            string pass = ConfigurationManager.AppSettings["ftpPassword"].ToString();
+            string url = @ConfigurationManager.AppSettings["ftpURL"].ToString();
+            string user = @ConfigurationManager.AppSettings["ftpUsername"].ToString();
+            string pass = @ConfigurationManager.AppSettings["ftpPassword"].ToString();
+            string directory = @ConfigurationManager.AppSettings["ftpDirectory"];
 
             LOG.Info("Creating SFTP Client");
 
@@ -212,6 +245,12 @@ namespace XFDataDump
             {
                 LOG.Debug("Trying to connect to " + url);
                 scp.Connect();
+
+                if (!String.IsNullOrWhiteSpace(directory))
+                {
+                    scp.ChangeDirectory(directory);
+                }
+
                 LOG.Debug("Connected to " + url);
                 foreach (string file in files)
                 {
@@ -245,16 +284,19 @@ namespace XFDataDump
 
             LOG.Info("Creating archive " + zipPath);
 
-            using (ZipOutputStream s = new ZipOutputStream(File.Create(zipPath))) {
+            using (ZipOutputStream s = new ZipOutputStream(File.Create(zipPath)))
+            {
                 s.SetLevel(9);
-                foreach(string file in files) {
+                foreach (string file in files)
+                {
 
                     LOG.Debug("Adding Entry " + file);
 
                     ZipEntry entry = new ZipEntry(Path.GetFileName(file));
                     s.PutNextEntry(entry);
 
-                    using (FileStream fs = File.OpenRead(file)) {
+                    using (FileStream fs = File.OpenRead(file))
+                    {
                         int sourceBytes;
                         do
                         {
@@ -277,23 +319,27 @@ namespace XFDataDump
          * write dataset to delimeted file
          */
         public static void writeToFile(this IDataReader dataReader, string fileOutputPath, bool firstRowIsColumnHeader = true, string seperator = ",")
-            {
+        {
 
             LOG.Info("Exporting data to " + fileOutputPath);
 
             StreamWriter sw = new StreamWriter(fileOutputPath, false);
             int icolcount = dataReader.FieldCount;
 
-            if (firstRowIsColumnHeader) {
-                for (int index = 0; index < icolcount; index++) {
+            if (firstRowIsColumnHeader)
+            {
+                for (int index = 0; index < icolcount; index++)
+                {
                     sw.Write(dataReader.GetName(index));
                     if (index < icolcount - 1) sw.Write(seperator);
                 }
                 sw.Write(sw.NewLine);
             }
 
-            while (dataReader.Read()) {
-                for (int index = 0; index < icolcount; index++) {
+            while (dataReader.Read())
+            {
+                for (int index = 0; index < icolcount; index++)
+                {
                     if (!dataReader.IsDBNull(index)) sw.Write(FormatValueCSV(dataReader.GetValue(index), dataReader.GetFieldType(index)));
                     if (index < icolcount - 1) sw.Write(seperator);
                 }
@@ -333,12 +379,23 @@ namespace XFDataDump
         /**
          * get a date based directory
          */
-        internal static string getPath(string prop) {
+        internal static string getPath(string prop)
+        {
             var val = ConfigurationManager.AppSettings[prop].ToString();
             val = string.Format(val, ID);
             var dirs = Path.GetDirectoryName(val);
             if (!Directory.Exists(dirs)) Directory.CreateDirectory(dirs);
             return val;
+        }
+
+        internal static bool getRemoveDuplicateProperty()
+        {
+            bool removeDuplicateTickers = false;
+            if (ConfigurationManager.AppSettings["RemoveDuplicateTickers"] != null)
+            {
+                removeDuplicateTickers = bool.Parse(ConfigurationManager.AppSettings["RemoveDuplicateTickers"]);
+            }
+            return removeDuplicateTickers;
         }
 
     }
