@@ -1,5 +1,5 @@
 	<div class="login-bar" data-bind="css: {'non-premium': (premiumUser() == false)}">
-		<span class="stock-facts"><b>StockFacts <i>Premium</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'premium'} ">Learn more &raquo;</a> </span>
+		<span class="stock-facts"><b>StockFacts <i>Plus</i></b> delivers enhanced features and benefits. <a data-bind="siteLink: { id: 'premium'} ">Learn more &raquo;</a> </span>
 		<div class="right">
 			<a class="button" data-bind="siteLink: { id: 'sign-in'}">Sign in</a>
 			<a class="button" data-bind="siteLink: { id: 'sign-up'} ">Start your free trial</a>
@@ -7,7 +7,7 @@
 	</div>
 	
 	<div class="login-bar" data-bind="css: {'premium': (premiumUser() ==  true)}">		
-		<span class="stock-facts"><b>StockFacts <i>Premium</i></b></span>
+		<span class="stock-facts"><b>StockFacts <i>Plus</i></b></span>
 		<span class="logged-in-as" data-bind="css: {'hide': (libLoggedIn() == true)}">Logged in as <span data-bind="text: premiumUserEmail"></span></span>
 		<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> <span data-bind="text: (currentDay() > 1)? 'days':'day'"></span> left in your trial.</span>
 		<span class="trial-expired" data-bind="visible: (libTrialExpired() == true)">: Your trial has expired.</span>
