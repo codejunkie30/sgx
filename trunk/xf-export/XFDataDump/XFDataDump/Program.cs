@@ -100,6 +100,7 @@ namespace XFDataDump
                     aseanTickerData = aseanTickerData.AsEnumerable()
                                                      .Where(r => !sgxTickerArray.Contains(r.Field<string>("tickerSymbol")))
                                                      .CopyToDataTable();
+                    aseanTickerData.TableName = ConfigurationManager.AppSettings["companiesTableName"];
                     //ToDisk(aseanTickerData, "c:\\asean_test_after.csv"); //For debugging
                 }
                 writeToDB(aseanTickerData, conn);
