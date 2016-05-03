@@ -51,14 +51,6 @@ public class WatchlistEmailServiceHelper implements Job{
 	@Autowired
 	private EmailAuditRepository emailAuditRepository;
 	
-	private static final String EMAIL_SUBJECT = "SGX StockFacts Premium Alert"; 
-	
-	private static final String EMAIL_SUCCESS = "Success";
-	
-	private static final String EMAIL_FAILED = "Failed";
-	
-	private static final String WATCHLIST_UNAVAILABLE = "Watchlist doesn't contain companies or alert options";
-	
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceHelper.class);
 	
 	@Override
@@ -71,31 +63,37 @@ public class WatchlistEmailServiceHelper implements Job{
 				List<WatchlistModel> list =	watchlistService.getWatchlist(acc.getUser());
 				if(list.size() > 0)
 					for(WatchlistModel watchlist : list){
-						List<AlertOption> options=null;
+						List<?> options=null;
 						try {
 							options = watchlistEmailService.parseWatchlist(watchlist, acc);
 						} catch (QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 							log.error("exception while parsing watchlist");
 						}
-						if(watchlist.getCompanies().size() > 0 && options.size() > 0){
+						if(watchlist.getCompanies().size() > 0 && options.size() > 0 && options instanceof AlertOption){
 							try {
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
 										options.size() + "\t "+ watchlist.getCompanies().size() );
 								
-								content = senderService.send(acc.getUser().getUsername(), EMAIL_SUBJECT, options,
+								List<AlertOption> options2 = (List<AlertOption>) options;
+								content = senderService.send(acc.getUser().getUsername(), IEmailAuditMessages.EMAIL_SUBJECT, options2,
 											watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 								
-								insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_SUCCESS, EMAIL_SUCCESS);
+								insertEmailTransaction(acc.getUser(), watchlist, content, IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_SUCCESS, IEmailAuditMessages.EMAIL_SUCCESS);
 								
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.info("exception while sending watchList email to "+acc.getUser().getUsername());
 								log.info("Exception in email notification : ",e.getMessage() + "\n Details of Root cause " + e);
 								
-								insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_FAILED, e.getMessage());
+								insertEmailTransaction(acc.getUser(), watchlist, content, IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, e.getMessage());
 								
 							}
-						}else{
-							insertEmailTransaction(acc.getUser(), watchlist, content, EMAIL_SUBJECT, EMAIL_FAILED, WATCHLIST_UNAVAILABLE);
+						} else {
+							String strMsg = new String();
+							for (Object o : options) {
+								strMsg += o.toString() + "\n";
+							}
+							insertEmailTransaction(acc.getUser(), watchlist, content,
+									IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, strMsg);
 						}
 					}
 			}

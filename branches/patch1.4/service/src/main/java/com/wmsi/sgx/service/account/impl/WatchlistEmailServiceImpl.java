@@ -74,8 +74,8 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				List<WatchlistModel> list = watchlistService.getWatchlist(usr);
 				if (list.size() > 0)
 					for (WatchlistModel watchlist : list) {
-						List<AlertOption> options = parseWatchlist(watchlist, acct);
-						if (watchlist.getCompanies().size() > 0 && options.size() > 0)
+						List options = parseWatchlist(watchlist, acct);
+						if (watchlist.getCompanies().size() > 0 && options.size() > 0 && options instanceof AlertOption)
 							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options,
 									watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 					}
@@ -85,8 +85,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	@Override
-	public List<AlertOption> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
+	public List<?> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
+		List<AlertOption> alertList = new ArrayList<AlertOption>();
+		List <String>errorList = new ArrayList<String>();
 		map.putAll(watchlist.getOptionList());
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -117,8 +119,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				comp = companyService.getCompanyByIdAndIndex(company,"sgd_premium");
 				//previousComp = companyService.getPreviousById(company);
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
-				System.out.println("Previous " + company + " : " + previousComp);
-				System.out.println("Current "+ company + " : " + comp);
+				if(comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())){
+					errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
+					return errorList;
+				}
 				
 			}catch(CompanyServiceException e){
 				break;
@@ -223,8 +227,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}					
 		}	
 		
-		List<AlertOption> alertList = new ArrayList<AlertOption>();
-		
 		if(priceOptions.size() > 0){
 			AlertOption alert = new AlertOption();
 			alert.setCompanies(priceOptions);
@@ -276,7 +278,12 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 		}
 		
-		return alertList;		
+		if(alertList.size()>0){
+			return alertList;
+		}else{
+			errorList.add(IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
+			return errorList;
+		}
 	}	
 	
 	public Estimate getEstimate(List<Estimate> estimate){
