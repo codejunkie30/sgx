@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<int:chain id="indexerChain###LastCurrencyNumber###" input-channel="indexRequestChannel###LastCurrencyNumber###" output-channel="indexChannel###LastCurrencyNumber###" >
+	<!-- <int:chain id="indexerChain###LastCurrencyNumber###" input-channel="indexRequestChannel###LastCurrencyNumber###" output-channel="indexChannel###LastCurrencyNumber###" >
 		
 		<int:header-enricher>
 			<int:header name="indexName" expression="'${elasticsearch.index.idr.prefix}' + headers.jobId" overwrite="true" />
@@ -30,11 +30,11 @@
 		
 	
 	
-	<!-- Split on tickers for multi-threading -->
+	Split on tickers for multi-threading
 	<int:splitter id="tickerSplitter###LastCurrencyNumber###" input-channel="indexChannel###LastCurrencyNumber###"
 	output-channel="indexTickerChannel###LastCurrencyNumber###" ref="indexBuilderService" method="readTickers" />
 	
-		<!-- Load Data -->
+		Load Data
  	<int:chain 
  		id="indexDataChain###LastCurrencyNumber###"
 		input-channel="indexTickerChannel###LastCurrencyNumber###"
@@ -52,7 +52,7 @@
 	</int:chain>
 	
 	
-	<!-- Indexing Error Handling -->
+	Indexing Error Handling
 	<int:chain 
 		id="indexErrorHandlingChain###LastCurrencyNumber###"
 		input-channel="indexErrorChannel###LastCurrencyNumber###" 
@@ -81,7 +81,7 @@
     	    	
 	</int:router>
 	
-	<!--  Job Completed successfully, create index and remove old indexes -->
+	 Job Completed successfully, create index and remove old indexes
 	<int:chain input-channel="createAlias###LastCurrencyNumber###" output-channel="loggingChannel###LastCurrencyNumber###">
 		<int:service-activator ref="indexerService"
 			method="createIndexAlias" />
@@ -92,7 +92,7 @@
 	
 	<int:logging-channel-adapter channel="loggingChannel###LastCurrencyNumber###" level="INFO" expression=" 'Job Complete ' + payload.toString()" />
 		
-		<!-- Job failed -->
+		Job failed
 	<int:header-enricher input-channel="failedJobChannel###LastCurrencyNumber###" output-channel="failedLogger###LastCurrencyNumber###">
 		<int:header name="failedJob" value="true"/>
 	</int:header-enricher>	
@@ -100,7 +100,7 @@
 	<int:logging-channel-adapter channel="failedLogger###LastCurrencyNumber###" level="INFO" expression=" 'Job Failed ' + payload.toString()"/>
 	
 	
-	<!-- Channel definitions -->
+	Channel definitions
 	<task:executor id="indexerTaskExecutor###LastCurrencyNumber###" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
 	<task:executor id="indexerRequestChannelExecutor###LastCurrencyNumber###" pool-size="1" queue-capacity="1" rejection-policy="DISCARD" />
 
@@ -127,12 +127,12 @@
 		</int:interceptors>
 	</int:channel>
 	
-	<!--  Error Logging -->
+	 Error Logging
 	<int:channel id="errorLoggerChannel###LastCurrencyNumber###"/>		
 	<int:service-activator input-channel="errorLoggerChannel###LastCurrencyNumber###" ref="loggerAdapter" method="error"/>
 	<bean id="loggerAdapter1" class="com.wmsi.sgx.logging.integration.IntegrationLoggerAdapter"/>
 	
-	<!-- Retry Handler -->
+	Retry Handler
 	<bean id="retryAdvice###LastCurrencyNumber###" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
 		<property name="retryTemplate">
 			<bean id="retryTemplate###LastCurrencyNumber###" class="org.springframework.retry.support.RetryTemplate">	
@@ -155,7 +155,7 @@
 				<constructor-arg ref="indexErrorChannel###LastCurrencyNumber###" />
 			</bean>
 		</property>
-	</bean>
+	</bean> -->
 
 
 </beans>
