@@ -86,6 +86,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Wmsi.Utilities.ExceptionManagement, Version=1.0.0.0, Culture=neutral, PublicKeyToken=797ced3acd31714a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wmsi.Utilities.ExceptionManagement.1.0\lib\net20\Wmsi.Utilities.ExceptionManagement.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
