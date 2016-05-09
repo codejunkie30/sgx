@@ -4,6 +4,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		email: ko.observable(),
 		password: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		encEmail: null,
+		encPassword: null,
 		initPage: function() {
     		var displayMessage = SIGNIN.messages.messages[0];
 			
@@ -58,18 +60,36 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//this.initValidation();
     		return this;
 		},
+		
 		signIn: function(me){
-			var displayMessage = SIGNIN.messages.messages[0];			
-			var endpoint = me.fqdn + "/sgx/login";
-			// var endpoint = 'https://localhost:2443/sgx/login';
-			// var endpoint = 'https://sgx.mymsi.com:3443/sgx/login';
-			var postType = 'POST';
-			var params = {username:me.email(), password:me.password()};
+			var endpoint = me.fqdn + "/sgx/publickey";
 			
-			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
+			if (me.errors().length > 0 || me.isFormValid() == undefined) {				
 	            return
 	        }
+			
 			PAGE.showLoading();
+			$.getJSON(endpoint, function( data ) {
+				me.encryptUserNamePwd( data.pubKey );
+				me.loginUser();
+    		});
+		},
+		
+		encryptUserNamePwd: function( pubkey ){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+			me.encPassword = encrypt.encrypt( me.password() );
+		},
+		
+		loginUser: function(){
+			var me= this;
+			var displayMessage = SIGNIN.messages.messages[0];			
+			var endpoint = me.fqdn + "/sgx/login";
+			var postType = 'POST';
+			var params = {username:me.encEmail, password:me.encPassword};
+			
 			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
@@ -121,8 +141,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}
 					}
 				},PAGE.customSGXError);
-			
 		},
+		
 		getURLParam: function getURLParam(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
 				sURLVariables = sPageURL.split('&'),
