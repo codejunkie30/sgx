@@ -8,6 +8,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		receiveEmails: ko.observable(false),
 		messages: JSON.parse(MESSAGES),
 		trialDays: ko.observable(),
+		encEmail: null,
+		encPassword: null,
+		encPasswordMatch: null,
 		
 		initPage: function() {
     		// finish other page loading
@@ -90,9 +93,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		startTrial: function(me){
 			var displayMessage = SIGNUP.messages.messages[0];
-			var endpoint = me.fqdn + "/sgx/user/create";
-			var postType = 'POST';
-			var params = { email: SIGNUP.email(), password: SIGNUP.password(), passwordMatch: SIGNUP.retypePassword(), contactOptIn: SIGNUP.receiveEmails() };
+			var endpoint = me.fqdn + "/sgx/publickey";
 			
 			if (this.errors().length > 0 || this.isFormValid() == undefined || this.termsConditions() == false) {
 				if (this.termsConditions() == false) { 
@@ -103,28 +104,50 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        }
 			
 			PAGE.showLoading();
+			$.getJSON(endpoint, function( data ) {
+				me.encryptUserNamePwd( data.pubKey );
+				me.CreateUser();
+    		});
+		},
+		
+		encryptUserNamePwd: function( pubkey ){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+			me.encPassword = encrypt.encrypt( me.password() );
+			me.encPasswordMatch = encrypt.encrypt( me.retypePassword() );
+		},
+		
+		CreateUser: function(){
+			var me= this;
+			var displayMessage = SIGNUP.messages.messages[0];
+			var endpoint = me.fqdn + "/sgx/user/create";
+			var postType = 'POST';
+			var params = {email:me.encEmail, password:me.encPassword, passwordMatch: me.encPasswordMatch, contactOptIn: SIGNUP.receiveEmails()};
 			
 			UTIL.handleAjaxRequestJSON(
-				endpoint,
-				postType,
-				params,
-				function(data, textStatus, jqXHR){
-					if (data == true){
-						$('.form').empty().addClass('confirm');
-						$('<div/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
-						PAGE.resizeIframeSimple();
-						PAGE.hideLoading();
-					} else {
-						if (data.details.errorCode == 4003){
-							$('.error-messages').empty();
-							$('<p/>').html(displayMessage.signUp.emailDuplicate).appendTo('.error-messages');
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){
+						if (data == true){
+							$('.form').empty().addClass('confirm');
+							$('<div/>').html(displayMessage.signUp.success).appendTo('.form.confirm');
 							PAGE.resizeIframeSimple();
 							PAGE.hideLoading();
+						} else {
+							if (data.details.errorCode == 4003){
+								$('.error-messages').empty();
+								$('<p/>').html(displayMessage.signUp.emailDuplicate).appendTo('.error-messages');
+								PAGE.resizeIframeSimple();
+								PAGE.hideLoading();
+							}
 						}
-					}
-				}, 
-				PAGE.customSGXError);
+					}, 
+					PAGE.customSGXError);
 		},
+		
 		termsConditionsModal: function(){
 			var displayMessage = SIGNUP.messages.messages[0];
 			PAGE.modal.open({  width: 950, maxWidth: 950, height: 425, scrolling: true, content: displayMessage.signUp.termsConditions }); 
