@@ -23,10 +23,11 @@ import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.wmsi.sgx.controller.DistributionsController;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.security.RestAuthenticationFailureHandler;
 import com.wmsi.sgx.security.RestAuthenticationSuccessHandler;
+import com.wmsi.sgx.service.RSAKeyException;
+import com.wmsi.sgx.service.RSAKeyService;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.UserService;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
@@ -60,6 +61,9 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 	
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private RSAKeyService rsaKeyService;
 
 
 	public StatelessLoginFilter(RestAuthenticationSuccessHandler restAuthenticationSuccessHandler,
@@ -79,6 +83,12 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
 		//final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 		user = new ObjectMapper().readValue(request.getInputStream(), com.wmsi.sgx.domain.User.class);
+		try {
+			user.setUsername(rsaKeyService.decrypt(user.getUsername()));
+			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
+		} catch (RSAKeyException e) {
+			log.error("Error in decrypting the username or password");
+		}
 		final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), user.getPassword());
 		loginToken.setDetails(authenticationDetailsSource.buildDetails(request));

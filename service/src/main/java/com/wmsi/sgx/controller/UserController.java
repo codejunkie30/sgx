@@ -2,12 +2,14 @@
 package com.wmsi.sgx.controller;
 
 import javax.mail.MessagingException;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,8 @@ import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
 import com.wmsi.sgx.model.VerifyUser;
 import com.wmsi.sgx.model.account.UserModel;
+import com.wmsi.sgx.service.RSAKeyException;
+import com.wmsi.sgx.service.RSAKeyService;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.InvalidTokenException;
 import com.wmsi.sgx.service.account.RegistrationService;
@@ -36,16 +40,25 @@ public class UserController{
 	
 	@Autowired
 	private RegistrationService registrationService;
+	
+	@Autowired
+	private RSAKeyService rsaKeyService;
+	
+	@Autowired
+	private LocalValidatorFactoryBean validator;
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public @ResponseBody Boolean register(@Valid @RequestBody UserModel user) throws UserExistsException, MessagingException{
-		
-		CreateUserReponse res =registrationService.registerUser(user);
-		try{
-		registrationService.sendVerificationEmail(res.getUsername(),res.getToken());
+	public @ResponseBody Boolean register(@RequestBody UserModel user, BindingResult result) throws UserExistsException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
+		decryptUserModelParams(user);
+		validator.validate(user, result);
+		if (result.hasErrors()) {
+			throw new MethodArgumentNotValidException(null, result);
 		}
-		catch(Exception e){
-			log.error("Exception occrued in sending email", e);			
+		CreateUserReponse res = registrationService.registerUser(user);
+		try {
+			registrationService.sendVerificationEmail(res.getUsername(), res.getToken());
+		} catch (Exception e) {
+			log.error("Exception occrued in sending email", e);
 		}
 		return true;
 	}
@@ -57,15 +70,15 @@ public class UserController{
 	}
 	
 	@RequestMapping(value = "resetToken", method = RequestMethod.POST)
-	public @ResponseBody ApiResponse resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException{
-		
+	public @ResponseBody ApiResponse resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException, RSAKeyException{
+		decryptUsername(user);
 		return registrationService.resendVerificationEmail(user.getUsername());
 	}
 
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
-	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException{
+	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException, RSAKeyException{
 	
-		 
+		decryptUsername(user);
 		try{
 			return registrationService.sendPasswordReset(user.getUsername());	
 			
@@ -80,12 +93,13 @@ public class UserController{
 		return true;
 		
 	}
+
 	//Strictly used for internal testing, 
 	//you can make a user expired by calling this api endpoint  
 	@RequestMapping(value = "expireUser", method = RequestMethod.POST)
-	public @ResponseBody Boolean expireUser(@RequestBody ResetUser user) throws UserNotFoundException{
+	public @ResponseBody Boolean expireUser(@RequestBody ResetUser user) throws UserNotFoundException, RSAKeyException{
 	
-		
+		decryptUsername(user);
 		try{
 			registrationService.convertToExpiredAccount(user.getUsername());	
 		}
@@ -101,7 +115,12 @@ public class UserController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @Valid @RequestBody ChangePasswordModel user) throws InvalidTokenException, MessagingException{
+	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @RequestBody ChangePasswordModel user, BindingResult result) throws InvalidTokenException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
+		decryptChangePasswordModel(user);
+		validator.validate(user, result);
+		if (result.hasErrors()) {
+			throw new MethodArgumentNotValidException(null,result);
+		}
 		return registrationService.resetPassword(user, token);
 	}
 	
@@ -109,13 +128,61 @@ public class UserController{
 	// The following endpoint is for proof of concept only and should be removed once ecommerce is full
 	// integrated. 
 	@RequestMapping(value = "premium", method = RequestMethod.POST)
-	public @ResponseBody Boolean registerPremium(@RequestBody UserModel user){
+	public @ResponseBody Boolean registerPremium(@RequestBody UserModel user) throws RSAKeyException{
 		
-		
+		decryptUserModelParams(user);
 		// TODO Ecomm integration 
 		// This end point should not be public but is here for testing purposes
 		// remove this and integrate this service call with the Ecommerce callback for successful payment.
 		return registrationService.convertToPremiumAccount(user);
 	}
+	
+	/**
+	 * Decrypts the {@link ResetUser} params
+	 * 
+	 * @param user
+	 * @throws RSAKeyException 
+	 */
+	private void decryptUsername(ResetUser user) throws RSAKeyException {
+		try {
+			user.setUsername(rsaKeyService.decrypt(user.getUsername()));
+		} catch (RSAKeyException e) {
+			log.error("Error in decrypting the username");
+			throw new RSAKeyException("username is not valid");
+		}
+	}
 
+	/**
+	 * Decrypts the {@link ChangePasswordModel} params
+	 * 
+	 * @param user
+	 * @throws RSAKeyException 
+	 */
+	private void decryptChangePasswordModel(ChangePasswordModel user) throws RSAKeyException {
+		try {
+			user.setEmail(rsaKeyService.decrypt(user.getEmail()));
+			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
+			user.setPasswordMatch(rsaKeyService.decrypt(user.getPasswordMatch()));
+		} catch (RSAKeyException e) {
+			log.error("Error in decrypting the ChangePasswordModel");
+			throw new RSAKeyException("Email, password or passwordmatch is not valid");
+		}
+	}
+
+	/**
+	 * Decrypts the {@link UserModel} params
+	 * 
+	 * @param user
+	 * @throws RSAKeyException 
+	 */
+	private void decryptUserModelParams(UserModel user) throws RSAKeyException {
+		try {
+			user.setEmail(rsaKeyService.decrypt(user.getEmail()));
+			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
+			user.setPasswordMatch(rsaKeyService.decrypt(user.getPasswordMatch()));
+		} catch (RSAKeyException e) {
+			log.error("Error in decrypting the UserModel");
+			throw new RSAKeyException("Email, password or passwordmatch is not valid");
+		}
+	}
 }
