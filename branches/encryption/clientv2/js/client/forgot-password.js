@@ -3,6 +3,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	var FORGOTPASS = {
 		email: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		encEmail: null,
 		initPage: function() {
 			
 			this.isFormValid = ko.computed(function() {
@@ -52,29 +53,46 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);
 			
-			var endpoint = me.fqdn + "/sgx/user/reset";
-			var postType = 'POST';
-			var params = { username: FORGOTPASS.email() };
-			
-			var displayMessage = FORGOTPASS.messages.messages[0];
-			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
+			
 			PAGE.showLoading();
+			var endpoint = me.fqdn + "/sgx/publickey";
+			$.getJSON(endpoint, function( data ) {
+				me.encryptUserName( data.pubKey );
+				me.resetPwd();
+    		});
+			
+		},
+		
+		encryptUserName: function( pubkey ){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+		},
+		
+		resetPwd: function(){
+			var me= this;
+			var endpoint = me.fqdn + "/sgx/user/reset";
+			var postType = 'POST';
+			var params = { username: me.encEmail };
+			
+			var displayMessage = FORGOTPASS.messages.messages[0];
 			UTIL.handleAjaxRequestJSON(
-				endpoint,
-				postType,
-				params,
-				function(data, textStatus, jqXHR){
-					if (data == true){
-						$('.form').empty().addClass('rp-sent');
-						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
-						PAGE.resizeIframeSimple();
-						PAGE.hideLoading();
-					}
-				}, 
-				PAGE.customSGXError);
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){
+						if (data == true){
+							$('.form').empty().addClass('rp-sent');
+							$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
+							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
+						}
+					}, 
+					PAGE.customSGXError);
 		}
 	};
 	
