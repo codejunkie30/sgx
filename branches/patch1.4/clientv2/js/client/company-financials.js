@@ -59,6 +59,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     		var params = { id: me.ticker };
     		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, 
 				function(data) {
+    		//    console.log((JSON.stringify(data, null, 4)));
 					me.initFinancials(me, data);  
 				}, 
 				PAGE.customSGXError,
@@ -285,9 +286,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 				labels: {
                     formatter: function() {
                     	//var fmt = data.hasOwnProperty("format") ? data.format : ""; 
-                    	if (formatType == "cash") return PAGE.currentFormats.chart.format + _round(this.value,3);
-                    	else if (formatType == "percent") return _round(this.value,3) + "%";
-                        return _round(this.value,3);
+                    	if (formatType == "cash") return _round(this.value,3)==0?"-":PAGE.currentFormats.chart.format + _round(this.value,3);
+                    	else if (formatType == "percent") return _round(this.value,3)==0?"-":_round(this.value,3) + "%";
+                        return _round(this.value,3)==0?"-":_round(this.value,3);
                     }
 				}
 			});
@@ -356,7 +357,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 
     /**
      * Experimental Highcharts plugin to implement chart.alignThreshold option.
-     * Author: Torstein Hønsi
+     * Author: Torstein Hï¿½nsi
      * Last revision: 2013-12-02
      */
     (function (H) {

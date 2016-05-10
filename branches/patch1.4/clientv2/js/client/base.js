@@ -41,6 +41,17 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				
 		}
 	};
+	
+	KO.bindingHandlers.formatNonZeroValue = {
+		update: function(element, valueAccessor, allBindings) {
+	        return KO.bindingHandlers.text.update(element,function(){
+	        	if (valueAccessor() == null) return $(element).html(); 
+	        	//console.log(allBindings().text);
+	            return PAGE.formatZeroValue(KO.unwrap(valueAccessor()), allBindings().text);
+	        });
+				
+		}
+	};
 
 	KO.bindingHandlers.precision = {
 		update: function(element, valueAccessor, allBindings) {
@@ -72,7 +83,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 
                 	valueToWrite += '.'+getZeroes(precision);
                 }
-
                 if(precision == 0){
                   valueToWrite =  Math.round(value);
                   valueToWrite+="";
@@ -80,6 +90,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
                 if(formatNum) {
                   valueToWrite = valueToWrite.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
+                if(valueToWrite==0.00)return "-";
                 if(postFix) {
                   if( postFix != '%')
                     valueToWrite += ' ';
@@ -442,7 +453,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			return $.grep(this.glossary.terms, function(e, i) { return e.id == name; }).length > 0;
 		},
 
-		
+	getFormatter:function(fmt){
+	    return this.currentFormats.hasOwnProperty(fmt) ? this.currentFormats[fmt] : {};
+	},
+	
         getFormatted: function(fmt, value, decimals) {
         	if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
         	if (value === "" || value === "-") return value;
@@ -485,6 +499,40 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     		return val;
         },
     	
+        formatZeroValue: function(fmt, value) {
+    	       if (typeof fmt === "undefined" || fmt == "string" || fmt == "lookup") return value;
+    	       if (value === "" || value === "-") return value;
+    	       if (value == null) return '-';
+    	
+		var val = value;
+		
+		var formatter = PAGE.getFormatter(fmt);
+		
+		if (fmt.indexOf("number") != -1 || fmt == "millions" || fmt == "percent" || fmt =="dollars" || fmt =="cents" || fmt == "volume") {
+
+			// round
+			val = parseFloat(val).toFixed(formatter.decimals).replace(/(\.\d*[1-9])0+$/,'$1').replace(/\.0*$/,'');
+
+			// give some commas
+			var parts = val.split(".");
+    		    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    		    if (parts.length > 1 && parseInt(parts[1], 10) > 0) val = parts.join(".");
+    		    else val = parts[0];
+
+    		    // negative numbers
+				if (val.indexOf("-") == 0 && val==0) {
+					return "-";
+				};
+				
+				if(val==0){
+				    return "-";
+				}
+    		    
+		    
+		}
+			return val;
+		},
+		
         modal: {
         	
             close: function(settings) {
