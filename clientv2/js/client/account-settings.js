@@ -15,6 +15,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		isFormValid: ko.observable(true),
 		messages: JSON.parse(MESSAGES),
 		currencyDD: JSON.parse(CUR),
+		encPassword: null,
+		encPasswordMatch: null,
 		initPage: function() {
 			
 			var displayMessage = SAVECHANGES.messages.messages[0];
@@ -140,9 +142,27 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		updatePassword: function(){
+			var me = this;
+			var endpoint = me.fqdn + "/sgx/publickey";
+			$.getJSON(endpoint, function( data ) {
+				me.encryptPwd( data.pubKey );
+				me.changePwd();
+    		});
+		},
+		
+		encryptPwd: function( pubkey ){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( pubkey );
+			me.encPassword = encrypt.encrypt( me.newPassword() );
+			me.encPasswordMatch = encrypt.encrypt( me.retypeNewPassword() );
+		},
+		
+		changePwd: function(){
+			var me = this;
 			var endpoint = PAGE.fqdn + "/sgx/account/password";
 			var postType = 'POST';
-			var params = { password: SAVECHANGES.newPassword(), passwordMatch: SAVECHANGES.retypeNewPassword() };
+			var params = { password: me.encPassword, passwordMatch: me.encPasswordMatch };
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -156,8 +176,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback);
-			
-			
 		},
 		
 		//getCurrency: function(){
