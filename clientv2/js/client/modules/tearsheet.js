@@ -41,7 +41,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 			
 			// too long a variable name
 			this.companyInfo = this.company.companyInfo;
-
+			
+			this.companyInfo.volume = roundMe(this.companyInfo.volume, 3)
+			
 			// make keydevs observable
 			this.keyDevs = ko.observable(this.keyDevs);
 			
@@ -117,3 +119,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart"], function(UTIL,
 	return TEARSHEET;
 	
 });
+function roundMe(val, precision) {
+	  var roundingMultiplier = Math.pow(10, precision);
+	  var valAsNum = isNaN(val)? 0 : parseFloat(+val);
+	  var returnVal = Math.round( valAsNum*roundingMultiplier) / roundingMultiplier;
+
+	  return returnVal;
+	}
