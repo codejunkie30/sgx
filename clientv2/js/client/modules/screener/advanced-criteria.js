@@ -35,7 +35,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		textDistributions: [ "industryGroup" ],
 		firstRun: true,
 		exchangeDisplay: false,
-			
+		info:null,
+		minimum:0,maximum:0,	
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
@@ -198,7 +199,10 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				 } else {
 					 $.each(field.values, function(vIdx, val) {CRITERIA.randomizeBucket(buckets, val, type, bCount);});
 				 }
-
+				if(this.field == 'avgBrokerReq')
+				{
+					CRITERIA.info = field;
+				}
         		
         		
         		// build the collection
@@ -321,6 +325,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				};
 				
         		mdl.changes = ko.computed(function() {
+        			CRITERIA.minimum = this.min();
+        			CRITERIA.maximum = this.max();
         			return this.min() + "-" + this.max() + "-" + this.val();
         		}, mdl);
         		
@@ -330,7 +336,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
 	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
-						
+						if(this.field.id == 'avgBrokerReq')
+						{
+	        				var cnt = CRITERIA.info.values.lastIndexOf(CRITERIA.maximum) - CRITERIA.info.values.indexOf(CRITERIA.minimum);
+	        				return cnt+1
+						}
         				return this.criteria.getDistributionMatches(this.field, min, max);
     				}
     				return 0;
