@@ -107,7 +107,10 @@ namespace XFDataDump
 
                 // match S&P companies to lists provided
                 LOG.Info("Updating Ticker Table");
-                using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn)) command.ExecuteNonQuery();
+                using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn))
+                { 
+                    command.ExecuteNonQuery();
+                }
                 LOG.Info("Finished Updating Ticker Table");
 
                 // export list of good companies

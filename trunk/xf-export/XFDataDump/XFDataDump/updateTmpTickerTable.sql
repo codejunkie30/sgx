@@ -5,11 +5,13 @@ UPDATE pop SET
 	pop.currencyISO = (SELECT c.ISOCode FROM ciqCurrency c WHERE ti.currencyId = c.currencyId)
 FROM
 	##sgxpop pop
-INNER JOIN
-    ciqTradingItem ti
-ON
-    pop.tickerSymbol = ti.tickerSymbol
-AND
+INNER JOIN ciqTradingItem ti ON pop.tickerSymbol = ti.tickerSymbol
+INNER JOIN ciqSecurity s ON s.securityId = ti.securityId
+WHERE
 	ti.exchangeId = (SELECT ce.exchangeId FROM ciqExchange ce WHERE ce.exchangeSymbol = pop.exchangeSymbol)
 AND
-	ti.tradingItemStatusId = 15;
+	ti.tradingItemStatusId = 15
+AND
+	ti.PrimaryFlag = 1
+AND 
+	s.primaryFlag = 1;
