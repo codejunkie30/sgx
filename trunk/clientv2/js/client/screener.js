@@ -71,7 +71,17 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
             		
             		$(".screener-header .message .promo-image img").attr("src", promo.src);
             		if (promo.hasOwnProperty("href")) {
-            			$(".screener-header .message .promo-image a").attr("href", promo.href).attr("target", "_top");
+            			//if promo.href is navigate to page within the application. Revert the code changes below if the href is an URL 
+            			var parentURL;
+            			if (typeof document.location.hash !== "undefined" && document.location.hash != "") {
+	            			parentURL = decodeURIComponent(document.location.hash.replace(/^#/, ''));
+	            			parentURL = parentURL.split("?")[0].split("#")[0];
+            			}
+            			else {
+            				parentURL = window.location.pathname;
+            			}
+            			var pageURL = parentURL + promo.href;
+            			$(".screener-header .message .promo-image a").attr("href", pageURL).attr("target", "_top");
             			
             		}
             		
