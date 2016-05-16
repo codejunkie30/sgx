@@ -145,7 +145,7 @@ public class UserController{
 		try {
 			user.setUsername(rsaKeyService.decrypt(user.getUsername()));
 		} catch (RSAKeyException e) {
-			log.error("Error in decrypting the username");
+			log.error("Error in decrypting the username",e);
 			throw new RSAKeyException("username is not valid");
 		}
 	}
@@ -162,7 +162,7 @@ public class UserController{
 			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
 			user.setPasswordMatch(rsaKeyService.decrypt(user.getPasswordMatch()));
 		} catch (RSAKeyException e) {
-			log.error("Error in decrypting the ChangePasswordModel");
+			log.error("Error in decrypting the ChangePasswordModel",e);
 			throw new RSAKeyException("Email, password or passwordmatch is not valid");
 		}
 	}
@@ -179,7 +179,7 @@ public class UserController{
 			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
 			user.setPasswordMatch(rsaKeyService.decrypt(user.getPasswordMatch()));
 		} catch (RSAKeyException e) {
-			log.error("Error in decrypting the UserModel");
+			log.error("Error in decrypting the UserModel",e);
 			throw new RSAKeyException("Email, password or passwordmatch is not valid");
 		}
 	}

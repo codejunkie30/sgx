@@ -87,7 +87,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 			user.setUsername(rsaKeyService.decrypt(user.getUsername()));
 			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
 		} catch (RSAKeyException e) {
-			log.error("Error in decrypting the username or password");
+			log.error("Error in decrypting the username or password",e);
 		}
 		final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), user.getPassword());
