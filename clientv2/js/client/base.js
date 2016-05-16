@@ -527,6 +527,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				if(val==0){
 				    return "-";
 				}
+				
+    		    // make it pretty
+    		    if (formatter.hasOwnProperty("format")) val = formatter.format.replace(new RegExp("\\$VALUE","gm"), val);
+
     		    
 		    
 		}
