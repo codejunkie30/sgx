@@ -27,14 +27,17 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			$.each(this.priceData, function(idx, point) {
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(point.x));
 
-		        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
-		          return;
-		        }
-				self.chartData[key] = {}
+//		        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
+//		          return;
+//		        }
+		        self.chartData[key] = {}
 				self.chartData[key].close = point.y;
-				self.chartData[key].low = lowPrice[idx].y;
-				self.chartData[key].open = openPrice[idx].y;
-				self.chartData[key].high = highPrice[idx].y;
+				 if( lowPrice[idx])
+					 self.chartData[key].low = lowPrice[idx].y;
+				 if( openPrice[idx])
+					 self.chartData[key].open = openPrice[idx].y;
+				 if( highPrice[idx])
+					 self.chartData[key].high = highPrice[idx].y;
 			});
 
 			// all the volume data						
