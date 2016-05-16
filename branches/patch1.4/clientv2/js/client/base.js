@@ -519,14 +519,17 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
     		    if (parts.length > 1 && parseInt(parts[1], 10) > 0) val = parts.join(".");
     		    else val = parts[0];
 
-    		    // negative numbers
-				if (val.indexOf("-") == 0 && val==0) {
-					return "-";
-				};
+    		 // negative numbers
+		if (val.indexOf("-") == 0 && val==0) {
+			return "-";
+		};
 				
-				if(val==0){
-				    return "-";
+				
+		if(val==0){
+		    return "-";
 				}
+		// negative numbers
+		if (val.indexOf("-") == 0) val = "(" + val.substring(1) + ")";
 				
     		    // make it pretty
     		    if (formatter.hasOwnProperty("format")) val = formatter.format.replace(new RegExp("\\$VALUE","gm"), val);
