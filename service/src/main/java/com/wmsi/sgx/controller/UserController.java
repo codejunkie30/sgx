@@ -99,7 +99,6 @@ public class UserController{
 	@RequestMapping(value = "expireUser", method = RequestMethod.POST)
 	public @ResponseBody Boolean expireUser(@RequestBody ResetUser user) throws UserNotFoundException, RSAKeyException{
 	
-		decryptUsername(user);
 		try{
 			registrationService.convertToExpiredAccount(user.getUsername());	
 		}
@@ -130,7 +129,6 @@ public class UserController{
 	@RequestMapping(value = "premium", method = RequestMethod.POST)
 	public @ResponseBody Boolean registerPremium(@RequestBody UserModel user) throws RSAKeyException{
 		
-		decryptUserModelParams(user);
 		// TODO Ecomm integration 
 		// This end point should not be public but is here for testing purposes
 		// remove this and integrate this service call with the Ecommerce callback for successful payment.
