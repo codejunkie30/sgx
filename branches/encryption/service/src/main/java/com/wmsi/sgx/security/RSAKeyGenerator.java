@@ -60,7 +60,7 @@ public final class RSAKeyGenerator {
 			try {
 				File parentDirectory = new File(publicFile.getParent());
 				if (!parentDirectory.exists()) {
-					parentDirectory.mkdir();
+					parentDirectory.mkdirs();
 				}
 				// Get and RSA keypair generator
 				KeyPairGenerator gen = KeyPairGenerator.getInstance(ALGORITHAM_NAME);
@@ -87,9 +87,8 @@ public final class RSAKeyGenerator {
 				log.info("RSA key generation successful!");
 
 			} catch (Exception e) {
-				log.error("RSA key generation failed:");
-				e.printStackTrace();
-				throw new RuntimeException(ERROR_GENERATING_KEYS);
+				log.error("RSA key generation failed:",e);
+				throw new RuntimeException(ERROR_GENERATING_KEYS,e);
 			} finally {
 				try {
 					if (fos != null)
