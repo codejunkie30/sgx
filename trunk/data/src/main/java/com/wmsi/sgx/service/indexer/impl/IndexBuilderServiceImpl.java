@@ -80,7 +80,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	private String tickerFile;
 
 	@Value("${loader.fx.file}")
-	private String fxFile = "/mnt/data/fx-conversion.csv";
+	private String fxFile;
+	//private String fxFile = "/mnt/data/fx-conversion.csv";
 
 	@Autowired
 	private CapIQService capIQService;
