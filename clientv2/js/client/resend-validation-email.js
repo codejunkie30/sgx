@@ -4,6 +4,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		email: ko.observable(),
 		messages: JSON.parse(MESSAGES),
 		encEmail: null,
+		pubkey: null,
+		
 		initPage: function() {
 						
 			this.isFormValid = ko.computed(function() {
@@ -43,16 +45,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		resendEmail: function(me){
 			var me = this;
 			var endpoint = me.fqdn + "/sgx/publickey";
-			$.getJSON(endpoint, function( data ) {
-				me.encryptEmail( data.pubKey );
+			if(!me.pubkey){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptEmail();
+					me.resetToken();
+	    		});
+			}else{
+				me.encryptEmail();
 				me.resetToken();
-    		});
+			}
+			
 		},
 		
-		encryptEmail: function( pubkey ){
+		encryptEmail: function(){
 			var me= this;
 			var encrypt = new JSEncrypt();
-			encrypt.setPublicKey( pubkey );
+			encrypt.setPublicKey( me.pubkey );
 			me.encEmail = encrypt.encrypt( me.email() );
 		},
 		

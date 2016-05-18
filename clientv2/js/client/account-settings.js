@@ -17,6 +17,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		currencyDD: JSON.parse(CUR),
 		encPassword: null,
 		encPasswordMatch: null,
+		pubkey: null,
+		
 		initPage: function() {
 			
 			var displayMessage = SAVECHANGES.messages.messages[0];
@@ -93,7 +95,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		saveChanges: function(me){
-			
+			var displayMessage = SAVECHANGES.messages.messages[0];
 			if (SAVECHANGES.showChange() == false){
 				//updates Currency & OptIn Status
 				this.updateSettings();
@@ -144,16 +146,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		updatePassword: function(){
 			var me = this;
 			var endpoint = me.fqdn + "/sgx/publickey";
-			$.getJSON(endpoint, function( data ) {
-				me.encryptPwd( data.pubKey );
+			if( !me.pubKey ){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptPwd();
+					me.changePwd();
+	    		});
+			}else{
+				me.encryptPwd();
 				me.changePwd();
-    		});
+			}
+			
 		},
 		
-		encryptPwd: function( pubkey ){
+		encryptPwd: function(){
 			var me= this;
 			var encrypt = new JSEncrypt();
-			encrypt.setPublicKey( pubkey );
+			encrypt.setPublicKey( me.pubkey );
 			me.encPassword = encrypt.encrypt( me.newPassword() );
 			me.encPasswordMatch = encrypt.encrypt( me.retypeNewPassword() );
 		},
