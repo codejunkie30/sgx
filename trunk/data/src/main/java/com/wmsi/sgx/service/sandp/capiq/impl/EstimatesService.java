@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,6 +28,9 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 public class EstimatesService extends AbstractDataService{
 	private static final Logger log = LoggerFactory.getLogger(EstimatesService.class);
 	
+	@Value("${loader.consensus-estimates.dir}")
+	private String consensusEstimatesDir;
+	
 	@Override
 	public Estimates load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		return getEstimates(id);
@@ -39,7 +43,7 @@ public class EstimatesService extends AbstractDataService{
 		Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 		
 		List<CompanyCSVRecord> all = null;
-		try { all = getParsedFinacnialRecords(id, "consensus-estimates"); }
+		try { all = getParsedFinacnialRecords(id, consensusEstimatesDir); }
 		catch (Exception e) {}
 
 		// don't need estimates

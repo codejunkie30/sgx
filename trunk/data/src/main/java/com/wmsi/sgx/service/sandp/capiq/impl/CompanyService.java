@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
 import com.google.gson.Gson;
@@ -37,6 +38,12 @@ public class CompanyService extends AbstractDataService {
 	
 	@Autowired
 	private AlphaFactorIndexerService alphaFactorService;
+	
+	@Value("${loader.company-data.dir}")
+	private String companyDataDir;
+	
+	@Value("${loader.consensus-estimates.dir}")
+	private String consensusEstimatesDir;
 
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -46,7 +53,7 @@ public class CompanyService extends AbstractDataService {
 		try {
 
 			// list of records
-			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, "company-data");
+			List<CompanyCSVRecord> records = getParsedCompanyRecords(id, companyDataDir);
 			setConsensus(id, records);
 			// company
 			Company company = getCompany(id, records);
@@ -97,7 +104,7 @@ public class CompanyService extends AbstractDataService {
 		List<String> fields = Arrays.asList(fieldNames);
 		
 		try {
-			List<CompanyCSVRecord> consensus = getParsedCompanyRecords(id, "consensus-estimates");
+			List<CompanyCSVRecord> consensus = getParsedCompanyRecords(id, consensusEstimatesDir);
 			for (CompanyCSVRecord item : consensus) {
 				if (fields.contains(item.getName())) records.add(item);
 			}

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
 import com.wmsi.sgx.model.DividendHistory;
@@ -18,6 +19,9 @@ import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 public class DividendService extends AbstractDataService{
+	
+	@Value("${loader.dividend-history.dir}")
+	private String dividendHistoryDir;
 	
 	@SuppressWarnings("unchecked")
 	public DividendHistory load(String id, String... parms)
@@ -39,7 +43,7 @@ public class DividendService extends AbstractDataService{
 		dH.setTickerCode(id);		
 		
 		Iterable<CSVRecord> records = null; 
-		try { records = getCompanyData(id, "dividend-history"); }
+		try { records = getCompanyData(id, dividendHistoryDir); }
 		catch(Exception e) {}
 		
 		// don't need a history
