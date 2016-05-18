@@ -11,6 +11,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		encEmail: null,
 		encPassword: null,
 		encPasswordMatch: null,
+		pubkey: null,
 		
 		initPage: function() {
     		// finish other page loading
@@ -104,16 +105,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        }
 			
 			PAGE.showLoading();
-			$.getJSON(endpoint, function( data ) {
-				me.encryptUserNamePwd( data.pubKey );
+			if(!me.pubkey){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptUserNamePwd();
+					me.CreateUser();
+	    		});
+			}else{
+				me.encryptUserNamePwd();
 				me.CreateUser();
-    		});
+			}
 		},
 		
-		encryptUserNamePwd: function( pubkey ){
+		encryptUserNamePwd: function(){
 			var me= this;
 			var encrypt = new JSEncrypt();
-			encrypt.setPublicKey( pubkey );
+			encrypt.setPublicKey( me.pubkey );
 			me.encEmail = encrypt.encrypt( me.email() );
 			me.encPassword = encrypt.encrypt( me.password() );
 			me.encPasswordMatch = encrypt.encrypt( me.retypePassword() );
