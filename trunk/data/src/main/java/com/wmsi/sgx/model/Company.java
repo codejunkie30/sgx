@@ -22,7 +22,8 @@ public class Company {
 	private Double avgTradedVolM3;
 	
 	private Double avgVolumeM3;
-
+	
+	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_BASIC_EPS_INCL")
 	private Double basicEpsIncl;
 
