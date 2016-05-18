@@ -30,6 +30,9 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class VwapServiceImpl implements VwapService {
 	private static final Logger log = LoggerFactory.getLogger(VwapServiceImpl.class);
+	
+	@Value("${loader.adjustment-factor.dir}")
+	private String adjustmentFactorDir;
 
 	private Resource vwapData;
 
@@ -122,7 +125,7 @@ public class VwapServiceImpl implements VwapService {
 
 	private List<VwapAdjustmentFactor> loadAdjustmentFactor(String stockSymbol, String extension) {
 		List<VwapAdjustmentFactor> vwapAdjustmentFactors = new ArrayList<>();
-		File f = new File(companiesDir + "adjustment-factor/" + stockSymbol + extension);
+		File f = new File(companiesDir + adjustmentFactorDir+"/" + stockSymbol + extension);
 		CSVReader csvReader = null;
 		try {
 			csvReader = new CSVReader(new FileReader(f), ',');

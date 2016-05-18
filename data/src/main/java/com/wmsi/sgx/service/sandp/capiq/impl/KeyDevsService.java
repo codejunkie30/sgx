@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -27,10 +28,14 @@ import com.wmsi.sgx.util.TemplateUtil;
 
 @SuppressWarnings("unchecked")
 public class KeyDevsService extends AbstractDataService {
+	
 	private Logger log = LoggerFactory.getLogger(KeyDevsService.class);
 	
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
+	
+	@Value("${loader.key-devs.dir}")
+	private String keyDevDir;
 
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -75,7 +80,7 @@ public class KeyDevsService extends AbstractDataService {
 		String tickerNoEx = id.split(":")[0];
 		KeyDevs kD = new KeyDevs();
 		kD.setTickerCode(tickerNoEx);
-		Iterable<CSVRecord> records = getCompanyData(id, "key-devs");
+		Iterable<CSVRecord> records = getCompanyData(id, keyDevDir);
 		if (records == null) return null;
 		List<KeyDev> list = new ArrayList<KeyDev>();
 		
