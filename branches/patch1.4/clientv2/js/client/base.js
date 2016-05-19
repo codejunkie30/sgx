@@ -42,6 +42,21 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		}
 	};
 	
+	KO.bindingHandlers.formatVolume = {
+			update: function(element, valueAccessor, allBindings) {
+		        return KO.bindingHandlers.text.update(element,function() {
+		        	if (valueAccessor() == null) return "-";
+		        	if(parseFloat(allBindings().text) == parseFloat("0.000")) {
+		        		return "-";
+		        	}
+		        	else {
+		        		return allBindings().text;
+		        	}
+		        });
+					
+			}
+		};
+	
 	KO.bindingHandlers.formatNonZeroValue = {
 		update: function(element, valueAccessor, allBindings) {
 	        return KO.bindingHandlers.text.update(element,function(){
