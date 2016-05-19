@@ -20,8 +20,8 @@ namespace Wmsi.SGX.Operations
             //Download from here: 
 
             var folderPath = @"E:\Company Documents\SGX\SGX_AdjVWAP_Files\";
-            var spFileData = File.ReadAllLines(@folderPath + "S_P_ValVol_03_May_2016_QA_Post.csv");
-            //var spFileData = Utilities.DownloadTextFile(GlobalConfig.SGXValueVolumeURL);
+            //var spFileData = File.ReadAllLines(@folderPath + "S_P_ValVol_03_May_2016_QA.csv");
+            var spFileData = Utilities.DownloadTextFile(GlobalConfig.SGXValueVolumeURL);
 
             /*
              * Format:
@@ -51,7 +51,8 @@ namespace Wmsi.SGX.Operations
                 tickerAdjustedList.Add(tickerAdjusted);
             }
 
-            var adjFileData = Utilities.DownloadFTPTextFile("adjustment-factor.csv");
+           
+            var adjFileData = Utilities.DownloadFTPTextFile(GlobalConfig.AdjustmentFactorFileName);
             //var adjFileData = File.ReadAllLines(@folderPath + "adjustment-factor.csv");
             /*
              * Format:

@@ -19,7 +19,9 @@ namespace Wmsi.SGX.Operations
 {
     public static class SGX_DataLoadTester
     {
-
+        /// <summary>
+        /// CrossCheck was created to test for duplicate tickers.
+        /// </summary>
         public static void CrossCheck()
         {
             List<string> rows = null;
@@ -128,7 +130,7 @@ namespace Wmsi.SGX.Operations
             //before your loop
             var csv = new StringBuilder();
             //Write Header
-            csv.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+            csv.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}",
                     "tickerCode", //0
                     "CompanyName", //1
                     "vwapCurrency", //2
@@ -140,7 +142,9 @@ namespace Wmsi.SGX.Operations
                     "Pricing.LastTradeDateTime", //8
                     "Pricing.CurrentDateTime", //9
                     "Pricing.PreviousTradeDateTime", //10
-                    "Float Percentage")); //11
+                    "Float Percentage", //11
+                    "5-Year Beta", //12
+                    "Shares Outstanding")); //13
 
             foreach (var ticker in stockCodes)
             {
@@ -187,7 +191,6 @@ namespace Wmsi.SGX.Operations
                     if (t1.company.companyInfo != null)
                     {
                         //Get Current Price
-
                         var currentPrice = GetCurrentPrice(ticker);
 
                         string lastPrice = string.Empty;
@@ -202,7 +205,7 @@ namespace Wmsi.SGX.Operations
                             currentTradeTimestamp = (currentPrice.price.currentDate.HasValue) ? Utilities.FromUnixTime(currentPrice.price.currentDate.Value).ToShortDateString() : "Date is null";
                             previousTradeTimestamp = (currentPrice.price.previousDate.HasValue) ? Utilities.FromUnixTime(currentPrice.price.previousDate.Value).ToShortDateString() : "Date is null";
                         }
-                        newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                        newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}",
                             t1.company.companyInfo.tickerCode, //0
                             t1.company.companyInfo.companyName, //1
                             t1.company.companyInfo.vwapCurrency, //2
@@ -214,7 +217,9 @@ namespace Wmsi.SGX.Operations
                             lastTradeTimestamp, //8
                             currentTradeTimestamp, //9
                             previousTradeTimestamp, //10
-                            t1.company.companyInfo.floatPercentage); //11
+                            t1.company.companyInfo.floatPercentage, //11
+                            t1.company.companyInfo.beta5Yr, //12
+                            t1.company.companyInfo.sharesOutstanding); //12
                     }
                     else
                     {
@@ -236,8 +241,8 @@ namespace Wmsi.SGX.Operations
             string fileName = string.Format(@"SGX-DataPoints_{0}.csv", DateTime.Now.ToString("yyyyMMdd_HH_mm_ss"));
             string csvFileData = csv.ToString();
             var attachment = Attachment.CreateAttachmentFromString(csv.ToString(), fileName); //Mail attachment
-            //string filePath = string.Format(@"C:\{0}", fileName);
-            //File.WriteAllText(filePath, csvFileData);
+           string filePath = string.Format(@"C:\{0}", fileName);
+            File.WriteAllText(filePath, csvFileData);
 
             var email = new System.Net.Mail.MailMessage(GlobalConfig.EmailFrom, GlobalConfig.EmailTo, string.Format("SGX data load data points from {0}", GlobalConfig.SGXDomain), string.Format("SGX data from {0}", GlobalConfig.SGXDomain));
             email.Priority = (stockCodes.Count() <= 700) ? MailPriority.High : MailPriority.Normal;
