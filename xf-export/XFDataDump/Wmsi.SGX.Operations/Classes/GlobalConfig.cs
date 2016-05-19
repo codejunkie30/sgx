@@ -82,5 +82,12 @@ namespace Wmsi.SGX.Operations.Classes
                 return ConfigurationManager.AppSettings["SmtpPassword"];
             }
         }
+        public static string AdjustmentFactorFileName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["AdjustmentFactorFileName"];
+            }
+        }
     }
 }

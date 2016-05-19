@@ -10,14 +10,13 @@ namespace Wmsi.SGX.Operations
             try
             {
                 //throw new Exception("test");
-                //SGX_AdjustmentFactorSpreadSheetMerge.Execute();
+           //     SGX_AdjustmentFactorSpreadSheetMerge.Execute();
                 SGX_DataLoadTester.Execute();
                 //SGX_DataLoadTester.CrossCheck();
             }
             catch (Exception ex)
             {
                 ExceptionManager.Publish(ex);
-
             }
         }
     }
