@@ -286,9 +286,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 				labels: {
                     formatter: function() {
                     	//var fmt = data.hasOwnProperty("format") ? data.format : ""; 
-                    	if (formatType == "cash") return _round(this.value,3)==0?"-":PAGE.currentFormats.chart.format + _round(this.value,3);
-                    	else if (formatType == "percent") return _round(this.value,3)==0?"-":_round(this.value,3) + "%";
-                        return _round(this.value,3)==0?"-":_round(this.value,3);
+                    	if (formatType == "cash") return PAGE.currentFormats.chart.format + _round(this.value,3);
+                    	else if (formatType == "percent") return _round(this.value,3) + "%";
+                        return _round(this.value,3);
                     }
 				}
 			});
