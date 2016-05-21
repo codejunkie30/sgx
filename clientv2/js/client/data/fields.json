@@ -152,7 +152,7 @@
 			   },
 			   {
 			      "id":"basicEpsIncl",
-			      "format":"percent",
+			      "format":"dollars",
 			      "name":"Basic EPS",
 			      "template":"number",
 			      "shortName":"Basic EPS"
