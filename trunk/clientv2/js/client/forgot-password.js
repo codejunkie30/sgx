@@ -3,6 +3,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	var FORGOTPASS = {
 		email: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		encEmail: null,
+		pubkey: null,
+		
 		initPage: function() {
 			
 			this.isFormValid = ko.computed(function() {
@@ -52,29 +55,51 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);
 			
-			var endpoint = me.fqdn + "/sgx/user/reset";
-			var postType = 'POST';
-			var params = { username: FORGOTPASS.email() };
-			
-			var displayMessage = FORGOTPASS.messages.messages[0];
-			
 			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
 	            return
 	        }
+			
 			PAGE.showLoading();
+			var endpoint = me.fqdn + "/sgx/publickey";
+			if(!me.pubkey){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptUserName();
+					me.resetPwd();
+	    		});
+			}else{
+				me.encryptUserName();
+				me.resetPwd();
+			}
+		},
+		
+		encryptUserName: function(){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( me.pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+		},
+		
+		resetPwd: function(){
+			var me= this;
+			var endpoint = me.fqdn + "/sgx/user/reset";
+			var postType = 'POST';
+			var params = { username: me.encEmail };
+			
+			var displayMessage = FORGOTPASS.messages.messages[0];
 			UTIL.handleAjaxRequestJSON(
-				endpoint,
-				postType,
-				params,
-				function(data, textStatus, jqXHR){
-					if (data == true){
-						$('.form').empty().addClass('rp-sent');
-						$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
-						PAGE.resizeIframeSimple();
-						PAGE.hideLoading();
-					}
-				}, 
-				PAGE.customSGXError);
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){
+						if (data == true){
+							$('.form').empty().addClass('rp-sent');
+							$('<p/>').html(displayMessage.forgotPass.emailReset).appendTo('.form.rp-sent');
+							PAGE.resizeIframeSimple();
+							PAGE.hideLoading();
+						}
+					}, 
+					PAGE.customSGXError);
 		}
 	};
 	

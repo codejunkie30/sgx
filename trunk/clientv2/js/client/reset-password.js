@@ -5,6 +5,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		newPassword: ko.observable(),
 		retypeNewPassword: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		encEmail: null,
+		encPassword: null,
+		encPasswordMatch: null,
+		pubkey: null,
 		
 		initPage: function() {
     		// finish other page loading
@@ -78,18 +82,46 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
     		return this;
 		},
-		resetPass: function(RESETPASS, me){
-			var token = this.getURLParam('ref');
-			var endpoint = PAGE.fqdn + "/sgx/user/password?ref="+token;
-			var postType = 'POST';
-			var params = { email: RESETPASS.email(), password: RESETPASS.newPassword(), passwordMatch: RESETPASS.retypeNewPassword() };
+		
+		resetPass: function(){
+			var me= this;
+			var endpoint = me.fqdn + "/sgx/publickey";
 			
-			if (this.errors().length > 0 || this.isFormValid() == undefined) {				
+			if (me.errors().length > 0 || me.isFormValid() == undefined) {				
 	            return
 	        }
 			
-			var displayMessage = RESETPASS.messages.messages[0];
 			PAGE.showLoading();
+			
+			if(!me.pubkey){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptUserNamePwd();
+					me.resetAccount();
+	    		});
+			}else{
+				me.encryptUserNamePwd();
+				me.resetAccount();
+			}
+		},
+		
+		encryptUserNamePwd: function(){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( me.pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+			me.encPassword = encrypt.encrypt( me.newPassword() );
+			me.encPasswordMatch = encrypt.encrypt( me.retypeNewPassword() );
+		},
+		
+		resetAccount: function(){
+			var me= this;
+			var token = me.getURLParam('ref');
+			var endpoint = PAGE.fqdn + "/sgx/user/password?ref="+token;
+			var postType = 'POST';
+			var params = { email: me.encEmail, password: me.encPassword, passwordMatch: me.encPasswordMatch };
+			var displayMessage = RESETPASS.messages.messages[0];
+			
 			UTIL.handleAjaxRequestJSON(
 				endpoint,
 				postType,
@@ -111,6 +143,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);
 		},
+		
 		getURLParam: function getURLParam(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
 				sURLVariables = sPageURL.split('&'),

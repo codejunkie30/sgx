@@ -3,6 +3,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	var RESEND = {
 		email: ko.observable(),
 		messages: JSON.parse(MESSAGES),
+		encEmail: null,
+		pubkey: null,
+		
 		initPage: function() {
 						
 			this.isFormValid = ko.computed(function() {
@@ -40,9 +43,33 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		return this;
 		},
 		resendEmail: function(me){
+			var me = this;
+			var endpoint = me.fqdn + "/sgx/publickey";
+			if(!me.pubkey){
+				$.getJSON(endpoint, function( data ) {
+					me.pubkey = data.pubKey;
+					me.encryptEmail();
+					me.resetToken();
+	    		});
+			}else{
+				me.encryptEmail();
+				me.resetToken();
+			}
+			
+		},
+		
+		encryptEmail: function(){
+			var me= this;
+			var encrypt = new JSEncrypt();
+			encrypt.setPublicKey( me.pubkey );
+			me.encEmail = encrypt.encrypt( me.email() );
+		},
+		
+		resetToken: function(){
+			var me = this;
 			var endpoint = me.fqdn + "/sgx/user/resetToken";
 			var postType = 'POST';
-			var params = { username: RESEND.email() };
+			var params = { username: me.encEmail };
 			var jsonp = 'callback';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -82,7 +109,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback);
-			
 		}
 	};
 	
