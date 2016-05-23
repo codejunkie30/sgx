@@ -61,4 +61,21 @@ public class EmailServiceImpl implements EmailService{
         mailSender.send(mimeMessage);
 	}
 
+	@Override
+	public void send(String to, String subject, String body) throws MessagingException {
+		final MimeMessage mimeMessage = mailSender.createMimeMessage();
+		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+		message.setSubject(subject);
+		try {
+			message.setFrom(new InternetAddress(emailSender, "SGX"));
+		} catch (Exception e) {
+			log.error("Trying to create address", e);
+		}
+		message.setTo(to);
+		message.setText(body, false /* isHtml */);
+
+		mailSender.send(mimeMessage);
+		
+	}
+
 }

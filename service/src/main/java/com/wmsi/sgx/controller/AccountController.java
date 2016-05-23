@@ -6,8 +6,12 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +34,8 @@ import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.security.SecureTokenGenerator;
 import com.wmsi.sgx.security.token.TokenAuthenticationService;
 import com.wmsi.sgx.security.token.TokenHandler;
+import com.wmsi.sgx.service.RSAKeyException;
+import com.wmsi.sgx.service.RSAKeyService;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.PremiumVerificationService;
 import com.wmsi.sgx.service.account.RegistrationService;
@@ -40,6 +46,8 @@ import com.wmsi.sgx.service.account.UserNotFoundException;
 @RequestMapping("/account")
 public class AccountController{
 
+	private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+	
 	@Autowired
 	private AccountService accountService;
 	
@@ -69,7 +77,13 @@ public class AccountController{
 	public String cancel;
 	
 	@Autowired
-	private TokenAuthenticationService tokenAuthenticationService;		
+	private TokenAuthenticationService tokenAuthenticationService;
+	
+	@Autowired
+	private RSAKeyService rsaKeyService;
+	
+	@Autowired
+	private LocalValidatorFactoryBean validator;
 	
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
@@ -92,7 +106,9 @@ public class AccountController{
 	}
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	public @ResponseBody Boolean changePassword(HttpServletRequest request, @Valid @RequestBody PasswordChangeModel pass) throws UserNotFoundException, MessagingException{
+	public @ResponseBody Boolean changePassword(HttpServletRequest request, @RequestBody PasswordChangeModel pass, BindingResult result) throws UserNotFoundException, MessagingException, RSAKeyException{
+		decryptPasswordChangeModelParams(pass);
+		validator.validate(pass, result);
 		User user = findUserFromToken(request);
 		String username = user.getUsername();
 		
@@ -189,5 +205,21 @@ public class AccountController{
 		if(token != null)
 		 return user = tokenHandler.parseUserFromToken(token);
 		return null;
+	}
+	
+	/**
+	 * Decrypts the {@link UserModel} params
+	 * 
+	 * @param user
+	 * @throws RSAKeyException 
+	 */
+	private void decryptPasswordChangeModelParams(PasswordChangeModel user) throws RSAKeyException {
+		try {
+			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
+			user.setPasswordMatch(rsaKeyService.decrypt(user.getPasswordMatch()));
+		} catch (RSAKeyException e) {
+			log.error("Error in decrypting the UserModel");
+			throw new RSAKeyException("Email, password or passwordmatch is not valid");
+		}
 	}
 }
