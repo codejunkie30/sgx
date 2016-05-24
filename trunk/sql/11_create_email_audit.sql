@@ -14,8 +14,11 @@ CREATE TABLE [dbo].[email_audit](
 	[watchlist_name] [nvarchar](50) NULL,
 	[subject] [nvarchar](50) NOT NULL,
 	[status] [nvarchar](50) NOT NULL,
-	[reason] [nvarchar](50) NULL
+	[reason] [nvarchar](200) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+alter table [dbo].[email_audit] 
+alter column reason nvarchar(200) null
 
 GO
 INSERT [dbo].[email_audit] ([id], [user_id], [email], [created_dt], [body], [watchlist_name], [subject], [status], [reason]) VALUES (1, 1, N'someone@wmsi.com', CAST(N'2015-09-03 13:41:09.913' AS DateTime), NULL, NULL, N'SGX StockFacts Premium Alert', N'success', NULL)
