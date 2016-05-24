@@ -30,7 +30,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 //		        if( !lowPrice[idx] || !openPrice[idx] || !highPrice[idx]){
 //		          return;
 //		        }
-				self.chartData[key] = {}
+		        self.chartData[key] = {}
 				self.chartData[key].close = point.y;
 				 if( lowPrice[idx])
 					 self.chartData[key].low = lowPrice[idx].y;
@@ -97,27 +97,71 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    	}
 		    	
 				var openVal = Highcharts.numberFormat(point.open,3);
+				if(parseFloat(openVal) == parseFloat("0.000"))
+				{
+					openVal = "-"
+				}
+				else
+				{
+					openVal = PAGE.currentFormats.chart.format + openVal.replace(/\.?0+$/,'')
+				}
+				
 				var closeVal = Highcharts.numberFormat(point.close,3);
+				if(parseFloat(closeVal) == parseFloat("0.000"))
+				{
+					closeVal="-";
+				}
+				else
+				{
+					closeVal=PAGE.currentFormats.chart.format + closeVal.replace(/\.?0+$/,'');
+				}
+				
 				var lowVal = Highcharts.numberFormat(point.low,3);
+				if(parseFloat(lowVal) == parseFloat("0.000"))
+				{
+					lowVal="-";
+				}
+				else
+				{
+					lowVal=PAGE.currentFormats.chart.format + lowVal.replace(/\.?0+$/,'');
+				}
+				
 				var highVal = Highcharts.numberFormat(point.high,3);
+				if(parseFloat(highVal) == parseFloat("0.000"))
+				{
+					highVal="-";
+				}
+				else
+				{
+					highVal=PAGE.currentFormats.chart.format + highVal.replace(/\.?0+$/,'');
+				}
 				
 		    	// is a trading day
 		    	ret += "<span class='chart-mouseover'>";
 		    	ret += "<br />";
-		    	ret += "<span>Open</span>: " + PAGE.currentFormats.chart.format + openVal.replace(/\.?0+$/,'');
+		    	ret += "<span>Open</span>: " + openVal;
 		    	ret += "<br />";
-		    	ret += "<span>Close</span>: " + PAGE.currentFormats.chart.format + closeVal.replace(/\.?0+$/,'');
+		    	ret += "<span>Close</span>: " + closeVal;
 		    	ret += "<br />";
-		    	ret += "<span>Low</span>: " + PAGE.currentFormats.chart.format +lowVal.replace(/\.?0+$/,'');
+		    	ret += "<span>Low</span>: " + lowVal;
 		    	ret += "<br />";
-		    	ret += "<span>High</span>: " + PAGE.currentFormats.chart.format + highVal.replace(/\.?0+$/,'');
+		    	ret += "<span>High</span>: " + highVal;
 		    	ret += "<br />";
 
 		    	// no volume for this period
 		    	if (this.points.length <= 1) return ret;
 
 		    	// has volume too
-		    	ret += "<span>Volume</span>: " + roundMe(this.points[1].y, 3) + " mm";
+		    	var vol = roundMe(this.points[1].y, 3);
+		    	if(parseFloat(vol) == parseFloat("0.000"))
+		    	{
+		    		vol = "-";
+		    	}
+		    	else
+		    	{
+		    		vol = vol+" mm";
+		    	}
+		    	ret += "<span>Volume</span>: " + vol;
 		    	ret += "</span>";
 		    	
 		    	return ret;

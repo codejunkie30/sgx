@@ -118,6 +118,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		}
 			
 			var fmt = field.format == "millions" ? "number1" : field.format;
+			var zeroValue =  this.parent.formatZeroValue(fmt, val);
+			if(zeroValue=='-')return zeroValue;
 			val = this.parent.getFormatted(fmt, val);
     		
     		return val;
