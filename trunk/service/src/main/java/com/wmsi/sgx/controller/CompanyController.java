@@ -27,6 +27,7 @@ import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.Financial;
 import com.wmsi.sgx.model.Financials;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
+import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
@@ -274,13 +275,127 @@ public class CompanyController{
 	public PriceHistory getHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
 		PriceHistory ret = new PriceHistory();
-		ret.setPrice(companyService.loadPriceHistory(search.getId(),currency));
-		ret.setHighPrice(companyService.loadHighPriceHistory(search.getId(),currency));
-		ret.setLowPrice(companyService.loadLowPriceHistory(search.getId(),currency));
-		ret.setOpenPrice(companyService.loadOpenPriceHistory(search.getId(),currency));
-		ret.setVolume(companyService.loadVolumeHistory(search.getId(),currency));
+		
+		List<HistoricalValue> price = companyService.loadPriceHistory(search.getId(),currency);
+		List<HistoricalValue> highPrice= companyService.loadHighPriceHistory(search.getId(),currency);
+		List<HistoricalValue> lowPrice = companyService.loadLowPriceHistory(search.getId(),currency);
+		List<HistoricalValue> openPrice = companyService.loadOpenPriceHistory(search.getId(),currency);
+		List<HistoricalValue> volume = companyService.loadVolumeHistory(search.getId(),currency);
+		
+		setData(price,highPrice,lowPrice,openPrice,volume);
+		
+		ret.setPrice(price);
+		ret.setHighPrice(highPrice);
+		ret.setLowPrice(lowPrice);
+		ret.setOpenPrice(openPrice);
+		ret.setVolume(volume);
 		return ret;
 	}
+	
+	/***
+	 * Method to add missed data for a particular date.
+	 * @param price
+	 * @param highPrice
+	 * @param lowPrice
+	 * @param openPrice
+	 * @param volume
+	 */
+	/***
+	 * Method to add missed data for a particular date.
+	 * @param price
+	 * @param highPrice
+	 * @param lowPrice
+	 * @param openPrice
+	 * @param volume
+	 */
+  private void setData( List<HistoricalValue> price,
+                        List<HistoricalValue> highPrice,
+                        List<HistoricalValue> lowPrice,
+                        List<HistoricalValue> openPrice,
+                        List<HistoricalValue> volume )
+  {
+    
+    int priceListSize = price.size();
+    int highPriceListSize = highPrice.size();
+    int lowPriceListSize = lowPrice.size();
+    int openPriceListSize = openPrice.size();
+    int volumeListSize = volume.size();
+    if( priceListSize != highPriceListSize || priceListSize != lowPriceListSize
+        || priceListSize != openPriceListSize
+        || priceListSize != volumeListSize )
+    {
+      if( priceListSize != highPriceListSize )
+      {
+        for( int i = 0; i < price.size(); i++ )
+        {
+          HistoricalValue priceH = price.get( i );
+          HistoricalValue priceHP = highPrice.get( i );
+          HistoricalValue temp = null;
+          if( !priceH.getDate().equals( priceHP.getDate() ) )
+          {
+            temp = new HistoricalValue();
+            temp.setDate( priceH.getDate() );
+            temp.setTickerCode( priceH.getTickerCode() );
+            temp.setValue( 0.0 );
+            highPrice.add( i, temp );
+          }
+        }
+      }
+      else if( priceListSize != lowPriceListSize )
+      {
+        for( int i = 0; i < price.size(); i++ )
+        {
+          HistoricalValue priceH = price.get( i );
+          HistoricalValue priceLP = lowPrice.get( i );
+          HistoricalValue temp = null;
+          if( !priceH.getDate().equals( priceLP.getDate() ) )
+          {
+            temp = new HistoricalValue();
+            temp.setDate( priceH.getDate() );
+            temp.setTickerCode( priceH.getTickerCode() );
+            temp.setValue( 0.0 );
+            lowPrice.add( i, temp );
+          }
+          
+        }
+      }
+      else if( priceListSize != openPriceListSize )
+      {
+        for( int i = 0; i < price.size(); i++ )
+        {
+          HistoricalValue priceH = price.get( i );
+          HistoricalValue priceOP = openPrice.get( i );
+          HistoricalValue temp = null;
+          if( !priceH.getDate().equals( priceOP.getDate() ) )
+          {
+            temp = new HistoricalValue();
+            temp.setDate( priceH.getDate() );
+            temp.setTickerCode( priceH.getTickerCode() );
+            temp.setValue( 0.0 );
+            openPrice.add( i, temp );
+          }
+        }
+      }
+      else if( priceListSize != volumeListSize )
+      {
+        for( int i = 0; i < price.size(); i++ )
+        {
+          HistoricalValue priceH = price.get( i );
+          HistoricalValue volumev = volume.get( i );
+          HistoricalValue temp = null;
+          if( !priceH.getDate().equals( volumev.getDate() ) )
+          {
+            temp = new HistoricalValue();
+            temp.setDate( priceH.getDate() );
+            temp.setTickerCode( priceH.getTickerCode() );
+            temp.setValue( 0.0 );
+            volume.add( i, temp );
+          }
+        }
+      }
+      
+    }
+  }
 	
 	@RequestMapping("company/dividendHistory")
 	public DividendHistory getDividendHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
