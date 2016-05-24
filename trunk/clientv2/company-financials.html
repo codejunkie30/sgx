@@ -84,7 +84,7 @@
 								<input type="checkbox">
 							</td>
 							<!-- ko foreach : $root.dataPoints -->
-								<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', format: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
+								<td data-bind="text: $data.hasOwnProperty($parent.property) && $data[$parent.property] != null? $data[$parent.property] : '-', formatNonZeroValue: 'number', attr: { 'data-value': $data.hasOwnProperty($parent.property) ? $data[$parent.property] : null, 'data-name': $parent.property }">-</td>
 							<!-- /ko -->
 							<td class="uncheck" data-bind="visible: $root.series().length > 0, click: function(data, event) { $root.handleClick($root, data, event); }">
 								<span data-bind="visible: $root.canUncheck($root, property)">[UNCHART]</span>
