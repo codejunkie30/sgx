@@ -21,7 +21,7 @@ public interface WatchlistEmailService {
 	void getEmailsForUser(User usr) throws QuanthouseServiceException,
 			CompanyServiceException, SearchServiceException, MessagingException;
 	
-	 List<AlertOption> parseWatchlist(WatchlistModel watchlist, Account acct) 
+	 List<?> parseWatchlist(WatchlistModel watchlist, Account acct) 
 			 throws QuanthouseServiceException, CompanyServiceException, SearchServiceException;
 
 }
