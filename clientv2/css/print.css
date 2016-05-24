@@ -132,9 +132,9 @@ table.panel td.property, .general-info td.property, table.panel td.note, .genera
 .gti-link { padding: 10px; }
 .gti-link a { font-weight: bold; color: #0e236b; text-decoration: none; }
 
-table.footer { background-color: #eee; width: 100%; }
-table.footer td { padding: 10px; }
-table.footer * { color: #333; font-family: Arial,Helvetica,sans-serif; font-size: 13px; }
+table.footer { background-color: #eee; width: 100%;}
+table.footer td { padding: 8px; }
+table.footer * { color: #333; font-family: Arial,Helvetica,sans-serif; font-size: 8.5px; }
 
 .change.negative {
   color: red;
