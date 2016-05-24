@@ -88,12 +88,10 @@ public class WatchlistEmailServiceHelper implements Job{
 								
 							}
 						} else {
-							String strMsg = new String();
 							for (Object o : options) {
-								strMsg += o.toString() + "\n";
+								insertEmailTransaction(acc.getUser(), watchlist, content,
+										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, o.toString());
 							}
-							insertEmailTransaction(acc.getUser(), watchlist, content,
-									IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, strMsg);
 						}
 					}
 			}
