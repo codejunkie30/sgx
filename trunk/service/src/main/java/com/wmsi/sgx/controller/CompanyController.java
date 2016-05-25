@@ -341,7 +341,7 @@ public class CompanyController{
           }
         }
       }
-      else if( priceListSize != lowPriceListSize )
+      if( priceListSize != lowPriceListSize )
       {
         for( int i = 0; i < price.size(); i++ )
         {
@@ -359,7 +359,7 @@ public class CompanyController{
           
         }
       }
-      else if( priceListSize != openPriceListSize )
+      if( priceListSize != openPriceListSize )
       {
         for( int i = 0; i < price.size(); i++ )
         {
@@ -376,7 +376,7 @@ public class CompanyController{
           }
         }
       }
-      else if( priceListSize != volumeListSize )
+      if( priceListSize != volumeListSize )
       {
         for( int i = 0; i < price.size(); i++ )
         {
