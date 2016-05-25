@@ -166,7 +166,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 						 
 						 var series = '<span style="font-size:11px">'+this.key+'</span>';
 						 series += '<br />';
-						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
+						 series +=_round(this.y,3)==0?'<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + "-" +'</span>': '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
 						  return series;
 					}
 				},
