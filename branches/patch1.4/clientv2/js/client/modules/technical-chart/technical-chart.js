@@ -324,7 +324,12 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
           $.each(this.points, function() {
 			var currencyType;
 			(this.series.yAxis.axisTitle.textStr == 'PRICE') ? currencyType = PAGE.currentFormats.chart.format : currencyType = '';
-            tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>' + currencyType +_round(this.point.y, 3)+'</b><br/>'
+	    if(_round(this.point.y, 3)==0){
+		tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>' + "-"+'</b><br/>'
+	    }else{
+		tp += '<span style="color:'+this.series.color+'">\u25CF</span> '+this.series.name+': <b>' + currencyType +_round(this.point.y, 3)+'</b><br/>'
+	    }
+            
           });
 
           return tp;
