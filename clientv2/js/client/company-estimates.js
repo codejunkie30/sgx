@@ -330,7 +330,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 						 
 						 var series = '<span style="font-size:11px">'+this.key+'</span>';
 						 series += '<br />';
-						 series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
+						 if(currencyFormat + _round(this.y,3)==0){
+						     series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + "-" +'</span>';
+						 }else{
+						     series += '<span style="font-size: 16px; font-weight: bold; color:'+ this.series.color +'">&bull; </span> <span style="font-size: 12px;">'+this.series.name+': </span><span style="font-size: 12px; font-weight: bold; ">' + currencyFormat + _round(this.y,3) + percentFormat +'</span>';
+						 }
+						 
 						  return series;
 					}
 				},
