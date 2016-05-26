@@ -487,7 +487,12 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
         formatter: function() {
           var tp = '<span style="font-size:10px">'+this.x+'</span><br/>';
           $.each(this.points, function() {
-            tp += '<span style="font-weight: bold; color:'+ this.series.color +'">\u25CF</span> <span style="font-size: 12px;"> '+this.series.name+': </span><span style="font-size: 12px; font-weight:bold">' + PAGE.currentFormats.chart.format + _round(this.y, 3) +'</span><br />';
+            if(_round(this.point.y, 3)==0){
+        	tp += '<span style="font-weight: bold; color:'+ this.series.color +'">\u25CF</span> <span style="font-size: 12px;"> '+this.series.name+': </span><span style="font-size: 12px; font-weight:bold">' + "-" +'</span><br />';
+            }
+            else{
+        	tp += '<span style="font-weight: bold; color:'+ this.series.color +'">\u25CF</span> <span style="font-size: 12px;"> '+this.series.name+': </span><span style="font-size: 12px; font-weight:bold">' + PAGE.currentFormats.chart.format + _round(this.y, 3) +'</span><br />';
+            }
 
           });
 
