@@ -94,6 +94,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		MutablePair<List<AlertOption>, List<String>> pair = new MutablePair<List<AlertOption>, List <String>>();
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
 		List<AlertOption> alertList = new ArrayList<AlertOption>();
+		//below variable is used for auditing the email related errors
 		List <String>errorList = new ArrayList<String>();
 		map.putAll(watchlist.getOptionList());
 		
@@ -127,14 +128,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
 				log.info(" Watch list company close dates info  \n:  Current Date :- " + comp.getPreviousCloseDate()
 				+ " \t Previous Close Date :- " + previousComp.getPreviousCloseDate());
-				if(comp.getPreviousCloseDate()==null)
-				{
-					log.info("comp.getPreviousCloseDate() is null");
-				}
-				if(previousComp.getPreviousCloseDate()==null)
-				{
-					log.info("previousComp.getPreviousCloseDate() is null");
-				}
 				if ((comp.getPreviousCloseDate() != null && previousComp.getPreviousCloseDate() != null)
 						&& !comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())) {
 					noUpdatesFlag = false;
@@ -145,7 +138,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				}
 				
 			}catch(CompanyServiceException e){
-				log.info(" Company Not found " + comp);
 				noUpdatesFlag = true;
 				continue;
 			}
@@ -298,7 +290,11 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 		}
 		
-		if(noUpdatesFlag||errorList.size()>0){
+		//TODO Refactor to a method?
+		if(errorList.size()>0){
+			pair.setRight(errorList);
+			pair.setLeft(null);
+		}else if(noUpdatesFlag){
 			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
 			pair.setRight(errorList);
 			pair.setLeft(null);
@@ -309,6 +305,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		return pair;
 		}	
 	
+
 	public Estimate getEstimate(List<Estimate> estimate){
 		Estimate ret = null;
 		if(estimate != null)

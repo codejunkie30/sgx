@@ -66,7 +66,6 @@ public class WatchlistEmailServiceHelper implements Job{
 						MutablePair<List<AlertOption>, List<String>> options =null;
 						try {
 							options = watchlistEmailService.parseWatchlist(watchlist, acc);
-							log.info(" Options Right values are "+ options.getRight() + "\t Options left values are "+ options.getLeft() );
 						} catch (QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 							log.error("exception while parsing watchlist");
 						}
@@ -91,7 +90,7 @@ public class WatchlistEmailServiceHelper implements Job{
 								}
 							}else{
 								insertEmailTransaction(acc.getUser(), watchlist, content,
-										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, IEmailAuditMessages.UNKNOWN);
+										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
 							}
 						}
 					}
