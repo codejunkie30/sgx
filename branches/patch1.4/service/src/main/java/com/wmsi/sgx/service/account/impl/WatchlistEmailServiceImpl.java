@@ -12,6 +12,9 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +35,6 @@ import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
 import com.wmsi.sgx.service.account.WatchlistEmailService;
 import com.wmsi.sgx.service.account.WatchlistService;
-import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 import com.wmsi.sgx.util.DateUtil;
 import com.wmsi.sgx.util.DefaultHashMap;
@@ -56,8 +58,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	@Autowired
 	private QuanthouseService quanthouseService;
 	
-	@Autowired
-	private SearchService estimatesSerach;
 	
 	@Autowired
 	private KeyDevsMap keyDevsMap;
@@ -65,6 +65,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	//Alerts does not have currency conversion feature default currency is used here
 	public String defaultCurrency="sgd";
 	
+	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceImpl.class);
 	
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
@@ -74,10 +75,13 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				List<WatchlistModel> list = watchlistService.getWatchlist(usr);
 				if (list.size() > 0)
 					for (WatchlistModel watchlist : list) {
-						List options = parseWatchlist(watchlist, acct);
-						if (watchlist.getCompanies().size() > 0 && options.size() > 0 && options instanceof AlertOption)
-							senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options,
+						MutablePair<List<AlertOption>, List<String>> options = parseWatchlist(watchlist, acct);
+						if (watchlist.getCompanies().size() > 0 && options.getLeft()!=null){
+							List<AlertOption> alertList = options.getLeft();
+							if(alertList.size()>0)
+								senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options.getLeft(),
 									watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
+						}
 					}
 					break;
 			}
@@ -85,7 +89,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	@Override
-	public List<?> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
+	public MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
+		boolean noUpdatesFlag = false;
+		MutablePair<List<AlertOption>, List<String>> pair = new MutablePair<List<AlertOption>, List <String>>();
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
 		List<AlertOption> alertList = new ArrayList<AlertOption>();
 		List <String>errorList = new ArrayList<String>();
@@ -119,13 +125,19 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				comp = companyService.getCompanyByIdAndIndex(company,"sgd_premium");
 				//previousComp = companyService.getPreviousById(company);
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
+				log.info(" Watch list company close dates info  \n:  Current Date : " + comp.getPreviousCloseDate()
+				+ " \t Previous Close Date : " + previousComp.getPreviousCloseDate());
 				if(comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())){
-					errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
-					return errorList;
+					noUpdatesFlag = true;
+					continue;
+				}else{
+					noUpdatesFlag = false;
 				}
 				
 			}catch(CompanyServiceException e){
-				break;
+				log.info(" Company Not found " + comp);
+				noUpdatesFlag = true;
+				continue;
 			}
 			
 			String companyName = getCompanyName(company);
@@ -156,9 +168,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("pcTradingVolume")!=null&&map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
-				if(volume == 0.0 && comp.getVolume() != null)
-					volumeOptions.put(company, companyName);
-				else if(volume > 0.0){
+				if(volume > 0.0 && comp.getVolume() != null){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
 					if(Math.abs(Double.parseDouble(verifyStringAsNumber(map.get("pcTradingVolumeValue").toString()))) < priceChange){
 						volumeOptions.put(company, companyName);
@@ -278,19 +288,22 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			}
 		}
 		
-		if(alertList.size()>0){
-			return alertList;
+		if(noUpdatesFlag||errorList.size()>0){
+			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
+			pair.setRight(errorList);
+			pair.setLeft(null);
 		}else{
-			errorList.add(IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
-			return errorList;
+			pair.setRight(null);
+			pair.setLeft(alertList);
 		}
-	}	
+		return pair;
+		}	
 	
 	public Estimate getEstimate(List<Estimate> estimate){
 		Estimate ret = null;
 		if(estimate != null)
 			for(Estimate est : estimate){
-				if(est.getPeriod().equals(""))
+				if(est.getPeriod()!=null&&est.getPeriod().equals(""))
 					ret = est;
 			}		
 		

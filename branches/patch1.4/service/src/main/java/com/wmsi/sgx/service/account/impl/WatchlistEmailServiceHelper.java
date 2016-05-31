@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -11,7 +12,6 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Account;
@@ -63,18 +63,18 @@ public class WatchlistEmailServiceHelper implements Job{
 				List<WatchlistModel> list =	watchlistService.getWatchlist(acc.getUser());
 				if(list.size() > 0)
 					for(WatchlistModel watchlist : list){
-						List<?> options=null;
+						MutablePair<List<AlertOption>, List<String>> options =null;
 						try {
 							options = watchlistEmailService.parseWatchlist(watchlist, acc);
 						} catch (QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 							log.error("exception while parsing watchlist");
 						}
-						if(watchlist.getCompanies().size() > 0 && options.size() > 0 && options instanceof AlertOption){
+						if(watchlist.getCompanies().size() > 0 && options.getLeft()!=null && options.getLeft().size() > 0 ){
 							try {
+								List<AlertOption> options2 =  options.getLeft();
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
-										options.size() + "\t "+ watchlist.getCompanies().size() );
+										options2.size() + "\t "+ watchlist.getCompanies().size() );
 								
-								List<AlertOption> options2 = (List<AlertOption>) options;
 								content = senderService.send(acc.getUser().getUsername(), IEmailAuditMessages.EMAIL_SUBJECT, options2,
 											watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
 								
@@ -88,7 +88,7 @@ public class WatchlistEmailServiceHelper implements Job{
 								
 							}
 						} else {
-							for (Object o : options) {
+							for (Object o : options.getRight()) {
 								insertEmailTransaction(acc.getUser(), watchlist, content,
 										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, o.toString());
 							}
