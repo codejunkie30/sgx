@@ -76,7 +76,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				if (list.size() > 0)
 					for (WatchlistModel watchlist : list) {
 						MutablePair<List<AlertOption>, List<String>> options = parseWatchlist(watchlist, acct);
-						if (watchlist.getCompanies().size() > 0 && options.getLeft()!=null){
+						if (options.getLeft()!=null&&watchlist.getCompanies().size() > 0  ){
 							List<AlertOption> alertList = options.getLeft();
 							if(alertList.size()>0)
 								senderService.send(acct.getUser().getUsername(), "SGX StockFacts Premium Alert", options.getLeft(),
@@ -127,11 +127,13 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
 				log.info(" Watch list company close dates info  \n:  Current Date : " + comp.getPreviousCloseDate()
 				+ " \t Previous Close Date : " + previousComp.getPreviousCloseDate());
-				if(comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())){
+				if ((comp.getPreviousCloseDate() != null && previousComp.getPreviousCloseDate() != null)
+						&& !comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())) {
+					noUpdatesFlag = false;
+				}else{
 					noUpdatesFlag = true;
 					continue;
-				}else{
-					noUpdatesFlag = false;
+					
 				}
 				
 			}catch(CompanyServiceException e){

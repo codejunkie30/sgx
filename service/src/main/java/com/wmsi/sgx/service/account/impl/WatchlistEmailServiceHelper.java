@@ -74,18 +74,13 @@ public class WatchlistEmailServiceHelper implements Job{
 								List<AlertOption> options2 =  options.getLeft();
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
 										options2.size() + "\t "+ watchlist.getCompanies().size() );
-								
 								content = senderService.send(acc.getUser().getUsername(), IEmailAuditMessages.EMAIL_SUBJECT, options2,
 											watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
-								
 								insertEmailTransaction(acc.getUser(), watchlist, content, IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_SUCCESS, IEmailAuditMessages.EMAIL_SUCCESS);
-								
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.info("exception while sending watchList email to "+acc.getUser().getUsername());
 								log.info("Exception in email notification : ",e.getMessage() + "\n Details of Root cause " + e);
-								
 								insertEmailTransaction(acc.getUser(), watchlist, content, IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, e.getMessage());
-								
 							}
 						} else {
 							if(options.getRight()!=null){
@@ -93,9 +88,9 @@ public class WatchlistEmailServiceHelper implements Job{
 									insertEmailTransaction(acc.getUser(), watchlist, content,
 											IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, o.toString());
 								}
-									
 							}else{
-								log.info("Options pair not set "+options.getLeft() +"\t"+options.getRight() +"\t" + acc.getUser() +"\t"+watchlist.getCompanies());
+								insertEmailTransaction(acc.getUser(), watchlist, content,
+										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, IEmailAuditMessages.UNKNOWN);
 							}
 						}
 					}
