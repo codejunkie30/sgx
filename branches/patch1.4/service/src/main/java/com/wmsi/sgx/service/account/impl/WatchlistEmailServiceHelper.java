@@ -66,6 +66,7 @@ public class WatchlistEmailServiceHelper implements Job{
 						MutablePair<List<AlertOption>, List<String>> options =null;
 						try {
 							options = watchlistEmailService.parseWatchlist(watchlist, acc);
+							log.info(" Options Right values are "+ options.getRight() + "\t Options left values are "+ options.getLeft() );
 						} catch (QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 							log.error("exception while parsing watchlist");
 						}
