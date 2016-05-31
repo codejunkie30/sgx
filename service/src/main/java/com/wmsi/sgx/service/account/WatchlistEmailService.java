@@ -1,9 +1,10 @@
 package com.wmsi.sgx.service.account;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.mail.MessagingException;
+
+import org.apache.commons.lang3.tuple.MutablePair;
 
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.User;
@@ -21,7 +22,7 @@ public interface WatchlistEmailService {
 	void getEmailsForUser(User usr) throws QuanthouseServiceException,
 			CompanyServiceException, SearchServiceException, MessagingException;
 	
-	 List<?> parseWatchlist(WatchlistModel watchlist, Account acct) 
+	MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) 
 			 throws QuanthouseServiceException, CompanyServiceException, SearchServiceException;
 
 }

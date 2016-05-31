@@ -60,7 +60,7 @@ public class WatchlistSenderServiceImpl implements WatchlistSenderService{
         final String htmlContent = templateEngine.process(file, ctx);        
         message.setText(htmlContent, true /* isHtml */);	
 		if (auditAndSendEmail) {
-			mailSender.send(mimeMessage);
+			//mailSender.send(mimeMessage);
 
 			log.info("Watchlist Email sent to: {} for watchList: {}", to, watchlist.getName());
 			log.info(" Email information \n " + ctx.getVariables().get("watchlistName"));
