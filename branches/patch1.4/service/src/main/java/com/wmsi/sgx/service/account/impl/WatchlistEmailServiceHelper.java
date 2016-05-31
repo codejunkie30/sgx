@@ -88,9 +88,14 @@ public class WatchlistEmailServiceHelper implements Job{
 								
 							}
 						} else {
-							for (Object o : options.getRight()) {
-								insertEmailTransaction(acc.getUser(), watchlist, content,
-										IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, o.toString());
+							if(options.getRight()!=null){
+								for (Object o : options.getRight()) {
+									insertEmailTransaction(acc.getUser(), watchlist, content,
+											IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED, o.toString());
+								}
+									
+							}else{
+								log.info("Options pair not set "+options.getLeft() +"\t"+options.getRight() +"\t" + acc.getUser() +"\t"+watchlist.getCompanies());
 							}
 						}
 					}
