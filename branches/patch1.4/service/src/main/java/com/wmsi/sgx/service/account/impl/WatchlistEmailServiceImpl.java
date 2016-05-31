@@ -125,8 +125,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				comp = companyService.getCompanyByIdAndIndex(company,"sgd_premium");
 				//previousComp = companyService.getPreviousById(company);
 				previousComp = companyService.getCompanyByIdAndIndex(company, "sgd_premium_previous");
-				log.info(" Watch list company close dates info  \n:  Current Date : " + comp.getPreviousCloseDate()
-				+ " \t Previous Close Date : " + previousComp.getPreviousCloseDate());
+				log.info(" Watch list company close dates info  \n:  Current Date :- " + comp.getPreviousCloseDate()
+				+ " \t Previous Close Date :- " + previousComp.getPreviousCloseDate());
+				if(comp.getPreviousCloseDate()==null)
+				{
+					log.info("comp.getPreviousCloseDate() is null");
+				}
+				if(previousComp.getPreviousCloseDate()==null)
+				{
+					log.info("previousComp.getPreviousCloseDate() is null");
+				}
 				if ((comp.getPreviousCloseDate() != null && previousComp.getPreviousCloseDate() != null)
 						&& !comp.getPreviousCloseDate().equals(previousComp.getPreviousCloseDate())) {
 					noUpdatesFlag = false;
