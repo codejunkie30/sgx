@@ -10,7 +10,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 			PREMIUM.price(displayMessage.premium.price);
 			PREMIUM.content(displayMessage.premium.content);
 			
-			PAGE.trackPage("SGX Premium");
+			PAGE.trackPage("SGX Premium Promo - Learn More");
 			
     		// finish other page loading
     		ko.applyBindings(this, $("body")[0]);
