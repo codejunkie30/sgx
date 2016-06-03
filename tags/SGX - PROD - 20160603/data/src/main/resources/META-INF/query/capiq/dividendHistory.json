@@ -1,0 +1,6 @@
+{"inputRequests": [ 
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_XDIV_DATE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}},
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_DIV_PAYMENT_DATE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}},
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_DIV_AMOUNT","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}},
+	{"function":"GDSHE","identifier":"$id$","mnemonic":"IQ_DIV_PAYMENT_TYPE","properties":{"STARTDATE":"$startDate$", "ENDDATE":"$endDate$", "FREQUENCY":"D", "CURRENCYID":"SGD"}}
+]}

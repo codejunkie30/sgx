@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-3.0.xsd
+		http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int:chain id="indexerChain3" input-channel="indexRequestChannel3" output-channel="indexChannel3" >
+		
+		<int:header-enricher>
+			<int:header name="indexName" expression="'${elasticsearch.index.myr.prefix}' + headers.jobId" overwrite="true" />
+			<int:header name="indexDate" expression="headers.jobDate" />
+			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
+		</int:header-enricher>
+		<int:service-activator ref="indexerService" method="createIndex" />
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
+		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
+		<int:service-activator ref="indexerService" method="flush" />
+	</int:chain>
+
+	<int:channel id="indexChannel3" />
+	<int:channel id="loggingChannel3" />
+	<int:channel id="errorLoggerChannel3"/>	
+	<int:channel id="failedLogger3"/>
+	<int:publish-subscribe-channel id="aggregationCompleteChannel3"/>
+		
+	
+	
+	<!-- Split on tickers for multi-threading -->
+	<int:splitter id="tickerSplitter3" input-channel="indexChannel3"
+	output-channel="indexTickerChannel3" ref="indexBuilderService" method="readTickers" />
+	
+		<!-- Load Data -->
+ 	<int:chain 
+ 		id="indexDataChain3"
+		input-channel="indexTickerChannel3"
+		output-channel="tickerAggregatorChannel3">
+
+		<int:header-enricher>
+			<int:error-channel value="indexErrorChannel3"/>
+		</int:header-enricher>	
+		
+		<int:service-activator ref="indexBuilderService" method="index">
+			<int:request-handler-advice-chain >
+				<ref bean="retryAdvice3"/>
+			</int:request-handler-advice-chain>
+		</int:service-activator>
+	</int:chain>
+	
+	
+	<!-- Indexing Error Handling -->
+	<int:chain 
+		id="indexErrorHandlingChain3"
+		input-channel="indexErrorChannel3" 
+		output-channel="tickerAggregatorChannel3">		
+			
+			<int:transformer expression="payload.failedMessage"/>
+						
+			<int:enricher>
+				<int:property name="indexed" value="false"/>
+			</int:enricher>							
+	</int:chain>
+	
+	<int:aggregator id="tickerAggregtor3" 
+		input-channel="tickerAggregatorChannel3"
+	 	output-channel="aggregationCompleteChannel3"
+		correlation-strategy-expression="headers.jobId"
+		release-strategy-expression="#this.size() == #this[0].headers.sequenceSize">
+	</int:aggregator>
+	
+	<int:router	input-channel="aggregationCompleteChannel3" 
+		ref="indexBuilderService"
+		method="isJobSuccessful">
+				
+    	<int:mapping value="true" channel="indexRequestChannel4"/>
+    	<int:mapping value="false" channel="failedJobChannel3"/>
+    	    	
+	</int:router>
+	
+	<!--  Job Completed successfully, create index and remove old indexes -->
+	<int:chain input-channel="createAlias3" output-channel="loggingChannel3">
+		<int:service-activator ref="indexerService"
+			method="createIndexAlias" />
+		<int:service-activator ref="indexBuilderService"
+			method="deleteOldIndexes" />
+	</int:chain>
+
+	
+	<int:logging-channel-adapter channel="loggingChannel3" level="INFO" expression=" 'Job Complete ' + payload.toString()" />
+		
+		<!-- Job failed -->
+	<int:header-enricher input-channel="failedJobChannel3" output-channel="failedLogger3">
+		<int:header name="failedJob" value="true"/>
+	</int:header-enricher>	
+		
+	<int:logging-channel-adapter channel="failedLogger3" level="INFO" expression=" 'Job Failed ' + payload.toString()"/>
+	
+	
+	<!-- Channel definitions -->
+	<task:executor id="indexerTaskExecutor3" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
+	<task:executor id="indexerRequestChannelExecutor3" pool-size="1" queue-capacity="1" rejection-policy="DISCARD" />
+
+	<int:channel id="indexRequestChannel3">
+		<int:dispatcher task-executor="indexerRequestChannelExecutor3" />
+	</int:channel>
+	
+	<int:channel id="indexTickerChannel3" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">	
+		<int:dispatcher task-executor="indexerTaskExecutor3" />
+	</int:channel>
+
+	<int:channel id="tickerAggregatorChannel3">
+		<int:interceptors>
+			<int:wire-tap channel="statusLoggingChannel3" />
+		</int:interceptors>
+	</int:channel>
+	
+	<int:channel id="statusLoggingChannel3"/>	
+	<int:logging-channel-adapter channel="statusLoggingChannel3" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
+	
+	<int:channel id="indexErrorChannel3">
+		<int:interceptors>
+			<int:wire-tap channel="errorLoggerChannel3"/>
+		</int:interceptors>
+	</int:channel>
+	
+	<!--  Error Logging -->
+	<int:channel id="errorLoggerChannel3"/>		
+	<int:service-activator input-channel="errorLoggerChannel3" ref="loggerAdapter" method="error"/>
+	<bean id="loggerAdapter1" class="com.wmsi.sgx.logging.integration.IntegrationLoggerAdapter"/>
+	
+	<!-- Retry Handler -->
+	<bean id="retryAdvice3" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
+		<property name="retryTemplate">
+			<bean id="retryTemplate3" class="org.springframework.retry.support.RetryTemplate">	
+				<property name="retryPolicy">
+					<bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+						<property name="maxAttempts" value="4" />
+					</bean>
+				</property>
+				<property name="backOffPolicy">
+					<bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+						<property name="initialInterval" value="1000" />
+						<property name="multiplier" value="5" />
+					</bean>
+				</property>
+			</bean>			
+		</property>
+		<property name="recoveryCallback">
+			<bean
+				class="org.springframework.integration.handler.advice.ErrorMessageSendingRecoverer">
+				<constructor-arg ref="indexErrorChannel3" />
+			</bean>
+		</property>
+	</bean>
+
+
+</beans>

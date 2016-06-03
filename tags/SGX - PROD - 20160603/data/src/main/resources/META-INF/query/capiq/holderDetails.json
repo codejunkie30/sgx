@@ -1,0 +1,5 @@
+{"inputRequests": [
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_NAME"},
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_SHARES"},
+{"function":"GDSHE", "identifier":"$id$","mnemonic":"IQ_HOLDER_PERCENT"}
+]}

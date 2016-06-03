@@ -1,0 +1,23 @@
+<div class="pchange-container ll-skin-latoja">
+
+	<h4>Percent Change <span>(up to one year)</span></h4>
+	
+	<div>
+	
+		<span class="column">
+			<strong>Start:</strong>
+			<div id="min" class="picker" data-config='{ "minDate": "-1y", "maxDate": "-2d", "defaultDate": "-1y", "numberOfMonths": 1 }'></div>  
+		</span>
+	
+		<span class="column">
+			<strong>End:</strong>
+			<div id="max" class="picker" data-config='{ "minDate": "-1y + 1d", "maxDate": "-1d", "defaultDate": "-1d", "numberOfMonths": 1 }'></div>  
+		</span>
+
+	</div>
+	
+	<div style="white-space:nowrap">
+		<strong>Percent Change:</strong> <input data-bind="value: val"  />%
+	</div>
+
+</div>

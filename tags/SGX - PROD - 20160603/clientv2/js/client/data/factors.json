@@ -1,0 +1,14 @@
+{
+
+	"factors": [
+		{ "id": "valuation", "name": "Valuation", "minLabel": "Under", "maxLabel": "Over" },
+		{ "id": "analystExpectations", "name": "Analyst Expectations" },
+		{ "id": "capitalEfficiency", "name": "Capital Efficiency" },
+		{ "id": "priceMomentum", "name": "Price Momentum" },
+		{ "id": "earningsQuality", "name": "Earnings Quality" },
+		{ "id": "volatility", "name": "Volatility" },
+		{ "id": "size", "name": "Size", "minLabel": "Small", "maxLabel": "Large" },
+		{ "id": "historicalGrowth", "name": "Growth" }
+	]
+
+}
