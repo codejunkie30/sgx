@@ -343,7 +343,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-hkd": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in HK$ mm", decimals: 1, format: "HK$ $VALUE mm" },
+			millions: { header: "in HK$ mm", decimals: 2, format: "HK$ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in HK$", decimals: 3, format: "HK$ $VALUE" },
 			cents: { header: "in HK$", decimals: 3, format: "HK$ $VALUE" },
@@ -355,7 +355,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-idr": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in Rp mm", decimals: 1, format: "Rp $VALUE mm" },
+			millions: { header: "in Rp mm", decimals: 2, format: "Rp $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in Rp", decimals: 3, format: "Rp $VALUE" },
 			cents: { header: "in Rp", decimals: 3, format: "Rp $VALUE" },
@@ -367,7 +367,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-myr": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in RM mm", decimals: 1, format: "RM $VALUE mm" },
+			millions: { header: "in RM mm", decimals: 2, format: "RM $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in RM", decimals: 3, format: "RM $VALUE" },
 			cents: { header: "in RM", decimals: 3, format: "RM $VALUE" },
@@ -379,7 +379,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-php": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in ₱ mm", decimals: 1, format: "₱ $VALUE mm" },
+			millions: { header: "in ₱ mm", decimals: 2, format: "₱ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
 			cents: { header: "in ₱", decimals: 3, format: "₱ $VALUE" },
@@ -391,7 +391,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-thb": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in ฿ mm", decimals: 1, format: "฿ $VALUE mm" },
+			millions: { header: "in ฿ mm", decimals: 2, format: "฿ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in ฿", decimals: 3, format: "฿ $VALUE" },
 			cents: { header: "in ฿", decimals: 3, format: "฿ $VALUE" },
@@ -403,7 +403,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-twd": {
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in NT$ mm", decimals: 1, format: "NT$ $VALUE mm" },
+			millions: { header: "in NT$ mm", decimals: 2, format: "NT$ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in NT$", decimals: 3, format: "NT$ $VALUE" },
 			cents: { header: "in NT$", decimals: 3, format: "NT$ $VALUE" },
@@ -415,7 +415,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		"numberFormats-usd": {	
         	lookup: { header: "" },
         	string: { header: "" },
-			millions: { header: "in US$ mm", decimals: 1, format: "US$ $VALUE mm" },
+			millions: { header: "in US$ mm", decimals: 2, format: "US$ $VALUE mm" },
 			volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
 			dollars: { header: "in US$", decimals: 3, format: "US$ $VALUE" },
 			cents: { header: "in US$", decimals: 3, format: "US$ $VALUE" },
@@ -427,7 +427,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         "numberFormats-sgd": {
         	lookup: { header: "" },
         	string: { header: "" },
-        	millions: { header: "in S$ mm", decimals: 1, format: "S$ $VALUE mm" },
+        	millions: { header: "in S$ mm", decimals: 2, format: "S$ $VALUE mm" },
         	volume: { header: "in mm", decimals: 2, format: "$VALUE mm" },
         	dollars: { header: "in S$", decimals: 3, format: "S$ $VALUE" },
         	cents: { header: "in S$", decimals: 3, format: "S$ $VALUE" },
