@@ -10,5 +10,5 @@ public class IEmailAuditMessages {
 
 	public static final String WATCHLIST_UNAVAILABLE = "Watchlist doesn't contain companies or alert options";
 
-	public static final String NO_UPDATE_AVAILABLE = "No updates to watchlist companies. ";
+	public static final String NO_UPDATE_AVAILABLE = "No updates to watchlist companies.";
 }
