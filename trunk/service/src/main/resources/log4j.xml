@@ -21,21 +21,21 @@
 
 	<!-- Loggers -->
 	<logger name="org.springframework.integration">
-		<level value="error" />
+		<level value="info" />
 	</logger>
 
 	<logger name="com.wmsi.sgx">
-		<level value="error" />
+		<level value="info" />
 	</logger>
 
 	<logger name="org.apache.http.wire">
-		<level value="error"/>
+		<level value="info"/>
 	</logger>
 	
 	<!-- Root Logger -->
 	<root>
 		<priority value="error" />
-		<appender-ref ref="console" />  
+		<appender-ref ref="info" />  
 		<appender-ref ref="file" />
 	</root>
 
