@@ -1,0 +1,51 @@
+
+<table class="table table-condensed table-hover user-display-table">
+	<thead>
+		<tr>
+			<th style="width:4%;">#</th>
+			<th style="width:38%;">Username</th>
+			<th style="width:20%;">Created Date</th>
+			<th style="width:20%;">Expiration Date</th>
+			<th style="width:18%;">User Status</th>
+		</tr>
+	</thead>
+	<tbody data-bind="foreach:users">
+		<tr data-bind="click:$parent.showUserModal.bind($parent, $data, $index)">
+			<td data-bind="text:$parent.getPageDisplay($index, $parent.currentPage())"></td>
+			<td data-bind="text:$data.username"></td>
+			<td data-bind="dateFormat:$data.created_date"></td>
+			<td data-bind="dateFormat:$data.expiration_date"></td>
+			<td data-bind="text:$data.status" class="user-status"></td>
+
+		</tr>
+	</tbody>
+</table>
+
+
+<!-- ko if:paginationArray().length > 1 -->
+
+<nav class="users-pagination">
+  <ul class="pagination">
+    <li >
+      <a href="#" aria-label="Previous" data-bind="click:getPreviousPage">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <!-- ko foreach:paginationArray -->
+    <li data-bind="
+    			css:{active: $parent.currentPage() == $data},
+    			click:$parent.setCurrentPage.bind($parent, $data)">
+    	<a href="#" data-bind="text:$data"></a>
+    </li>
+    <!-- /ko -->
+    <li>
+      <a href="#" aria-label="Next" data-bind="click:getNextPage">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- /ko -->
+
+<modal-component params="data: modalData, adminType: adminType"/></modal-component>
