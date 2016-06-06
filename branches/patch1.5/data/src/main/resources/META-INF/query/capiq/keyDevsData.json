@@ -1,0 +1,11 @@
+{
+	"inputRequests": 
+	[
+		
+		{
+			"function": "GDSP",
+			"identifier": "$id$",
+			"mnemonic": "IQ_KEY_DEV_SOURCE"
+		}
+	]
+}

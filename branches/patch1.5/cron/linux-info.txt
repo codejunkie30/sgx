@@ -1,0 +1,37 @@
+For /etc/tomcat7/tomcat7.conf
+JAVA_OPTS="-Dspring.profiles.active=<PROFILE> -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M -Xms2048m -Xmx2048m"
+
+<PROFILE OPTIONS>
+	prod-us - us servers
+	prod-sing - singapore servers
+	
+	
+Need to upgrade java crypto packages on server
+	sudo unzip UnlimitedJCEPolicyJDK7.zip -d /usr/java/jdk1.7.0_51/jre/lib/security/
+	cd /usr/java/jdk1.7.0_51/jre/lib/security/
+	mv UnlimitedJCEPolicy/* .
+
+Need to drop enets certs on /mnt/sgx-ecomm/
+
+Secure/HttpOnly
+
+	http://support.filecatalyst.com/index.php?/Knowledgebase/Article/View/209/0/securing-session-cookies-in-tomcat-with--httponly-and-securetrueFZ
+
+	context.xml (Context)
+		useHttpOnly="true"
+
+	server.xml (Connector)
+		secure="true"
+		proxyPort="443"
+
+
+	nginx
+
+    	index index.html;
+    	proxy_set_header        X-Real-IP $remote_addr;
+    	proxy_set_header        X-Forwarded-Host $host;
+    	proxy_set_header        X-Forwarded-Server $host;
+    	proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_set_header        Host $http_host;
+    	proxy_pass              http://localhost:8080;
+    	proxy_set_header X-Forwarded-Proto https;

@@ -1,0 +1,254 @@
+package com.wmsi.sgx.service.account.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.domain.Watchlist;
+import com.wmsi.sgx.domain.WatchlistCompany;
+import com.wmsi.sgx.domain.WatchlistOption;
+import com.wmsi.sgx.model.Response;
+import com.wmsi.sgx.model.WatchlistModel;
+import com.wmsi.sgx.repository.WatchlistCompanyRepository;
+import com.wmsi.sgx.repository.WatchlistOptionRepository;
+import com.wmsi.sgx.repository.WatchlistRepository;
+import com.wmsi.sgx.service.CompanyService;
+import com.wmsi.sgx.service.CompanyServiceException;
+import com.wmsi.sgx.service.account.WatchlistService;
+
+@Service
+public class WatchlistServiceImpl implements WatchlistService {
+
+	@Autowired
+	private WatchlistRepository watchlistRepository;
+	
+	@Autowired 
+	private WatchlistOptionRepository optionRepository;
+	
+	@Autowired
+	private WatchlistCompanyRepository companyRepository;
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	//Alerts does not have currency conversion feature default currency is used here
+	public String defaultCurrency="sgd";
+	
+	@Override
+	public void renameWatchlist(User user, String watchlistName, String id){
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		for (Watchlist list : watchlist) {
+			if(list.getWatchlist_id().equals(Long.parseLong(id))){
+				Watchlist update = watchlistRepository.findOne(list.getWatchlist_id());
+				update.setName(watchlistName);
+				watchlistRepository.save(update);
+			}
+		}		
+	}
+	
+	@Override
+	public List<WatchlistModel> createWatchlist(User user, String watchlistName) {
+		
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		if(watchlist.length < 10){
+		
+			Watchlist newWatchlist = new Watchlist();
+			newWatchlist.setUser(user);
+			newWatchlist.setDate_created(new Date());
+			newWatchlist.setName(watchlistName);
+			watchlistRepository.save(newWatchlist);
+			
+			setOptions(getDefaultOptions(), newWatchlist.getWatchlist_id());
+		}
+		
+		return getWatchlist(user);
+	}
+
+	@Override
+	public void deleteWatchlist(User user, String id) {
+		Long longId = Long.parseLong(id);
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		List<WatchlistCompany> companies = Arrays.asList(companyRepository.findById(longId));
+		List<WatchlistOption> options = Arrays.asList(optionRepository.findById(longId));
+		
+		for (Watchlist list : watchlist) {
+			if(list.getWatchlist_id().equals(longId)){
+				watchlistRepository.delete(list);
+				companyRepository.delete(companies);
+				optionRepository.delete(options);
+			}
+		}
+	}
+	
+	@Override
+	@Transactional
+	public List<String> cleanWatchlist(User user){
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		List<String> ret = new ArrayList<String>();
+		
+		for(Watchlist list : watchlist){
+			Long id = list.getWatchlist_id();
+			WatchlistCompany[] companies = companyRepository.findById(id);
+			List<String> existingCompanies = new ArrayList<String>();
+			for(WatchlistCompany comp : companies){
+				try{
+					companyService.getCompanyByIdAndIndex(comp.getTickerCode(), "sgd_premium");
+					existingCompanies.add(comp.getTickerCode());
+				}catch(CompanyServiceException e){
+					ret.add(comp.getTickerCode());
+				}
+				
+				
+				}
+			if(companies.length != existingCompanies.size())
+				addCompanies(user, id.toString(), existingCompanies);
+			
+		}
+		return ret;
+		
+	}
+	
+	@Override
+	public List<WatchlistModel> getWatchlist(User user){
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		
+		List<WatchlistModel> ret = new ArrayList<WatchlistModel>();
+		
+		for(Watchlist list : watchlist){
+			Long id = list.getWatchlist_id();
+			WatchlistOption[] options = optionRepository.findById(id);
+			WatchlistCompany[] companies = companyRepository.findById(id);	
+			
+			Map<String, Object> optionsMap = new HashMap<String, Object>();			
+			for(WatchlistOption opt : options){
+				String optValue = opt.getOption_value();
+				if(optValue.equalsIgnoreCase("false") | optValue.equalsIgnoreCase("true"))
+						optionsMap.put(opt.getAlert_option(), Boolean.parseBoolean(optValue));	
+				else if(optValue.equalsIgnoreCase("null"))
+						optionsMap.put(opt.getAlert_option(), null);	
+				else
+					optionsMap.put(opt.getAlert_option(), optValue);
+			}
+			List<String> companyList = new ArrayList<String>();
+			for(WatchlistCompany comp : companies)
+				companyList.add(comp.tickerCode);
+			
+			WatchlistModel model = new WatchlistModel();
+			model.setId(list.getWatchlist_id().toString());
+			model.setName(list.getName());
+			model.setOptionList(optionsMap);
+			model.setCompanies(companyList);
+			ret.add(model);
+		}
+		
+		return ret;
+	}
+	
+	@Override
+	@Transactional
+	public void editWatchlist(User user, WatchlistModel model){
+		Long id = Long.parseLong(model.getId());
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		for(Watchlist list : watchlist){
+			if(list.getWatchlist_id().equals(id)){
+				List<WatchlistOption> oldOptions = Arrays.asList(optionRepository.findById(id));
+				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
+				
+				setOptions(model.getOptionList(), id);
+				if(model.getCompanies().size() <= 10){
+					setCompanies(model.getCompanies(), id);
+					companyRepository.delete(oldCompanies);
+				}
+				
+				optionRepository.delete(oldOptions);
+				
+				break;
+			}
+		}		
+	}
+	
+	@Override
+	@Transactional
+	public Response addCompanies(User user, String addId, List<String> companies){
+		Long id = Long.parseLong(addId);
+		Watchlist[] watchlist = watchlistRepository.findByUser(user);
+		Response response = new Response();
+		
+		for(Watchlist list : watchlist){
+			if(list.getWatchlist_id().equals(id)){
+				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
+				
+				if(companies.size() <= 10){
+					setCompanies(companies, id);
+					companyRepository.delete(oldCompanies);
+					response.setMessage("success");
+					return response;
+				}				
+			}
+		}
+		
+		response.setMessage("failure");
+		return response;
+	}
+	
+	public void setOptions(Map<String, Object> map, Long id){
+		for(Map.Entry<String, Object> entry : map.entrySet()){
+			WatchlistOption newOptions = new WatchlistOption();
+			newOptions.setAlert_option(entry.getKey());
+			if(entry.getValue() == null)
+				newOptions.setOption_value("null");
+			else
+				newOptions.setOption_value(entry.getValue().toString());
+			newOptions.setWatchlistId(id);
+			optionRepository.save(newOptions);
+		}
+	}
+	
+	public void setCompanies(List<String> companies, Long id){
+		for(String comp : companies){
+			WatchlistCompany newComp = new WatchlistCompany();
+			newComp.setId(id);
+			newComp.setTickerCode(comp);
+			newComp.setWatchlistId(id);
+			companyRepository.save(newComp);
+		}
+	}
+	
+	public Map<String, Object> getDefaultOptions(){
+		Map<String, Object> defaultOptions = new HashMap<String, Object>();
+		defaultOptions.put("pcPriceDrop", "false");
+		defaultOptions.put("pcPriceDropBelow", "null");
+		defaultOptions.put("pcPriceRiseAbove", "null");
+		defaultOptions.put("pcTradingVolume", "false");
+		defaultOptions.put("pcTradingVolumeValue", "null");
+		defaultOptions.put("pcReachesWeek", "false");
+		defaultOptions.put("pcReachesWeekValue", "null");
+		defaultOptions.put("estChangePriceDrop", "false");
+		defaultOptions.put("estChangePriceDropBelow", "null");
+		defaultOptions.put("estChangePriceDropAbove", "null");
+		defaultOptions.put("estChangeConsensus", "false");
+		defaultOptions.put("estChangeConsensusValue", "1");
+		defaultOptions.put("kdAnounceCompTransactions", "false");
+		defaultOptions.put("kdCompanyForecasts", "false");
+		defaultOptions.put("kdCorporateStructureRelated", "false");
+		defaultOptions.put("kdCustProdRelated", "false");
+		defaultOptions.put("kdDividensSplits", "false");
+		defaultOptions.put("kdListTradeRelated", "false");
+		defaultOptions.put("kdPotentialRedFlags", "false");
+		defaultOptions.put("kdPotentialTransactions", "false");
+		defaultOptions.put("kdResultsCorpAnnouncements", "false");
+		
+		return defaultOptions;
+		
+	}
+	
+}
