@@ -291,16 +291,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 		
 		//TODO Refactor to a method?
-		if(errorList.size()>0){
-			pair.setRight(errorList);
-			pair.setLeft(null);
-		}else if(noUpdatesFlag){
+		if(alertList!=null&&alertList.size()>0){
+			pair.setRight(null);
+			pair.setLeft(alertList);
+		}else if(noUpdatesFlag&&alertList.size()==0){
 			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
 			pair.setRight(errorList);
 			pair.setLeft(null);
 		}else{
-			pair.setRight(null);
-			pair.setLeft(alertList);
+			pair.setRight(errorList);
+			pair.setLeft(null);
 		}
 		return pair;
 		}	
