@@ -23,7 +23,9 @@ configuration(
 			"premium",
 			"resend-validation-email",
 			"purchase-account",
-			"purchase-account-confirmation"
+			"purchase-account-confirmation",
+			"valuation",
+			"key-developments"
 		]	
 	}
 );

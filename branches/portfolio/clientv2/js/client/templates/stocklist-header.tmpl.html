@@ -1,0 +1,38 @@
+<header class="header">	
+	<div data-bind="template: 'login-bar'"></div>
+	
+	<section data-bind="if:premiumUser() == true">
+		<h1>StockList</h1>
+		
+		<div>
+			<div class="grid scan intro">
+					<p>Create a StockList with up to 25 companies in each. For each StockList, see the current valuation, key developments, and setup to receive email alerts.</p>
+			</div>
+			
+			<div data-bind="visible: finalWL().length > 0" >
+				<div>
+					<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
+					<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
+					&nbsp;
+					Create a StockList: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName">
+					<a class="button" data-bind="click:$root.addWatchlist">CREATE</a>
+					<span class="error-messages" data-bind="validationMessage:newWLName"></span>
+				</div>
+				
+				<div data-bind="visible: showChange()" class="edit-watchlist">
+					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
+				</div>
+			</div>
+			
+			<div class="profilestocklist">
+				<nav>
+					<ul>
+						<li class="stocklist-alerts"><a data-bind="siteLink: { id: 'alerts'} ">Alerts</a></li>
+						<li class="stocklist-valuation"><a data-bind="siteLink: { id: 'valuation'}">Valuation</a></li>
+						<li class="stocklist-keydev"><a data-bind="siteLink: { id: 'key-developments'}">key-developments</a></li>
+					</ul>		
+				</nav>
+			</div>	
+		</div>	
+	</section>
+</header>
