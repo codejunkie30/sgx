@@ -90,7 +90,9 @@
 /* ::-webkit-scrollbar-corner       {  }
 ::-webkit-resizer                {  } */
 
-.header .profilestocklist { background: #ebecec; margin: 18px 0; }
+
+/* Portfolio StockList Navigation */
+.header .profilestocklist { margin: 18px 0; }
 .header .profilestocklist .left { float: left; margin: 28px 0 10px 22px; width: 68.5%; }
 .header .profilestocklist .right { float: right; margin: 0 18px 0 0; }
 .header .profilestocklist h1 { margin: 0 0 10px 0 !important; }
@@ -118,9 +120,9 @@
 .header .profilestocklist .profilestocklist-bar a.down-print { background-position: 0 -86px; padding: 2px 0 0 21px; } 
 
 .header .profilestocklist nav { margin: 10px 22px 0 24px; position: relative; }
-.header .profilestocklist nav ul { font-size: 0; overflow: hidden; }
-.header .profilestocklist nav ul li { display: inline-block; font-size: 13pt !important; line-height: 38px; padding-top:2px; }
-.header .profilestocklist nav ul li a { font-size:12pt; padding: 10px 45px; color: ; text-decoration: none; border: 1px solid #000; border-bottom: 0 !important; border-radius: 8px 8px 0 0; }
+.header .profilestocklist nav ul { font-size: 0; overflow: hidden; text-align: center;}
+.header .profilestocklist nav ul li { display: inline-block; font-size: 13pt !important; line-height: 38px; padding-top:2px; margin: 0 2px 0 0;}
+.header .profilestocklist nav ul li a { font-size:12pt; padding: 10px 45px;text-decoration: none;border: 2px solid #ebecec; border-bottom: 0 !important; border-radius: 8px 8px 0 0;background: #ebecec; }
 
 /* Nav Active Link Styles */
 .header .profilestocklist nav ul li a:hover,
