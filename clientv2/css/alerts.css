@@ -22,8 +22,8 @@
 
 .watchlist { display: inline-block; width: 42.5%; margin: 0 2.5% 0 0; float: left;}
 .watchlist .wl-companies { margin: 12px 0;position:relative;}
-.watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc;  }
-.watchlist .wl-companies ul li { list-style-type: none; padding: 10px; }
+.watchlist .wl-companies ul { padding: 0; margin: 0; border-bottom: 2px solid #ccc; max-height: 300px;overflow-x: hidden; }
+.watchlist .wl-companies ul li { list-style-type: none; padding: 5px; }
 .watchlist .wl-companies ul li.odd { background: #ebecec; }
 .watchlist .wl-companies ul li span { font-size: 22px; color: #444; font-weight: bold; display: inline-block; }
 .watchlist .wl-companies ul li .ticker { width: 115px; }
@@ -46,7 +46,7 @@
 .watchlist .wl-companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
 
 .watchlist .results h5 { padding: 5px; margin: 15px 0 8px 0; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
-.watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; max-height: 290px; overflow-x: hidden; }
+.watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; max-height: 290px;overflow-x: hidden;border-bottom: 2px solid #ccc; }
 .watchlist .results ul li { list-style-type: none; margin-bottom: 8px; line-height: 17px; }
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
 .watchlist .results ul li .name { font-size: 13px; position: relative; top: -3px; }
@@ -61,7 +61,7 @@
 .wl-container .alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
 .wl-container .alerts ul li input[type="text"] { width: 32px; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; }
 
-.button-wrapper { margin: 35px 0 0 10px; }
+.button-wrapper { margin: 35px 0 0 245px; }
 .button-wrapper a { cursor: pointer; }
 .button-wrapper a.email { margin-left: 10px; }
 
@@ -81,3 +81,51 @@
   -moz-opacity: 0.8;
   opacity: 0.8;
   background-color: #fff; }
+  
+::-webkit-scrollbar              { width: 6px; }
+/* ::-webkit-scrollbar-button       {  } */
+::-webkit-scrollbar-track        { background-color: #dddddd;  }
+/* ::-webkit-scrollbar-track-piece  {  } */
+::-webkit-scrollbar-thumb        { background-color: #0e236b; }
+/* ::-webkit-scrollbar-corner       {  }
+::-webkit-resizer                {  } */
+
+.header .profilestocklist { background: #ebecec; margin: 18px 0; }
+.header .profilestocklist .left { float: left; margin: 28px 0 10px 22px; width: 68.5%; }
+.header .profilestocklist .right { float: right; margin: 0 18px 0 0; }
+.header .profilestocklist h1 { margin: 0 0 10px 0 !important; }
+.header .profilestocklist h1, .header .profilestocklist h1 span  { color: #fff; font-size: 27px; line-height: 27px !important; }
+.header .profilestocklist .breadcrumb { color: #fff; }
+.header .profilestocklist .breadcrumb a { color: #fff; text-decoration: none;}
+.header .profilestocklist .breadcrumb a:hover { text-decoration: underline; }
+.header .profilestocklist .pricing .currency,
+.header .profilestocklist .pricing .price,
+.header .profilestocklist .as-of,
+.header .profilestocklist .as-of .date,
+.header .profilestocklist .as-of .time { color: #fff !important; }
+.header .profilestocklist .right.price { width: 27% !important; }
+.header .profilestocklist .right .current-currency { color: #fff; padding: 8px; font-size: 9pt; }
+.header .profilestocklist .right .current-currency span { color: #fff !important; font-size: 9pt; text-transform: uppercase !important; }
+
+.header .profilestocklist .profilestocklist-bar { background: #031753; padding: 8px 0 8px 22px; display: block; clear: both; }
+.header .profilestocklist .profilestocklist-bar a { background: url(../img/bg-profilestocklist-bar.png) no-repeat; color: #fff; text-decoration: none; font-size: 9pt !important; height: 17px; line-height: 17px; }
+.header .profilestocklist .profilestocklist-bar a:hover { text-decoration: underline; cursor: pointer; }
+.header .profilestocklist .profilestocklist-bar .right { margin: 0 20px 0 0 !important; }
+.header .profilestocklist .profilestocklist-bar .right a { margin: 0 0 0 32px; }
+.header .profilestocklist .profilestocklist-bar a.back { background-position: 0 0; padding: 2px 0 0 21px; }
+.header .profilestocklist .profilestocklist-bar a.view { background-position: 0 -27px; padding: 3px 0 2px 24px; }
+.header .profilestocklist .profilestocklist-bar a.add { background-position: 0 -59px; padding: 1px 0 0 21px; }
+.header .profilestocklist .profilestocklist-bar a.down-print { background-position: 0 -86px; padding: 2px 0 0 21px; } 
+
+.header .profilestocklist nav { margin: 10px 22px 0 24px; position: relative; }
+.header .profilestocklist nav ul { font-size: 0; overflow: hidden; }
+.header .profilestocklist nav ul li { display: inline-block; font-size: 13pt !important; line-height: 38px; padding-top:2px; }
+.header .profilestocklist nav ul li a { font-size:12pt; padding: 10px 45px; color: ; text-decoration: none; border: 1px solid #000; border-bottom: 0 !important; border-radius: 8px 8px 0 0; }
+
+/* Nav Active Link Styles */
+.header .profilestocklist nav ul li a:hover,
+#stockListAlerts .header .profilestocklist nav ul li.stocklist-alerts a,
+#stockListValuation .header .profilestocklist nav ul li.stocklist-valuation a,
+#stockListKeydev .header .profilestocklist nav ul li.stocklist-keydev a { background: #ffffff; border: 2px solid #ebecec; }
+
+
