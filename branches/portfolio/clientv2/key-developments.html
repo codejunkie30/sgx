@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.4" />
-    <link rel="stylesheet" href="css/alerts.css?v=1.0" />  
+    <link rel="stylesheet" href="css/alerts.css?v=1.0" />
+    <link rel="stylesheet" href="css/key-dev.css?v=1.0" />  
     
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
@@ -22,8 +23,71 @@
 	<div class="grid">
 		<span data-bind="template: 'stocklist-header'"></span>
 	</div>
+	<div class="grid scan intro">
+			<p>Select which developments you would like to see for your StockList</p>
+	</div>
 	
-	
+	<section class="key-dev-match">
+		<div class="content">
+			<div class="control-box">
+				<table>
+					<tr>
+						<td><select data-bind="" ></select></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Announced/Completed Transactions</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Company Forecasts and Ratings</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Corporate Structure Related </label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Customer/Product Related</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Dividends/Splits</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Listing/Trading Related</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Potential Red Flags/Distress Indicators</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Potential Transactions</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="checkbox" value="" data-bind="">Results and Corporate Announcements</label></td>
+					</tr>
+					<tr>
+						<td><a class="search-button" data-bind="">Search</a></td>
+					</tr>
+				</table>
+				
+			</div>
+			<div class="matches">
+				<h2>Key Development Matches</h2>
+				<table>
+					<tr>
+						<td>
+							<div class="no-devs" data-bind="">There is no data to show for the selected period.</div>
+						</td>
+					</tr>
+				</table>
+					
+					<!-- <div>
+						<ul class="key-devs" data-bind="">gggjghghhhgh
+							<li>
+								Data to populate
+							</li>
+						</ul>
+						<div class="no-devs" data-bind="">There is no data to show for the selected period.</div>
+					</div> -->
+			</div>
+		</div>
+	</section>
 	<div class="grid disclosure scan">
 		<p>SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a data-bind="siteLink:'terms-conditions'">terms and conditions</a>.</p>
 	</div>	

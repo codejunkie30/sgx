@@ -1,0 +1,115 @@
+/* .key-dev-match {
+  height:920px;
+  position:relative;
+  border-right: 1px solid #cacdd3;
+  border-left: 1px solid #cacdd3;
+  border-bottom: 1px solid #cacdd3;
+  padding-bottom: 10px; } */
+
+/*  .key-dev-match .control-box label {
+    color: #8c8e90; }
+  .key-dev-match .control-box label.selected {
+      color: #000; }
+  .key-dev-match .control-box label.active-checkBox {
+    font-size: 11.5px;
+    font-weight: bold;
+    color: #000; }
+  .key-dev-match .control-box label.text-input {
+    padding: 5px 0;
+    display: block; } */
+.key-dev-match .control-box {
+	width: 27.5%;
+	background: #ebecec;
+	text-align: left;
+	float: left;
+}
+
+/* .key-dev-match .content {
+    padding: 20px;
+    text-align: right; } */
+.key-dev-match .matches {
+	margin-left: 300px;
+	height: 475px;
+}
+
+.key-dev-match .control-box select {
+	/* background: #ddd; */
+	height: 30px;
+	border: 1px solid #d4d4d4;
+	border-radius: 4px;
+	min-width: 235px;
+	margin-top: 15px;
+}
+
+#key-devs {
+	width: 99%;
+}
+
+.key-devs {
+	padding: 0px;
+	margin: 10px 0 25px;
+}
+
+.key-devs ul {
+	margin: 0px 0;
+	padding: 10px 10px 0;
+	border: 1px solid red;
+	border-top: none;
+}
+
+.key-devs li {
+	position: relative;
+	margin: 0 0 9px 0;
+	padding-left: 26px;
+	display: inline-block;
+	list-style: none;
+}
+
+.key-devs li div {
+	position: absolute;
+	left: 0;
+	top: 2px;
+	margin: 0 10px 0 0;
+	background: #565a5c;
+	color: #fff;
+	display: inline-block;
+	width: 16px;
+	height: 15px;
+	text-align: center;
+	line-height: 15px;
+	font-size: 12px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.key-devs li span {
+	font-weight: bold;
+	color: #0e236b;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.key-devs li span:hover {
+	text-decoration: underline;
+}
+
+h2 {
+	color: #6b6b6b;
+	font-weight: bold;
+	font-size: 20px;
+	margin-bottom: 18px;
+	border-bottom: 1px solid #ccc;
+}
+
+.search-button {
+	display: inline-block;
+	font-size: 15px;
+	background: #0e236b;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	line-height: 22px;
+	padding: 2px 20px;
+	color: #fff !important;
+	cursor: pointer;
+    margin: 10px 0 30px 5px;
+}
