@@ -120,7 +120,7 @@
 .header .profilestocklist .profilestocklist-bar a.down-print { background-position: 0 -86px; padding: 2px 0 0 21px; } 
 
 .header .profilestocklist nav { margin: 10px 22px 0 24px; position: relative; }
-.header .profilestocklist nav ul { font-size: 0; overflow: hidden; text-align: center;}
+.header .profilestocklist nav ul { font-size: 0; overflow: hidden; margin-left: 120px;}
 .header .profilestocklist nav ul li { display: inline-block; font-size: 13pt !important; line-height: 38px; padding-top:2px; margin: 0 2px 0 0;}
 .header .profilestocklist nav ul li a { font-size:12pt; padding: 10px 45px;text-decoration: none;border: 2px solid #ebecec; border-bottom: 0 !important; border-radius: 8px 8px 0 0;background: #ebecec; }
 
