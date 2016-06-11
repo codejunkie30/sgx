@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 
 	var KEYDEV = {
 		finalWL: ko.observableArray(),
