@@ -298,6 +298,10 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
 			pair.setRight(errorList);
 			pair.setLeft(null);
+		}else if(watchlist.getCompanies().isEmpty()||watchlist.getCompanies().size()<=0){
+			errorList.add(IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
+			pair.setRight(errorList);
+			pair.setLeft(null);
 		}else{
 			pair.setRight(errorList);
 			pair.setLeft(null);
