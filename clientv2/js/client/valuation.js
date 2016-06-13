@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "client/modules/tearsheet", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, TS) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 
 	var VALUATION = {
 		finalWL: ko.observableArray(),
@@ -19,6 +19,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		premiumUserEmail: ko.observable(),
 		currentDay: ko.observable(),
 		
+		activeTab: ko.observable('performance'),
+		
 		initPage: function() {
 			var me = this;
 			
@@ -32,6 +34,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.getWatchListData(me); 
 		},
+		
+		changeTab: function(tabName){
+			var me = this;
+			if( tabName == me.activeTab ) return;
+			me.activeTab(tabName);
+	    },
 
 		getWatchListData: function(me) {
 			PAGE.showLoading();
