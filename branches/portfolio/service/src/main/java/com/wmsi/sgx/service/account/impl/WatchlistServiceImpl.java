@@ -66,7 +66,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 	public List<WatchlistModel> createWatchlist(User user, String watchlistName) {
 		
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
-		if(watchlist.length < 10){
+		if(watchlist.length <= 25){
 		
 			Watchlist newWatchlist = new Watchlist();
 			newWatchlist.setUser(user);
