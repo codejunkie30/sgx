@@ -1,8 +1,5 @@
 package com.wmsi.sgx.service.account.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,15 +9,22 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Watchlist;
 import com.wmsi.sgx.domain.WatchlistCompany;
 import com.wmsi.sgx.domain.WatchlistOption;
+import com.wmsi.sgx.domain.WatchlistTransaction;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistModel;
+import com.wmsi.sgx.model.WatchlistTransactionModel;
 import com.wmsi.sgx.repository.WatchlistCompanyRepository;
 import com.wmsi.sgx.repository.WatchlistOptionRepository;
 import com.wmsi.sgx.repository.WatchlistRepository;
+import com.wmsi.sgx.repository.WatchlistTransactionRepository;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.WatchlistService;
@@ -36,6 +40,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 	
 	@Autowired
 	private WatchlistCompanyRepository companyRepository;
+	
+	@Autowired
+	private WatchlistTransactionRepository transactionRepository;
 	
 	@Autowired
 	private CompanyService companyService;
@@ -79,12 +86,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
 		List<WatchlistCompany> companies = Arrays.asList(companyRepository.findById(longId));
 		List<WatchlistOption> options = Arrays.asList(optionRepository.findById(longId));
+		List<WatchlistTransaction> transactions = Arrays.asList(transactionRepository.findById(longId));
 		
 		for (Watchlist list : watchlist) {
 			if(list.getWatchlist_id().equals(longId)){
 				watchlistRepository.delete(list);
 				companyRepository.delete(companies);
 				optionRepository.delete(options);
+				transactionRepository.delete(transactions);
 			}
 		}
 	}
@@ -200,6 +209,79 @@ public class WatchlistServiceImpl implements WatchlistService {
 		return response;
 	}
 	
+	@Override
+	@Transactional
+	public Response addTransactions(User user, String addId, List<WatchlistTransactionModel> transactions) {
+		Long id = Long.parseLong(addId);
+		Response response = new Response();
+		if (transactions != null) {
+			Watchlist[] watchlist = watchlistRepository.findByUser(user);
+			for (Watchlist list : watchlist) {
+				if (list.getWatchlist_id().equals(id)) {
+					setTransactions(transactions, id);
+					response.setMessage("success");
+					return response;
+				}
+			}
+		}
+		response.setMessage("failure");
+		return response;
+	}
+	
+	@Override
+	@Transactional
+	public Response deleteTransactions(User user,String id, String transactionId) {
+		Long watchlistId = Long.parseLong(id);
+		Long transId = Long.parseLong(transactionId);
+		Response response = new Response();
+
+		if (id != null && transId != null) {
+			Watchlist[] watchlist = watchlistRepository.findByUser(user);
+			for (Watchlist list : watchlist) {
+				if (list.getWatchlist_id().equals(watchlistId)) {
+					WatchlistTransaction transaction = transactionRepository.findByIds(watchlistId, transId);
+					transactionRepository.delete(transaction);
+					response.setMessage("success");
+					return response;
+				}
+			}
+		}
+		response.setMessage("failure");
+		return response;
+	}
+	
+	@Override
+	public List<WatchlistTransactionModel> getTransactions(User user, String id) {
+		Long watchlistId = Long.parseLong(id);
+		List<WatchlistTransactionModel> transactionModelList = new ArrayList<>();
+
+		if (id != null) {
+			Watchlist[] watchlist = watchlistRepository.findByUser(user);
+
+			for (Watchlist list : watchlist) {
+				if (list.getWatchlist_id().equals(watchlistId)) {
+					WatchlistTransaction[] transactions = transactionRepository.findById(watchlistId);
+					for (WatchlistTransaction transaction : transactions) {
+						WatchlistTransactionModel transactionModel = new WatchlistTransactionModel();
+						BeanUtils.copyProperties(transaction, transactionModel);
+						transactionModelList.add(transactionModel);
+					}
+					return transactionModelList;
+				}
+			}
+		}
+		return transactionModelList;
+	}
+
+	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id) {
+		for (WatchlistTransactionModel watchlistTransactionModel : transactions) {
+			WatchlistTransaction transaction = new WatchlistTransaction();
+			BeanUtils.copyProperties(watchlistTransactionModel,transaction);
+			transaction.setWatchlistId(id);
+			transactionRepository.save(transaction);
+		}
+	}
+	
 	public void setOptions(Map<String, Object> map, Long id){
 		for(Map.Entry<String, Object> entry : map.entrySet()){
 			WatchlistOption newOptions = new WatchlistOption();
@@ -249,6 +331,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 		
 		return defaultOptions;
 		
+	}
+
+	@Override
+	public List<WatchlistCompany> getStockListCompanies(String id) {
+		WatchlistCompany[] companies = companyRepository.findById(Long.parseLong(id));
+		return Arrays.asList(companies);
 	}
 	
 }

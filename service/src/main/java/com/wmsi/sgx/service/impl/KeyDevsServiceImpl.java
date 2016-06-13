@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.model.KeyDev;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.keydevs.KeyDevsRequest;
+import com.wmsi.sgx.model.keydevs.StockListKeyDevsRequest;
 import com.wmsi.sgx.service.KeyDevsService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
+import com.wmsi.sgx.service.search.elasticsearch.query.KeyDevsQueryBuilder;
 
 @Service
 public class KeyDevsServiceImpl implements KeyDevsService{
@@ -68,6 +70,19 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 		catch(ParseException e){
 			
 			return 0;
+		}
+	}
+	
+	@Override
+	public List<KeyDevs> search(StockListKeyDevsRequest req) throws ServiceException {
+
+		try{
+			List<KeyDevs> keyDevs = keyDevsSearch.search(new KeyDevsQueryBuilder(req), KeyDevs.class).getHits();
+			
+			return keyDevs;
+		}
+		catch(SearchServiceException e){
+			throw new ServiceException("Query execution failed", e);
 		}
 	}
 
