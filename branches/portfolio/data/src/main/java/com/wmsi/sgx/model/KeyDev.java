@@ -24,6 +24,8 @@ public class KeyDev{
 	
 	private String id;
 	
+	private String keyDevId;
+	
 	public String getId() {
 		return id;
 	}
@@ -89,9 +91,24 @@ public class KeyDev{
 			KeyDev that = (KeyDev) object;
 			return Objects.equal(this.date, that.date) && Objects.equal(this.headline, that.headline)
 					&& Objects.equal(this.situation, that.situation) && Objects.equal(this.type, that.type)
-					&& Objects.equal(this.source, that.source) && Objects.equal(this.id, that.id);
+					&& Objects.equal(this.source, that.source) && Objects.equal(this.id, that.id)
+			        && Objects.equal(this.keyDevId, that.keyDevId);
 		}
 		return false;
+	}
+
+	/**
+	 * @return the keyDevId
+	 */
+	public String getKeyDevId() {
+		return keyDevId;
+	}
+
+	/**
+	 * @param keyDevId the keyDevId to set
+	 */
+	public void setKeyDevId(String keyDevId) {
+		this.keyDevId = keyDevId;
 	}
 
 	
