@@ -4,15 +4,25 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.model.KeyDev;
 import com.wmsi.sgx.model.KeyDevs;
+import com.wmsi.sgx.model.StockListKeyDev;
 import com.wmsi.sgx.model.keydevs.KeyDevsRequest;
 import com.wmsi.sgx.model.keydevs.StockListKeyDevsRequest;
 import com.wmsi.sgx.service.KeyDevsService;
@@ -85,5 +95,63 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 			throw new ServiceException("Query execution failed", e);
 		}
 	}
+	
+	@Override
+	public Map<String, StockListKeyDev> searchKeyDevs(StockListKeyDevsRequest req) throws ServiceException {
 
+		try{
+			Long from = null;
+			Long to = null;
+			Calendar calendar = Calendar.getInstance();
+			from = calendar.getTime().getTime();
+			calendar.add(Calendar.MONTH, -5);
+			to = calendar.getTime().getTime();
+			Map<String, StockListKeyDev> map = new HashMap<>();
+			StockListKeyDev stockListKeyDev=null;
+			List<KeyDevs> keyDevsList = keyDevsSearch.search(new KeyDevsQueryBuilder(req), KeyDevs.class).getHits();
+			for (KeyDevs keyDevs : keyDevsList) {
+				for (KeyDev keyDev : keyDevs.getKeyDevs()) {
+					if (from.compareTo(keyDev.getDate().getTime()) > 0
+							&& to.compareTo(keyDev.getDate().getTime()) < 0) {
+						if (map.get(keyDev.getKeyDevId()) == null) {
+							stockListKeyDev = new StockListKeyDev();
+							map.put(keyDev.getKeyDevId(), stockListKeyDev);
+							stockListKeyDev.setTickerCodes(new ArrayList<String>());
+							stockListKeyDev.setTypes(new ArrayList<String>());
+						} else {
+							stockListKeyDev = map.get(keyDev.getKeyDevId());
+						}
+						BeanUtils.copyProperties(keyDev, stockListKeyDev);
+						stockListKeyDev.getTickerCodes().add(keyDevs.getTickerCode());
+						stockListKeyDev.setDate(keyDev.getDate().getTime());
+						stockListKeyDev.getTypes().add(keyDev.getType());
+					}
+				}
+			}
+			sortByValues(map);
+			return map;
+		}
+		catch(SearchServiceException e){
+			throw new ServiceException("Query execution failed", e);
+		}
+	}
+	
+	private static HashMap sortByValues(Map map) {
+		List list = new LinkedList(map.entrySet());
+		// Defined Custom Comparator here
+		Collections.sort( list, new Comparator<Map.Entry<String, StockListKeyDev>>()
+        {
+            public int compare( Map.Entry<String, StockListKeyDev> o1, Map.Entry<String, StockListKeyDev> o2 )
+            {
+                return (o2.getValue()).compareTo( o1.getValue() );
+            }
+        } );
+
+		HashMap sortedHashMap = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			sortedHashMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedHashMap;
+	}
 }
