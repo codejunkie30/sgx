@@ -32,12 +32,13 @@ public class KeyDevsQueryBuilder extends AbstractQueryBuilder {
 		SearchSourceBuilder builder = new SearchSourceBuilder();
 		if (stockListKeyDevsRequest != null) {
 			String[] ids = stockListKeyDevsRequest.getTickerCodes().toArray(new String[stockListKeyDevsRequest.getTickerCodes().size()]);
-			builder.query(QueryBuilders.idsQuery("keyDevs").addIds(ids)).sort("keyDevs.date", SortOrder.DESC);
+			builder.query(QueryBuilders.idsQuery("keyDevs").addIds(ids));
 
 			if (stockListKeyDevsRequest.getFrom() != null && stockListKeyDevsRequest.getTo() != null) {
-				builder.postFilter(FilterBuilders.rangeFilter("keyDevs.date").from(getTime(stockListKeyDevsRequest.getFrom()))
-						.to(getTime(stockListKeyDevsRequest.getTo())));
+				builder.postFilter(FilterBuilders.boolFilter().must(FilterBuilders.rangeFilter("keyDevs.date").gt(getTime(stockListKeyDevsRequest.getFrom()))
+						.lte(getTime(stockListKeyDevsRequest.getTo()))));
 			}
+			builder.sort("keyDevs.date", SortOrder.DESC);
 		}
 		return builder.toString();
 	}

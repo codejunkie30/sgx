@@ -11,6 +11,7 @@ public class KeyDev{
 	private String time;
 	private String type;
 	private String source;
+	private String keyDevId;
 
 	public Date getDate() {
 		return date;
@@ -88,6 +89,21 @@ public class KeyDev{
 			.add("time", time)
 			.add("type", type)
 			.add("source", source)
+			.add("source", source)
 			.toString();
+	}
+
+	/**
+	 * @return the keyDevId
+	 */
+	public String getKeyDevId() {
+		return keyDevId;
+	}
+
+	/**
+	 * @param keyDevId the keyDevId to set
+	 */
+	public void setKeyDevId(String keyDevId) {
+		this.keyDevId = keyDevId;
 	}
 }
