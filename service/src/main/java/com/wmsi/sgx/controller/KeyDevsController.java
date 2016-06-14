@@ -29,10 +29,10 @@ public class KeyDevsController{
 		return keyDevsService.search(search);
 	}
 	
-	/*@RequestMapping("search/stockListKeydevs")
+	@RequestMapping("search/stockListKeydevsTemp")
 	public List<KeyDevs> searchKeyDevs(@RequestBody StockListKeyDevsRequest search) throws ServiceException {
 		return keyDevsService.search(search);
-	}*/
+	}
 	
 	@RequestMapping("search/stockListKeydevs")
 	public Map<String, StockListKeyDev> searchStockListKeyDevs(@RequestBody StockListKeyDevsRequest search) throws ServiceException {
