@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","client/modules/performance-chart-config","highstock", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, PER_CHART_CONFIG) {
 
 	var VALUATION = {
 		finalWL: ko.observableArray(),
@@ -9,6 +9,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		selectedValue: ko.observable(),
 		addWatchlistName: ko.observableArray(),
 		messages: JSON.parse(MESSAGES),
+		activeTab: ko.observable('performance'),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -19,7 +20,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		premiumUserEmail: ko.observable(),
 		currentDay: ko.observable(),
 		
-		activeTab: ko.observable('performance'),
+		chartData : [],
+		seriesOptions: [],
+		volumeData : [],
+		closePrice : [],
+		priceData : [],
+		priceHistoryData : [],
 		
 		initPage: function() {
 			var me = this;
@@ -33,6 +39,56 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.getWatchListData(me); 
+		},
+		
+		renderChart: function(me, responseData){
+			me.chartData = responseData;
+			$.each(responseData.companiesPriceHistory, function(i, data){
+				var priceData = me.toHighCharts(data.priceHistory.price);
+				me.seriesOptions[i] = {
+		                name: data.tickerCode,
+		                data: priceData,
+		                threshold : null,
+						turboThreshold : 0
+	            };
+
+            	me.performanceChartRenderer(me);
+			});	
+		},
+		
+		toHighCharts : function(data) {
+			var ret = [];
+			$.each(data, function(idx, row) {
+				ret.push({
+					x : Date.fromISO(row.date).getTime(),
+					y : row.value
+				});
+			});
+			ret.sort(function(a, b) {
+				return a.x - b.x;
+			});
+			return ret;
+		},
+		
+		performanceChartRenderer:function(me){
+			var baseChart = PER_CHART_CONFIG;
+			baseChart.series = me.seriesOptions;
+			$('#performance-chart-content').highcharts('StockChart', baseChart);
+		},
+		
+		getChartData(me, id){
+			var endpoint = PAGE.fqdn + "/sgx/company/stockListpriceHistory";
+			var postType = 'POST';
+    	    var params = { "id" : id };
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						//Render Chart 
+						me.renderChart(me, data);
+					}, 
+					PAGE.customSGXError);
 		},
 		
 		changeTab: function(tabName){
@@ -60,6 +116,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
+					
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
@@ -69,6 +126,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			);
 			
 			me.selectedValue.subscribe(function(data){
+				
+				var chart = $('#performance-chart-content').highcharts();
+				if(!UTIL.isEmpty(chart)){
+					me.seriesOptions = [];
+					me.performanceChartRenderer(me);
+				}
+				
+				//get the performance chart data
+				me.getChartData(me, data);
+				
 				var watchlists = this.finalWL();
 				for(var i = 0, len = watchlists.length; i < len; i++) {
 					var wl = watchlists[i]
@@ -79,7 +146,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 				}				
 			}, me);
-
 
 			ko.validation.init({insertMessages: false});
 			VALUATION.newWLName.extend({
