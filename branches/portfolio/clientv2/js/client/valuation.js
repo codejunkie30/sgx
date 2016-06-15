@@ -10,6 +10,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		addWatchlistName: ko.observableArray(),
 		messages: JSON.parse(MESSAGES),
 		activeTab: ko.observable('performance'),
+		displayTransactions: ko.observableArray(),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -39,6 +40,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.getWatchListData(me); 
+			
+			PAGE.resizeIframeSimple();
 		},
 		
 		renderChart: function(me, responseData){
@@ -91,6 +94,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.customSGXError);
 		},
 		
+		getTransactionsData: function(me, id){
+			var endpoint = PAGE.fqdn + "/sgx/watchlist/transactions";
+			var postType = 'POST';
+    	    var params = { "message" : id };
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){	
+						me.displayTransactions(data);
+					}, 
+					PAGE.customSGXError);
+		},
+		
 		changeTab: function(tabName){
 			var me = this;
 			if( tabName == me.activeTab ) return;
@@ -135,6 +152,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				//get the performance chart data
 				me.getChartData(me, data);
+				
+				//get the transaction data
+				me.getTransactionsData(me, data);
 				
 				var watchlists = this.finalWL();
 				for(var i = 0, len = watchlists.length; i < len; i++) {
