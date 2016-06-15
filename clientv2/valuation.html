@@ -35,7 +35,7 @@
 			</div>
 			
 			<div>
-				<table>
+				<table data-bind="with: displayTransactions">
 					<thead>
 						<tr>
 							<th>Chart</th>
@@ -47,15 +47,15 @@
 							<th>Delete</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>asas</td>
-							<td>asas</td>
-							<td>asas</td>
-							<td>asas</td>
-							<td>asas</td>
-							<td>asas</td>
-							<td>asas</td>
+					<tbody data-bind="foreach: {data: $data}">
+						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+							<td><input type="checkbox" data-bind="checked: 'true'"></td>
+							<td data-bind="text: tickerCode"></td>
+							<td data-bind="text: tradeDate, format: 'date'"></td>
+							<td data-bind="text: numberOfShares, format: 'number'"></td>
+							<td data-bind="text: costAtPurchase, format: 'dollars'"></td>
+							<td data-bind="text: currentPrice, format: 'dollars'"></td>
+							<td><img src="img/x-button.png" alt="" data-bind="tooltip: 'Delete'" /></td>
 						</tr>
 					</tbody>
 				</table>
@@ -83,7 +83,7 @@
 							<td><input type="text" data-bind=""/></td>
 							<td><input type="text" data-bind=""/></td>
 							<td><input type="text" data-bind=""/></td>
-							<td><a class="search-button" data-bind="">Add</a></td>
+							<td><a class="add-button" data-bind="">Add</a></td>
 						</tr>
 					</tbody>
 				</table>
