@@ -66,7 +66,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 	public List<WatchlistModel> createWatchlist(User user, String watchlistName) {
 		
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
-		if(watchlist.length <= 25){
+		if(watchlist.length <= 10){
 		
 			Watchlist newWatchlist = new Watchlist();
 			newWatchlist.setUser(user);
@@ -173,7 +173,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
 				
 				setOptions(model.getOptionList(), id);
-				if(model.getCompanies().size() <= 10){
+				if(model.getCompanies().size() <= 25){
 					setCompanies(model.getCompanies(), id);
 					companyRepository.delete(oldCompanies);
 				}
@@ -196,7 +196,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			if(list.getWatchlist_id().equals(id)){
 				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
 				
-				if(companies.size() <= 10){
+				if(companies.size() <= 25){
 					setCompanies(companies, id);
 					companyRepository.delete(oldCompanies);
 					response.setMessage("success");
