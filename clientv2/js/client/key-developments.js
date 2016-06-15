@@ -2,6 +2,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 	var KEYDEV = {
 		finalWL: ko.observableArray(),
+		watchlistCompanies:ko.observableArray(),
 		showChange: ko.observable(false),
 		editWLName: ko.observable(),
 		newWLName: ko.observable(),
@@ -46,6 +47,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				function(data, textStatus, jqXHR){
+				    	if(!data.watchlists){
+				    	    console.log('Watchlists unavailable');
+				    	    return;
+				    	}
 					KEYDEV.finalWL(data.watchlists.sort(sortByName));
 					function sortByName(a, b){
 						  var a = a.name.toLowerCase();
@@ -66,13 +71,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					var wl = watchlists[i]
 					if( wl.id == data) {
 						KEYDEV.clearWatchListErrors();
-						KEYDEV.editWLName(wl.name);			
+						KEYDEV.editWLName(wl.name);
+						//TODO populate watchlist companies
+						KEYDEV.populateWatchlistCompanies(wl);
 						break;
 					}
 				}				
 			}, me);
 
-
+			
 			ko.validation.init({insertMessages: false});
 			KEYDEV.newWLName.extend({
 					minLength: { params: 2, message: displayMessage.watchlist.error },
@@ -215,6 +222,27 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.customSGXError,
 				undefined
 			);			
+		},
+		
+		populateWatchlistCompanies:function(watchlistObject){
+		    // JSON Call for populating the companies for the selected watchlist.
+			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+				    $('#watchlistCompaniesSelect')
+                                    .empty()
+				return;
+			}
+
+		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
+		    var params = { "companies": watchlistObject.companies };
+		    var postType = 'POST';
+		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
+				self.allCompanies = data.companyNameAndTickerList;
+				KEYDEV.watchlistCompanies(data.companyPrice);
+
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log('error making service call');
+			});
+
 		},
 		
 		clearWatchListErrors: function() {
