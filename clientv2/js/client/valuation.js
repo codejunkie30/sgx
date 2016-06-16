@@ -24,6 +24,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		chartData : [],
 		seriesOptions: [],
+		transactionTickers: [],
+		
 		volumeData : [],
 		closePrice : [],
 		priceData : [],
@@ -76,9 +78,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var baseChart = PER_CHART_CONFIG;
 			baseChart.series = me.seriesOptions;
 			$('#performance-chart-content').highcharts('StockChart', baseChart);
+			PAGE.hideLoading();
 		},
 		
 		getChartData(me, id){
+			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/company/stockListpriceHistory";
 			var postType = 'POST';
     	    var params = { "id" : id };
@@ -106,35 +110,82 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							data[i]["selectedTransaction"] = ko.observable(true);
 						}
 						me.displayTransactions(data);
-						me.selectAllTransaction = ko.computed({
-							read: function () {
-				                var selectAllTransaction = true;
-				                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
-				                	selectAllTransaction = selectAllTransaction && item.selectedTransaction()
-				                });
-				                $('#selectAllId').prop('checked', selectAllTransaction);
-				                return selectAllTransaction;
-				            },
-				            write: function (value) {
-				                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
-				                    if (value) item.selectedTransaction(true);
-				                    else item.selectedTransaction(false);
-				                });
-				            }
-					    });
+						me.computeSelectAllTrans(me);
 					}, 
 					PAGE.customSGXError);
 			PAGE.resizeIframeSimple();
+		},
+		
+		computeSelectAllTrans: function(me){
+			me.selectAllTransaction = ko.computed({
+				read: function () {
+	                var selectAllTransaction = true;
+	                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
+	                	//single chart transaction
+	                	me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
+	                });
+	                $('#selectAllId').prop('checked', selectAllTransaction);
+	                return selectAllTransaction;
+	            },
+	            write: function (value) {
+	                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+	                    if (value) item.selectedTransaction(true);
+	                    else item.selectedTransaction(false);
+	                    //push the tickers for unchart
+	                    me.transactionTickers.push(item.tickerCode);
+	                });
+	                //Multi Chart Transaction
+	                me.multiChartUnchart(me, value);
+	            }
+		    });
+		},
+		
+		singleChartUnchart: function(me, seriesName, value){
+			var chart = $('#performance-chart-content').highcharts();
+			if(!UTIL.isEmpty(chart)){
+				var seriesLength = chart.series.length;
+				for(var i = seriesLength -1; i > -1; i--) {
+					if(chart.series[i].name == seriesName){
+						if(value){
+			        		chart.series[i].show();
+			        	}else{
+			        		chart.series[i].hide();
+			        	}
+					}
+				}
+			}
+		},
+		
+		multiChartUnchart: function(me, value){
+			var chart = $('#performance-chart-content').highcharts();
+			if(!UTIL.isEmpty(chart)){
+				var seriesLength = chart.series.length;
+		        for(var i = seriesLength -1; i > -1; i--) {
+		        	if(me.isNameContains(chart.series[i].name)){
+			        	if(value){
+			        		chart.series[i].show();
+			        	}else{
+			        		chart.series[i].hide();
+			        	}
+		        	}
+		        }
+			}
+		},
+		
+		isNameContains: function(seriesName){
+			var me = this;
+			var transTickers = me.transactionTickers;
+			for (i in transTickers) {
+		       if (transTickers[i] == seriesName) return true;
+		    }
+		    return false;
 		},
 		
 		changeTab: function(tabName){
 			var me = this;
 			if( tabName == me.activeTab ) return;
 			me.activeTab(tabName);
-	    },
-	    
-	    chartClickCounter: function(){
-	    	alert("ok");
 	    },
 
 		getWatchListData: function(me) {
@@ -170,7 +221,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var chart = $('#performance-chart-content').highcharts();
 				if(!UTIL.isEmpty(chart)){
 					me.seriesOptions = [];
-					me.performanceChartRenderer(me);
+					//me.performanceChartRenderer(me);
 				}
 				
 				//get the performance chart data
