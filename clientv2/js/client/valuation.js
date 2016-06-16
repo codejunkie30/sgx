@@ -40,8 +40,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.getWatchListData(me); 
-			
-			PAGE.resizeIframeSimple();
 		},
 		
 		renderChart: function(me, responseData){
@@ -106,6 +104,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						me.displayTransactions(data);
 					}, 
 					PAGE.customSGXError);
+			PAGE.resizeIframeSimple();
 		},
 		
 		changeTab: function(tabName){
