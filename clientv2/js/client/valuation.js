@@ -11,6 +11,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		messages: JSON.parse(MESSAGES),
 		activeTab: ko.observable('performance'),
 		displayTransactions: ko.observableArray(),
+		selectAllTransaction: ko.computed(function() {}),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -101,7 +102,26 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
+						for(i in data){
+							data[i]["selectedTransaction"] = ko.observable(true);
+						}
 						me.displayTransactions(data);
+						me.selectAllTransaction = ko.computed({
+							read: function () {
+				                var selectAllTransaction = true;
+				                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+				                	selectAllTransaction = selectAllTransaction && item.selectedTransaction()
+				                });
+				                $('#selectAllId').prop('checked', selectAllTransaction);
+				                return selectAllTransaction;
+				            },
+				            write: function (value) {
+				                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+				                    if (value) item.selectedTransaction(true);
+				                    else item.selectedTransaction(false);
+				                });
+				            }
+					    });
 					}, 
 					PAGE.customSGXError);
 			PAGE.resizeIframeSimple();
@@ -111,6 +131,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me = this;
 			if( tabName == me.activeTab ) return;
 			me.activeTab(tabName);
+	    },
+	    
+	    chartClickCounter: function(){
+	    	alert("ok");
 	    },
 
 		getWatchListData: function(me) {
