@@ -3,7 +3,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 	var defaults = {
 		title : undefined,
 
-		//colors : [ 'rgb(206, 217, 236)', '#BFCE00' ],
+		colors : [ '#0e236b' ],
 
 		chart : {
 			backgroundColor : 'rgba(255, 255, 255, 0.1)',
