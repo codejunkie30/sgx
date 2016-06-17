@@ -226,3 +226,23 @@
 	color: #fff !important;
 	cursor: pointer;
 }
+
+.valuation-results .company-header {
+	color: #0e236b;
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	cursor: pointer;
+	vertical-align: top;
+}
+
+.valuation-results .company-row {
+	color: #000;
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+	font: normal 12px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	line-height: 125%;
+	vertical-align: top;
+}
