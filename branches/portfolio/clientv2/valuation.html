@@ -35,30 +35,49 @@
 			</div>
 			
 			<div>
-				<table data-bind="with: displayTransactions">
-					<thead>
-						<tr>
-							<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
-							<th width="38%">Company Name</th>
-							<th width="13%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="13%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="13%">Last Close Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="13%">Current value <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="5%">Delete <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-						</tr>
-					</thead>
-					<tbody data-bind="foreach: {data: $data}">
-						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-							<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
-							<td data-bind="text: tickerCode"></td>
-							<td data-bind="text: tradeDate, format: 'date'"></td>
-							<td data-bind="text: numberOfShares, format: 'number'"></td>
-							<td data-bind="text: costAtPurchase, format: 'dollars'"></td>
-							<td data-bind="text: currentPrice, format: 'dollars'"></td>
-							<td><img src="img/x-button.png" alt="" data-bind="tooltip: 'Delete Transaction'"  /></td>
-						</tr>
-					</tbody>
-				</table>
+				<!-- <span data-bind="if: displayTransactions().length == 0">observableArray is empty</span> -->
+				<!-- ko {if: displayTransactions().length} -->
+					<table data-bind="with: displayTransactions">
+						<thead>
+							<tr>
+								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
+								<th width="38%">Company Name</th>
+								<th width="13%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+								<th width="13%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+								<th width="13%">Last Close Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+								<th width="13%">Current value <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+								<th width="5%">Delete <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: {data: $data}">
+							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+								<td data-bind="text: tickerCode"></td>
+								<td data-bind="text: tradeDate, format: 'date'"></td>
+								<td data-bind="text: numberOfShares, format: 'number'"></td>
+								<td data-bind="text: costAtPurchase, format: 'dollars'"></td>
+								<td data-bind="text: currentPrice, format: 'dollars'"></td>
+								<td><img src="img/x-button.png" alt="" data-bind="tooltip: 'Delete Transaction'"  /></td>
+							</tr>
+						</tbody>
+					</table>
+				<!-- /ko -->
+				<!-- ko {if: displayTransCompanies().length} -->
+					<table data-bind="with: displayTransCompanies">
+						<thead>
+							<tr>
+								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
+								<th width="95%" class="company-header">Company Name</th>
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: {data: $data}">
+							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+								<td class="company-row" data-bind="text: tickerCode"></td>
+							</tr>
+						</tbody>
+					</table>	
+				<!-- /ko -->
 			</div>
 		</div>
 		

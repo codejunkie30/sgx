@@ -11,6 +11,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		messages: JSON.parse(MESSAGES),
 		activeTab: ko.observable('performance'),
 		displayTransactions: ko.observableArray(),
+		displayTransCompanies: ko.observableArray(),
 		selectAllTransaction: ko.computed(function() {}),
 		
 		libLoggedIn: ko.observable(),
@@ -25,6 +26,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		chartData : [],
 		seriesOptions: [],
 		transactionTickers: [],
+		watchlistId: null,
 		
 		volumeData : [],
 		closePrice : [],
@@ -47,8 +49,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		renderChart: function(me, responseData){
 			me.chartData = responseData;
+			me.transactionTickers = [];
 			$.each(responseData.companiesPriceHistory, function(i, data){
 				var priceData = me.toHighCharts(data.priceHistory.price);
+				me.transactionTickers.push(data.tickerCode);
 				me.seriesOptions[i] = {
 		                name: data.tickerCode,
 		                data: priceData,
@@ -58,6 +62,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
             	me.performanceChartRenderer(me);
 			});	
+			
+			//get the transaction data
+			me.getTransactionsData(me, me.watchlistId);
 		},
 		
 		toHighCharts : function(data) {
@@ -78,14 +85,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var baseChart = PER_CHART_CONFIG;
 			baseChart.series = me.seriesOptions;
 			$('#performance-chart-content').highcharts('StockChart', baseChart);
-			PAGE.hideLoading();
 		},
 		
-		getChartData(me, id){
+		getChartData(me){
 			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/company/stockListpriceHistory";
 			var postType = 'POST';
-    	    var params = { "id" : id };
+    	    var params = { "id" : me.watchlistId };
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
@@ -106,21 +112,43 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						for(i in data){
-							data[i]["selectedTransaction"] = ko.observable(true);
+						me.displayTransactions([]);
+						me.displayTransCompanies([]);
+						if(!$.isEmptyObject(data)){
+							for(i in data){
+								data[i]["selectedTransaction"] = ko.observable(true);
+							}
+							me.displayTransactions(data);
+							me.computeSelectAllTrans(me);
+						}else{
+							var tickersData = me.transactionTickers;
+							if(!UTIL.isEmpty(tickersData)){
+								var jsonObj = [];
+								for(i=0 ;i<tickersData.length; i++){
+									var item = {};
+									item ["tickerCode"] = tickersData[i];
+									item ["selectedTransaction"] = ko.observable(true);
+									jsonObj.push(item);
+								}
+								me.displayTransCompanies(jsonObj);
+								me.computeSelectAllTrans(me);
+							}
 						}
-						me.displayTransactions(data);
-						me.computeSelectAllTrans(me);
 					}, 
 					PAGE.customSGXError);
 			PAGE.resizeIframeSimple();
+			PAGE.hideLoading();
 		},
 		
 		computeSelectAllTrans: function(me){
+			var evaluateData = me.displayTransactions();
+			if(UTIL.isEmpty(evaluateData)){
+				evaluateData = me.displayTransCompanies();
+			}
 			me.selectAllTransaction = ko.computed({
 				read: function () {
 	                var selectAllTransaction = true;
-	                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
 	                	//single chart transaction
 	                	me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
@@ -129,11 +157,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                return selectAllTransaction;
 	            },
 	            write: function (value) {
-	                ko.utils.arrayForEach(me.displayTransactions(), function (item) {
+	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                    if (value) item.selectedTransaction(true);
 	                    else item.selectedTransaction(false);
-	                    //push the tickers for unchart
-	                    me.transactionTickers.push(item.tickerCode);
 	                });
 	                //Multi Chart Transaction
 	                me.multiChartUnchart(me, value);
@@ -162,24 +188,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if(!UTIL.isEmpty(chart)){
 				var seriesLength = chart.series.length;
 		        for(var i = seriesLength -1; i > -1; i--) {
-		        	if(me.isNameContains(chart.series[i].name)){
-			        	if(value){
-			        		chart.series[i].show();
-			        	}else{
-			        		chart.series[i].hide();
-			        	}
+		        	if(value){
+		        		chart.series[i].show();
+		        	}else{
+		        		chart.series[i].hide();
 		        	}
 		        }
 			}
-		},
-		
-		isNameContains: function(seriesName){
-			var me = this;
-			var transTickers = me.transactionTickers;
-			for (i in transTickers) {
-		       if (transTickers[i] == seriesName) return true;
-		    }
-		    return false;
 		},
 		
 		changeTab: function(tabName){
@@ -217,18 +232,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			);
 			
 			me.selectedValue.subscribe(function(data){
+				me.watchlistId = data;
 				
 				var chart = $('#performance-chart-content').highcharts();
 				if(!UTIL.isEmpty(chart)){
 					me.seriesOptions = [];
-					//me.performanceChartRenderer(me);
+					me.performanceChartRenderer(me);
 				}
 				
 				//get the performance chart data
-				me.getChartData(me, data);
-				
-				//get the transaction data
-				me.getTransactionsData(me, data);
+				me.getChartData(me);
 				
 				var watchlists = this.finalWL();
 				for(var i = 0, len = watchlists.length; i < len; i++) {
