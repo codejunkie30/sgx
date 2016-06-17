@@ -251,9 +251,10 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	@Override
-	public List<WatchlistTransactionModel> getTransactions(User user, String id) {
+	public Map<String, List<WatchlistTransactionModel>> getTransactions(User user, String id) {
 		Long watchlistId = Long.parseLong(id);
-		List<WatchlistTransactionModel> transactionModelList = new ArrayList<>();
+		Map<String, List<WatchlistTransactionModel>> transactionMap = new HashMap<>();
+		List<WatchlistTransactionModel> transactionModelList;
 
 		if (id != null) {
 			Watchlist[] watchlist = watchlistRepository.findByUser(user);
@@ -264,13 +265,20 @@ public class WatchlistServiceImpl implements WatchlistService {
 					for (WatchlistTransaction transaction : transactions) {
 						WatchlistTransactionModel transactionModel = new WatchlistTransactionModel();
 						BeanUtils.copyProperties(transaction, transactionModel);
+						if(transactionMap.get(transaction.getTickerCode()) == null){
+							transactionModelList = new ArrayList<>();
+							transactionMap.put(transaction.getTickerCode(), transactionModelList);
+						}else{
+							transactionModelList = transactionMap.get(transaction.getTickerCode());
+						}
+						
 						transactionModelList.add(transactionModel);
 					}
-					return transactionModelList;
+					return transactionMap;
 				}
 			}
 		}
-		return transactionModelList;
+		return transactionMap;
 	}
 
 	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id) {

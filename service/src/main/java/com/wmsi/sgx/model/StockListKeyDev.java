@@ -12,7 +12,7 @@ import java.util.List;
 public class StockListKeyDev implements Comparable<StockListKeyDev>{
 
 	private List<String> tickerCodes;
-	private List<String> types;
+	private String type;
 	private Long date;
 	private String headline;
 	private String situation;
@@ -35,18 +35,18 @@ public class StockListKeyDev implements Comparable<StockListKeyDev>{
 	}
 
 	/**
-	 * @return the types
+	 * @return the type
 	 */
-	public List<String> getTypes() {
-		return types;
+	public String getType() {
+		return type;
 	}
 
 	/**
-	 * @param types
-	 *            the types to set
+	 * @param type
+	 *            the type to set
 	 */
-	public void setTypes(List<String> types) {
-		this.types = types;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	
@@ -121,8 +121,8 @@ public class StockListKeyDev implements Comparable<StockListKeyDev>{
 		StringBuilder builder = new StringBuilder();
 		builder.append("StockListKeyDev [tickerCodes=");
 		builder.append(tickerCodes);
-		builder.append(", types=");
-		builder.append(types);
+		builder.append(", type=");
+		builder.append(type);
 		builder.append(", date=");
 		builder.append(date);
 		builder.append(", headline=");

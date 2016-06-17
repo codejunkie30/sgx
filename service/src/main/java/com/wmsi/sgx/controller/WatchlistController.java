@@ -127,7 +127,7 @@ public class WatchlistController {
 	}
 	
 	@RequestMapping(value = "watchlist/transactions")
-	public List<WatchlistTransactionModel> getTransactions(HttpServletRequest request, @RequestBody Response response){
+	public Map<String, List<WatchlistTransactionModel>> getTransactions(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		String id = response.getMessage();
 		return watchlistService.getTransactions(usr,id);

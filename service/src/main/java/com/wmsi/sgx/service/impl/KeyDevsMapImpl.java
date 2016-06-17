@@ -22,6 +22,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	ClassPathResource keyDevFile;
 	private Map<String, List<String>> keyDevMap;
 	private Map<String, String> keyDevLabel;
+	private Map<String, String> keyDevTypeLabelMap;
 	
 	@Override
 	public Map<String, List<String>> getMap(){
@@ -30,6 +31,11 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	@Override
 	public String getKeyDevLabel(String key){
 		return keyDevLabel.get(key);
+	}
+	
+	@Override
+	public String getKeyDevLabelByType(String type){
+		return keyDevTypeLabelMap.get(type);
 	}
 	
 	
@@ -50,11 +56,12 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		List<String> kdPotentialTransactions = new ArrayList<String>();
 		List<String> kdResultsCorpAnnouncements = new ArrayList<String>();
 		
-	
+		keyDevTypeLabelMap = new HashMap<>();
 		try{
 			reader = new InputStreamReader(keyDevFile.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			while((record = csvReader.readNext()) != null){
+				keyDevTypeLabelMap.put(record[0], record[1]);
 				switch(record[1]){
 				case "Announced/Completed Transactions":
 					kdAnounceCompTransactions.add(record[0]);

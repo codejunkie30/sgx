@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.StockListKeyDev;
 import com.wmsi.sgx.model.keydevs.KeyDevsRequest;
 import com.wmsi.sgx.model.keydevs.StockListKeyDevsRequest;
+import com.wmsi.sgx.service.KeyDevsMap;
 import com.wmsi.sgx.service.KeyDevsService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.search.SearchService;
@@ -36,6 +38,9 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 
 	@Autowired
 	private SearchService keyDevsSearch;
+	
+	@Autowired
+	private KeyDevsMap keyDevsMap;
 
 	@Override
 	@Cacheable("keyDevsSearch")
@@ -97,7 +102,7 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 	}
 	
 	@Override
-	public Map<String, StockListKeyDev> searchKeyDevs(StockListKeyDevsRequest req) throws ServiceException {
+	public Map<String, List<StockListKeyDev>> searchKeyDevs(StockListKeyDevsRequest req) throws ServiceException {
 
 		try{
 			Long from = null;
@@ -117,26 +122,24 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 							stockListKeyDev = new StockListKeyDev();
 							map.put(keyDev.getKeyDevId(), stockListKeyDev);
 							stockListKeyDev.setTickerCodes(new ArrayList<String>());
-							stockListKeyDev.setTypes(new ArrayList<String>());
 						} else {
 							stockListKeyDev = map.get(keyDev.getKeyDevId());
 						}
 						BeanUtils.copyProperties(keyDev, stockListKeyDev);
 						stockListKeyDev.getTickerCodes().add(keyDevs.getTickerCode());
 						stockListKeyDev.setDate(keyDev.getDate().getTime());
-						stockListKeyDev.getTypes().add(keyDev.getType());
 					}
 				}
 			}
-			sortByValues(map);
-			return map;
+			return sortAndGroupByType(map);
+			
 		}
 		catch(SearchServiceException e){
 			throw new ServiceException("Query execution failed", e);
 		}
 	}
 	
-	private static HashMap sortByValues(Map map) {
+	private Map<String, List<StockListKeyDev>> sortAndGroupByType(Map map) {
 		List list = new LinkedList(map.entrySet());
 		// Defined Custom Comparator here
 		Collections.sort( list, new Comparator<Map.Entry<String, StockListKeyDev>>()
@@ -147,10 +150,20 @@ public class KeyDevsServiceImpl implements KeyDevsService{
             }
         } );
 
-		HashMap sortedHashMap = new LinkedHashMap();
+		Map<String, List<StockListKeyDev>> sortedHashMap = new TreeMap();
+		List<StockListKeyDev> stockListKeyDevs;
+		String keyDevTypeLabel;
 		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			sortedHashMap.put(entry.getKey(), entry.getValue());
+			Map.Entry<String, StockListKeyDev> entry = (Map.Entry<String, StockListKeyDev>) it.next();
+			stockListKeyDevs = new ArrayList<>();
+			keyDevTypeLabel = keyDevsMap.getKeyDevLabelByType(entry.getValue().getType());
+			if(sortedHashMap.get(keyDevTypeLabel) == null){
+				stockListKeyDevs = new ArrayList<>();
+				sortedHashMap.put(keyDevTypeLabel, stockListKeyDevs);
+			}else{
+				stockListKeyDevs = sortedHashMap.get(keyDevTypeLabel);
+			}
+			stockListKeyDevs.add(entry.getValue());
 		}
 		return sortedHashMap;
 	}
