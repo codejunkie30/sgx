@@ -23,6 +23,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	private Map<String, List<String>> keyDevMap;
 	private Map<String, String> keyDevLabel;
 	private Map<String, String> keyDevTypeLabelMap;
+	private Map<String, String> keyDevTypeCodeLabelMap;
 	
 	@Override
 	public Map<String, List<String>> getMap(){
@@ -35,7 +36,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	
 	@Override
 	public String getKeyDevLabelByType(String type){
-		return keyDevTypeLabelMap.get(type);
+		return keyDevTypeCodeLabelMap.get(keyDevTypeLabelMap.get(type));
 	}
 	
 	
@@ -114,5 +115,14 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		keyDevLabel.put("kdPotentialTransactions", "Potential Transactions");
 		keyDevLabel.put("kdResultsCorpAnnouncements", "Corporate Communications");
 		
+		keyDevTypeCodeLabelMap = reverse(keyDevLabel);
+		
 		}
+	
+	public static HashMap<String, String> reverse(Map<String, String> map) {
+	    HashMap<String, String> rev = new HashMap<String, String>();
+	    for(Map.Entry<String, String> entry : map.entrySet())
+	        rev.put(entry.getValue(), entry.getKey());
+	    return rev;
+	}
 }
