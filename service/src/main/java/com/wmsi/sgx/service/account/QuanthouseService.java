@@ -20,5 +20,8 @@ public interface QuanthouseService {
 	List<CompanyPrice> getCompanyPrice(List<String> companies)
 			throws QuanthouseServiceException, CompanyServiceException, SearchServiceException;	
 	
+	List<CompanyPrice> getPriceChangeForWatchlistCompanies(List<String> companies)
+			throws QuanthouseServiceException, CompanyServiceException,SearchServiceException;
+	
 	void setCurrency(String currency);
 }

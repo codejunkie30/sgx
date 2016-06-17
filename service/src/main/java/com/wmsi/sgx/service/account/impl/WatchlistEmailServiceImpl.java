@@ -170,7 +170,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("pcTradingVolume")!=null&&map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
-				if(volume > 0.0 && comp.getVolume() != null){
+				if(volume == 0.0 && comp.getVolume() != null)
+					volumeOptions.put(company, companyName);
+				else if(volume > 0.0){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
 					if(Math.abs(Double.parseDouble(verifyStringAsNumber(map.get("pcTradingVolumeValue").toString()))) < priceChange){
 						volumeOptions.put(company, companyName);
@@ -291,16 +293,21 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 		
 		//TODO Refactor to a method?
-		if(errorList.size()>0){
-			pair.setRight(errorList);
-			pair.setLeft(null);
-		}else if(noUpdatesFlag){
+		if(noUpdatesFlag&&alertList.isEmpty()){
 			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
 			pair.setRight(errorList);
 			pair.setLeft(null);
-		}else{
+		}else if(watchlist.getCompanies()==null||watchlist.getCompanies().isEmpty()){
+			errorList.add(IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
+			pair.setRight(errorList);
+			pair.setLeft(null);
+		}else if(alertList.size()>0){
 			pair.setRight(null);
 			pair.setLeft(alertList);
+		}else if(alertList.isEmpty()){
+			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
+			pair.setRight(errorList);
+			pair.setLeft(null);
 		}
 		return pair;
 		}	
