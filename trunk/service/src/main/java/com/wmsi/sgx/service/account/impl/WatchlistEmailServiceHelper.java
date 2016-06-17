@@ -75,7 +75,7 @@ public class WatchlistEmailServiceHelper implements Job{
 								log.info(" Watch list info  \n:" + acc.getUser().getUsername() +  " \t" +
 										options2.size() + "\t "+ watchlist.getCompanies().size() );
 								content = senderService.send(acc.getUser().getUsername(), IEmailAuditMessages.EMAIL_SUBJECT, options2,
-											watchlist, quanthouseService.getCompanyPrice(watchlist.getCompanies()));
+											watchlist, quanthouseService.getPriceChangeForWatchlistCompanies(watchlist.getCompanies()));
 								insertEmailTransaction(acc.getUser(), watchlist, content, IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_SUCCESS, IEmailAuditMessages.EMAIL_SUCCESS);
 							} catch (MessagingException | QuanthouseServiceException | CompanyServiceException | SearchServiceException e) {
 								log.info("exception while sending watchList email to "+acc.getUser().getUsername());
