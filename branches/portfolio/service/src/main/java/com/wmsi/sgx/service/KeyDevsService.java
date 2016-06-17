@@ -12,6 +12,6 @@ public interface KeyDevsService{
 	
 	KeyDevs search(KeyDevsRequest req) throws ServiceException;
 	List<KeyDevs> search(StockListKeyDevsRequest req) throws ServiceException;
-	Map<String, StockListKeyDev> searchKeyDevs(StockListKeyDevsRequest req) throws ServiceException;
+	Map<String, List<StockListKeyDev>> searchKeyDevs(StockListKeyDevsRequest req) throws ServiceException;
 
 }
