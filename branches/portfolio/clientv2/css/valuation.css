@@ -186,11 +186,33 @@
 	text-align: right;
 }
 
-.valuation-results .pager input {
-	width: 25px;
-	display: inline-block;
-	margin: 0 6px;
-	text-align: center;
+.transactions table tbody tr td input {
+	width: 90px;
+    height: 30px;
+    text-align: left;
+    display: inline-block;
+}
+
+.transactions .select-company {
+	width: 220px;
+    height: 36px;
+    display: inline-block;
+}
+
+.transactions .select-type {
+	width: 90px;
+    height: 36px;
+    display: inline-block;
+}
+
+.transactions table thead tr th {
+	color: #0e236b;
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	cursor: pointer;
+	vertical-align: top;
 }
 
 .valuation-results .pager .action-btn {
@@ -222,7 +244,7 @@
 	display: inline-block;
 	background: #0e236b;
 	-webkit-border-radius: 4px;
-	padding: 3px 7px 3px 7px;
+	padding: 8px 15px 8px 15px;
 	color: #fff !important;
 	cursor: pointer;
 }

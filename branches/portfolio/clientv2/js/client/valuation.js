@@ -13,6 +13,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		displayTransactions: ko.observableArray(),
 		displayTransCompanies: ko.observableArray(),
 		selectAllTransaction: ko.computed(function() {}),
+		watchlistCompanies: ko.observableArray(),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -64,7 +65,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});	
 			
 			//get the transaction data
-			me.getTransactionsData(me, me.watchlistId);
+			me.getTransactionsData(me);
 		},
 		
 		toHighCharts : function(data) {
@@ -103,10 +104,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.customSGXError);
 		},
 		
-		getTransactionsData: function(me, id){
+		getTransactionsData: function(me){
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/transactions";
 			var postType = 'POST';
-    	    var params = { "message" : id };
+    	    var params = { "message" : me.watchlistId };
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
@@ -173,11 +174,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var seriesLength = chart.series.length;
 				for(var i = seriesLength -1; i > -1; i--) {
 					if(chart.series[i].name == seriesName){
-						if(value){
-			        		chart.series[i].show();
-			        	}else{
-			        		chart.series[i].hide();
-			        	}
+		        		chart.series[i].setVisible(value);
 					}
 				}
 			}
@@ -186,14 +183,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		multiChartUnchart: function(me, value){
 			var chart = $('#performance-chart-content').highcharts();
 			if(!UTIL.isEmpty(chart)){
-				var seriesLength = chart.series.length;
-		        for(var i = seriesLength -1; i > -1; i--) {
-		        	if(value){
-		        		chart.series[i].show();
-		        	}else{
-		        		chart.series[i].hide();
-		        	}
-		        }
+				chart.series.visible = value;
 			}
 		},
 		
@@ -243,12 +233,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				//get the performance chart data
 				me.getChartData(me);
 				
-				var watchlists = this.finalWL();
+				var watchlists = me.finalWL();
 				for(var i = 0, len = watchlists.length; i < len; i++) {
-					var wl = watchlists[i]
+					var wl = watchlists[i];
 					if( wl.id == data) {
-						VALUATION.clearWatchListErrors();
-						VALUATION.editWLName(wl.name);			
+						me.clearWatchListErrors();
+						me.editWLName(wl.name);	
+						me.populateWatchlistCompanies(wl, me);
 						break;
 					}
 				}				
@@ -396,6 +387,29 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.customSGXError,
 				undefined
 			);			
+		},
+		
+		populateWatchlistCompanies:function(watchlistObject, me){
+		    // JSON Call for populating the companies for the selected watchlist.
+			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+			    $('#watchlistCompaniesSelect').empty()
+				return;
+			}
+
+		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
+		    var params = { "companies": watchlistObject.companies };
+		    var postType = 'POST';
+		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
+		    	if(!$.isEmptyObject(data)){
+		    		me.watchlistCompanies(data.companyPrice);
+		    	}
+		    	PAGE.hideLoading();
+				setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
+
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log('error making service call');
+			});
+
 		},
 		
 		clearWatchListErrors: function() {
