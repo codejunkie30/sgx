@@ -227,6 +227,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			if (vals.hasOwnProperty("id")) {
 				id = vals.id;
 				extra = vals.extra;
+				if(extra!=null&&extra.indexOf('code')>-1) {
+				    if(extra.indexOf('=')>-1)
+					extra='code='+encodeURIComponent(extra.substr(extra.indexOf('=')+1,extra.len));
+				}
 				url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
 			}
 			else {
@@ -898,7 +902,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 					var companies = wl.companies;
 					
-					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
+					if (companies.length >= 25) { alert("You have added 25 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
 					
 					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
 					
