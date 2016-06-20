@@ -13,7 +13,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		displayTransactions: ko.observableArray(),
 		displayTransCompanies: ko.observableArray(),
 		selectAllTransaction: ko.computed(function() {}),
+		
 		watchlistCompanies: ko.observableArray(),
+		availableTypes: ko.observableArray(['BUY', 'SELL']),
+		transItems: ko.observableArray([]),
+		selectedCompanyValue: ko.observable(),
+		selectedAvailableType: ko.observable(),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -427,7 +432,72 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			$('.wl-companies').prepend($('<div id="loading-alerts"><div class="loading-text"><img src="img/ajax-loader.gif"></div></div>'));
 		},
 		
+		
+		
+		//-------------Transaction functionality starts--------------
+		addTrans: function() {
+			var me = this;
+			var companyName = $("#watchlistCompaniesSelect option:selected").text();
+			var tickerCode = me.selectedCompanyValue();
+			var transactionType = me.selectedAvailableType();
+			var tradeDate =  $("#tradeDate").val();
+			var numberOfShares = $("#numberOfShares").val();
+			var costAtPurchase = $("#costAtPurchase").val();
+			var transItemModel = new insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase);
+			me.transItems.push(transItemModel);
+			me.addTransaction(transItemModel);
+	    },
+	    
+	    addTransaction: function(model){
+	    	var me = this;
+	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
+			var postType = 'POST';
+    	    var params = ko.toJSON(me.mapDataToSend(model));
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						console.log(data);
+					}, 
+					PAGE.customSGXError);
+	    },
+	    
+	    mapDataToSend: function(item){
+	            return {
+	            		id : this.watchlistId,
+	            		transactions : [
+		                    {
+				            	tickerCode     : item.tickerCode,
+				            	transactionType: item.transactionType,
+				            	tradeDate      : item.tradeDate,
+				            	numberOfShares : item.numberOfShares,
+				            	costAtPurchase : item.costAtPurchase,	
+				            	currentPrice   : item.currentPrice
+		                    }
+		                  ]
+            		  };
+	    },
+	    
+	    removeItem: function(item) {
+	        this.transItems.remove(item);
+	    }
+		
 	};
+	
+	function insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase) {
+    	var me = this;
+    	me.companyName = ko.observable(companyName);
+    	me.tickerCode = ko.observable(tickerCode);
+    	me.transactionType = ko.observable(transactionType);
+    	me.tradeDate = ko.observable(tradeDate);
+    	me.numberOfShares = ko.observable(numberOfShares);
+    	me.costAtPurchase = ko.observable(costAtPurchase);
+    	me.currentPrice = ko.observable("89.9");
+    	/*me.priceWithTax = ko.dependentObservable(function() {
+            return (me.price() * 1.05).toFixed(2);
+        }, me);*/
+    }
 	
 	return VALUATION;
 	
