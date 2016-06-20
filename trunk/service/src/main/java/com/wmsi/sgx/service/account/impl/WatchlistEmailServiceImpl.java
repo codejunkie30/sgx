@@ -170,7 +170,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("pcTradingVolume")!=null&&map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
-				if(volume == 0.0 && comp.getVolume() != null)
+				if(volume < 0.0 && comp.getVolume() != null)
 					volumeOptions.put(company, companyName);
 				else if(volume > 0.0){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
