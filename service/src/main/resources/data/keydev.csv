@@ -59,18 +59,18 @@ Index Constituent Adds,Listing/Trading Related
 Index Constituent Drops,Listing/Trading Related
 Ticker Changes,Listing/Trading Related
 Regulatory Agency Inquiries,Potential Red Flags/Distress Indicators
-Regulatory Authority – Compliance,Potential Red Flags/Distress Indicators
-Regulatory Authority – Enforcement Actions,Potential Red Flags/Distress Indicators
-Regulatory Authority – Regulations,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Compliance,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Enforcement Actions,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Regulations,Potential Red Flags/Distress Indicators
 Auditor Going Concern Doubts,Potential Red Flags/Distress Indicators
 Auditor Changes,Potential Red Flags/Distress Indicators
-Bankruptcy – Asset Sale/Liquidation,Potential Red Flags/Distress Indicators
+Bankruptcy ï¿½ Asset Sale/Liquidation,Potential Red Flags/Distress Indicators
 Bankruptcy - Conclusion,Potential Red Flags/Distress Indicators
 Bankruptcy - Emergence/Exit,Potential Red Flags/Distress Indicators
 Bankruptcy - Filing,Potential Red Flags/Distress Indicators
-Bankruptcy – Financing,Potential Red Flags/Distress Indicators
+Bankruptcy ï¿½ Financing,Potential Red Flags/Distress Indicators
 Bankruptcy - Other,Potential Red Flags/Distress Indicators
-Bankruptcy – Reorganization ,Potential Red Flags/Distress Indicators
+Bankruptcy ï¿½ Reorganization ,Potential Red Flags/Distress Indicators
 Business Reorganizations,Potential Red Flags/Distress Indicators
 Credit Rating - S&P - CreditWatch/Outlook Action,Potential Red Flags/Distress Indicators
 Credit Rating - S&P - Not-Rated Action,Potential Red Flags/Distress Indicators
@@ -84,9 +84,9 @@ Index Constituent Drops,Potential Red Flags/Distress Indicators
 Labor-Related Announcements,Potential Red Flags/Distress Indicators
 Lawsuits & Legal Issues,Potential Red Flags/Distress Indicators
 Regulatory Agency Inquiries,Potential Red Flags/Distress Indicators
-Regulatory Authority – Compliance,Potential Red Flags/Distress Indicators
-Regulatory Authority – Enforcement Actions,Potential Red Flags/Distress Indicators
-Regulatory Authority – Regulations,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Compliance,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Enforcement Actions,Potential Red Flags/Distress Indicators
+Regulatory Authority ï¿½ Regulations,Potential Red Flags/Distress Indicators
 Restatements of Operating Results,Potential Red Flags/Distress Indicators
 Considering Multiple Strategic Alternatives,Potential Transactions
 M&A Rumors and Discussions,Potential Transactions
@@ -96,42 +96,42 @@ Seeking Acquisitions/Investments,Potential Transactions
 Seeking Financing/Partners,Potential Transactions
 Seeking to Sell/Divest,Potential Transactions
 Shelf Registration Filings,Potential Transactions
-Announcements of Earnings,Corporate Communications
-Announcement of Interim Management Statement,Corporate Communications
-Announcement of Operating Results,Corporate Communications
-Announcements of Sales/Trading Statement,Corporate Communications
-Analyst/Investor Day,Corporate Communications
-Annual General Meeting,Corporate Communications
-Bankruptcy – Asset Sale/Liquidation,Corporate Communications
-Bankruptcy - Conclusion,Corporate Communications
-Bankruptcy - Emergence/Exit,Corporate Communications
-Bankruptcy - Filing,Corporate Communications
-Bankruptcy – Financing,Corporate Communications
-Bankruptcy - Other,Corporate Communications
-Bankruptcy – Reorganization ,Corporate Communications
-Company Conference Presentations,Corporate Communications
-Conferences,Corporate Communications
-Corporate Guidance - Unusual Events,Corporate Communications
-Delayed Earnings Announcements,Corporate Communications
-Delayed SEC Filings,Corporate Communications
-Earnings Calls,Corporate Communications
-Earnings Release Date,Corporate Communications
-Bankruptcy - Emergence/Exit,Corporate Communications
-Estimated Earnings Release Date (CIQ Derived),Corporate Communications
-Earnings Release Date,Corporate Communications
-Fixed Income Calls,Corporate Communications
-Guidance/Update Calls,Corporate Communications
-Halt/Resume of Operations - Unusual Events,Corporate Communications
-Interim Management Statement Release Date,Corporate Communications
-Interim Management Statement Calls,Corporate Communications
-M&A Calls,Corporate Communications
-Operating Results Calls,Corporate Communications
-Operating Results Release Date,Corporate Communications
-Regulatory Authority – Regulations,Corporate Communications
-Restatements of Operating Results,Corporate Communications
-S&P Events,Corporate Communications
-Sales/Trading Statement Release Date,Corporate Communications
-Sales/Trading Statement Calls,Corporate Communications
-Shareholder/Analyst Calls,Corporate Communications
-Special Calls,Corporate Communications
-Special/Extraordinary Shareholders Meeting,Corporate Communications
+Announcements of Earnings,Results and Corporate Announcements
+Announcement of Interim Management Statement,Results and Corporate Announcements
+Announcement of Operating Results,Results and Corporate Announcements
+Announcements of Sales/Trading Statement,Results and Corporate Announcements
+Analyst/Investor Day,Results and Corporate Announcements
+Annual General Meeting,Results and Corporate Announcements
+Bankruptcy ï¿½ Asset Sale/Liquidation,Results and Corporate Announcements
+Bankruptcy - Conclusion,Results and Corporate Announcements
+Bankruptcy - Emergence/Exit,Results and Corporate Announcements
+Bankruptcy - Filing,Results and Corporate Announcements
+Bankruptcy ï¿½ Financing,Results and Corporate Announcements
+Bankruptcy - Other,Results and Corporate Announcements
+Bankruptcy ï¿½ Reorganization ,Results and Corporate Announcements
+Company Conference Presentations,Results and Corporate Announcements
+Conferences,Results and Corporate Announcements
+Corporate Guidance - Unusual Events,Results and Corporate Announcements
+Delayed Earnings Announcements,Results and Corporate Announcements
+Delayed SEC Filings,Results and Corporate Announcements
+Earnings Calls,Results and Corporate Announcements
+Earnings Release Date,Results and Corporate Announcements
+Bankruptcy - Emergence/Exit,Results and Corporate Announcements
+Estimated Earnings Release Date (CIQ Derived),Results and Corporate Announcements
+Earnings Release Date,Results and Corporate Announcements
+Fixed Income Calls,Results and Corporate Announcements
+Guidance/Update Calls,Results and Corporate Announcements
+Halt/Resume of Operations - Unusual Events,Results and Corporate Announcements
+Interim Management Statement Release Date,Results and Corporate Announcements
+Interim Management Statement Calls,Results and Corporate Announcements
+M&A Calls,Results and Corporate Announcements
+Operating Results Calls,Results and Corporate Announcements
+Operating Results Release Date,Results and Corporate Announcements
+Regulatory Authority ï¿½ Regulations,Results and Corporate Announcements
+Restatements of Operating Results,Results and Corporate Announcements
+S&P Events,Results and Corporate Announcements
+Sales/Trading Statement Release Date,Results and Corporate Announcements
+Sales/Trading Statement Calls,Results and Corporate Announcements
+Shareholder/Analyst Calls,Results and Corporate Announcements
+Special Calls,Results and Corporate Announcements
+Special/Extraordinary Shareholders Meeting,Results and Corporate Announcements
