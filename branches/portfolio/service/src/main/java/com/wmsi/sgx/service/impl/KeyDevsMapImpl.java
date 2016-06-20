@@ -80,7 +80,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 					kdPotentialRedFlags.add(record[0]);
 				case "Potential Transactions":
 					kdPotentialTransactions.add(record[0]);
-				case "Corporate Communications":
+				case "Results and Corporate Announcements":
 					kdResultsCorpAnnouncements.add(record[0]);
 
 				}
@@ -113,7 +113,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		keyDevLabel.put("kdListTradeRelated", "Listing/Trading Related");
 		keyDevLabel.put("kdPotentialRedFlags", "Potential Red Flags/Distress Indicators");
 		keyDevLabel.put("kdPotentialTransactions", "Potential Transactions");
-		keyDevLabel.put("kdResultsCorpAnnouncements", "Corporate Communications");
+		keyDevLabel.put("kdResultsCorpAnnouncements", "Results and Corporate Announcements");
 		
 		keyDevTypeCodeLabelMap = reverse(keyDevLabel);
 		
