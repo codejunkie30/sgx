@@ -283,14 +283,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			alertList.add(alert);
 		}
 		
-		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
-			if(entry.getValue().size() > 0){
-				AlertOption alert = new AlertOption();
-				alert.setCompanies(entry.getValue());
-				alert.setDescription(keyDevsMap.getKeyDevLabel(entry.getKey()));
-				alertList.add(alert);
-			}
-		}
 		
 		//TODO Refactor to a method?
 		if(noUpdatesFlag&&alertList.isEmpty()){
@@ -302,6 +294,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			pair.setRight(errorList);
 			pair.setLeft(null);
 		}else if(alertList.size()>0){
+			addKeyDevOptions(alertList, keyDevOptions);
 			pair.setRight(null);
 			pair.setLeft(alertList);
 		}else if(alertList.isEmpty()){
@@ -310,7 +303,18 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			pair.setLeft(null);
 		}
 		return pair;
-		}	
+		}
+
+	private void addKeyDevOptions(List<AlertOption> alertList, Map<String, Map<String, String>> keyDevOptions) {
+		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
+			if(entry.getValue().size() > 0){
+				AlertOption alert = new AlertOption();
+				alert.setCompanies(entry.getValue());
+				alert.setDescription(keyDevsMap.getKeyDevLabel(entry.getKey()));
+				alertList.add(alert);
+			}
+		}
+	}	
 	
 
 	public Estimate getEstimate(List<Estimate> estimate){
