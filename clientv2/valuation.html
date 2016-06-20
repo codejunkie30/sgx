@@ -84,24 +84,34 @@
 		<!-- div content for transactions functionality -->
 		<div class="grid valuation-results transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
 			<div>
+				Enter transaction to view additional details on your StockList
+			</div>
+			
+			<div align="right">
+					<a class="add-button" data-bind="">Save</a>
+				</div>
+			
+			<div>
 				<table>
 					<thead>
 						<tr>
-							<th>Company Name</th>
-							<th>Type</th>
-							<th>First Trade Date</th>
-							<th>Number of Shares</th>
-							<th>Last Close Price</th>
-							<th>Action</th>
+							<th width="45%">Company Name</th>
+							<th width="10%">Type</th>
+							<th width="10%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							<th width="10%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							<th width="10%">Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							<th width="10%">Last Close Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							<th width="5%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><select data-bind="" ></select></td>
-							<td><select data-bind="" ></select></td>
+							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'Select a Company', optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
+							<td><select class="select-type" data-bind="" ></select></td>
 							<td><input type="text" data-bind=""/></td>
 							<td><input type="text" data-bind=""/></td>
 							<td><input type="text" data-bind=""/></td>
+							<td>&nbsp;</td>
 							<td><a class="add-button" data-bind="">Add</a></td>
 						</tr>
 					</tbody>
