@@ -87,11 +87,10 @@
 				Enter transaction to view additional details on your StockList
 			</div>
 			
-			<div align="right">
-					<a class="add-button" data-bind="">Save</a>
-				</div>
-			
 			<div>
+				 <div align="right">
+					<a class="add-button" data-bind="click: saveTrans">Save</a>
+				</div>
 				<table>
 					<thead>
 						<tr>
@@ -124,10 +123,13 @@
 								<td><input type="text" data-bind="value: numberOfShares"/></td>
 								<td><input type="text" data-bind="value: costAtPurchase"/></td>
 								<td data-bind="text: currentPrice"></td>
-								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root), tooltip: 'Delete Transaction'"  /></td>
+								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)"  /></td>
 						    </tr>
     				  </script>
 				</table>
+				<div align="right">
+					<a class="add-button" data-bind="click: saveTrans">Save</a>
+				</div>
 			</div>
 		</div>
 	</section>
