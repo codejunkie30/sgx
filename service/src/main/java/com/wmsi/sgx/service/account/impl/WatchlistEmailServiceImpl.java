@@ -89,7 +89,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	@Override
-	public MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
+	public synchronized MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		boolean noUpdatesFlag = false;
 		MutablePair<List<AlertOption>, List<String>> pair = new MutablePair<List<AlertOption>, List <String>>();
 		Map<String, Object> map = new DefaultHashMap<String,Object>("false");
