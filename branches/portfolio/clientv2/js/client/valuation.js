@@ -445,14 +445,45 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var costAtPurchase = $("#costAtPurchase").val();
 			var transItemModel = new insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase);
 			me.transItems.push(transItemModel);
-			me.addTransaction(transItemModel);
+			me.clearFieldData();
+			//me.addTransaction(transItemModel);
+	    },
+	    
+	    saveTrans: function(){
+	    	var me = this;
+	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
+			var postType = 'POST';
+    	    var params = {'id' : me.watchlistId,'transactions' : me.mapTransDataToSend()};
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						console.log(data);
+					}, 
+					PAGE.customSGXError);
+	    },
+	    
+	    mapTransDataToSend: function(){
+	    	var me= this;
+	    	var items = ko.toJS(me.transItems());
+	    	return ko.utils.arrayMap(items, function(item) {
+	            delete item.companyName;
+	            return item;
+	        });
+	    },
+	    
+	    clearFieldData: function(){
+	    	$("#tradeDate").val("");
+	    	$("#numberOfShares").val("");
+	    	$("#costAtPurchase").val("");
 	    },
 	    
 	    addTransaction: function(model){
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
-    	    var params = ko.toJSON(me.mapDataToSend(model));
+    	    var params = ko.toJS(me.mapDataToSend(model));
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
@@ -468,6 +499,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	            		id : this.watchlistId,
 	            		transactions : [
 		                    {
+		                    	id 			   : "",
 				            	tickerCode     : item.tickerCode,
 				            	transactionType: item.transactionType,
 				            	tradeDate      : item.tradeDate,
@@ -494,6 +526,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.numberOfShares = ko.observable(numberOfShares);
     	me.costAtPurchase = ko.observable(costAtPurchase);
     	me.currentPrice = ko.observable("89.9");
+    	me.id = ko.observable("");
     	/*me.priceWithTax = ko.dependentObservable(function() {
             return (me.price() * 1.05).toFixed(2);
         }, me);*/
