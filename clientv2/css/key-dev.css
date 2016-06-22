@@ -29,7 +29,7 @@
     text-align: right; } */
 .key-dev-match .matches {
 	margin-left: 320px;
-	height: 475px;
+	height: 600px;
 }
 
 .key-dev-match .control-box select {
@@ -112,4 +112,11 @@ h2 {
 	color: #fff !important;
 	cursor: pointer;
     margin: 10px 0 30px 5px;
+}
+
+h3, h3 span {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 26px;
 }

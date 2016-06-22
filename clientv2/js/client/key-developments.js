@@ -8,8 +8,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		newWLName: ko.observable(),
 		premiumUser: ko.observable(),
 		selectedValue: ko.observable(),
+		keydevCompSelectedVal: ko.observable(),
 		addWatchlistName: ko.observableArray(),
 		messages: JSON.parse(MESSAGES),
+		allCompanies : [],
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -19,6 +21,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		libCurrency: ko.observable(),
 		premiumUserEmail: ko.observable(),
 		currentDay: ko.observable(),
+		
+		kdAnounceCompTransactions: ko.observableArray(),//Announced/Completed Transactions
+		kdCompanyForecasts: ko.observableArray(),//Company Forecasts and Ratings
+		kdCorporateStructureRelated: ko.observableArray(),//Corporate Structure Related
+		kdCustProdRelated: ko.observableArray(),//Customer/Product Related
+		kdDividensSplits: ko.observableArray(),//Dividends/Splits
+		kdListTradeRelated: ko.observableArray(),//Listing/Trading Related
+		kdPotentialRedFlags: ko.observableArray(),//Potential Red Flags/Distress Indicators
+		kdPotentialTransactions: ko.observableArray(),//Potential Transactions
+		kdResultsCorpAnnouncements: ko.observableArray(),//Results and Corporate Announcements
+		
 		
 		initPage: function() {
 			var me = this;
@@ -37,7 +50,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		getWatchListData: function(me) {
 			PAGE.showLoading();
 			
-			var displayMessage = KEYDEV.messages.messages[0];
+			var displayMessage = me.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'POST';
 			var params = {};
@@ -51,7 +64,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				    	    console.log('Watchlists unavailable');
 				    	    return;
 				    	}
-					KEYDEV.finalWL(data.watchlists.sort(sortByName));
+					me.finalWL(data.watchlists.sort(sortByName));
 					function sortByName(a, b){
 						  var a = a.name.toLowerCase();
 						  var b = b.name.toLowerCase(); 
@@ -67,26 +80,32 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.selectedValue.subscribe(function(data){
 				var watchlists = this.finalWL();
+				var keyDevFlag = true;
 				for(var i = 0, len = watchlists.length; i < len; i++) {
 					var wl = watchlists[i]
 					if( wl.id == data) {
-						KEYDEV.clearWatchListErrors();
-						KEYDEV.editWLName(wl.name);
-						//TODO populate watchlist companies
-						KEYDEV.populateWatchlistCompanies(wl);
+						me.allCompanies = wl.companies;
+						me.clearWatchListErrors();
+						me.editWLName(wl.name);
+						me.populateWatchlistCompanies(wl, me);
 						break;
 					}
-				}				
+				}
+				
+				if(keyDevFlag && !UTIL.isEmpty(me.allCompanies)){
+					keyDevFlag = false;
+					me.getKeyDevData(me, me.allCompanies);
+				}
+				
 			}, me);
-
 			
 			ko.validation.init({insertMessages: false});
-			KEYDEV.newWLName.extend({
+			me.newWLName.extend({
 					minLength: { params: 2, message: displayMessage.watchlist.error },
 					maxLength: { params: 40, message: displayMessage.watchlist.error }
 			});
 
-			me.wlNameError = ko.validation.group(KEYDEV.newWLName);  //grouping error for wlName only
+			me.wlNameError = ko.validation.group(me.newWLName);  //grouping error for wlName only
 			me.errors = ko.validation.group(me);			
 			me.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
@@ -96,23 +115,81 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			return me;
 		},
+		
+		searchKeyDev: function(){
+			var me = this;
+			var tickers = me.allCompanies; 
+			if(!UTIL.isEmpty(me.keydevCompSelectedVal())){
+				tickers = $.makeArray(me.keydevCompSelectedVal());
+			}
+			me.getKeyDevData(me, tickers);
+		},
+		
+		getKeyDevData: function(me, tickerCodes){
+	    	var endpoint = PAGE.fqdn + "/sgx/search/stockListKeydevs";
+			var postType = 'POST';
+    	    var params = {'tickerCodes' : tickerCodes};
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						console.log(data);
+						me.refractKeyDevData(data, me);
+					}, 
+					PAGE.customSGXError);
+		},
+		
+		refractKeyDevData: function(data, me){
+			me.kdAnounceCompTransactions.removeAll();
+			me.kdCompanyForecasts.removeAll();
+			me.kdCorporateStructureRelated.removeAll();
+			me.kdCustProdRelated.removeAll();
+			me.kdDividensSplits.removeAll();
+			me.kdListTradeRelated.removeAll();
+			me.kdPotentialRedFlags.removeAll();
+			me.kdPotentialTransactions.removeAll();
+			me.kdResultsCorpAnnouncements.removeAll();
+			
+			for(i in data){
+				if(i == "kdAnounceCompTransactions"){
+					me.kdAnounceCompTransactions(data[i]);
+				}else if(i == "kdCompanyForecasts"){
+					me.kdCompanyForecasts(data[i]);
+				}else if(i == "kdCorporateStructureRelated"){
+					me.kdCorporateStructureRelated(data[i]);
+				}else if(i == "kdCustProdRelated"){
+					me.kdCustProdRelated(data[i]);
+				}else if(i == "kdDividensSplits"){
+					me.kdDividensSplits(data[i]);
+				}else if(i == "kdListTradeRelated"){
+					me.kdListTradeRelated(data[i]);
+				}else if(i == "kdPotentialRedFlags"){
+					me.kdPotentialRedFlags(data[i]);
+				}else if(i == "kdPotentialTransactions"){
+					me.kdPotentialTransactions(data[i]);
+				}else if(i == "kdResultsCorpAnnouncements"){
+					me.kdResultsCorpAnnouncements(data[i]);
+				}
+			}
+		},
 				
 		addWatchlist: function(){
 			var me = this;
-			var newWLNameLC = KEYDEV.newWLName();
+			var newWLNameLC = me.newWLName();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
     	    var params = { "message": newWLNameLC };
-			var wlLength = KEYDEV.finalWL().length;
+			var wlLength = me.finalWL().length;
 			
 			if (me.wlNameError().length != 0) return;
 			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( newWLNameLC.toLowerCase().trim(), KEYDEV.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
+			if ($.inArray( newWLNameLC.toLowerCase().trim(), me.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
 			
-			KEYDEV.addWatchlistName([]);
-			$.each(KEYDEV.finalWL(), function(i, data){
-				KEYDEV.addWatchlistName.push(data.name.toLowerCase());
+			me.addWatchlistName([]);
+			$.each(me.finalWL(), function(i, data){
+				me.addWatchlistName.push(data.name.toLowerCase());
 			});			
 			
 			PAGE.showLoading();
@@ -128,11 +205,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					PAGE.hideLoading();
-					KEYDEV.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(sortByName));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
-							KEYDEV.selectedValue(data.id);
+							me.selectedValue(data.id);
 						}						
 					});
 				}, 
@@ -140,24 +217,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			
 			//Clears add WL after submit
-			KEYDEV.newWLName(null);
+			me.newWLName(null);
 		},
 
 		editWLNameSubmit: function(){
 			var me=this;
-			var editedName = KEYDEV.editWLName().trim();
+			var editedName = me.editWLName().trim();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
-			var params = { "watchlistName": editedName, "id": KEYDEV.selectedValue()};
+			var params = { "watchlistName": editedName, "id": me.selectedValue()};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			
 			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( editedName.toLowerCase(), KEYDEV.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return;  }
+			if ($.inArray( editedName.toLowerCase(), me.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return;  }
 			
-			KEYDEV.addWatchlistName([]);
-			$.each(KEYDEV.finalWL(), function(i, data){
-				KEYDEV.addWatchlistName.push(data.name.toLowerCase());
+			me.addWatchlistName([]);
+			$.each(me.finalWL(), function(i, data){
+				me.addWatchlistName.push(data.name.toLowerCase());
 			});	
     		
 			UTIL.handleAjaxRequest(
@@ -171,24 +248,24 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  var b = b.name.toLowerCase(); 
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
-					KEYDEV.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(sortByName));
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback
 			);
 			
 				//Clears add WL after submit
-			KEYDEV.newWLName(null);
-			KEYDEV.showChange(false);
+			me.newWLName(null);
+			me.showChange(false);
 		},
 		
 		confirmDelete: function(){
-			var deleteName = KEYDEV.editWLName();
+			var deleteName = me.editWLName();
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
-				KEYDEV.deleteWatchlist();
+				me.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });
 			
@@ -198,9 +275,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},		
 		
 		deleteWatchlist: function(){			
+			var me = this;
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/delete";
 			var postType = 'POST';
-			var params = { "message": KEYDEV.selectedValue()};
+			var params = { "message": me.selectedValue()};
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			
@@ -217,18 +295,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					PAGE.hideLoading();
-					KEYDEV.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(sortByName));
 				}, 
 				PAGE.customSGXError,
 				undefined
 			);			
 		},
 		
-		populateWatchlistCompanies:function(watchlistObject){
+		populateWatchlistCompanies:function(watchlistObject, me){
 		    // JSON Call for populating the companies for the selected watchlist.
 			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
-				    $('#watchlistCompaniesSelect')
-                                    .empty()
+				    $('#watchlistCompaniesSelect').empty()
 				return;
 			}
 
@@ -236,8 +313,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    var params = { "companies": watchlistObject.companies };
 		    var postType = 'POST';
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
-				self.allCompanies = data.companyNameAndTickerList;
-				KEYDEV.watchlistCompanies(data.companyPrice);
+				me.watchlistCompanies(data.companyPrice);
 
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
