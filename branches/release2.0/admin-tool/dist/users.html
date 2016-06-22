@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/vendor.css">
+<link href="css/main.css?1056b5c7855f71fd176f" rel="stylesheet"></head>
+<body>
+<div id="users">
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">SGX StockFacts Premium Admin</span>
+      </div>
+
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li data-bind="css:{active: page == 'users'}"><a href="#" data-bind="click:goToPage.bind($data, 'users')">Users</a></li>
+          <li data-bind="css:{active: page == 'general'}"><a href="#" data-bind="click:goToPage.bind($data, 'general')">General</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="" data-bind="click:logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container">
+
+    <section class="user-search">
+      <h4 data-bind="click:test">Search for user</h4>
+      <div class="form-inline">
+        <div class="form-group">
+          <input type="text" class="form-control search-by-email" placeholder="Enter an email address"
+                  data-bind="value:userEmail">
+        </div>
+        <a href="#" class="btn btn-primary" data-bind="click:searchByEmailTrigger">Go</a>
+        <span class="validationMessage-inline" data-bind="validationMessage:userEmail"></span>
+
+        <div class="search-by-transactionId">
+          <h5>Search by transaction Id</h5>
+            <div class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control transaction-id-input" placeholder="Enter a transaction Id" data-bind="value:transactionId">
+              </div>
+              <a href="#" class="btn btn-primary" data-bind="click:searchByTransactionIdTrigger">Go</a>
+              <span class="validationMessage-inline" data-bind="validationMessage:transactionId"></span>
+            </div>
+        </div>
+
+        <div class="search-by-date">
+          <h5>Search by date created</h5>
+          <label class="radio-inline">
+            <input type="radio" name="search-date" value="week" data-bind="checked:dateCreated"> This week
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="search-date" value="month" data-bind="checked:dateCreated"> This month
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="search-date" value="year" data-bind="checked:dateCreated"> This year
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="search-date" value="all" data-bind="checked:dateCreated"> All
+          </label>
+          <a href="#" class="btn btn-default" data-bind="click:searchByDateTrigger">Go</a> <span class="validationMessage-inline" data-bind="validationMessage:dateCreated"></span>
+ 
+        </div>
+      </div>
+    </section>
+
+  <hr>
+
+<!-- ko if:searchResults().length > 0 -->
+  <display-users params="data:searchResults, adminType: adminType"></display-users>
+<!-- /ko -->
+
+
+
+
+<!--   <button type="button" class="btn btn-primary btn-lg" data-bind="click:toggleSuperAdmin">
+    Add Admin User
+  </button> -->
+
+
+  </div>
+</div>
+<script src="js/bundle.js?1056b5c7855f71fd176f"></script></body>
+</html>
