@@ -114,9 +114,8 @@
 							<td><a class="add-button" data-bind="click: addTrans">Add</a></td>
 						</tr>
 					</tbody>
-					<tbody data-bind="template: { name: 'transTmpl', foreach: transItems }"></tbody>
-				    	<script id="transTmpl" type="text/html">
-        					<tr>
+					<tbody data-bind="foreach: transItems">
+						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<td class="company-row" data-bind="text: companyName"></td>
 								<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
 								<td><input type="text" data-bind="value: tradeDate"/></td>
@@ -125,7 +124,8 @@
 								<td data-bind="text: currentPrice"></td>
 								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)"  /></td>
 						    </tr>
-    				  </script>
+					</tbody>
+				    	
 				</table>
 				<div align="right">
 					<a class="add-button" data-bind="click: saveTrans">Save</a>
