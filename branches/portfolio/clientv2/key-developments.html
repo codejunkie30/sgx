@@ -32,7 +32,7 @@
 			<div class="control-box">
 				<table>
 					<tr>
-						<td><select id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'All Companies in StockList', value: selectedValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
+						<td><select id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'All Companies in StockList', value: keydevCompSelectedVal, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 					</tr>
 					<tr>
 						<td><label><input type="checkbox" value="" data-bind="">Announced/Completed Transactions</label></td>
@@ -62,29 +62,114 @@
 						<td><label><input type="checkbox" value="" data-bind="">Results and Corporate Announcements</label></td>
 					</tr>
 					<tr>
-						<td><a class="search-button" data-bind="">Search</a></td>
+						<td><a class="search-button" data-bind="click: searchKeyDev">Search</a></td>
 					</tr>
 				</table>
 				
 			</div>
 			<div class="matches">
 				<h2>Key Development Matches</h2>
-				<table>
-					<tr>
-						<td>
-							<div class="no-devs" data-bind="">There is no data to show for the selected period.</div>
-						</td>
-					</tr>
-				</table>
-					
-					<!-- <div>
-						<ul class="key-devs" data-bind="">gggjghghhhgh
-							<li>
-								Data to populate
-							</li>
-						</ul>
-						<div class="no-devs" data-bind="">There is no data to show for the selected period.</div>
-					</div> -->
+				
+				<div data-bind="visible: kdAnounceCompTransactions().length > 0 ">
+					<h3>Announced/Completed Transactions</h3>
+					<table data-bind="foreach: kdAnounceCompTransactions">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+								<!-- <div class="no-devs" data-bind="">There is no data to show for the selected period.</div> -->
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdCompanyForecasts().length > 0 ">
+					<h3>Company Forecasts and Ratings</h3>
+					<table data-bind="foreach: kdCompanyForecasts">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdCorporateStructureRelated().length > 0 ">
+					<h3>Corporate Structure Related</h3>
+					<table data-bind="foreach: kdCorporateStructureRelated">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdCustProdRelated().length > 0 ">
+					<h3>Customer/Product Related</h3>
+					<table data-bind="foreach: kdCustProdRelated">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdDividensSplits().length > 0 ">
+					<h3>Dividends/Splits</h3>
+					<table data-bind="foreach: kdDividensSplits">
+						<tr>
+							<td>
+								<span data-bind="text: headline"></span>
+								<div data-bind="text: tickerCodes"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdListTradeRelated().length > 0 ">
+					<h3>Listing/Trading Related</h3>
+					<table data-bind="foreach: kdListTradeRelated">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdPotentialRedFlags().length > 0 ">
+					<h3>Potential Red Flags/Distress Indicators</h3>
+					<table data-bind="foreach: kdPotentialRedFlags">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdPotentialTransactions().length > 0 ">
+					<h3>Potential Transactions</h3>
+					<table data-bind="foreach: kdPotentialTransactions">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div data-bind="visible: kdResultsCorpAnnouncements().length > 0 ">
+					<h3>Results and Corporate Announcements</h3>
+					<table data-bind="foreach: kdResultsCorpAnnouncements">
+						<tr>
+							<td>
+								<div data-bind="text: headline"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</section>
