@@ -152,23 +152,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.kdResultsCorpAnnouncements.removeAll();
 			
 			for(i in data){
-				if(i == "kdAnounceCompTransactions"){
+				if(i === "kdAnounceCompTransactions"){
 					me.kdAnounceCompTransactions(data[i]);
-				}else if(i == "kdCompanyForecasts"){
+				}else if(i === "kdCompanyForecasts"){
 					me.kdCompanyForecasts(data[i]);
-				}else if(i == "kdCorporateStructureRelated"){
+				}else if(i === "kdCorporateStructureRelated"){
 					me.kdCorporateStructureRelated(data[i]);
-				}else if(i == "kdCustProdRelated"){
+				}else if(i === "kdCustProdRelated"){
 					me.kdCustProdRelated(data[i]);
-				}else if(i == "kdDividensSplits"){
+				}else if(i === "kdDividensSplits"){
 					me.kdDividensSplits(data[i]);
-				}else if(i == "kdListTradeRelated"){
+				}else if(i === "kdListTradeRelated"){
 					me.kdListTradeRelated(data[i]);
-				}else if(i == "kdPotentialRedFlags"){
+				}else if(i === "kdPotentialRedFlags"){
 					me.kdPotentialRedFlags(data[i]);
-				}else if(i == "kdPotentialTransactions"){
+				}else if(i === "kdPotentialTransactions"){
 					me.kdPotentialTransactions(data[i]);
-				}else if(i == "kdResultsCorpAnnouncements"){
+				}else if(i === "kdResultsCorpAnnouncements"){
 					me.kdResultsCorpAnnouncements(data[i]);
 				}
 			}
@@ -260,6 +260,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		confirmDelete: function(){
+			var me = this;
 			var deleteName = me.editWLName();
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 

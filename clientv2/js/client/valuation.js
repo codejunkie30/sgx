@@ -10,7 +10,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		addWatchlistName: ko.observableArray(),
 		messages: JSON.parse(MESSAGES),
 		activeTab: ko.observable('performance'),
-		displayTransactions: ko.observableArray(),
+		displayTransactions: ko.observableArray([]),
 		displayTransCompanies: ko.observableArray(),
 		selectAllTransaction: ko.computed(function() {}),
 		
@@ -105,11 +105,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					function(data, textStatus, jqXHR){					
 						//Render Chart 
 						me.renderChart(me, data);
+						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
 		},
 		
 		getTransactionsData: function(me){
+			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/transactions";
 			var postType = 'POST';
     	    var params = { "message" : me.watchlistId };
@@ -118,14 +120,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
+						me.transItems([]);
 						me.displayTransactions([]);
 						me.displayTransCompanies([]);
 						if(!$.isEmptyObject(data)){
 							me.displayAddTransactions(data);
-							for(i in data){
-								data[i]["selectedTransaction"] = ko.observable(true);
-							}
-							me.displayTransactions(data);
+							me.displayPerformanceTransactions(data);
 							me.computeSelectAllTrans(me);
 						}else{
 							var tickersData = me.transactionTickers;
@@ -141,10 +141,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								me.computeSelectAllTrans(me);
 							}
 						}
+						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
-			PAGE.resizeIframeSimple();
-			PAGE.hideLoading();
 		},
 		
 		computeSelectAllTrans: function(me){
@@ -218,7 +217,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
-					
+					PAGE.hideLoading();
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
@@ -249,6 +248,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						break;
 					}
 				}				
+				
+				PAGE.resizeIframeSimple();
 			}, me);
 
 			ko.validation.init({insertMessages: false});
@@ -262,8 +263,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
 			});
-			
-			PAGE.hideLoading();
 			
 			return me;
 		},
@@ -330,7 +329,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			$.each(VALUATION.finalWL(), function(i, data){
 				VALUATION.addWatchlistName.push(data.name.toLowerCase());
 			});	
-    		
+			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
 				postType,
@@ -343,6 +342,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					VALUATION.finalWL(data.sort(sortByName));
+					PAGE.hideLoading();
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback
@@ -401,7 +401,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    $('#watchlistCompaniesSelect').empty()
 				return;
 			}
-
+			PAGE.showLoading();
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
 		    var params = { "companies": watchlistObject.companies };
 		    var postType = 'POST';
@@ -455,12 +455,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
     	    var params = {'id' : me.watchlistId,'transactions' : me.mapTransDataToSend()};
+    	    PAGE.showLoading();
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
 					params,
 					function(data, textStatus, jqXHR){					
 						console.log(data);
+						PAGE.hideLoading();
+						me.transItems([]);
+						me.getTransactionsData(me);
 					}, 
 					PAGE.customSGXError);
 	    },
@@ -512,6 +516,33 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
             		  };
 	    },
 	    
+	    displayPerformanceTransactions: function(data){
+	    	var me = this;
+	    	var tickersData = me.transactionTickers.slice();
+	    	var availTicker = [];
+	    	
+	    	for(i in data){
+	    		availTicker.push(i);
+	    		var item = data[i][0];
+				var transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
+				me.displayTransactions.push(transItemModel);
+	    	}
+	    	
+	    	for(var i = 0; i<availTicker.length; i++){
+	    		var loc = tickersData.indexOf(availTicker[i]);
+	    		if(loc != -1) {
+	    			tickersData.splice(loc, 1);
+	    		}
+	    	}
+	    	
+	    	for(var i = 0; i<tickersData.length; i++){
+	    		var tickerCode = tickersData[i];
+	    		var transItemCompModel =  new insertPerTrans(tickerCode, tickerCode, "", "", "", "", "");
+				me.displayTransactions.push(transItemCompModel);
+	    	}
+			
+	    },
+	    
 	    displayAddTransactions: function(data){
 	    	var me = this;
 	    	var serverTransData = me.refractTransData(data);
@@ -533,10 +564,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if(item.id!=""){
+	    	if(item.id()!=""){
 		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
 				var postType = 'POST';
 	    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
+	    	    PAGE.showLoading();
 				UTIL.handleAjaxRequestJSON(
 						endpoint,
 						postType,
@@ -544,6 +576,32 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						function(data, textStatus, jqXHR){					
 							console.log(data);
 							me.transItems.remove(item);
+							PAGE.hideLoading();
+							me.transItems([]);
+							me.getTransactionsData(me);
+						}, 
+						PAGE.customSGXError);
+	    	}else{
+	    		me.transItems.remove(item);
+	    	}
+	    },
+	    
+	    removePerformanceItem: function(item) {
+	    	var me = this;
+	    	if(item.id!=""){
+		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+				var postType = 'POST';
+	    	    var params = {"id": me.watchlistId, "transactionId" : item.id};
+	    	    PAGE.showLoading();
+				UTIL.handleAjaxRequestJSON(
+						endpoint,
+						postType,
+						params,
+						function(data, textStatus, jqXHR){					
+							console.log(data);
+							me.displayTransactions.remove(item);
+							PAGE.hideLoading();
+							me.getTransactionsData(me);
 						}, 
 						PAGE.customSGXError);
 	    	}else{
@@ -566,6 +624,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	/*me.priceWithTax = ko.dependentObservable(function() {
             return (me.price() * 1.05).toFixed(2);
         }, me);*/
+    }
+	
+	function insertPerTrans(companyName, tickerCode, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
+    	var me = this;
+    	me.companyName = companyName;
+    	me.tickerCode = tickerCode;
+    	me.tradeDate = tradeDate;
+    	me.numberOfShares = numberOfShares;
+    	me.costAtPurchase = costAtPurchase;
+    	me.currentPrice = currentPrice;
+    	me.id = id;
+    	me.selectedTransaction = ko.observable(true);;
     }
 	
 	return VALUATION;
