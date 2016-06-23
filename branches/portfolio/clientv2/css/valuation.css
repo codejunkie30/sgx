@@ -1,11 +1,11 @@
 .valuation-performance {
-	height: 920px; //
-	display: none;
+	/* display: none;
+	height: 920px;
 	position: relative;
 	border-right: 1px solid #cacdd3;
 	border-left: 1px solid #cacdd3;
 	border-bottom: 1px solid #cacdd3;
-	padding-bottom: 10px;
+	padding-bottom: 10px; */
 }
 
 .valuation-performance a {
