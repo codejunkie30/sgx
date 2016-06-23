@@ -4,6 +4,7 @@
 package com.wmsi.sgx.model;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dt84327
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class StockListKeyDev implements Comparable<StockListKeyDev>{
 
-	private List<String> tickerCodes;
+	private Set<String> tickerCodes;
 	private String type;
 	private Long date;
 	private String headline;
@@ -22,7 +23,7 @@ public class StockListKeyDev implements Comparable<StockListKeyDev>{
 	/**
 	 * @return the tickerCodes
 	 */
-	public List<String> getTickerCodes() {
+	public Set<String> getTickerCodes() {
 		return tickerCodes;
 	}
 
@@ -30,7 +31,7 @@ public class StockListKeyDev implements Comparable<StockListKeyDev>{
 	 * @param tickerCodes
 	 *            the tickerCodes to set
 	 */
-	public void setTickerCodes(List<String> tickerCodes) {
+	public void setTickerCodes(Set<String> tickerCodes) {
 		this.tickerCodes = tickerCodes;
 	}
 
