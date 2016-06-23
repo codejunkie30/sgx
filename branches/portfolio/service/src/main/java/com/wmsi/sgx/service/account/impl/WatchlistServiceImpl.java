@@ -172,6 +172,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 				List<WatchlistOption> oldOptions = Arrays.asList(optionRepository.findById(id));
 				List<WatchlistCompany> oldCompanies = Arrays.asList(companyRepository.findById(id));
 				
+				if(oldCompanies.size() != model.getCompanies().size()){
+					for (WatchlistCompany watchlistCompany : oldCompanies) {
+						if (!model.getCompanies().contains(watchlistCompany.getTickerCode())) {
+							WatchlistTransaction[] deletedCompanyTransactions = transactionRepository.findByTickerCode(id, watchlistCompany.getTickerCode());
+							transactionRepository.delete(deletedCompanyTransactions);
+							break;
+						}
+					}
+				}
 				setOptions(model.getOptionList(), id);
 				if(model.getCompanies().size() <= 25){
 					setCompanies(model.getCompanies(), id);
