@@ -176,7 +176,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 					for (WatchlistCompany watchlistCompany : oldCompanies) {
 						if (!model.getCompanies().contains(watchlistCompany.getTickerCode())) {
 							WatchlistTransaction[] deleteCompanyTransactions = transactionRepository.findByTickerCode(id, watchlistCompany.getTickerCode());
-							transactionRepository.delete(deleteCompanyTransactions);
+							if (deleteCompanyTransactions.length > 1) {
+								transactionRepository.delete(deleteCompanyTransactions);
+							}
 							break;
 						}
 					}
