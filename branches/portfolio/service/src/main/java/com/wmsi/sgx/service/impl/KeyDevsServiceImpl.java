@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +122,7 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 						if (map.get(keyDev.getKeyDevId()) == null) {
 							stockListKeyDev = new StockListKeyDev();
 							map.put(keyDev.getKeyDevId(), stockListKeyDev);
-							stockListKeyDev.setTickerCodes(new ArrayList<String>());
+							stockListKeyDev.setTickerCodes(new LinkedHashSet<String>());
 						} else {
 							stockListKeyDev = map.get(keyDev.getKeyDevId());
 						}
