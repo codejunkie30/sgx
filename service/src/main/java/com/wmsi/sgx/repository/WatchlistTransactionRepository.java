@@ -22,4 +22,7 @@ public interface WatchlistTransactionRepository extends CustomRepository<Watchli
 	
 	@Query("from WatchlistTransaction where watchlist_id = :watchlist_id and id = :id")
 	WatchlistTransaction findByIds(@Param("watchlist_id") Long watchlist_id, @Param("id") Long id);
+	
+	@Query("from WatchlistTransaction where watchlist_id = :watchlist_id and tickerCode = :tickerCode")
+	WatchlistTransaction[] findByTickerCode(@Param("watchlist_id") Long watchlist_id, @Param("tickerCode") String tickerCode);
 }
