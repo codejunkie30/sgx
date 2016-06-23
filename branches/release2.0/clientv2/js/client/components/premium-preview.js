@@ -12,7 +12,7 @@ define(['knockout', "wmsi/page", 'text!./premium-preview.html', "text!client/dat
   }
   
   function trackPromoGA(secName){
-	  var title = "SGX Premium Promo -"+secName;
+	  var title = "SGX Plus Promo -"+secName;
 	  page.trackPage(title);
   }
 
