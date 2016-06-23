@@ -64,7 +64,7 @@ public class WatchlistEmailServiceHelper implements Job {
 				if (list.size() > 0)
 					for (WatchlistModel watchlist : list) {
 						synchronized (watchlist) {
-
+							content = null;
 							MutablePair<List<AlertOption>, List<String>> options = new MutablePair<List<AlertOption>, List<String>>();
 							try {
 								options = watchlistEmailService.parseWatchlist(watchlist, acc);
