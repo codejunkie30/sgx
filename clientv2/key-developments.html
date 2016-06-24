@@ -35,31 +35,31 @@
 						<td><select id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'All Companies in StockList', value: keydevCompSelectedVal, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Announced/Completed Transactions</label></td>
+						<td><label><input type="checkbox" id="kdAnounceCompTransactionsCheckbox">Announced/Completed Transactions</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Company Forecasts and Ratings</label></td>
+						<td><label><input type="checkbox" id="kdCompanyForecastsCheckbox">Company Forecasts and Ratings</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Corporate Structure Related </label></td>
+						<td><label><input type="checkbox" id="kdCorporateStructureRelatedCheckbox">Corporate Structure Related </label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Customer/Product Related</label></td>
+						<td><label><input type="checkbox" id="kdCustProdRelatedCheckbox">Customer/Product Related</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Dividends/Splits</label></td>
+						<td><label><input type="checkbox" id="kdDividensSplitsCheckbox">Dividends/Splits</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Listing/Trading Related</label></td>
+						<td><label><input type="checkbox" id="kdListTradeRelatedCheckbox">Listing/Trading Related</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Potential Red Flags/Distress Indicators</label></td>
+						<td><label><input type="checkbox" id="kdPotentialRedFlagsCheckbox">Potential Red Flags/Distress Indicators</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Potential Transactions</label></td>
+						<td><label><input type="checkbox" id="kdPotentialTransactionsCheckbox">Potential Transactions</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" value="" data-bind="">Results and Corporate Announcements</label></td>
+						<td><label><input type="checkbox" id="kdResultsCorpAnnouncementsCheckbox">Results and Corporate Announcements</label></td>
 					</tr>
 					<tr>
 						<td><a class="search-button" data-bind="click: searchKeyDev">Search</a></td>
@@ -70,7 +70,8 @@
 			<div class="matches">
 				<h2>Key Development Matches</h2>
 				
-				<div data-bind="visible: kdAnounceCompTransactions().length > 0 ">
+				<div id="kdAnounceCompTransactionsId">
+				<div data-bind="visible: kdAnounceCompTransactions().length > 0 " >
 					<h3>Announced/Completed Transactions</h3>
 					<table data-bind="foreach: kdAnounceCompTransactions">
 						<tr>
@@ -81,8 +82,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdCompanyForecasts().length > 0 ">
+				<div id="kdCompanyForecastsId">
+				<div data-bind="visible: kdCompanyForecasts().length > 0 " >
 					<h3>Company Forecasts and Ratings</h3>
 					<table data-bind="foreach: kdCompanyForecasts">
 						<tr>
@@ -92,8 +95,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdCorporateStructureRelated().length > 0 ">
+				<div id="kdCorporateStructureRelatedId">
+				<div data-bind="visible: kdCorporateStructureRelated().length > 0 " >
 					<h3>Corporate Structure Related</h3>
 					<table data-bind="foreach: kdCorporateStructureRelated">
 						<tr>
@@ -103,8 +108,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdCustProdRelated().length > 0 ">
+				<div id="kdCustProdRelatedId">
+				<div data-bind="visible: kdCustProdRelated().length > 0 " >
 					<h3>Customer/Product Related</h3>
 					<table data-bind="foreach: kdCustProdRelated">
 						<tr>
@@ -114,8 +121,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdDividensSplits().length > 0 ">
+				<div id="kdDividensSplitsId">
+				<div data-bind="visible: kdDividensSplits().length > 0 " >
 					<h3>Dividends/Splits</h3>
 					<table data-bind="foreach: kdDividensSplits">
 						<tr>
@@ -126,8 +135,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdListTradeRelated().length > 0 ">
+				<div id="kdListTradeRelatedId">
+				<div data-bind="visible: kdListTradeRelated().length > 0 " >
 					<h3>Listing/Trading Related</h3>
 					<table data-bind="foreach: kdListTradeRelated">
 						<tr>
@@ -137,8 +148,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdPotentialRedFlags().length > 0 ">
+				<div id="kdPotentialRedFlagsId">
+				<div data-bind="visible: kdPotentialRedFlags().length > 0 " >
 					<h3>Potential Red Flags/Distress Indicators</h3>
 					<table data-bind="foreach: kdPotentialRedFlags">
 						<tr>
@@ -148,8 +161,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdPotentialTransactions().length > 0 ">
+				<div id="kdPotentialTransactionsId">
+				<div data-bind="visible: kdPotentialTransactions().length > 0 " >
 					<h3>Potential Transactions</h3>
 					<table data-bind="foreach: kdPotentialTransactions">
 						<tr>
@@ -159,8 +174,10 @@
 						</tr>
 					</table>
 				</div>
+				</div>
 				
-				<div data-bind="visible: kdResultsCorpAnnouncements().length > 0 ">
+				<div id="kdResultsCorpAnnouncementsId">
+				<div data-bind="visible: kdResultsCorpAnnouncements().length > 0 " >
 					<h3>Results and Corporate Announcements</h3>
 					<table data-bind="foreach: kdResultsCorpAnnouncements">
 						<tr>
@@ -169,6 +186,7 @@
 							</td>
 						</tr>
 					</table>
+				</div>
 				</div>
 			</div>
 		</div>
