@@ -122,7 +122,43 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if(!UTIL.isEmpty(me.keydevCompSelectedVal())){
 				tickers = $.makeArray(me.keydevCompSelectedVal());
 			}
-			me.getKeyDevData(me, tickers);
+			me.getKeyDevSearchData(me, tickers);
+		},
+		
+		getKeyDevSearchData: function(me, tickerCodes){
+	    	var endpoint = PAGE.fqdn + "/sgx/search/stockListKeydevs";
+			var postType = 'POST';
+    	    var params = {'tickerCodes' : tickerCodes};
+			UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						console.log(data);
+						me.refractKeyDevData(data, me);
+						me.showHideCheckboxes(me);
+					}, 
+					PAGE.customSGXError);
+		},
+		
+		showHideCheckboxes: function(me){
+			me.showHideCheckboxeRenderer($('#kdAnounceCompTransactionsCheckbox'), $('#kdAnounceCompTransactionsId') );
+			me.showHideCheckboxeRenderer($('#kdCompanyForecastsCheckbox'), $('#kdCompanyForecastsId') );
+			me.showHideCheckboxeRenderer($('#kdCorporateStructureRelatedCheckbox'), $('#kdCorporateStructureRelatedId') );
+			me.showHideCheckboxeRenderer($('#kdCustProdRelatedCheckbox'), $('#kdCustProdRelatedId') );
+			me.showHideCheckboxeRenderer($('#kdDividensSplitsCheckbox'), $('#kdDividensSplitsId') );
+			me.showHideCheckboxeRenderer($('#kdListTradeRelatedCheckbox'), $('#kdListTradeRelatedId') );
+			me.showHideCheckboxeRenderer($('#kdPotentialRedFlagsCheckbox'), $('#kdPotentialRedFlagsId') );
+			me.showHideCheckboxeRenderer($('#kdPotentialTransactionsCheckbox'), $('#kdPotentialTransactionsId') );
+			me.showHideCheckboxeRenderer($('#kdResultsCorpAnnouncementsCheckbox'), $('#kdResultsCorpAnnouncementsId') );
+		},
+		
+		showHideCheckboxeRenderer: function(idCheckbox, idDiv){
+			if(idCheckbox.prop('checked') === true){
+				idDiv.show();
+	        }else{
+	        	idDiv.hide();
+	        }
 		},
 		
 		getKeyDevData: function(me, tickerCodes){

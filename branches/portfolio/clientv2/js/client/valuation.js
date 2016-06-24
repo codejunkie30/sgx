@@ -564,49 +564,70 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if(item.id()!=""){
-		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
-				var postType = 'POST';
-	    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
-	    	    PAGE.showLoading();
-				UTIL.handleAjaxRequestJSON(
-						endpoint,
-						postType,
-						params,
-						function(data, textStatus, jqXHR){					
-							console.log(data);
-							me.transItems.remove(item);
-							PAGE.hideLoading();
-							me.transItems([]);
-							me.getTransactionsData(me);
-						}, 
-						PAGE.customSGXError);
-	    	}else{
-	    		me.transItems.remove(item);
-	    	}
+	    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			
+			 $('.confirm-delete').click(function(e) {				
+				 if(item.id()!=""){
+				    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+						var postType = 'POST';
+			    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
+			    	    PAGE.showLoading();
+						UTIL.handleAjaxRequestJSON(
+								endpoint,
+								postType,
+								params,
+								function(data, textStatus, jqXHR){					
+									console.log(data);
+									me.transItems.remove(item);
+									PAGE.hideLoading();
+									me.transItems([]);
+									me.getTransactionsData(me);
+								}, 
+								PAGE.customSGXError);
+			    	}else{
+			    		me.transItems.remove(item);
+			    	}
+				$('.cboxWrapper').colorbox.close();
+	        });
+			
+			 $('.cancel').click(function(e) {
+				$('.cboxWrapper').colorbox.close();
+	        });	
+			 
 	    },
 	    
 	    removePerformanceItem: function(item) {
 	    	var me = this;
-	    	if(item.id!=""){
-		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
-				var postType = 'POST';
-	    	    var params = {"id": me.watchlistId, "transactionId" : item.id};
-	    	    PAGE.showLoading();
-				UTIL.handleAjaxRequestJSON(
-						endpoint,
-						postType,
-						params,
-						function(data, textStatus, jqXHR){					
-							console.log(data);
-							me.displayTransactions.remove(item);
-							PAGE.hideLoading();
-							me.getTransactionsData(me);
-						}, 
-						PAGE.customSGXError);
-	    	}else{
-	    		me.transItems.remove(item);
-	    	}
+			
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			
+			 $('.confirm-delete').click(function(e) {				
+				 if(item.id!=""){
+				    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+						var postType = 'POST';
+			    	    var params = {"id": me.watchlistId, "transactionId" : item.id};
+			    	    PAGE.showLoading();
+						UTIL.handleAjaxRequestJSON(
+								endpoint,
+								postType,
+								params,
+								function(data, textStatus, jqXHR){					
+									console.log(data);
+									me.displayTransactions.remove(item);
+									PAGE.hideLoading();
+									me.getTransactionsData(me);
+								}, 
+								PAGE.customSGXError);
+			    	}else{
+			    		me.transItems.remove(item);
+			    	}
+				$('.cboxWrapper').colorbox.close();
+	        });
+			
+			 $('.cancel').click(function(e) {
+				$('.cboxWrapper').colorbox.close();
+	        });	
+	    	
 	    }
 		
 	};
