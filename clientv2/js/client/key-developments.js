@@ -12,6 +12,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		addWatchlistName: ko.observableArray(),
 		messages: JSON.parse(MESSAGES),
 		allCompanies : [],
+		companyNameAndTickerList : [],
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -44,7 +45,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//To get the select box for the currency change in the login bar
 			PAGE.libCurrency(true);
 			
+			me.makeAggregateCompanyDataCall(me);
+			
 			me.getWatchListData(me); 
+		},
+		
+		makeAggregateCompanyDataCall: function(me){
+			var endpoint = this.fqdn+'/sgx/company/names';
+			$.getJSON(endpoint+"?callback=?").done(function(data){
+				me.companyNameAndTickerList = data.companyNameAndTickerList;
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log('error making makeAggregateCompanyDataCall');
+			});
 		},
 
 		getWatchListData: function(me) {

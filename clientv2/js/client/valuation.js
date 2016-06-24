@@ -444,7 +444,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var tradeDate =  $("#tradeDate").val();
 			var numberOfShares = $("#numberOfShares").val();
 			var costAtPurchase = $("#costAtPurchase").val();
-			var transItemModel = new insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, "89.7", "");
+			var transItemModel = new insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, "", "");
 			me.transItems.push(transItemModel);
 			me.clearFieldData();
 			//me.addTransaction(transItemModel);
@@ -547,7 +547,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
-	    		var transItemModel =  new insertTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
+	    		var transItemModel =  new insertDisplayTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
 	    },
@@ -640,11 +640,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tradeDate = ko.observable(tradeDate);
     	me.numberOfShares = ko.observable(numberOfShares);
     	me.costAtPurchase = ko.observable(costAtPurchase);
+    	me.currentPrice = ko.dependentObservable(function() {
+            return (me.costAtPurchase() / me.numberOfShares()).toFixed(2);
+        }, me);
+    	me.id = ko.observable(id);
+    }
+    
+    function insertDisplayTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
+    	var me = this;
+    	me.companyName = ko.observable(companyName);
+    	me.tickerCode = ko.observable(tickerCode);
+    	me.transactionType = ko.observable(transactionType);
+    	me.tradeDate = ko.observable(tradeDate);
+    	me.numberOfShares = ko.observable(numberOfShares);
+    	me.costAtPurchase = ko.observable(costAtPurchase);
     	me.currentPrice = ko.observable(currentPrice);
     	me.id = ko.observable(id);
-    	/*me.priceWithTax = ko.dependentObservable(function() {
-            return (me.price() * 1.05).toFixed(2);
-        }, me);*/
     }
 	
 	function insertPerTrans(companyName, tickerCode, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
