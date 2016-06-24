@@ -69,134 +69,136 @@
 			</div>
 			<div class="matches">
 				<h2>Key Development Matches</h2>
-				
-				<div id="kdAnounceCompTransactionsId">
-				<div data-bind="visible: kdAnounceCompTransactions().length > 0 " >
-					<h3>Announced/Completed Transactions</h3>
-					<table data-bind="foreach: kdAnounceCompTransactions">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-								<!-- <div class="no-devs" data-bind="">There is no data to show for the selected period.</div> -->
-							</td>
-						</tr>
-					</table>
+				<div id="allKeyDevDivId" style="display: none">
+					<div id="kdAnounceCompTransactionsId">
+					<div data-bind="visible: kdAnounceCompTransactions().length > 0 " >
+						<h3>Announced/Completed Transactions</h3>
+						<table data-bind="foreach: kdAnounceCompTransactions">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+									<!-- <div class="no-devs" data-bind="">There is no data to show for the selected period.</div> -->
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdCompanyForecastsId">
+					<div data-bind="visible: kdCompanyForecasts().length > 0 " >
+						<h3>Company Forecasts and Ratings</h3>
+						<table data-bind="foreach: kdCompanyForecasts">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdCorporateStructureRelatedId">
+					<div data-bind="visible: kdCorporateStructureRelated().length > 0 " >
+						<h3>Corporate Structure Related</h3>
+						<table data-bind="foreach: kdCorporateStructureRelated">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdCustProdRelatedId">
+					<div data-bind="visible: kdCustProdRelated().length > 0 " >
+						<h3>Customer/Product Related</h3>
+						<table data-bind="foreach: kdCustProdRelated">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdDividensSplitsId">
+					<div data-bind="visible: kdDividensSplits().length > 0 " >
+						<h3>Dividends/Splits</h3>
+						<table data-bind="foreach: kdDividensSplits">
+							<tr>
+								<td>
+									<span data-bind="text: headline"></span>
+									<div data-bind="text: tickerCodes"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdListTradeRelatedId">
+					<div data-bind="visible: kdListTradeRelated().length > 0 " >
+						<h3>Listing/Trading Related</h3>
+						<table data-bind="foreach: kdListTradeRelated">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdPotentialRedFlagsId">
+					<div data-bind="visible: kdPotentialRedFlags().length > 0 " >
+						<h3>Potential Red Flags/Distress Indicators</h3>
+						<table data-bind="foreach: kdPotentialRedFlags">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdPotentialTransactionsId">
+					<div data-bind="visible: kdPotentialTransactions().length > 0 " >
+						<h3>Potential Transactions</h3>
+						<table data-bind="foreach: kdPotentialTransactions">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					<div id="kdResultsCorpAnnouncementsId">
+					<div data-bind="visible: kdResultsCorpAnnouncements().length > 0 " >
+						<h3>Results and Corporate Announcements</h3>
+						<table data-bind="foreach: kdResultsCorpAnnouncements">
+							<tr>
+								<td>
+									<div data-bind="text: headline"></div>
+									<div data-bind="text: tickerCodes"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
 				</div>
-				</div>
-				
-				<div id="kdCompanyForecastsId">
-				<div data-bind="visible: kdCompanyForecasts().length > 0 " >
-					<h3>Company Forecasts and Ratings</h3>
-					<table data-bind="foreach: kdCompanyForecasts">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdCorporateStructureRelatedId">
-				<div data-bind="visible: kdCorporateStructureRelated().length > 0 " >
-					<h3>Corporate Structure Related</h3>
-					<table data-bind="foreach: kdCorporateStructureRelated">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdCustProdRelatedId">
-				<div data-bind="visible: kdCustProdRelated().length > 0 " >
-					<h3>Customer/Product Related</h3>
-					<table data-bind="foreach: kdCustProdRelated">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdDividensSplitsId">
-				<div data-bind="visible: kdDividensSplits().length > 0 " >
-					<h3>Dividends/Splits</h3>
-					<table data-bind="foreach: kdDividensSplits">
-						<tr>
-							<td>
-								<span data-bind="text: headline"></span>
-								<div data-bind="text: tickerCodes"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdListTradeRelatedId">
-				<div data-bind="visible: kdListTradeRelated().length > 0 " >
-					<h3>Listing/Trading Related</h3>
-					<table data-bind="foreach: kdListTradeRelated">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdPotentialRedFlagsId">
-				<div data-bind="visible: kdPotentialRedFlags().length > 0 " >
-					<h3>Potential Red Flags/Distress Indicators</h3>
-					<table data-bind="foreach: kdPotentialRedFlags">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdPotentialTransactionsId">
-				<div data-bind="visible: kdPotentialTransactions().length > 0 " >
-					<h3>Potential Transactions</h3>
-					<table data-bind="foreach: kdPotentialTransactions">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
-				
-				<div id="kdResultsCorpAnnouncementsId">
-				<div data-bind="visible: kdResultsCorpAnnouncements().length > 0 " >
-					<h3>Results and Corporate Announcements</h3>
-					<table data-bind="foreach: kdResultsCorpAnnouncements">
-						<tr>
-							<td>
-								<div data-bind="text: headline"></div>
-								<div data-bind="text: tickerCodes"></div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				</div>
+			
 			</div>
 		</div>
 	</section>

@@ -184,6 +184,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					function(data, textStatus, jqXHR){					
 						console.log(data);
 						me.refractKeyDevData(data, me);
+						$('#allKeyDevDivId').show();
 					}, 
 					PAGE.customSGXError);
 		},
