@@ -46,22 +46,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.makeAggregateCompanyDataCall(me);
-			
-			me.getWatchListData(me); 
 		},
 		
 		makeAggregateCompanyDataCall: function(me){
-			var endpoint = this.fqdn+'/sgx/company/names';
+			PAGE.showLoading();
+			var endpoint = me.fqdn+'/sgx/company/names';
 			$.getJSON(endpoint+"?callback=?").done(function(data){
 				me.companyNameAndTickerList = data.companyNameAndTickerList;
+				me.getWatchListData(me); 
+				PAGE.hideLoading();
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making makeAggregateCompanyDataCall');
 			});
 		},
 
 		getWatchListData: function(me) {
-			PAGE.showLoading();
-			
 			var displayMessage = me.messages.messages[0];
 			var endpoint = me.fqdn + "/sgx/watchlist/get";
 			var postType = 'POST';
@@ -123,8 +122,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				PAGE.resizeIframeSimple();
 			});
 			
-			PAGE.hideLoading();
-			
 			return me;
 		},
 		
@@ -138,6 +135,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		getKeyDevSearchData: function(me, tickerCodes){
+			PAGE.showLoading();
 	    	var endpoint = PAGE.fqdn + "/sgx/search/stockListKeydevs";
 			var postType = 'POST';
     	    var params = {'tickerCodes' : tickerCodes};
@@ -149,6 +147,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						console.log(data);
 						me.refractKeyDevData(data, me);
 						me.showHideCheckboxes(me);
+						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
 		},
@@ -201,6 +200,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.kdResultsCorpAnnouncements.removeAll();
 			
 			for(i in data){
+				me.addKeyDevCompanies(data[i], me);
 				if(i === "kdAnounceCompTransactions"){
 					me.kdAnounceCompTransactions(data[i]);
 				}else if(i === "kdCompanyForecasts"){
@@ -221,6 +221,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.kdResultsCorpAnnouncements(data[i]);
 				}
 			}
+		},
+		
+		addKeyDevCompanies: function(data, me){
+			$.each(data, function (index, item) {
+				  var companies = [];
+				  $.each(item.tickerCodes, function (index, value) {
+					  $.each(me.companyNameAndTickerList, function (index, record) {
+						  if(value === record.tickerCode){
+							  companies.push(record.companyName);
+						  }
+					  });
+				  });
+				  item ["companies"] = companies;
+			});
 		},
 				
 		addWatchlist: function(){
