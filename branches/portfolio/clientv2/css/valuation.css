@@ -129,7 +129,7 @@
 	border: 1px solid #ccc;
 	padding: 8px 12px;
 	font: bold 14px/12px Arial, Helvetica, sans-serif;
-	text-align: center;
+	text-align: left;
 	cursor: pointer;
 	vertical-align: top;
 }
@@ -189,7 +189,7 @@
 	border: 1px solid #ccc;
 	padding: 8px 12px;
 	font: bold 12px/12px Arial, Helvetica, sans-serif;
-	text-align: center;
+	text-align: left;
 	line-height: 280%;
 	vertical-align: top;
 }
