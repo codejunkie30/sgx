@@ -153,16 +153,6 @@
 	background: url("../img/sort_descending.png") no-repeat right 5px center;
 }
 
-.valuation-results table tbody td {
-	color: #000;
-	border: 1px solid #ccc;
-	padding: 8px 12px;
-	font: normal 12px/12px Arial, Helvetica, sans-serif;
-	text-align: center;
-	line-height: 125%;
-	vertical-align: top;
-}
-
 .valuation-results table .industryGroup {
 	text-align: left;
 	width: 220px;
@@ -278,4 +268,19 @@
     text-align: left;
     line-height: 280%;
     vertical-align: top;
+}
+
+/* .panel, .flip {
+    padding: 5px;
+    text-align: center;
+    background-color: #d5e3ea;
+    border: solid 1px #d5e3ea;
+} */
+
+.panel {
+    padding: 50px;
+    display: none;
+    text-align: center;
+    background-color: #d5e3ea;
+    border: solid 1px #d5e3ea;
 }

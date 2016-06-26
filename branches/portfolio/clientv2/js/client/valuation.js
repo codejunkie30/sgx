@@ -523,9 +523,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	for(i in data){
 	    		availTicker.push(i);
-	    		var item = data[i][0];
-				var transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
-				me.displayTransactions.push(transItemModel);
+	    		var item = null;
+	    		var transItemModel = null;
+	    		var muiltiCompTransModel = null;
+	    		if(data[i].length > 1){
+	    			item = data[i][0];
+					transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+																item.costAtPurchase, item.currentPrice, item.id, true);
+					me.displayTransactions.push(transItemModel);
+					me.getMultiCompData(data[i], transItemModel, me);
+	    		}else{
+	    			item = data[i][0];
+					transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+																item.costAtPurchase, item.currentPrice, item.id, false);
+					me.displayTransactions.push(transItemModel);
+	    		}
 	    	}
 	    	
 	    	for(var i = 0; i<availTicker.length; i++){
@@ -537,10 +549,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	for(var i = 0; i<tickersData.length; i++){
 	    		var tickerCode = tickersData[i];
-	    		var transItemCompModel =  new insertPerTrans(tickerCode, tickerCode, "", "", "", "", "");
+	    		var transItemCompModel =  new insertPerTrans(tickerCode, tickerCode,"","", "", "", "", "", "");
 				me.displayTransactions.push(transItemCompModel);
 	    	}
 			
+	    },
+	    
+	    getMultiCompData: function(data, model, me){
+	    	for(i =0; i<data.length; i++){
+	    		var item = data[i];
+	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.id);
+	    		model.multiCompData.push(muiltiCompTransModel);
+	    	}
 	    },
 	    
 	    displayAddTransactions: function(data){
@@ -628,6 +648,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$('.cboxWrapper').colorbox.close();
 	        });	
 	    	
+	    },
+	    
+	    
+	    toogleCompanyPlus: function(id, item){
+	    	$('#toogle_'+id).show();
+	    	$('#plus_'+id).hide();
+	    	$('#minus_'+id).show();
+	    	$('#internaltd_'+id).removeClass();
+	    },
+	    
+	    toogleCompanyMinus: function(id, item){
+	    	$('#toogle_'+id).hide();
+	    	$('#minus_'+id).hide();
+	    	$('#plus_'+id).show();
 	    }
 		
 	};
@@ -658,16 +692,29 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.id = ko.observable(id);
     }
 	
-	function insertPerTrans(companyName, tickerCode, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
+	function insertPerTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id, multiFlag) {
     	var me = this;
     	me.companyName = companyName;
     	me.tickerCode = tickerCode;
+    	me.transactionType = transactionType;
     	me.tradeDate = tradeDate;
     	me.numberOfShares = numberOfShares;
     	me.costAtPurchase = costAtPurchase;
     	me.currentPrice = currentPrice;
     	me.id = id;
-    	me.selectedTransaction = ko.observable(true);;
+    	me.selectedTransaction = ko.observable(true);
+    	me.isMultiTrans = multiFlag ;
+    	me.multiCompData = ko.observableArray([]);
+    }
+	
+	function insertMultiPerTrans(tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, id) {
+    	var me = this;
+    	me.intTickerCode = tickerCode;
+    	me.intTransactionType = transactionType;
+    	me.intTradeDate = tradeDate;
+    	me.intNumberOfShares = numberOfShares;
+    	me.intCostAtPurchase = costAtPurchase;
+    	me.intId = id;
     }
 	
 	return VALUATION;
