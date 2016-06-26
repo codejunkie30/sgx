@@ -52,7 +52,31 @@
 						<tbody data-bind="foreach: displayTransactions">
 							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
-								<td data-bind="text: tickerCode"></td>
+								<!-- ko if: isMultiTrans -->
+									<td>
+										<div>
+											<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
+											<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
+											<span data-bind="text: tickerCode"></span>
+										</div>
+										<table class="panel" data-bind="attr: { id:'toogle_'+$index()}">
+											<tbody data-bind="foreach: multiCompData">
+												<tr>
+													<td>&nbsp;</td>
+													<td data-bind="text: intTransactionType"></td>
+													<td data-bind="text: intTradeDate"></td>		
+													<td data-bind="text: intNumberOfShares"></td>
+													<td data-bind="text: intCostAtPurchase"></td>
+													<td>&nbsp;</td>
+													<td><img src="img/x-button.png" alt="" data-bind="" /></td>										
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								<!-- /ko -->
+								<!-- ko ifnot: isMultiTrans -->
+									<td data-bind="text: tickerCode"></td>
+								<!-- /ko -->
 								<td data-bind="text: tradeDate, format: 'date'"></td>
 								<td data-bind="text: numberOfShares, format: 'number'"></td>
 								<td data-bind="text: costAtPurchase, format: 'dollars'"></td>
