@@ -557,9 +557,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    getMultiCompData: function(data, model, me){
 	    	for(i =0; i<data.length; i++){
-	    		var item = data[i];
-	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.id);
-	    		model.multiCompData.push(muiltiCompTransModel);
+	    		if(i!=0){
+		    		var item = data[i];
+		    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.id);
+		    		model.multiCompData.push(muiltiCompTransModel);
+	    		}
 	    	}
 	    },
 	    
