@@ -57,7 +57,7 @@
 										<div>
 											<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
 											<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
-											<span data-bind="text: tickerCode"></span>
+											<span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)
 										</div>
 										<table class="panel" data-bind="attr: { id:'toogle_'+$index()}">
 											<tbody data-bind="foreach: multiCompData">
@@ -75,7 +75,7 @@
 									</td>
 								<!-- /ko -->
 								<!-- ko ifnot: isMultiTrans -->
-									<td data-bind="text: tickerCode"></td>
+									<td><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
 								<!-- /ko -->
 								<td data-bind="text: tradeDate, format: 'date'"></td>
 								<td data-bind="text: numberOfShares, format: 'number'"></td>
@@ -102,7 +102,7 @@
 						<tbody data-bind="foreach: {data: $data}">
 							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
-								<td class="company-row" data-bind="text: tickerCode"></td>
+								<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
 							</tr>
 						</tbody>
 					</table>	

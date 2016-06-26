@@ -13,6 +13,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		displayTransactions: ko.observableArray([]),
 		displayTransCompanies: ko.observableArray(),
 		selectAllTransaction: ko.computed(function() {}),
+		companyNameAndTickerList : [],
 		
 		watchlistCompanies: ko.observableArray(),
 		availableTypes: ko.observableArray(['BUY', 'SELL']),
@@ -50,7 +51,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//To get the select box for the currency change in the login bar
 			PAGE.libCurrency(true);
 			
-			me.getWatchListData(me); 
+			me.makeAggregateCompanyDataCall(me);
+			
+		},
+		
+		makeAggregateCompanyDataCall: function(me){
+			PAGE.showLoading();
+			var endpoint = me.fqdn+'/sgx/company/names';
+			$.getJSON(endpoint+"?callback=?").done(function(data){
+				me.companyNameAndTickerList = data.companyNameAndTickerList;
+				me.getWatchListData(me); 
+				PAGE.hideLoading();
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log('error making makeAggregateCompanyDataCall');
+			});
 		},
 		
 		renderChart: function(me, responseData){
@@ -134,6 +148,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								for(i=0 ;i<tickersData.length; i++){
 									var item = {};
 									item ["tickerCode"] = tickersData[i];
+									item ["companyName"] = me.convertTickerCodeToCompany(tickersData[i], me);
 									item ["selectedTransaction"] = ko.observable(true);
 									jsonObj.push(item);
 								}
@@ -528,13 +543,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var muiltiCompTransModel = null;
 	    		if(data[i].length > 1){
 	    			item = data[i][0];
-					transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+					transItemModel =  new insertPerTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
 																item.costAtPurchase, item.currentPrice, item.id, true);
 					me.displayTransactions.push(transItemModel);
 					me.getMultiCompData(data[i], transItemModel, me);
 	    		}else{
 	    			item = data[i][0];
-					transItemModel =  new insertPerTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+					transItemModel =  new insertPerTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
 																item.costAtPurchase, item.currentPrice, item.id, false);
 					me.displayTransactions.push(transItemModel);
 	    		}
@@ -549,11 +564,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	for(var i = 0; i<tickersData.length; i++){
 	    		var tickerCode = tickersData[i];
-	    		var transItemCompModel =  new insertPerTrans(tickerCode, tickerCode,"","", "", "", "", "", "");
+	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", "", "", "");
 				me.displayTransactions.push(transItemCompModel);
 	    	}
 			
 	    },
+	    
+	    convertTickerCodeToCompany: function(tickerCode, me){
+	    	var company = "";
+	    	$.each(me.companyNameAndTickerList, function (index, record) {
+				  if(tickerCode === record.tickerCode){
+					  company = record.companyName;
+					  return false;
+				  }
+	    	});
+	    	return company;
+		},
 	    
 	    getMultiCompData: function(data, model, me){
 	    	for(i =0; i<data.length; i++){
@@ -569,7 +595,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
-	    		var transItemModel =  new insertDisplayTrans(item.tickerCode, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
+	    		var transItemModel =  new insertDisplayTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
 	    },
