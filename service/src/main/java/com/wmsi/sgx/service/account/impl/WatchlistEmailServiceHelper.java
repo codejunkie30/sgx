@@ -63,7 +63,6 @@ public class WatchlistEmailServiceHelper implements Job {
 				List<WatchlistModel> list = watchlistService.getWatchlist(acc.getUser());
 				if (list.size() > 0)
 					for (WatchlistModel watchlist : list) {
-						synchronized (watchlist) {
 							content = null;
 							MutablePair<List<AlertOption>, List<String>> options = new MutablePair<List<AlertOption>, List<String>>();
 							try {
@@ -108,9 +107,7 @@ public class WatchlistEmailServiceHelper implements Job {
 									insertEmailTransaction(acc.getUser(), watchlist, content,
 											IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED,
 											IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
-								}
 							}
-
 						}
 					}
 			}
