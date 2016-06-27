@@ -34,6 +34,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		seriesOptions: [],
 		transactionTickers: [],
 		watchlistId: null,
+		disCompanyName: null,
+		liveClosingPrice: null,
 		
 		volumeData : [],
 		closePrice : [],
@@ -51,20 +53,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//To get the select box for the currency change in the login bar
 			PAGE.libCurrency(true);
 			
-			me.makeAggregateCompanyDataCall(me);
+			me.getWatchListData(me); 
 			
-		},
-		
-		makeAggregateCompanyDataCall: function(me){
-			PAGE.showLoading();
-			var endpoint = me.fqdn+'/sgx/company/names';
-			$.getJSON(endpoint+"?callback=?").done(function(data){
-				me.companyNameAndTickerList = data.companyNameAndTickerList;
-				me.getWatchListData(me); 
-				PAGE.hideLoading();
-			}).fail(function(jqXHR, textStatus, errorThrown){
-				console.log('error making makeAggregateCompanyDataCall');
-			});
 		},
 		
 		renderChart: function(me, responseData){
@@ -453,13 +443,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		//-------------Transaction functionality starts--------------
 		addTrans: function() {
 			var me = this;
-			var companyName = $("#watchlistCompaniesSelect option:selected").text();
+			//var companyName = $("#watchlistCompaniesSelect option:selected").text();
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
 			var tradeDate =  $("#tradeDate").val();
 			var numberOfShares = $("#numberOfShares").val();
 			var costAtPurchase = $("#costAtPurchase").val();
-			var transItemModel = new insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, "", "");
+			me.convertTickerAndClosePrice(tickerCode, me);
+			var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 			me.transItems.push(transItemModel);
 			me.clearFieldData();
 			//me.addTransaction(transItemModel);
@@ -543,14 +534,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var muiltiCompTransModel = null;
 	    		if(data[i].length > 1){
 	    			item = data[i][0];
-					transItemModel =  new insertPerTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
-																item.costAtPurchase, item.currentPrice, item.id, true);
+	    			me.convertTickerAndClosePrice(item.tickerCode, me);
+					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+																item.costAtPurchase, me.liveClosingPrice, item.id, true);
 					me.displayTransactions.push(transItemModel);
 					me.getMultiCompData(data[i], transItemModel, me);
 	    		}else{
 	    			item = data[i][0];
-					transItemModel =  new insertPerTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
-																item.costAtPurchase, item.currentPrice, item.id, false);
+	    			me.convertTickerAndClosePrice(item.tickerCode, me);
+					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+																item.costAtPurchase, me.liveClosingPrice, item.id, false);
 					me.displayTransactions.push(transItemModel);
 	    		}
 	    	}
@@ -572,13 +565,25 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    convertTickerCodeToCompany: function(tickerCode, me){
 	    	var company = "";
-	    	$.each(me.companyNameAndTickerList, function (index, record) {
-				  if(tickerCode === record.tickerCode){
+	    	$.each(me.watchlistCompanies(), function (index, record) {
+				  if(tickerCode === record.ticker){
 					  company = record.companyName;
 					  return false;
 				  }
 	    	});
 	    	return company;
+		},
+		
+		convertTickerAndClosePrice: function(tickerCode, me){
+			me.disCompanyName = null,
+			me.liveClosingPrice = null,
+	    	$.each(me.watchlistCompanies(), function (index, record) {
+				  if(tickerCode === record.ticker){
+					  me.disCompanyName = record.companyName;
+					  me.liveClosingPrice = record.price;
+					  return false;
+				  }
+	    	});
 		},
 	    
 	    getMultiCompData: function(data, model, me){
@@ -595,7 +600,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
-	    		var transItemModel =  new insertDisplayTrans(me.convertTickerCodeToCompany(item.tickerCode, me), item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.currentPrice, item.id);
+	    		me.convertTickerAndClosePrice(item.tickerCode, me);
+	    		var transItemModel =  new insertDisplayTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate,
+	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
 	    },
@@ -702,9 +709,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tradeDate = ko.observable(tradeDate);
     	me.numberOfShares = ko.observable(numberOfShares);
     	me.costAtPurchase = ko.observable(costAtPurchase);
-    	me.currentPrice = ko.dependentObservable(function() {
-            return (me.costAtPurchase() / me.numberOfShares()).toFixed(2);
-        }, me);
+    	me.currentPrice = ko.observable(currentPrice);
     	me.id = ko.observable(id);
     }
     
