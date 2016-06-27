@@ -111,7 +111,7 @@
 					<input type="checkbox" data-bind="style: { display: ($root.userStatus() == 'PREMIUM' || $root.userStatus() == 'TRIAL' || name!='Exchange') ? null : 'none' }"  />
 				</div>
 				<!-- ko if:name=='Exchange' && ($root.userStatus() == 'UNAUTHORIZED' || $root.userStatus() == 'EXPIRED')-->
-					<p class="exchange-denied criteria-content">Upgrade to a StockFacts Premium account to search additional exchanges, including Malaysia, Taiwan, Thailand, Indonesia, Singapore and Philippines.</p>
+					<p class="exchange-denied criteria-content">Upgrade to a StockFacts Plus account to search additional exchanges, including Malaysia, Taiwan, Thailand, Indonesia, Singapore and Philippines.</p>
 					<p>
 						<span data-bind="visible:$root.userStatus()=='UNAUTHORIZED'">
 						<a class="underline" data-bind="siteLink:'sign-in'">Sign in</a> |
