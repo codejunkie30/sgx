@@ -1,11 +1,19 @@
 .valuation-performance {
-	/* display: none;
 	height: 920px;
 	position: relative;
-	border-right: 1px solid #cacdd3;
-	border-left: 1px solid #cacdd3;
-	border-bottom: 1px solid #cacdd3;
-	padding-bottom: 10px; */
+	top: -2px;
+	z-index:1;
+	border: 2px solid #ebecec;
+	padding: 30px 10px 10px; 
+	
+}
+
+.downArrow:after{
+   width: 0;
+   height: 0;
+   border-style: solid;
+   border-width: 10px 7.5px 0 7.5px;
+   border-color: #0e236b transparent transparent transparent;
 }
 
 .valuation-performance a {
@@ -70,47 +78,6 @@
 	display: none;
 }
 
-.valuation-results .toolbar {
-	background-color: #f3f3f3;
-	border-image: none;
-	border-style: solid none;
-	border-width: 1px medium;
-	height: 39px;
-	border-top: 1px solid #dcdcdc;
-	border-bottom: 1px solid #dcdcdc;
-}
-
-.valuation-results .toolbar .column {
-	width: 33%;
-	display: inline-block;
-}
-
-.valuation-results .toolbar.home .column {
-	width: 33%;
-	display: inline-block;
-	float: left;
-}
-
-.valuation-results .toolbar.home .column.center, .valuation-results .toolbar.home .column.right
-	{
-	position: relative;
-	top: 7px;
-}
-
-.valuation-results .toolbar .results {
-	color: #565a5c;
-	font-size: 14px;
-	font-style: italic;
-	line-height: 39px;
-	text-indent: 10px;
-}
-
-.valuation-results .toolbar .customize {
-	margin-right: 16px !important;
-	text-align: center;
-	width: 200px;
-}
-
 .valuation-results table {
 	border-spacing: 0;
 	border-collapse: collapse;
@@ -118,6 +85,16 @@
 	margin-bottom: 10px;
 	width: 100%;
 	border-right: 1px solid #ccc;
+}
+
+.valuation-results table tbody td {
+	color: #000;
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+	font: bold 12px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	line-height: 280%;
+	vertical-align: top;
 }
 
 .valuation-results table thead tr {
@@ -153,11 +130,6 @@
 	background: url("../img/sort_descending.png") no-repeat right 5px center;
 }
 
-.valuation-results table .industryGroup {
-	text-align: left;
-	width: 220px;
-}
-
 .valuation-results table .companyName {
 	text-align: left;
 	width: 220px;
@@ -176,22 +148,13 @@
 	text-align: right;
 }
 
+
 .transactions table tbody tr td input {
 	width: 90px;
     height: 30px;
     text-align: left;
     display: inline-block;
     font: bold 12px/12px Arial, Helvetica, sans-serif;
-}
-
-.valuation-results table tbody td {
-	color: #000;
-	border: 1px solid #ccc;
-	padding: 8px 12px;
-	font: bold 12px/12px Arial, Helvetica, sans-serif;
-	text-align: left;
-	line-height: 280%;
-	vertical-align: top;
 }
 
 .transactions .select-company {
