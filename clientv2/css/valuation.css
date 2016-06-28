@@ -2,18 +2,17 @@
 	/* height: 920px; */
 	position: relative;
 	top: -2px;
-	z-index:1;
+	z-index: 1;
 	border: 2px solid #ebecec;
-	padding: 30px 10px 10px; 
-	
+	padding: 30px 10px 10px;
 }
 
-.downArrow:after{
-   width: 0;
-   height: 0;
-   border-style: solid;
-   border-width: 10px 7.5px 0 7.5px;
-   border-color: #0e236b transparent transparent transparent;
+.downArrow:after {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 7.5px 0 7.5px;
+	border-color: #0e236b transparent transparent transparent;
 }
 
 .valuation-performance a {
@@ -37,15 +36,6 @@
 	border-right: 2px solid #fff;
 }
 
-.valuation-performance .content {
-	padding: 20px;
-	text-align: right;
-}
-
-.valuation-performance .content label {
-	display: block;
-}
-
 .header-bar {
 	background: #0e236b;
 	text-align: center;
@@ -62,7 +52,7 @@
 
 .header-bar a.active {
 	cursor: default;
-	color: #4d4e50;
+	color: #ffffff;
 }
 
 .performance, .transactions {
@@ -123,11 +113,13 @@
 }
 
 .valuation-results table thead tr th.asc {
-	background: url("../img/sort_ascending.png") no-repeat right 5px center;
+	background: url("../img/sort_ascending.png") no-repeat left 125px top
+		10px;
 }
 
 .valuation-results table thead tr th.desc {
-	background: url("../img/sort_descending.png") no-repeat right 5px center;
+	background: url("../img/sort_descending.png") no-repeat left 125px top
+		5px;
 }
 
 .valuation-results table .companyName {
@@ -148,25 +140,24 @@
 	text-align: right;
 }
 
-
 .transactions table tbody tr td input {
 	width: 90px;
-    height: 30px;
-    text-align: left;
-    display: inline-block;
-    font: normal 12px/12px Arial, Helvetica, sans-serif;
+	height: 30px;
+	text-align: left;
+	display: inline-block;
+	font: normal 12px/12px Arial, Helvetica, sans-serif;
 }
 
 .transactions .select-company {
 	width: 220px;
-    height: 36px;
-    display: inline-block;
+	height: 36px;
+	display: inline-block;
 }
 
 .transactions .select-type {
 	width: 90px;
-    height: 36px;
-    display: inline-block;
+	height: 36px;
+	display: inline-block;
 }
 
 .transactions table thead tr th {
@@ -215,13 +206,19 @@
 
 .save-button {
 	display: inline-block;
-    background: #0e236b;
-    -webkit-border-radius: 4px;
-    padding: 10px 30px;
-    color: #fff !important;
-    cursor: pointer;
-    margin-right: 20px;
-    font: normal 15px/15px Arial, Helvetica, sans-serif;
+	background: #0e236b;
+	-webkit-border-radius: 4px;
+	padding: 8px 25px;
+	color: #fff !important;
+	cursor: pointer;
+	margin-right: 20px;
+	font: normal 15px/15px Arial, Helvetica, sans-serif;
+}
+
+.imgCenterAllign {
+	cursor: pointer;
+	margin-top: 10px;
+    text-align: center;
 }
 
 .valuation-results .company-header {
@@ -235,13 +232,13 @@
 }
 
 .valuation-results .company-row {
-    color: #000;
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    font: bold 12px/12px Arial, Helvetica, sans-serif;
-    text-align: left;
-    line-height: 280%;
-    vertical-align: top;
+	color: #000;
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+	font: bold 12px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	line-height: 280%;
+	vertical-align: top;
 }
 
 /* .panel, .flip {
@@ -250,11 +247,34 @@
     background-color: #d5e3ea;
     border: solid 1px #d5e3ea;
 } */
-
 .panel {
-    padding: 50px;
-    display: none;
-    text-align: center;
-    background-color: #d5e3ea;
-    border: solid 1px #d5e3ea;
+	padding: 50px;
+	display: none;
+	text-align: center;
+	background-color: #d5e3ea;
+	border: solid 1px #d5e3ea;
+}
+
+.w80P {
+	width: 80%
+}
+
+.w20P {
+	width: 20%
+}
+
+.floatLeft {
+	float: left;
+}
+
+.floatRight {
+	float: right;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.blueCl{
+	color: #0e236b;
 }

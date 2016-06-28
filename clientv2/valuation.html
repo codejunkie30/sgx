@@ -125,10 +125,10 @@
 						<tr>
 							<th width="45%" class="asc" id="transCompanyNameColumn" data-bind="click: sortColumn">Company Name</th>
 							<th width="10%">Type</th>
-							<th width="10%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="10%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="10%">Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-							<th width="10%">Last Close Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+							<th width="10%"><div class="floatLeft w80P blueCl">Trade Date</div><div class="floatRight w20P"><img data-bind="tooltip: ''" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="10%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"><img data-bind="tooltip: ''" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="10%"><div class="floatLeft w80P blueCl">Price</div><div class="floatRight w20P"><img data-bind="tooltip: ''" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="10%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"><img data-bind="tooltip: ''" alt="" src="img/ico-info_blue.png"></div></th>
 							<th width="5%">Action</th>
 						</tr>
 					</thead>
@@ -145,14 +145,14 @@
 					</tbody>
 					<tbody data-bind="foreach: transItems">
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-								<td class="company-row" data-bind="text: companyName"></td>
-								<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
-								<td><input type="text" data-bind="value: tradeDate"/></td>
-								<td><input type="text" data-bind="value: numberOfShares"/></td>
-								<td><input type="text" data-bind="value: costAtPurchase"/></td>
-								<td data-bind="text: currentPrice"></td>
-								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)"  /></td>
-						    </tr>
+							<td class="company-row" data-bind="text: companyName"></td>
+							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
+							<td><input type="text" data-bind="value: tradeDate"/></td>
+							<td><input type="text" data-bind="value: numberOfShares"/></td>
+							<td><input type="text" data-bind="value: costAtPurchase"/></td>
+							<td data-bind="text: currentPrice"></td>
+							<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)" /></div></td>
+					    </tr>
 					</tbody>
 				    	
 				</table>
