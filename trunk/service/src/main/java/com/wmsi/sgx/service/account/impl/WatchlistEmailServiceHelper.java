@@ -92,19 +92,19 @@ public class WatchlistEmailServiceHelper implements Job {
 											+ acc.getUser().getUsername());
 									log.info("Exception in email notification : ",
 											e.getMessage() + "\n Details of Root cause " + e);
-									insertEmailTransaction(acc.getUser(), watchlist, content,
+									insertEmailTransaction(acc.getUser(), watchlist, null,
 											IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED,
 											e.getMessage());
 								}
 							} else {
 								if (options.getRight() != null) {
 									for (Object o : options.getRight()) {
-										insertEmailTransaction(acc.getUser(), watchlist, content,
+										insertEmailTransaction(acc.getUser(), watchlist, null,
 												IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED,
 												o.toString());
 									}
 								} else {
-									insertEmailTransaction(acc.getUser(), watchlist, content,
+									insertEmailTransaction(acc.getUser(), watchlist, null,
 											IEmailAuditMessages.EMAIL_SUBJECT, IEmailAuditMessages.EMAIL_FAILED,
 											IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
 							}
