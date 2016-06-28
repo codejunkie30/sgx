@@ -142,7 +142,7 @@
 
 .transactions table tbody tr td input {
 	width: 90px;
-	height: 30px;
+	height: 25px;
 	text-align: left;
 	display: inline-block;
 	font: normal 12px/12px Arial, Helvetica, sans-serif;
@@ -150,13 +150,13 @@
 
 .transactions .select-company {
 	width: 220px;
-	height: 36px;
+	height: 30px;
 	display: inline-block;
 }
 
 .transactions .select-type {
 	width: 90px;
-	height: 36px;
+	height: 30px;
 	display: inline-block;
 }
 
