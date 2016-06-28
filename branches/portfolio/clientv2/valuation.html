@@ -14,7 +14,7 @@
 
 </head>
 
-<body style="width: auto;" id="stockListValuation" class="alerts-wrapper">
+<body id="stockListValuation" class="alerts-wrapper">
 	<div class="grid">
 		<span data-bind="template: 'stocklist-header'"></span>
 	</div>
@@ -123,7 +123,7 @@
 				<table>
 					<thead>
 						<tr>
-							<th width="45%">Company Name</th>
+							<th width="45%" class="asc" id="transCompanyNameColumn" data-bind="click: sortColumn">Company Name</th>
 							<th width="10%">Type</th>
 							<th width="10%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
 							<th width="10%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>

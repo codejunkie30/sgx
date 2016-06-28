@@ -1,4 +1,10 @@
-
+.key-dev-match{
+	position: relative;
+	top: -2px;
+	z-index:1;
+	border: 2px solid #ebecec;
+	padding: 30px 10px 10px; 
+}
 .key-dev-match .control-box {
 	width: 30%;
 	background: #ebecec;
@@ -8,7 +14,8 @@
 
 .key-dev-match .matches {
 	margin-left: 320px;
-	height: 600px;
+	height: 530px;
+
 }
 
 .key-dev-match .control-box select {

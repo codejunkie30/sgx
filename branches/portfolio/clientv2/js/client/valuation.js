@@ -605,6 +605,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
+	    	me.transItems.sort(sortByName);
+	    	function sortByName(a, b){
+				  var a = a.companyName().toLowerCase();
+				  var b = b.companyName().toLowerCase(); 
+				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+			}
 	    },
 	    
 	    refractTransData: function(data){
@@ -697,7 +703,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#toogle_'+id).hide();
 	    	$('#minus_'+id).hide();
 	    	$('#plus_'+id).show();
-	    }
+	    },
+	    
+	    sortColumn: function(data, event){
+	    	var me = this;
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.transItems.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName().toLowerCase();
+	  			  var b = b.companyName().toLowerCase(); 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.transItems.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName().toLowerCase();
+	  			  var b = b.companyName().toLowerCase(); 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
 		
 	};
 	
