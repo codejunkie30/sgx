@@ -51,7 +51,7 @@
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
 .watchlist .results ul li .name { font-size: 13px; position: relative; top: -3px; }
 
-.wl-container .alerts { display: inline-block; width: 55%; }
+.wl-container .alerts { display: inline-block; width: 53%; }
 .wl-container .alerts .price-changes, .alerts .estimates, .alerts .developments { background: #ebecec; }
 .wl-container .alerts .developments { overflow: hidden !important; clear: both; }
 .wl-container .alerts input[type=text] { background: #f6f6f6; width: 44px; padding: 0 2px; }

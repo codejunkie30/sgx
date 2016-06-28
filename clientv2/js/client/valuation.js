@@ -453,7 +453,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 			me.transItems.push(transItemModel);
 			me.clearFieldData();
-			//me.addTransaction(transItemModel);
+			me.addTransaction(transItemModel);
 	    },
 	    
 	    saveTrans: function(){
@@ -501,6 +501,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					params,
 					function(data, textStatus, jqXHR){					
 						console.log(data);
+						me.transItems([]);
+						me.getTransactionsData(me);
 					}, 
 					PAGE.customSGXError);
 	    },

@@ -1,5 +1,5 @@
 .valuation-performance {
-	height: 920px;
+	/* height: 920px; */
 	position: relative;
 	top: -2px;
 	z-index:1;
@@ -83,7 +83,7 @@
 	border-collapse: collapse;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	width: 100%;
+	width: 98%;
 	border-right: 1px solid #ccc;
 }
 
@@ -91,7 +91,7 @@
 	color: #000;
 	border: 1px solid #ccc;
 	padding: 8px 12px;
-	font: bold 12px/12px Arial, Helvetica, sans-serif;
+	font: normal 12px/12px Arial, Helvetica, sans-serif;
 	text-align: left;
 	line-height: 280%;
 	vertical-align: top;
@@ -154,7 +154,7 @@
     height: 30px;
     text-align: left;
     display: inline-block;
-    font: bold 12px/12px Arial, Helvetica, sans-serif;
+    font: normal 12px/12px Arial, Helvetica, sans-serif;
 }
 
 .transactions .select-company {
@@ -211,6 +211,17 @@
 	padding: 8px 15px 8px 15px;
 	color: #fff !important;
 	cursor: pointer;
+}
+
+.save-button {
+	display: inline-block;
+    background: #0e236b;
+    -webkit-border-radius: 4px;
+    padding: 10px 30px;
+    color: #fff !important;
+    cursor: pointer;
+    margin-right: 20px;
+    font: normal 15px/15px Arial, Helvetica, sans-serif;
 }
 
 .valuation-results .company-header {
