@@ -475,7 +475,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//var companyName = $("#watchlistCompaniesSelect option:selected").text();
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
-			var tradeDate =  $("#tradeDate").val();
+			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO($("#tradeDate").val()));
 			var numberOfShares = $("#numberOfShares").val();
 			var costAtPurchase = $("#costAtPurchase").val();
 			me.convertTickerAndClosePrice(tickerCode, me);
