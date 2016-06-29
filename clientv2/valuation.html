@@ -136,7 +136,7 @@
 						<tr>
 							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType" ></select></td>
-							<td><input type="text" id="tradeDate" /></td>
+							<td><input type="text" id="tradeDate" readonly="readonly"/></td>
 							<td><input type="text" id="numberOfShares" /></td>
 							<td><input type="text" id="costAtPurchase" /></td>
 							<td>&nbsp;</td>
@@ -147,7 +147,7 @@
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
-							<td><input type="text" data-bind="value: tradeDate"/></td>
+							<td><input type="text" data-bind="value: tradeDate, datepicker:'tradeDate'" readonly="readonly"/></td>
 							<td><input type="text" data-bind="value: numberOfShares"/></td>
 							<td><input type="text" data-bind="value: costAtPurchase"/></td>
 							<td data-bind="text: currentPrice"></td>
