@@ -228,7 +228,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		changeTab: function(tabName){
 			var me = this;
+			
 			if( tabName == me.activeTab ) return;
+		
+			$(".header-bar > ul > li.downArrow").removeClass("downArrow");
+			
+			if(tabName=='performance'){
+				$(".header-bar > ul > li:first").addClass("downArrow");
+			}else{
+				$(".header-bar > ul > li:last").addClass("downArrow");
+			}
+			
 			me.activeTab(tabName);
 	    },
 

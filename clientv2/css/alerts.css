@@ -11,7 +11,7 @@
 
 #alerts-content-alternative { margin: 0 0 0 0; }
 
-.wl-container { overflow: hidden; min-height: 300px; /*display: none;*/ }
+.wl-container { overflow: hidden; min-height: 300px; margin-top: 15px; /*display: none;*/ }
 
 .wl-container .edit-watchlist { margin: 10px 0; }
 
@@ -32,20 +32,21 @@
 .watchlist .wl-companies ul li .change { width: 100px; color: #b5cf34; }
 .watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
-.watchlist .search .description .screener-basic { margin-bottom: 8px; }
-.watchlist .search .searchtoggle { margin: 0; }
-.watchlist .search .searchtoggle .toggle { display: inline-block; margin: 0px; padding-left: 15px;  padding-right: 15px; background-color: #565a5c; }
-.watchlist .search .searchtoggle .toggle.sname { -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; }
-.watchlist .search .searchtoggle .toggle.scode { -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; }
-.watchlist .search .searchtoggle .selected { background-color: #0e236b; }
-.watchlist .search .searchbar { margin: 10px 0; border: 1px solid #0e236b; display: inline-block; -webkit-border-radius: 4px; border-radius: 4px; height: 22px; position: relative; width: 212px; background: #fff; -webkit-background-clip: padding; -moz-background-clip: padding; background-clip: padding-box; }
-.watchlist .search .searchbar input { border: none; padding: 0px; color: #494949; font: normal 12px Arial, Helvetica, sans-serif; font-style: italic; width: 186px; height: 22px; text-indent: 10px; background: none; }
-.watchlist .search .search-submit { position: absolute; top: 0px; right: 0px; width: 26px !important; height: 0; padding-top: 22px; background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important; z-index: 20; cursor: pointer; }
+.search h5{float: left; padding-right: 10px; margin-top: 11px;}
+.search .description .screener-basic { margin-bottom: 8px; }
+.search .searchtoggle { margin: 0; }
+.search .searchtoggle .toggle { display: inline-block; margin: 0px; padding-left: 15px;  padding-right: 15px; background-color: #565a5c; }
+.search .searchtoggle .toggle.sname { -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; }
+.search .searchtoggle .toggle.scode { -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; }
+.search .searchtoggle .selected { background-color: #0e236b; }
+.search .searchbar { margin: 10px 0; border: 1px solid #0e236b; display: inline-block; -webkit-border-radius: 4px; border-radius: 4px; height: 22px; position: relative; width: 212px; background: #fff; -webkit-background-clip: padding; -moz-background-clip: padding; background-clip: padding-box; }
+.search .searchbar input { border: none; padding: 0px; color: #494949; font: normal 12px Arial, Helvetica, sans-serif; font-style: italic; width: 186px; height: 22px; text-indent: 10px; background: none; }
+.search .search-submit { position: absolute; top: 0px; right: 0px; width: 26px !important; height: 0; padding-top: 22px; background: #0e236b url("../img/searchbar-icon.jpg") no-repeat center center !important; z-index: 20; cursor: pointer; }
 
 .watchlist .wl-companies ul li .remove { background: url(../img/x-button.png) no-repeat; height: 16px; width: 16px; cursor: pointer; }
 .watchlist .wl-companies ul li .company { font-size: 12px !important; font-weight: normal !important;}
 
-.watchlist .results h5 { padding: 5px; margin: 15px 0 8px 0; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
+.watchlist .results h5 { padding: 5px; margin-bottom:8px; font-size: 14px; font-weight: normal; background: #ebecec; text-transform: uppercase; }
 .watchlist .results ul { margin: 0; padding: 0; font-size: 12px; font-weight: bold; max-height: 290px;overflow-x: hidden;border-bottom: 2px solid #ccc; }
 .watchlist .results ul li { list-style-type: none; margin-bottom: 8px; line-height: 17px; }
 .watchlist .results ul li .add { background: url(../img/add-button.png) no-repeat; height: 17px; width: 17px; display: inline-block; margin: 0 6px 0 0; cursor: pointer; }
@@ -82,11 +83,11 @@
   opacity: 0.8;
   background-color: #fff; }
   
-::-webkit-scrollbar              { width: 6px; }
+::-webkit-scrollbar              { width: 6px;cursor:pointer; }
 /* ::-webkit-scrollbar-button       {  } */
-::-webkit-scrollbar-track        { background-color: #dddddd;  }
+::-webkit-scrollbar-track        { background-color: #dddddd;cursor:pointer;  }
 /* ::-webkit-scrollbar-track-piece  {  } */
-::-webkit-scrollbar-thumb        { background-color: #0e236b; }
+::-webkit-scrollbar-thumb        { background-color: #0e236b;cursor:pointer; }
 /* ::-webkit-scrollbar-corner       {  }
 ::-webkit-resizer                {  } */
 
