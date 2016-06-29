@@ -8,6 +8,10 @@
 }
 
 .downArrow:after {
+	content:"";
+	position:relative;
+    top:34px;
+    right:63px;
 	width: 0;
 	height: 0;
 	border-style: solid;
