@@ -1,5 +1,27 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","client/modules/performance-chart-config","highstock", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, PER_CHART_CONFIG) {
 
+	
+	ko.bindingHandlers.datepicker = {
+		    init: function (element, valueAccessor, allBindingsAccessor) {
+		        var options = allBindingsAccessor().datepickerOptions || {};
+
+		        $(element).datepicker(options);
+
+		        //handle the field changing
+		        ko.utils.registerEventHandler(element, "change", function () {
+		            var observable = valueAccessor();
+		            //observable($(element).datepicker("getDate"));
+		        });
+
+		        //handle disposal (if KO removes by the template binding)
+		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		            $(element).datepicker("destroy");
+		        });
+
+		    }
+		};
+
+	
 	var VALUATION = {
 		finalWL: ko.observableArray(),
 		showChange: ko.observable(false),
@@ -147,8 +169,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							}
 						}
 						PAGE.hideLoading();
+						me.showDatePicker();
 					}, 
 					PAGE.customSGXError);
+		},
+		
+		showDatePicker: function(){
+			$( "#tradeDate" ).datepicker({
+				  //altFormat: "yy-mm-dd"
+			});
 		},
 		
 		computeSelectAllTrans: function(me){
@@ -600,6 +629,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    displayAddTransactions: function(data){
 	    	var me = this;
+	    	me.showDatePicker();
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
 	    		me.convertTickerAndClosePrice(item.tickerCode, me);
