@@ -4,24 +4,55 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
-
 		        $(element).datepicker(options);
 
 		        //handle the field changing
-		        ko.utils.registerEventHandler(element, "change", function () {
+		       /* ko.utils.registerEventHandler(element, "change", function () {
 		            var observable = valueAccessor();
-		            //observable($(element).datepicker("getDate"));
-		        });
+		            observable($(element).datepicker("getDate"));
+		        });*/
 
 		        //handle disposal (if KO removes by the template binding)
 		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
 		            $(element).datepicker("destroy");
 		        });
-
+		    },
+		    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+		        var value = parseInt($(element).val());
+		        var date = $.datepicker.formatDate("dd/mm/yy", Date.fromISO(value));
+		        $(element).val(date);
 		    }
 		};
-
 	
+
+	ko.bindingHandlers.currency = {
+	    symbol: ko.observable('$'),
+	    update: function(element, valueAccessor, allBindingsAccessor){
+	        return ko.bindingHandlers.text.update(element,function(){
+	            var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
+                symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currency.symbol);
+            	var returnValue = symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	            return returnValue === "$0.00" ? "-" : returnValue;
+	        });
+	    }
+	};
+	
+	ko.bindingHandlers.currencyInput = {
+		symbol: ko.observable('$'),
+	    update: function (element, valueAccessor, allBindingsAccessor) {
+	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
+            symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currencyInput.symbol);
+	        $(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+	    }
+	};
+	
+	ko.bindingHandlers.largeNumber = {
+	    update: function (element, valueAccessor, allBindingsAccessor) {
+	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0);
+	        $(element).val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+	    }
+	};
+
 	var VALUATION = {
 		finalWL: ko.observableArray(),
 		showChange: ko.observable(false),
@@ -518,6 +549,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me= this;
 	    	var items = ko.toJS(me.transItems());
 	    	return ko.utils.arrayMap(items, function(item) {
+	    		var formattedDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(item.tradeDate));
+	    		item.tradeDate = formattedDate;
 	            delete item.companyName;
 	            return item;
 	        });
