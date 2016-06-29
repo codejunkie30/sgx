@@ -1,5 +1,6 @@
 .valuation-performance {
 	/* height: 920px; */
+	display: none;
 	position: relative;
 	top: -2px;
 	z-index: 1;

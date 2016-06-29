@@ -128,6 +128,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			//get the transaction data
 			me.getTransactionsData(me);
+			$('#valuationSection').show();
 		},
 		
 		toHighCharts : function(data) {
@@ -513,7 +514,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		//-------------Transaction functionality starts--------------
 		addTrans: function() {
 			var me = this;
-			//var companyName = $("#watchlistCompaniesSelect option:selected").text();
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
 			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO($("#tradeDate").val()));
