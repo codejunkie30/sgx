@@ -14,9 +14,32 @@ CREATE TABLE [dbo].[watchlist_transaction](
 	[tickerCode] [nvarchar](50) NOT NULL,
 	[transaction_type] [nvarchar](50) NOT NULL,
 	[tradeDate] [date] NOT NULL,
-	[number_of_shares] [bigint] NOT NULL,
+	[number_of_shares] [numeric](18, 10) NOT NULL,
 	[cost_at_purchase] [numeric](18, 10) NOT NULL,
 	[current_price] [numeric](18, 10) NOT NULL
 ) ON [PRIMARY]
 
+GO
+
+USE [sgx]
+GO
+
+INSERT INTO [dbo].[watchlist_transaction]
+           ([id]
+           ,[watchlist_id]
+           ,[tickerCode]
+           ,[transaction_type]
+           ,[tradeDate]
+           ,[number_of_shares]
+           ,[cost_at_purchase]
+           ,[current_price])
+     VALUES
+           (100,
+		   1,
+		   101,
+		   'BUY',
+		   '2016-06-30',
+		   10,
+		   100.25,
+		   12.2)
 GO
