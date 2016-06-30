@@ -108,6 +108,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.getWatchListData(me); 
 			
+			$('#valuationSection').show();
+			
 		},
 		
 		renderChart: function(me, responseData){
@@ -128,7 +130,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			//get the transaction data
 			me.getTransactionsData(me);
-			$('#valuationSection').show();
 		},
 		
 		toHighCharts : function(data) {
@@ -524,6 +525,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.transItems.push(transItemModel);
 			me.clearFieldData();
 			me.addTransaction(transItemModel);
+			PAGE.resizeIframeSimple();
 	    },
 	    
 	    saveTrans: function(){
@@ -772,12 +774,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
 	    	$('#internaltd_'+id).removeClass();
+	    	PAGE.resizeIframeSimple();
+	    	//setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
 	    },
 	    
 	    toogleCompanyMinus: function(id, item){
 	    	$('#toogle_'+id).hide();
 	    	$('#minus_'+id).hide();
 	    	$('#plus_'+id).show();
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    sortColumn: function(data, event){
