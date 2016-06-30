@@ -39,7 +39,7 @@ public class WatchlistTransaction {
 	public Date tradeDate;
 
 	@Column(name = "number_of_shares", nullable = false)
-	public Long numberOfShares;
+	public Double numberOfShares;
 
 	@Column(name = "cost_at_purchase", nullable = false)
 	public Double costAtPurchase;
@@ -125,7 +125,7 @@ public class WatchlistTransaction {
 	/**
 	 * @return the numberOfShares
 	 */
-	public Long getNumberOfShares() {
+	public Double getNumberOfShares() {
 		return numberOfShares;
 	}
 
@@ -133,7 +133,7 @@ public class WatchlistTransaction {
 	 * @param numberOfShares
 	 *            the numberOfShares to set
 	 */
-	public void setNumberOfShares(Long numberOfShares) {
+	public void setNumberOfShares(Double numberOfShares) {
 		this.numberOfShares = numberOfShares;
 	}
 

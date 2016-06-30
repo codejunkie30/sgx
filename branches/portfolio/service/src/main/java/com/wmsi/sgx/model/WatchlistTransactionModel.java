@@ -19,7 +19,7 @@ public class WatchlistTransactionModel {
 
 	public Date tradeDate;
 
-	public Long numberOfShares;
+	public Double numberOfShares;
 
 	public Double costAtPurchase;
 
@@ -88,7 +88,7 @@ public class WatchlistTransactionModel {
 	/**
 	 * @return the numberOfShares
 	 */
-	public Long getNumberOfShares() {
+	public Double getNumberOfShares() {
 		return numberOfShares;
 	}
 
@@ -96,7 +96,7 @@ public class WatchlistTransactionModel {
 	 * @param numberOfShares
 	 *            the numberOfShares to set
 	 */
-	public void setNumberOfShares(Long numberOfShares) {
+	public void setNumberOfShares(Double numberOfShares) {
 		this.numberOfShares = numberOfShares;
 	}
 
