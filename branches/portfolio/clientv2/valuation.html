@@ -137,9 +137,9 @@
 						<tr>
 							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType" ></select></td>
-							<td><input type="text" id="tradeDate" readonly="readonly"/></td>
-							<td><input type="text" id="numberOfShares" /></td>
-							<td><input type="text" id="costAtPurchase" /></td>
+							<td><input data-bind="value: initialTradeDate" type="text" id="tradeDate" readonly="readonly"/></td>
+							<td><input type="text" class="text" data-bind="value: initialNumberOfShares"/></td>
+							<td><input type="text" data-bind="value: initialCostAtPurchase" /></td>
 							<td>&nbsp;</td>
 							<td><a class="add-button" data-bind="click: addTrans">Add</a></td>
 						</tr>

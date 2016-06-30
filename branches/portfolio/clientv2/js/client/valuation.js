@@ -73,6 +73,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		transItems: ko.observableArray([]),
 		selectedCompanyValue: ko.observable(),
 		selectedAvailableType: ko.observable(),
+		initialNumberOfShares: ko.observable(),
+		initialCostAtPurchase: ko.observable(),
+		initialTradeDate: ko.observable(),
 		
 		libLoggedIn: ko.observable(),
 		libTrialPeriod: ko.observable(),
@@ -208,9 +211,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({
-				  //altFormat: "yy-mm-dd"
-			});
+			$( "#tradeDate" ).datepicker();
 		},
 		
 		computeSelectAllTrans: function(me){
@@ -517,9 +518,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me = this;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
-			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO($("#tradeDate").val()));
-			var numberOfShares = $("#numberOfShares").val();
-			var costAtPurchase = $("#costAtPurchase").val();
+			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(me.initialTradeDate()));
+			var numberOfShares = me.initialNumberOfShares();
+			var costAtPurchase = me.initialCostAtPurchase();
 			me.convertTickerAndClosePrice(tickerCode, me);
 			var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 			me.transItems.push(transItemModel);
@@ -559,9 +560,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    clearFieldData: function(){
-	    	$("#tradeDate").val("");
-	    	$("#numberOfShares").val("");
-	    	$("#costAtPurchase").val("");
+	    	var me = this;
+	    	me.initialTradeDate(null);
+	    	me.initialNumberOfShares(null);
+	    	me.initialCostAtPurchase(null);
 	    },
 	    
 	    addTransaction: function(model){
