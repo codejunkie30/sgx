@@ -41,13 +41,13 @@
 					<table>
 						<thead>
 							<tr>
-								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
-								<th width="38%">Company Name</th>
-								<th width="13%">First Trade Date <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-								<th width="13%">Number of Shares <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-								<th width="13%">Last Close Price <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-								<th width="13%">Current value <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
-								<th width="5%">Delete <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></th>
+								<th width="5%"><div class="floatLeft w80P blueCl">Chart </div><div class="floatRight w20P"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="38%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
+								<th width="13%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
+								<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
+								<th width="13%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
+								<th width="13%"><div class="floatLeft w80P blueCl">Current value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
+								<th width="5%"><div class="floatLeft w80P blueCl">Delete</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></div></th>
 							</tr>
 						</thead>
 						<tbody data-bind="foreach: displayTransactions">
@@ -93,14 +93,14 @@
 					</table>
 				<!-- /ko -->
 				<!-- ko {if: displayTransCompanies().length} -->
-					<table data-bind="with: displayTransCompanies">
+					<table>
 						<thead>
 							<tr>
-								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
-								<th width="95%" class="company-header">Company Name</th>
+								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
+								<th width="95%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
 							</tr>
 						</thead>
-						<tbody data-bind="foreach: {data: $data}">
+						<tbody data-bind="foreach: displayTransCompanies">
 							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
 								<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>

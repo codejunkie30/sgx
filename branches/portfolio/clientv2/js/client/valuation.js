@@ -201,6 +201,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									jsonObj.push(item);
 								}
 								me.displayTransCompanies(jsonObj);
+								me.displayTransCompanies.sort(sortByName);
+						    	function sortByName(a, b){
+									  var a = a.companyName.toLowerCase();
+									  var b = b.companyName.toLowerCase(); 
+									  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+								}
 								me.computeSelectAllTrans(me);
 							}
 						}
@@ -638,6 +644,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", "", "", "");
 				me.displayTransactions.push(transItemCompModel);
 	    	}
+	    	
+	    	me.displayTransactions.sort(sortByName);
+	    	function sortByName(a, b){
+				  var a = a.companyName.toLowerCase();
+				  var b = b.companyName.toLowerCase(); 
+				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+			}
 			
 	    },
 	    
@@ -807,7 +820,50 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    }
 	    	}
 	    },
-		
+	    
+	    sortColumnAsc: function(data, event){
+	    	var me = this;
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransactions.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransactions.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
+	    
+	    sortColumnByAsc: function(data, event){
+	    	var me = this;
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransCompanies.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransCompanies.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },  
+	    
+	
 	};
 	
 	function insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
