@@ -42,14 +42,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    update: function (element, valueAccessor, allBindingsAccessor) {
 	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
             symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currencyInput.symbol);
-	        $(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+	    	if(!isNaN(value)){
+	    		$(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+	    	}else{
+	    		$(element).val($(element).val().replace(/[^\w\s]/gi, ''));
+	    	}
 	    }
 	};
 	
 	ko.bindingHandlers.largeNumber = {
 	    update: function (element, valueAccessor, allBindingsAccessor) {
 	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0);
-	        $(element).val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+	    	if(!isNaN(value)){
+	    		$(element).val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+	    	}else{
+	    		$(element).val($(element).val().replace(/[^\w\s]/gi, ''));
+	    	}
 	    }
 	};
 
@@ -559,7 +567,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var items = ko.toJS(me.transItems());
 	    	return ko.utils.arrayMap(items, function(item) {
 	    		var formattedDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(item.tradeDate));
+	    		var costAtPurchase = item.costAtPurchase;
+	    		var numberOfShares = item.numberOfShares;
 	    		item.tradeDate = formattedDate;
+	    		item.costAtPurchase = isNaN(costAtPurchase) ? costAtPurchase.replace(/[^\w\s]/gi, '') : costAtPurchase;
+	    		item.numberOfShares = isNaN(numberOfShares) ? numberOfShares.replace(/[^\w\s]/gi, '') : numberOfShares;
 	            delete item.companyName;
 	            return item;
 	        });
