@@ -34,7 +34,7 @@ INSERT INTO [dbo].[watchlist_transaction]
            ,[cost_at_purchase]
            ,[current_price])
      VALUES
-           (100,
+           (1,
 		   1,
 		   101,
 		   'BUY',
