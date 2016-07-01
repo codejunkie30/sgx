@@ -207,6 +207,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									item ["companyName"] = me.convertTickerCodeToCompany(tickersData[i], me);
 									item ["selectedTransaction"] = ko.observable(true);
 									jsonObj.push(item);
+									PAGE.resizeIframeSimple();
 								}
 								me.displayTransCompanies(jsonObj);
 								me.displayTransCompanies.sort(sortByName);
@@ -637,12 +638,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 																item.costAtPurchase, me.liveClosingPrice, item.id, true);
 					me.displayTransactions.push(transItemModel);
 					me.getMultiCompData(data[i], transItemModel, me);
+					PAGE.resizeIframeSimple();
 	    		}else{
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
 																item.costAtPurchase, me.liveClosingPrice, item.id, false);
 					me.displayTransactions.push(transItemModel);
+					PAGE.resizeIframeSimple();
 	    		}
 	    	}
 	    	
@@ -657,6 +660,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var tickerCode = tickersData[i];
 	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", "", "", "");
 				me.displayTransactions.push(transItemCompModel);
+				PAGE.resizeIframeSimple();
 	    	}
 	    	
 	    	me.displayTransactions.sort(sortByName);
@@ -710,6 +714,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var transItemModel =  new insertDisplayTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate,
 	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
+	    		PAGE.resizeIframeSimple();
 	    	});
 	    	me.transItems.sort(sortByName);
 	    	function sortByName(a, b){
