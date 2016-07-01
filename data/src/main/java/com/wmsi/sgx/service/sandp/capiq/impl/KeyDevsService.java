@@ -123,7 +123,7 @@ public class KeyDevsService extends AbstractDataService {
 		try {
 
 			File f = new File(rawDir + keyDevDir + ".csv");
-			if(f.exists()){
+			if(!f.exists()){
 				log.error("Unable to process key dev source content as key-devs.csv file doesn't exists");
 				return;
 			}
