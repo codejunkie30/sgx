@@ -210,6 +210,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									jsonObj.push(item);
 								}
 								me.displayTransCompanies(jsonObj);
+								PAGE.resizeIframeSimple();
 								me.displayTransCompanies.sort(sortByName);
 						    	function sortByName(a, b){
 									  var a = a.companyName.toLowerCase();
