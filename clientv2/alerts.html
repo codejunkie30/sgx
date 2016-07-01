@@ -30,8 +30,14 @@
 
 	<section id="alerts" data-bind="if:premiumUser() == true">
 		<div class="grid scan intro">
+			<!-- ko {if: finalWL().length} -->
 				<p>Select the types of events that you'd like to be alerted to. Alerts are sent daily to the email address listed in your account.</p>
+			<!-- /ko -->
+			<!-- ko ifnot: finalWL().length -->
+				<p>There is no record to display.</p>
+			<!-- /ko -->
 		</div>
+		<!-- ko {if: finalWL().length} -->
 		<div class="search" data-bind="if: displayList">
 			<h5>Search for companies to add to your Watch List</h5>
 			<div>
@@ -41,6 +47,7 @@
 				</span>
 			</div>
 		</div>
+		<!-- /ko -->
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
 				<div class="results" data-bind="if: displayList">

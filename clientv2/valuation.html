@@ -15,7 +15,7 @@
 
 </head>
 
-<body id="stockListValuation" class="alerts-wrapper">
+<body style="width: auto;" id="stockListValuation" class="alerts-wrapper">
 	<div class="grid">
 		<span data-bind="template: 'stocklist-header'"></span>
 	</div>
@@ -31,12 +31,9 @@
 		<!-- div content for performance functionality -->
 		<div class="grid valuation-results performance" data-bind="css:{'show-hidden': activeTab() == 'performance'}">
 		
-			<div id="performance-chart-content" align="center">
-				Chart Content has to be display
-			</div>
+			<div id="performance-chart-content" align="center"></div>
 			
 			<div>
-				<!-- <span data-bind="if: displayTransactions().length == 0">observableArray is empty</span> -->
 				<!-- ko {if: displayTransactions().length} -->
 					<table>
 						<thead>

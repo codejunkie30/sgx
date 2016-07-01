@@ -9,11 +9,13 @@
 					<p>Create a StockList with up to 25 companies in each. For each StockList, see the current valuation, key developments, and setup to receive email alerts.</p>
 			</div>
 			
-			<div data-bind="visible: finalWL().length > 0" >
+			<div>
 				<div>
-					<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
-					<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
-					&nbsp;
+					<!-- ko {if: finalWL().length} -->
+						<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
+						<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
+						&nbsp;
+					<!-- /ko -->
 					Create a StockList: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName">
 					<a class="button" data-bind="click:$root.addWatchlist">CREATE</a>
 					<span class="error-messages" data-bind="validationMessage:newWLName"></span>

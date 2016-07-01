@@ -19,7 +19,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    },
 		    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
 		        var value = parseInt($(element).val());
-		        var date = $.datepicker.formatDate("dd/mm/yy", Date.fromISO(value));
+		        var date = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(value));
 		        $(element).val(date);
 		    }
 		};
@@ -197,6 +197,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							me.displayAddTransactions(data);
 							me.displayPerformanceTransactions(data);
 							me.computeSelectAllTrans(me);
+							PAGE.resizeIframeSimple();
 						}else{
 							var tickersData = me.transactionTickers;
 							if(!UTIL.isEmpty(tickersData)){
@@ -207,7 +208,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									item ["companyName"] = me.convertTickerCodeToCompany(tickersData[i], me);
 									item ["selectedTransaction"] = ko.observable(true);
 									jsonObj.push(item);
-									PAGE.resizeIframeSimple();
 								}
 								me.displayTransCompanies(jsonObj);
 								me.displayTransCompanies.sort(sortByName);
@@ -218,6 +218,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								}
 								me.computeSelectAllTrans(me);
 							}
+							PAGE.resizeIframeSimple();
 						}
 						PAGE.hideLoading();
 						me.showDatePicker();
