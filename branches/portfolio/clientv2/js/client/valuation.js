@@ -16,8 +16,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
 		            $(element).datepicker("destroy");
 		        });
-		    },
-		    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+		        
 		        var value = parseInt($(element).val());
 		        var date = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(value));
 		        $(element).val(date);
@@ -27,7 +26,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 	ko.bindingHandlers.currency = {
 	    symbol: ko.observable('$'),
-	    update: function(element, valueAccessor, allBindingsAccessor){
+	    init: function(element, valueAccessor, allBindingsAccessor){
 	        return ko.bindingHandlers.text.update(element,function(){
 	            var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
                 symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currency.symbol);
@@ -39,25 +38,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	
 	ko.bindingHandlers.currencyInput = {
 		symbol: ko.observable('$'),
-	    update: function (element, valueAccessor, allBindingsAccessor) {
+	    init: function (element, valueAccessor, allBindingsAccessor) {
 	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
             symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currencyInput.symbol);
-	    	if(!isNaN(value)){
-	    		$(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
-	    	}else{
-	    		$(element).val($(element).val().replace(/[^\w\s]/gi, ''));
-	    	}
+    		$(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    }
 	};
 	
 	ko.bindingHandlers.largeNumber = {
-	    update: function (element, valueAccessor, allBindingsAccessor) {
+	    init: function (element, valueAccessor, allBindingsAccessor) {
 	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0);
-	    	if(!isNaN(value)){
-	    		$(element).val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-	    	}else{
-	    		$(element).val($(element).val().replace(/[^\w\s]/gi, ''));
-	    	}
+    		$(element).val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 	    }
 	};
 
@@ -572,11 +563,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var items = ko.toJS(me.transItems());
 	    	return ko.utils.arrayMap(items, function(item) {
 	    		var formattedDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(item.tradeDate));
-	    		var costAtPurchase = item.costAtPurchase;
-	    		var numberOfShares = item.numberOfShares;
+	    		var costAtPurchase = item.costAtPurchase.replace(/,/gi,"");
+	    		var numberOfShares = item.numberOfShares.replace(/,/gi,"");
 	    		item.tradeDate = formattedDate;
-	    		item.costAtPurchase = isNaN(costAtPurchase) ? costAtPurchase.replace(/[^\w\s]/gi, '') : costAtPurchase;
-	    		item.numberOfShares = isNaN(numberOfShares) ? numberOfShares.replace(/[^\w\s]/gi, '') : numberOfShares;
+	    		item.costAtPurchase = costAtPurchase.replace("$","");
+	    		item.numberOfShares = numberOfShares;
 	            delete item.companyName;
 	            return item;
 	        });
