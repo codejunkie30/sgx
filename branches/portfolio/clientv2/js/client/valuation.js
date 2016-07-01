@@ -535,12 +535,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(me.initialTradeDate()));
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
-			me.convertTickerAndClosePrice(tickerCode, me);
-			var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
-			me.transItems.push(transItemModel);
-			me.clearFieldData();
-			me.addTransaction(transItemModel);
-			PAGE.resizeIframeSimple();
+			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode)){
+				me.convertTickerAndClosePrice(tickerCode, me);
+				var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
+				me.transItems.push(transItemModel);
+				me.clearFieldData();
+				me.addTransaction(transItemModel);
+				PAGE.resizeIframeSimple();
+			}
 	    },
 	    
 	    saveTrans: function(){
