@@ -236,6 +236,22 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		}
 	};
 	
+	KO.bindingHandlers.stockListSiteLink = {
+			update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+				var vals = KO.unwrap(valueAccessor());
+				var url = null;
+				if (vals.hasOwnProperty("id")) {
+					id = vals.id;
+					extra = vals.extra;
+					url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
+				}
+				else {
+					url = PAGE.getPage(PAGE.pageData.getPage(vals));
+				}
+				$(element).attr("href", url).attr("target", "_parent");
+			}
+	};
+	
 	// Input field to only allow numeric values
 	KO.bindingHandlers.numeric = {
 	    init: function (element) {

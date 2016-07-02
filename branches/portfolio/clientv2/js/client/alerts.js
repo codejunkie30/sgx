@@ -112,6 +112,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
 					ALERTS.finalWL(data.watchlists.sort(sortByName));
+					ALERTS.selectedValue(UTIL.getParameterByName("code"));
 					callback();
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');

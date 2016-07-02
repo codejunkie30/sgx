@@ -29,9 +29,9 @@
 			<div class="profilestocklist">
 				<nav>
 					<ul>
-						<li class="stocklist-alerts"><a data-bind="siteLink: { id: 'alerts'} ">Alerts</a></li>
-						<li class="stocklist-valuation"><a data-bind="siteLink: { id: 'valuation'}">Valuation</a></li>
-						<li class="stocklist-keydev"><a data-bind="siteLink: { id: 'key-developments'}">Key Developments</a></li>
+						<li class="stocklist-alerts"><a data-bind="stockListSiteLink: { id: 'alerts', extra: 'code=' + selectedValue()}">Alerts</a></li>
+						<li class="stocklist-valuation"><a data-bind="stockListSiteLink: { id: 'valuation', extra: 'code=' + selectedValue()}">Valuation</a></li>
+						<li class="stocklist-keydev"><a data-bind="stockListSiteLink: { id: 'key-developments', extra: 'code=' + selectedValue()}">Key Developments</a></li>
 					</ul>		
 				</nav>
 			</div>	
