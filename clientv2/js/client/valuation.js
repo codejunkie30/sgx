@@ -303,6 +303,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
+					VALUATION.selectedValue(UTIL.getParameterByName("code"));
 					PAGE.hideLoading();
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
