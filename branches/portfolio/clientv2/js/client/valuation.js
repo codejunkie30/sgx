@@ -85,17 +85,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		premiumUserEmail: ko.observable(),
 		currentDay: ko.observable(),
 		
-		chartData : [],
-		seriesOptions: [],
-		transactionTickers: [],
 		watchlistId: null,
 		disCompanyName: null,
 		liveClosingPrice: null,
 		
-		volumeData : [],
-		closePrice : [],
-		priceData : [],
-		priceHistoryData : [],
+		seriesOptions: [],
+		transactionTickers: [],
+		chartData: [],
 		
 		initPage: function() {
 			var me = this;
@@ -115,20 +111,40 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		renderChart: function(me, responseData){
-			me.chartData = responseData;
 			me.transactionTickers = [];
 			$.each(responseData.companiesPriceHistory, function(i, data){
-				var priceData = me.toHighCharts(data.priceHistory.price);
 				me.transactionTickers.push(data.tickerCode);
+				
+				var allData = data.priceHistory;
+				var priceData = me.toHighCharts(allData.price);
+				var lowPrice = me.toHighCharts(allData.lowPrice);
+				var openPrice = me.toHighCharts(allData.openPrice);
+				var highPrice = me.toHighCharts(allData.highPrice);
+				
+				$.each(priceData, function(k, record) {
+					var key = Highcharts.dateFormat("%e/%b/%Y", new Date(record.x));
+					
+			        me.chartData[key] = {}
+			        me.chartData[key].close = record.y;
+					 if( lowPrice[k])
+						 me.chartData[key].low = lowPrice[k].y;
+					 if( openPrice[k])
+						 me.chartData[key].open = openPrice[k].y;
+					 if( highPrice[k])
+						 me.chartData[key].high = highPrice[k].y;
+				});
+				
 				me.seriesOptions[i] = {
 		                name: data.tickerCode,
 		                data: priceData,
+		                chartData: me.chartData,
 		                threshold : null,
 						turboThreshold : 0
 	            };
-
-            	me.performanceChartRenderer(me);
+				
 			});	
+			
+			me.performanceChartRenderer(me);
 			
 			//get the transaction data
 			me.getTransactionsData(me);
@@ -150,9 +166,87 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		performanceChartRenderer:function(me){
 			var baseChart = PER_CHART_CONFIG;
+			
 			baseChart.series = me.seriesOptions;
+			
+			baseChart.tooltip.formatter = function() {
+				if (!this.hasOwnProperty("point")) return;
+				
+				var key = Highcharts.dateFormat("%e/%b/%Y", this.key);
+				var userOption =  this.series.userOptions.chartData[key];
+		    	var priceData = me.cloneDataAndFormat( userOption, me );
+				
+		    	var ret = "<b>" + key+" "+ "("+this.series.userOptions.name+")" + "</b>";
+
+		    	// not a trading day
+		    	if (priceData == undefined) {
+		    		ret += "<br />";
+		    		ret += "No trading data available.";
+		    		return ret;
+		    	}
+		    	
+				var openVal = Highcharts.numberFormat(priceData.open,3);
+				if(parseFloat(openVal) == parseFloat("0.000")){
+					openVal = "-"
+				}else{
+					openVal = "$" + openVal.replace(/\.?0+$/,'')
+				}
+				
+				var closeVal = Highcharts.numberFormat(priceData.close,3);
+				if(parseFloat(closeVal) == parseFloat("0.000")){
+					closeVal="-";
+				}else{
+					closeVal="$" + closeVal.replace(/\.?0+$/,'');
+				}
+				
+				var lowVal = Highcharts.numberFormat(priceData.low,3);
+				if(parseFloat(lowVal) == parseFloat("0.000")){
+					lowVal="-";
+				}else{
+					lowVal="$" + lowVal.replace(/\.?0+$/,'');
+				}
+				
+				var highVal = Highcharts.numberFormat(priceData.high,3);
+				if(parseFloat(highVal) == parseFloat("0.000")){
+					highVal="-";
+				}else{
+					highVal="$" + highVal.replace(/\.?0+$/,'');
+				}
+				
+		    	// is a trading day
+		    	ret += "<span class='chart-mouseover'>";
+		    	ret += "<br />";
+		    	ret += "<span>Open</span>: " + openVal;
+		    	ret += "<br />";
+		    	ret += "<span>Close</span>: " + closeVal;
+		    	ret += "<br />";
+		    	ret += "<span>Low</span>: " + lowVal;
+		    	ret += "<br />";
+		    	ret += "<span>High</span>: " + highVal;
+		    	ret += "</span>";
+		    	
+		    	return ret;
+			};
+			
 			$('#performance-chart-content').highcharts('StockChart', baseChart);
 		},
+		
+		cloneDataAndFormat: function(obj, me) {
+		      var returnObj = {};
+		      $.each(obj, function(key, val) {
+		    	  returnObj[key] = me.roundMe(val, 3);
+		      });
+
+		      return returnObj;
+	    },
+	    
+	    roundMe: function(val, precision) {
+	    	  var roundingMultiplier = Math.pow(10, precision);
+	    	  var valAsNum = isNaN(val)? 0 : parseFloat(+val);
+	    	  var returnVal = Math.round( valAsNum*roundingMultiplier) / roundingMultiplier;
+
+	    	  return returnVal;
+    	},
 		
 		getChartData(me){
 			PAGE.showLoading();
