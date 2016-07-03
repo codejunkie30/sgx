@@ -14,9 +14,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		plotOptions : {
 			series : {
 				animation : false
-			},
-			area : {
-				lineColor : 'rgb(10, 63, 160)'
 			}
 		},
 
@@ -73,10 +70,10 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			enabled : true,
 			useHTML : true,
 			crosshairs : [ true, true ],
-			shared : true
+			shared : false
 		},
 
-		/*xAxis : {
+		xAxis : {
 
 			labels : {
 				formatter : function() {
@@ -84,7 +81,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 				}
 			}
 
-		},*/
+		},
 
 		yAxis : [
 				{
