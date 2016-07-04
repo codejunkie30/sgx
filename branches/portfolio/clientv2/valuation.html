@@ -75,10 +75,10 @@
 								<!-- ko ifnot: isMultiTrans -->
 									<td><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
 								<!-- /ko -->
-								<td data-bind="text: tradeDate, format: 'date'"></td>
-								<td data-bind="text: numberOfShares, format: 'number'"></td>
-								<td data-bind="text: currentPrice, format: 'dollars'"></td>
-								<td data-bind="text: currentValue, format: 'dollars'"></td>
+								<td data-bind="text: tradeDate"></td>
+								<td data-bind="text: numberOfShares"></td>
+								<td data-bind="text: lastClosePrice"></td>
+								<td data-bind="text: currentValue"></td>
 								<!-- ko if: id -->
     								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></td>
 								<!-- /ko -->
@@ -106,6 +106,19 @@
 					</table>	
 				<!-- /ko -->
 			</div>
+			
+			<!-- ko {if: displayTransactions().length} -->
+			<div>
+				<h3>Portfolio Value</h3>
+				<table>
+					<tr>
+						<td>Total Invested<span id="totalInvested"></span></td>
+						<td>Current Value<span id="totalCurrentValue"></span></td>
+						<td>Percent Change<span id="percentageChange"></span></td>				
+					</tr>
+				</table>
+			</div>
+			<!-- /ko -->
 		</div>
 		
 		<!-- div content for transactions functionality -->
