@@ -658,8 +658,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var items = ko.toJS(me.transItems());
 	    	return ko.utils.arrayMap(items, function(item) {
 	    		var formattedDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(item.tradeDate));
-	    		var costAtPurchase = item.costAtPurchase.replace(/,/gi,"");
-	    		var numberOfShares = item.numberOfShares.replace(/,/gi,"");
+	    		var costAtPurchase = item.costAtPurchase.toString().replace(/,/gi,"");
+	    		var numberOfShares = item.numberOfShares.toString().replace(/,/gi,"");
 	    		item.tradeDate = formattedDate;
 	    		item.costAtPurchase = costAtPurchase.replace("$","");
 	    		item.numberOfShares = numberOfShares;
@@ -1010,6 +1010,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.selectedTransaction = ko.observable(true);
     	me.isMultiTrans = multiFlag ;
     	me.multiCompData = ko.observableArray([]);
+    	me.currentValue = (me.numberOfShares * me.currentPrice).toFixed(2);
     }
 	
 	function insertMultiPerTrans(tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, id) {
