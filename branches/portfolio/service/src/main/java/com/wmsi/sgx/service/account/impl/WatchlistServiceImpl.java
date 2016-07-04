@@ -18,6 +18,8 @@ import com.wmsi.sgx.domain.Watchlist;
 import com.wmsi.sgx.domain.WatchlistCompany;
 import com.wmsi.sgx.domain.WatchlistOption;
 import com.wmsi.sgx.domain.WatchlistTransaction;
+import com.wmsi.sgx.model.CompanyWatchlistTransactionHistoryModel;
+import com.wmsi.sgx.model.CompanyWatchlistTransactionModel;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.model.WatchlistTransactionModel;
@@ -290,6 +292,61 @@ public class WatchlistServiceImpl implements WatchlistService {
 			}
 		}
 		return transactionMap;
+	}
+	
+	@Override
+	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(User user, String id) {
+		Long watchlistId = Long.parseLong(id);
+		CompanyWatchlistTransactionHistoryModel companyWatchlistTransactionHistoryModel = new CompanyWatchlistTransactionHistoryModel();
+		Map<String, CompanyWatchlistTransactionModel> transactionMap = new HashMap<>();
+		companyWatchlistTransactionHistoryModel.setCompanies(transactionMap);
+		
+		CompanyWatchlistTransactionModel companyWatchlistTransactionModel;
+		List<WatchlistTransactionModel> transactionModelList;
+		double transactionValue;
+
+		if (id != null) {
+			Watchlist[] watchlist = watchlistRepository.findByUser(user);
+
+			for (Watchlist list : watchlist) {
+				if (list.getWatchlist_id().equals(watchlistId)) {
+					WatchlistTransaction[] transactions = transactionRepository.findById(watchlistId);
+					for (WatchlistTransaction transaction : transactions) {
+						WatchlistTransactionModel transactionModel = new WatchlistTransactionModel();
+						BeanUtils.copyProperties(transaction, transactionModel);
+						
+						if(transactionMap.get(transaction.getTickerCode()) == null){
+							companyWatchlistTransactionModel = new CompanyWatchlistTransactionModel();
+							transactionModelList = new ArrayList<>();
+							companyWatchlistTransactionModel.setTradeDate(transaction.getTradeDate());
+							companyWatchlistTransactionModel.setTransactions(transactionModelList);
+							transactionMap.put(transaction.getTickerCode(), companyWatchlistTransactionModel);
+						}else{
+							companyWatchlistTransactionModel = transactionMap.get(transaction.getTickerCode());
+							transactionModelList = companyWatchlistTransactionModel.getTransactions();
+						}
+						transactionValue = transaction.getNumberOfShares() * transaction.getCostAtPurchase();
+						if("BUY".equalsIgnoreCase(transaction.getTransactionType())){
+							companyWatchlistTransactionModel.setNumberOfShares(companyWatchlistTransactionModel.getNumberOfShares() + transaction.getNumberOfShares());
+							companyWatchlistTransactionModel.setInvestement(companyWatchlistTransactionModel.getInvestement() + transactionValue);
+							companyWatchlistTransactionHistoryModel
+							.setTotalInvested(companyWatchlistTransactionHistoryModel.getTotalInvested()
+									+ transactionValue);
+						}else{
+							companyWatchlistTransactionModel.setNumberOfShares(companyWatchlistTransactionModel.getNumberOfShares() - transaction.getNumberOfShares());
+							companyWatchlistTransactionModel.setInvestement(companyWatchlistTransactionModel.getInvestement() - transactionValue);
+							companyWatchlistTransactionHistoryModel
+							.setTotalInvested(companyWatchlistTransactionHistoryModel.getTotalInvested()
+									- transactionValue);
+						}
+						transactionModelList.add(transactionModel);
+						
+					}
+					return companyWatchlistTransactionHistoryModel;
+				}
+			}
+		}
+		return companyWatchlistTransactionHistoryModel;
 	}
 
 	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id) {

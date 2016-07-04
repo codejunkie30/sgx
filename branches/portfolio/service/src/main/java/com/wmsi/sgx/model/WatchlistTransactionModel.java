@@ -11,19 +11,19 @@ import java.util.Date;
  */
 public class WatchlistTransactionModel {
 
-	public Long id;
+	private Long id;
 
-	public String tickerCode;
+	private String tickerCode;
 
-	public String transactionType;
+	private String transactionType;
 
-	public Date tradeDate;
+	private Date tradeDate;
 
-	public Double numberOfShares;
+	private Double numberOfShares;
 
-	public Double costAtPurchase;
+	private Double costAtPurchase;
 
-	public Double currentPrice;
+	private Double currentPrice;
 
 	/**
 	 * @return the id

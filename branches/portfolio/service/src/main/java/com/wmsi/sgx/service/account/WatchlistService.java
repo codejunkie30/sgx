@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.WatchlistCompany;
+import com.wmsi.sgx.model.CompanyWatchlistTransactionHistoryModel;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.model.WatchlistTransactionModel;
@@ -20,7 +21,8 @@ public interface WatchlistService {
 	List<String> cleanWatchlist(User user);
 	Response addTransactions(User user, String addId, List<WatchlistTransactionModel> transactions);
 	Response deleteTransactions(User user,String id, String transactionId);
-	Map<String, List<WatchlistTransactionModel>> getTransactions(User user,String id);
+	Map<String, List<WatchlistTransactionModel>> getTransactions(User user, String id);
+	CompanyWatchlistTransactionHistoryModel getWatchListTransactions(User user,String id);
 	List<WatchlistCompany> getStockListCompanies(String id);
 	
 }

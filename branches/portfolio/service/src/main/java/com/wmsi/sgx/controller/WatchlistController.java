@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.CompanyWatchlistTransactionHistoryModel;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistAddCompany;
 import com.wmsi.sgx.model.WatchlistAddTransaction;
@@ -131,6 +132,14 @@ public class WatchlistController {
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		String id = response.getMessage();
 		return watchlistService.getTransactions(usr,id);
+		
+	}
+	
+	@RequestMapping(value = "watchlist/watchlistTransactions")
+	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
+		String id = response.getMessage();
+		return watchlistService.getWatchListTransactions(usr,id);
 		
 	}
 	
