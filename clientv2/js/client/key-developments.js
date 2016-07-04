@@ -246,15 +246,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	    var params = { "message": newWLNameLC };
 			var wlLength = me.finalWL().length;
 			
+			me.addWatchlistName([]);
+			$.each(me.finalWL(), function(i, data){
+				me.addWatchlistName.push(data.name.toLowerCase());
+			});
+			
 			if (me.wlNameError().length != 0) return;
 			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), me.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 Watch Lists.</p>', width: 600 }); return; }
-			
-			me.addWatchlistName([]);
-			$.each(me.finalWL(), function(i, data){
-				me.addWatchlistName.push(data.name.toLowerCase());
-			});			
 			
 			PAGE.showLoading();
 			
