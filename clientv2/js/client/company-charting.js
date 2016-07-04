@@ -447,12 +447,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       newSeries.data = Algorithms['RSI'](xData, yData);
       this.indicators_chart.addSeries(newSeries);
-      this.indicators_chart.redraw();
 
       setTimeout(function(){
-        self.indicators_chart.chartElement.get('RSI').remove(false);
-        self.indicators_chart.chartElement.addSeries(newSeries);
-      }, 500)
+        self.indicators_chart.redraw();
+      }, 500);
 
       this.rsiInput.overBought.subscribe(function(data) {
 
