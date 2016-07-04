@@ -118,14 +118,14 @@ public class KeyDevsService extends AbstractDataService {
 		return kD;
 	}
 	
-	public void init() {
+	public Boolean init() {
 
 		try {
 
 			File f = new File(rawDir + keyDevDir + ".csv");
 			if(!f.exists()){
 				log.error("Unable to process key dev source content as key-devs.csv file doesn't exists");
-				return;
+				return false;
 			}
 			File backupFile = new File(rawDir + keyDevDir + "-bck.csv");
 			if(backupFile.exists()){
@@ -133,7 +133,7 @@ public class KeyDevsService extends AbstractDataService {
 			}
 			FileUtils.copyFile(f, backupFile);
 			if (!backupFile.exists())
-				return;
+				return false;
 			
 			CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 			Iterable<CSVRecord> records = csvHelperUtil.getRecords(backupFile.getAbsolutePath());
@@ -175,13 +175,14 @@ public class KeyDevsService extends AbstractDataService {
 		} catch (Exception e) {
 			log.error("Couldn't load key developments", e);
 		}
-
+		return true;
 	}
 	
 	private void loadSourceContent(Map<String, String> keyDevSource) throws IOException{
 		String originalFilePath = new StringBuilder(rawDir).append(keyDevDir).append(".csv").toString();
 		String backupFilePath = new StringBuilder(rawDir).append(keyDevDir).append("-bck.csv").toString();
 		String tempFilePath = new StringBuilder(rawDir).append(keyDevDir).append("-temp.csv").toString();
+		String originalBackupFilePath = new StringBuilder(rawDir).append(keyDevDir).append("-original.csv").toString();
 		log.info("loading key developments source content");
 		ICsvListReader listReader = null;
 		ICsvListWriter listWriter = null;
@@ -217,8 +218,9 @@ public class KeyDevsService extends AbstractDataService {
 				File f = new File(originalFilePath);
 				File backupFile = new File(backupFilePath);
 				File tempFile = new File(tempFilePath);
-				FileUtils.deleteQuietly(f);
+				File originalBackupFile = new File(originalBackupFilePath);
 				FileUtils.deleteQuietly(backupFile);
+				f.renameTo(originalBackupFile);
 				tempFile.renameTo(f);
 			}
 		}
