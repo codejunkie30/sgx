@@ -4,7 +4,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
-		        $(element).datepicker(options);
+		        $(element).datepicker({  maxDate: new Date() });
 
 		        //handle the field changing
 		       /* ko.utils.registerEventHandler(element, "change", function () {
@@ -289,7 +289,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							me.displayAddTransactions(data);
 							me.displayPerformanceTransactions(data);
 							me.computeSelectAllTrans(me);
-							PAGE.resizeIframeSimple();
 						}else{
 							var tickersData = me.transactionTickers;
 							if(!UTIL.isEmpty(tickersData)){
@@ -302,7 +301,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									jsonObj.push(item);
 								}
 								me.displayTransCompanies(jsonObj);
-								PAGE.resizeIframeSimple();
 								me.displayTransCompanies.sort(sortByName);
 						    	function sortByName(a, b){
 									  var a = a.companyName.toLowerCase();
@@ -311,16 +309,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								}
 								me.computeSelectAllTrans(me);
 							}
-							PAGE.resizeIframeSimple();
 						}
 						PAGE.hideLoading();
 						me.showDatePicker();
+						setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
 					}, 
 					PAGE.customSGXError);
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker();
+			$( "#tradeDate" ).datepicker({  maxDate: new Date() });
 		},
 		
 		computeSelectAllTrans: function(me){
@@ -381,7 +379,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}else{
 				$(".header-bar > ul > li:last").addClass("downArrow");
 			}
-			
+			setTimeout(function(){ PAGE.resizeIframeSimple() }, 100);
 			me.activeTab(tabName);
 	    },
 
@@ -638,7 +636,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.transItems.push(transItemModel);
 				me.clearFieldData();
 				me.addTransaction(transItemModel);
-				PAGE.resizeIframeSimple();
 			}
 	    },
 	    
@@ -779,7 +776,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 																item.costAtPurchase, me.liveClosingPrice, "", true, currentValue);
 					me.displayTransactions.push(transItemModel);
 					me.getMultiCompData(data[i], transItemModel, me);
-					PAGE.resizeIframeSimple();
 	    		}else{
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
@@ -790,7 +786,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
 																item.costAtPurchase, me.liveClosingPrice, item.id, false, currentValue);
 					me.displayTransactions.push(transItemModel);
-					PAGE.resizeIframeSimple();
 	    		}
 	    	}
 	    	
@@ -805,7 +800,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var tickerCode = tickersData[i];
 	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", "", "", "", "");
 				me.displayTransactions.push(transItemCompModel);
-				PAGE.resizeIframeSimple();
 	    	}
 	    	
 	    	me.displayTransactions.sort(sortByName);
@@ -875,7 +869,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var transItemModel =  new insertDisplayTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate,
 	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
-	    		PAGE.resizeIframeSimple();
 	    	});
 	    	me.transItems.sort(sortByName);
 	    	function sortByName(a, b){
