@@ -344,7 +344,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
 	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
-						if(this.criteria.isValuationCriteria(this.field))
+						if(this.criteria.isValuationCriteria(this.field.id))
 						{
 	        				var cnt = CRITERIA.info.values.lastIndexOf(CRITERIA.maximum) - CRITERIA.info.values.indexOf(CRITERIA.minimum);
 	        				return cnt+1
