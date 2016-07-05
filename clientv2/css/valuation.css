@@ -1,5 +1,4 @@
 .valuation-performance {
-	/* height: 920px; */
 	display: none;
 	position: relative;
 	top: -2px;
@@ -79,7 +78,7 @@
 .valuation-results table {
 	border-spacing: 0;
 	border-collapse: collapse;
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-bottom: 10px;
 	width: 98%;
 	border-right: 1px solid #ccc;
@@ -147,6 +146,14 @@
 .valuation-results .pager {
 	font-weight: bold;
 	text-align: right;
+}
+
+.transactions table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-right: 1px solid #ccc;
 }
 
 .transactions table tbody tr td input {
@@ -230,6 +237,11 @@
     text-align: center;
 }
 
+.imgIntCenterAllign {
+	cursor: pointer;
+    text-align: center;
+}
+
 .valuation-results .company-header {
 	color: #0e236b;
 	border: 1px solid #ccc;
@@ -250,12 +262,6 @@
 	vertical-align: top;
 }
 
-/* .panel, .flip {
-    padding: 5px;
-    text-align: center;
-    background-color: #d5e3ea;
-    border: solid 1px #d5e3ea;
-} */
 .panel {
 	background-color: #d5e3ea;
 	border: solid 1px #d5e3ea;
