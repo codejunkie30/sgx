@@ -41,7 +41,7 @@
 					<table class="w935p ml10p">
 						<thead>
 							<tr>
-								<th width="10%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 20px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="10%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 25px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
 								<th width="34%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
 								<th width="14%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
 								<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
@@ -86,11 +86,11 @@
 					</table>
 				<!-- /ko -->
 				<!-- ko {if: displayTransCompanies().length} -->
-					<table>
+					<table style="margin-left: 10px;">
 						<thead>
 							<tr>								
-								<th width="8%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 20px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
-								<th width="88%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
+								<th width="9%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 25px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="81%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
 							</tr>
 						</thead>
 						<tbody data-bind="foreach: displayTransCompanies">
@@ -120,9 +120,9 @@
 		</div>
 		
 		<!-- div content for transactions functionality -->
-		<div class="grid valuation-results transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
-			<div style="padding-bottom: 25px">
-				Enter transaction to view additional details on your StockList
+		<div class="grid transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
+			<div style="margin: 15px 0px 30px 20px">
+				<b>Enter transaction to view additional details on your StockList</b>
 			</div>
 			
 			<div>
