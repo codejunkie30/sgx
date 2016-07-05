@@ -30,7 +30,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        return ko.bindingHandlers.text.update(element,function(){
 	            var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
                 symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currency.symbol);
-            	var returnValue = symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            	var returnValue = symbol + value;
 	            return returnValue === "$0.00" ? "-" : returnValue;
 	        });
 	    }
@@ -754,8 +754,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    			sellShare += parseFloat(item.numberOfShares);
 	    		}
 	    	}
-	    	noOfShares = parseFloat(buyShare - sellShare).toFixed(2);
-	    	me.companiesNoOfShares += noOfShares;
+	    	noOfShares = (parseFloat(buyShare) - parseFloat(sellShare)).toFixed(2);
+	    	me.companiesNoOfShares += parseFloat(noOfShares);
 	    	return noOfShares;
 	    },
 	    
@@ -1102,7 +1102,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("mm/dd/yy", Date.fromISO(tradeDate)) : "";
     	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
     	me.costAtPurchase = costAtPurchase;
-    	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
+    	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice: "";
     	me.id = id;
     	me.selectedTransaction = ko.observable(true);
     	me.isMultiTrans = multiFlag ;
