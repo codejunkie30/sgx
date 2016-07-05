@@ -318,6 +318,18 @@
 		{
 			"id":"transLastClosePrice",
 			"definition":"The price per share at the last close price."
+		},
+		{
+			"id":"portfolioTotalInvested",
+			"definition":"Total invested includes all transactions."
+		},
+		{
+			"id":"currentPortfolioValue",
+			"definition":"Current value includes purchases and sales.It does not include dividend, stock splits."
+		},
+		{
+			"id":"portfolioPercentChange",
+			"definition":"Percent change is based on total invested vs current value."
 		}
 		
 	]
