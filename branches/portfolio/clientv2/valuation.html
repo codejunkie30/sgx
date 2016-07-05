@@ -35,21 +35,21 @@
 			
 			<div>
 				<!-- ko {if: displayTransactions().length} -->
-					<table>
+					<table class="w935p ml10p">
 						<thead>
 							<tr>
-								<th width="5%"><div class="floatLeft w80P blueCl">Chart </div><div class="floatRight w20P"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
-								<th width="38%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
-								<th width="13%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
+								<th width="10%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 20px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="34%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
+								<th width="14%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
 								<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
-								<th width="13%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
-								<th width="13%"><div class="floatLeft w80P blueCl">Current value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
-								<th width="5%"><div class="floatLeft w80P blueCl">Delete</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></div></th>
+								<th width="14%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
+								<th width="10%"><div class="floatLeft w80P blueCl">Current value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
+								<th width="5%" ><div class="floatLeft w80P blackCl">Delete </div><img style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
 							</tr>
 						</thead>
 						<tbody data-bind="foreach: displayTransactions">
 							<tr data-bind="css: { 'odd': ($index() % 2 != 0) }, attr: { id:'tr'+$index()}">
-								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+								<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
 								<!-- ko if: isMultiTrans -->
 									<td data-bind="attr: { id:'comptd'+$index()}">
 										<div>
@@ -83,14 +83,14 @@
 				<!-- ko {if: displayTransCompanies().length} -->
 					<table>
 						<thead>
-							<tr>
-								<th width="5%">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></th>
-								<th width="95%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
+							<tr>								
+								<th width="8%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 20px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="88%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
 							</tr>
 						</thead>
 						<tbody data-bind="foreach: displayTransCompanies">
 							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-								<td><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+								<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
 								<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
 							</tr>
 						</tbody>
@@ -99,15 +99,17 @@
 			</div>
 			
 			<!-- ko {if: displayTransactions().length} -->
-			<div>
+			<div class="portfolioMenu">
 				<h3>Portfolio Value</h3>
-				<table>
-					<tr>
-						<td>Total Invested<span id="totalInvested"></span></td>
-						<td>Current Value<span id="totalCurrentValue"></span></td>
-						<td>Percent Change<span id="percentageChange"></span></td>				
-					</tr>
-				</table>
+				<ul class="portfolioMenu">
+					<li><div class="floatLeft w80P blackCl">TOTAL INVESTED&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></div><div id="totalInvested" style="font-weight:bold;clear: both;"></div></li>
+					<li><div class="floatLeft w80P blackCl">CURRENT VALUE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></div><div id="totalCurrentValue" style="font-weight:bold;clear: both;"></div></li>
+					<li><div class="floatLeft w80P blackCl">PERCENT CHANGE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: ''"  /></div><div id="percentageChange" style="font-weight:bold;clear: both;"></div></li>
+					<li>&nbsp;</li>
+				</ul>
+			</div>
+				<div class="clear mt15p ml10p">
+					Total invested includes all transactions. Current value includes purchases and sales. It does not include dividend, stock splits or.. percent change is based on total invested vs. current value. Add other disclosures here.
 			</div>
 			<!-- /ko -->
 		</div>

@@ -5,7 +5,7 @@
 	top: -2px;
 	z-index: 1;
 	border: 2px solid #ebecec;
-	padding: 30px 10px 10px;
+	padding: 30px 0px 10px;
 }
 
 .downArrow:after {
@@ -37,8 +37,11 @@
 
 .valuation-performance .header-bar li:first-child {
 	margin-left: 0;
-	padding-right: 10px;
+	padding-right: 12px;
 	border-right: 2px solid #fff;
+}
+.valuation-performance .header-bar li.downArrow:first-child {
+	padding-right: 5px;
 }
 
 .header-bar {
@@ -100,7 +103,8 @@
 	color: #0e236b;
 	border: 1px solid #ccc;
 	padding: 8px 12px;
-	font: bold 14px/12px Arial, Helvetica, sans-serif;
+	/*font: bold 14px/12px Arial, Helvetica, sans-serif;*/
+	font-weight: bold;
 	text-align: left;
 	cursor: pointer;
 	vertical-align: top;
@@ -274,9 +278,73 @@
 }
 
 .textCenter {
-	text-align: center;
+	text-align: center !important;
 }
 
 .blueCl{
 	color: #0e236b;
+}
+
+.blackCl{
+	color: #000000;
+}
+
+.clear {
+	clear: both;
+}
+
+.ml10p {
+	margin-left: 10px;
+}
+
+.mt15p {
+	margin-top: 15px;
+}
+
+.portfolioCalc{
+	color: #060606;
+	border: 1px solid #060606;
+	padding: 8px 12px;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
+	text-align: left;
+	cursor: pointer;
+	vertical-align: top;
+}
+
+.portfolioMenu {
+	margin-left: 10px;
+}
+
+.portfolioMenu h3 {
+	border-bottom: 1px solid #cccccc;
+	font-weight: bold;
+	color: #000000;
+	padding-top: 10px;
+}
+
+.portfolioMenu ul li {
+    display: inline;
+    float: left;
+    width: 25%;
+    margin-left: 15px;
+    border-right: 1px solid #cccccc;
+}
+
+.portfolioMenu ul li:last-child, 
+.portfolioMenu ul li:nth-child(3) {
+    border: 0 !important;
+}
+
+.deleteTran {
+	padding: 0;
+    margin: 25px 0 0 0;
+}
+
+.deleteTran span {
+    padding: 7px 15px;
+    font-size: 11pt;
+}
+
+.w935p {
+	width: 935px;
 }
