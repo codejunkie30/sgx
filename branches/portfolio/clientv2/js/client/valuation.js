@@ -312,7 +312,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}
 						PAGE.hideLoading();
 						me.showDatePicker();
-						setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
+						setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 					}, 
 					PAGE.customSGXError);
 		},
@@ -379,7 +379,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}else{
 				$(".header-bar > ul > li:last").addClass("downArrow");
 			}
-			setTimeout(function(){ PAGE.resizeIframeSimple() }, 100);
+			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			me.activeTab(tabName);
 	    },
 
@@ -597,7 +597,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    		me.watchlistCompanies(data.companyPrice);
 		    	}
 		    	PAGE.hideLoading();
-				setTimeout(function(){ PAGE.resizeIframeSimple() }, 500);
+				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
@@ -819,7 +819,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
-	    	$('#percentageChange').html(percentageChange);
+	    	$('#percentageChange').html(percentageChange+"%");
 	    	
 	    	me.transactionNoOfShares = 0.00;
 	    	me.userEnteredPurchasedPrice = 0.00;
@@ -997,7 +997,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	$('#tr'+id).addClass('panel');
 
-	    	PAGE.resizeIframeSimple();
+	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 	    	//setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
 	    },
 	    
@@ -1019,7 +1019,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	    alert($(this).find('td'));
 	    });*/
 	    	
-	    	PAGE.resizeIframeSimple();
+	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 	    },
 	    
 	    sortColumn: function(data, event){
