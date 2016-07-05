@@ -67,12 +67,12 @@
 								<td data-bind="text: lastClosePrice, attr: { id:'closeptd'+$index()}"></td>
 								<td data-bind="text: currentValue"></td>
 								<!-- ko if: id -->
-    								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></td>
+    								<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></div></td>
 								<!-- /ko -->
 								<!-- ko ifnot: id -->
     								<td>&nbsp;
 										<div data-bind="foreach: multiCompData, attr: { id:'multiCompData'+$index()}" style="display: none;">
-											<div><img src="img/x-button.png" alt="" data-bind="click: $root.removeIntPerItem.bind($root)" /></div>
+											<div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeIntPerItem.bind($root)" /></div>
 										</div>    								
     								</td>
 								<!-- /ko -->
