@@ -253,9 +253,6 @@
     border: solid 1px #d5e3ea;
 } */
 .panel {
-	padding: 50px;
-	display: none;
-	text-align: center;
 	background-color: #d5e3ea;
 	border: solid 1px #d5e3ea;
 }

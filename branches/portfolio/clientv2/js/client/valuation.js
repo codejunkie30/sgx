@@ -964,19 +964,43 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    
-	    toogleCompanyPlus: function(id, item){
-	    	$('#toogle_'+id).show();
+	    toogleCompanyPlus: function(id, data){
 	    	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
-	    	$('#internaltd_'+id).removeClass();
+	    	
+	    	$.each(data.multiCompData(), function (index, item) {
+	    		var intTransType = item.intTransactionType === "BUY" ? "Transaction Type <b>BOUGHT</b>" : "Transaction Type <b>SOLD</b>";
+	    		$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
+	    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+	    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
+	    		$('#closeptd'+id).append("<div id='intclosediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intCostAtPurchase+ "</div>");
+	    		$('#deletetd'+id).append("<div id='intdeletediv"+item.intId+"' style='padding-bottom: 5px;padding-left: 10px;cursor: pointer;'><img src='img/x-button.png' alt='' data-bind='' /></div>");
+	    	});
+	    	
+	    	$('#tr'+id).addClass('panel');
+
 	    	PAGE.resizeIframeSimple();
 	    	//setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
 	    },
 	    
-	    toogleCompanyMinus: function(id, item){
-	    	$('#toogle_'+id).hide();
+	    toogleCompanyMinus: function(id, data){
 	    	$('#minus_'+id).hide();
 	    	$('#plus_'+id).show();
+	    	
+	    	$.each(data.multiCompData(), function (index, item) {
+	    		$('#intcompdiv'+item.intId).remove();
+	    		$('#intdatediv'+item.intId).remove();
+	    		$('#intsharediv'+item.intId).remove();
+	    		$('#intclosediv'+item.intId).remove();
+	    		$('#intdeletediv'+item.intId).remove();
+	    	});
+	    	
+	    	$('#tr'+id).removeClass('panel');
+	    	
+	    	/*$('#tr'+id).each(function(){  
+    	    alert($(this).find('td'));
+	    });*/
+	    	
 	    	PAGE.resizeIframeSimple();
 	    },
 	    
@@ -1090,9 +1114,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	var me = this;
     	me.intTickerCode = tickerCode;
     	me.intTransactionType = transactionType;
-    	me.intTradeDate = tradeDate;
-    	me.intNumberOfShares = numberOfShares;
-    	me.intCostAtPurchase = costAtPurchase;
+    	me.intTradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("mm/dd/yy", Date.fromISO(tradeDate)) : "";
+    	me.intNumberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
+    	me.intCostAtPurchase = !UTIL.isEmpty(costAtPurchase) ? "$" + costAtPurchase.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
     	me.intId = id;
     }
 	
