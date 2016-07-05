@@ -77,7 +77,12 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 			labels : {
 				formatter : function() {
-					return Highcharts.dateFormat("%e. %b", this.value);
+					return $.datepicker.formatDate("mm/dd/yy", Date.fromISO(this.value));
+				},
+				style : {
+					color : "#000000",
+					fontSize: "12px",
+					fontWeight : "bold"
 				}
 			}
 
@@ -85,7 +90,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 		yAxis : [
 				{
-					title : undefined,
 					lineWidth : 2,
 					animation : false,
 					minRange : .001,
@@ -103,22 +107,15 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 						align : 'right',
 						y : -3,
 						x : -10
-					}
-				}],
-
-		labels : {
-			items : [ {
-				html : "Price",
-				style : {
-					top : '-22px',
-					left : '596px'
-				}
-			} ],
-			style : {
-				color : "#666",
-				fontWeight : "bold"
-			}
-		}
+					},
+					title: {
+						style : {
+							color : "#000000",
+							fontWeight : "bold"
+						},
+				          text: 'PRICE'
+			        }
+				}]
 
 	};
 
