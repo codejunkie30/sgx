@@ -70,7 +70,11 @@
     								<td><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></td>
 								<!-- /ko -->
 								<!-- ko ifnot: id -->
-    								<td data-bind="attr: { id:'deletetd'+$index()}">&nbsp;</td>
+    								<td>&nbsp;
+										<div data-bind="foreach: multiCompData, attr: { id:'multiCompData'+$index()}" style="display: none;">
+											<div><img src="img/x-button.png" alt="" data-bind="click: $root.removeIntPerItem.bind($root)" /></div>
+										</div>    								
+    								</td>
 								<!-- /ko -->
 							</tr>
 						</tbody>

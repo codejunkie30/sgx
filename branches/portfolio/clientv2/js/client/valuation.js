@@ -945,7 +945,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								}, 
 								PAGE.customSGXError);
 			    	}else{
-			    		me.transItems.remove(item);
+			    		me.displayTransactions.remove(item);
 			    	}
 				$('.cboxWrapper').colorbox.close();
 	        });
@@ -956,9 +956,33 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    },
 	    
+	    removeIntPerItem: function(item){
+	    	var me = this;
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			 $('.confirm-delete').click(function(e) {				
+		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+				var postType = 'POST';
+	    	    var params = {"id": me.watchlistId, "transactionId" : item.intId};
+	    	    PAGE.showLoading();
+				UTIL.handleAjaxRequestJSON(
+					endpoint,
+					postType,
+					params,
+					function(data, textStatus, jqXHR){					
+						console.log(data);
+						PAGE.hideLoading();
+						me.getTransactionsData(me);
+					}, 
+				PAGE.customSGXError);
+				$('.cboxWrapper').colorbox.close();
+	        });
+			 $('.cancel').click(function(e) {
+				$('.cboxWrapper').colorbox.close();
+	        });	
+	    },
 	    
-	    toogleCompanyPlus: function(id, data){
-	    	$('#plus_'+id).hide();
+	    toogleCompanyPlus: function(id, data){	 
+	       	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
 	    	
 	    	$.each(data.multiCompData(), function (index, item) {
@@ -967,8 +991,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
 	    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    		$('#closeptd'+id).append("<div id='intclosediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intCostAtPurchase+ "</div>");
-	    		$('#deletetd'+id).append("<div id='intdeletediv"+item.intId+"' style='padding-bottom: 5px;padding-left: 10px;cursor: pointer;'><img src='img/x-button.png' alt='' data-bind='' /></div>");
 	    	});
+	    	
+	    	$('#multiCompData'+id).show();
 	    	
 	    	$('#tr'+id).addClass('panel');
 
@@ -977,6 +1002,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    toogleCompanyMinus: function(id, data){
+	    	$('#multiCompData'+id).hide();
 	    	$('#minus_'+id).hide();
 	    	$('#plus_'+id).show();
 	    	
@@ -985,7 +1011,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#intdatediv'+item.intId).remove();
 	    		$('#intsharediv'+item.intId).remove();
 	    		$('#intclosediv'+item.intId).remove();
-	    		$('#intdeletediv'+item.intId).remove();
 	    	});
 	    	
 	    	$('#tr'+id).removeClass('panel');
