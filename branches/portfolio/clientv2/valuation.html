@@ -53,9 +53,11 @@
 								<!-- ko if: isMultiTrans -->
 									<td data-bind="attr: { id:'comptd'+$index()}">
 										<div>
-											<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
-											<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
-											<span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)
+											<div style="float: left; margin-right: 4px;padding-top: 8px;">
+												<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
+												<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
+											</div>
+											<div style="padding-top: 8px;text-decoration: underline;"><span data-bind="text:companyName"></span>&nbsp;(<span data-bind="text:tickerCode"></span>)</div>
 										</div>
 									</td>
 								<!-- /ko -->
