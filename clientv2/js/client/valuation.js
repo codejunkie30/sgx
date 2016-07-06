@@ -280,9 +280,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						me.transItems([]);
-						me.displayTransactions([]);
-						me.displayTransCompanies([]);
+						me.transItems.removeAll();
+						me.displayTransactions.removeAll();
+						me.displayTransCompanies.removeAll();
+						if(UTIL.isEmpty(me.transactionTickers)){
+							$('#valutionNoCompaniesTextDiv').show();
+				    		$('#valuationContentDiv').hide();	
+						}else{
+							$('#valutionNoCompaniesTextDiv').hide();
+				    		$('#valuationContentDiv').show();
+						}
+						
 						if(!$.isEmptyObject(data)){
 							me.displayAddTransactions(data);
 							me.displayPerformanceTransactions(data);
@@ -476,7 +484,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
-				function(data, textStatus, jqXHR){					
+				function(data, textStatus, jqXHR){
+					me.transItems.removeAll();
+					me.displayTransactions.removeAll();
+					me.displayTransCompanies.removeAll();
+					me.watchlistCompanies.removeAll();
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
@@ -582,10 +594,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		populateWatchlistCompanies:function(watchlistObject, me){
 		    // JSON Call for populating the companies for the selected watchlist.
-			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+			me.watchlistCompanies.removeAll();
+			/*if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
 			    $('#watchlistCompaniesSelect').empty()
 				return;
-			}
+			}*/
 			PAGE.showLoading();
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
 		    var params = { "companies": watchlistObject.companies };

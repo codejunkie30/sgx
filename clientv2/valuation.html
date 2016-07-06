@@ -21,120 +21,120 @@
 	</div>
 <!-- ko {if: finalWL().length} -->
 	<section class="valuation-performance" id="valuationSection">
-		<div class="grid scan intro" data-bind="visible: watchlistCompanies().length == 0">
+		<div class="grid scan intro" style="display:none" id="valutionNoCompaniesTextDiv">
 				<p align="center">You have no companies currently in your StockList.</p>
 		</div>
-		<!-- ko {if: watchlistCompanies().length} -->
-		<div class="header-bar">
-			<ul>
-				<li class="downArrow"><a href="#" data-bind="click:changeTab.bind($data, 'performance'), css:{'active': activeTab() == 'performance'}">PERFORMANCE</a></li>
-				<li><a href="#" data-bind="click:changeTab.bind($data, 'transactions'), css:{'active': activeTab() == 'transactions'}">TRANSACTIONS</a></li>
-			</ul>
-		</div>
-		
-		<!-- div content for performance functionality -->
-		<div class="grid valuation-results performance" data-bind="css:{'show-hidden': activeTab() == 'performance'}">
-			<div style="margin-left: 15px;margin-bottom: 15px;">
-				<b>Select a timeframe to see how your StockList changed during that time.</b>
+		<div id="valuationContentDiv" style="display:none">
+			<div class="header-bar">
+				<ul>
+					<li class="downArrow"><a href="#" data-bind="click:changeTab.bind($data, 'performance'), css:{'active': activeTab() == 'performance'}">PERFORMANCE</a></li>
+					<li><a href="#" data-bind="click:changeTab.bind($data, 'transactions'), css:{'active': activeTab() == 'transactions'}">TRANSACTIONS</a></li>
+				</ul>
 			</div>
 			
-			<div id="performance-chart-content" align="center"></div>
-			
-			<div>
-				<!-- ko {if: displayTransactions().length} -->
-					<table class="w935p ml10p">
-						<thead>
-							<tr>
-								<th width="10%" >
+			<!-- div content for performance functionality -->
+			<div class="grid valuation-results performance" data-bind="css:{'show-hidden': activeTab() == 'performance'}">
+				<div style="margin-left: 15px;margin-bottom: 15px;">
+					<b>Select a timeframe to see how your StockList changed during that time.</b>
+				</div>
+				
+				<div id="performance-chart-content" align="center"></div>
+				
+				<div>
+					<!-- ko {if: displayTransactions().length} -->
+						<table class="w935p ml10p">
+							<thead>
+								<tr>
+									<th width="10%" >
+										<div><div style="padding-left: 8px;" class="floatLeft blackCl">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /></div><div class="float:clear"></div></div>
+										<div class="floatLeft" style="padding-left: 25px;">
+										<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
+										</div>
+									</th>
+									<th width="34%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
+									<th width="14%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
+									<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
+									<th width="14%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
+									<th width="10%"><div class="floatLeft w80P blueCl">Current value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
+									<th width="5%" ><div class="floatLeft w80P blackCl">Delete </div><img style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: displayTransactions">
+								<tr data-bind="css: { 'odd': ($index() % 2 != 0) }, attr: { id:'tr'+$index()}">
+									<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+									<!-- ko if: isMultiTrans -->
+										<td data-bind="attr: { id:'comptd'+$index()}">
+											<div>
+												<div style="float: left; margin-right: 4px;padding-top: 8px;">
+													<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
+													<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
+												</div>
+												<div style="padding-top: 8px;text-decoration: underline;"><span data-bind="text:companyName"></span>&nbsp;(<span data-bind="text:tickerCode"></span>)</div>
+											</div>
+										</td>
+									<!-- /ko -->
+									<!-- ko ifnot: isMultiTrans -->
+										<td><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
+									<!-- /ko -->
+									<td data-bind="text: tradeDate, attr: { id:'datetd'+$index()}"></td>
+									<td data-bind="text: numberOfShares, attr: { id:'sharetd'+$index()}"></td>
+									<td data-bind="text: lastClosePrice"></td>
+									<td data-bind="text: currentValue"></td>
+									<!-- ko if: id -->
+	    								<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></div></td>
+									<!-- /ko -->
+									<!-- ko ifnot: id -->
+	    								<td>&nbsp;
+											<div data-bind="foreach: multiCompData, attr: { id:'multiCompData'+$index()}" style="display: none;">
+												<div class="imgIntCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeIntPerItem.bind($root)" /></div>
+											</div>    								
+	    								</td>
+									<!-- /ko -->
+								</tr>
+							</tbody>
+						</table>
+					<!-- /ko -->
+					<!-- ko {if: displayTransCompanies().length} -->
+						<table style="margin-left: 10px;">
+							<thead>
+								<tr>								
+									<th width="9%" >
 									<div><div style="padding-left: 8px;" class="floatLeft blackCl">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /></div><div class="float:clear"></div></div>
 									<div class="floatLeft" style="padding-left: 25px;">
 									<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
 									</div>
-								</th>
-								<th width="34%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
-								<th width="14%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
-								<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
-								<th width="14%"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
-								<th width="10%"><div class="floatLeft w80P blueCl">Current value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
-								<th width="5%" ><div class="floatLeft w80P blackCl">Delete </div><img style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
-							</tr>
-						</thead>
-						<tbody data-bind="foreach: displayTransactions">
-							<tr data-bind="css: { 'odd': ($index() % 2 != 0) }, attr: { id:'tr'+$index()}">
-								<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
-								<!-- ko if: isMultiTrans -->
-									<td data-bind="attr: { id:'comptd'+$index()}">
-										<div>
-											<div style="float: left; margin-right: 4px;padding-top: 8px;">
-												<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
-												<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
-											</div>
-											<div style="padding-top: 8px;text-decoration: underline;"><span data-bind="text:companyName"></span>&nbsp;(<span data-bind="text:tickerCode"></span>)</div>
-										</div>
-									</td>
-								<!-- /ko -->
-								<!-- ko ifnot: isMultiTrans -->
-									<td><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
-								<!-- /ko -->
-								<td data-bind="text: tradeDate, attr: { id:'datetd'+$index()}"></td>
-								<td data-bind="text: numberOfShares, attr: { id:'sharetd'+$index()}"></td>
-								<td data-bind="text: lastClosePrice"></td>
-								<td data-bind="text: currentValue"></td>
-								<!-- ko if: id -->
-    								<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removePerformanceItem.bind($root)" /></div></td>
-								<!-- /ko -->
-								<!-- ko ifnot: id -->
-    								<td>&nbsp;
-										<div data-bind="foreach: multiCompData, attr: { id:'multiCompData'+$index()}" style="display: none;">
-											<div class="imgIntCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeIntPerItem.bind($root)" /></div>
-										</div>    								
-    								</td>
-								<!-- /ko -->
-							</tr>
-						</tbody>
-					</table>
-				<!-- /ko -->
-				<!-- ko {if: displayTransCompanies().length} -->
-					<table style="margin-left: 10px;">
-						<thead>
-							<tr>								
-								<th width="9%" >
-								<div><div style="padding-left: 8px;" class="floatLeft blackCl">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /></div><div class="float:clear"></div></div>
-								<div class="floatLeft" style="padding-left: 25px;">
-								<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
-								</div>
-								</th>
-								<th width="81%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
-							</tr>
-						</thead>
-						<tbody data-bind="foreach: displayTransCompanies">
-							<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
-								<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
-								<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
-							</tr>
-						</tbody>
-					</table>	
+									</th>
+									<th width="81%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: displayTransCompanies">
+								<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+									<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+									<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
+								</tr>
+							</tbody>
+						</table>	
+					<!-- /ko -->
+				</div>
+				
+				<!-- ko {if: displayTransactions().length} -->
+				<div class="portfolioMenu">
+					<h3>Portfolio Value</h3>
+					<ul class="portfolioMenu">
+						<li><div class="floatLeft w80P blackCl">TOTAL INVESTED&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'portfolioTotalInvested'"  /></div><div id="totalInvested" style="font-weight:bold;clear: both;"></div></li>
+						<li><div class="floatLeft w80P blackCl">CURRENT VALUE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentPortfolioValue'"  /></div><div id="totalCurrentValue" style="font-weight:bold;clear: both;"></div></li>
+						<li><div class="floatLeft w80P blackCl">PERCENT CHANGE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'portfolioPercentChange'"  /></div><div id="percentageChange" style="font-weight:bold;clear: both;"></div></li>
+						<li>&nbsp;</li>
+					</ul>
+				</div>
+					<div class="clear mt15p ml10p">
+						Total invested includes all transactions. Current value includes purchases and sales. It does not include dividend, stock splits or.. percent change is based on total invested vs. current value.
+				</div>
 				<!-- /ko -->
 			</div>
 			
-			<!-- ko {if: displayTransactions().length} -->
-			<div class="portfolioMenu">
-				<h3>Portfolio Value</h3>
-				<ul class="portfolioMenu">
-					<li><div class="floatLeft w80P blackCl">TOTAL INVESTED&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'portfolioTotalInvested'"  /></div><div id="totalInvested" style="font-weight:bold;clear: both;"></div></li>
-					<li><div class="floatLeft w80P blackCl">CURRENT VALUE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentPortfolioValue'"  /></div><div id="totalCurrentValue" style="font-weight:bold;clear: both;"></div></li>
-					<li><div class="floatLeft w80P blackCl">PERCENT CHANGE&nbsp;<img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'portfolioPercentChange'"  /></div><div id="percentageChange" style="font-weight:bold;clear: both;"></div></li>
-					<li>&nbsp;</li>
-				</ul>
-			</div>
-				<div class="clear mt15p ml10p">
-					Total invested includes all transactions. Current value includes purchases and sales. It does not include dividend, stock splits or.. percent change is based on total invested vs. current value.
-			</div>
-			<!-- /ko -->
-		</div>
-		
-		<!-- div content for transactions functionality -->
-		<div class="grid transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
+			<!-- div content for transactions functionality -->
+			<div class="grid transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
 			<div style="margin: 15px 0px 30px 20px">
 				<b>Enter transaction to view additional details on your StockList</b>
 			</div>
@@ -184,7 +184,7 @@
 				</div>
 			</div>
 		</div>
-<!-- /ko -->	
+		</div>	
 	</section>
 	
 <!-- /ko -->    

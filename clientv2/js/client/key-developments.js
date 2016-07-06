@@ -92,7 +92,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.selectedValue.subscribe(function(data){
 				var watchlists = this.finalWL();
-				var keyDevFlag = true;
 				for(var i = 0, len = watchlists.length; i < len; i++) {
 					var wl = watchlists[i]
 					if( wl.id == data) {
@@ -104,10 +103,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 				}
 				
-				if(keyDevFlag && !UTIL.isEmpty(me.allCompanies)){
-					keyDevFlag = false;
-					me.getKeyDevData(me, me.allCompanies);
-				}
+				me.getKeyDevData(me, me.allCompanies);
 				
 			}, me);
 			
@@ -184,7 +180,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					function(data, textStatus, jqXHR){					
 						console.log(data);
 						me.refractKeyDevData(data, me);
-						$('#allKeyDevDivId').show();
+						if(!$.isEmptyObject(data)){
+							$('#keyDevNoCompaniesTextDiv').hide();
+							$('#keyDevelopemntContentDiv').show();
+							$('#allKeyDevDivId').show();
+						}else{
+							$('#keyDevelopemntContentDiv').hide();
+							$('#keyDevNoCompaniesTextDiv').show();
+							$('#allKeyDevDivId').hide();
+						}
 					}, 
 					PAGE.customSGXError);
 		},
@@ -262,7 +266,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				endpoint,
 				postType,
 				params,
-				function(data, textStatus, jqXHR){					
+				function(data, textStatus, jqXHR){
+					me.watchlistCompanies.removeAll();
 					function sortByName(a, b){
 					  var a = a.name.toLowerCase();
 					  var b = b.name.toLowerCase(); 
@@ -368,17 +373,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		populateWatchlistCompanies:function(watchlistObject, me){
+			me.watchlistCompanies.removeAll();
 		    // JSON Call for populating the companies for the selected watchlist.
-			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+			/*if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
 				    $('#watchlistCompaniesSelect').empty()
 				return;
-			}
+			}*/
 
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
 		    var params = { "companies": watchlistObject.companies };
 		    var postType = 'POST';
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
-				me.watchlistCompanies(data.companyPrice);
+		    	if(!$.isEmptyObject(data)){
+			    	me.watchlistCompanies(data.companyPrice);
+		    	}
 
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
