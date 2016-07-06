@@ -93,12 +93,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		transactionTickers: [],
 		chartData: [],
 		
-		transactionNoOfShares: 0.00,
-		userEnteredPurchasedPrice: 0.00,
-		userEnteredSellPrice: 0.00,
+		totalCurrentValue: 0.00,
 		
-		companiesNoOfShares: 0.00,
-		sumOfLastClosePrice: 0.00,
+		userEnteredPurchasedPrice: 0.00,
+    	userEnteredSellPrice: 0.00,
 		
 		initPage: function() {
 			var me = this;
@@ -738,22 +736,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    calcTotalInvested: function(item, me){
-	    	me.transactionNoOfShares += parseFloat(item.numberOfShares) ;
     		if(item.transactionType === "BUY"){
-    			me.userEnteredPurchasedPrice += parseFloat(item.costAtPurchase);
+    			me.userEnteredPurchasedPrice = parseFloat( parseFloat(me.userEnteredPurchasedPrice) + ( item.numberOfShares * item.costAtPurchase) ).toFixed(2);
     		}else{
-    			me.userEnteredSellPrice += parseFloat(item.costAtPurchase);
+    			me.userEnteredSellPrice = parseFloat( parseFloat(me.userEnteredSellPrice) + (item.numberOfShares * item.costAtPurchase) ).toFixed(2);
     		}
 	    },
 	    
-	    calcSingleCompNoOfShares: function(item, me){
-	    	me.companiesNoOfShares += parseFloat(item.numberOfShares);
-	    },
-	    
 	    calcMultiCompNoOfShares: function(data, me){
-	    	var buyShare = 0;
-    		var sellShare = 0;
-    		var noOfShares = 0;
+	    	var buyShare = 0.00;
+    		var sellShare = 0.00;
+    		var noOfShares = 0.00;
 	    	for(i=0; i<data.length; i++){
 	    		var item = data[i];
 	    		if(item.transactionType === "BUY"){
@@ -763,7 +756,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		}
 	    	}
 	    	noOfShares = (parseFloat(buyShare) - parseFloat(sellShare)).toFixed(2);
-	    	me.companiesNoOfShares += parseFloat(noOfShares);
 	    	return noOfShares;
 	    },
 	    
@@ -780,9 +772,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		if(data[i].length > 1){
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
-	    			me.sumOfLastClosePrice += parseFloat(me.liveClosingPrice);
 	    			var noOfShares = me.calcMultiCompNoOfShares(data[i], me);
 	    			var currentValue  = me.calcMultiCompCurrentValue(noOfShares, me);
+	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, noOfShares, 
 																item.costAtPurchase, me.liveClosingPrice, "", true, currentValue);
 					me.displayTransactions.push(transItemModel);
@@ -790,10 +782,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		}else{
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
-	    			me.sumOfLastClosePrice += parseFloat(me.liveClosingPrice);
 	    			me.calcTotalInvested(item, me);
-	    			me.calcSingleCompNoOfShares(item, me);
 	    			var currentValue  = me.calcCurrentValue(item, me);
+	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
 																item.costAtPurchase, me.liveClosingPrice, item.id, false, currentValue);
 					me.displayTransactions.push(transItemModel);
@@ -824,19 +815,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    totalCalculation: function(me){
-			var totalInvested = ((me.transactionNoOfShares * me.userEnteredPurchasedPrice) - (me.transactionNoOfShares * me.userEnteredSellPrice)).toFixed(2);
-	    	var totalCurrentValue = (me.companiesNoOfShares * me.sumOfLastClosePrice).toFixed(2);
-	    	var percentageChange = ((totalInvested - totalCurrentValue) / (totalInvested * 100)).toFixed(2); 
+	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(2);
+	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(2); 
+	    	var percentageChange = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#percentageChange').html(percentageChange+"%");
 	    	
-	    	me.transactionNoOfShares = 0.00;
 	    	me.userEnteredPurchasedPrice = 0.00;
 	    	me.userEnteredSellPrice = 0.00;
-	    	me.companiesNoOfShares = 0.00;
-	    	me.sumOfLastClosePrice = 0.00;
+	    	me.totalCurrentValue = 0.00;
 	    },
 	    
 	    convertTickerCodeToCompany: function(tickerCode, me){
