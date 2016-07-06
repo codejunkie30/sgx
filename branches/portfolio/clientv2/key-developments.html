@@ -24,8 +24,12 @@
 		<span data-bind="template: 'stocklist-header'"></span>
 	</div>
 	
-	
+<!-- ko {if: finalWL().length} -->	
 	<section class="key-dev-match">
+		<div class="grid scan intro" data-bind="visible: watchlistCompanies().length == 0">
+				<p align="center">You have no companies currently in your StockList.</p>
+		</div>
+		<!-- ko {if: watchlistCompanies().length} -->
 		<div class="grid scan intro">
 		    <p>Select which developments you would like to see for your StockList</p>
 		</div>
@@ -201,7 +205,9 @@
 			
 			</div>
 		</div>
+	<!-- /ko -->
 	</section>
+<!-- /ko -->	
 	<div class="grid disclosure scan">
 		<p>SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a data-bind="siteLink:'terms-conditions'">terms and conditions</a>.</p>
 	</div>	

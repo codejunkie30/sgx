@@ -113,8 +113,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.getWatchListData(me); 
 			
-			$('#valuationSection').show();
-			
 		},
 		
 		renderChart: function(me, responseData){
