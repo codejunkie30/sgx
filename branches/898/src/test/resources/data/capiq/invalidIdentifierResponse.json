@@ -1,0 +1,15 @@
+{
+    "GDSSDKResponse": [
+        {
+            "Seniority": "",
+            "StartDate": "",
+            "Mnemonic": "IQ_CLOSEPRICE",
+            "SnapType": "",
+            "ErrMsg": "InvalidIdentifier",
+            "Function": "GDSP",
+            "Frequency": "",
+            "Identifier": "$id$",
+            "Limit": ""
+        }
+    ]
+}
