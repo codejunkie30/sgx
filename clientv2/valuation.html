@@ -45,7 +45,12 @@
 					<table class="w935p ml10p">
 						<thead>
 							<tr>
-								<th width="10%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 25px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="10%" >
+									<div><div style="padding-left: 8px;" class="floatLeft blackCl">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /></div><div class="float:clear"></div></div>
+									<div class="floatLeft" style="padding-left: 25px;">
+									<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
+									</div>
+								</th>
 								<th width="34%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
 								<th width="14%"><div class="floatLeft w80P blueCl">First Trade Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
 								<th width="13%"><div class="floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
@@ -93,7 +98,12 @@
 					<table style="margin-left: 10px;">
 						<thead>
 							<tr>								
-								<th width="9%" ><div class="floatLeft w80P blackCl">Chart </div><div style="padding-left: 25px;"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /><input type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction"></div></th>
+								<th width="9%" >
+								<div><div style="padding-left: 8px;" class="floatLeft blackCl">Chart <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'chart'"  /></div><div class="float:clear"></div></div>
+								<div class="floatLeft" style="padding-left: 25px;">
+								<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
+								</div>
+								</th>
 								<th width="81%" class="asc" id="companyName" data-bind="click: sortColumnByAsc">Company Name</th>								
 							</tr>
 						</thead>

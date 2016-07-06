@@ -253,7 +253,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	  return returnVal;
     	},
 		
-		getChartData(me){
+		getChartData: function(me){
 			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/company/stockListpriceHistory";
 			var postType = 'POST';
