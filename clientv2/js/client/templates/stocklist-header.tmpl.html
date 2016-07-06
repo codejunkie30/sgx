@@ -26,7 +26,7 @@
 				</div>
 			</div>
 			
-			<div class="profilestocklist">
+			<div class="profilestocklist" data-bind="visible: finalWL().length > 0">
 				<nav>
 					<ul>
 						<li class="stocklist-alerts"><a data-bind="stockListSiteLink: { id: 'alerts', extra: 'code=' + selectedValue()}">Alerts</a></li>
@@ -34,7 +34,7 @@
 						<li class="stocklist-keydev"><a data-bind="stockListSiteLink: { id: 'key-developments', extra: 'code=' + selectedValue()}">Key Developments</a></li>
 					</ul>		
 				</nav>
-			</div>	
+			</div>
 		</div>	
 	</section>
 </header>

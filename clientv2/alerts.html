@@ -27,15 +27,10 @@
 		<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName, userStatus: userStatus} }"></div>
 	</section>
 
-
+<!-- ko {if: finalWL().length} -->
 	<section id="alerts" data-bind="if:premiumUser() == true">
 		<div class="grid scan intro">
-			<!-- ko {if: finalWL().length} -->
 				<p>Select the types of events that you'd like to be alerted to. Alerts are sent daily to the email address listed in your account.</p>
-			<!-- /ko -->
-			<!-- ko ifnot: finalWL().length -->
-				<p>There is no record to display.</p>
-			<!-- /ko -->
 		</div>
 		<!-- ko {if: finalWL().length} -->
 		<div class="search" data-bind="if: displayList">
@@ -240,6 +235,7 @@
 			</section>
 		</div>
 	</section>
+<!-- /ko -->	
 	<div class="grid disclosure scan">
 		<p>SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a data-bind="siteLink:'terms-conditions'">terms and conditions</a>.</p>
 	</div>	
