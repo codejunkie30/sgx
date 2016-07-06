@@ -990,7 +990,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
 	    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
 	    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
-	    		$('#closeptd'+id).append("<div id='intclosediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intCostAtPurchase+ "</div>");
 	    	});
 	    	
 	    	$('#multiCompData'+id).show();
@@ -1010,7 +1009,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#intcompdiv'+item.intId).remove();
 	    		$('#intdatediv'+item.intId).remove();
 	    		$('#intsharediv'+item.intId).remove();
-	    		$('#intclosediv'+item.intId).remove();
 	    	});
 	    	
 	    	$('#tr'+id).removeClass('panel');
