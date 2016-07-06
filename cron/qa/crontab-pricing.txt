@@ -1,2 +1,0 @@
-*/2 * * * * /bin/bash /root/cron/qa/pricing-deploy.sh >> /root/logs/build.log 2>&1
-*/10 * * * * aws s3 sync /var/log/ s3://logs-wmsi/sgx/pricing-us

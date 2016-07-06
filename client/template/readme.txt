@@ -1,1 +1,0 @@
-These templates are converted to javascript for fast loading.  Currently a manual process
