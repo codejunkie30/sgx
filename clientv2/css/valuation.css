@@ -102,8 +102,8 @@
 	color: #0e236b;
 	border: 1px solid #ccc;
 	padding: 8px 12px;
-	/*font: bold 14px/12px Arial, Helvetica, sans-serif;*/
-	font-weight: bold;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
+/* 	font-weight: bold; */
 	text-align: left;
 	cursor: pointer;
 	vertical-align: top;
@@ -286,10 +286,13 @@
 
 .blueCl{
 	color: #0e236b;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
+	line-height: 16px;
 }
 
 .blackCl{
 	color: #000000;
+	font: bold 14px/12px Arial, Helvetica, sans-serif;
 }
 
 .clear {
@@ -371,3 +374,12 @@ height: 17px;
 width: 17px;
 height: 17px;
 }
+
+.pl8p {
+	padding-left: 8px;
+}
+
+.pl25p {
+	padding-left: 25px;
+}
+
