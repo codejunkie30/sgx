@@ -57,11 +57,11 @@ import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages={"com.wmsi.sgx.service"})
+@ComponentScan(basePackages={"com.wmsi.sgx.service","com.wmsi.sgx.repository"})
 @PropertySources(value = {
-	@PropertySource("classpath:META-INF/properties/capiq.properties")
+@PropertySource("classpath:META-INF/properties/capiq.properties")
 })
-@Import(AppConfig.class)
+@Import(value = { AppConfig.class,DataConfig.class})
 public class HttpConfig{
 	
 	@Autowired

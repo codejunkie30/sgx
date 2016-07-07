@@ -12,8 +12,9 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
-			<int:service-activator ref="xfRetrievalService" method="init"/>
+<!-- 			<int:service-activator ref="xfRetrievalService" method="init"/>
 			<int:service-activator ref="xfSplitterService" method="init"/>
+ -->			<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
 	</int:chain>
 	<!-- TODO Do we need router? -->
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
