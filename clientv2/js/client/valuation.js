@@ -1089,7 +1089,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	var bought = 0.00;
 	    	var sell = 0.0;
-	    	var tickerCode = data.tickerCode();
+    		var tickerCode = data.tickerCode();
 	    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 	    		 if(item.tickerCode() === tickerCode){
 	    			 var costAtPurchase = item.costAtPurchase().toString().replace(/,/gi,"");
@@ -1106,7 +1106,48 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		 PAGE.modal.open({ type: 'alert',  content: '<p>Sell price is greater than the purchase price</p>', width: 400 });
 	    		 return;
 	    	 }
+	    },
+	    
+	    buySellInitialValidate: function(param, data, event ){
+	    	var me = this;
+	    	var bought = 0.00;
+	    	var sell = 0.00;
+	    	var share = 0.00;
+	    	var price = 0.00;
 	    	
+	    	if(data.transItems().length){
+	    		var tickerCode = data.selectedCompanyValue();
+		    	 ko.utils.arrayForEach(data.transItems(), function (item) {
+		    		 if(item.tickerCode() === tickerCode){
+		    			 var costAtPurchase = item.costAtPurchase().toString().replace(/,/gi,"");
+		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+		    			 if(item.transactionType() === "BUY"){
+		    				 bought = parseFloat( parseFloat(bought) + (parseFloat(numberOfShares) * parseFloat(costAtPurchase.replace("$","")) ) ).toFixed(2);
+		    			 }else{
+		    				 sell = parseFloat( parseFloat(sell) + (parseFloat(numberOfShares) * parseFloat(costAtPurchase.replace("$","")) ) ).toFixed(2);
+		    			 }
+		    		 }
+		    	 });
+		    	 
+	    	 	if(param === 'share'){
+		    		share = $('#'+event.target.id).val();
+		    		price = !UTIL.isEmpty(data.initialCostAtPurchase()) ? data.initialCostAtPurchase() : 0.00;
+		    	}else{
+		    		share = !UTIL.isEmpty(data.initialNumberOfShares()) ? data.initialNumberOfShares() : 0.00;
+		    		price = $('#'+event.target.id).val();
+		    	}
+	    		if(data.selectedAvailableType() === "BUY"){
+   				 	bought = parseFloat( parseFloat(bought) + ( parseFloat(share) * parseFloat(price) ) ).toFixed(2);
+   			 	}else{
+   			 		sell = parseFloat( parseFloat(sell) + ( parseFloat(share) * parseFloat(price) ) ).toFixed(2);
+   			 	}
+	    	}
+	    	
+	    	if(parseFloat(sell) > parseFloat(bought)){
+	    		 $('#'+event.target.id).val("");
+	    		 PAGE.modal.open({ type: 'alert',  content: '<p>Sell price is greater than the purchase price</p>', width: 400 });
+	    		 return;
+	    	 }
 	    }
 	
 	};
