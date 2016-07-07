@@ -267,7 +267,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var newWLNameLC = ALERTS.newWLName();
 			
 			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( newWLNameLC.toLowerCase().trim(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return; }
+			if ($.inArray( newWLNameLC.toLowerCase().trim(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 StockLists.</p>', width: 600 }); return; }
 
@@ -425,7 +425,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		addCompany: function(data){
 
-			if (ALERTS.companies().length >= 25) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a watch list.</p>', width: 300 }); return; }
+			if (ALERTS.companies().length >= 25) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a StockList.</p>', width: 300 }); return; }
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
 			
 			//callback to update companies after the call succeeds.
