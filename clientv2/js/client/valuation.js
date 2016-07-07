@@ -1083,6 +1083,29 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    },  
 	    
+	    buySellValidate: function(data, event){
+	    	var me = this;
+	    	var bought = 0.00;
+	    	var sell = 0.0;
+	    	var tickerCode = data.tickerCode();
+	    	 ko.utils.arrayForEach(me.transItems(), function (item) {
+	    		 if(item.tickerCode() === tickerCode){
+	    			 var costAtPurchase = item.costAtPurchase().toString().replace(/,/gi,"");
+	 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+	    			 if(item.transactionType() === "BUY"){
+	    				 bought = parseFloat( parseFloat(bought) + (parseFloat(numberOfShares) * parseFloat(costAtPurchase.replace("$","")) ) ).toFixed(2);
+	    			 }else{
+	    				 sell = parseFloat( parseFloat(sell) + (parseFloat(numberOfShares) * parseFloat(costAtPurchase.replace("$","")) ) ).toFixed(2);
+	    			 }
+	    		 }
+	    	 });
+	    	 if(parseFloat(sell) > parseFloat(bought)){
+	    		 $('#'+event.target.id).val("");
+	    		 PAGE.modal.open({ type: 'alert',  content: '<p>Sell price is greater than the purchase price</p>', width: 400 });
+	    		 return;
+	    	 }
+	    	
+	    }
 	
 	};
 	

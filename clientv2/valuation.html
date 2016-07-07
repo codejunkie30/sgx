@@ -171,8 +171,8 @@
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
 							<td><input data-bind="value: tradeDate, datepicker:tradeDate" type="text" readonly="readonly"/></td>
-							<td><input data-bind="numeric, value: numberOfShares, largeNumber: numberOfShares" type="text"/></td>
-							<td><input data-bind="numeric, value: costAtPurchase, currencyInput: costAtPurchase, symbol: '$'" type="text"/></td>
+							<td><input data-bind="numeric, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares, event: { keyup: $root.buySellValidate.bind($root) }, attr: { id:'share'+$index()}" type="text"/></td>
+							<td><input data-bind="numeric, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$', event: { keyup: $root.buySellValidate.bind($root) }, attr: { id:'price'+$index()}" type="text"/></td>
 							<td data-bind="text: currentPrice, currency: currentPrice, symbol: '$'"></td>
 							<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)" /></div></td>
 					    </tr>
