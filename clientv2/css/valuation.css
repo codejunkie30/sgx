@@ -351,3 +351,23 @@
 .w935p {
 	width: 935px;
 }
+
+.multiTransCompany { 
+	color :#0e236b;
+	padding-top:8px;
+	text-decoration: underline;
+}
+
+.multiTransCompany span{ 
+    color :#0e236b;
+}
+
+.valuation-results table tbody tr td input[type=checkbox] {
+width: 17px;
+height: 17px;
+}
+
+.valuation-results table thead tr th input[type=checkbox] {
+width: 17px;
+height: 17px;
+}
