@@ -3,8 +3,6 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 	var defaults = {
 		title : undefined,
 
-		colors : [ '#0e236b' ],
-
 		chart : {
 			backgroundColor : 'rgba(255, 255, 255, 0.1)',
 			height : 300,
@@ -77,7 +75,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 			labels : {
 				formatter : function() {
-					return $.datepicker.formatDate("mm/dd/yy", Date.fromISO(this.value));
+					return Highcharts.dateFormat("%e. %b", this.value);
 				},
 				style : {
 					color : "#000000",
