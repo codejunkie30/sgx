@@ -24,5 +24,7 @@ public interface IndexBuilderService{
 	String getPreviousDayIndexName(String indexName) throws IndexerServiceException;
 
 	String computeIndexName(String jobId, String indexName) throws IndexerServiceException;
+	
+	boolean saveCurrencyList()throws IndexerServiceException;
 
 }

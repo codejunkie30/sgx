@@ -57,7 +57,7 @@ public final class Main{
 
 		final Scanner scanner = new Scanner(System.in);
 
-		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
+		MessageChannel chan = (MessageChannel) context.getBean("inputDataRequestChannel");
 
 		Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 
