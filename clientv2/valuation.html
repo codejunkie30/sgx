@@ -160,8 +160,8 @@
 							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType" ></select></td>
 							<td><input data-bind="value: initialTradeDate" type="text" id="tradeDate" readonly="readonly"/></td>
-							<td><input type="text" class="text" data-bind="numeric, value: initialNumberOfShares, event: { keyup: $root.buySellInitialValidate.bind($root, 'share') }, attr: { id:'initialshare'}"/></td>
-							<td><input type="text" data-bind="numeric, value: initialCostAtPurchase, event: { keyup: $root.buySellInitialValidate.bind($root,'price') }, attr: { id:'initialprice'}" /></td>
+							<td><input type="text" class="text" data-bind="numeric, value: initialNumberOfShares"/></td>
+							<td><input type="text" data-bind="numeric, value: initialCostAtPurchase" /></td>
 							<td>&nbsp;</td>
 							<td><a class="add-button" data-bind="click: addTrans">Add</a></td>
 						</tr>
@@ -171,8 +171,8 @@
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
 							<td><input data-bind="value: tradeDate, datepicker:tradeDate" type="text" readonly="readonly"/></td>
-							<td><input data-bind="numeric, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares, event: { keyup: $root.buySellValidate.bind($root) }, attr: { id:'share'+$index()}" type="text"/></td>
-							<td><input data-bind="numeric, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$', event: { keyup: $root.buySellValidate.bind($root) }, attr: { id:'price'+$index()}" type="text"/></td>
+							<td><input data-bind="numeric, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares" type="text"/></td>
+							<td><input data-bind="numeric, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$'" type="text"/></td>
 							<td data-bind="text: currentPrice, currency: currentPrice, symbol: '$'"></td>
 							<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)" /></div></td>
 					    </tr>
