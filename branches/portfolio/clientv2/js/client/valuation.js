@@ -171,6 +171,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var baseChart = PER_CHART_CONFIG;
 			
 			baseChart.series = me.seriesOptions;
+			// set the zoom
+			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
 			
 			baseChart.tooltip.formatter = function() {
 				if (!this.hasOwnProperty("point")) return;
