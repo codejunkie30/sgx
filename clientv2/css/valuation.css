@@ -120,6 +120,36 @@
 		12px;
 }
 
+.valuation-results table thead tr th div.tradeDate.asc {
+	background: url("../img/sort_ascending.png") no-repeat left 40px top 21px;
+}
+
+.valuation-results table thead tr th div.numShares.asc {
+	background: url("../img/sort_ascending.png") no-repeat left 51px top 37px;
+}
+
+.valuation-results table thead tr th div.lastClosePr.asc {
+	background: url("../img/sort_ascending.png") no-repeat left 42px top 21px;
+}
+.valuation-results table thead tr th div.currentVal.asc {
+	background: url("../img/sort_ascending.png") no-repeat left 42px top 21px;
+}
+
+.valuation-results table thead tr th div.tradeDate.desc {
+	background: url("../img/sort_descending.png") no-repeat left 40px top 17px;
+}
+
+.valuation-results table thead tr th div.numShares.desc {
+	background: url("../img/sort_descending.png") no-repeat left 51px top 33px;
+}
+
+.valuation-results table thead tr th div.lastClosePr.desc {
+	background: url("../img/sort_descending.png") no-repeat left 42px top 17px;
+}
+.valuation-results table thead tr th div.currentVal.desc {
+	background: url("../img/sort_descending.png") no-repeat left 38px top 17px;
+}
+
 .valuation-results table .companyName {
 	text-align: left;
 	width: 220px;
@@ -383,4 +413,3 @@ height: 17px;
 .pl25p {
 	padding-left: 25px;
 }
-

@@ -51,12 +51,12 @@
 										<input class="textCenter" type="checkbox" id="selectAllId" data-bind="checked: $root.selectAllTransaction">
 										</div>
 									</th>
-									<th width="32%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
-									<th width="15%"><div class="floatLeft w80P blueCl">First Trade <br> Date</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
-									<th width="13%"><div class="floatLeft w80P blueCl">Number <br> of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
-									<th width="15%"><div class="floatLeft w80P blueCl">Last Close<br> Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
-									<th width="10%"><div class="floatLeft w80P blueCl">Current   <br> Value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
-									<th width="5%" ><div class="floatLeft w80P blackCl">Delete </div><img class="tooltip-left" style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
+									<th width="29%" class="asc" id="companyName" data-bind="click: sortColumnAsc">Company Name</th>
+									<th width="15%"><div id = "perTradeDate" data-bind="click: perSortbyTradeDate" class="tradeDate asc floatLeft w80P blueCl">First Trade <br> Date</div><div class="floatRight w20P"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
+									<th width="14%"><div data-bind="click: perSortbyNumShares"  id = "perNumOfShares" class="numShares asc floatLeft w80P blueCl">Number of <br> Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
+									<th width="16%"><div data-bind="click: perSortLastClsPrice" id = "perLastClosePrice" class="lastClosePr asc floatLeft w80P blueCl">Last Close<br> Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
+									<th width="12%"><div data-bind="click: perSortCurrentValue" id = "perCurPrice" class="currentVal asc floatLeft w80P blueCl">Current   <br> Value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
+									<th width="4%"><div class="floatLeft w80P blackCl">Delete </div><img class="tooltip-left" style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
 								</tr>
 							</thead>
 							<tbody data-bind="foreach: displayTransactions">

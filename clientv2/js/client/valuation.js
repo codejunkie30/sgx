@@ -1118,6 +1118,101 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    },  
 	    
+	    perSortbyTradeDate: function(data, event){
+	    	var me = this;
+	    	me.perTradeDate = ko.observable(tradeDate);
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransactions.sort(sortByTradeDate);
+	    	    function sortByTradeDate(a, b){
+	  			  var a = a.tradeDate;
+	  			  var b = b.tradeDate; 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransactions.sort(sortByTradeDate);
+	    	    function sortByTradeDate(a, b){
+	  			  var a = a.tradeDate;
+	  			  var b = b.tradeDate; 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
+	    
+	    perSortbyNumShares: function(data, event){
+	    	var me = this;
+	    	me.perNumOfShares = ko.observable(perNumOfShares);
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransactions.sort(sortByNumShares);
+	    	    function sortByNumShares(a, b){
+	  			  var a = a.numberOfShares;
+	  			  var b = b.numberOfShares; 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransactions.sort(sortByNumShares);
+	    	    function sortByNumShares(a, b){
+	  			  var a = a.numberOfShares;
+	  			  var b = b.numberOfShares; 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
+	    
+	    perSortLastClsPrice: function(data, event){
+	    	var me = this;
+	    	me.perLastClosePrice = ko.observable(perLastClosePrice);
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransactions.sort(sortByClsPrice);
+	    	    function sortByClsPrice(a, b){
+	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
+	    	       var b = b.lastClosePrice.toString().replace(/,/gi,"");
+	    	       a = parseFloat(a.replace("$",""));
+		  		   b = parseFloat(b.replace("$",""));
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransactions.sort(sortByClsPrice);
+	    	    function sortByClsPrice(a, b){
+	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
+		    	   var b = b.lastClosePrice.toString().replace(/,/gi,"");
+		    	   a = parseFloat(a.replace("$",""));
+			  	   b = parseFloat(b.replace("$",""));
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
+	    
+	    perSortCurrentValue: function(data, event){
+	    	var me = this;
+	    	me.perCurPrice = ko.observable(perCurPrice);
+	    	if($('#'+event.target.id).hasClass('asc')){
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		me.displayTransactions.sort(sortByCurrentVal);
+	    	    function sortByCurrentVal(a, b){
+	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
+	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
+	    	    	a = parseFloat(a.replace("$",""));
+		  			b = parseFloat(b.replace("$",""));  
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		me.displayTransactions.sort(sortByCurrentVal);
+	    	    function sortByCurrentVal(a, b){
+	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
+	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
+	    	    	a = parseFloat(a.replace("$",""));
+		  			b = parseFloat(b.replace("$","")); 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    },
 	    buySellValidate: function(data, event){
 	    	var me = this;
 	    	var bought = 0.00;
@@ -1204,7 +1299,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tickerCode = tickerCode;
     	me.transactionType = transactionType;
     	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("mm/dd/yy", Date.fromISO(tradeDate)) : "";
-    	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
+    	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? parseFloat(numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')).toFixed(2): "" ;
     	me.costAtPurchase = costAtPurchase;
     	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice: "";
     	me.id = id;
