@@ -226,6 +226,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.kdResultsCorpAnnouncements(data[i]);
 				}
 			}
+			
+			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 		},
 		
 		addKeyDevCompanies: function(data, me){
@@ -396,6 +398,25 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		clearWatchListErrors: function() {
 			$('.error-messages').empty();
+		},
+		
+		keyDevClick: function(item) {
+			var source;
+			if (item.source != null){
+				source = item.source
+			} else {
+				source = '-'
+			}
+			var copy = "<h4>" + item.headline + "</h4>" + 
+			   "<p class='bold'>" + 
+			   "Source: " + source + "<br />" +
+			   "Type: " + item.type + "<br />" +
+			   "From: " + PAGE.getFormatted("date", item.date) +  
+			   "</p>" +
+			   "<div class='news'>" + item.situation + "</div>";
+			
+			PAGE.modal.open({ content: copy, type: 'alert' });
+			
 		},
 		
 		_hideLoading: function() {

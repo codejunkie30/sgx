@@ -81,9 +81,8 @@
 						<table data-bind="foreach: kdAnounceCompTransactions">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
-									<!-- <div class="no-devs" data-bind="">There is no data to show for the selected period.</div> -->
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -96,8 +95,8 @@
 						<table data-bind="foreach: kdCompanyForecasts">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -110,8 +109,8 @@
 						<table data-bind="foreach: kdCorporateStructureRelated">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -124,8 +123,8 @@
 						<table data-bind="foreach: kdCustProdRelated">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -138,8 +137,8 @@
 						<table data-bind="foreach: kdDividensSplits">
 							<tr>
 								<td>
-									<span data-bind="text: headline"></span>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -152,8 +151,8 @@
 						<table data-bind="foreach: kdListTradeRelated">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -166,8 +165,8 @@
 						<table data-bind="foreach: kdPotentialRedFlags">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -180,8 +179,8 @@
 						<table data-bind="foreach: kdPotentialTransactions">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -194,8 +193,8 @@
 						<table data-bind="foreach: kdResultsCorpAnnouncements">
 							<tr>
 								<td>
-									<div data-bind="text: headline"></div>
-									<div>Companies: <span data-bind="text: companies"></span></div>
+									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
+									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
