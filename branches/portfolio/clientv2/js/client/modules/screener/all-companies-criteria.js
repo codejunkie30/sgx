@@ -42,6 +42,22 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
     		
     		// search
     		var endpoint = "/sgx/search";
+    		
+    		if(typeof(UTIL.retrieveCriteria()) != "undefined" && typeof UTILS.retrieveTracking() != "undefined" &&  UTILS.retrieveTracking().value == "true") {
+    			var criteria = UTIL.retrieveCriteria().value;
+    			params = criteria.allCompanies;
+    		}
+    		else {
+    			if(typeof UTIL.retrieveCriteria() != "undefined") {
+					var criteria = UTIL.retrieveCriteria().value;
+					criteria = {allCompanies: params};
+    			}
+    			else {
+    				var criteria = {allCompanies: params};
+    			}
+    			UTIL.saveCriteria(criteria);
+    			
+    		}
     		this.screener.results.retrieve(endpoint, params, val, function() { 
 				viewAllLength = params.criteria.length;
 				setTimeout(function(){

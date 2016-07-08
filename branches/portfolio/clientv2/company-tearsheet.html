@@ -28,14 +28,14 @@
 			<div id="price-volume"></div>	
 			<div class="section-break" data-bind="tabs">			
 			    <ul>
-			        <li><a href="#overview">Overview</a></li>
-			        <li><a href="#valuation">Valuation</a></li>
-			        <li><a href="#financials">Financials</a></li>
-			        <li><a href="#dividends" target="#dividends" data-bind="click : function() { PAGE.resizeIframeSimple(); }">Dividends</a></li>
-			        <li><a href="#ownership">Ownership</a></li>
+			        <li data-bind="click: savingTab('overview')" name="overview"><a href="#overview">Overview</a></li>
+			        <li data-bind="click: savingTab('valuation')" name="valuation"><a href="#valuation">Valuation</a></li>
+			        <li data-bind="click: savingTab('financials')" name="financials"><a href="#financials">Financials</a></li>
+			        <li data-bind="click: savingTab('dividends')" name="dividends"><a href="#dividends" target="#dividends" data-bind="click : function() { PAGE.resizeIframeSimple(); }">Dividends</a></li>
+			        <li data-bind="click: savingTab('ownership')" name="ownership"><a href="#ownership">Ownership</a></li>
 			    </ul>
 			    <div class="tab-content">			    
-			        <div id="overview">
+			        <div id="overview" name="overviewDiv">
 			            <table cellspacing="0">
 			                <tbody>
 			                    <tr>
@@ -108,7 +108,7 @@
 						</table>
 					</div>
 					
-			        <div id="valuation">
+			        <div id="valuation" name="valuationDiv">
 			            <table cellspacing="0">
 			                <tbody>
 			                    <tr>
@@ -130,7 +130,7 @@
 			            </table>
 			        </div>
 			        
-			        <div id="financials">
+			        <div id="financials" name="financialsDiv">
 			
 			            <table cellspacing="0">
 			                <tbody>
@@ -173,7 +173,7 @@
 			            </table>			
 			        </div>
 			        
-					<div id="dividends">
+					<div id="dividends" name="dividendsDiv">
 						<!-- ko if: $data.dividendHistory.dividendValues != null -->
 						<table cellspacing="0">
 							<thead data-bind="visible: $data.hasOwnProperty('dividendHistory') && $data.dividendHistory.hasOwnProperty('dividendValues') && $data.dividendHistory.dividendValues.length > 0">
@@ -205,7 +205,7 @@
 						
 					</div>
 			
-					<div id="ownership">
+					<div id="ownership" name="ownershipDiv">
 						<!-- ko if: $data.holders != null -->
 						<table cellspacing="0">
 							<thead>

@@ -1,4 +1,4 @@
-define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGES ) {
+define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function( UTIL,$, ko, PAGES ) {
 
 
   function HS_Chart(chartId, companyName) {
@@ -26,6 +26,20 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       
       var self = this;
       var chartOptions = this.getGenericChartObj();
+      if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
+			if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
+				var criteria = UTIL.retrieveCriteria().value;
+				for(var i=0;i<chartOptions.rangeSelector.buttons.length;i++) {
+					if(chartOptions.rangeSelector.buttons[i].text == criteria.companycharts.graphTab) {
+						chartOptions.rangeSelector.selected=i;
+					}
+				}
+				
+				$($("tspan")[0]).text(criteria.companycharts.minDate);
+	        	$($("tspan")[1]).text(criteria.companycharts.maxDate);
+			}
+      }
+      //chartOptions.rangeSelector.selected=5;
       chartOptions.series[0].name = companyName;
       $(this.chartId).highcharts('StockChart', chartOptions);
       setTimeout(function(){ 
@@ -121,7 +135,7 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
   HS_Chart.prototype.addAxis = function(seriesObject) {
 
     var axis = seriesObject.yAxis;
-    if( this.chartElement.get(axis) ) return;
+    if( this.chartElement == null || this.chartElement.get(axis) ) return;
 
     var axisObject =  {
         id: axis,
@@ -320,6 +334,51 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       },
       tooltip: {
         formatter: function() {
+        	var graphTab = "";
+        	var minDate = "";
+        	var maxDate = "";
+        	minDate = $($("tspan")[0]).text();
+        	maxDate = $($("tspan")[1]).text();
+        	for(var i=0;i<$("text").length;i++) {
+        		//alert($($("text")[i]).attr('style'));
+        		if("font-weight:bold;color:black;fill:black;" == $($("text")[i]).attr('style')) {
+        			graphTab = $($("text")[i]).text();
+        		}
+        		}
+        	if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companycharts == null || UTIL.retrieveCriteria().value.companycharts == "undefined")) {
+        	  	var companycharts= {
+	      				graphTab:graphTab,
+	      				minDate : minDate,
+	      				maxDate : maxDate,
+	      				financialTab:false,
+	      				indicatorTab:true
+	      			}
+      			var criteria = {companycharts: companycharts};
+      			UTIL.saveCriteria(criteria);
+			}
+			else {
+        	  var criteria = UTIL.retrieveCriteria().value;
+        	  var companycharts = criteria.companycharts;
+        	  if(companycharts!=null) {
+	        	  companycharts.graphTab=graphTab;
+	        	  companycharts.minDate=minDate;
+	        	  companycharts.maxDate=maxDate;
+	        	  companycharts.financialTab=false;
+	        	  companycharts.indicatorTab=true;
+        	  }
+        	  else {
+        	  var companycharts= {
+	      				graphTab:graphTab,
+	      				minDate : minDate,
+	      				maxDate : maxDate
+	      			}
+        	  }
+    			criteria = {companycharts: companycharts};
+    			//criteria.push("companyFinancials",companyFinancials);
+    			UTIL.saveCriteria(criteria);
+			}
+        		//alert("style = "+$($("text")[i]).attr('style'));alert($("text")[i])
+        	
           var tp = '<span style="font-size:10px">'+Highcharts.dateFormat('%A, %b %e, %Y',this.x)+'</span><br/>';
           $.each(this.points, function() {
 			var currencyType;

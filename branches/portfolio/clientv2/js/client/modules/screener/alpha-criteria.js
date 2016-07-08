@@ -119,13 +119,37 @@ define([ "wmsi/utils", "knockout", "text!client/data/factors.json" ], function(U
     		$(".alpha-factors .quintiles[data-value]").each(function(idx, el) { params[$(this).attr("data-id")] = parseInt($(this).attr("data-value")); });
     		
     		// just search all companies
-    		if ($.isEmptyObject(params)) {
+    		if ($.isEmptyObject(params) && (((typeof(UTIL.retrieveCriteria()) == "undefined" || typeof UTILS.retrieveTracking() == "undefined" || UTILS.retrieveTracking().value == "false")))) {
     			params.criteria = [{ field: "exchange", value: "SGX" },{ field: "exchange", value: "CATALIST" }];
     			endpoint = "/sgx/search";
+    			this.screener.results.retrieve(endpoint, params);
     		}
-    		
+    		else {
+    			if(typeof(UTIL.retrieveCriteria()) != "undefined" && typeof UTILS.retrieveTracking() != "undefined" &&  UTILS.retrieveTracking().value == "true") {
+    				var criteria = UTIL.retrieveCriteria().value;
+    				this.screener.results.retrieve(endpoint, criteria.alphaCriteria);
+    			}
+    			else {
+    				if(typeof UTIL.retrieveCriteria() != "undefined") {
+    					var criteria = UTIL.retrieveCriteria().value;
+    					if(criteria!=null) {
+    						var arrvalues = ['valuation','analystExpectations','capitalEfficiency','priceMomentum','earningsQuality','volatility','historicalGrowth','size'];
+            				for(var i=0;i<arrvalues.length;i++) {
+            					if(typeof params[arrvalues[i]] != "undefined" && isNaN(params[arrvalues[i]])) {
+            						params[arrvalues[i]] = criteria.alphaCriteria[arrvalues[i]]
+            					}
+            				}
+    					}
+    				}
+    				
+    				var criteria = {alphaCriteria: params};
+    				UTIL.saveCriteria(criteria);
+    				this.screener.results.retrieve(endpoint, params); 
+    			}
+    			
+    		}
     		// search
-    		this.screener.results.retrieve(endpoint, params);    		
+    		   		
     	}
 		
 	};
