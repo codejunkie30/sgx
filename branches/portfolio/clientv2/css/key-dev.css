@@ -1,10 +1,11 @@
-.key-dev-match{
+.key-dev-match {
 	position: relative;
 	top: -2px;
-	z-index:1;
+	z-index: 1;
 	border: 2px solid #ebecec;
-	padding: 30px 10px 10px; 
+	padding: 30px 10px 10px;
 }
+
 .key-dev-match .control-box {
 	width: 30%;
 	background: #ebecec;
@@ -15,16 +16,16 @@
 .key-dev-match .matches {
 	margin-left: 320px;
 	height: 530px;
-
 }
 
 .key-dev-match .control-box select {
 	height: 30px;
-	width:1px;
+	width: 1px;
 	border: 1px solid #d4d4d4;
 	border-radius: 4px;
 	min-width: 235px;
 	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 #key-devs {
@@ -54,12 +55,37 @@ h2 {
 	padding: 2px 20px;
 	color: #fff !important;
 	cursor: pointer;
-    margin: 10px 0 30px 5px;
+	margin: 10px 0 30px 5px;
 }
 
 h3, h3 span {
-    color: #333333;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 26px;
+	color: #333333;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 26px;
+}
+
+.matches .key-header {
+	font: arial 12px Georgia;
+	color: #0e236b;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.matches .key-header:hover {
+	text-decoration: underline;
+}
+
+div.news {
+	margin-bottom: 10px;
+}
+
+.matches .key-company {
+	font: italic 12px Georgia;
+	color: #333333;
+	text-decoration: none;
+}
+
+.matches table td {
+	padding: 10px 0px;
 }
