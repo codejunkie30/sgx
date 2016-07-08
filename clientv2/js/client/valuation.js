@@ -142,10 +142,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		                data: priceData,
 		                chartData: me.chartData,
 		                threshold : null,
-						turboThreshold : 0,
-						marker : {
-		                    enabled : true		                    
-		                }
+						turboThreshold : 0
 	            };
 				
 			});	
@@ -353,22 +350,37 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			me.selectAllTransaction = ko.computed({
 				read: function () {
+					PAGE.showLoading();
 	                var selectAllTransaction = true;
+	                var showChart = false;
 	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
+	                	showChart = item.selectedTransaction() || showChart;
 	                	//single chart transaction
 	                	me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
 	                });
 	                $('#selectAllId').prop('checked', selectAllTransaction);
+	                if(showChart){
+	                	$('#performance-chart-content').show()
+	                	$('#performance-chart-header').show();	
+	                	PAGE.resizeIframeSimple();
+	                }else{
+	                	$('#performance-chart-content').hide();
+	                	$('#performance-chart-header').hide();	
+	                	PAGE.resizeIframeSimple();
+	                }
+	                PAGE.hideLoading();
 	                return selectAllTransaction;
 	            },
 	            write: function (value) {
+	            	PAGE.showLoading();
 	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                    if (value) item.selectedTransaction(true);
 	                    else item.selectedTransaction(false);
 	                });
 	                //Multi Chart Transaction
 	                me.multiChartUnchart(me, value);
+	                PAGE.hideLoading(); 
 	            }
 		    });
 		},

@@ -12,6 +12,15 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		plotOptions : {
 			series : {
 				animation : false
+			},
+			line: {
+	            
+                events: {
+                    legendItemClick: function () {
+                        return false;
+                    }
+                },
+                showInLegend: true
 			}
 		},
 
