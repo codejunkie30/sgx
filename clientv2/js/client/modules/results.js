@@ -145,6 +145,14 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
                     
                     postLoad: function(settings) {
                     	
+                    	if(UTIL.retrieveScreenerCriteria() != null || UTIL.retrieveScreenerCriteria() != "undefined") {
+        					        					
+        					screenerCriteria = UTIL.retrieveScreenerCriteria().value;
+        					var cutomizeItems = [];
+        					screenerCriteria.customizeDisplay = cutomizeItems;
+        					UTIL.saveScreenerCriteria(screenerCriteria);
+        				}
+                    	
                     	ko.applyBindings(settings.viewModel, $(".modal-container")[0]);
                     	
                     	$(".modal-container .checkbox").click(function(e) {                    		
@@ -202,14 +210,45 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				this.headersChanged();
 				this.headersChanged(false);
 				var arr = this.staticFields.slice();
+				var selectedItems = [];
+				var screenerCriteria = null;
+				if(UTIL.retrieveScreenerCriteria() == null || UTIL.retrieveScreenerCriteria() == "undefined") {
+					
+					screenerCriteria = {
+		    				customizeDisplay : selectedItems
+		    			}
+					
+				}
+				else {
+					screenerCriteria = UTIL.retrieveScreenerCriteria().value;
+				}
 				$.each(this.fieldGroups, function(idx, group) {
 					var defs = $.grep(group.fields, function(obj, idx) {
-						
-						if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isHeader") && obj.isHeader && obj.id != 'exchange') obj.dataDisplay = true;
-						return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay;
+						if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
+							for(var i=0;i<screenerCriteria.customizeDisplay.length;i++) {
+								if(obj.id == screenerCriteria.customizeDisplay[i]) {
+									obj.dataDisplay = true;
+								}
+							}
+							if(obj.hasOwnProperty("dataDisplay") && obj.dataDisplay) {
+								selectedItems.push(obj.id);
+							}
+							return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay;
+						}
+						else {
+							if (!obj.hasOwnProperty("dataDisplay") && obj.hasOwnProperty("isHeader") && obj.isHeader && obj.id != 'exchange') {
+								obj.dataDisplay = true;
+							}
+							if(obj.hasOwnProperty("dataDisplay") && obj.dataDisplay) {
+								selectedItems.push(obj.id);
+							}
+							return obj.hasOwnProperty("dataDisplay") && obj.dataDisplay;
+						}
 					});
 					if (defs.length > 0) arr.push.apply(arr, defs);
 				});
+				screenerCriteria.customizeDisplay = selectedItems;
+				UTIL.saveScreenerCriteria(screenerCriteria);
 				return arr;				
 			}, mdl);
 			
@@ -219,8 +258,45 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			mdl.refinedCompanies = ko.computed(function() {
 				if (this.companies() == null) return [];
 				var companies = this.companies().slice();
-				if (typeof mdl.sectors.val() === "undefined" || mdl.sectors.val() == null) return companies;
-				return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
+				if (typeof mdl.sectors.val() === "undefined" || mdl.sectors.val() == null) {
+					var searchType = UTILS.retrieveSearchType().value;
+					 if((typeof UTILS.retrieveTracking() == "undefined" ||  UTILS.retrieveTracking().value == "false")) {
+						 var sector = new Object();
+						 sector[searchType] = null;
+						 UTILS.saveSector(sector);
+						 return companies;
+					 }
+					 else {
+						 if(typeof UTILS.retrieveSector() != "undefined" && UTILS.retrieveSector().value[searchType] != null ) {
+							 
+							 var sector = UTILS.retrieveSector().value;
+							 var slectedSector = sector[searchType];
+							 mdl.sectors.val(slectedSector); 
+							 return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
+						 }
+						 else {
+							 return companies;
+						 }
+					 }
+				}
+				else {
+					var searchType = UTILS.retrieveSearchType().value;
+					if(typeof UTILS.retrieveTracking() != "undefined" &&  UTILS.retrieveTracking().value == "true") {
+						var sector = UTILS.retrieveSector().value;
+						var slectedSector = sector[searchType];
+						mdl.sectors.val(slectedSector); 
+						return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
+					}
+					else {
+						var sector = new Object();
+						sector[searchType] = mdl.sectors.val();
+						UTILS.saveSector(sector);
+						var tempSelected = UTILS.retrieveSector().value;
+						return $.grep(companies, function(el, idx) { return el.hasOwnProperty("industry") && el.industry == mdl.sectors.val(); });
+					}
+					
+				}
+				
 			}, mdl);
 			
 			mdl.currentCompanies = ko.computed(function() {
@@ -237,9 +313,32 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * 
 			 */
 			mdl.changePage = function(i) { 
+			
         if(mdl.pages() == 0) 
           return; 
-        mdl.page(+mdl.page() + i); 
+          var pageNo = +mdl.page() + i;
+        mdl.page(pageNo);
+        var screenerCriteria = null;
+        var pages = [];
+        if(UTIL.retrieveScreenerCriteria() == null || UTIL.retrieveScreenerCriteria() == "undefined") {
+			
+			screenerCriteria = {
+    				customizeDisplay : selectedItems
+    			}
+			
+		}
+		else {
+			screenerCriteria = UTIL.retrieveScreenerCriteria().value;
+		}
+		if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
+        	
+        }
+        else {
+        	pages.push(pageNo);
+        	screenerCriteria.pagination = pages;
+        	UTIL.saveScreenerCriteria(screenerCriteria);
+        }
+        	
       };
 			
 			mdl.page.subscribe(function(change) {
@@ -285,9 +384,35 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			 * sorting
 			 */
 			mdl.sort = function(field, results) {
+				var curField = null;
+				var screenerCriteria = null;
+				var direction = null;
+				if(UTIL.retrieveScreenerCriteria() == null || UTIL.retrieveScreenerCriteria() == "undefined") {
+					
+					screenerCriteria = {
+		    				sortField : field
+		    			}
+					
+				}
+				else {
+					screenerCriteria = UTIL.retrieveScreenerCriteria().value;
+				}
 				
-				var curField = $("th." + field.id);
-				var direction = $(curField).hasClass("asc") ? "desc" : "asc";
+				if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
+					field = screenerCriteria.sortField;
+					curField = $("th." + screenerCriteria.sortField.id);
+					direction=screenerCriteria.direction;
+				}
+				else {
+					curField = $("th." + field.id);
+					screenerCriteria.sortField = field;
+					direction = $(curField).hasClass("asc") ? "desc" : "asc";
+					screenerCriteria.direction = direction;
+					screenerCriteria.pagination=[1];
+					UTIL.saveScreenerCriteria(screenerCriteria);
+				}
+				
+				
 				var companies = mdl.companies();
 				var prop = field.hasOwnProperty("resultDisplay") ? field.resultDisplay : field.id;
         
@@ -326,7 +451,41 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
             	});
             	mdl.companies(companies);
             	mdl.page(1);
-				
+            	var screenCriteria = null;
+            	
+            	if(UTIL.retrieveScreenerCriteria() == null || UTIL.retrieveScreenerCriteria() == "undefined") {
+					
+					screenerCriteria = {
+							pagination : 1
+		    			}
+					
+				}
+				else {
+					screenerCriteria = UTIL.retrieveScreenerCriteria().value;
+				}
+            	if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
+            		mdl.page(screenerCriteria.pagination[0]);
+            	}
+            	
+            	if(typeof(UTIL.retrieveCriteria()) != "undefined" && typeof(UTIL.retrieveCriteria().value.alphaCriteria) != "undefined" && typeof UTILS.retrieveTracking() != "undefined" &&  UTILS.retrieveTracking().value == "true") {
+            		var criteria = UTIL.retrieveCriteria().value;
+        			var cri = criteria.alphaCriteria;
+        			
+        			var arrvalues = ['valuation','analystExpectations','capitalEfficiency','priceMomentum','earningsQuality','volatility','historicalGrowth','size'];
+        			for(var i=0;i<arrvalues.length;i++) {
+        				if(cri[arrvalues[i]] != undefined && cri[arrvalues[i]] > 0) {
+
+        					$("span[data-id=" + arrvalues[i] + "]").addClass("per-" + (cri[arrvalues[i]]*20)).attr("data-class", "per-" + (cri[arrvalues[i]]*20)).attr("data-value", arrvalues[i]);
+
+    	    			}   
+        			}
+        				
+        			    			
+        			
+        			 
+        		}
+            	
+            	UTILS.saveTracking("false");
 			};
 			
 
