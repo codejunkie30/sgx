@@ -194,7 +194,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		
         		// get the random distributions
         		var buckets = {};
-				if (CRITERIA.isValuationCriteria(this.field)){ 
+				if (this.field == 'avgBrokerReq'){ 
 					$.each(field.values, function(vIdx, val) { 
 					    var val = Math.round(val * 10) / 10; 
 					    CRITERIA.randomizeBucket(buckets, val, type, bCount);
