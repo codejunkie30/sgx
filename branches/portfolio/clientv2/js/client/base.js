@@ -955,7 +955,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			var newWLNameLC = PAGE.newWLName();
 			
 			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); PAGE.hideLoading(); return; }
-			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); PAGE.hideLoading(); return; }
+			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Stocklist name already exists."); PAGE.hideLoading(); return; }
 			
 			if (wlLength >= 10) { alert("You can create up to 10 StockLists."); PAGE.hideLoading(); return; }
 			

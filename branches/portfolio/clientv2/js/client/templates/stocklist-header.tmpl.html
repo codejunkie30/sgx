@@ -1,7 +1,7 @@
 <header class="header">	
 	<div data-bind="template: 'login-bar'"></div>
 	
-	<section data-bind="if:premiumUser() == true">
+	<section data-bind="if:premiumUser() == true && PAGE.userStatus() != 'EXPIRED' && PAGE.userStatus() != 'UNAUTHORIZED'">
 		<h1>StockList</h1>
 		
 		<div>
