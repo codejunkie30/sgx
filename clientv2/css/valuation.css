@@ -107,16 +107,17 @@
 	text-align: left;
 	cursor: pointer;
 	vertical-align: top;
+	line-height: 25px;
 }
 
 .valuation-results table thead tr th.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 117px top
-		12px;
+	background: url("../img/sort_ascending.png") no-repeat left 125px top
+		16px;
 }
 
 .valuation-results table thead tr th.desc {
-	background: url("../img/sort_descending.png") no-repeat left 117px top
-		8px;
+	background: url("../img/sort_descending.png") no-repeat left 125px top
+		12px;
 }
 
 .valuation-results table .companyName {

@@ -686,6 +686,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						me.getTransactionsData(me);
 					}, 
 					PAGE.customSGXError);
+					me.clearFieldData();
 	    },
 	    
 	    mapTransDataToSend: function(){
@@ -705,6 +706,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    clearFieldData: function(){
 	    	var me = this;
+	    	me.selectedCompanyValue(null);
 	    	me.initialTradeDate(null);
 	    	me.initialNumberOfShares(null);
 	    	me.initialCostAtPurchase(null);
