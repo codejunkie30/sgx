@@ -89,3 +89,7 @@ div.news {
 .matches table td {
 	padding: 10px 0px;
 }
+
+.key-dev-match .allKeyDevDivId{
+	max-height: 450px;overflow-x: hidden;
+}
