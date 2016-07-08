@@ -93,3 +93,8 @@ div.news {
 .key-dev-match .allKeyDevDivId{
 	max-height: 450px;overflow-x: hidden;
 }
+
+.control-box table tr td input[type=checkbox] {
+	width: 15px;
+	height: 15px;
+}
