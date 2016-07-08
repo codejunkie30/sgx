@@ -99,7 +99,55 @@ define(["jquery", "moment"], function($, moment) {
             }
         },
 		
-		 deleteCurrency: function() {
+        saveScreenerCriteria: function(screenerCriteria) {
+            store.set('screenerCriteria', {value: screenerCriteria});
+        },
+
+
+        retrieveScreenerCriteria: function() {
+			var screenerCriteria = store.get('screenerCriteria');
+			return screenerCriteria;
+        },
+        
+        saveCriteria: function(criteria) {
+            store.set('criteria', {value: criteria});
+        },
+
+
+        retrieveCriteria: function() {
+			var criteria = store.get('criteria');
+			return criteria;
+        },
+        
+        saveTracking: function(tracking) {
+        	store.set('tracking', {value: tracking});
+        },
+        
+        retrieveTracking: function() {
+        	var tracking = store.get('tracking');
+        	return tracking;
+        },
+        
+        saveSearchType: function(searchType) {
+        	store.set('searchType', {value: searchType});
+        },
+        
+        retrieveSearchType: function() {
+        	var searchType = store.get('searchType');
+        	return searchType;
+        },
+        
+        
+        saveSector: function(sector) {
+        	store.set('sector', {value: sector});
+        },
+        
+        retrieveSector: function() {
+        	var sector = store.get('sector');
+        	return sector;
+        },
+        
+        deleteCurrency: function() {
             store.remove('currency')  
         },
 		
