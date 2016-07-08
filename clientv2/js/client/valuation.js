@@ -142,7 +142,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		                data: priceData,
 		                chartData: me.chartData,
 		                threshold : null,
-						turboThreshold : 0
+						turboThreshold : 0,
+						marker : {
+		                    enabled : true		                    
+		                }
 	            };
 				
 			});	
@@ -168,11 +171,27 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		performanceChartRenderer:function(me){
+			var perfChart;
 			var baseChart = PER_CHART_CONFIG;
 			
 			baseChart.series = me.seriesOptions;
 			// set the zoom
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
+			
+			//tooltip custom positioning
+			baseChart.tooltip.positioner= function (labelWidth, labelHeight, point) {
+                var tooltipX, tooltipY;
+                if (point.plotX + labelWidth > perfChart.plotWidth) {
+                    tooltipX = point.plotX + perfChart.plotLeft - labelWidth - 20;
+                } else {
+                    tooltipX = point.plotX + perfChart.plotLeft + 20;
+                }
+                tooltipY = point.plotY + perfChart.plotTop - 20;
+                return {
+                    x: tooltipX,
+                    y: tooltipY
+                };
+            }
 			
 			baseChart.tooltip.formatter = function() {
 				if (!this.hasOwnProperty("point")) return;
@@ -233,7 +252,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	return ret;
 			};
 			
-			$('#performance-chart-content').highcharts('StockChart', baseChart);
+			perfChart = $('#performance-chart-content').highcharts('StockChart', baseChart).highcharts();
 		},
 		
 		cloneDataAndFormat: function(obj, me) {

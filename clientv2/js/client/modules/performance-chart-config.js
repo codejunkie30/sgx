@@ -5,8 +5,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 
 		chart : {
 			backgroundColor : 'rgba(255, 255, 255, 0.1)',
-			height : 300,
-		    width: 700
+			height : 445,
+			width : 700
 		},
 
 		plotOptions : {
@@ -71,17 +71,21 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			shared : false
 		},
 
+		legend: {
+			enabled : true           
+        },
+
 		xAxis : {
 
 			labels : {
 				formatter : function() {
-					return Highcharts.dateFormat("%e. %b", this.value);
+					return Highcharts.dateFormat("%e/%b/%Y", this.value);
 				},
-				style : {
-					color : "#000000",
-					fontSize: "12px",
-					fontWeight : "bold"
-				}
+				style: {
+                	color: "#000000",
+                	fontWeight: "bold"
+                },
+				x: 0
 			}
 
 		},
