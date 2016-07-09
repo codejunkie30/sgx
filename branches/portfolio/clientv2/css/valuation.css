@@ -110,45 +110,26 @@
 	line-height: 25px;
 }
 
-.valuation-results table thead tr th.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 125px top
-		16px;
-}
+.valuation-results table thead tr th.asc {background: url("../img/sort_ascending.png") no-repeat left 125px top 16px;}
 
-.valuation-results table thead tr th.desc {
-	background: url("../img/sort_descending.png") no-repeat left 125px top
-		12px;
-}
+.valuation-results table thead tr th.desc {background: url("../img/sort_descending.png") no-repeat left 125px top 12px;}
 
-.valuation-results table thead tr th div.tradeDate.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 40px top 21px;
-}
+.valuation-results table thead tr th.dateasc {background: url("../img/sort_ascending.png") no-repeat left 88px top 12px;}
 
-.valuation-results table thead tr th div.numShares.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 51px top 37px;
-}
+.valuation-results table thead tr th.datedesc {background: url("../img/sort_descending.png") no-repeat left 88px top 8px;}
 
-.valuation-results table thead tr th div.lastClosePr.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 42px top 21px;
-}
-.valuation-results table thead tr th div.currentVal.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 42px top 21px;
-}
+.valuation-results table thead tr th.shareasc {background: url("../img/sort_ascending.png") no-repeat left 69px top 12px;}
 
-.valuation-results table thead tr th div.tradeDate.desc {
-	background: url("../img/sort_descending.png") no-repeat left 40px top 17px;
-}
+.valuation-results table thead tr th.sharedesc {background: url("../img/sort_descending.png") no-repeat left 69px top 8px;}
 
-.valuation-results table thead tr th div.numShares.desc {
-	background: url("../img/sort_descending.png") no-repeat left 51px top 33px;
-}
+.valuation-results table thead tr th.closepasc {background: url("../img/sort_ascending.png") no-repeat left 88px top 12px;}
 
-.valuation-results table thead tr th div.lastClosePr.desc {
-	background: url("../img/sort_descending.png") no-repeat left 42px top 17px;
-}
-.valuation-results table thead tr th div.currentVal.desc {
-	background: url("../img/sort_descending.png") no-repeat left 38px top 17px;
-}
+.valuation-results table thead tr th.closepdesc {background: url("../img/sort_descending.png") no-repeat left 88px top 8px;}
+
+.valuation-results table thead tr th.currrentpasc {background: url("../img/sort_ascending.png") no-repeat left 66px top 12px;}
+
+.valuation-results table thead tr th.currrentpdesc {background: url("../img/sort_descending.png") no-repeat left 66px top 8px;}
+
 
 .valuation-results table .companyName {
 	text-align: left;

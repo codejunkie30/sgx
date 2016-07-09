@@ -1058,7 +1058,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    sortColumn: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
 	    		me.transItems.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName().toLowerCase();
@@ -1066,7 +1066,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
 	    		me.transItems.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName().toLowerCase();
@@ -1079,7 +1079,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    sortColumnAsc: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
 	    		me.displayTransactions.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName.toLowerCase();
@@ -1087,7 +1087,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
 	    		me.displayTransactions.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName.toLowerCase();
@@ -1100,7 +1100,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    sortColumnByAsc: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
 	    		me.displayTransCompanies.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName.toLowerCase();
@@ -1108,7 +1108,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
 	    		me.displayTransCompanies.sort(sortByName);
 	    	    function sortByName(a, b){
 	  			  var a = a.companyName.toLowerCase();
@@ -1120,9 +1120,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    perSortbyTradeDate: function(data, event){
 	    	var me = this;
-	    	me.perTradeDate = ko.observable(tradeDate);
-	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    	if($('#'+event.target.id).hasClass('dateasc')){
+	    		$('#'+event.target.id).removeClass('dateasc').addClass('datedesc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
 	  			  var a = a.tradeDate;
@@ -1130,7 +1129,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('datedesc').addClass('dateasc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
 	  			  var a = a.tradeDate;
@@ -1142,9 +1141,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    perSortbyNumShares: function(data, event){
 	    	var me = this;
-	    	me.perNumOfShares = ko.observable(perNumOfShares);
-	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    	if($('#'+event.target.id).hasClass('shareasc')){
+	    		$('#'+event.target.id).removeClass('shareasc').addClass('sharedesc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
 	  			  var a = a.numberOfShares;
@@ -1152,7 +1150,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('sharedesc').addClass('shareasc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
 	  			  var a = a.numberOfShares;
@@ -1164,9 +1162,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    perSortLastClsPrice: function(data, event){
 	    	var me = this;
-	    	me.perLastClosePrice = ko.observable(perLastClosePrice);
-	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    	if($('#'+event.target.id).hasClass('closepasc')){
+	    		$('#'+event.target.id).removeClass('closepasc').addClass('closepdesc')
 	    		me.displayTransactions.sort(sortByClsPrice);
 	    	    function sortByClsPrice(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
@@ -1176,7 +1173,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('closepdesc').addClass('closepasc')
 	    		me.displayTransactions.sort(sortByClsPrice);
 	    	    function sortByClsPrice(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
@@ -1190,9 +1187,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    perSortCurrentValue: function(data, event){
 	    	var me = this;
-	    	me.perCurPrice = ko.observable(perCurPrice);
-	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc')
+	    	if($('#'+event.target.id).hasClass('currrentpasc')){
+	    		$('#'+event.target.id).removeClass('currrentpasc').addClass('currrentpdesc')
 	    		me.displayTransactions.sort(sortByCurrentVal);
 	    	    function sortByCurrentVal(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
@@ -1202,7 +1198,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc')
+	    		$('#'+event.target.id).removeClass('currrentpdesc').addClass('currrentpasc')
 	    		me.displayTransactions.sort(sortByCurrentVal);
 	    	    function sortByCurrentVal(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
@@ -1213,6 +1209,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    }
 	    	}
 	    },
+	    
 	    buySellValidate: function(data, event){
 	    	var me = this;
 	    	var bought = 0.00;
