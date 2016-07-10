@@ -295,7 +295,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		chartData: [],
 		
 		totalCurrentValue: 0.00,
-		
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
 		
@@ -352,6 +351,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			//get the transaction data
 			me.getTransactionsData(me);
+			
 		},
 		
 		toHighCharts : function(data) {
@@ -640,8 +640,27 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
-					VALUATION.selectedValue(UTIL.getParameterByName("code"));
 					PAGE.hideLoading();
+					
+					me.selectedValue(UTIL.getParameterByName("code"));
+					me.watchlistId = UTIL.getParameterByName("code");
+					
+					var watchlists = me.finalWL();
+					for(var i = 0, len = watchlists.length; i < len; i++) {
+						var wl = watchlists[i];
+						if( wl.id == me.watchlistId) {
+							me.clearWatchListErrors();
+							me.editWLName(wl.name);	
+							me.populateWatchlistCompanies(wl, me);
+							break;
+						}
+					}
+					
+					//get the performance chart data
+					me.getChartData(me);
+					
+					PAGE.resizeIframeSimple();
+					
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
@@ -650,34 +669,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				},PAGE.customSGXError
 			);
 			
-			me.selectedValue.subscribe(function(data){
-				me.watchlistId = data;
-				
-				$('.pagination-container').remove();
-				
-				var chart = $('#performance-chart-content').highcharts();
-				if(!UTIL.isEmpty(chart)){
-					me.seriesOptions = [];
-					me.performanceChartRenderer(me);
-				}
-				
-				//get the performance chart data
-				me.getChartData(me);
-				
-				var watchlists = me.finalWL();
-				for(var i = 0, len = watchlists.length; i < len; i++) {
-					var wl = watchlists[i];
-					if( wl.id == data) {
-						me.clearWatchListErrors();
-						me.editWLName(wl.name);	
-						me.populateWatchlistCompanies(wl, me);
-						break;
-					}
-				}				
-				
-				PAGE.resizeIframeSimple();
-			}, me);
-
 			ko.validation.init({insertMessages: false});
 			VALUATION.newWLName.extend({
 					minLength: { params: 2, message: displayMessage.watchlist.error },
@@ -691,6 +682,39 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			return me;
+		},
+		
+		watchListChange: function(data, event){
+			var me = this;
+			me.transItems.removeAll();
+			me.displayTransactions.removeAll();
+			me.displayTransCompanies.removeAll();
+			me.watchlistCompanies.removeAll();
+			
+			me.watchlistId = data.selectedValue();
+			
+			$('.pagination-container').remove();
+			
+			var chart = $('#performance-chart-content').highcharts();
+			if(!UTIL.isEmpty(chart)){
+				me.seriesOptions = [];
+				me.performanceChartRenderer(me);
+			}
+			
+			var watchlists = me.finalWL();
+			for(var i = 0, len = watchlists.length; i < len; i++) {
+				var wl = watchlists[i];
+				if( wl.id == me.watchlistId) {
+					me.clearWatchListErrors();
+					me.editWLName(wl.name);	
+					me.populateWatchlistCompanies(wl, me);
+					break;
+				}
+			}
+			
+			//get the performance chart data
+			me.getChartData(me);
+			
 		},
 				
 		addWatchlist: function(){
@@ -734,8 +758,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
 							VALUATION.selectedValue(data.id);
+							
+							me.watchlistId = data.id;
+							
+							$('.pagination-container').remove();
+							
+							var chart = $('#performance-chart-content').highcharts();
+							if(!UTIL.isEmpty(chart)){
+								me.seriesOptions = [];
+								me.performanceChartRenderer(me);
+							}
+							
+							//get the performance chart data
+							me.getChartData(me);
 						}						
 					});
+					
 				}, 
 				PAGE.customSGXError);	
 			
@@ -828,11 +866,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		populateWatchlistCompanies:function(watchlistObject, me){
 		    // JSON Call for populating the companies for the selected watchlist.
-			me.watchlistCompanies.removeAll();
-			/*if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
-			    $('#watchlistCompaniesSelect').empty()
+			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+			    $('#watchlistCompaniesSelect').val(null);
 				return;
-			}*/
+			}
 			PAGE.showLoading();
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
 		    var params = { "companies": watchlistObject.companies };

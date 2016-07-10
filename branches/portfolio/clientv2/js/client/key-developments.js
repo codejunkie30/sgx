@@ -81,7 +81,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 					}
+					
 					me.selectedValue(UTIL.getParameterByName("code"));
+					
+					var watchlists = me.finalWL();
+					for(var i = 0, len = watchlists.length; i < len; i++) {
+						var wl = watchlists[i]
+						if( wl.id == UTIL.getParameterByName("code")) {
+							me.allCompanies = wl.companies;
+							me.clearWatchListErrors();
+							me.editWLName(wl.name);
+							me.populateWatchlistCompanies(wl, me);
+							break;
+						}
+					}
+					
+					me.getKeyDevData(me, me.allCompanies);
+					
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
@@ -91,19 +107,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			);
 			
 			me.selectedValue.subscribe(function(data){
-				var watchlists = this.finalWL();
-				for(var i = 0, len = watchlists.length; i < len; i++) {
-					var wl = watchlists[i]
-					if( wl.id == data) {
-						me.allCompanies = wl.companies;
-						me.clearWatchListErrors();
-						me.editWLName(wl.name);
-						me.populateWatchlistCompanies(wl, me);
-						break;
-					}
-				}
 				
-				me.getKeyDevData(me, me.allCompanies);
 				
 			}, me);
 			
@@ -120,6 +124,25 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			return me;
+		},
+		
+		watchListChange: function(data, event){
+			var me = this;
+			me.watchlistCompanies.removeAll();
+			
+			var watchlists = this.finalWL();
+			for(var i = 0, len = watchlists.length; i < len; i++) {
+				var wl = watchlists[i]
+				if( wl.id == data.selectedValue()) {
+					me.allCompanies = wl.companies;
+					me.clearWatchListErrors();
+					me.editWLName(wl.name);
+					me.populateWatchlistCompanies(wl, me);
+					break;
+				}
+			}
+			
+			me.getKeyDevData(me, me.allCompanies);
 		},
 		
 		searchKeyDev: function(){
@@ -281,6 +304,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
 							me.selectedValue(data.id);
+							
+							me.watchlistCompanies.removeAll();
+							me.kdAnounceCompTransactions.removeAll();
+							me.kdCompanyForecasts.removeAll();
+							me.kdCorporateStructureRelated.removeAll();
+							me.kdCustProdRelated.removeAll();
+							me.kdDividensSplits.removeAll();
+							me.kdListTradeRelated.removeAll();
+							me.kdPotentialRedFlags.removeAll();
+							me.kdPotentialTransactions.removeAll();
+							me.kdResultsCorpAnnouncements.removeAll();
+							
+							$('#keyDevelopemntContentDiv').hide();
+							$('#keyDevNoCompaniesTextDiv').show();
+							$('#allKeyDevDivId').hide();
 						}						
 					});
 				}, 
@@ -375,12 +413,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		populateWatchlistCompanies:function(watchlistObject, me){
-			me.watchlistCompanies.removeAll();
 		    // JSON Call for populating the companies for the selected watchlist.
-			/*if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
-				    $('#watchlistCompaniesSelect').empty()
+			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
+				    $('#watchlistCompaniesSelect').val(null);
 				return;
-			}*/
+			}
 
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
 		    var params = { "companies": watchlistObject.companies };
