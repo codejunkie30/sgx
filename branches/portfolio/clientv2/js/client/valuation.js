@@ -653,6 +653,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.selectedValue.subscribe(function(data){
 				me.watchlistId = data;
 				
+				$('.pagination-container').remove();
+				
 				var chart = $('#performance-chart-content').highcharts();
 				if(!UTIL.isEmpty(chart)){
 					me.seriesOptions = [];
