@@ -1153,10 +1153,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
 	    	
-	    	$('#transItemsId').paginathing({
-			    perPage: 10,
-			    insertAfter: '#transItemsId'
-			});
+	    	if(me.transItems().length > 25){
+	    		$('#transItemsId').paginathing({
+				    perPage: 25,
+				    insertAfter: '#transItemsId'
+				});
+	    	}
+	    	
 	    },
 	    
 	    refractTransData: function(data){
