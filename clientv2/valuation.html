@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="css/style.css?v=1.4" />
     <link rel="stylesheet" href="css/alerts.css?v=1.0" />
     <link rel="stylesheet" href="css/valuation.css?v=1.0" />
-
 </head>
 
 <body style="width: auto;" id="stockListValuation" class="alerts-wrapper">
@@ -166,7 +165,7 @@
 							<td><a class="add-button" data-bind="click: addTrans">Add</a></td>
 						</tr>
 					</tbody>
-					<tbody data-bind="foreach: transItems">
+					<tbody data-bind="foreach: transItems" id="transItemsId">
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>

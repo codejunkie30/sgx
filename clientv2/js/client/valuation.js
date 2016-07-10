@@ -682,6 +682,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    saveTrans: function(){
+	    	$('.pagination-container').remove();
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
@@ -911,6 +912,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				  var b = b.companyName().toLowerCase(); 
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
+	    	
+	    	$('#transItemsId').paginathing({
+			    perPage: 25,
+			    insertAfter: '#transItemsId'
+			});
 	    },
 	    
 	    refractTransData: function(data){
@@ -925,6 +931,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
+	    	$('.pagination-container').remove();
 	    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
@@ -959,7 +966,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removePerformanceItem: function(item) {
 	    	var me = this;
-			
+	    	$('.pagination-container').remove();
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
@@ -993,6 +1000,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeIntPerItem: function(item){
 	    	var me = this;
+	    	$('.pagination-container').remove();
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
 			 $('.confirm-delete').click(function(e) {				
 		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
