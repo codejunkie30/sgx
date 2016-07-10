@@ -50,6 +50,8 @@ namespace XFDataDump
 
         internal static string TEMP_DIR = getPath("tmpDir");
 
+        internal static string PREPROCESS_DIR = getPath("sqlPreprocess");
+
         internal static bool m_RemoveDuplicateTicker = getRemoveDuplicateProperty();
 
         internal static void ToDisk(DataTable dt, string fileName)
@@ -107,7 +109,9 @@ namespace XFDataDump
 
                 // match S&P companies to lists provided
                 LOG.Info("Updating Ticker Table");
-                using (SqlCommand command = new SqlCommand(Properties.Resources.updateTmpTickerTable, conn))
+                string filePath = Path.Combine(PREPROCESS_DIR, "updateTmpTickerTable.sql");
+                string sql = File.ReadAllText(filePath);
+                using (SqlCommand command = new SqlCommand(sql, conn))
                 { 
                     command.ExecuteNonQuery();
                 }
