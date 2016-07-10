@@ -114,6 +114,54 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					ALERTS.finalWL(data.watchlists.sort(sortByName));
 					ALERTS.selectedValue(UTIL.getParameterByName("code"));
 					callback();
+					
+					var watchlists = ALERTS.finalWL();
+
+					for(var i = 0, len = watchlists.length; i < len; i++) {
+						var wl = watchlists[i]
+						if( wl.id == UTIL.getParameterByName("code")) {
+							ALERTS.companies(wl.companies);
+							ALERTS.displayList(wl);
+							ALERTS.clearWatchListErrors();
+							ALERTS.editWLName(wl.name);			
+							break;
+						}
+					}				
+					
+					$.each($('.alerts input[type=text]'),function(){
+						if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+					});
+					
+					$('.alerts input[type=text]').change(function(){
+						if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+					});
+					
+					ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+					
+					ALERTS.PCPriceCheck.subscribe(function (i,v) {
+						if (ALERTS.PCPriceCheck() == false){
+							$('.pcPriceDropBelow').val(null).removeClass('percent');
+							$('.pcPriceRiseAbove').val(null).removeClass('percent');
+						};
+				    }, this);
+					
+					ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+					
+					ALERTS.PCTradeVol.subscribe(function (i,v) {
+						if (ALERTS.PCTradeVol() == false){
+							$('.pcTradingVolumeValue').val(null).removeClass('percent');
+						};
+				    }, this);
+					
+					ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+					
+					ALERTS.ESTChangePrice.subscribe(function (i,v) {
+						if (ALERTS.ESTChangePrice() == false){
+							$('.estChangePriceDropBelow').val(null).removeClass('percent');
+							$('.estChangePriceDropAbove').val(null).removeClass('percent');
+						};
+				    }, this);
+					
 					var arr = data.removed;					
 					var removedTicker = arr.join(', ');
 					if (arr.length > 0) {
@@ -127,64 +175,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.weeks(JSON.parse(AL).alerts[0].weeks);
 			this.consensusRec(JSON.parse(AL).alerts[0].consensusRec);
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
-			
-
-			this.selectedValue.subscribe(function(data){
-
-				var watchlists = this.finalWL();
-
-				for(var i = 0, len = watchlists.length; i < len; i++) {
-					var wl = watchlists[i]
-					if( wl.id == data) {
-						ALERTS.companies(wl.companies);
-						ALERTS.displayList(wl);
-						ALERTS.clearWatchListErrors();
-						ALERTS.editWLName(wl.name);			
-						break;
-					}
-				}				
-				
-				$.each($('.alerts input[type=text]'),function(){
-					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
-				});
-				
-				$('.alerts input[type=text]').change(function(){
-					if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
-				});
-				
-				ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
-				
-				ALERTS.PCPriceCheck.subscribe(function (i,v) {
-					if (ALERTS.PCPriceCheck() == false){
-						$('.pcPriceDropBelow').val(null).removeClass('percent');
-						$('.pcPriceRiseAbove').val(null).removeClass('percent');
-					};
-			    }, this);
-				
-				ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
-				
-				ALERTS.PCTradeVol.subscribe(function (i,v) {
-					if (ALERTS.PCTradeVol() == false){
-						$('.pcTradingVolumeValue').val(null).removeClass('percent');
-					};
-			    }, this);
-				
-				ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
-				
-				ALERTS.ESTChangePrice.subscribe(function (i,v) {
-					if (ALERTS.ESTChangePrice() == false){
-						$('.estChangePriceDropBelow').val(null).removeClass('percent');
-						$('.estChangePriceDropAbove').val(null).removeClass('percent');
-					};
-			    }, this);
-				
-				
-				PAGE.resizeIframeSimple();
-
-			}, this);
-
-			
-
 
 			me.searchInput.subscribe(function(data){
 				//ratelimiting the search 200ms
@@ -250,6 +240,59 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 		},
 		
+		watchListChange: function(data, event){
+
+			var watchlists = this.finalWL();
+
+			for(var i = 0, len = watchlists.length; i < len; i++) {
+				var wl = watchlists[i]
+				if( wl.id == data.selectedValue()) {
+					ALERTS.companies(wl.companies);
+					ALERTS.displayList(wl);
+					ALERTS.clearWatchListErrors();
+					ALERTS.editWLName(wl.name);			
+					break;
+				}
+			}				
+			
+			$.each($('.alerts input[type=text]'),function(){
+				if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+			});
+			
+			$('.alerts input[type=text]').change(function(){
+				if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+			});
+			
+			ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+			
+			ALERTS.PCPriceCheck.subscribe(function (i,v) {
+				if (ALERTS.PCPriceCheck() == false){
+					$('.pcPriceDropBelow').val(null).removeClass('percent');
+					$('.pcPriceRiseAbove').val(null).removeClass('percent');
+				};
+		    }, this);
+			
+			ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+			
+			ALERTS.PCTradeVol.subscribe(function (i,v) {
+				if (ALERTS.PCTradeVol() == false){
+					$('.pcTradingVolumeValue').val(null).removeClass('percent');
+				};
+		    }, this);
+			
+			ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+			
+			ALERTS.ESTChangePrice.subscribe(function (i,v) {
+				if (ALERTS.ESTChangePrice() == false){
+					$('.estChangePriceDropBelow').val(null).removeClass('percent');
+					$('.estChangePriceDropAbove').val(null).removeClass('percent');
+				};
+		    }, this);
+			
+			
+			PAGE.resizeIframeSimple();
+		},
+		
 		init_nonPremium: function() {
             $('#alerts-content-alternative').show();
         },
@@ -293,7 +336,55 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							//ALERTS.saveWatchlist();
 							ALERTS.selectedValue(data.id);
 							
-							//setTimeout(function(){ ALERTS.displayWatchlists();}, 500);
+							var watchlists = ALERTS.finalWL();
+							
+							for(var i = 0, len = watchlists.length; i < len; i++) {
+								var wl = watchlists[i]
+								if( wl.id == data.id) {
+									ALERTS.companies(wl.companies);
+									ALERTS.displayList(wl);
+									ALERTS.clearWatchListErrors();
+									ALERTS.editWLName(wl.name);			
+									break;
+								}
+							}				
+							
+							$.each($('.alerts input[type=text]'),function(){
+								if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+							});
+							
+							$('.alerts input[type=text]').change(function(){
+								if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
+							});
+							
+							ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+							
+							ALERTS.PCPriceCheck.subscribe(function (i,v) {
+								if (ALERTS.PCPriceCheck() == false){
+									$('.pcPriceDropBelow').val(null).removeClass('percent');
+									$('.pcPriceRiseAbove').val(null).removeClass('percent');
+								};
+						    }, this);
+							
+							ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+							
+							ALERTS.PCTradeVol.subscribe(function (i,v) {
+								if (ALERTS.PCTradeVol() == false){
+									$('.pcTradingVolumeValue').val(null).removeClass('percent');
+								};
+						    }, this);
+							
+							ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+							
+							ALERTS.ESTChangePrice.subscribe(function (i,v) {
+								if (ALERTS.ESTChangePrice() == false){
+									$('.estChangePriceDropBelow').val(null).removeClass('percent');
+									$('.estChangePriceDropAbove').val(null).removeClass('percent');
+								};
+						    }, this);
+							
+							
+							PAGE.resizeIframeSimple();
 						}						
 					});
 				}, 

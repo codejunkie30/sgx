@@ -12,7 +12,7 @@
 			<div>
 				<div>
 					<!-- ko {if: finalWL().length} -->
-						<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
+						<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: $root.watchListChange.bind($root) }"></select>
 						<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
 						&nbsp;
 					<!-- /ko -->
