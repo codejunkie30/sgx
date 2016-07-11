@@ -791,8 +791,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			
-			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( editedName.toLowerCase(), VALUATION.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return;  }
+			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
+			if ($.inArray( editedName.toLowerCase(), VALUATION.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return;  }
 			
 			VALUATION.addWatchlistName([]);
 			$.each(VALUATION.finalWL(), function(i, data){
