@@ -914,7 +914,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.clearFieldData();
 			}
 			if(me.transItems().length){
-				me.buySellValidate() ? me.saveTrans() : me.transItems.remove(!UTIL.isEmpty(transItemModel)) ;
+				me.buySellValidate() ? me.saveTrans() : me.transItems.remove(transItemModel) ;
 			}
 	    },
 	    
@@ -1508,7 +1508,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	   	    			 }
 	   	    		 }
    	    	 	});
-    			if( (parseFloat(sell) > parseFloat(bought)) && bought!=0 && sell!=0 ){
+    			if( parseFloat(sell) > parseFloat(bought) ){
     				PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
     				flag = false;
     				return false;
