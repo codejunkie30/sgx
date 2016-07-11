@@ -35,10 +35,11 @@
 			</div>
 			<div class="content">
 			<div class="control-box">
+			<div class="keydevHeader">
+				<select id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'All Companies in StockList', value: keydevCompSelectedVal, optionsValue: 'ticker', optionsText: 'companyName'"></select>
+			</div>
+			<hr/>
 				<table>
-					<tr>
-						<td><select id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'All Companies in StockList', value: keydevCompSelectedVal, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
-					</tr>
 					<tr>
 						<td><label><input type="checkbox" id="kdAnounceCompTransactionsCheckbox">Announced/Completed Transactions</label></td>
 					</tr>

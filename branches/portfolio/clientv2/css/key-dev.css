@@ -98,3 +98,16 @@ div.news {
 	width: 15px;
 	height: 15px;
 }
+
+.keydevHeader {
+	padding-left:16px;
+	margin-top: 10px;
+}
+
+hr{
+	width:234px;
+	margin-left:16px;
+	color: #ccc;
+	margin-top: 2px;
+	
+}
