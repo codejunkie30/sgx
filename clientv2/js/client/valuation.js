@@ -297,6 +297,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		totalCurrentValue: 0.00,
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
+    	
+    	buySellValidateFlag: true,
 		
 		initPage: function() {
 			var me = this;
@@ -912,15 +914,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(me.initialTradeDate()));
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
-			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode)){
-				me.convertTickerAndClosePrice(tickerCode, me);
-				var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
-				me.transItems.push(transItemModel);
-				me.clearFieldData();
+			if(me.buySellValidateFlag){
+				if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode)){
+					me.convertTickerAndClosePrice(tickerCode, me);
+					var transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
+					me.transItems.push(transItemModel);
+					me.clearFieldData();
+				}
+				if(me.transItems().length){
+					me.saveTrans(transItemModel);
+				}
+			}else{
+				 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
+	    		 return;
 			}
-			if(me.transItems().length){
-				me.saveTrans(transItemModel);
-			}
+			
 	    },
 	    
 	    saveTrans: function(){
@@ -1511,8 +1519,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		 }
 	    	 });
 	    	 if(parseFloat(sell) > parseFloat(bought)){
+	    		 me.buySellValidateFlag = false;
 	    		 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
 	    		 return;
+	    	 }else{
+	    		 me.buySellValidateFlag = true;
 	    	 }
 	    },
 	    
@@ -1544,8 +1555,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		 	}
 	    	
 	    	if(parseFloat(sell) > parseFloat(bought)){
+	    		me.buySellValidateFlag = false;
 	    		 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
 	    		 return;
+	    	 }else{
+	    		 me.buySellValidateFlag = true;
 	    	 }
 	    }
 	
