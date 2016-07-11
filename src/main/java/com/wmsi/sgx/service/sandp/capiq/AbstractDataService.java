@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.wmsi.sgx.model.ErrorBean;
 import com.wmsi.sgx.model.FXRecord;
 import com.wmsi.sgx.model.annotation.FXAnnotation;
 import com.wmsi.sgx.model.annotation.MillionFormatterAnnotation;
@@ -48,6 +49,7 @@ public abstract class AbstractDataService implements DataService{
 	protected static String DT_FMT_STR = "MM/dd/yyyy";
 	
 	private static FastDateFormat DT_FMT = FastDateFormat.getInstance(DT_FMT_STR);
+	
 
 	@Override
 	public abstract <T> T load(String id, String... parms) throws ResponseParserException, CapIQRequestException;

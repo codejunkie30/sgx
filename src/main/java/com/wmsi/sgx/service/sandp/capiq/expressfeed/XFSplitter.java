@@ -10,7 +10,11 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.wmsi.sgx.exception.ErrorBeanHelper;
+import com.wmsi.sgx.model.ErrorBean;
 
 public class XFSplitter {
 
@@ -21,6 +25,9 @@ public class XFSplitter {
 	
 	@Value("${loader.raw.dir}")
 	private String rawDir = "/mnt/data/raw/";
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
 	
 	public Boolean init() {
 		
@@ -57,9 +64,10 @@ public class XFSplitter {
 			
 		}
 		catch(Exception e) {
+			errorBeanHelper
+					.addError(new ErrorBean("XFSplitter:init", "Splitting XF Files", ErrorBean.ERROR, e.getMessage()));
 			log.error("Splitting XF Files", e);
-		}
-		
+		}	
 		
 		return false;
 	}

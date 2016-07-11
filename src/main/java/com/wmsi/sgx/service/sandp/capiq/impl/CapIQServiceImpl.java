@@ -53,11 +53,11 @@ public class CapIQServiceImpl implements CapIQService{
 	@Autowired
 	private DataService keyDevsService;
 	
-/*	@Override
+	@Override
 	public KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{		
 		return keyDevsService.load(input.getTicker() + ":" + input.getExchangeSymbol(), input.getDate());
 	}
-*/	
+	
 	@Autowired
 	private DataService holdersService;
 	

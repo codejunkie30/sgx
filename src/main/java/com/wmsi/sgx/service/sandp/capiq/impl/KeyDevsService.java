@@ -85,6 +85,7 @@ public class KeyDevsService extends AbstractDataService {
 			json = m.writeValueAsString(requestWrapper);
 		}
 		catch(IOException e){
+			log.error("Couldn't load key developments", e);
 			throw new CapIQRequestException("Couldn't load key developments", e);
 		}
 
