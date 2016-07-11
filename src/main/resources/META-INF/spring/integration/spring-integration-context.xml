@@ -12,9 +12,12 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
-<!-- 			<int:service-activator ref="xfRetrievalService" method="init"/>
-			<int:service-activator ref="xfSplitterService" method="init"/>
- -->			<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
+ 				<int:service-activator ref="xfRetrievalService" method="init"/>
+				<int:service-activator ref="xfSplitterService" method="init"/>
+ 				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
+ 				<int:service-activator ref="keyDevsService" method="init"/>
+ 				<int:service-activator ref="gtiService" method="init"/>
+ 				<int:service-activator ref="vwapService" method="init"/>
 	</int:chain>
 	<!-- TODO Do we need router? -->
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
@@ -24,11 +27,11 @@
 			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
 		</int:header-enricher>	
 		<int:service-activator ref="indexerService" method="createIndex"/>
-<!-- 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
- -->		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
+	 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
+   			<int:service-activator ref="indexBuilderService" method="createFXIndex" />
 		<int:service-activator ref="indexerService" method="flush" />
-		<int:service-activator ref="gtiService" method="init"/>
-		<int:service-activator ref="vwapService" method="init"/>
+		
+		
 	<!-- 	<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" /> -->
 	</int:chain>
 	
@@ -210,6 +213,8 @@
 	</bean>
 	 	
 	<bean id="xfRetrievalService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFRetrievalService" />
+	
+	<bean id="keyDevsService" class="com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService" />
 	
 	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
 	

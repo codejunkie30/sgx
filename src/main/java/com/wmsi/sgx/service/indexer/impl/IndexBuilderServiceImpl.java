@@ -296,22 +296,24 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			deleteOldIndexes();
 			updateCurrencyCompletedFlag(indexName);
 		}
-		
-/*		return (((currencyList != null & !currencyList.isEmpty() && indexName != null)
-				&& currencyList.getLast().equalsIgnoreCase(indexName.substring(0, indexName.lastIndexOf("_"))))
-				|| currencyList.isEmpty()) ? 0
-						: (Boolean.TRUE.equals(success) ? 1 : -1);
-*/	
-		if(hasCurrenciesCompleted()){
+
+		/*
+		 * return (((currencyList != null & !currencyList.isEmpty() && indexName
+		 * != null) &&
+		 * currencyList.getLast().equalsIgnoreCase(indexName.substring(0,
+		 * indexName.lastIndexOf("_")))) || currencyList.isEmpty()) ? 0 :
+		 * (Boolean.TRUE.equals(success) ? 1 : -1);
+		 */
+		if (hasCurrenciesCompleted()) {
 			return 0;
-		}else{
-			if(success){
+		} else {
+			if (success) {
 				return 1;
-			}else{
+			} else {
 				return -1;
 			}
 		}
-		}
+	}
 
 	private void updateCurrencyCompletedFlag(String indexName) {
 		CurrencyModel model = new CurrencyModel();
