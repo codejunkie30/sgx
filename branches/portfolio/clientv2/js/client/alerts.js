@@ -300,7 +300,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
         },
 		
 		addWatchlist: function(){
-
 			if(this.wlNameError().length != 0) return;
 			var wlLength = ALERTS.finalWL().length;
 			ALERTS.addWatchlistName([]);
@@ -318,7 +317,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
-    	var params = { "message": ALERTS.newWLName() };
+			var params = { "message": ALERTS.newWLName() };
 			PAGE.showLoading();
 			UTIL.handleAjaxRequestJSON(
 				endpoint,
