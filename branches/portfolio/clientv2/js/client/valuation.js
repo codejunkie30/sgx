@@ -205,13 +205,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
-		        $(element).datepicker({  maxDate: new Date() });
-
-		        //handle the field changing
-		       /* ko.utils.registerEventHandler(element, "change", function () {
-		            var observable = valueAccessor();
-		            observable($(element).datepicker("getDate"));
-		        });*/
+		        $(element).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
 
 		        //handle disposal (if KO removes by the template binding)
 		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
@@ -219,7 +213,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        });
 		        
 		        var value = parseInt($(element).val());
-		        var date = $.datepicker.formatDate("mm/dd/yy", Date.fromISO(value));
+		        var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(value));
 		        $(element).val(date);
 		    }
 		};
@@ -541,7 +535,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({  maxDate: new Date() });
+			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
 		},
 		
 		computeSelectAllTrans: function(me){
@@ -910,7 +904,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var transItemModel;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
-			var tradeDate = $.datepicker.formatDate("yy-mm-dd", Date.fromISO(me.initialTradeDate()));
+			var tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(me.initialTradeDate()));
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
 			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode)){
@@ -1591,7 +1585,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.companyName = companyName;
     	me.tickerCode = tickerCode;
     	me.transactionType = transactionType;
-    	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("mm/dd/yy", Date.fromISO(tradeDate)) : "";
+    	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
     	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? parseFloat(numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')).toFixed(2): "" ;
     	me.costAtPurchase = costAtPurchase;
     	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice: "";
@@ -1606,7 +1600,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	var me = this;
     	me.intTickerCode = tickerCode;
     	me.intTransactionType = transactionType;
-    	me.intTradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("mm/dd/yy", Date.fromISO(tradeDate)) : "";
+    	me.intTradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
     	me.intNumberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
     	me.intCostAtPurchase = !UTIL.isEmpty(costAtPurchase) ? "$" + costAtPurchase.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
     	me.intId = id;
