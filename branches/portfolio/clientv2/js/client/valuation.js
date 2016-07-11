@@ -1404,17 +1404,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#'+event.target.id).removeClass('dateasc').addClass('datedesc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
-	  			  var a = a.tradeDate;
-	  			  var b = b.tradeDate; 
-	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    	var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
+    	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : ""; 
+    	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
 	    		$('#'+event.target.id).removeClass('datedesc').addClass('dateasc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
-	  			  var a = a.tradeDate;
-	  			  var b = b.tradeDate; 
-	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    	    		var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
+    	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : "";
+	  			 	if (a == "" && b){
+	    	    	    return 1;
+	    	    	}
+	    	    	if (b == "" && a){
+	    	    	    return -1;
+	    	    	}
+	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
 	    },
@@ -1425,17 +1431,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#'+event.target.id).removeClass('shareasc').addClass('sharedesc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
-	  			  var a = a.numberOfShares;
-	  			  var b = b.numberOfShares; 
+	  			  var a = parseFloat(a.numberOfShares);
+	  			  var b = parseFloat(b.numberOfShares); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
 	    		$('#'+event.target.id).removeClass('sharedesc').addClass('shareasc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
-	  			  var a = a.numberOfShares;
-	  			  var b = b.numberOfShares; 
-	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	  			  	var a = parseFloat(a.numberOfShares);
+	  			  	var b = parseFloat(b.numberOfShares);
+	  			  	if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
+	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
 	    },
@@ -1460,7 +1472,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	   var b = b.lastClosePrice.toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
 			  	   b = parseFloat(b.replace("$",""));
-	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+			  	   if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+			  	   }
+			  	   if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	   }
+			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
 	    },
@@ -1485,7 +1503,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
-	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+		  			if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
+			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
 	    },
