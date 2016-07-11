@@ -1176,38 +1176,67 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	return codes;
 	    },
 	    
+	    isDeleteValid: function(transactionType, tickerCode, numberOfShares){
+	    	var flag = true;
+	    	numberOfShares = numberOfShares.toString().replace(/,/gi,"");
+	    	if(transactionType === "BUY"){
+	    		 var me = this;
+		    	 var bought = 0.00;
+		    	 var sell = 0.00;
+		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
+		    		 if(item.tickerCode() === tickerCode){
+		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+		    			 if(item.transactionType() === "BUY"){
+		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
+		    			 }else{
+		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
+		    			 }
+		    		 }
+		    	 });
+		    	 bought = parseFloat( parseFloat(bought) - parseFloat(numberOfShares) ).toFixed(2);
+		    	 if(parseFloat(sell) > parseFloat(bought)){
+		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
+		    		 flag = false;
+		    	 }
+	    	}
+	    	
+	    	return flag;
+	    },
+	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	$('.pagination-container').remove();
-	    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
-			
-			 $('.confirm-delete').click(function(e) {				
-				 if(item.id()!=""){
-				    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
-						var postType = 'POST';
-			    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
-			    	    PAGE.showLoading();
-						UTIL.handleAjaxRequestJSON(
-								endpoint,
-								postType,
-								params,
-								function(data, textStatus, jqXHR){					
-									console.log(data);
-									me.transItems.remove(item);
-									PAGE.hideLoading();
-									me.transItems([]);
-									me.getTransactionsData(me);
-								}, 
-								PAGE.customSGXError);
-			    	}else{
-			    		me.transItems.remove(item);
-			    	}
-				$('.cboxWrapper').colorbox.close();
-	        });
-			
-			 $('.cancel').click(function(e) {
-				$('.cboxWrapper').colorbox.close();
-	        });	
+	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares()) ){
+	    		$('.pagination-container').remove();
+		    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+				
+				 $('.confirm-delete').click(function(e) {				
+					 if(item.id()!=""){
+					    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+							var postType = 'POST';
+				    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
+				    	    PAGE.showLoading();
+							UTIL.handleAjaxRequestJSON(
+									endpoint,
+									postType,
+									params,
+									function(data, textStatus, jqXHR){					
+										console.log(data);
+										me.transItems.remove(item);
+										PAGE.hideLoading();
+										me.transItems([]);
+										me.getTransactionsData(me);
+									}, 
+									PAGE.customSGXError);
+				    	}else{
+				    		me.transItems.remove(item);
+				    	}
+					$('.cboxWrapper').colorbox.close();
+		        });
+				
+				 $('.cancel').click(function(e) {
+					$('.cboxWrapper').colorbox.close();
+		        });
+	    	}
 			 
 	    },
 	    
@@ -1242,33 +1271,34 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			 $('.cancel').click(function(e) {
 				$('.cboxWrapper').colorbox.close();
 	        });	
-	    	
 	    },
 	    
 	    removeIntPerItem: function(item){
 	    	var me = this;
-	    	$('.pagination-container').remove();
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
-			 $('.confirm-delete').click(function(e) {				
-		    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
-				var postType = 'POST';
-	    	    var params = {"id": me.watchlistId, "transactionId" : item.intId};
-	    	    PAGE.showLoading();
-				UTIL.handleAjaxRequestJSON(
-					endpoint,
-					postType,
-					params,
-					function(data, textStatus, jqXHR){					
-						console.log(data);
-						PAGE.hideLoading();
-						me.getTransactionsData(me);
-					}, 
-				PAGE.customSGXError);
-				$('.cboxWrapper').colorbox.close();
-	        });
-			 $('.cancel').click(function(e) {
-				$('.cboxWrapper').colorbox.close();
-	        });	
+	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares) ){
+		    	$('.pagination-container').remove();
+				PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+				 $('.confirm-delete').click(function(e) {				
+			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
+					var postType = 'POST';
+		    	    var params = {"id": me.watchlistId, "transactionId" : item.intId};
+		    	    PAGE.showLoading();
+					UTIL.handleAjaxRequestJSON(
+						endpoint,
+						postType,
+						params,
+						function(data, textStatus, jqXHR){					
+							console.log(data);
+							PAGE.hideLoading();
+							me.getTransactionsData(me);
+						}, 
+					PAGE.customSGXError);
+					$('.cboxWrapper').colorbox.close();
+		        });
+				 $('.cancel').click(function(e) {
+					$('.cboxWrapper').colorbox.close();
+		        });	
+	    	}
 	    },
 	    
 	    toogleCompanyPlus: function(id, data){	 
