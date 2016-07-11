@@ -168,6 +168,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('<div class="save">The companies below have been removed from one or more of your StockLists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
 					
+					PAGE.resizeIframeSimple();
+					
 				}, 
 				PAGE.customSGXError);
 			
