@@ -255,6 +255,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}
 			}				
 			
+			ALERTS.searchInput("");
+			
 			$.each($('.alerts input[type=text]'),function(){
 				if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 			});
