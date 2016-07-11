@@ -372,7 +372,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me = this;
 			var deleteName = me.editWLName();
 			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
 				me.deleteWatchlist();
