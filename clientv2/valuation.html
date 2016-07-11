@@ -107,7 +107,7 @@
 								</tr>
 							</thead>
 							<tbody data-bind="foreach: displayTransCompanies">
-								<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
+								<tr data-bind="css: { 'odd': ($index() % 2 != 0) }">
 									<td class="textCenter"><input type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
 									<td class="company-row"><span data-bind="text:companyName"></span> (<span data-bind="text:tickerCode"></span>)</td>
 								</tr>
