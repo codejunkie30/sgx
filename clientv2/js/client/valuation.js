@@ -825,7 +825,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		confirmDelete: function(){
 			var deleteName = VALUATION.editWLName();
 			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
 				VALUATION.deleteWatchlist();
@@ -1207,7 +1207,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares()) ){
 	    		$('.pagination-container').remove();
-		    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+		    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
 					 if(item.id()!=""){
@@ -1243,7 +1243,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    removePerformanceItem: function(item) {
 	    	var me = this;
 	    	$('.pagination-container').remove();
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
 				 if(item.id!=""){
@@ -1277,7 +1277,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares) ){
 		    	$('.pagination-container').remove();
-				PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button floatRight ">Cancel</span></div>', width: 400 }); 
+				PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
 					var postType = 'POST';
