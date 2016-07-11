@@ -108,7 +108,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 						formatter : function() {
 							if (this.value == 0)
 								return;
-							return PAGE.currentFormats.chart.format
+							return "S$ "
 									+ _round(this.value, 3);
 						},
 						style : {
