@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -27,6 +28,7 @@ import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CurrencyModel;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.model.Estimate;
@@ -38,13 +40,13 @@ import com.wmsi.sgx.model.GovTransparencyIndex;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
-import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.VolWeightedAvgPrice;
 import com.wmsi.sgx.model.VolWeightedAvgPrices;
 import com.wmsi.sgx.model.indexer.Index;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.currency.CurrencyService;
 import com.wmsi.sgx.service.gti.GtiService;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
@@ -94,9 +96,78 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 	@Autowired
 	private IndexerService indexerService;
+	
+	@Autowired
+	private CurrencyService currencyService;
+	
+	private LinkedList<String> currencyList = new LinkedList<String>();
 
 	@Autowired
 	private VwapService vwapService;
+	
+/*	public IndexBuilderServiceImpl() throws IndexerServiceException {
+		//buildIndexNameList();
+		saveCurrencyList();
+	}
+*/
+	private void buildIndexNameList() throws IndexerServiceException {
+		/**
+		 * Read currencies.csv Create the map with HashMap(Key,Map
+		 * <Key,Value>) where pattern would follow
+		 * 
+		 * 
+		 * "HKD","Hong Kong Dollar" "IDR","Indonesian Rupiah" "MYR",
+		 * "Malaysian Ringgit" "PHP","Philippines Peso" "SGD",
+		 * "Singapore Dollar" "THB","Thai Baht" "TWD","Taiwan Dollar" "USD",
+		 * "US Dollar"
+		 */
+		String[] record = null;
+		CSVReader csvReader = null;
+		InputStreamReader reader = null;
+		try {
+			reader = new InputStreamReader(new FileInputStream("/mnt/data/currencies.csv"));//TODO refactor to properties
+			csvReader = new CSVReader(reader, ',');
+			csvReader.readNext();
+			while ((record = csvReader.readNext()) != null) {
+				currencyList.add(record[0].toLowerCase() + "_premium");
+			}
+
+		} catch (IOException e) {
+			throw new IndexerServiceException("Error parsing ticker input file", e);
+		} finally {
+			IOUtils.closeQuietly(csvReader);
+			IOUtils.closeQuietly(reader);
+		}
+	}
+	
+	public boolean saveCurrencyList()throws IndexerServiceException{
+		String[] record = null;
+		CSVReader csvReader = null;
+		InputStreamReader reader = null;
+		List<CurrencyModel>currencyModelList = new ArrayList<CurrencyModel>();
+		try {
+			reader = new InputStreamReader(new FileInputStream("/mnt/data/currencies.csv"));//TODO refactor to properties
+			csvReader = new CSVReader(reader, ',');
+			csvReader.readNext();
+			while ((record = csvReader.readNext()) != null) {
+				CurrencyModel model =new CurrencyModel();
+				model.setCompleted(false);
+				model.setCurrencyName(record[0].toLowerCase() + "_premium");
+				model.setDescription(record[1]);
+				currencyModelList.add(model);
+			}
+			//delete existing records
+			currencyService.deleteAll();
+			return currencyService.addCurrencies(currencyModelList);
+
+		} catch (IOException e) {
+			throw new IndexerServiceException("Error parsing ticker input file", e);
+		} finally {
+			IOUtils.closeQuietly(csvReader);
+			IOUtils.closeQuietly(reader);
+		}
+		
+	}
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
@@ -196,7 +267,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	 * @throws IndexerServiceException
 	 */
 	@Override
-	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName)
+	public int isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName)
 			throws IndexerServiceException {
 
 		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
@@ -223,9 +294,36 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		if (success) {
 			indexerService.createIndexAlias(indexName);
 			deleteOldIndexes();
+			updateCurrencyCompletedFlag(indexName);
 		}
 
-		return success;
+		/*
+		 * return (((currencyList != null & !currencyList.isEmpty() && indexName
+		 * != null) &&
+		 * currencyList.getLast().equalsIgnoreCase(indexName.substring(0,
+		 * indexName.lastIndexOf("_")))) || currencyList.isEmpty()) ? 0 :
+		 * (Boolean.TRUE.equals(success) ? 1 : -1);
+		 */
+		if (hasCurrenciesCompleted()) {
+			return 0;
+		} else {
+			if (success) {
+				return 1;
+			} else {
+				return -1;
+			}
+		}
+	}
+
+	private void updateCurrencyCompletedFlag(String indexName) {
+		CurrencyModel model = new CurrencyModel();
+		model.setCompleted(true);
+		model.setCurrencyName(indexName.substring(0, indexName.lastIndexOf("_")));
+		currencyService.updateCurrency(model);
+	}
+	
+	private boolean hasCurrenciesCompleted(){
+		return currencyService.getCountOfCurrenciesToComplete()<=0;
 	}
 
 	private static final int INDEX_REMOVAL_THRESHOLD = 5;
@@ -346,10 +444,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		if (h != null)
 			indexerService.save("holders", tickerNoExchange, h, index);
 
-		KeyDevs kd = capIQService.getKeyDevelopments(input);
+/*		KeyDevs kd = capIQService.getKeyDevelopments(input);
 		if (kd != null)
 			indexerService.save("keyDevs", tickerNoExchange, kd, index);
-
+*/
 		DividendHistory dH = capIQService.getDividendData(input);
 		if (dH != null)
 			indexerService.save("dividendHistory", tickerNoExchange, dH, index);
@@ -503,4 +601,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		return true;
 	}
+	
+	@Override
+	public String computeIndexName(@Header String jobId, @Header String indexName) throws IndexerServiceException {
+		CurrencyModel currencyModel = currencyService.getNonCompleteCurrency();
+		if (currencyModel != null) {
+			return currencyModel.getCurrencyName()+ "_" + jobId;
+		} else
+			throw new IndexerServiceException("IndexName not available");
+	}
+
 }
