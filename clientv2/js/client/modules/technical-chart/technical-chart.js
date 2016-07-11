@@ -29,14 +29,19 @@ define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function
       if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
 			if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
 				var criteria = UTIL.retrieveCriteria().value;
-				for(var i=0;i<chartOptions.rangeSelector.buttons.length;i++) {
-					if(chartOptions.rangeSelector.buttons[i].text == criteria.companycharts.graphTab) {
-						chartOptions.rangeSelector.selected=i;
+				if(typeof(criteria.companycharts) != "undefined" && criteria.companycharts !=null) {
+					if(typeof(criteria.companycharts.graphTab) != "undefined" && criteria.companycharts.graphTab !=null){
+						for(var i=0;i<chartOptions.rangeSelector.buttons.length;i++) {
+							
+							if(chartOptions.rangeSelector.buttons[i].text == criteria.companycharts.graphTab) {
+								chartOptions.rangeSelector.selected=i;
+							}
+						}
+						
+						$($("tspan")[0]).text(criteria.companycharts.minDate);
+			        	$($("tspan")[1]).text(criteria.companycharts.maxDate);
 					}
 				}
-				
-				$($("tspan")[0]).text(criteria.companycharts.minDate);
-	        	$($("tspan")[1]).text(criteria.companycharts.maxDate);
 			}
       }
       //chartOptions.rangeSelector.selected=5;
@@ -100,7 +105,8 @@ define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function
       return ret;
 
     }
-
+    
+    
   };
 
 
@@ -131,7 +137,7 @@ define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function
 
   }
 
-
+ 
   HS_Chart.prototype.addAxis = function(seriesObject) {
 
     var axis = seriesObject.yAxis;
@@ -241,6 +247,7 @@ define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function
 
   }
 
+  
 
   HS_Chart.prototype.getGenericChartObj = function() {
     var options =
@@ -466,9 +473,10 @@ define([ "wmsi/utils","jquery", "knockout", "wmsi/page", "highstock" ], function
         }
       }
     }, false, false);
-
+    
+    
   }
-
+    
   FS_Chart.prototype.removeAxis = function(serviceObj) {
     var axis = this.chartElement.get(serviceObj.serviceName);
     axis.remove(false);

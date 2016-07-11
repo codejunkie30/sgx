@@ -36,7 +36,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		firstRun: true,
 		exchangeDisplay: false,
 		info:[],
-		minimum:0,maximum:0,	
+		minimum:0,maximum:0,
+		fieldItems: null,
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
@@ -63,6 +64,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				var critCount = 0;
     				var industryFlag = false;
     				var exchangeFlag = false;
+    				this.fieldItems = this.fieldGroups;
     				for(var j=0;j<this.fieldGroups.length;j++) {
     					for(var k=0;k<this.fieldGroups[j].fields.length;k++) {
     						this.fieldGroups[j].fields[k].isDefault=false;
@@ -75,6 +77,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     								}
     								else if(prevParams[i].field == "exchange") {
     									exchangeFlag = true;
+    									//this.fieldGroups[j].fields[k].label = this.fieldGroups[j].fields[k].itemLabels[prevParams[i].value]
     								}
     								this.fieldGroups[j].fields[k].isDefault=true;
     							}
@@ -85,20 +88,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     					}
     						
     				}
-    				
-    				while(critCount<6) {
-    					if(!industryFlag) {
+    				if(!exchangeFlag) {
+    					this.fieldGroups[4].fields[0].isDefault=true;
+    				}
+    				if(!industryFlag) {
+    					if(prevCriteria.industryFlag) {
     						this.fieldGroups[3].fields[0].isDefault=true;
-    						industryFlag=true
-    						critCount = critCount+1;
-    					}
-    					if(!exchangeFlag) {
-    						this.fieldGroups[4].fields[0].isDefault=true;
-    						exchangeFlag=true
-    						critCount = critCount+1;
-    					}
-    					if(industryFlag && exchangeFlag) {
-    						break;
     					}
     				}
     				
@@ -444,10 +439,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		    							}
 		    						}
 		    					}
-		    					else if(prevParams[i].field == "industryGroup" || prevParams[i].field == "exchange") {
+		    					else if(prevParams[i].field == "industryGroup") {
 		    						if($("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).length != 0) {
+		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').find('ul').append('<li>Select Industry</li>');
+		    							//$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').attr('data-label','Select Industry');
 		    							$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).val(prevParams[i].value);
 			    						$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(1).text(prevParams[i].value);
+			    						mdl.field.label=prevParams[i].value;;
+			    						mdl.val(prevParams[i].value)
+		    						}
+		    						
+		    					}
+		    					else if(prevParams[i].field == "exchange") {
+		    						if($("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).length != 0) {
+		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').find('ul').append('<li>Select Exchange</li>');
+		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').attr('data-label','Select Exchange');
+		    							$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).val(prevParams[i].value);
+			    						$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(1).text(CRITERIA.fieldItems[4].fields[0].itemLabels[prevParams[i].value]);
+			    						mdl.field.label=CRITERIA.fieldItems[4].fields[0].itemLabels[prevParams[i].value];
+			    						mdl.val(prevParams[i].value);
 		    						}
 		    						
 		    					}
@@ -509,19 +519,66 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		
     		var endpoint = "/sgx/search";
     		var params = [];
+    		var industryFlag = false;
+    		var exchangeFlag = false;
+    		var exchangeVm = null;
+    		var industryVm = null;
     		$(".search-criteria .criteria:not(.inactive)").each(function(idx, el) {
 
     			var vm = ko.dataFor(el);
     			var name = vm.field.id;
 				
+    			if(name=="industryGroup") {
+    				exchangeVm = vm;
+    				industryFlag = true;
+    			}
+    			else if(name=="exchange") {
+    				exchangeFlag = true;
+    				industryVm = vm;
+    			}
     			param = { 'field': name };
     			
-    			if (vm.field.template == "select") {					
-    				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) return;
+    			if (vm.field.template == "select") {
+    				
+    				
+    				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) {
+    					if(name == "exchange") {
+    						if((typeof vm.val() === "undefined" || vm.val() == null) && vm.field.label != "Select Exchange" ) {
+    							for(var i=0;i<CRITERIA.fieldItems[4].fields[0].buckets.length;i++) {
+    								
+    								if(CRITERIA.fieldItems[4].fields[0].buckets[i].key == vm.field.label) {
+    									param.value = CRITERIA.fieldItems[4].fields[0].buckets[i].key;
+    	        						vm.val(CRITERIA.fieldItems[4].fields[0].buckets[i].key);
+    	        						param.value = vm.val();
+    	        						params.push(param);
+    								}
+    							}
+    							
+        						
+        					}
+    					}
+    					else if(name == "industryGroup") {
+    						if((typeof vm.val() != "undefined" && vm.val() != null) || vm.field.label != "Select Industry" ) {
+    							for(var i=0;i<CRITERIA.fieldItems[3].fields[0].buckets.length;i++) {
+    								
+    								if(CRITERIA.fieldItems[3].fields[0].buckets[i].key == vm.field.label) {
+    									param.value = CRITERIA.fieldItems[3].fields[0].buckets[i].key;
+    	        						vm.val(CRITERIA.fieldItems[3].fields[0].buckets[i].key);
+    	        						param.value = vm.val();
+    	        						params.push(param);
+    								}
+    							}
+    							
+        						
+        					}
+    					}
+    					
+    					return;
+    				}
 					//Fix for REITs as it's no longer part of industryGroup
     				(vm.val() != 'Real Estate Investment Trusts (REITs)') ? param.field = vm.field.id : param.field = 'industry';
-    				param.value = vm.val();					
-					
+    				param.value = vm.val();		
+    				
     			}
     			else if (vm.field.template == "change") {
     				if (vm.val() == null) return;
@@ -560,7 +617,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     						}
     						
     			}
-    				
+    			
     			this.screener.results.retrieve(endpoint, { 'criteria': prevParams }, null, scroll);
     		}
     		else {
@@ -594,7 +651,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     	    				criteria: params,
     	    				position:position,
     	    				customizeDisplay:customizeItems,
-    	    				pagination:customizeItems
+    	    				pagination:customizeItems,
+    	    				industryFlag:industryFlag
     	    			}
 					
 				}
@@ -602,6 +660,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				screenerCriteria = UTIL.retrieveScreenerCriteria().value;
     				screenerCriteria.criteria = params;
     				screenerCriteria.position = position;
+    				screenerCriteria.industryFlag=industryFlag;
     				
     			}
     				
