@@ -259,16 +259,31 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 					var criteria = UTIL.retrieveCriteria().value;
 					this.quarterlyTab(criteria.companyEstimates.quarterlyTab);
 					this.annualTab(criteria.companyEstimates.annualTab);
-					for(var j=0;j<$($('.checkbox')).length;j++) {
-						if($($('.checkbox')[j]).closest('table').attr('id')=="Annual") {
-							for(var i=0;i<criteria.companyEstimates.annual.length;i++) {
-								if(criteria.companyEstimates.annual[i]==$($('.checkbox')[j]).find('div').attr('data-name'))
-								//if($($('.checkbox')[0]).find('div').attr('data-name') == )
-								this.renderChart(me, $($('.checkbox')[j]))
+					if(criteria.companyEstimates.annualTab) {
+						for(var j=0;j<$($('.checkbox')).length;j++) {
+							if($($('.checkbox')[j]).closest('table').attr('id')=="Annual") {
+								for(var i=0;i<criteria.companyEstimates.annual.length;i++) {
+									if(criteria.companyEstimates.annual[i]==$($('.checkbox')[j]).find('div').attr('data-name'))
+									//if($($('.checkbox')[0]).find('div').attr('data-name') == )
+									this.renderChart(me, $($('.checkbox')[j]))
+								}
 							}
+							
+							
 						}
-						
-						
+					}
+					else if(criteria.companyEstimates.quarterlyTab) {
+						for(var j=0;j<$($('.checkbox')).length;j++) {
+							if($($('.checkbox')[j]).closest('table').attr('id')=="Quarterly") {
+								for(var i=0;i<criteria.companyEstimates.quarterly.length;i++) {
+									if(criteria.companyEstimates.quarterly[i]==$($('.checkbox')[j]).find('div').attr('data-name'))
+									//if($($('.checkbox')[0]).find('div').attr('data-name') == )
+									this.renderChart(me, $($('.checkbox')[j]))
+								}
+							}
+							
+							
+						}
 					}
 				}
 			}
@@ -474,17 +489,23 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		  		var annualTab=false;
 		  		if(CF.quarterlyTab()) {
 		  			quarterlyTab = true;
+		  			var companyEstimates= {
+			  				quarterly: selectedItems,
+			  				quarterlyTab:quarterlyTab,
+			  				annualTab:annualTab
+			  				
+			  		}
 		  		}
 		  		else {
 		  			annualTab=true;
+		  			var companyEstimates= {
+		  					annual: selectedItems,
+			  				quarterlyTab:quarterlyTab,
+			  				annualTab:annualTab
+			  				
+			  		}
 		  		}
-		  		var tab = CF.quarterlyTab;
-		  		var companyEstimates= {
-		  				annual: selectedItems,
-		  				quarterlyTab:quarterlyTab,
-		  				annualTab:annualTab
-		  				
-		  		}
+		  		
 		  		var criteria = {companyEstimates: companyEstimates};
 		  		UTIL.saveCriteria(criteria);
 		      }
@@ -495,24 +516,42 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 		  		var annualTab=false;
 		  		if(CF.quarterlyTab()) {
 		  			quarterlyTab = true;
+		  			
+		  			if(typeof(criteria.companyEstimates.quarterly) != "undeifined" && criteria.companyEstimates.quarterly != null) {
+						
+						
+						for(var i=0;i<criteria.companyEstimates.quarterly.length;i++) {
+							if(el.closest('td').find('.trigger').attr('data-name') != criteria.companyEstimates.quarterly[i])
+							selectedItems.push(criteria.companyEstimates.quarterly[i]);
+						}
+					}
+					selectedItems.push(el.closest('td').find('.trigger').attr('data-name'));
+					var companyEstimates= {
+							quarterly: selectedItems,
+							quarterlyTab:quarterlyTab,
+			  				annualTab:annualTab
+		    		}
+		  			
 		  		}
 		  		else {
 		  			annualTab=true;
-		  		}
-				if(typeof(criteria.companyEstimates.annual) != "undeifined" && criteria.companyEstimates.annual != null) {
-					
-					
-					for(var i=0;i<criteria.companyEstimates.annual.length;i++) {
-						if(el.closest('td').find('.trigger').attr('data-name') != criteria.companyEstimates.annual[i])
-						selectedItems.push(el.closest('td').find('.trigger').attr('data-name'));
+		  			if(typeof(criteria.companyEstimates.annual) != "undeifined" && criteria.companyEstimates.annual != null) {
+						
+						
+						for(var i=0;i<criteria.companyEstimates.annual.length;i++) {
+							if(el.closest('td').find('.trigger').attr('data-name') != criteria.companyEstimates.annual[i])
+							selectedItems.push(criteria.companyEstimates.annual[i]);
+						}
 					}
-				}
-				selectedItems.push(el.closest('td').find('.trigger').attr('data-name'));
-				var companyEstimates= {
-						annual: selectedItems,
-						quarterlyTab:quarterlyTab,
-		  				annualTab:annualTab
-	    			}
+					selectedItems.push(el.closest('td').find('.trigger').attr('data-name'));
+					var companyEstimates= {
+							annual: selectedItems,
+							quarterlyTab:quarterlyTab,
+			  				annualTab:annualTab
+		    		}
+		  			
+		  		}
+				
 				criteria = {companyEstimates: companyEstimates};
 				
 				UTIL.saveCriteria(criteria);
@@ -525,6 +564,41 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
     	removeSeries: function(model, el) {
 
     		var name = $(".trigger", el).attr("data-name");
+    		if(this.quarterlyTab()) {
+    			if((UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") && (UTIL.retrieveCriteria().value.companyEstimates != null || UTIL.retrieveCriteria().value.companyEstimates != "undefined")) {
+        			var criteria = UTIL.retrieveCriteria().value;
+        			var companyEstimates = UTIL.retrieveCriteria().value.companyEstimates;
+        			var selectedItems = [];
+        			for(var i=0;i<criteria.companyEstimates.quarterly.length;i++) {
+    					if(name != criteria.companyEstimates.quarterly[i]) {
+    						selectedItems.push(criteria.companyEstimates.quarterly[i])
+    					}
+    					
+    				}
+        			companyEstimates.quarterly = selectedItems;
+        			criteria = {companyEstimates: companyEstimates};
+    				
+    				UTIL.saveCriteria(criteria);
+        		}
+    		}
+    		else if(this.annualTab()) {
+    			if((UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") && (UTIL.retrieveCriteria().value.companyEstimates != null || UTIL.retrieveCriteria().value.companyEstimates != "undefined")) {
+        			var criteria = UTIL.retrieveCriteria().value;
+        			var companyEstimates = UTIL.retrieveCriteria().value.companyEstimates;
+        			var selectedItems = [];
+        			for(var i=0;i<criteria.companyEstimates.annual.length;i++) {
+    					if(name != criteria.companyEstimates.annual[i]) {
+    						selectedItems.push(criteria.companyEstimates.annual[i])
+    					}
+    					
+    				}
+        			companyEstimates.annual = selectedItems;
+        			criteria = {companyEstimates: companyEstimates};
+    				
+    				UTIL.saveCriteria(criteria);
+        		}
+    		}
+    		
     		var chart = $('#bar-chart').highcharts();
 
     		// remove the series
