@@ -915,9 +915,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 					var companies = wl.companies;
 					
-					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
+					if (companies.length >= 25) { alert("You have added 10 companies to this StockList. Please choose another."); PAGE.hideLoading(); return; }
 					
-					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
+					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this StockList."); PAGE.hideLoading(); return; }
 					
 					wl.companies = KO.observableArray(companies);
 					
@@ -976,9 +976,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						if (wl.name == PAGE.newWLName()){
 							var companies = wl.companies;
 				
-							if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
+							if (companies.length >= 25) { alert("You have added 10 companies to this StockList. Please choose another."); PAGE.hideLoading(); return; }
 							
-							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
+							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this StockList."); PAGE.hideLoading(); return; }
 							
 							wl.companies = KO.observableArray(companies);
 							
