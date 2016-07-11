@@ -22,7 +22,7 @@
 
 .watchlist { display: inline-block; width: 42.5%; margin: 0 2.5% 0 0; float: left;}
 .watchlist .wl-companies { margin: 12px 0;position:relative;}
-.watchlist .wl-companies ul { padding: 0; margin-top: 25px; margin:0; border-bottom: 2px solid #ccc; max-height: 300px;overflow-x: hidden; }
+.watchlist .wl-companies ul { padding: 0; margin-top: 25px; margin:0; border-bottom: 2px solid #ccc; max-height: 500px;overflow-x: hidden; }
 .watchlist .wl-companies ul li { list-style-type: none; padding: 5px; width:96%; }
 .watchlist .wl-companies ul li.odd { background: #ebecec; }
 .watchlist .wl-companies ul li span { font-size: 22px; color: #444; font-weight: bold; display: inline-block; }
