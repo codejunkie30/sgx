@@ -364,7 +364,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
       var postType = 'POST';
       var params = { id: self.ticker };
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { setTimeout(function (){
+
+    	  self.financialsHandler(data, serviceObj, action, self);
+
+    	}, 500)  }, PAGE.customSGXError, undefined);
 
     },
 
