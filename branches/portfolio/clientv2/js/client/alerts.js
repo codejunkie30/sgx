@@ -443,8 +443,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});		
 			
 			var editedName = ALERTS.editWLName().trim();
-			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( editedName.toLowerCase(), ALERTS.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>Watch list name already exists.</p>', width: 600 }); return;  }
+			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
+			if ($.inArray( editedName.toLowerCase(), ALERTS.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return;  }
 			
 			
     		var params = { "watchlistName": ALERTS.editWLName(), "id": ALERTS.selectedValue()};
@@ -519,7 +519,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		addCompany: function(data){
 
 			if (ALERTS.companies().length >= 25) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a StockList.</p>', width: 300 }); return; }
-			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this watch list.</p>', width: 600 }); return; }
+			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this StockList.</p>', width: 600 }); return; }
 			
 			//callback to update companies after the call succeeds.
 			var addcompaniesObservableList = ALERTS.companies;
