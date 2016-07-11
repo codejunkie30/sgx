@@ -1060,7 +1060,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    			me.calcTotalInvested(item, me);
 	    			var currentValue  = me.calcCurrentValue(item, me);
 	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
-					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, 
+					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(2), 
 																item.costAtPurchase, me.liveClosingPrice, item.id, false, currentValue);
 					me.displayTransactions.push(transItemModel);
 	    		}
@@ -1130,7 +1130,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	for(i =0; i<data.length; i++){
 	    		var item = data[i];
 	    		me.calcTotalInvested(item, me);
-	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, item.numberOfShares, item.costAtPurchase, item.id);
+	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(2), item.costAtPurchase, item.id);
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
 	    },
@@ -1586,7 +1586,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tickerCode = tickerCode;
     	me.transactionType = transactionType;
     	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
-    	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? parseFloat(numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')).toFixed(2): "" ;
+    	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
     	me.costAtPurchase = costAtPurchase;
     	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice: "";
     	me.id = id;
