@@ -64,17 +64,19 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
 				if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
 					var criteria = UTIL.retrieveCriteria().value;
-					if(typeof(criteria.companyEstimates.quarterlyTab) != "undefined" && criteria.companyEstimates.quarterlyTab != null)
-						this.quarterlyTab(criteria.companyEstimates.quarterlyTab);
-					if(typeof(criteria.companyEstimates.annualTab) != "undefined" && criteria.companyEstimates.annualTab != null)
-						this.annualTab(criteria.companyEstimates.annualTab);
-					if(criteria.companyEstimates.quarterlyTab) {
-						$('.annual a').removeClass('active');
-						$('.quarterly a').addClass('active');
-					}
-					else {
-						$('.annual a').addClass('active');
-						$('.quarterly a').removeClass('active');
+					if(typeof(criteria.companyEstimates) != "undefined" && criteria.companyEstimates != null) {
+						if(typeof(criteria.companyEstimates.quarterlyTab) != "undefined" && criteria.companyEstimates.quarterlyTab != null)
+							this.quarterlyTab(criteria.companyEstimates.quarterlyTab);
+						if(typeof(criteria.companyEstimates.annualTab) != "undefined" && criteria.companyEstimates.annualTab != null)
+							this.annualTab(criteria.companyEstimates.annualTab);
+						if(criteria.companyEstimates.quarterlyTab) {
+							$('.annual a').removeClass('active');
+							$('.quarterly a').addClass('active');
+						}
+						else {
+							$('.annual a').addClass('active');
+							$('.quarterly a').removeClass('active');
+						}
 					}
 				}
             }
@@ -694,6 +696,24 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 					model.removeSeries(model, this);
 				}
 			});
+			UTILS.saveTracking(false);
+			if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyEstimates == null || UTIL.retrieveCriteria().value.companyEstimates == "undefined")) {
+		    	var companyEstimates= {
+		  				quarterlyTab:true,
+		  				annualTab:false
+		  				
+		  		}
+		  		var criteria = {companyEstimates: companyEstimates};
+		  		UTIL.saveCriteria(criteria);
+		      }
+			else {
+				var criteria = UTIL.retrieveCriteria().value;
+				companyEstimates = criteria.companyEstimates;
+				companyEstimates.quarterlyTab = true;
+				companyEstimates.annualTab = false;
+				criteria = {companyEstimates: companyEstimates};
+				UTIL.saveCriteria(criteria);
+			}
 			CF.quarterlyTab(true);
 			CF.annualTab(false);
 			$('.quarterly a').addClass('active');
@@ -705,6 +725,25 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 					model.removeSeries(model, this);
 				}
 			});
+			UTILS.saveTracking(false);
+			if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyEstimates == null || UTIL.retrieveCriteria().value.companyEstimates == "undefined")) {
+		    	var companyEstimates= {
+		  				quarterlyTab:false,
+		  				annualTab:true
+		  				
+		  		}
+		  		var criteria = {companyEstimates: companyEstimates};
+		  		UTIL.saveCriteria(criteria);
+		      }
+			else {
+				var criteria = UTIL.retrieveCriteria().value;
+				companyEstimates = criteria.companyEstimates;
+				companyEstimates.quarterlyTab = false;
+				companyEstimates.annualTab = true;
+				criteria = {companyEstimates: companyEstimates};
+				UTIL.saveCriteria(criteria);
+			}
+			
 			CF.quarterlyTab(false);
 			CF.annualTab(true);
 			$('.annual a').addClass('active');

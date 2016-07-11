@@ -235,7 +235,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
 
         self.trackChoiceNum( diff[0], action);
-
+        
         self.makeDataCall(diff[0], action);
 
         this.oldData = data.slice(0);
@@ -339,6 +339,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       		console.log("k = "+k);
       	}
   	},10000000);
+      
       //this.dropdownChoices.push('grossProfit');
       ko.applyBindings(this, $("body")[0]);
 
@@ -426,19 +427,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
             	  if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
         				if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
         					var criteria = UTIL.retrieveCriteria().value;
-        					if(typeof criteria.companycharts.financials != undefined && criteria.companycharts.financials !=null) {
-	        					for(var j=0;j<criteria.companycharts.financials.length;j++) {
-	        						if("totalRevenue" != criteria.companycharts.financials[j]) {
-	        							self.dropdownChoices.push(criteria.companycharts.financials[j]);
-	        						}
+        					if(typeof criteria.companycharts != undefined && criteria.companycharts !=null) {
+	        					if(typeof criteria.companycharts.financials != undefined && criteria.companycharts.financials !=null) {
+		        					for(var j=0;j<criteria.companycharts.financials.length;j++) {
+		        						if("totalRevenue" != criteria.companycharts.financials[j]) {
+		        							self.dropdownChoices.push(criteria.companycharts.financials[j]);
+		        						}
+		        					}
 	        					}
+	        					if(criteria.companycharts.financialTab) {
+	          						self.activeTab('financials');
+	          					}
+	          					else {
+	          						self.activeTab('indicators');
+	          					}
         					}
-        					if(criteria.companycharts.financialTab) {
-          						self.activeTab('financials');
-          					}
-          					else {
-          						self.activeTab('indicators');
-          					}
         				}
             	  }
             	  
