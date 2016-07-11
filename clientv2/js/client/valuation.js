@@ -934,6 +934,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					params,
 					function(data, textStatus, jqXHR){					
 						console.log(data);
+						$('.save').remove();
+						$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 						PAGE.hideLoading();
 						me.transItems([]);
 						me.getTransactionsData(me);
