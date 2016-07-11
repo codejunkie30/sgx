@@ -204,6 +204,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.searchResults( resultArray );
 				}, 200)
 
+				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 
 			});
 			
