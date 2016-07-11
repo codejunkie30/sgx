@@ -311,6 +311,10 @@
 	clear: both;
 }
 
+.ml5p {
+	margin-left: 5px;
+}
+
 .ml10p {
 	margin-left: 10px;
 }
@@ -359,8 +363,15 @@
 }
 
 .deleteTran span {
-    padding: 7px 15px;
-    font-size: 11pt;
+    display: inline-block;
+    font-size: 12px;
+    background: #0e236b;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    line-height: 22px;
+    padding: 0 10px;
+    color: #fff !important;
+    cursor: pointer;
 }
 
 .w935p {
