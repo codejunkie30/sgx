@@ -790,13 +790,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var jsonp = 'jsonp';
 			var jsonpCallback = 'jsonpCallback';
 			
-			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
-			if ($.inArray( editedName.toLowerCase(), VALUATION.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return;  }
-			
 			VALUATION.addWatchlistName([]);
 			$.each(VALUATION.finalWL(), function(i, data){
 				VALUATION.addWatchlistName.push(data.name.toLowerCase());
 			});	
+			
+			if (editedName ==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
+			if ($.inArray( editedName.toLowerCase(), VALUATION.addWatchlistName() ) != -1) { PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return;  }
+					
 			PAGE.showLoading();
 			UTIL.handleAjaxRequest(
 				endpoint,
