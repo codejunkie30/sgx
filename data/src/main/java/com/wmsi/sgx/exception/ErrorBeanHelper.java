@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.mail.MessagingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -27,6 +29,8 @@ public class ErrorBeanHelper {
 	private com.wmsi.sgx.util.EmailService emailService;
 
 	Map<String, ArrayList<ErrorBean>> errorMap = new HashMap<String, ArrayList<ErrorBean>>();
+	
+	private Logger log = LoggerFactory.getLogger(ErrorBeanHelper.class);
 
 	/**
 	 * Contains any errors that may have occurred while executing the request.
@@ -75,6 +79,7 @@ public class ErrorBeanHelper {
 				beanInfo.append(" ************* Object Description ********* \n " + b.getObjectName());
 			}
 			sb.append(pair.getKey() + " : " + beanInfo.toString() + "\n");
+			log.info(" ***** Error Information ******* "+ sb.toString());
 		}
 		return sb.toString();
 
