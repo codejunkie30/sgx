@@ -15,8 +15,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    this.container = $('<nav></nav>').addClass(this.options.containerClass);
 		    this.ul = $('<ul></ul>').addClass(this.options.ulClass);
 
-		    this.show(this.startPage);
-
+		    if(this.totalItems > this.options.perPage ){
+		    	this.show(this.startPage);	
+		    }
 		    return this;
 		  }
 
@@ -25,15 +26,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    pagination: function(type, page) {
 		      var _self = this;
 		      var li = $('<li></li>');
-		      var a = $('<a></a>').attr('href', '#');
-		      var cssClass = type === 'number' ? _self.options.liClass : type;
-		      var text = type === 'number' ? page : _self.paginationText(type);
-
-		      li.addClass(cssClass);
-		      li.data('pagination-type', type);
-		      li.data('page', page);
-		      li.append(a.html(text));
-
+		      if(type === 'number'){
+		    	  var inputBox = $('<input type="text" style="width: 18px; text-align: center"/>').attr('id', 'pagingTextBox').attr('value', _self.currentPage);
+		    	  li.data('pagination-type', type);
+		    	  li.append("<b>&nbsp;&nbsp;Page&nbsp;&nbsp;<b>");
+		    	  li.append(inputBox);
+		    	  li.append("&nbsp;&nbsp;of&nbsp;&nbsp;<b>"+_self.totalPages+"&nbsp;&nbsp; </b>");
+		      }else{
+			      var span = $('<span class="action-btn"></span>');
+			      var cssClass = type;
+			      var text = type === 'number' ? page : _self.paginationText(type);
+	
+			      li.addClass(cssClass);
+			      li.data('pagination-type', type);
+			      li.data('page', page);
+			      li.append(span.html(text));
+		      }
 		      return li;
 		    },
 
@@ -71,16 +79,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		      if(_self.options.firstLast) {
 		        pagination.push(_self.pagination('first', _self.startPage));
 		      }
-
+		      
 		      // "Prev" button
 		      if(_self.options.prevNext) {
 		        pagination.push(_self.pagination('prev', prev));
 		      }
-
+		      
 		      // Pagination
-		      for(var i = start; i <= end; i++) {
-		        pagination.push(_self.pagination('number', i));
-		      }
+		      pagination.push(_self.pagination('number'));
 
 		      // "Next" button
 		      if(_self.options.prevNext) {
@@ -154,16 +160,34 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		      var _self = this;
 		      _self.container.find('li').each(function(){
 		        var _li = $(this);
+		        var type = _li.data('pagination-type');
+		        if(type === 'number'){
+		        	 $('#pagingTextBox').change(function(e) {
+		        		 e.preventDefault();
+		        		 var pageNumber = _self.currentPage;
+		        		 try{
+		        			 pageNumber = parseInt($('#pagingTextBox').val());
+		        			 if(pageNumber > _self.totalPages || pageNumber < 1 || isNaN(pageNumber)){
+		        				 pageNumber = _self.currentPage;
+		        				 $('#pagingTextBox').val(_self.currentPage);
+		        			 }
+		        		 }catch(e){
+		        			 $('#pagingTextBox').val(_self.currentPage);
+		        		 }
+		        		 _self.currentPage = pageNumber;
+				          _self.show(pageNumber);
+		        	 });
+		         }else{
 
-		        _li.click(function(e) {
-		          e.preventDefault();
-		          var page = _li.data('page');
-
-		          _self.currentPage = page;
-		          _self.show(page);
+			        _li.click(function(e) {
+			        	e.preventDefault();
+			          	var page = _li.data('page');
+			          	_self.currentPage = page;
+			          	_self.show(page);
+			        });
+		         }
 		        });
-		      });
-		    },
+		      },
 
 		    show: function(page) {
 		      var _self = this;
@@ -187,9 +211,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    perPage: 10,
 		    limitPagination: false,
 		    prevNext: true,
-		    firstLast: true,
-		    prevText: '&laquo;',
-		    nextText: '&raquo;',
+		    firstLast: false,
+		    prevText: '&lt;',
+		    nextText: '&gt;',
 		    firstText: 'First',
 		    lastText: 'Last',
 		    containerClass: 'pagination-container',
@@ -936,7 +960,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){					
-						console.log(data);
 						$('.save').remove();
 						$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 						PAGE.hideLoading();
@@ -1158,12 +1181,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
 	    	
-	    	if(me.transItems().length > 25){
-	    		$('#transItemsId').paginathing({
-				    perPage: 25,
-				    insertAfter: '#transItemsId'
-				});
-	    	}
+    		$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
 	    	
 	    },
 	    
@@ -1360,6 +1380,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
