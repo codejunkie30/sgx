@@ -114,6 +114,7 @@ public class KeyDevsService extends AbstractDataService {
 			keydev.setHeadline(record.get(4));
 			keydev.setSituation(record.get(5));
 			keydev.setType(record.get(6));
+			keydev.setKeyDevId(record.get(2));
 			list.add(keydev);
 		}
 		kD.setKeyDevs(list);
