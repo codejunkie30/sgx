@@ -51,6 +51,7 @@ public class KeyDevsService extends AbstractDataService {
 	private String rawDir = "/mnt/data/raw/";
 	
 	public static final String KEY_DEV_SOURCE_COLUMN_NAME = "source";
+	
 
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -156,7 +157,7 @@ public class KeyDevsService extends AbstractDataService {
 
 				String json = getQuery(entry.getValue());
 				Resource template = new ByteArrayResource(json.getBytes());
-
+				
 				KeyDevs devs = null;
 				try {
 					devs = executeRequest(new CapIQRequestImpl(template), null);
