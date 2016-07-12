@@ -26,11 +26,13 @@ import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.CurrencyModel;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
+import com.wmsi.sgx.model.ErrorBean;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.FXRecord;
@@ -40,6 +42,7 @@ import com.wmsi.sgx.model.GovTransparencyIndex;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
+import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.VolWeightedAvgPrice;
 import com.wmsi.sgx.model.VolWeightedAvgPrices;
@@ -100,45 +103,22 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	@Autowired
 	private CurrencyService currencyService;
 	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
 	private LinkedList<String> currencyList = new LinkedList<String>();
 
 	@Autowired
 	private VwapService vwapService;
 	
-/*	public IndexBuilderServiceImpl() throws IndexerServiceException {
-		//buildIndexNameList();
-		saveCurrencyList();
-	}
-*/
-	private void buildIndexNameList() throws IndexerServiceException {
-		/**
-		 * Read currencies.csv Create the map with HashMap(Key,Map
-		 * <Key,Value>) where pattern would follow
-		 * 
-		 * 
-		 * "HKD","Hong Kong Dollar" "IDR","Indonesian Rupiah" "MYR",
-		 * "Malaysian Ringgit" "PHP","Philippines Peso" "SGD",
-		 * "Singapore Dollar" "THB","Thai Baht" "TWD","Taiwan Dollar" "USD",
-		 * "US Dollar"
-		 */
-		String[] record = null;
-		CSVReader csvReader = null;
-		InputStreamReader reader = null;
-		try {
-			reader = new InputStreamReader(new FileInputStream("/mnt/data/currencies.csv"));//TODO refactor to properties
-			csvReader = new CSVReader(reader, ',');
-			csvReader.readNext();
-			while ((record = csvReader.readNext()) != null) {
-				currencyList.add(record[0].toLowerCase() + "_premium");
-			}
+	@Autowired
+	private com.wmsi.sgx.util.EmailService emailService;
+	
+	@Value ("${email.dataload.complete}")
+	public String toSite;
 
-		} catch (IOException e) {
-			throw new IndexerServiceException("Error parsing ticker input file", e);
-		} finally {
-			IOUtils.closeQuietly(csvReader);
-			IOUtils.closeQuietly(reader);
-		}
-	}
+	@Value("${loader.currencies.file}")
+	public String currenciesFile;
 	
 	public boolean saveCurrencyList()throws IndexerServiceException{
 		String[] record = null;
@@ -146,7 +126,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		InputStreamReader reader = null;
 		List<CurrencyModel>currencyModelList = new ArrayList<CurrencyModel>();
 		try {
-			reader = new InputStreamReader(new FileInputStream("/mnt/data/currencies.csv"));//TODO refactor to properties
+			reader = new InputStreamReader(new FileInputStream(currenciesFile));
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext();
 			while ((record = csvReader.readNext()) != null) {
@@ -161,6 +141,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			return currencyService.addCurrencies(currencyModelList);
 
 		} catch (IOException e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:saveCurrencyList",
+					"Error parsing ticker input file", ErrorBean.ERROR, e.getMessage()));
 			throw new IndexerServiceException("Error parsing ticker input file", e);
 		} finally {
 			IOUtils.closeQuietly(csvReader);
@@ -212,6 +194,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 			return ret;
 		} catch (IOException e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:readTickers",
+					"Error parsing ticker input file", ErrorBean.ERROR, e.getMessage()));
 			throw new IndexerServiceException("Error parsing ticker input file", e);
 		} finally {
 			IOUtils.closeQuietly(csvReader);
@@ -230,8 +214,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			indexRecord(indexName, input);
 		} catch (InvalidIdentifierException e) {
 			// Allow bad tickers to flow through ie. don't consider it an error
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:index",
+					"Invalid Id", ErrorBean.ERROR, e.getMessage()));
 			log.error("Invalid id " + input.getTicker());
 		} catch (Exception ex) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:index",
+					"Invalid Id", ErrorBean.ERROR, ex.getMessage()));
 			log.error("Invalid record: " + input.getTicker(), ex);
 		}
 
@@ -297,6 +285,11 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			updateCurrencyCompletedFlag(indexName);
 		}
 
+		boolean flag = hasCurrenciesCompleted();
+		//send email if error 
+		if(!success||flag){
+			errorBeanHelper.sendEmail();
+		}
 		/*
 		 * return (((currencyList != null & !currencyList.isEmpty() && indexName
 		 * != null) &&
@@ -304,7 +297,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		 * indexName.lastIndexOf("_")))) || currencyList.isEmpty()) ? 0 :
 		 * (Boolean.TRUE.equals(success) ? 1 : -1);
 		 */
-		if (hasCurrenciesCompleted()) {
+		if (flag) {
 			return 0;
 		} else {
 			if (success) {
@@ -444,10 +437,10 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		if (h != null)
 			indexerService.save("holders", tickerNoExchange, h, index);
 
-/*		KeyDevs kd = capIQService.getKeyDevelopments(input);
+		KeyDevs kd = capIQService.getKeyDevelopments(input);
 		if (kd != null)
 			indexerService.save("keyDevs", tickerNoExchange, kd, index);
-*/
+
 		DividendHistory dH = capIQService.getDividendData(input);
 		if (dH != null)
 			indexerService.save("dividendHistory", tickerNoExchange, dH, index);
@@ -594,6 +587,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				indexerService.bulkSave("fxdata", buffer.toString(), indexName);
 			buffer.setLength(0);
 		} catch (Exception e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:createFXIndex",
+					"Trying to create FX conversion index", ErrorBean.ERROR, e.getMessage()));
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
 		}
 
@@ -607,8 +602,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		CurrencyModel currencyModel = currencyService.getNonCompleteCurrency();
 		if (currencyModel != null) {
 			return currencyModel.getCurrencyName()+ "_" + jobId;
-		} else
+		} else{
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:computeIndexName",
+					"IndexName not available", ErrorBean.ERROR, ""));
 			throw new IndexerServiceException("IndexName not available");
+		}
+
 	}
 
 }

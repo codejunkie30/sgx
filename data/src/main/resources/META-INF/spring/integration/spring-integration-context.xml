@@ -12,10 +12,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
- 				<int:service-activator ref="xfRetrievalService" method="init"/>
+  				<int:service-activator ref="xfRetrievalService" method="init"/>
+  				<int:service-activator ref="keyDevsService" method="init"/>
 				<int:service-activator ref="xfSplitterService" method="init"/>
  				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
- 				<int:service-activator ref="keyDevsService" method="init"/>
  				<int:service-activator ref="gtiService" method="init"/>
  				<int:service-activator ref="vwapService" method="init"/>
 	</int:chain>
@@ -25,18 +25,17 @@
 			<int:header name="indexName"  method="computeIndexName" ref="resolveIndexNameSvc" overwrite="true"/>
 			<int:header name="indexDate" expression="headers.jobDate" />	
 			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
+			<int:error-channel value="errorLoggerChannel"/>
 		</int:header-enricher>	
-		<int:service-activator ref="indexerService" method="createIndex"/>
+			<int:service-activator ref="indexerService" method="createIndex"/>
 		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
 		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
 		<int:service-activator ref="indexerService" method="flush" />
 	<!-- 	<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" /> -->
 	</int:chain>
-	
 	<!-- 
 		BEGIN HACK SECTION FOR CHANNEL PROCESSING 
 	 -->
-
 	<!-- Http gateway to request latest ticker from SGX web service -->
 	<int-http:outbound-gateway 
 		request-channel="httpTickerRequestChannel" 
@@ -47,7 +46,6 @@
 	
 	<!-- Error handler, if http outbound gateway throws and exception default to local copy of ticker file -->
 	<int:service-activator input-channel="httpTickerErrorChannel" expression="@tickerFileResource" />
-	
 	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
 	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="${loader.ticker.file}"/>
@@ -71,9 +69,6 @@
 		input-channel="indexTickerChannel"
 		output-channel="tickerAggregatorChannel">
 
-		<int:header-enricher>
-			<int:error-channel value="indexErrorChannel"/>
-		</int:header-enricher>	
 		
 		<int:service-activator ref="indexBuilderService" method="index">
 			<int:request-handler-advice-chain >
@@ -118,14 +113,14 @@
  		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" /> 
  	</int:chain>
 
-	<int:logging-channel-adapter channel="loggingChannel" level="INFO" />
+	<int:logging-channel-adapter channel="loggingChannel" level="INFO" expression=" 'Job Complete ' + payload.toString()"/>
 	
 	<!-- Job failed -->
 	<int:header-enricher input-channel="failedJobChannel" output-channel="failedLogger">
 		<int:header name="failedJob" value="true"/>
 	</int:header-enricher>	
 		
-	<int:logging-channel-adapter channel="failedLogger" level="INFO" />
+	<int:logging-channel-adapter channel="failedLogger" level="INFO" expression=" 'Job Failed ' + payload.toString()"/>
 	
 	<!-- 
 	  Channel definitions
@@ -134,7 +129,7 @@
 	<task:executor id="indexerRequestChannelExecutor" pool-size="1" queue-capacity="1" rejection-policy="DISCARD" />
 	
 	<int:channel id="indexRequestChannel">
-		<int:dispatcher task-executor="indexerRequestChannelExecutor" />	
+		<int:dispatcher task-executor="indexerRequestChannelExecutor" />
 	</int:channel>
 			
 	<int:channel id="indexChannel"/>
@@ -154,7 +149,7 @@
 	
 	<!--  Error Logging -->
 	<int:channel id="errorLoggerChannel"/>		
-	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="info" />
+	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
 	<bean id="loggerAdapter" class="com.wmsi.sgx.logging.integration.IntegrationLoggerAdapter"/>
 
 	<int:channel id="tickerAggregatorChannel">
@@ -164,7 +159,7 @@
 	</int:channel>
 	
 	<int:channel id="statusLoggingChannel"/>	
-		<int:logging-channel-adapter channel="statusLoggingChannel" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
+	<int:logging-channel-adapter channel="statusLoggingChannel" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
  	
 	<!-- Retry Handler -->
 	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
@@ -212,9 +207,9 @@
 	 	
 	<bean id="xfRetrievalService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFRetrievalService" />
 	
-	<bean id="keyDevsService" class="com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService" />
-	
 	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
 	
 	<bean id="resolveIndexNameSvc" class="com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl"/>
+	
+	<bean id="errorBeanHelper" class="com.wmsi.sgx.exception.ErrorBeanHelper"/>
 </beans>

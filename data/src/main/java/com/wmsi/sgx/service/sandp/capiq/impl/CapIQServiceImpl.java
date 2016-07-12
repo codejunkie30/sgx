@@ -15,7 +15,6 @@ import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
-import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQService;
 import com.wmsi.sgx.service.sandp.capiq.DataService;
@@ -53,11 +52,11 @@ public class CapIQServiceImpl implements CapIQService{
 	@Autowired
 	private DataService keyDevsService;
 	
-/*	@Override
+	@Override
 	public KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException{		
 		return keyDevsService.load(input.getTicker() + ":" + input.getExchangeSymbol(), input.getDate());
 	}
-*/	
+	
 	@Autowired
 	private DataService holdersService;
 	
