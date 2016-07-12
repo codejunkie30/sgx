@@ -33,11 +33,9 @@
 		<int:service-activator ref="indexerService" method="flush" />
 	<!-- 	<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" /> -->
 	</int:chain>
-	
 	<!-- 
 		BEGIN HACK SECTION FOR CHANNEL PROCESSING 
 	 -->
-
 	<!-- Http gateway to request latest ticker from SGX web service -->
 	<int-http:outbound-gateway 
 		request-channel="httpTickerRequestChannel" 
@@ -48,7 +46,6 @@
 	
 	<!-- Error handler, if http outbound gateway throws and exception default to local copy of ticker file -->
 	<int:service-activator input-channel="httpTickerErrorChannel" expression="@tickerFileResource" />
-	
 	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
 	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="${loader.ticker.file}"/>
@@ -209,8 +206,6 @@
 	</bean>
 	 	
 	<bean id="xfRetrievalService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFRetrievalService" />
-	
-	<bean id="keyDevsService" class="com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService" />
 	
 	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
 	

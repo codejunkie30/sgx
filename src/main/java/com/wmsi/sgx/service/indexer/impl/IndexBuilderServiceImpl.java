@@ -117,13 +117,16 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	@Value ("${email.dataload.complete}")
 	public String toSite;
 
+	@Value("${loader.currencies.file}")
+	public String currenciesFile;
+	
 	public boolean saveCurrencyList()throws IndexerServiceException{
 		String[] record = null;
 		CSVReader csvReader = null;
 		InputStreamReader reader = null;
 		List<CurrencyModel>currencyModelList = new ArrayList<CurrencyModel>();
 		try {
-			reader = new InputStreamReader(new FileInputStream("/mnt/data/currencies.csv"));//TODO refactor to properties
+			reader = new InputStreamReader(new FileInputStream(currenciesFile));
 			csvReader = new CSVReader(reader, ',');
 			csvReader.readNext();
 			while ((record = csvReader.readNext()) != null) {

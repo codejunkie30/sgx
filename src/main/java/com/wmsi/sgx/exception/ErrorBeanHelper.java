@@ -17,6 +17,8 @@ import com.wmsi.sgx.model.ErrorBean;
 public class ErrorBeanHelper {
 
 	public static final String DATALOAD_COMPLETE_WITH_ERRORS = " Dataload failed with errors  ";
+	
+	public static final String DATALOAD_COMPLETE_SUCCESSFULLY = " Dataload complete successfully  ";
 
 	@Value("${email.dataload.complete}")
 	public String toSite;
@@ -68,7 +70,7 @@ public class ErrorBeanHelper {
 			Map.Entry pair = (Map.Entry) it.next();
 			ArrayList<ErrorBean> beanList = (ArrayList<ErrorBean>) pair.getValue();
 			for (ErrorBean b : beanList) {
-				beanInfo.append(" ************* Error Message ********* \n " + b.getErrorMessage());
+				beanInfo.append(" ************* Error Message *************** \n " + b.getErrorMessage());
 				beanInfo.append(" \n ");
 				beanInfo.append(" ************* Object Description ********* \n " + b.getObjectName());
 			}
@@ -80,11 +82,15 @@ public class ErrorBeanHelper {
 
 	public void sendEmail() {
 		try {
-			emailService.send(toSite, DATALOAD_COMPLETE_WITH_ERRORS, this.toString());
+			if(errorMap.isEmpty()){
+				emailService.send(toSite, DATALOAD_COMPLETE_SUCCESSFULLY, "");
+			}else{
+				emailService.send(toSite, DATALOAD_COMPLETE_WITH_ERRORS, this.toString());
+			}
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 }
