@@ -6,11 +6,14 @@ import java.io.FileOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 
 import com.jcraft.jsch.ChannelSftp.LsEntry;
+import com.wmsi.sgx.exception.ErrorBeanHelper;
+import com.wmsi.sgx.model.ErrorBean;
 
 public class XFRetrievalService {
 	
@@ -42,6 +45,10 @@ public class XFRetrievalService {
 	
 	@Value("${loader.ftp.rawFiles}")
 	private String rawFiles = "company-data.csv,consensus-estimates.csv,dividend-history.csv,key-devs.csv,ownership.csv,adjustment-factor.csv";
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+
 	
 	public DefaultSftpSessionFactory getSFTPSessionFactory(){
 		DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
@@ -100,6 +107,9 @@ public class XFRetrievalService {
 				session.read(name, out);
 			}
 			catch(Exception e) {
+				errorBeanHelper
+				.addError(new ErrorBean("XFRetrievalService:grabFiles", "Error in downloading file", ErrorBean.ERROR, e.getMessage()));
+				errorBeanHelper.sendEmail();
 				log.error("Downloading file: " + name, e);
 			}
 			finally {

@@ -17,7 +17,7 @@ public interface CapIQService{
 
 	Holders getHolderDetails(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
-//	KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
+	KeyDevs getKeyDevelopments(CompanyInputRecord input) throws ResponseParserException, CapIQRequestException;
 
 	Financials getCompanyFinancials(CompanyInputRecord input, String currency) throws ResponseParserException, CapIQRequestException;
 
