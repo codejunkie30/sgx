@@ -1414,6 +1414,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    function sortByTradeDate(a, b){
     	    		var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : "";
+	  			 	if (a == "" && b){
+	    	    	    return 1;
+	    	    	}
+	    	    	if (b == "" && a){
+	    	    	    return -1;
+	    	    	}
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
@@ -1487,7 +1493,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$",""));  
-		  			return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
 	    		$('#'+event.target.id).removeClass('currrentpdesc').addClass('currrentpasc')
