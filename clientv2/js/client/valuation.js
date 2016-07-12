@@ -1435,6 +1435,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    function sortByNumShares(a, b){
 	  			  	var a = parseFloat(a.numberOfShares);
 	  			  	var b = parseFloat(b.numberOfShares);
+	  			  	if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
@@ -1460,6 +1466,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	   var b = b.lastClosePrice.toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
 			  	   b = parseFloat(b.replace("$",""));
+			  	   if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+			  	   }
+			  	   if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	   }
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
@@ -1485,6 +1497,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
+		  			if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
