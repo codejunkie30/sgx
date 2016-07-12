@@ -287,7 +287,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		seriesOptions: [],
 		transactionTickers: [],
 		chartData: [],
-		
+		seriesColors:ko.observableArray(['#5273cf','#db12be','#e527fd','#5dcc68','#ed9db4','#4c995f','#86b9b5','#f41901','#395b47','#cefb68','#f75900','#a4506c','#0d359b','#7cb5ec','#434348','#90ed7d','#f7a35c','#8085e9','#f15c80','#e4d354','#8d4653','#91e8e1','#60a114','#9866f4','#a401ad']),
+		tickerColors:ko.observableArray(),
+
 		totalCurrentValue: 0.00,
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
@@ -309,6 +311,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		renderChart: function(me, responseData){
 			me.transactionTickers = [];
+			me.tickerColors.removeAll();
 			$.each(responseData.companiesPriceHistory, function(i, data){
 				me.transactionTickers.push(data.tickerCode);
 				
@@ -330,17 +333,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					 if( highPrice[k])
 						 me.chartData[key].high = highPrice[k].y;
 				});
-				
+
+				me.tickerColors()[data.tickerCode] = me.seriesColors()[i];
 				me.seriesOptions[i] = {
 		                name: data.tickerCode,
 		                data: priceData,
 		                chartData: me.chartData,
 		                threshold : null,
-						turboThreshold : 0
+						turboThreshold : 0,
+						color:me.seriesColors()[i]
 	            };
 				
 			});	
-			
+
 			me.performanceChartRenderer(me);
 			
 			//get the transaction data

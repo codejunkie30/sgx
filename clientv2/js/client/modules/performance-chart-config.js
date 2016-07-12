@@ -81,7 +81,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 		},
 
 		legend: {
-			enabled : true           
+			enabled : false           
         },
 
 		xAxis : {
