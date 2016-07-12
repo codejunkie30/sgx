@@ -1361,27 +1361,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    },
 	    
-	    sortColumnAsc: function(data, event){
-	    	var me = this;
-	    	if($('#'+event.target.id).hasClass('asc')){
-	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
-	  			  var a = a.companyName.toLowerCase();
-	  			  var b = b.companyName.toLowerCase(); 
-	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
-	    	}else{
-	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
-	  			  var a = a.companyName.toLowerCase();
-	  			  var b = b.companyName.toLowerCase(); 
-	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
-	    	}
-	    },
-	    
 	    sortColumnByAsc: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
@@ -1403,18 +1382,53 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    },  
 	    
+	    perSortByCompanyName: function(data, event){
+	    	var me = this;
+	    	if($('#perCompanyName').hasClass('asc')){
+	    		$('#perCompanyName').removeClass('asc').addClass('desc');
+	    		me.displayTransactions.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#perCompanyName').removeClass('desc').addClass('asc');
+	    		me.displayTransactions.sort(sortByName);
+	    	    function sortByName(a, b){
+	  			  var a = a.companyName.toLowerCase();
+	  			  var b = b.companyName.toLowerCase(); 
+	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#perTradeDate').removeClass('dateasc');
+	    	$('#perTradeDate').removeClass('datedesc');
+	    	$('#perNumOfShares').removeClass('shareasc');
+	    	$('#perNumOfShares').removeClass('sharedesc');
+	    	$('#perLastClosePrice').removeClass('closepasc');
+	    	$('#perLastClosePrice').removeClass('closepdesc');
+	    	$('#perCurPrice').removeClass('currrentpasc');
+	    	$('#perCurPrice').removeClass('currrentpdesc');
+	    },
+	    
 	    perSortbyTradeDate: function(data, event){
 	    	var me = this;
-	    	if($('#'+event.target.id).hasClass('dateasc')){
-	    		$('#'+event.target.id).removeClass('dateasc').addClass('datedesc');
+	    	if($('#perTradeDate').hasClass('dateasc')){
+	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
 	    	    	var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : ""; 
+    	    		if (a == "" && b){
+	    	    	    return 1;
+	    	    	}
+	    	    	if (b == "" && a){
+	    	    	    return -1;
+	    	    	}
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('datedesc').addClass('dateasc');
+	    		$('#perTradeDate').removeClass('datedesc').addClass('dateasc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
     	    		var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
@@ -1428,20 +1442,35 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#perCompanyName').removeClass('asc');
+	    	$('#perCompanyName').removeClass('desc');
+	    	$('#perNumOfShares').removeClass('shareasc');
+	    	$('#perNumOfShares').removeClass('sharedesc');
+	    	$('#perLastClosePrice').removeClass('closepasc');
+	    	$('#perLastClosePrice').removeClass('closepdesc');
+	    	$('#perCurPrice').removeClass('currrentpasc');
+	    	$('#perCurPrice').removeClass('currrentpdesc');
+	    	
 	    },
 	    
 	    perSortbyNumShares: function(data, event){
 	    	var me = this;
-	    	if($('#'+event.target.id).hasClass('shareasc')){
-	    		$('#'+event.target.id).removeClass('shareasc').addClass('sharedesc')
+	    	if($('#perNumOfShares').hasClass('shareasc')){
+	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
-	  			  var a = parseFloat(a.numberOfShares);
-	  			  var b = parseFloat(b.numberOfShares); 
-	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    	var a = parseFloat(a.numberOfShares);
+	    	    	var b = parseFloat(b.numberOfShares); 
+		  			if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
+			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('sharedesc').addClass('shareasc')
+	    		$('#perNumOfShares').removeClass('sharedesc').addClass('shareasc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
 	  			  	var a = parseFloat(a.numberOfShares);
@@ -1455,22 +1484,36 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#perCompanyName').removeClass('asc');
+	    	$('#perCompanyName').removeClass('desc');
+	    	$('#perTradeDate').removeClass('dateasc');
+	    	$('#perTradeDate').removeClass('datedesc');
+	    	$('#perLastClosePrice').removeClass('closepasc');
+	    	$('#perLastClosePrice').removeClass('closepdesc');
+	    	$('#perCurPrice').removeClass('currrentpasc');
+	    	$('#perCurPrice').removeClass('currrentpdesc');
 	    },
 	    
 	    perSortLastClsPrice: function(data, event){
 	    	var me = this;
-	    	if($('#'+event.target.id).hasClass('closepasc')){
-	    		$('#'+event.target.id).removeClass('closepasc').addClass('closepdesc')
+	    	if($('#perLastClosePrice').hasClass('closepasc')){
+	    		$('#perLastClosePrice').removeClass('closepasc').addClass('closepdesc')
 	    		me.displayTransactions.sort(sortByClsPrice);
 	    	    function sortByClsPrice(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
 	    	       var b = b.lastClosePrice.toString().replace(/,/gi,"");
 	    	       a = parseFloat(a.replace("$",""));
 		  		   b = parseFloat(b.replace("$",""));
-	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+		  		   if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+			  	   }
+			  	   if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	   }
+			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('closepdesc').addClass('closepasc')
+	    		$('#perLastClosePrice').removeClass('closepdesc').addClass('closepasc')
 	    		me.displayTransactions.sort(sortByClsPrice);
 	    	    function sortByClsPrice(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
@@ -1486,22 +1529,36 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#perCompanyName').removeClass('asc');
+	    	$('#perCompanyName').removeClass('desc');
+	    	$('#perTradeDate').removeClass('dateasc');
+	    	$('#perTradeDate').removeClass('datedesc');
+	    	$('#perNumOfShares').removeClass('shareasc');
+	    	$('#perNumOfShares').removeClass('sharedesc');
+	    	$('#perCurPrice').removeClass('currrentpasc');
+	    	$('#perCurPrice').removeClass('currrentpdesc');
 	    },
 	    
 	    perSortCurrentValue: function(data, event){
 	    	var me = this;
-	    	if($('#'+event.target.id).hasClass('currrentpasc')){
-	    		$('#'+event.target.id).removeClass('currrentpasc').addClass('currrentpdesc')
+	    	if($('#perCurPrice').hasClass('currrentpasc')){
+	    		$('#perCurPrice').removeClass('currrentpasc').addClass('currrentpdesc')
 	    		me.displayTransactions.sort(sortByCurrentVal);
 	    	    function sortByCurrentVal(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$",""));  
-	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+		  			if (!$.isNumeric(a) && b){
+	    	    	    return 1;
+		  			}
+			  	  	if (!$.isNumeric(b) && a){
+	    	    	    return -1;
+			  	  	}
+			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	    }
 	    	}else{
-	    		$('#'+event.target.id).removeClass('currrentpdesc').addClass('currrentpasc')
+	    		$('#perCurPrice').removeClass('currrentpdesc').addClass('currrentpasc')
 	    		me.displayTransactions.sort(sortByCurrentVal);
 	    	    function sortByCurrentVal(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
@@ -1517,6 +1574,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#perCompanyName').removeClass('asc');
+	    	$('#perCompanyName').removeClass('desc');
+	    	$('#perTradeDate').removeClass('dateasc');
+	    	$('#perTradeDate').removeClass('datedesc');
+	    	$('#perNumOfShares').removeClass('shareasc');
+	    	$('#perNumOfShares').removeClass('sharedesc');
+	    	$('#perLastClosePrice').removeClass('closepasc');
+	    	$('#perLastClosePrice').removeClass('closepdesc');
 	    },
 	    
 	    buySellValidate: function(){
