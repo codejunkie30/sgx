@@ -1484,8 +1484,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
-	    	    	var a = parseFloat(a.numberOfShares);
-	    	    	var b = parseFloat(b.numberOfShares); 
+	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
+			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,"")); 
 		  			if (!$.isNumeric(a) && b){
 	    	    	    return 1;
 		  			}
@@ -1498,8 +1498,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#perNumOfShares').removeClass('sharedesc').addClass('shareasc')
 	    		me.displayTransactions.sort(sortByNumShares);
 	    	    function sortByNumShares(a, b){
-	  			  	var a = parseFloat(a.numberOfShares);
-	  			  	var b = parseFloat(b.numberOfShares);
+	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
+			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,""));
 	  			  	if (!$.isNumeric(a) && b){
 	    	    	    return 1;
 		  			}
