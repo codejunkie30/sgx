@@ -27,11 +27,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		      var _self = this;
 		      var li = $('<li></li>');
 		      if(type === 'number'){
-		    	  var inputBox = $('<input type="text" style="width: 18px; text-align: center"/>').attr('id', 'pagingTextBox').attr('value', _self.currentPage);
+		    	  var inputBox = $('<input type="text" style="width: 25px; text-align: center"/>').attr('id', 'pagingTextBox').attr('value', _self.currentPage);
 		    	  li.data('pagination-type', type);
 		    	  li.append("<b>&nbsp;&nbsp;Page&nbsp;&nbsp;<b>");
 		    	  li.append(inputBox);
-		    	  li.append("&nbsp;&nbsp;of&nbsp;&nbsp;<b>"+_self.totalPages+"&nbsp;&nbsp; </b>");
+		    	  li.append("<b>&nbsp;&nbsp;of&nbsp;&nbsp;"+_self.totalPages+"&nbsp;&nbsp; </b>");
 		      }else{
 			      var span = $('<span class="action-btn"></span>');
 			      var cssClass = type;
