@@ -222,7 +222,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       $('.technical-charting-alternative').show();
       PAGE.hideLoading();
       ko.applyBindings(this, $("body")[0]);
-      setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
     },
 
     init_premium: function() {
