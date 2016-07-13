@@ -828,7 +828,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
               PAGE.selectedCurrency.subscribe(function(newValue) {
                 if (newValue != UTILS.retrieveCurrency()){                
                   UTILS.saveCurrency(newValue.toLowerCase());
-                  UTILS.saveTracking("true");
                   setTimeout(function(){
                     location.reload();
                   }, 100);
