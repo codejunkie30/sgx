@@ -13,7 +13,7 @@
 
 	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
   				<int:service-activator ref="xfRetrievalService" method="init"/>
-  				<!-- <int:service-activator ref="keyDevsService" method="init"/> -->
+  				<int:service-activator ref="keyDevsService" method="init"/>
 				<int:service-activator ref="xfSplitterService" method="init"/>
  				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
  				<int:service-activator ref="gtiService" method="init"/>
