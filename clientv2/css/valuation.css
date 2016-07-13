@@ -247,6 +247,10 @@
 
 .transactions table thead tr th.lastpricedesc {background: url("../img/sort_descending.png") no-repeat left 41px top 8px;}
 
+.transactions table thead tr th.typeasc {background: url("../img/sort_ascending.png") no-repeat left 50px top 12px;}
+
+.transactions table thead tr th.typedesc {background: url("../img/sort_descending.png") no-repeat left 50px top 8px;}
+
 .transactions table tbody tr td input {
 	width: 90px;
 	height: 25px;

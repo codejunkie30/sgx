@@ -1388,6 +1388,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('asc');
 	    	$('#transTradeDate').removeClass('desc');
 	    	$('#transNumShare').removeClass('shareasc');
@@ -1396,6 +1398,41 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transPrice').removeClass('pricedesc');
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
+	    },
+	    
+	    transSortbyType: function(){
+	    	var me = this;
+	    	if($('#transType').hasClass('typeasc')){
+	    		$('#transType').removeClass('typeasc').addClass('typedesc');
+	    		me.transItems.sort(sortByType);
+	    	    function sortByType(a, b){
+	    	    	var a = a.transactionType().toLowerCase();
+    	    		var b = b.transactionType().toLowerCase(); 
+    	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#transType').removeClass('typedesc').addClass('typeasc');
+	    		me.transItems.sort(sortByType);
+	    	    function sortByType(a, b){
+	    	    	var a = a.transactionType().toLowerCase();
+    	    		var b = b.transactionType().toLowerCase(); 
+	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transTradeDate').removeClass('dateasc');
+	    	$('#transTradeDate').removeClass('datedesc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');	    	
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
@@ -1423,6 +1460,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
 	    	$('#transNumShare').removeClass('shareasc');
 	    	$('#transNumShare').removeClass('sharedesc');
 	    	$('#transPrice').removeClass('priceasc');
@@ -1456,6 +1495,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('dateasc');
 	    	$('#transTradeDate').removeClass('datedesc');
 	    	$('#transPrice').removeClass('priceasc');
@@ -1493,6 +1534,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('dateasc');
 	    	$('#transTradeDate').removeClass('datedesc');
 	    	$('#transNumShare').removeClass('shareasc');
@@ -1530,6 +1573,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('dateasc');
 	    	$('#transTradeDate').removeClass('datedesc');
 	    	$('#transNumShare').removeClass('shareasc');
