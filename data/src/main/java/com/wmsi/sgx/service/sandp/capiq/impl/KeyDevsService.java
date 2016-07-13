@@ -64,6 +64,8 @@ public class KeyDevsService extends AbstractDataService {
 
 	
 	private String getQuery(List<String> ids) throws CapIQRequestException{
+		keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
+		requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
 
 		ObjectMapper m;
 		JsonNode requestWrapper;
