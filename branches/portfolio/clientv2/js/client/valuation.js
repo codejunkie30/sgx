@@ -209,7 +209,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		  };
 
 		  $.fn.paginathing.defaults = {
-		    perPage: 3,
+		    perPage: 25,
 		    limitPagination: false,
 		    prevNext: true,
 		    firstLast: false,
