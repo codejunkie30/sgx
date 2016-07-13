@@ -226,15 +226,25 @@
 	vertical-align: top;
 }
 
-.transactions table thead tr th.asc {
-	background: url("../img/sort_ascending.png") no-repeat left 125px top
-		10px;
-}
+.transactions table thead tr th.asc {background: url("../img/sort_ascending.png") no-repeat left 125px top 10px;}
 
-.transactions table thead tr th.desc {
-	background: url("../img/sort_descending.png") no-repeat left 125px top
-		5px;
-}
+.transactions table thead tr th.desc {background: url("../img/sort_descending.png") no-repeat left 125px top 5px;}
+
+.transactions table thead tr th.dateasc {background: url("../img/sort_ascending.png") no-repeat left 54px top 12px;}
+
+.transactions table thead tr th.datedesc {background: url("../img/sort_descending.png") no-repeat left 54px top 8px;}
+
+.transactions table thead tr th.shareasc {background: url("../img/sort_ascending.png") no-repeat left 69px top 12px;}
+
+.transactions table thead tr th.sharedesc {background: url("../img/sort_descending.png") no-repeat left 69px top 8px;}
+
+.transactions table thead tr th.priceasc {background: url("../img/sort_ascending.png") no-repeat left 50px top 12px;}
+
+.transactions table thead tr th.pricedesc {background: url("../img/sort_descending.png") no-repeat left 50px top 8px;}
+
+.transactions table thead tr th.lastpriceasc {background: url("../img/sort_ascending.png") no-repeat left 41px top 12px;}
+
+.transactions table thead tr th.lastpricedesc {background: url("../img/sort_descending.png") no-repeat left 41px top 8px;}
 
 .transactions table tbody tr td input {
 	width: 90px;

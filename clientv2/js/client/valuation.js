@@ -1361,7 +1361,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 	    },
 	    
-	    sortColumn: function(data, event){
+	    transSortByCompanyName: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
@@ -1380,6 +1380,154 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	    	    }
 	    	}
+	    	$('#transTradeDate').removeClass('asc');
+	    	$('#transTradeDate').removeClass('desc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
+	    },
+	    
+	    transSortbyTradeDate: function(){
+	    	var me = this;
+	    	if($('#transTradeDate').hasClass('dateasc')){
+	    		$('#transTradeDate').removeClass('dateasc').addClass('datedesc');
+	    		me.transItems.sort(sortByTradeDate);
+	    	    function sortByTradeDate(a, b){
+	    	    	var a = new Date(a.tradeDate()).getTime();
+    	    		var b = new Date(b.tradeDate()).getTime(); 
+    	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#transTradeDate').removeClass('datedesc').addClass('dateasc');
+	    		me.transItems.sort(sortByTradeDate);
+	    	    function sortByTradeDate(a, b){
+	    	    	var a = new Date(a.tradeDate()).getTime();
+    	    		var b = new Date(b.tradeDate()).getTime();
+	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
+	    },
+	    
+	    transSortbyNumberShare: function(data, event){
+	    	var me = this;
+	    	if($('#transNumShare').hasClass('shareasc')){
+	    		$('#transNumShare').removeClass('shareasc').addClass('sharedesc')
+	    		me.transItems.sort(sortByNumShares);
+	    	    function sortByNumShares(a, b){
+	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
+			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,"")); 
+			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#transNumShare').removeClass('sharedesc').addClass('shareasc')
+	    		me.transItems.sort(sortByNumShares);
+	    	    function sortByNumShares(a, b){
+	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
+			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,""));
+	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transTradeDate').removeClass('dateasc');
+	    	$('#transTradeDate').removeClass('datedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
+	    },
+	    
+	    transSortbyPrice: function(data, event){
+	    	var me = this;
+	    	if($('#transPrice').hasClass('priceasc')){
+	    		$('#transPrice').removeClass('priceasc').addClass('pricedesc');
+	    		me.transItems.sort(sortByClsPrice);
+	    	    function sortByClsPrice(a, b){
+	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
+	    	       var b = b.costAtPurchase().toString().replace(/,/gi,"");
+	    	       a = parseFloat(a.replace("$",""));
+		  		   b = parseFloat(b.replace("$",""));
+			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#transPrice').removeClass('pricedesc').addClass('priceasc');
+	    		me.transItems.sort(sortByClsPrice);
+	    	    function sortByClsPrice(a, b){
+	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
+		    	   var b = b.costAtPurchase().toString().replace(/,/gi,"");
+		    	   a = parseFloat(a.replace("$",""));
+			  	   b = parseFloat(b.replace("$",""));
+			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transTradeDate').removeClass('dateasc');
+	    	$('#transTradeDate').removeClass('datedesc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$(".pagination-container").remove();
+	    	$('#transItemsId').paginathing({
+			    insertAfter: '#transItemsId'
+			});
+	    },
+	    
+	    transSortbyLastPrice: function(data, event){
+	    	var me = this;
+	    	if($('#transLastPrice').hasClass('lastpriceasc')){
+	    		$('#transLastPrice').removeClass('lastpriceasc').addClass('lastpricedesc')
+	    		me.transItems.sort(sortByCurrentVal);
+	    	    function sortByCurrentVal(a, b){
+	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
+	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
+	    	    	a = parseFloat(a.replace("$",""));
+		  			b = parseFloat(b.replace("$",""));  
+			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	    }
+	    	}else{
+	    		$('#transLastPrice').removeClass('lastpricedesc').addClass('lastpriceasc')
+	    		me.transItems.sort(sortByCurrentVal);
+	    	    function sortByCurrentVal(a, b){
+	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
+	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
+	    	    	a = parseFloat(a.replace("$",""));
+		  			b = parseFloat(b.replace("$","")); 
+			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    	    }
+	    	}
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transTradeDate').removeClass('dateasc');
+	    	$('#transTradeDate').removeClass('datedesc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
