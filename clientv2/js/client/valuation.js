@@ -574,8 +574,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var showChart = false;
 			var evaluateData = me.displayTransactions();
 
-			ko.utils.arrayForEach(evaluateData, function (item) {
-            	showChart = item.selectedTransaction() || showChart;
+			ko.utils.arrayForEach(evaluateData, function (aitem) {
+            	showChart = aitem.selectedTransaction() || showChart;
              });
 			me.singleChartUnchart(me, item.tickerCode, value);
 			if(value){
@@ -656,8 +656,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		multiChartUnchart: function(me, value){
 			var chart = $('#performance-chart-content').highcharts();
-			if(!UTIL.isEmpty(chart)){
-				chart.series.visible = value;
+			if(!UTIL.isEmpty(chart)){				
+				var seriesLength = chart.series.length;
+				for(var i = seriesLength -1; i > -1; i--) {					
+		        		chart.series[i].setVisible(value);					
+				}
 			}
 		},
 		
