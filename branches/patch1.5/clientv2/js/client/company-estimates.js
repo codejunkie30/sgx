@@ -134,7 +134,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             PAGE.hideLoading();
             $('#estimates-content-alternative').show();
             ko.applyBindings(this, $("body")[0]);
-      		setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
         },
 
 		initFinancials: function(me, data) {
