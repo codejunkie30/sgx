@@ -1335,8 +1335,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    		$('#multiCompData'+id).css({"padding-top":"15px"});
 	    		}else{
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
-		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 5px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
+		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 7px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 7px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    		}
 	    	});
 	    	
