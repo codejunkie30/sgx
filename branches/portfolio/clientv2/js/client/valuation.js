@@ -186,6 +186,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			          	_self.show(page);
 			        });
 		         }
+		         location.href = '#transactionSave';
 		        });
 		      },
 
@@ -208,7 +209,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		  };
 
 		  $.fn.paginathing.defaults = {
-		    perPage: 25,
+		    perPage: 3,
 		    limitPagination: false,
 		    prevNext: true,
 		    firstLast: false,
