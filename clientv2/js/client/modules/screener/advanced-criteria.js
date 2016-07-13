@@ -35,9 +35,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 		textDistributions: [ "industryGroup" ],
 		firstRun: true,
 		exchangeDisplay: false,
-		info:[],
-		minimum:0,maximum:0,
-		fieldItems: null,
+		info:null,
+		minimum:0,maximum:0,	
 		init: function(screener, finalize) {
 			
     		// reset the val and the toggle
@@ -52,55 +51,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 			this.changeTemplate = cTemplate;
 			this.screener = screener;
 			screener.criteria = this;
-			
-			
-			
-			if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-    			
-    			var prevCriteria = UTIL.retrieveScreenerCriteria().value;
-    			
-    			var prevParams = prevCriteria.criteria;
-    			
-    				var critCount = 0;
-    				var industryFlag = false;
-    				var exchangeFlag = false;
-    				this.fieldItems = this.fieldGroups;
-    				for(var j=0;j<this.fieldGroups.length;j++) {
-    					for(var k=0;k<this.fieldGroups[j].fields.length;k++) {
-    						this.fieldGroups[j].fields[k].isDefault=false;
-    						for(var i=0;i<prevParams.length;i++) {
-    							
-    							if(prevParams[i].field === this.fieldGroups[j].fields[k].id) {
-    								critCount = critCount+1
-    								if(prevParams[i].field == "industryGroup") {
-    									industryFlag  = true;
-    								}
-    								else if(prevParams[i].field == "exchange") {
-    									exchangeFlag = true;
-    									//this.fieldGroups[j].fields[k].label = this.fieldGroups[j].fields[k].itemLabels[prevParams[i].value]
-    								}
-    								this.fieldGroups[j].fields[k].isDefault=true;
-    							}
-    							
-    						}
-    						
-    							
-    					}
-    						
-    				}
-    				if(!exchangeFlag) {
-    					this.fieldGroups[4].fields[0].isDefault=true;
-    				}
-    				if(!industryFlag) {
-    					if(prevCriteria.industryFlag) {
-    						this.fieldGroups[3].fields[0].isDefault=true;
-    					}
-    				}
-    				
-    			
-			}
-			
-			
 			
 			// clear the drawn the inputs
 			$(".search-criteria tbody").children().remove();
@@ -164,7 +114,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		$.each(data.fields, function(idx, name) {
     			
     			var field = CRITERIA.getFieldById(name);
-    			
     			
     			// we can process it in the service
     			if (!field.hasOwnProperty("customDistribution") || !field.customDistribution) {
@@ -250,11 +199,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				 } else {
 					 $.each(field.values, function(vIdx, val) {CRITERIA.randomizeBucket(buckets, val, type, bCount);});
 				 }
-				//if(this.field == 'avgBrokerReq' || this.field == 'marketCap')
-				//{
-					CRITERIA.info[this.field] = field;
-				//}
-				
+				if(this.field == 'avgBrokerReq')
+				{
+					CRITERIA.info = field;
+				}
+        		
         		
         		// build the collection
         		var arr = [], start = 0;
@@ -387,86 +336,17 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
 	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
-
-							if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-				    			
-				    			var prevCriteria = UTIL.retrieveScreenerCriteria().value;
-				    			
-				    			var prevParams = prevCriteria.criteria;
-				    			for(var i=0;i<prevParams.length;i++) {
-				    				
-				    					if(prevParams[i].field === this.field.id && (prevParams[i].field != "industryGroup" && prevParams[i].field != "exchange" && prevParams[i].field != "percentChange" && prevParams[i].field != "targetPriceNum")) {
-				    						
-					        				
-					        				for(var k=0;k<prevCriteria.position.length;k++) {
-				    							if(prevParams[i].field == prevCriteria.position[k]) {
-
-				    								var cnt = prevCriteria.position[k+1][4].upperIndex - prevCriteria.position[k+1][3].lowerIndex;
-						    						mdl.updatesMin(CRITERIA.info[prevParams[i].field].values[prevCriteria.position[k+1][3].lowerIndex]);
-						    						mdl.updatesMax(CRITERIA.info[prevParams[i].field].values[prevCriteria.position[k+1][4].upperIndex]);
-						    						
-							        				return cnt+1
-				    							}
-				    						}
-				    						
-				    					}
-		    				
-				    			
-				    			}
-							
-							}
+						if(this.field.id == 'avgBrokerReq')
+						{
+	        				var cnt = CRITERIA.info.values.lastIndexOf(CRITERIA.maximum) - CRITERIA.info.values.indexOf(CRITERIA.minimum);
+	        				return cnt+1
+						}
         				return this.criteria.getDistributionMatches(this.field, min, max);
     				}
     				return 0;
     			}, mdl);
     			
         		ko.applyBindings(mdl, $(el)[0]);
-
-					if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-		    			
-		    			var prevCriteria = UTIL.retrieveScreenerCriteria().value;
-		    			
-		    			var prevParams = prevCriteria.criteria;
-		    			for(var i=0;i<prevParams.length;i++) {
-		    						    				
-		    					if(prevParams[i].field != "industryGroup" && prevParams[i].field != "exchange" && prevParams[i].field != "percentChange" && prevParams[i].field != "targetPriceNum") {
-		    						
-		    						for(var k=0;k<prevCriteria.position.length;k++) {
-		    							if(prevParams[i].field == prevCriteria.position[k]) {
-		    								$("[data-id="+prevParams[i].field+"]").find('.ui-slider-range').attr('style',prevCriteria.position[k+1][0].attr1);
-		    								$("[data-id="+prevParams[i].field+"]").find(".ui-slider-handle").eq(0).attr('style',prevCriteria.position[k+1][1].attr2);
-		    								$("[data-id="+prevParams[i].field+"]").find(".ui-slider-handle").eq(1).attr('style',prevCriteria.position[k+1][2].attr3);
-		    							}
-		    						}
-		    					}
-		    					else if(prevParams[i].field == "industryGroup") {
-		    						if($("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).length != 0) {
-		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').find('ul').append('<li>Select Industry</li>');
-		    							//$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').attr('data-label','Select Industry');
-		    							$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).val(prevParams[i].value);
-			    						$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(1).text(prevParams[i].value);
-			    						mdl.field.label=prevParams[i].value;;
-			    						mdl.val(prevParams[i].value)
-		    						}
-		    						
-		    					}
-		    					else if(prevParams[i].field == "exchange") {
-		    						if($("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).length != 0) {
-		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').find('ul').append('<li>Select Exchange</li>');
-		    							//$("[data-id="+prevParams[i].field+"]").find('.dropdown').attr('data-label','Select Exchange');
-		    							$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(0).val(prevParams[i].value);
-			    						$("[data-id="+prevParams[i].field+"]").find('.button-dropdown').find('.copy').eq(1).text(CRITERIA.fieldItems[4].fields[0].itemLabels[prevParams[i].value]);
-			    						mdl.field.label=CRITERIA.fieldItems[4].fields[0].itemLabels[prevParams[i].value];
-			    						mdl.val(prevParams[i].value);
-		    						}
-		    						
-		    					}
-		    					
-		    			}
-		    				
-		    			
-		    		}
-					
         		
         		if (typeof field.customDistribution === "undefined" || !field.customDistribution) {
         			mdl.changes.subscribe(function(val) { mdl.criteria.runSearch(); });
@@ -519,66 +399,19 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		
     		var endpoint = "/sgx/search";
     		var params = [];
-    		var industryFlag = false;
-    		var exchangeFlag = false;
-    		var exchangeVm = null;
-    		var industryVm = null;
     		$(".search-criteria .criteria:not(.inactive)").each(function(idx, el) {
 
     			var vm = ko.dataFor(el);
     			var name = vm.field.id;
 				
-    			if(name=="industryGroup") {
-    				exchangeVm = vm;
-    				industryFlag = true;
-    			}
-    			else if(name=="exchange") {
-    				exchangeFlag = true;
-    				industryVm = vm;
-    			}
     			param = { 'field': name };
     			
-    			if (vm.field.template == "select") {
-    				
-    				
-    				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) {
-    					if(name == "exchange") {
-    						if((typeof vm.val() === "undefined" || vm.val() == null) && vm.field.label != "Select Exchange" ) {
-    							for(var i=0;i<CRITERIA.fieldItems[4].fields[0].buckets.length;i++) {
-    								
-    								if(CRITERIA.fieldItems[4].fields[0].buckets[i].key == vm.field.label) {
-    									param.value = CRITERIA.fieldItems[4].fields[0].buckets[i].key;
-    	        						vm.val(CRITERIA.fieldItems[4].fields[0].buckets[i].key);
-    	        						param.value = vm.val();
-    	        						params.push(param);
-    								}
-    							}
-    							
-        						
-        					}
-    					}
-    					else if(name == "industryGroup") {
-    						if((typeof vm.val() != "undefined" && vm.val() != null) || vm.field.label != "Select Industry" ) {
-    							for(var i=0;i<CRITERIA.fieldItems[3].fields[0].buckets.length;i++) {
-    								
-    								if(CRITERIA.fieldItems[3].fields[0].buckets[i].key == vm.field.label) {
-    									param.value = CRITERIA.fieldItems[3].fields[0].buckets[i].key;
-    	        						vm.val(CRITERIA.fieldItems[3].fields[0].buckets[i].key);
-    	        						param.value = vm.val();
-    	        						params.push(param);
-    								}
-    							}
-    							
-        						
-        					}
-    					}
-    					
-    					return;
-    				}
+    			if (vm.field.template == "select") {					
+    				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) return;
 					//Fix for REITs as it's no longer part of industryGroup
     				(vm.val() != 'Real Estate Investment Trusts (REITs)') ? param.field = vm.field.id : param.field = 'industry';
-    				param.value = vm.val();		
-    				
+    				param.value = vm.val();					
+					
     			}
     			else if (vm.field.template == "change") {
     				if (vm.val() == null) return;
@@ -600,76 +433,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		});
     		
     		// search
-    		if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-    			
-    			var prevCriteria = UTIL.retrieveScreenerCriteria().value;
-    			
-    			var prevParams = prevCriteria.criteria;
-    			for(var i=0;i<prevParams.length;i++) {
-    				
-    						for(var k=0;k<prevCriteria.position.length;k++) {
-    							if(prevParams[i].field == prevCriteria.position[k] && (prevParams[i].field != "industryGroup" && prevParams[i].field != "exchange" && prevParams[i].field != "percentChange" && prevParams[i].field != "targetPriceNum")) {
-    								if(typeof(CRITERIA.info[prevParams[i].field]) != "undefined" ) {
-    									prevParams[i].from = CRITERIA.info[prevParams[i].field].values[prevCriteria.position[k+1][3].lowerIndex];
-    									prevParams[i].to = CRITERIA.info[prevParams[i].field].values[prevCriteria.position[k+1][4].upperIndex];
-    								}
-    							}
-    						}
-    						
-    			}
-    			
-    			this.screener.results.retrieve(endpoint, { 'criteria': prevParams }, null, scroll);
-    		}
-    		else {
-    			
-    			//var arr = ["marketCap","totalRevenue","peRatio","dividendYield","priceVs52WeekHigh"];
-    			var position =[];
-    			for(var i=0;i<params.length;i++) {
-    				if(params[i].field != "industryGroup" && params[i].field != "exchange" && params[i].field != "percentChange" && params[i].field != "targetPriceNum") {
-        					var sliderPosition = [];
-        					var styleAttr1 = $("[data-id="+params[i].field+"]").find('.ui-slider-range').attr("style");
-        					var styleAttr2 = $("[data-id="+params[i].field+"]").find(".ui-slider-handle").eq(0).attr("style");
-        					var styleAttr3 = $("[data-id="+params[i].field+"]").find(".ui-slider-handle").eq(1).attr("style");
-        					sliderPosition.push({attr1:styleAttr1});
-        					sliderPosition.push({attr2:styleAttr2});
-        					sliderPosition.push({attr3:styleAttr3});
-        					
-
-        					sliderPosition.push({lowerIndex:CRITERIA.info[params[i].field].values.indexOf(params[i].from)});
-        					sliderPosition.push({upperIndex:CRITERIA.info[params[i].field].values.indexOf(params[i].to)});
-
-        					
-        					position.push(params[i].field,sliderPosition);
-        					
-    				}
-            		
-    			}
-    			var screenerCriteria = null;var page = 1;
-    			if(UTIL.retrieveScreenerCriteria() == null || UTIL.retrieveScreenerCriteria() == "undefined") {
-					var customizeItems = [];
-    				screenerCriteria = {
-    	    				criteria: params,
-    	    				position:position,
-    	    				customizeDisplay:customizeItems,
-    	    				pagination:customizeItems,
-    	    				industryFlag:industryFlag
-    	    			}
-					
-				}
-    			else {
-    				screenerCriteria = UTIL.retrieveScreenerCriteria().value;
-    				screenerCriteria.criteria = params;
-    				screenerCriteria.position = position;
-    				screenerCriteria.industryFlag=industryFlag;
-    				
-    			}
-    				
-    			
-    			UTIL.saveScreenerCriteria(screenerCriteria);
-    			this.screener.results.retrieve(endpoint, { 'criteria': params }, null, scroll);
-    		}
-    			
-    		
+    		this.screener.results.retrieve(endpoint, { 'criteria': params }, null, scroll);
     		
     	},
     	

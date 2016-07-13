@@ -19,22 +19,9 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			PAGE.checkStatus();
 			
 			this.results = SEARCH.init(this);
-			
-			var searchType = null;
-			
-			if(typeof UTILS.retrieveTracking()!="undefined" && UTILS.retrieveTracking().value == "true") {
-				if(typeof UTILS.retrieveSearchType()!="undefined" && UTILS.retrieveSearchType().value!=null) {
-					searchType = UTILS.retrieveSearchType().value
-				}
-				else {
-					searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
-				}
-				
-			}
-			else {
-				// some base variables
-				
-			}
+
+			// some base variables
+			var searchType = UTIL.getParameterByName("type") == "" ? this.defaultSearch : UTIL.getParameterByName("type");
 
     		// load the marketing copy
     		this.loadMarketingCopy();
@@ -113,8 +100,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 		 */
 		changeScreenerToggle: function(name) {
 			
-			UTILS.saveSearchType(name);
-			
 			// loading thingy
 			this.showLoading();
 			
@@ -161,7 +146,6 @@ define([ "wmsi/utils", "knockout", "client/modules/results", "jquery-placeholder
 			 */
 			screenerToggle: function(data, event) {
 				var name = $(event.currentTarget).attr("data-name");
-				
 				var screener = ko.dataFor($(".screener-header")[0]);
 				screener.results.viewModel.sectors.val(null);
 				screener.changeScreenerToggle(name);

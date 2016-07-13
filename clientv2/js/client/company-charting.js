@@ -171,34 +171,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
       var self = this;
       self.dropdownChoices.subscribe(function(data) {
-    	  
-    	  if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "false") {
-    	  if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companycharts == null || UTIL.retrieveCriteria().value.companycharts == "undefined")) {
-        	  var selectedItems = [];
-      			
-      			var companycharts= {
-      				indicators: selectedItems,
-      				financials: data,
-      				financialTab:true,
-      				indicatorTab:false
-      			}
-      			var criteria = {companycharts: companycharts};
-      			UTIL.saveCriteria(criteria);
-          }
-          else {
-        	  var criteria = UTIL.retrieveCriteria().value;
-    			
-    			
-    			var companycharts= {
-    					financials: data,
-    					financialTab:true,
-    					indicatorTab:false
-        			}
-    			criteria = {companycharts: companycharts};
-    			//criteria.push("companyFinancials",companyFinancials);
-    			UTIL.saveCriteria(criteria);
-          }
-    	  }
+
         var localScope = this; //this really is local scope for this function
         localScope.oldData = this.oldData || []; //save old data in this function's scope
         localScope.bypassNextNotification = localScope.bypassNextNotification || false; //need to bypass the rest of the code sometimes
@@ -235,12 +208,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
 
         self.trackChoiceNum( diff[0], action);
-        
+
         self.makeDataCall(diff[0], action);
 
         this.oldData = data.slice(0);
       });
-      
+
     },
 
     init_nonPremium: function() {
@@ -275,53 +248,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.initIndicatorsChart(data)  }, PAGE.customSGXError, undefined);
 
       this.editEnableRSI.subscribe(function(data) {
-        if(data) {
-        	
-        	if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companycharts == null || UTIL.retrieveCriteria().value.companycharts == "undefined")) {
-          	  var selectedItems = [];
-        			selectedItems.push("RSI");
-        			var companycharts= {
-        				indicators: selectedItems,
-        				financialTab:false,
-      				indicatorTab:true
-        			}
-        			var criteria = {companycharts: companycharts};
-        			UTIL.saveCriteria(criteria);
-            }
-            else {
-          	  var criteria = UTIL.retrieveCriteria().value;
-      			
-      			var selectedItems = [];
-      			if(typeof(criteria.companycharts.indicators) != "undeifined" && criteria.companycharts.indicators != null) {
-      				
-      			
-	      			for(var i=0;i<criteria.companycharts.indicators.length;i++) {
-	      				selectedItems.push(criteria.companycharts.indicators[i]);
-	      			}
-      			}
-      			
-      			
-      			selectedItems.push("RSI");
-      			var companycharts =  criteria.companycharts;
-      			if(companycharts!=null){
-      				companycharts.indicators=selectedItems;
-      				companycharts.financialTab=false,
-      				companycharts.indicatorTab=true
-      			}
-      			else {
-	      			var companycharts= {
-	      					indicators: selectedItems,
-	      					financialTab:false,
-	      					indicatorTab:true
-	          			}
-      			}
-      			criteria = {companycharts: companycharts};
-      			}
-      			//criteria.push("companyFinancials",companyFinancials);
-      			UTIL.saveCriteria(criteria);
-        	
+        if(data)
           this.addSeriesRSI();
-        }
         else {
           this.removeSeriesRSI();
           this.rsiInput.overBought(70);  //back to default
@@ -333,14 +261,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.flattenDropdownsObject();
       this.setFinancialsDropdowns();
       this.dropdownChoices.push('totalRevenue');
-      
-      setTimeout(function(){
-      	for(var k=0;k<1000;k++) {
-      		console.log("k = "+k);
-      	}
-  	},10000000);
-      
-      //this.dropdownChoices.push('grossProfit');
       ko.applyBindings(this, $("body")[0]);
 
     },
@@ -364,11 +284,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       //var endpoint = 'http://192.168.1.37:8001/techCharts/'+serviceObj.serviceName;
       var postType = 'POST';
       var params = { id: self.ticker };
-      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { setTimeout(function (){
-
-    	  self.financialsHandler(data, serviceObj, action, self);
-
-    	}, 500)  }, PAGE.customSGXError, undefined);
+      UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) { self.financialsHandler(data, serviceObj, action, self);  }, PAGE.customSGXError, undefined);
 
     },
 
@@ -426,106 +342,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
 
             self.financials_chart.chartReady.subscribe(function(data) {
               self.financials_chart.chartElement.xAxis[0].setCategories(arrayCategories);
-              
-              if(self.financials_chart.chartElement!=null) {
-            	  if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-        				if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
-        					var criteria = UTIL.retrieveCriteria().value;
-        					if(typeof criteria.companycharts != undefined && criteria.companycharts !=null) {
-	        					if(typeof criteria.companycharts.financials != undefined && criteria.companycharts.financials !=null) {
-		        					for(var j=0;j<criteria.companycharts.financials.length;j++) {
-		        						if("totalRevenue" != criteria.companycharts.financials[j]) {
-		        							self.dropdownChoices.push(criteria.companycharts.financials[j]);
-		        						}
-		        					}
-	        					}
-	        					if(criteria.companycharts.financialTab) {
-	          						self.activeTab('financials');
-	          					}
-	          					else {
-	          						self.activeTab('indicators');
-	          					}
-        					}
-        				}
-            	  }
-            	  
-              }
-              if(self.indicators_chart != null && self.indicators_chart.chartElement!=null) {
-            	  console.log("self.indicators_chart.chartElement is not null");
-            	  if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-      				if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
-      					var criteria = UTIL.retrieveCriteria().value;
-      					if(typeof criteria.companycharts.indicators != undefined && criteria.companycharts.indicators !=null) {
-	      					for(var j=0;j<criteria.companycharts.indicators.length;j++) {
-	      						var selectedItem=criteria.companycharts.indicators[j];
-	      						if(selectedItem == "RSI") {
-	      							self.addSeriesRSI();
-	      							//self.indicators_chart.redraw();
-	      							$("input[type=checkbox][data-bind='checked:editEnableRSI']").prop("checked",true);
-	      						}
-	      						else {
-	      						var checkBoxValue = selectedItem.split(".");
-	      						var value = checkBoxValue[1];
-	      	                  var defaultSeriesConfig = {
-	      	                    //simple Moving Area
-	      	                    'fifteen': { type: 'line', id: value, name: '15-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 15, color:'#bdd831' },
-	      	                    'fifty': { type: 'line', id: value, name: '50-day SMA', yAxis:'primary-axis', showInLegend:true, algorithm:'SMA', periods: 40,  color:'#ffcc00' },
-	      	                    //Moving avg con40
-	      	                    'MACD': { type: 'line', id: value, name: 'MACD', showInLegend:true, algorithm:'MACD', yAxis: 'tertiary-axis', axisName:'MACD',  color:'#0094b3' },
-	      	                    'Histogram': { type: 'column', id: value, name: 'Histogram', showInLegend:true, algorithm:'histogram', yAxis: 'tertiary-axis', axisName:'MACD', color:'#bdd831' },
-	      	                    'SignalLine': { type: 'line', id: value, name: 'Signal line', showInLegend:true, algorithm:'signalLine', yAxis: 'tertiary-axis', axisName: 'MACD',  color:'#791e75' }
-	      	                  };
-	
-	      	                  var seriesObject = defaultSeriesConfig[ value ];
-	
-	      	                  if(true) {
-	
-	      	                    var xData = self.indicators_chart.xData.slice(0);
-	      	                    var yData = self.indicators_chart.yData.slice(0);
-	      	                    var algorithm = seriesObject.algorithm;
-	
-	      	                    var seriesData = Algorithms[ algorithm ]( xData, yData, seriesObject.periods );
-	      	                    seriesObject.data = seriesData;
-	
-	      	                    self.indicators_chart.addSeries(seriesObject);
-	
-	      	                  }
-	      	                setTimeout(function(){
-	      	                	for(var k=0;k<10000000;k++) {
-	      	                		console.log("k = "+k);
-	      	                	}
-	      	            	},10000000);
-	
-	      	                  self.indicators_chart.redraw();
-	      	                  $("input[type=checkbox][value='"+selectedItem+"']").prop("checked",true);
-	      	                  
-	      						}
-	      					}
-      					}
-      					if(typeof criteria.companycharts.minDate != "undefined" && criteria.companycharts.minDate != null) {
-      						$($("tspan")[0]).text(criteria.companycharts.minDate);
-      					}
-      					if(typeof criteria.companycharts.maxDate != "undefined" && criteria.companycharts.maxDate != null) {
-      						$($("tspan")[1]).text(criteria.companycharts.maxDate);
-      					}
-      		        	
-      					if(criteria.companycharts.financialTab) {
-      						self.activeTab('financials');
-      					}
-      					else {
-      						self.activeTab('indicators');
-      					}
-      					
-      				}
-            	  }
-            	  
-            	  
-              }
-              
-              UTILS.saveTracking("false");
             });
-            //self.financials_chart.addSeries(seriesData, serviceObj);
-            //self.financials_chart.redraw();
+
       } else {
 
         if (action == 'add') {
@@ -540,7 +358,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
         }
 
       }
-      
+
 
     },
 
@@ -549,10 +367,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       this.indicators_chart = new Chart.HS_Chart('#technical-chart-container', this.ticker);
       this.indicators_chart.chartReady.subscribe(function(){
         setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
-        
-        
       });
-      this.indicators_chart.initChart(this.ticker);
       this.indicators_chart.initData(data);
     },  
 
@@ -615,53 +430,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "client/modules/tearshee
       var contextValue = dataVal[1];
 
       (this.checkBoxes[ contextValue ] == undefined)? this.checkBoxes[ contextValue ] = ko.observable(addSeriesBool): this.checkBoxes[ contextValue ](addSeriesBool);
-      
+
       (addSeriesBool)? contextArray.push(contextValue): contextArray.remove(contextValue);
-      
-      if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companycharts == null || UTIL.retrieveCriteria().value.companycharts == "undefined")) {
-    	  var selectedItems = [];
-  			selectedItems.push(dataVal[0]+"."+contextValue);
-  			var companycharts= {
-  				indicators: selectedItems,
-  				financialTab:false,
-				indicatorTab:true
-  			}
-  			var criteria = {companycharts: companycharts};
-  			UTIL.saveCriteria(criteria);
-      }
-      else {
-    	  var criteria = UTIL.retrieveCriteria().value;
-			
-			var selectedItems = [];
-			if(typeof(criteria.companycharts.indicators) != "undeifined" && criteria.companycharts.indicators != null) {
-				
-			
-			for(var i=0;i<criteria.companycharts.indicators.length;i++) {
-				selectedItems.push(criteria.companycharts.indicators[i]);
-			}
-			}
-			
-			if(addSeriesBool) {
-				selectedItems.push(dataVal[0]+"."+contextValue);
-			}
-			else {
-				var i = selectedItems.indexOf(dataVal[0]+"."+contextValue);
-				if(i != -1) {
-					selectedItems.splice(i, 1);
-				}
-			}
-			var companycharts= {
-					indicators: selectedItems,
-					financialTab:false,
-					indicatorTab:true
-    			}
-			criteria = {companycharts: companycharts};
-			}
-			//criteria.push("companyFinancials",companyFinancials);
-			UTIL.saveCriteria(criteria);
-			
-      
-      
       this.modifyIndicatorsChart( contextValue, addSeriesBool, event );
       return true;
 

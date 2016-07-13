@@ -74,17 +74,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			if (CHART.userStatus == 'PREMIUM'){
 				var base = CHART_DEFAULTS_PREM;
 			} else {
-				if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-					if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
-						var criteria = UTIL.retrieveCriteria().value;
-						for(var i=0;i<CHART_DEFAULTS.rangeSelector.buttons.length;i++) {
-							if(CHART_DEFAULTS.rangeSelector.buttons[i].text == criteria.companyProfile.graphTab) {
-								CHART_DEFAULTS.rangeSelector.selected=i;
-							}
-						}
-					}
-		      }
-				
 				var base = CHART_DEFAULTS;
 			}
 			
@@ -180,40 +169,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			
 			base.xAxis.events = {
 				afterSetExtremes: function(e) {
-					for(var i=0;i<$("text").length;i++) {
-		        		//alert($($("text")[i]).attr('style'));
-		        		if("font-weight:bold;color:black;fill:black;" == $($("text")[i]).attr('style')) {
-		        			graphTab = $($("text")[i]).text();
-		        			break;
-		        		}
-		        		}
-		        	if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyProfile == null || UTIL.retrieveCriteria().value.companyProfile == "undefined")) {
-		        	  	var companyProfile= {
-			      				graphTab:graphTab
-			      			}
-		      			var criteria = {companyProfile: companyProfile};
-		      			UTIL.saveCriteria(criteria);
-					}
-					else {
-		        	  var criteria = UTIL.retrieveCriteria().value;
-		        	  var 	companyProfile = criteria.companyProfile;
-		    		  if(companyProfile != null) {
-		    		  	companyProfile.graphTab=graphTab
-			      				
-			      			
-		    		  }
-		    		  else {
-		        	  var companyProfile= {
-			      				graphTab:graphTab
-			      				
-			      			}
-		    		  }
-		    			
-		        	  
-		    			criteria = {companyProfile: companyProfile};
-		    			//criteria.push("companyFinancials",companyFinancials);
-		    			UTIL.saveCriteria(criteria);
-					}
 					if (typeof periodChange !== "undefined") periodChange();
 		        }
 			};

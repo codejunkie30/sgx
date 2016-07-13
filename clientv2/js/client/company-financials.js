@@ -27,7 +27,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 
 			// extend tearsheet
 			$.extend(true, this, TS);
-			console.log($('.checkbox').closest('table').children('tr:first'));
+
 			// set up some basics
 			this.sections = JSON.parse(FINANCIALS).financials;
 			this.series([]);
@@ -45,7 +45,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			this.init(function() { self.finish(self); });
 			
 			PAGE.checkStatus();
-			
 			
 		},
 		
@@ -104,25 +103,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			setTimeout(function(){
 			me.resizeIframeSimple();
 			}, 500);
-			//$('.checkbox').closest('td').eq(0).find('input:checkbox:first').attr("checked", "checked")
-			//this.chartData(this,$('.checkbox').closest('td')[0]);
-			if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-				if(UTIL.retrieveCriteria() != null || UTIL.retrieveCriteria() != "undefined") {
-					var criteria = UTIL.retrieveCriteria().value;
-					
-					for(var i=0;i<$('.checkbox').length;i++) {
-						for(var j=0;j<criteria.companyFinancials.criteria.length;j++) {
-							if($($('.checkbox')[i]).find('.trigger').attr('data-name') == criteria.companyFinancials.criteria[j]) {
-								this.chartData(this,$('.checkbox').closest('td')[i]);
-							}
-						}
-//						$($('.checkbox')[0]).find('.trigger')
-//						if($($('.checkbox')[0]).find('.trigger').attr('data-name') == )
-//						this.chartData(this,$('.checkbox').closest('td')[i]);
-//						$('.checkbox').find('.trigger').attr('data-name')
-					}
-				}
-			}
+			
 		},		
 		initChart: function(me) {
 			
@@ -208,36 +189,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 		},
 		
 		handleClick: function(model, data, event) {
-			UTILS.saveTracking("false");
 			var el = $(".checkbox", $(event.currentTarget).closest("tr"));
-			var checkedItem = el.closest('td').find('.trigger').attr('data-name');
-			
-				if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyFinancials == null || UTIL.retrieveCriteria().value.companyFinancials == "undefined")) {
-					var selectedItems = [];
-					selectedItems.push(checkedItem);
-					var companyFinancials= {
-		    				criteria: selectedItems
-		    			}
-					var criteria = {companyFinancials: companyFinancials};
-					UTIL.saveCriteria(criteria);
-				}
-				else {
-					var criteria = UTIL.retrieveCriteria().value;
-					criteria.companyFinancials.criteria
-					var selectedItems = [];
-					
-					for(var i=0;i<criteria.companyFinancials.criteria.length;i++) {
-						selectedItems.push(criteria.companyFinancials.criteria[i]);
-					}
-					selectedItems.push(checkedItem);
-					var companyFinancials= {
-		    				criteria: selectedItems
-		    			}
-					criteria = {companyFinancials: companyFinancials};
-					//criteria.push("companyFinancials",companyFinancials);
-					UTIL.saveCriteria(criteria);
-				}
-			
 			model.chartData(model, el);
 		},
 		
@@ -410,7 +362,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
      */
     (function (H) {
         var each = H.each;
-        UTILS.saveTracking("true");
         H.wrap(H.Chart.prototype, 'adjustTickAmounts', function (proceed) {
             var ticksBelowThreshold = 0,
                 ticksAboveThreshold = 0;

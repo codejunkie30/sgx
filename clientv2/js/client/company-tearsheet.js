@@ -105,9 +105,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 				parent.resizeIframeSimple();	
 			}
 			
-			if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "true") {
-				UTILS.saveTracking("false");
-			}
 		},
 		
 		initNews: function(parent, data, finishedDrawing) {
@@ -167,91 +164,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			
 		},
 		
-		savingTab: function(selectedTab) {
-			
-			if(typeof(UTIL.retrieveTracking()) != "undefined" && UTILS.retrieveTracking().value == "false") {
-				if(typeof $(event.target)[0].href == "undefined") {
-					var selectedTab = "overview";
-					if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyProfile == null || UTIL.retrieveCriteria().value.companyProfile == "undefined")) {
-		        	  	
-		      			
-		      			var companyProfile= {
-		      				selectedTab:selectedTab
-		      			}
-		      			var criteria = {companyProfile: companyProfile};
-		      			UTIL.saveCriteria(criteria);
-		          }
-		          else {
-		        	  var criteria = UTIL.retrieveCriteria().value;
-		    			
-		    			
-		    			var companyProfile= {
-		    					selectedTab:selectedTab
-		    				}
-		    			criteria = {companyProfile: companyProfile};
-		    			//criteria.push("companyFinancials",companyFinancials);
-		    			UTIL.saveCriteria(criteria);
-		          }
-				}
-				else {
-					var arrTabs = ['overview','valuation','financials','dividends','ownership'];
-					for(var i=0;i<arrTabs.length;i++){
-						$('[name='+arrTabs[i]+']').attr('class','ui-state-default ui-corner-top').attr('aria-selected','false').attr('aria-expanded','false');
-						$('[name='+arrTabs[i]+"Div"+']').attr('aria-hidden','true').attr('style','display: none;');
-					}
-					$('[name='+selectedTab+']').attr('class','ui-state-default ui-corner-top ui-state-hover ui-state-focus ui-tabs-active ui-state-active').attr('aria-selected','true').attr('aria-expanded','true');
-					$('[name='+selectedTab+"Div"+']').attr('aria-hidden','false').attr('style','display: block;');
-					
-				if((UTIL.retrieveCriteria() == null || UTIL.retrieveCriteria() == "undefined") || (UTIL.retrieveCriteria().value.companyProfile == null || UTIL.retrieveCriteria().value.companyProfile == "undefined")) {
-		        	  	
-		      			
-		      			var companyProfile= {
-		      				selectedTab:selectedTab
-		      			}
-		      			var criteria = {companyProfile: companyProfile};
-		      			UTIL.saveCriteria(criteria);
-		          }
-		          else {
-		        	  var criteria = UTIL.retrieveCriteria().value;
-		    			
-		        	  var companyProfile = criteria.companyProfile;
-		        	  if(companyProfile!=null) {
-		        		  companyProfile.selectedTab = selectedTab
-			    				
-		        	  }
-		        	  else {
-		    			var companyProfile= {
-		    					selectedTab:selectedTab
-		    				}
-		          	}
-		    			criteria = {companyProfile: companyProfile};
-		    			//criteria.push("companyFinancials",companyFinancials);
-		    			UTIL.saveCriteria(criteria);
-		          }
-				}
-			}
-			else {
-				if((UTIL.retrieveCriteria() != null || typeof UTIL.retrieveCriteria() != "undefined") || (UTIL.retrieveCriteria().value.companyProfile != null || typeof UTIL.retrieveCriteria().value.companyProfile != "undefined")) {
-	        	  	
-	      			
-					var criteria = UTIL.retrieveCriteria().value;
-					if(typeof criteria.companyProfile != "undefined" && criteria.companyProfile != null) {
-						if(typeof criteria.companyProfile.selectedTab != "undefined" && criteria.companyProfile.selectedTab != null) {
-							if(criteria.companyProfile.selectedTab == selectedTab) {
-								$('[name='+selectedTab+']').attr('class','ui-state-default ui-corner-top ui-state-hover ui-state-focus ui-tabs-active ui-state-active').attr('aria-selected','true').attr('aria-expanded','true');
-								$('[name='+selectedTab+"Div"+']').attr('aria-hidden','false').attr('style','display: block;');
-							}
-							else {
-								$('[name='+selectedTab+']').attr('class','ui-state-default ui-corner-top').attr('aria-selected','false').attr('aria-expanded','false');
-								$('[name='+selectedTab+"Div"+']').attr('aria-hidden','true').attr('style','display: none;');
-							}
-						}
-					}
-				}
-	      			
-			}
-			return;
-		},
 		getKeyDevLetter: function(idx) {
 			return this.letters.substring(idx, idx+1);
 		},
@@ -307,7 +219,6 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 		
 	};
 	CP.ajaxOngoingCalls = ko.computed(function() {
-		//UTILS.saveTracking("false");
 		return CP.ajaxInAction().length > 0;
 	}).extend({throttle:250});
 
