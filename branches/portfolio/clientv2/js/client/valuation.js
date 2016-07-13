@@ -678,6 +678,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			me.activeTab(tabName);
+			if(tabName === "performance"){
+				me.getTransactionsData(me);
+			}else{
+				$(".pagination-container").remove();
+		    	$('#transItemsId').paginathing({
+				    insertAfter: '#transItemsId'
+				});
+			}
 	    },
 
 		getWatchListData: function(me) {
@@ -985,7 +993,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    saveTrans: function(){
-	    	$('.pagination-container').remove();
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
@@ -999,11 +1006,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('.save').remove();
 						$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 						PAGE.hideLoading();
-						me.transItems([]);
-						me.getTransactionsData(me);
 					}, 
 					PAGE.customSGXError);
-					//me.clearFieldData();
 	    },
 	    
 	    mapTransDataToSend: function(){
@@ -1263,7 +1267,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    removeItem: function(item) {
 	    	var me = this;
 	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares()) ){
-	    		$('.pagination-container').remove();
 		    	PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
@@ -1280,8 +1283,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 										console.log(data);
 										me.transItems.remove(item);
 										PAGE.hideLoading();
-										me.transItems([]);
-										me.getTransactionsData(me);
 									}, 
 									PAGE.customSGXError);
 				    	}else{
