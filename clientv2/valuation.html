@@ -60,7 +60,7 @@
 							</thead>
 							<tbody data-bind="foreach: displayTransactions">
 								<tr data-bind="css: { 'odd': ($index() % 2 != 0) }, attr: { id:'tr'+$index()}">
-									<td class="textCenter" data-bind="style: { backgroundColor: $root.tickerColors()[tickerCode] }"><input style="cursor: pointer;" type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction"></td>
+									<td class="textCenter" data-bind="style: { backgroundColor: $root.tickerColors()[tickerCode] }"><input style="cursor: pointer;" type="checkbox" data-bind="checkedValue: tickerCode, checked: selectedTransaction,click:$root.handleIndividualCheckbox.bind($root)"></td>
 									<!-- ko if: isMultiTrans -->
 										<td data-bind="attr: { id:'comptd'+$index()}">
 											<div>
