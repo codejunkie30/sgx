@@ -31,6 +31,7 @@
 	<int:header-enricher input-channel="triggerChannel" output-channel="inputDataRequestChannel">
 		<int:header name="jobId" expression="T(java.lang.System).currentTimeMillis()"/>
     	<int:header name="jobDate" expression="new java.util.Date()"/>
+    	<int:header name="indexName" value="default"/>
 	</int:header-enricher>
 	
 	
