@@ -196,6 +196,7 @@
 .imgIntCenterAllign {
 	cursor: pointer;
     text-align: center;
+    padding-bottom: 4px;
 }
 
 
