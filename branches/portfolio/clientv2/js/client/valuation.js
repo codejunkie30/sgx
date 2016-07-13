@@ -567,7 +567,32 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		showDatePicker: function(){
 			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
 		},
-		
+		handleIndividualCheckbox:function(item){
+			PAGE.showLoading();
+			var me = this;
+			var value = item.selectedTransaction();
+			var showChart = false;
+			var evaluateData = me.displayTransactions();
+
+			ko.utils.arrayForEach(evaluateData, function (item) {
+            	showChart = item.selectedTransaction() || showChart;
+             });
+			me.singleChartUnchart(me, item.tickerCode, value);
+			if(value){
+			    $('#performance-chart-content').show();
+        	    $('#performance-chart-header').show();
+			    
+			}
+			else if(!showChart){
+				me.multiChartUnchart(me, false);
+				$('#performance-chart-content').hide();
+            	$('#performance-chart-header').hide();
+			}
+			PAGE.hideLoading();
+			PAGE.resizeIframeSimple();
+			
+            return true;
+		},
 		computeSelectAllTrans: function(me){
 			var evaluateData = me.displayTransactions();
 			if(UTIL.isEmpty(evaluateData)){
@@ -575,26 +600,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			me.selectAllTransaction = ko.computed({
 				read: function () {
-					PAGE.showLoading();
 	                var selectAllTransaction = true;
 	                var showChart = false;
 	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
 	                	showChart = item.selectedTransaction() || showChart;
-	                	//single chart transaction
-	                	me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
 	                });
-	                $('#selectAllId').prop('checked', selectAllTransaction);
-	                if(showChart){
-	                	$('#performance-chart-content').show()
-	                	$('#performance-chart-header').show();	
-	                	PAGE.resizeIframeSimple();
-	                }else{
-	                	$('#performance-chart-content').hide();
-	                	$('#performance-chart-header').hide();	
-	                	PAGE.resizeIframeSimple();
-	                }
-	                PAGE.hideLoading();
+	                $('#selectAllId').prop('checked', selectAllTransaction);	                
+	                
 	                return selectAllTransaction;
 	            },
 	            write: function (value) {
@@ -603,9 +616,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                    if (value) item.selectedTransaction(true);
 	                    else item.selectedTransaction(false);
 	                });
-	                //Multi Chart Transaction
-	                me.multiChartUnchart(me, value);
-	                PAGE.hideLoading(); 
+	                
+	                var selectAllTransaction = true;
+	                var showChart = false;
+	                ko.utils.arrayForEach(evaluateData, function (item) {
+	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
+	                	showChart = item.selectedTransaction() || showChart;
+	                });
+	                $('#selectAllId').prop('checked', selectAllTransaction);
+	                if(showChart){
+	                	ko.utils.arrayForEach(evaluateData, function (item) {
+	    	                me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
+	    	            });
+	                	$('#performance-chart-content').show()
+	                	$('#performance-chart-header').show();	                	
+	                }else{
+	                	me.multiChartUnchart(me, false);
+	                	$('#performance-chart-content').hide();
+	                	$('#performance-chart-header').hide();	                	
+	                }
+	                PAGE.hideLoading();
+	                PAGE.resizeIframeSimple();
+	                
 	            }
 		    });
 		},
