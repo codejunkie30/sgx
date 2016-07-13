@@ -58,7 +58,7 @@ public class ErrorBeanHelper {
 			this.errors = new ArrayList<ErrorBean>();
 		}
 		if (errorMap.get(error.getErrorCode()) != null) {
-			errorMap.get(error).add(error);
+			errorMap.get(error.getErrorCode()).add(error);
 		} else {
 			this.errors.add(error);
 			errorMap.put(error.getErrorCode(), (ArrayList<ErrorBean>) errors);
