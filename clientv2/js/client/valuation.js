@@ -649,6 +649,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				for(var i = seriesLength -1; i > -1; i--) {
 					if(chart.series[i].name == seriesName){
 		        		chart.series[i].setVisible(value);
+		        		break;
 					}
 				}
 			}
@@ -659,8 +660,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if(!UTIL.isEmpty(chart)){				
 				var seriesLength = chart.series.length;
 				for(var i = seriesLength -1; i > -1; i--) {					
-		        		chart.series[i].setVisible(value);					
+		        		chart.series[i].setVisible(value,false);					
 				}
+				chart.redraw();
 			}
 		},
 		
