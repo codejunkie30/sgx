@@ -76,7 +76,7 @@ public class KeyDevsService extends AbstractDataService {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		try{
 			m = new ObjectMapper();
-			String template1 = TemplateUtil.bind(keyTemplate, ctx);
+			String template = TemplateUtil.bind(keyTemplate, ctx);
 			JsonNode  templateNode = m.readTree(TemplateUtil.resourceToStream(keyTemplate));
 			requestWrapper = m.readTree(TemplateUtil.resourceToStream(requetWrapper));
 			ArrayNode requestNode = (ArrayNode) requestWrapper.get("inputRequests");
@@ -86,7 +86,7 @@ public class KeyDevsService extends AbstractDataService {
 				
 				ctx.put("id", id);
 
-				String template = TemplateUtil.bind(keyTemplate, ctx);
+				//String template = TemplateUtil.bind(keyTemplate, ctx);
 				char doublequote = '"';
 				String templatebuff = 
 					"{"+
@@ -99,7 +99,7 @@ public class KeyDevsService extends AbstractDataService {
 									"}"+
 								"]"+
 							"}";
-				ArrayNode arr = (ArrayNode) m.readTree(TemplateUtil.bind(templatebuff, ctx)).get("inputRequests");
+				ArrayNode arr = (ArrayNode) m.readTree(template).get("inputRequests");
 				requestNode.addAll(arr);
 			}
 			
