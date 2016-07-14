@@ -43,6 +43,7 @@ public class KeyDevsService extends AbstractDataService {
 	
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
+	private ClassPathResource keyTemplate = new ClassPathResource("META-INF/query/capiq/keyDevTemplate");
 	
 	@Value("${loader.key-devs.dir}")
 	private String keyDevDir;
@@ -82,7 +83,7 @@ public class KeyDevsService extends AbstractDataService {
 				Map<String, Object> ctx = new HashMap<String, Object>();
 				ctx.put("id", id);
 
-				String template = TemplateUtil.bind(requetWrapper, ctx);
+				String template = TemplateUtil.bind(keyTemplate, ctx);
 				char doublequote = '"';
 				String templatebuff = 
 					"{"+
