@@ -91,7 +91,7 @@ public class KeyDevsService extends AbstractDataService {
 									"{"+
 							doublequote+"function"+doublequote+":"+doublequote+ "GDSP"+doublequote+","+
 							doublequote+"identifier"+doublequote+":"+doublequote+ "$id$"+ doublequote+","+
-							doublequote+"mnemonic"+doublequote+":"+doublequote+ "IQ_KEY_DEV_SOURCE"+doublequote+","+
+							doublequote+"mnemonic"+doublequote+":"+doublequote+ "IQ_KEY_DEV_SOURCE"+doublequote+
 									"}"+
 								"]"+
 							"}";
