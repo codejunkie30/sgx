@@ -9,14 +9,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    this.options = $.extend({}, $.fn.paginathing.defaults, options);
 
 		    this.startPage = 1;
-		    this.currentPage = 1;
+		    this.currentPage = this.options.currentPage;
 		    this.totalItems = this.el.children().length;
 		    this.totalPages = Math.ceil(this.totalItems / this.options.perPage);
 		    this.container = $('<nav></nav>').addClass(this.options.containerClass);
 		    this.ul = $('<ul></ul>').addClass(this.options.ulClass);
-
+		    this.currentPage = this.totalPages < this.currentPage ? this.currentPage -1 : this.currentPage;
 		    if(this.totalItems > this.options.perPage ){
-		    	this.show(this.startPage);	
+		    	this.show(this.currentPage);
 		    }
 		    return this;
 		  }
@@ -211,6 +211,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		  };
 
 		  $.fn.paginathing.defaults = {
+		    currentPage: 1,
 		    perPage: 25,
 		    limitPagination: false,
 		    prevNext: true,
@@ -684,14 +685,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			me.activeTab(tabName);
-			if(tabName === "performance"){
-				me.getTransactionsData(me);
-			}else{
-				$(".pagination-container").remove();
-		    	$('#transItemsId').paginathing({
-				    insertAfter: '#transItemsId'
-				});
-			}
 	    },
 
 		getWatchListData: function(me) {
@@ -766,8 +759,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			me.watchlistId = data.selectedValue();
 			
-			$('.pagination-container').remove();
-			
 			var chart = $('#performance-chart-content').highcharts();
 			if(!UTIL.isEmpty(chart)){
 				me.seriesOptions = [];
@@ -833,8 +824,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							VALUATION.selectedValue(data.id);
 							
 							me.watchlistId = data.id;
-							
-							$('.pagination-container').remove();
 							
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
@@ -1013,6 +1002,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					function(data, textStatus, jqXHR){					
 						$('.save').remove();
 						$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
+						me.getTransactionsData(me);
 						PAGE.hideLoading();
 						PAGE.resizeIframeSimple();
 					}, 
@@ -1229,8 +1219,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				  var b = b.companyName().toLowerCase(); 
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
-	    	
-    		$('#transItemsId').paginathing({
+	    	var currentPage = 1;
+			if($(".pagination-container").length){
+				currentPage = isNaN($('#pagingTextBox').val()) ? 1 : parseInt($('#pagingTextBox').val());
+			    $(".pagination-container").remove();
+			}
+			$('#transItemsId').paginathing({
+				currentPage: currentPage,
 			    insertAfter: '#transItemsId'
 			});
 	    	
@@ -1291,6 +1286,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									function(data, textStatus, jqXHR){					
 										console.log(data);
 										me.transItems.remove(item);
+										me.getTransactionsData(me);
 										PAGE.hideLoading();
 									}, 
 									PAGE.customSGXError);
@@ -1309,7 +1305,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removePerformanceItem: function(item) {
 	    	var me = this;
-	    	$('.pagination-container').remove();
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
@@ -1343,7 +1338,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    removeIntPerItem: function(item){
 	    	var me = this;
 	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares) ){
-		    	$('.pagination-container').remove();
 				PAGE.modal.open({ content: '<p>Are you sure you want to delete the transaction ?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
@@ -1447,6 +1441,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    transSortbyType: function(){
@@ -1482,6 +1477,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    transSortbyTradeDate: function(){
@@ -1517,6 +1513,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    transSortbyNumberShare: function(data, event){
@@ -1552,6 +1549,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    transSortbyPrice: function(data, event){
@@ -1591,6 +1589,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    transSortbyLastPrice: function(data, event){
@@ -1630,6 +1629,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
+	    	PAGE.resizeIframeSimple();
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
