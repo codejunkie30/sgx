@@ -75,7 +75,7 @@ public class KeyDevsService extends AbstractDataService {
 		String json = null;
 		try{
 			m = new ObjectMapper();
-			String template = TemplateUtil.bind(keyTemplate, ctx);
+			String template1 = TemplateUtil.bind(keyTemplate, ctx);
 			JsonNode  templateNode = m.readTree(TemplateUtil.resourceToStream(keyTemplate));
 			requestWrapper = m.readTree(TemplateUtil.resourceToStream(requetWrapper));
 			ArrayNode requestNode = (ArrayNode) requestWrapper.get("inputRequests");
