@@ -74,7 +74,7 @@ public class KeyDevsService extends AbstractDataService {
 		String json = null;
 		try{
 			m = new ObjectMapper();
-			requestWrapper = m.readTree(requetWrapper.getInputStream());
+			requestWrapper = m.readTree(TemplateUtil.resourceToStream(requetWrapper));
 			ArrayNode requestNode = (ArrayNode) requestWrapper.get("inputRequests");
 
 			for(String id : ids){
@@ -82,7 +82,7 @@ public class KeyDevsService extends AbstractDataService {
 				Map<String, Object> ctx = new HashMap<String, Object>();
 				ctx.put("id", id);
 
-				//String template = TemplateUtil.bind(keyDevsDataTemplate, ctx);
+				String template = TemplateUtil.bind(requetWrapper, ctx);
 				char doublequote = '"';
 				String templatebuff = 
 					"{"+
