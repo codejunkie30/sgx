@@ -163,8 +163,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					endpoint,
 					postType,
 					params,
-					function(data, textStatus, jqXHR){					
-						console.log(data);
+					function(data, textStatus, jqXHR){	
+						if(!$.isEmptyObject(data)){
+							$('#noRecordAvail').hide();
+						}else{
+							$('#noRecordAvail').show();
+						}
 						me.refractKeyDevData(data, me);
 						me.showHideCheckboxes(me);
 						PAGE.hideLoading();
@@ -193,6 +197,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		getKeyDevData: function(me, tickerCodes){
+			PAGE.showLoading();
 	    	var endpoint = PAGE.fqdn + "/sgx/search/stockListKeydevs";
 			var postType = 'POST';
     	    var params = {'tickerCodes' : tickerCodes};
@@ -200,18 +205,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					endpoint,
 					postType,
 					params,
-					function(data, textStatus, jqXHR){					
-						console.log(data);
-						me.refractKeyDevData(data, me);
+					function(data, textStatus, jqXHR){	
 						if(!$.isEmptyObject(data)){
-							$('#keyDevNoCompaniesTextDiv').hide();
-							$('#keyDevelopemntContentDiv').show();
-							$('#allKeyDevDivId').show();
+							$('#noRecordAvail').hide();
 						}else{
-							$('#keyDevelopemntContentDiv').hide();
-							$('#keyDevNoCompaniesTextDiv').show();
-							$('#allKeyDevDivId').hide();
+							$('#noRecordAvail').show();
 						}
+						me.refractKeyDevData(data, me);
+						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
 		},
@@ -415,8 +416,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		populateWatchlistCompanies:function(watchlistObject, me){
 		    // JSON Call for populating the companies for the selected watchlist.
 			if (Object.prototype.toString.call(watchlistObject.companies) == '[object Array]' && watchlistObject.companies.length == 0){ 
-				    $('#watchlistCompaniesSelect').val(null);
+			    $('#watchlistCompaniesSelect').val(null);
+			    $('#keyDevelopemntContentDiv').hide();
+				$('#keyDevNoCompaniesTextDiv').show();
+				$('#allKeyDevDivId').hide();
 				return;
+			}else{
+				$('#keyDevNoCompaniesTextDiv').hide();
+				$('#keyDevelopemntContentDiv').show();
+				$('#allKeyDevDivId').show();
 			}
 
 		    var endpoint = PAGE.fqdn+"/sgx/price/companyPrices";
@@ -425,8 +433,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 			    	me.watchlistCompanies(data.companyPrice);
+			    	
 		    	}
-
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
 			});
