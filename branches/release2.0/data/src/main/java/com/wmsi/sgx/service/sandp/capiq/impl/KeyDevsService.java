@@ -41,7 +41,7 @@ public class KeyDevsService extends AbstractDataService {
 	
 	private Logger log = LoggerFactory.getLogger(KeyDevsService.class);
 	
-	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("/META-INF/query/capiq/keyDevsData.json",KeyDevsService.class);
+	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
 	
 	@Value("${loader.key-devs.dir}")
