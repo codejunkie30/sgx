@@ -1367,13 +1367,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var intTransType = item.intTransactionType === "BUY" ? "Transaction Type <b>BOUGHT</b>" : "Transaction Type <b>SOLD</b>";
 	    		if($('#intMultiComp'+id).text().length > 32){
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
-		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;margin-bottom: -8px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top: 15px;margin-bottom: -8px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
+		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 		    		$('#multiCompData'+id).css({"padding-top":"15px"});
 	    		}else{
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
-		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-bottom: 7px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-bottom: 7px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
+		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='height: 25px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='height: 25px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    		}
 	    	});
 	    	
