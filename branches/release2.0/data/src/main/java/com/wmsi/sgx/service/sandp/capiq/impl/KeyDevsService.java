@@ -77,8 +77,7 @@ public class KeyDevsService extends AbstractDataService {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		try{
 			m = new ObjectMapper();
-			String template = TemplateUtil.bind(keyTemplate, ctx);
-			JsonNode  templateNode = m.readTree(TemplateUtil.resourceToStream(keyDevsDataTemplate));
+			String template = TemplateUtil.bind(keyDevsDataTemplate, ctx);
 			requestWrapper = m.readTree(TemplateUtil.resourceToStream(requetWrapper));
 			ArrayNode requestNode = (ArrayNode) requestWrapper.get("inputRequests");
 
@@ -87,7 +86,7 @@ public class KeyDevsService extends AbstractDataService {
 				
 				ctx.put("id", id);
 
-				String formattedTemplate = TemplateUtil.bind(keyTemplate, ctx);
+				String formattedTemplate = TemplateUtil.bind(template, ctx);
 				ArrayNode arr = (ArrayNode) m.readTree(formattedTemplate).get("inputRequests");
 				requestNode.addAll(arr);
 			}
