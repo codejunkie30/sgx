@@ -82,8 +82,25 @@ public class KeyDevsService extends AbstractDataService {
 				Map<String, Object> ctx = new HashMap<String, Object>();
 				ctx.put("id", id);
 
-				String template = TemplateUtil.bind(keyDevsDataTemplate, ctx);
-				ArrayNode arr = (ArrayNode) m.readTree(template).get("inputRequests");
+				//String template = TemplateUtil.bind(keyDevsDataTemplate, ctx);
+				char doublequote = '"';
+				String templatebuff = 
+					"{"+
+							doublequote +"inputRequests"+doublequote+":"+ 
+								"["+
+									"{"+
+					doublequote+"function"+doublequote+":"+doublequote+ "GDSHE"+doublequote+","+
+							doublequote+"identifier"+doublequote+":"+doublequote+ "$id$"+ doublequote+","+
+							doublequote+"mnemonic"+doublequote+":"+doublequote+ "IQ_KEY_DEV_ID"+doublequote+","+
+							doublequote+"properties"+doublequote+":"+ 
+										"{"+
+										doublequote+"STARTDATE"+doublequote+":"+doublequote+ "$startDate$"+doublequote+","+
+										doublequote+"FREQUENCY"+doublequote+":"+doublequote+"D"+doublequote+
+										"}"+
+									"}"+
+								"]"+
+							"}";
+				ArrayNode arr = (ArrayNode) m.readTree(TemplateUtil.bind(templatebuff, ctx)).get("inputRequests");
 				requestNode.addAll(arr);
 			}
 			
