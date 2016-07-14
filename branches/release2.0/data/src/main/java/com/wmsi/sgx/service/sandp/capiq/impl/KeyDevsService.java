@@ -43,7 +43,7 @@ public class KeyDevsService extends AbstractDataService {
 	
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
-	private ClassPathResource keyTemplate = new ClassPathResource("META-INF/query/capiq/keyDevTemplate");
+	private ClassPathResource keyTemplate = new ClassPathResource("META-INF/query/capiq/keyDevTemplate.json");
 	
 	@Value("${loader.key-devs.dir}")
 	private String keyDevDir;
