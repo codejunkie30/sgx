@@ -1,5 +1,7 @@
 package com.wmsi.sgx.exception;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -74,12 +76,12 @@ public class ErrorBeanHelper {
 			Map.Entry pair = (Map.Entry) it.next();
 			ArrayList<ErrorBean> beanList = (ArrayList<ErrorBean>) pair.getValue();
 			for (ErrorBean b : beanList) {
-				beanInfo.append(" ************* Error Message *************** \n " + b.getErrorMessage());
+				beanInfo.append(" \n Error Message :- \n" + b.getErrorMessage());
 				beanInfo.append(" \n ");
-				beanInfo.append(" ************* Object Description ********* \n " + b.getObjectName());
+				beanInfo.append("  Object Description :- \n" + b.getObjectName());
 			}
 			sb.append(pair.getKey() + " : " + beanInfo.toString() + "\n");
-			log.info(" ***** Error Information ******* "+ sb.toString());
+			log.info(" ***** Error Information ******* :- \n "+ sb.toString());
 		}
 		return sb.toString();
 
@@ -96,6 +98,12 @@ public class ErrorBeanHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public String getStackTrace(Exception ex){
+		StringWriter errors = new StringWriter();
+		ex.printStackTrace(new PrintWriter(errors));
+		return errors.toString();
 	}
 	
 }

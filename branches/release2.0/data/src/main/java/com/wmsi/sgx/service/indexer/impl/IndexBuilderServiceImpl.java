@@ -142,8 +142,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		} catch (IOException e) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:saveCurrencyList",
-					"Error parsing ticker input file", ErrorBean.ERROR, e.getMessage()));
-			throw new IndexerServiceException("Error parsing ticker input file", e);
+					"Error saving currency list ", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
+			throw new IndexerServiceException("Error saving currency list ", e);
 		} finally {
 			IOUtils.closeQuietly(csvReader);
 			IOUtils.closeQuietly(reader);
@@ -195,7 +195,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			return ret;
 		} catch (IOException e) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:readTickers",
-					"Error parsing ticker input file", ErrorBean.ERROR, e.getMessage()));
+					"Error parsing ticker input file", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			throw new IndexerServiceException("Error parsing ticker input file", e);
 		} finally {
 			IOUtils.closeQuietly(csvReader);
@@ -219,7 +219,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			log.error("Invalid id " + input.getTicker());
 		} catch (Exception ex) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:index",
-					"Invalid Id", ErrorBean.ERROR, ex.getMessage()));
+					"Invalid record: " + input.getTicker(), ErrorBean.ERROR, errorBeanHelper.getStackTrace(ex)));
 			log.error("Invalid record: " + input.getTicker(), ex);
 		}
 
@@ -588,7 +588,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			buffer.setLength(0);
 		} catch (Exception e) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:createFXIndex",
-					"Trying to create FX conversion index", ErrorBean.ERROR, e.getMessage()));
+					"Trying to create FX conversion index", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
 		}
 

@@ -65,7 +65,7 @@ public class XFSplitter {
 		}
 		catch(Exception e) {
 			errorBeanHelper
-					.addError(new ErrorBean("XFSplitter:init", "Splitting XF Files", ErrorBean.ERROR, e.getMessage()));
+					.addError(new ErrorBean("XFSplitter:init", "Splitting XF Files", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			log.error("Splitting XF Files", e);
 		}
 		
