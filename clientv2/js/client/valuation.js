@@ -1432,7 +1432,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    transSortbyType: function(){
@@ -1468,7 +1468,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    transSortbyTradeDate: function(){
@@ -1504,7 +1504,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    transSortbyNumberShare: function(data, event){
@@ -1540,7 +1540,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    transSortbyPrice: function(data, event){
@@ -1580,7 +1580,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    transSortbyLastPrice: function(data, event){
@@ -1620,7 +1620,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transItemsId').paginathing({
 			    insertAfter: '#transItemsId'
 			});
-	    	PAGE.resizeIframeSimple();
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
