@@ -577,13 +577,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			ko.utils.arrayForEach(evaluateData, function (aitem) {
             	showChart = aitem.selectedTransaction() || showChart;
              });
-			me.singleChartUnchart(me, item.tickerCode, value);
-			if(value){
+
+			if(showChart){
+			    me.singleChartUnchart(me, item.tickerCode, value);
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
-			    
 			}
-			else if(!showChart){
+			else{
 				me.multiChartUnchart(me, false);
 				$('#performance-chart-content').hide();
             	$('#performance-chart-header').hide();
@@ -601,10 +601,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.selectAllTransaction = ko.computed({
 				read: function () {
 	                var selectAllTransaction = true;
-	                var showChart = false;
 	                ko.utils.arrayForEach(evaluateData, function (item) {
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
-	                	showChart = item.selectedTransaction() || showChart;
 	                });
 	                $('#selectAllId').prop('checked', selectAllTransaction);	                
 	                
@@ -616,20 +614,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                    if (value) item.selectedTransaction(true);
 	                    else item.selectedTransaction(false);
 	                });
-	                
-	                var selectAllTransaction = true;
-	                var showChart = false;
-	                ko.utils.arrayForEach(evaluateData, function (item) {
-	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
-	                	showChart = item.selectedTransaction() || showChart;
-	                });
-	                $('#selectAllId').prop('checked', selectAllTransaction);
-	                if(showChart){
-	                	ko.utils.arrayForEach(evaluateData, function (item) {
-	    	                me.singleChartUnchart(me, item.tickerCode, item.selectedTransaction());
-	    	            });
+
+	                $('#selectAllId').prop('checked', value);
+	                if(value){
+	                	me.multiChartUnchart(me, true);
 	                	$('#performance-chart-content').show()
-	                	$('#performance-chart-header').show();	                	
+	                	$('#performance-chart-header').show();
 	                }else{
 	                	me.multiChartUnchart(me, false);
 	                	$('#performance-chart-content').hide();
