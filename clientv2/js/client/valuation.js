@@ -176,6 +176,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        		 }
 		        		 _self.currentPage = pageNumber;
 				          _self.show(pageNumber);
+				          PAGE.resizeIframeSimple();
 		        	 });
 		         }else{
 
@@ -184,6 +185,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			          	var page = _li.data('page');
 			          	_self.currentPage = page;
 			          	_self.show(page);
+			          	PAGE.resizeIframeSimple();
 			        });
 		         }
 		         location.href = '#transactionSave';
@@ -998,6 +1000,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						$('.save').remove();
 						$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 						PAGE.hideLoading();
+						PAGE.resizeIframeSimple();
 					}, 
 					PAGE.customSGXError);
 	    },
