@@ -242,7 +242,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        var value = parseInt($(element).val());
 		        var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(value));
 		        $(element).val(date);
-		    }
+		    },
+		    update: function(element, valueAccessor) {
+		        var value = ko.utils.unwrapObservable(valueAccessor()),
+	            $el = $(element),
+	            current = $el.datepicker("getDate");
+
+		        if (value - current !== 0) {
+		            $el.datepicker("setDate", value);   
+		        }
+	    	}
 		};
 	
 
@@ -320,6 +329,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		totalCurrentValue: 0.00,
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
+    	
+    	validatedCompanies: [],
+    	validateFlag: true,
     	
 		initPage: function() {
 			var me = this;
@@ -983,6 +995,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			if(me.transItems().length){
 				me.buySellValidate() ? me.saveTrans() : me.transItems.remove(transItemModel) ;
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
 			}
 	    },
 	    
@@ -1841,34 +1855,57 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#perLastClosePrice').removeClass('closepdesc');
 	    },
 	    
+	    transactionValidator: function(sentItem){
+	    	var me= this;
+	    	var loopFlag = true;
+	    	var bought = 0.00;
+	    	var sell = 0.00;
+	    	
+	    	$.each(me.validatedCompanies, function(i, data){
+	    		if(data === sentItem.tickerCode()){
+	    			loopFlag = false;
+	    		}
+	    	});
+	    		
+	    	if(loopFlag){
+	    		me.validatedCompanies.push(sentItem.tickerCode());
+	    		ko.utils.arrayForEach(me.transItems(), function (item) {
+	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
+	    				 if( ( new Date(item.tradeDate()) < new Date(sentItem.tradeDate()) ) || ( new Date(item.tradeDate()).getTime() == new Date(sentItem.tradeDate()).getTime() ) ){
+	    					 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+	   	   	    			 if(item.transactionType() === "BUY"){
+	   	   	    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
+	   	   	    			 }else{
+	   	   	    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
+	   	   	    			 }
+	    				 }
+	   	    		 }
+	    	 	});
+		    	
+				if( parseFloat(sell) > parseFloat(bought) ){
+					 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
+					 me.validateFlag = false;
+				}
+	    	}
+	    },
+	    
 	    buySellValidate: function(){
 	    	var me = this;
 	    	var flag = true;
 	    	var bought = 0.00;
 	    	var sell = 0.00;
-	    	var tickers = me.transactionTickers;
     		
-    		$.each(tickers, function(i, data){
-    			ko.utils.arrayForEach(me.transItems(), function (item) {
-	   	    		 if(item.tickerCode() === data){
-	   	 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-	   	    			 if(item.transactionType() === "BUY"){
-	   	    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
-	   	    			 }else{
-	   	    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
-	   	    			 }
-	   	    		 }
-   	    	 	});
-    			if( parseFloat(sell) > parseFloat(bought) ){
-    				PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
-    				flag = false;
-    				return false;
-   	    	 	}
-    			bought = 0.00;
-    	    	sell = 0.00;
-			});	
+			ko.utils.arrayForEach(me.transItems(), function (item) {
+				if(me.validateFlag){
+    				if(item.transactionType() === "SELL"){
+						me.transactionValidator(item);
+    				}
+				}else{
+					return false;
+				}
+    	 	});
     		
-    		return flag;
+    		return me.validateFlag;
 	    },
 	    
 	    /*buySellInitialValidate: function(data, event){
