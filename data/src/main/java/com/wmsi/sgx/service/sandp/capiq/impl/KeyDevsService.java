@@ -73,6 +73,7 @@ public class KeyDevsService extends AbstractDataService {
 		ObjectMapper m;
 		JsonNode requestWrapper;
 		String json = null;
+		Map<String, Object> ctx = new HashMap<String, Object>();
 		try{
 			m = new ObjectMapper();
 			String template1 = TemplateUtil.bind(keyTemplate, ctx);
@@ -82,7 +83,7 @@ public class KeyDevsService extends AbstractDataService {
 
 			for(String id : ids){
 
-				Map<String, Object> ctx = new HashMap<String, Object>();
+				
 				ctx.put("id", id);
 
 				String template = TemplateUtil.bind(keyTemplate, ctx);
