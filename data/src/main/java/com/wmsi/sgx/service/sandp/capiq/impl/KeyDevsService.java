@@ -43,7 +43,6 @@ public class KeyDevsService extends AbstractDataService {
 	
 	private ClassPathResource keyDevsDataTemplate = new ClassPathResource("META-INF/query/capiq/keyDevsData.json");
 	private ClassPathResource requetWrapper = new ClassPathResource("META-INF/query/capiq/inputRequestsWrapper.json");
-	private ClassPathResource keyTemplate = new ClassPathResource("META-INF/query/capiq/keyDevTemplate.json");
 	
 	@Value("${loader.key-devs.dir}")
 	private String keyDevDir;
@@ -53,7 +52,9 @@ public class KeyDevsService extends AbstractDataService {
 	
 	public static final String KEY_DEV_SOURCE_COLUMN_NAME = "source";
 	
-
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		String tickerNoEx = id.split(":")[0];
@@ -77,7 +78,7 @@ public class KeyDevsService extends AbstractDataService {
 		try{
 			m = new ObjectMapper();
 			String template = TemplateUtil.bind(keyTemplate, ctx);
-			JsonNode  templateNode = m.readTree(TemplateUtil.resourceToStream(keyTemplate));
+			JsonNode  templateNode = m.readTree(TemplateUtil.resourceToStream(keyDevsDataTemplate));
 			requestWrapper = m.readTree(TemplateUtil.resourceToStream(requetWrapper));
 			ArrayNode requestNode = (ArrayNode) requestWrapper.get("inputRequests");
 
@@ -86,20 +87,8 @@ public class KeyDevsService extends AbstractDataService {
 				
 				ctx.put("id", id);
 
-				//String template = TemplateUtil.bind(keyTemplate, ctx);
-				char doublequote = '"';
-				String templatebuff = 
-					"{"+
-							doublequote +"inputRequests"+doublequote+":"+ 
-								"["+
-									"{"+
-							doublequote+"function"+doublequote+":"+doublequote+ "GDSP"+doublequote+","+
-							doublequote+"identifier"+doublequote+":"+doublequote+ "$id$"+ doublequote+","+
-							doublequote+"mnemonic"+doublequote+":"+doublequote+ "IQ_KEY_DEV_SOURCE"+doublequote+
-									"}"+
-								"]"+
-							"}";
-				ArrayNode arr = (ArrayNode) m.readTree(template).get("inputRequests");
+				String formattedTemplate = TemplateUtil.bind(keyTemplate, ctx);
+				ArrayNode arr = (ArrayNode) m.readTree(formattedTemplate).get("inputRequests");
 				requestNode.addAll(arr);
 			}
 			
@@ -107,6 +96,8 @@ public class KeyDevsService extends AbstractDataService {
 		}
 		catch(IOException e){
 			log.error("Couldn't load key developments", e);
+			errorBeanHelper.addError(new ErrorBean("KeyDevsService:getQuery",
+					"Couldn't load key developments ", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			throw new CapIQRequestException("Couldn't load key developments", e);
 		}
 
@@ -196,6 +187,8 @@ public class KeyDevsService extends AbstractDataService {
 			loadSourceContent(keyDevSource);
 
 		} catch (Exception e) {
+			errorBeanHelper.addError(new ErrorBean("KeyDevsService:init",
+					"Couldn't load key developments ", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			log.error("Couldn't load key developments", e);
 		}
 		return true;
