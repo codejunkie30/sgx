@@ -579,14 +579,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
              });
 
 			if(showChart){
-			    me.singleChartUnchart(me, item.tickerCode, value);
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
+			    me.singleChartUnchart(me, item.tickerCode, value);
 			}
 			else{
-				me.multiChartUnchart(me, false);
 				$('#performance-chart-content').hide();
             	$('#performance-chart-header').hide();
+				me.multiChartUnchart(me, false);
 			}
 			PAGE.hideLoading();
 			PAGE.resizeIframeSimple();
@@ -617,13 +617,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 	                $('#selectAllId').prop('checked', value);
 	                if(value){
-	                	me.multiChartUnchart(me, true);
 	                	$('#performance-chart-content').show()
 	                	$('#performance-chart-header').show();
+	                	me.multiChartUnchart(me, true);
 	                }else{
-	                	me.multiChartUnchart(me, false);
 	                	$('#performance-chart-content').hide();
-	                	$('#performance-chart-header').hide();	                	
+	                	$('#performance-chart-header').hide();	
+	                	me.multiChartUnchart(me, false);                	
 	                }
 	                PAGE.hideLoading();
 	                PAGE.resizeIframeSimple();
