@@ -243,16 +243,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        var value = parseInt($(element).val());
 		        var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(value));
 		        $(element).val(date);
-		    },
-		    update: function(element, valueAccessor) {
-		        var value = ko.utils.unwrapObservable(valueAccessor()),
-	            $el = $(element),
-	            current = $el.datepicker("getDate");
-
-		        if (value - current !== 0) {
-		            $el.datepicker("setDate", value);   
-		        }
-	    	}
+		    }
 		};
 	
 
@@ -1906,42 +1897,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	 	});
     		
     		return me.validateFlag;
-	    },
-	    
-	    /*buySellInitialValidate: function(data, event){
-	    	var me = this;
-	    	var bought = 0.00;
-	    	var sell = 0.00;
-	    	var share = 0.00;
-	    	
-	    	if(data.transItems().length){
-	    		var tickerCode = data.selectedCompanyValue();
-		    	 ko.utils.arrayForEach(data.transItems(), function (item) {
-		    		 if(item.tickerCode() === tickerCode){
-		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-		    			 if(item.transactionType() === "BUY"){
-		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
-		    			 }else{
-		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
-		    			 }
-		    		 }
-		    	 });
-	    	}
-	    	
-	    	share = !UTIL.isEmpty(data.initialNumberOfShares()) ? data.initialNumberOfShares() : 0.00;
-    		if(data.selectedAvailableType() === "BUY"){
-			 	bought = parseFloat( parseFloat(bought) + parseFloat(share) ).toFixed(2);
-		 	}else{
-		 		sell = parseFloat( parseFloat(sell) + parseFloat(share) ).toFixed(2);
-		 	}
-	    	
-	    	if(parseFloat(sell) > parseFloat(bought)){
-	    		me.buySellValidateFlag = false;
-	    		 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
-	    		 return;
-	    	 }
-	    }*/
-	
+	    }
 	};
 	
 	function insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
