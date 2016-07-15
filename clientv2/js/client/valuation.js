@@ -961,7 +961,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		//-------------Transaction functionality starts--------------
 		addTrans: function() {
 			var me = this;
-			var transItemModel;
+			var transItemModel = null;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
 			var tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(me.initialTradeDate()));
@@ -973,14 +973,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.transItems.push(transItemModel);
 				me.clearFieldData();
 			}
-			if(me.transItems().length){
-				me.buySellValidate() ? me.saveTrans() : me.transItems.remove(transItemModel) ;
+			if(me.transItems().length && !UTIL.isEmpty(transItemModel)){
+				me.buySellValidate() ? me.insertTransaction() : me.transItems.remove(transItemModel) ;
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
 			}
 	    },
 	    
 	    saveTrans: function(){
+	    	var me = this;
+	    	if(me.transItems().length){
+				me.buySellValidate() ? me.insertTransaction() : me.transItems.remove(transItemModel) ;
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
+			}
+	    },
+	    
+	    insertTransaction: function(){
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
@@ -1874,7 +1883,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	 	});
 		    	
 				if( parseFloat(sell) > parseFloat(bought) ){
-					 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have purchased. Please correct and try again.</p>', width: 400 });
+					 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
 					 me.validateFlag = false;
 				}
 	    	}
