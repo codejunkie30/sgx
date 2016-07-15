@@ -1,5 +1,6 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","client/modules/performance-chart-config","highstock", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, PER_CHART_CONFIG) {
 	
+	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	(function($, window, document) {
 
 		  'use strict';
@@ -276,6 +277,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	};
 
 	var VALUATION = {
+		sectionName:'Valuation',
 		finalWL: ko.observableArray(),
 		showChange: ko.observable(false),
 		editWLName: ko.observable(),

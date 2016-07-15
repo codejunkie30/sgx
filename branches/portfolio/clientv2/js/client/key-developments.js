@@ -1,6 +1,8 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 
+	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	var KEYDEV = {
+		sectionName:'Key developments',	
 		finalWL: ko.observableArray(),
 		watchlistCompanies:ko.observableArray(),
 		showChange: ko.observable(false),
