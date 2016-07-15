@@ -68,7 +68,7 @@
 													<img src="img/ico-plus_blue.png" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
 													<img src="img/ico-minus_blue.png" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
 												</div>
-												<div class="multiTransCompany"><span data-bind="text:companyName, attr: { id:'intMultiComp'+$index()}"></span>&nbsp;(<span data-bind="text:tickerCode"></span>)</div>
+												<div class="multiTransCompany" data-bind="attr: { id:'intMultiComp'+$index()}"><span data-bind="text:companyName">&nbsp;</span>&nbsp;(<span data-bind="text:tickerCode"></span>)&nbsp;</div>
 											</div>
 										</td>
 									<!-- /ko -->
