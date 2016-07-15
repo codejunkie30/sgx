@@ -1359,7 +1359,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	$.each(data.multiCompData(), function (index, item) {
 	    		var intTransType = item.intTransactionType === "BUY" ? "Transaction Type <b>BOUGHT</b>" : "Transaction Type <b>SOLD</b>";
-	    		if($('#intMultiComp'+id).text().length > 32){
+	    		if($('#intMultiComp'+id).text().length > 36){
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
 		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
 		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
