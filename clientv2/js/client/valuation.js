@@ -990,7 +990,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    saveTrans: function(){
 	    	var me = this;
 	    	if(me.transItems().length){
-				me.buySellValidate() ? me.insertTransaction() : me.transItems.remove(transItemModel) ;
+				if(me.buySellValidate()){me.insertTransaction()};
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
 			}
