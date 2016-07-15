@@ -1867,6 +1867,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var loopFlag = true;
 	    	var bought = 0.00;
 	    	var sell = 0.00;
+	    	var samedatebought = 0.00;
+	    	var samedatesell = 0.00;
 	    	
 	    	$.each(me.validatedCompanies, function(i, data){
 	    		if(data === sentItem.tickerCode()){
@@ -1878,19 +1880,30 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		me.validatedCompanies.push(sentItem.tickerCode());
 	    		ko.utils.arrayForEach(me.transItems(), function (item) {
 	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
-	    				 if( ( new Date(item.tradeDate()) < new Date(sentItem.tradeDate()) ) || ( new Date(item.tradeDate()).getTime() == new Date(sentItem.tradeDate()).getTime() ) ){
-	    					 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+	   	    			 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+	    				 if( new Date(item.tradeDate()) < new Date(sentItem.tradeDate()) ){
 	   	   	    			 if(item.transactionType() === "BUY"){
 	   	   	    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
 	   	   	    			 }else{
 	   	   	    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
 	   	   	    			 }
+	    				 }else{
+	    					 if( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(sentItem.tradeDate()).setHours(0,0,0,0) ){
+	    						 if(item.transactionType() === "BUY"){
+	    							 samedatebought = parseFloat( parseFloat(samedatebought) + parseFloat(numberOfShares) ).toFixed(2);
+		   	   	    			 }else{
+		   	   	    				 samedatesell = parseFloat( parseFloat(samedatesell) + parseFloat(numberOfShares) ).toFixed(2);
+		   	   	    			 }
+	    					 }
 	    				 }
 	   	    		 }
 	    	 	});
 		    	
 				if( parseFloat(sell) > parseFloat(bought) ){
 					 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+					 me.validateFlag = false;
+				}else if(parseFloat(samedatesell) > parseFloat(samedatebought)){
+					PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
 					 me.validateFlag = false;
 				}
 	    	}
