@@ -691,6 +691,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params, 
 				function(data, textStatus, jqXHR){
+					if(!data.watchlists){
+						PAGE.hideLoading();
+			    	    console.log('Watchlists unavailable');
+			    	    return;
+			    	}
 					VALUATION.finalWL(data.watchlists.sort(sortByName));
 					function sortByName(a, b){
 						  var a = a.name.toLowerCase();
