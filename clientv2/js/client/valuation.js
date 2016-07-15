@@ -1140,9 +1140,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	me.displayTransactions.sort(sortByName);
 	    	function sortByName(a, b){
-				  var a = a.companyName.toLowerCase();
-				  var b = b.companyName.toLowerCase(); 
-				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
+	    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
+	    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
 	    	
 	    	me.totalCalculation(me);
@@ -1206,8 +1206,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	});
 	    	me.transItems.sort(sortByName);
 	    	function sortByName(a, b){
-				  var a = a.companyName().toLowerCase();
-				  var b = b.companyName().toLowerCase(); 
+				  var a = !UTIL.isEmpty(a.companyName()) ? a.companyName().toLowerCase() : "";
+				  var b = !UTIL.isEmpty(b.companyName()) ? b.companyName().toLowerCase() : ""; 
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 			}
 	    	var currentPage = 1;
