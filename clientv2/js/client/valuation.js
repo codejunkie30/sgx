@@ -231,6 +231,38 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		}(jQuery, window, document));
 	
+	// Input field to only allow numeric values
+	ko.bindingHandlers.valuationNumeric = {
+	    init: function (element) {
+	        $(element).on("keydown", function (event) {
+	            // Allow: backspace, delete, tab, escape, and enter
+	            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+	                // Allow: Ctrl+A
+	                (event.keyCode == 65 && event.ctrlKey === true) ||
+	                // Allow: . ,
+	                (event.keyCode == 190 || event.keyCode == 110) ||
+	                // Allow: home, end, left, right
+	                (event.keyCode >= 35 && event.keyCode <= 39)) {
+	                // let it happen, don't do anything
+	                return;
+	            }
+	            else {
+	                // Ensure that it is a number and stop the keypress
+	                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+	                    event.preventDefault();
+	                }
+	            }
+	        });
+	        $(element).on("change", function (event) {
+	        	event.preventDefault();
+	        	if(event.target.value === "0"){
+	        		event.target.value = "";
+	        		event.target.focus();
+	        	}
+	        });
+	    }    
+	};
+	
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
@@ -984,7 +1016,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(me.initialTradeDate()));
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
-			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
+			if(!UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
 				me.convertTickerAndClosePrice(tickerCode, me);
 				transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 				me.transItems.push(transItemModel);
@@ -1939,12 +1971,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var flag = true;
     		
 			ko.utils.arrayForEach(me.transItems(), function (item) {
-				if(me.validateFlag){
-    				if(item.transactionType() === "SELL"){
-						me.transactionValidator(item);
-    				}
-				}else{
+				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
+					me.validateFlag = false;
 					return false;
+				}else{
+					if(me.validateFlag){
+	    				if(item.transactionType() === "SELL"){
+							me.transactionValidator(item);
+	    				}
+					}else{
+						return false;
+					}
 				}
     	 	});
     		
