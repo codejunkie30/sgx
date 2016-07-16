@@ -1,4 +1,4 @@
-define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","client/modules/performance-chart-config","highstock", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, PER_CHART_CONFIG) {
+define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","client/modules/performance-compareChart-config","highstock", "jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES, PER_CHART_CONFIG) {
 	
 	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
 	(function($, window, document) {
@@ -350,7 +350,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				var allData = data.priceHistory;
 				var priceData = me.toHighCharts(allData.price);
-				var lowPrice = me.toHighCharts(allData.lowPrice);
+				/*var lowPrice = me.toHighCharts(allData.lowPrice);
 				var openPrice = me.toHighCharts(allData.openPrice);
 				var highPrice = me.toHighCharts(allData.highPrice);
 				
@@ -365,13 +365,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						 me.chartData[key].open = openPrice[k].y;
 					 if( highPrice[k])
 						 me.chartData[key].high = highPrice[k].y;
-				});
+				});*/
 
 				me.tickerColors()[data.tickerCode] = me.seriesColors()[i];
 				me.seriesOptions[i] = {
 		                name: data.tickerCode,
 		                data: priceData,
-		                chartData: me.chartData,
+		                //chartData: me.chartData,
 		                threshold : null,
 						turboThreshold : 0,
 						color:me.seriesColors()[i]
@@ -409,7 +409,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
 			
 			//tooltip custom positioning
-			baseChart.tooltip.positioner= function (labelWidth, labelHeight, point) {
+			/*baseChart.tooltip.positioner= function (labelWidth, labelHeight, point) {
                 var tooltipX, tooltipY;
                 if (point.plotX + labelWidth > perfChart.plotWidth) {
                     tooltipX = point.plotX + perfChart.plotLeft - labelWidth - 20;
@@ -480,7 +480,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	ret += "</span>";
 		    	
 		    	return ret;
-			};
+			};*/
 			
 			perfChart = $('#performance-chart-content').highcharts('StockChart', baseChart).highcharts();
 		},
@@ -1867,6 +1867,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var loopFlag = true;
 	    	var bought = 0.00;
 	    	var sell = 0.00;
+	    	sellDates = [];
 	    	
 	    	$.each(me.validatedCompanies, function(i, data){
 	    		if(data === sentItem.tickerCode()){
@@ -1878,29 +1879,40 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		me.validatedCompanies.push(sentItem.tickerCode());
 	    		ko.utils.arrayForEach(me.transItems(), function (item) {
 	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
-	   	    			 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-	    				 if( new Date(item.tradeDate()) < new Date(sentItem.tradeDate()) ){
-	   	   	    			 if(item.transactionType() === "BUY"){
-	   	   	    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
-	   	   	    			 }else{
-	   	   	    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
-	   	   	    			 }
-	    				 }
+   	   	    			 if(item.transactionType() === "SELL"){
+   	   	    				 sellDates.push(item.tradeDate());
+   	   	    			 }
 	   	    		 }
 	    	 	});
-		    	
-				if( parseFloat(sell) > parseFloat(bought) ){
-					 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
-					 me.validateFlag = false;
-				}
+	    		
+	    		
+				$.each(sellDates, function(i, selldate){
+					ko.utils.arrayForEach(me.transItems(), function (item) {
+						if(sentItem.tickerCode() === item.tickerCode()){
+							if( new Date(item.tradeDate()) < new Date(selldate) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(selldate).setHours(0,0,0,0) )){
+								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+								if(item.transactionType() === "BUY"){
+									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
+								}else{
+									sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
+								}
+							}
+						}
+					});
+					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
+						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+						 me.validateFlag = false;
+						 return false;
+					}
+					bought = 0.00;
+			    	sell = 0.00;
+				});
 	    	}
 	    },
 	    
 	    buySellValidate: function(){
 	    	var me = this;
 	    	var flag = true;
-	    	var bought = 0.00;
-	    	var sell = 0.00;
     		
 			ko.utils.arrayForEach(me.transItems(), function (item) {
 				if(me.validateFlag){
