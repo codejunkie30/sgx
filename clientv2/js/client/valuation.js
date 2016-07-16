@@ -580,13 +580,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me = this;
 			var value = item.selectedTransaction();
 			var showChart = false;
+			var displayChart = false;
 			var evaluateData = me.displayTransactions();
 
 			ko.utils.arrayForEach(evaluateData, function (aitem) {
             	showChart = aitem.selectedTransaction() || showChart;
              });
 
-			if(showChart){
+			for(var i=0;i<$('input[type="checkbox"]').length;i++) {
+				if($('input[type="checkbox"]')[i].checked) {
+					displayChart = true;
+					break;
+				}
+			}
+			if(event.target.checked || displayChart){
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
 			    me.singleChartUnchart(me, item.tickerCode, value);
@@ -762,7 +769,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.seriesOptions = [];
 				me.performanceChartRenderer(me);
 			}
-			
+			if(!UTIL.isEmpty(chart)){
+				$('#performance-chart-content').show();
+				$('#performance-chart-header').show();
+			}
 			var watchlists = me.finalWL();
 			for(var i = 0, len = watchlists.length; i < len; i++) {
 				var wl = watchlists[i];
@@ -974,7 +984,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(me.initialTradeDate()));
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
-			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode)){
+			if(!UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
 				me.convertTickerAndClosePrice(tickerCode, me);
 				transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 				me.transItems.push(transItemModel);
@@ -1014,6 +1024,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						PAGE.resizeIframeSimple();
 					}, 
 					PAGE.customSGXError);
+			
+			$('#transType').removeClass('typeasc');
+	    	$('#transType').removeClass('typedesc');
+	    	$('#transTradeDate').removeClass('asc');
+	    	$('#transTradeDate').removeClass('datedesc');
+	    	$('#transNumShare').removeClass('shareasc');
+	    	$('#transNumShare').removeClass('sharedesc');
+	    	$('#transPrice').removeClass('priceasc');
+	    	$('#transPrice').removeClass('pricedesc');
+	    	$('#transLastPrice').removeClass('lastpriceasc');
+	    	$('#transLastPrice').removeClass('lastpricedesc');
+	    	$('#transCompanyNameColumn').removeClass('desc');
+	    	$('#transCompanyNameColumn').removeClass('asc');
+	    	$('#transCompanyNameColumn').addClass('asc');
 	    },
 	    
 	    mapTransDataToSend: function(){
