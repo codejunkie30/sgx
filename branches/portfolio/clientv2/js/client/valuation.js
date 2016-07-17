@@ -1034,10 +1034,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 				if(me.buySellValidate()){
 					me.insertTransactionRecords()
-					me.record_modified = false;
 				}else{
 					if(transItemModel!=null)me.transItems.remove(transItemModel);
 				}
+				
+				//dirty flag settings
+				me.record_modified = false;
+				
 				//validation related attributes
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
@@ -1265,7 +1268,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $('#transItemsId input').change(function() { 
 		    	me.record_modified = true; 
 		    }); 
-	    	
+		    $('#transItemsId select').change(function() { 
+		    	me.record_modified = true; 
+		    });
 	    },
 	    
 	    refractTransData: function(data){
