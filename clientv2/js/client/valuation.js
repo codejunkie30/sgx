@@ -1012,8 +1012,23 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		//-------------Transaction functionality starts--------------
 		isFieldsEmpty: function(tradeDate, numberOfShares, costAtPurchase, tickerCode){
 			var flag = false;
-			if( !UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
+			if( tradeDate && numberOfShares && costAtPurchase && tickerCode ){
 				flag = true;
+				$('#watchlistCompaniesSelect').css({"borderColor":""});
+				$('#tradeDate').css({"borderColor":""});
+				$('#initialNumberOfShares').css({"borderColor":""});
+				$('#initialCostAtPurchase').css({"borderColor":""});
+			}else{
+				!tickerCode && (tradeDate || costAtPurchase || numberOfShares) ? $('#watchlistCompaniesSelect').css({"borderColor":"red"}) : $('#watchlistCompaniesSelect').css({"borderColor":""});
+				!tradeDate && (tickerCode || costAtPurchase || numberOfShares) ? $('#tradeDate').css({"borderColor":"red"}) : $('#tradeDate').css({"borderColor":""});
+				!numberOfShares && (tradeDate || costAtPurchase || tickerCode) ? $('#initialNumberOfShares').css({"borderColor":"red"}) : $('#initialNumberOfShares').css({"borderColor":""}) ;
+				!costAtPurchase && (tradeDate || numberOfShares || tickerCode) ? $('#initialCostAtPurchase').css({"borderColor":"red"}) : $('#initialCostAtPurchase').css({"borderColor":""}) ;
+				if( (!tickerCode && (tradeDate || costAtPurchase || numberOfShares)) || 
+						(!tradeDate && (tickerCode || costAtPurchase || numberOfShares)) || 
+							(!numberOfShares && (tradeDate || costAtPurchase || tickerCode)) ||
+								(!costAtPurchase && (tradeDate || numberOfShares || tickerCode)) ){
+					PAGE.modal.open({ type: 'alert',  content: '<p>Please collect an errors higlighted in red.</p>', width: 400 });
+				}
 			}
 			return flag;
 		},
