@@ -26,6 +26,7 @@ import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListReader;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
+import org.supercsv.quote.ColumnQuoteMode;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +58,8 @@ public class KeyDevsService extends AbstractDataService {
 	
 	@Autowired
 	private ErrorBeanHelper errorBeanHelper;
+	
+	public static final boolean[] COLUMNS_TO_QUOTE_MODE = new boolean[]{true,true,false,false,true,true,true,true};
 	
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
@@ -136,7 +139,7 @@ public class KeyDevsService extends AbstractDataService {
 
 			File f = new File(rawDir + keyDevDir + ".csv");
 			if(!f.exists()){
-				log.error("Unable to process key dev source content as key-devs.csv file doesn't exists");
+				log.error("Unable to process key dev source content as key devs file doesn't exists");
 				return false;
 			}
 			File backupFile = new File(rawDir + keyDevDir + "-bck.csv");
@@ -144,9 +147,10 @@ public class KeyDevsService extends AbstractDataService {
 				FileUtils.deleteQuietly(backupFile);
 			}
 			FileUtils.copyFile(f, backupFile);
-			if (!backupFile.exists())
+			if (!backupFile.exists()){
+				log.error("Unable to process key dev source content as key devs back up file doesn't created");
 				return false;
-			
+			}
 			CSVHelperUtil csvHelperUtil = new CSVHelperUtil();
 			Iterable<CSVRecord> records = csvHelperUtil.getRecords(backupFile.getAbsolutePath());
 			List<String> idsForCapIqApiCall;
@@ -202,6 +206,8 @@ public class KeyDevsService extends AbstractDataService {
 		ICsvListWriter listWriter = null;
 		boolean success = true;
 		try {
+			CsvPreference prefs = new CsvPreference.Builder('"', ',', "\r\n")
+				    .useQuoteMode(new ColumnQuoteMode(COLUMNS_TO_QUOTE_MODE)).build();
 			listReader = new CsvListReader(new FileReader(backupFilePath),
 					CsvPreference.STANDARD_PREFERENCE);
 			List<String> columns;
@@ -210,7 +216,7 @@ public class KeyDevsService extends AbstractDataService {
 				FileUtils.deleteQuietly(tempFile);
 			}
 			listWriter = new CsvListWriter(new FileWriter(tempFilePath),
-					CsvPreference.STANDARD_PREFERENCE);
+					prefs);
 			columns = listReader.read();
 			columns.add(KEY_DEV_SOURCE_COLUMN_NAME);
 			listWriter.write(columns);
@@ -218,10 +224,10 @@ public class KeyDevsService extends AbstractDataService {
 				columns.add(keyDevSource.get("IQKD" + columns.get(2)));
 				listWriter.write(columns);
 			}
-
+			log.info("Finished loading key developments source content");
 		} catch (FileNotFoundException e) {
 			success = false;
-			log.error("The key-devs-bck.csv file is not exists ", e);
+			log.error("The key dev back up file is not exists ", e);
 		} catch (IOException e) {
 			success = false;
 			log.error("Unable to read/write the key-dev source content into file", e);
