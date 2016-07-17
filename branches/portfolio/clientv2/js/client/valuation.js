@@ -1011,7 +1011,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		//-------------Transaction functionality starts--------------
 		isFieldsEmpty: function(tradeDate, numberOfShares, costAtPurchase, tickerCode){
-			return (!UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode));
+			var flag = false;
+			if( !UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
+				flag = true;
+			}
+			return flag;
 		},
 		
 		addSaveTransactions: function() {
@@ -1023,7 +1027,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
 			var isFieldsNotEmpty = me.isFieldsEmpty(tradeDate, numberOfShares, costAtPurchase, tickerCode);
-			if( isFieldsNotEmpty || me.record_modified ){
+			if( isFieldsNotEmpty || (me.record_modified &&
+					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
 				if(isFieldsNotEmpty){
 					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate));
 					me.convertTickerAndClosePrice(tickerCode, me);
