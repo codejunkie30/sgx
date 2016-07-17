@@ -1471,8 +1471,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    	$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
-	    	$('#transTradeDate').removeClass('asc');
-	    	$('#transTradeDate').removeClass('desc');
+	    	$('#transTradeDate').removeClass('dateasc');
+	    	$('#transTradeDate').removeClass('datedesc');
 	    	$('#transNumShare').removeClass('shareasc');
 	    	$('#transNumShare').removeClass('sharedesc');
 	    	$('#transPrice').removeClass('priceasc');
