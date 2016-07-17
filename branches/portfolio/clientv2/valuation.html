@@ -143,7 +143,7 @@
 			
 			<div>
 				 <div align="right">
-					<a class="save-button" name="transactionSave" data-bind="click: saveTrans">Save</a>
+					<a class="save-button" name="transactionSave" data-bind="click: addSaveTransactions">Save</a>
 				</div>
 				<table>
 					<thead>
@@ -165,7 +165,7 @@
 							<td><input type="text" class="text" data-bind="valuationNumeric, valueUpdate: 'afterkeydown', value: initialNumberOfShares"/></td>
 							<td><input type="text" data-bind="valuationNumeric, value: initialCostAtPurchase" /></td>
 							<td>&nbsp;</td>
-							<td><a class="add-button" data-bind="click: addTrans">Add</a></td>
+							<td><a class="add-button" data-bind="click: addSaveTransactions">Add</a></td>
 						</tr>
 					</tbody>
 					<tbody data-bind="foreach: transItems" id="transItemsId">
@@ -182,7 +182,7 @@
 				    	
 				</table>
 				<div align="right">
-					<a class="save-button" data-bind="click: saveTrans">Save</a>
+					<a class="save-button" data-bind="click: addSaveTransactions">Save</a>
 				</div>
 			</div>
 		</div>
