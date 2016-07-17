@@ -511,11 +511,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined);			
 		},
 		deleteCompany: function(data){
-
-            var deletecompaniesObservableList = ALERTS.companies;
-            deletecompaniesObservableList.remove(data.ticker);
-            ALERTS.saveWatchlist( function(){deletecompaniesObservableList });
-			PAGE.resizeIframeSimple();
+			PAGE.modal.open({ content: '<p>By deleting this company from your StockList, you will also be removing any associated transactions.</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			
+			 $('.confirm-delete').click(function(e) {				
+				 var deletecompaniesObservableList = ALERTS.companies;
+				 deletecompaniesObservableList.remove(data.ticker);
+				 ALERTS.saveWatchlist( function(){deletecompaniesObservableList });
+				 PAGE.resizeIframeSimple();
+				 $('.cboxWrapper').colorbox.close();
+	        });
+			
+			 $('.cancel').click(function(e) {
+				$('.cboxWrapper').colorbox.close();
+	        });
 		},
 
 		addCompany: function(data){
