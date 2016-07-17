@@ -359,6 +359,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	validatedCompanies: [],
     	validateFlag: true,
     	
+    	record_modified: false,
+    	
 		initPage: function() {
 			var me = this;
 			
@@ -1008,37 +1010,41 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		
 		//-------------Transaction functionality starts--------------
-		addTrans: function() {
+		isFieldsEmpty: function(tradeDate, numberOfShares, costAtPurchase, tickerCode){
+			return (!UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode));
+		},
+		
+		addSaveTransactions: function() {
 			var me = this;
 			var transItemModel = null;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
-			var tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(me.initialTradeDate()));
+			var tradeDate = me.initialTradeDate();
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
-			if(!UTIL.isEmpty(tradeDate) && !UTIL.isEmpty(numberOfShares) && !UTIL.isEmpty(costAtPurchase) && !UTIL.isEmpty(tickerCode) ){
-				me.convertTickerAndClosePrice(tickerCode, me);
-				transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
-				me.transItems.push(transItemModel);
-				me.clearFieldData();
-			}
-			if(me.transItems().length && !UTIL.isEmpty(transItemModel)){
-				me.buySellValidate() ? me.insertTransaction() : me.transItems.remove(transItemModel) ;
+			var isFieldsNotEmpty = me.isFieldsEmpty(tradeDate, numberOfShares, costAtPurchase, tickerCode);
+			if( isFieldsNotEmpty || me.record_modified ){
+				if(isFieldsNotEmpty){
+					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate));
+					me.convertTickerAndClosePrice(tickerCode, me);
+					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
+					me.transItems.push(transItemModel);
+					me.clearFieldData();
+				}
+				
+				if(me.buySellValidate()){
+					me.insertTransactionRecords()
+					me.record_modified = false;
+				}else{
+					if(transItemModel!=null)me.transItems.remove(transItemModel);
+				}
+				//validation related attributes
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
 			}
 	    },
 	    
-	    saveTrans: function(){
-	    	var me = this;
-	    	if(me.transItems().length){
-				if(me.buySellValidate()){me.insertTransaction()};
-				me.validatedCompanies = [];
-		    	me.validateFlag = true;
-			}
-	    },
-	    
-	    insertTransaction: function(){
+	    insertTransactionRecords: function(){
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
@@ -1059,7 +1065,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
-	    	$('#transTradeDate').removeClass('asc');
+	    	$('#transTradeDate').removeClass('dateasc');
 	    	$('#transTradeDate').removeClass('datedesc');
 	    	$('#transNumShare').removeClass('shareasc');
 	    	$('#transNumShare').removeClass('sharedesc');
@@ -1068,7 +1074,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
-	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').addClass('asc');
 	    },
 	    
@@ -1094,40 +1099,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	me.initialNumberOfShares(null);
 	    	me.initialCostAtPurchase(null);
 	    },
-	    
-	    /*addTransaction: function(model){
-	    	var me = this;
-	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
-			var postType = 'POST';
-    	    var params = ko.toJS(me.mapDataToSend(model));
-			UTIL.handleAjaxRequestJSON(
-					endpoint,
-					postType,
-					params,
-					function(data, textStatus, jqXHR){					
-						console.log(data);
-						me.transItems([]);
-						me.getTransactionsData(me);
-					}, 
-					PAGE.customSGXError);
-	    },
-	    
-	    mapDataToSend: function(item){
-	            return {
-	            		id : this.watchlistId,
-	            		transactions : [
-		                    {
-		                    	id 			   : "",
-				            	tickerCode     : item.tickerCode,
-				            	transactionType: item.transactionType,
-				            	tradeDate      : item.tradeDate,
-				            	numberOfShares : item.numberOfShares,
-				            	costAtPurchase : item.costAtPurchase,	
-				            	currentPrice   : item.currentPrice
-		                    }
-		                  ]
-            		  };
-	    },*/
 	    
 	    calcCurrentValue: function(item, me){
 	    	var numberOfShares = parseFloat(item.numberOfShares);
@@ -1291,6 +1262,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				currentPage: currentPage,
 			    insertAfter: '#transItemsId'
 			});
+		    $('#transItemsId input').change(function() { 
+		    	me.record_modified = true; 
+		    }); 
 	    	
 	    },
 	    
