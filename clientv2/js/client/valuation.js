@@ -638,7 +638,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.multiChartUnchart(me, false);
 			}
 			PAGE.hideLoading();
-			PAGE.resizeIframeSimple();
 			
             return true;
 		},
@@ -675,7 +674,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                	me.multiChartUnchart(me, false);                	
 	                }
 	                PAGE.hideLoading();
-	                PAGE.resizeIframeSimple();
 	                
 	            }
 		    });
