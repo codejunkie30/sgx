@@ -1027,7 +1027,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						(!tradeDate && (tickerCode || costAtPurchase || numberOfShares)) || 
 							(!numberOfShares && (tradeDate || costAtPurchase || tickerCode)) ||
 								(!costAtPurchase && (tradeDate || numberOfShares || tickerCode)) ){
-					PAGE.modal.open({ type: 'alert',  content: '<p>Please collect an errors higlighted in red.</p>', width: 400 });
+					PAGE.modal.open({ type: 'alert',  content: '<p>Please correct an errors higlighted in red.</p>', width: 400 });
 				}
 			}
 			return flag;
