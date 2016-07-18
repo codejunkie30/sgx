@@ -1200,7 +1200,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	for(var i = 0; i<tickersData.length; i++){
 	    		var tickerCode = tickersData[i];
-	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", "", "", "", "");
+	    		me.convertTickerAndClosePrice(tickerCode, me);
+	    		var transItemCompModel =  new insertPerTrans(me.convertTickerCodeToCompany(tickerCode, me), tickerCode,"","", "", "", me.liveClosingPrice, "", "", "");
 				me.displayTransactions.push(transItemCompModel);
 	    	}
 	    	
