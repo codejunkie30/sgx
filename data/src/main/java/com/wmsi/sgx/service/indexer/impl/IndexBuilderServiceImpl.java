@@ -235,17 +235,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 	@Override
 	public Boolean buildAlphaFactors(@Header String indexName)
-			throws AlphaFactorServiceException, IndexerServiceException {
+			throws AlphaFactorServiceException, IndexerServiceException{
 
 		log.info("Building alpha factors");
 
 		File file = null;
-		try {
-			file = alphaFactorService.getLatestFiles();
-		} catch (IOException e) {
-			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:buildAlphaFactors",
-					"IOException", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
-		}
+		file = alphaFactorService.getLatestFile();
 		if(file==null)return false;
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
