@@ -241,7 +241,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		File file = null;
 		try {
-			file = alphaFactorService.getLatestDownloadedFileFromLocalDirectory();
+			file = alphaFactorService.getLatestFiles();
 		} catch (IOException e) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:buildAlphaFactors",
 					"IOException", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
