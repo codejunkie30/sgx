@@ -198,6 +198,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		      _self.render(page);
 		      _self.handle();
+		      VALUATION.addSaveTransactions();
 		    }
 		  }
 
@@ -377,10 +378,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		renderChart: function(me, responseData){
-			me.transactionTickers = [];
+			VALUATION.transactionTickers = [];
 			me.tickerColors.removeAll();
 			$.each(responseData.companiesPriceHistory, function(i, data){
-				me.transactionTickers.push(data.tickerCode);
+				VALUATION.transactionTickers.push(data.tickerCode);
 				
 				var allData = data.priceHistory;
 				var priceData = me.toHighCharts(allData.price);
@@ -540,7 +541,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/company/stockListpriceHistory";
 			var postType = 'POST';
-    	    var params = { "id" : me.watchlistId };
+    	    var params = { "id" : VALUATION.watchlistId };
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
@@ -557,7 +558,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/transactions";
 			var postType = 'POST';
-    	    var params = { "message" : me.watchlistId };
+    	    var params = { "message" : VALUATION.watchlistId };
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
 					postType,
@@ -566,7 +567,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						me.transItems.removeAll();
 						me.displayTransactions.removeAll();
 						me.displayTransCompanies.removeAll();
-						if(UTIL.isEmpty(me.transactionTickers)){
+						if(UTIL.isEmpty(VALUATION.transactionTickers)){
 							$('#valutionNoCompaniesTextDiv').show();
 				    		$('#valuationContentDiv').hide();	
 						}else{
@@ -579,7 +580,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							me.displayPerformanceTransactions(data);
 							me.computeSelectAllTrans(me);
 						}else{
-							var tickersData = me.transactionTickers;
+							var tickersData = VALUATION.transactionTickers;
 							if(!UTIL.isEmpty(tickersData)){
 								var jsonObj = [];
 								for(i=0 ;i<tickersData.length; i++){
@@ -747,12 +748,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.hideLoading();
 					
 					me.selectedValue(UTIL.getParameterByName("code"));
-					me.watchlistId = UTIL.getParameterByName("code");
+					VALUATION.watchlistId = UTIL.getParameterByName("code");
 					
 					var watchlists = me.finalWL();
 					for(var i = 0, len = watchlists.length; i < len; i++) {
 						var wl = watchlists[i];
-						if( wl.id == me.watchlistId) {
+						if( wl.id == VALUATION.watchlistId) {
 							me.clearWatchListErrors();
 							me.editWLName(wl.name);	
 							me.populateWatchlistCompanies(wl, me);
@@ -795,7 +796,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.displayTransCompanies.removeAll();
 			me.watchlistCompanies.removeAll();
 			
-			me.watchlistId = data.selectedValue();
+			VALUATION.watchlistId = data.selectedValue();
 			
 			var chart = $('#performance-chart-content').highcharts();
 			if(!UTIL.isEmpty(chart)){
@@ -809,7 +810,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var watchlists = me.finalWL();
 			for(var i = 0, len = watchlists.length; i < len; i++) {
 				var wl = watchlists[i];
-				if( wl.id == me.watchlistId) {
+				if( wl.id == VALUATION.watchlistId) {
 					me.clearWatchListErrors();
 					me.editWLName(wl.name);	
 					me.populateWatchlistCompanies(wl, me);
@@ -864,7 +865,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if (data.name == newWLNameLC){
 							VALUATION.selectedValue(data.id);
 							
-							me.watchlistId = data.id;
+							VALUATION.watchlistId = data.id;
 							
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
@@ -1041,7 +1042,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
 			var isFieldsNotEmpty = me.isFieldsEmpty(tradeDate, numberOfShares, costAtPurchase, tickerCode);
-			if( isFieldsNotEmpty || (me.record_modified &&
+			if( isFieldsNotEmpty || (VALUATION.record_modified &&
 					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
 				if(isFieldsNotEmpty){
 					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate));
@@ -1058,7 +1059,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}
 				
 				//dirty flag settings
-				me.record_modified = false;
+				VALUATION.record_modified = false;
 				
 				//validation related attributes
 				me.validatedCompanies = [];
@@ -1070,7 +1071,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	var endpoint = PAGE.fqdn + "/sgx/watchlist/addTransaction";
 			var postType = 'POST';
-    	    var params = {'id' : me.watchlistId,'transactions' : me.mapTransDataToSend()};
+    	    var params = {'id' : VALUATION.watchlistId,'transactions' : me.mapTransDataToSend()};
     	    PAGE.showLoading();
 			UTIL.handleAjaxRequestJSON(
 					endpoint,
@@ -1164,7 +1165,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    displayPerformanceTransactions: function(data){
 	    	var me = this;
-	    	var tickersData = me.transactionTickers.slice();
+	    	var tickersData = VALUATION.transactionTickers.slice();
 	    	var availTicker = [];
 	    	
 	    	for(i in data){
@@ -1295,10 +1296,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    insertAfter: '#transItemsId'
 			});
 		    $('#transItemsId input').change(function() { 
-		    	me.record_modified = true; 
+		    	VALUATION.record_modified = true; 
 		    }); 
 		    $('#transItemsId select').change(function() { 
-		    	me.record_modified = true; 
+		    	VALUATION.record_modified = true; 
 		    });
 	    },
 	    
@@ -1348,7 +1349,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					 if(item.id()!=""){
 					    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
 							var postType = 'POST';
-				    	    var params = {"id": me.watchlistId, "transactionId" : item.id()};
+				    	    var params = {"id": VALUATION.watchlistId, "transactionId" : item.id()};
 				    	    PAGE.showLoading();
 							UTIL.handleAjaxRequestJSON(
 									endpoint,
@@ -1382,7 +1383,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				 if(item.id!=""){
 				    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
 						var postType = 'POST';
-			    	    var params = {"id": me.watchlistId, "transactionId" : item.id};
+			    	    var params = {"id": VALUATION.watchlistId, "transactionId" : item.id};
 			    	    PAGE.showLoading();
 						UTIL.handleAjaxRequestJSON(
 								endpoint,
@@ -1413,7 +1414,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
 					var postType = 'POST';
-		    	    var params = {"id": me.watchlistId, "transactionId" : item.intId};
+		    	    var params = {"id": VALUATION.watchlistId, "transactionId" : item.intId};
 		    	    PAGE.showLoading();
 					UTIL.handleAjaxRequestJSON(
 						endpoint,
