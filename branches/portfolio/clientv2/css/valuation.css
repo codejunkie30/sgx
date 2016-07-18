@@ -42,6 +42,10 @@
 	border-color: #0e236b transparent transparent transparent;
 }
 
+.negativePerChange{
+	color: #FF0000;
+}
+
 .header-bar {
 	background: #0e236b;
 	text-align: center;
