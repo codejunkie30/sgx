@@ -120,6 +120,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	@Value("${loader.currencies.file}")
 	public String currenciesFile;
 	
+	@Value("${loader.workdir}")
+	private String tmpDir;
+
 	public boolean saveCurrencyList()throws IndexerServiceException{
 		String[] record = null;
 		CSVReader csvReader = null;
@@ -236,7 +239,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		log.info("Building alpha factors");
 
-		File file = alphaFactorService.getLatestFile();
+		File file = null;
+		try {
+			file = alphaFactorService.getLatestDownloadedFileFromLocalDirectory();
+		} catch (IOException e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:buildAlphaFactors",
+					"IOException", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
+		}
+		if(file==null)return false;
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
 		for (AlphaFactor f : factors) {

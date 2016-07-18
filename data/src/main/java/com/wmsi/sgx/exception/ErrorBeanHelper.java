@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,13 +79,28 @@ public class ErrorBeanHelper {
 			for (ErrorBean b : beanList) {
 				beanInfo.append(" \n Error Message :- \n" + b.getErrorMessage());
 				beanInfo.append(" \n ");
-				beanInfo.append("  Object Description :- \n" + b.getObjectName());
+				beanInfo.append("  Object Description :- \n" + truncateString(b.getObjectName()));
 			}
 			sb.append(pair.getKey() + " : " + beanInfo.toString() + "\n");
 			log.info(" ***** Error Information ******* :- \n "+ sb.toString());
 		}
 		return sb.toString();
 
+	}
+	
+	private String truncateString(String str){
+		if(StringUtils.isEmpty(str))return "";
+		String lines[] = str.split("\\r?\\n");
+		StringBuffer sb = new StringBuffer();
+		int i = 1;
+		for(String s:lines){
+			sb.append(s);
+			i++;
+			if(i==7){
+				return sb.toString();
+			}
+		}
+		return sb.toString().isEmpty()?str.substring(0, str.length()/2):sb.toString();
 	}
 
 	public void sendEmail() {
