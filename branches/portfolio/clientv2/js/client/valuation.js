@@ -821,6 +821,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			//get the performance chart data
 			me.getChartData(me);
 			me.setSortingToDefault();
+			me.clearFieldData();
 		},
 				
 		addWatchlist: function(){
@@ -1014,10 +1015,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var flag = false;
 			if( tradeDate && numberOfShares && costAtPurchase && tickerCode ){
 				flag = true;
-				$('#watchlistCompaniesSelect').css({"borderColor":""});
-				$('#tradeDate').css({"borderColor":""});
-				$('#initialNumberOfShares').css({"borderColor":""});
-				$('#initialCostAtPurchase').css({"borderColor":""});
 			}else{
 				!tickerCode && (tradeDate || costAtPurchase || numberOfShares) ? $('#watchlistCompaniesSelect').css({"borderColor":"red"}) : $('#watchlistCompaniesSelect').css({"borderColor":""});
 				!tradeDate && (tickerCode || costAtPurchase || numberOfShares) ? $('#tradeDate').css({"borderColor":"red"}) : $('#tradeDate').css({"borderColor":""});
@@ -1125,6 +1122,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	me.initialTradeDate(null);
 	    	me.initialNumberOfShares(null);
 	    	me.initialCostAtPurchase(null);
+	    	$('#watchlistCompaniesSelect').css({"borderColor":""});
+			$('#tradeDate').css({"borderColor":""});
+			$('#initialNumberOfShares').css({"borderColor":""});
+			$('#initialCostAtPurchase').css({"borderColor":""});
 	    },
 	    
 	    calcCurrentValue: function(item, me){
