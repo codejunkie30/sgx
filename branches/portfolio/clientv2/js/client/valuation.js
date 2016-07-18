@@ -256,7 +256,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        });
 	        $(element).on("change", function (event) {
 	        	event.preventDefault();
-	        	if(event.target.value === "0"){
+	        	event.target.value = event.target.value.replace("$","");
+	        	event.target.value=event.target.value.replace(/,/gi,"");
+	        	if(parseFloat(event.target.value) === parseFloat("0")){
 	        		event.target.value = "";
 	        		event.target.focus();
 	        	}
