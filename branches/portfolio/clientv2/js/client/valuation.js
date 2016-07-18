@@ -726,6 +726,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			if(tabName === "performance"){
+				this.transItems.sort(sortByName);
+		    	function sortByName(a, b){
+					  var a = !UTIL.isEmpty(a.companyName()) ? a.companyName().toLowerCase() : "";
+					  var b = !UTIL.isEmpty(b.companyName()) ? b.companyName().toLowerCase() : ""; 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+				}
 				me.setSortingToDefault();
 				$(".pagination-container").remove();
 				$('#transItemsId').paginathing({
