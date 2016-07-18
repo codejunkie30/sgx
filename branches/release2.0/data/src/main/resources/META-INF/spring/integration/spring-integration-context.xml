@@ -12,12 +12,13 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
-  				<int:service-activator ref="xfRetrievalService" method="init"/>
-  				<int:service-activator ref="keyDevsService" method="init"/>
+     		<int:service-activator ref="xfRetrievalService" method="init"/>
+ 				<int:service-activator ref="keyDevsService" method="init"/>
 				<int:service-activator ref="xfSplitterService" method="init"/>
  				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
  				<int:service-activator ref="gtiService" method="init"/>
- 				<int:service-activator ref="vwapService" method="init"/>
+ 				<int:service-activator ref="vwapService" method="init"/> 
+ 				<int:service-activator ref="alphaFactorIndexerServiceImpl" method="getLatestFile"/>
 	</int:chain>
 	<!-- TODO Do we need router? -->
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
@@ -107,7 +108,7 @@
 	</int:router>
  	
  	<!--  Job Completed successfully, create index and remove old indexes -->
- 	<int:chain input-channel="createAlias" output-channel="loggingChannel">
+ 	<int:chain input-channel="createAlias7" output-channel="loggingChannel">
  		<int:service-activator ref="indexerService" method="createIndexAlias" />
  		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" /> 
  	</int:chain>
@@ -211,4 +212,6 @@
 	<bean id="resolveIndexNameSvc" class="com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl"/>
 	
 	<bean id="errorBeanHelper" class="com.wmsi.sgx.exception.ErrorBeanHelper"/>
+	
+	<bean id="alphaFactorIndexerServiceImpl" class="com.wmsi.sgx.service.sandp.alpha.impl.AlphaFactorIndexerServiceImpl"/>
 </beans>
