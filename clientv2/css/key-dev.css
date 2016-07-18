@@ -63,6 +63,7 @@ h3, h3 span {
 	font-size: 16px;
 	font-weight: bold;
 	line-height: 26px;
+	cursor: default;
 }
 
 .matches .key-header {
@@ -84,6 +85,7 @@ div.news {
 	font: italic 12px Georgia;
 	color: #333333;
 	text-decoration: none;
+	cursor: default;
 }
 
 .matches table td {
@@ -92,6 +94,7 @@ div.news {
 
 .key-dev-match .allKeyDevDivId{
 	max-height: 450px;overflow-x: hidden;
+	cursor: pointer;
 }
 
 .control-box table tr td input[type=checkbox] {
