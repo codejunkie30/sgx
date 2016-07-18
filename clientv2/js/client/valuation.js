@@ -820,7 +820,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			//get the performance chart data
 			me.getChartData(me);
-			
+			me.setSortingToDefault();
 		},
 				
 		addWatchlist: function(){
@@ -1086,7 +1086,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}, 
 					PAGE.customSGXError);
 			
-			$('#transType').removeClass('typeasc');
+			me.setSortingToDefault();
+	    },
+	    
+	    setSortingToDefault() {
+	    	$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('dateasc');
 	    	$('#transTradeDate').removeClass('datedesc');
