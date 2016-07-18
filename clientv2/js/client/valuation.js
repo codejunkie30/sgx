@@ -598,6 +598,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								}
 								me.computeSelectAllTrans(me);
 							}
+							$(".pagination-container").remove();
 						}
 						PAGE.hideLoading();
 						me.showDatePicker();
