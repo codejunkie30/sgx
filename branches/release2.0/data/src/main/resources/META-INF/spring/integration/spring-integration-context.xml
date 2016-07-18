@@ -18,7 +18,7 @@
  				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
  				<int:service-activator ref="gtiService" method="init"/>
  				<int:service-activator ref="vwapService" method="init"/> 
- 				<int:service-activator ref="alphaFactorIndexerServiceImpl" method="getLatestFile"/>
+ 				<!-- <int:service-activator ref="alphaFactorIndexerServiceImpl" method="getLatestFile"/> -->
 	</int:chain>
 	<!-- TODO Do we need router? -->
  	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
