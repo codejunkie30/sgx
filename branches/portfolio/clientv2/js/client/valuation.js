@@ -256,11 +256,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        });
 	        $(element).on("change", function (event) {
 	        	event.preventDefault();
-	        	event.target.value = event.target.value.replace("$","");
-	        	event.target.value=event.target.value.replace(/,/gi,"");
-	        	if(parseFloat(event.target.value) === parseFloat("0")){
+	        	var value = event.target.value;
+	        	value = value.replace("$","");
+	        	value = value.replace(/,/gi,"");
+	        	if( (parseFloat(value) === parseFloat("0")) || (value==="")){
 	        		event.target.value = "";
 	        		event.target.focus();
+	        		$('#'+event.target.id).css({"borderColor":"red"});
+	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
+	        	}else{
+	        		$('#'+event.target.id).css({"borderColor":""});
 	        	}
 	        });
 	    }    
@@ -720,6 +725,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$(".header-bar > ul > li:last").addClass("downArrow");
 			}
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
+			if(tabName === "performance"){
+				me.setSortingToDefault();
+				$(".pagination-container").remove();
+				$('#transItemsId').paginathing({
+				    insertAfter: '#transItemsId'
+				});
+			}
 			me.activeTab(tabName);
 	    },
 
