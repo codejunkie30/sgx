@@ -1226,7 +1226,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
-	    	$('#percentageChange').html(percentageChange+"%");
+	    	if(percentageChange < 0.00){
+	    		$('#percentageChange').html(percentageChange+"%").addClass('negativePerChange');
+	    	}
+	    	else {
+	    		$('#percentageChange').html(percentageChange+"%")
+	    	}
 	    	
 	    	me.userEnteredPurchasedPrice = 0.00;
 	    	me.userEnteredSellPrice = 0.00;
