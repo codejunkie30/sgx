@@ -172,9 +172,9 @@
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
-							<td><input data-bind="value: tradeDate, datepicker:tradeDate" type="text" readonly="readonly"/></td>
-							<td><input data-bind="valuationNumeric, attr: { id: 'share'+$index()}, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares" type="text"/></td>
-							<td><input data-bind="valuationNumeric, attr: { id: 'cost'+$index()}, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$'" type="text"/></td>
+							<td><input data-bind="value: tradeDate, attr: { id: 'date'+id()}, datepicker:tradeDate" type="text" readonly="readonly"/></td>
+							<td><input data-bind="valuationNumeric, attr: { id: 'share'+id()}, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares" type="text"/></td>
+							<td><input data-bind="valuationNumeric, attr: { id: 'cost'+id()}, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$'" type="text"/></td>
 							<td data-bind="text: currentPrice, currency: currentPrice, symbol: '$'"></td>
 							<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)" /></div></td>
 					    </tr>

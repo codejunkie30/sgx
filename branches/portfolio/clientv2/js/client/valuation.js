@@ -1066,11 +1066,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.convertTickerAndClosePrice(tickerCode, me);
 					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 					me.transItems.push(transItemModel);
-					me.clearFieldData();
 				}
 				
 				if(me.buySellValidate()){
-					me.insertTransactionRecords()
+					me.insertTransactionRecords();
+					me.clearFieldData();
 				}else{
 					if(transItemModel!=null)me.transItems.remove(transItemModel);
 				}
@@ -1987,8 +1987,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					});
 					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
 						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+						 if( !UTIL.isEmpty(sentItem.id()) ){
+							 $('#date'+sentItem.id()).css({"borderColor":"red"});
+							 $('#share'+sentItem.id()).css({"borderColor":"red"});
+						 }else{
+							 $('#tradeDate').css({"borderColor":"red"}) ;
+							 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
+						 }
+						 
 						 me.validateFlag = false;
-						 return false;
+					}else{
+						$('#date'+sentItem.id()).css({"borderColor":""});
+						$('#share'+sentItem.id()).css({"borderColor":""});
+						$('#tradeDate').css({"borderColor":""}) ;
+						$('#initialNumberOfShares').css({"borderColor":""}) ;
 					}
 					bought = 0.00;
 			    	sell = 0.00;
@@ -2005,13 +2017,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.validateFlag = false;
 					return false;
 				}else{
-					if(me.validateFlag){
-	    				if(item.transactionType() === "SELL"){
-							me.transactionValidator(item);
-	    				}
-					}else{
-						return false;
-					}
+    				if(item.transactionType() === "SELL"){
+						me.transactionValidator(item);
+    				}else{
+   	   	    			$('#date'+item.id()).css({"borderColor":""});
+						$('#share'+item.id()).css({"borderColor":""});
+    				}
 				}
     	 	});
     		
