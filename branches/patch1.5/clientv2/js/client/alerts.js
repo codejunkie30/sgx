@@ -497,7 +497,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('<p/>').html('Please enter valid numbers.').appendTo('.price-drop.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
-				} 
+				}
+				else if (ALERTS.displayList().optionList.pcPriceDropBelow < 1 || ALERTS.displayList().optionList.pcPriceRiseAbove < 1 || ALERTS.displayList().optionList.pcPriceDropBelow > 100 || ALERTS.displayList().optionList.pcPriceRiseAbove > 100 ) {
+					$('.price-drop.error-messages').empty();
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				}
 				else {
 					$('.price-drop.error-messages').empty();
 					pcPriceDropError = 0;
@@ -521,7 +527,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('<p/>').html('Please enter valid numbers.').appendTo('.trade-volume.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
-				} 				
+				}
+				else if (ALERTS.displayList().optionList.pcTradingVolumeValue < 1 ||  ALERTS.displayList().optionList.pcTradingVolumeValue > 100) {
+					$('.trade-volume.error-messages').empty();
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				}
 				else {
 					$('.trade-volume.error-messages').empty();
 					pcTradingVolumeError = 0;
@@ -545,6 +557,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				else if (isNaN(ALERTS.displayList().optionList.estChangePriceDropBelow) || isNaN(ALERTS.displayList().optionList.estChangePriceDropAbove) ) {
 					$('.target-price.error-messages').empty();
 					$('<p/>').html('Please enter valid numbers.').appendTo('.target-price.error-messages');
+					PAGE.resizeIframeSimple();
+					pcPriceDropError = 1;
+				}
+				else if (ALERTS.displayList().optionList.estChangePriceDropBelow < 1 || ALERTS.displayList().optionList.estChangePriceDropAbove < 1 || ALERTS.displayList().optionList.estChangePriceDropBelow > 100 || ALERTS.displayList().optionList.estChangePriceDropAbove > 100) {
+					$('.target-price.error-messages').empty();
+					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
 				}
