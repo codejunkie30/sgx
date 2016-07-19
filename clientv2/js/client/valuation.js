@@ -738,6 +738,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				    insertAfter: '#transItemsId'
 				});
 			}
+			else {
+				me.displayTransactions.sort(sortByName);
+				function sortByName(a, b){
+		    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
+		    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
+		    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+				}
+				$('#perCompanyName').addClass('asc');
+		    	$('#perCompanyName').removeClass('desc');
+		    	$('#perNumOfShares').removeClass('shareasc');
+		    	$('#perNumOfShares').removeClass('sharedesc');
+		    	$('#perLastClosePrice').removeClass('closepasc');
+		    	$('#perLastClosePrice').removeClass('closepdesc');
+		    	$('#perCurPrice').removeClass('currrentpasc');
+		    	$('#perCurPrice').removeClass('currrentpdesc');
+			}
 			me.activeTab(tabName);
 	    },
 
