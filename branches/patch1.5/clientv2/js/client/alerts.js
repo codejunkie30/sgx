@@ -234,6 +234,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			this.wlNameError = ko.validation.group(ALERTS.newWLName);  //grouping error for wlName only
 
+			ALERTS.editWLName
+			.extend({
+				minLength: { params: 2, message: displayMessage.watchlist.error },
+				maxLength: { params: 40, message: displayMessage.watchlist.error }
+			});
+
+			this.editWLNameError = ko.validation.group(ALERTS.editWLName);  //grouping error for editWLName only
+
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
@@ -339,6 +347,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 
 		editWLNameSubmit: function(){
+			if(this.editWLNameError().length != 0) return;
+
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
 			

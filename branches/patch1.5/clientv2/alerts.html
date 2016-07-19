@@ -49,6 +49,7 @@
 				<!-- /ko -->
 				<div data-bind="visible: showChange()" class="edit-watchlist">
 					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
+					<span class="error-messages" data-bind="validationMessage:editWLName">
 				</div>
 				
 				<div class="wl-companies">					
