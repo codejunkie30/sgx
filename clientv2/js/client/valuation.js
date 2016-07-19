@@ -726,9 +726,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			if(tabName === "performance"){
-				me.clearFieldData();
+				this.transItems.sort(sortByName);
+		    	function sortByName(a, b){
+					  var a = !UTIL.isEmpty(a.companyName()) ? a.companyName().toLowerCase() : "";
+					  var b = !UTIL.isEmpty(b.companyName()) ? b.companyName().toLowerCase() : ""; 
+					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+				}
 				me.setSortingToDefault();
-				me.getTransactionsData(me);
 				$(".pagination-container").remove();
 				$('#transItemsId').paginathing({
 				    insertAfter: '#transItemsId'
@@ -1214,8 +1218,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, noOfShares, 
 																item.costAtPurchase, me.liveClosingPrice, "", true, currentValue);
-					me.displayTransactions.push(transItemModel);
 					me.getMultiCompData(data[i], transItemModel, me);
+					me.displayTransactions.push(transItemModel);
 	    		}else{
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
@@ -1301,6 +1305,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(2), item.costAtPurchase, item.id);
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
+	    	
+		model.multiCompData.sort(sortByDate);
+		function sortByDate(a, b){
+	    	var a = new Date(a.intTradeDate);
+		    var b = new Date(b.intTradeDate);
+		    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	    	}
+		    model.tradeDate = model.multiCompData()[model.multiCompData().length-1].intTradeDate;
 	    },
 	    
 	    displayAddTransactions: function(data){
