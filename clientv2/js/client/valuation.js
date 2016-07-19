@@ -727,6 +727,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
 			if(tabName === "performance"){
 				me.clearFieldData();
+				me.setSortingToDefault();
 				me.getTransactionsData(me);
 				$(".pagination-container").remove();
 				$('#transItemsId').paginathing({
