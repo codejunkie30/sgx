@@ -1118,7 +1118,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.setSortingToDefault();
 	    },
 	    
-	    setSortingToDefault() {
+	    setSortingToDefault: function() {
 	    	$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
 	    	$('#transTradeDate').removeClass('dateasc');
