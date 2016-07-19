@@ -729,7 +729,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.clearFieldData();
 				me.setSortingToDefault();
 				me.getTransactionsData(me);
-				me.setSortingToDefault();
 				$(".pagination-container").remove();
 				$('#transItemsId').paginathing({
 				    insertAfter: '#transItemsId'
