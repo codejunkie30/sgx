@@ -946,6 +946,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			var newWLNameLC = PAGE.newWLName();
 			
 			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); PAGE.hideLoading(); return; }
+			if (newWLNameLC.trim().length < 2 || newWLNameLC.trim().length > 40) {  alert("Watch List must be between 1 and 40 characters."); PAGE.hideLoading(); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); PAGE.hideLoading(); return; }
 			
 			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); PAGE.hideLoading(); return; }
