@@ -165,28 +165,36 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        if(type === 'number'){
 		        	 $('#pagingTextBox').change(function(e) {
 		        		 e.preventDefault();
-		        		 var pageNumber = _self.currentPage;
-		        		 try{
-		        			 pageNumber = parseInt($('#pagingTextBox').val());
-		        			 if(pageNumber > _self.totalPages || pageNumber < 1 || isNaN(pageNumber)){
-		        				 pageNumber = _self.currentPage;
-		        				 $('#pagingTextBox').val(_self.currentPage);
-		        			 }
-		        		 }catch(e){
-		        			 $('#pagingTextBox').val(_self.currentPage);
-		        		 }
-		        		 _self.currentPage = pageNumber;
-				          _self.show(pageNumber);
-				          PAGE.resizeIframeSimple();
+		        		 VALUATION.addSaveTransactions();
+				         if(!VALUATION.hasFieldErrors){
+			        		 var pageNumber = _self.currentPage;
+			        		 try{
+			        			 pageNumber = parseInt($('#pagingTextBox').val());
+			        			 if(pageNumber > _self.totalPages || pageNumber < 1 || isNaN(pageNumber)){
+			        				 pageNumber = _self.currentPage;
+			        				 $('#pagingTextBox').val(_self.currentPage);
+			        			 }
+			        		 }catch(e){
+			        			 $('#pagingTextBox').val(_self.currentPage);
+			        		 }
+			        		 _self.currentPage = pageNumber;
+					          _self.show(pageNumber);
+					          PAGE.resizeIframeSimple();
+				         }else{
+				        	 $('#pagingTextBox').val(_self.currentPage);
+				         }
 		        	 });
 		         }else{
 
 			        _li.click(function(e) {
 			        	e.preventDefault();
-			          	var page = _li.data('page');
-			          	_self.currentPage = page;
-			          	_self.show(page);
-			          	PAGE.resizeIframeSimple();
+			        	VALUATION.addSaveTransactions();
+			        	if(!VALUATION.hasFieldErrors){
+			        		var page = _li.data('page');
+				          	_self.currentPage = page;
+				          	_self.show(page);
+				          	PAGE.resizeIframeSimple();
+			        	}
 			        });
 		         }
 		         location.href = '#transactionSave';
@@ -198,7 +206,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		      _self.render(page);
 		      _self.handle();
-		      VALUATION.addSaveTransactions();
 		    }
 		  }
 
@@ -264,7 +271,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        		event.target.focus();
 	        		$('#'+event.target.id).css({"borderColor":"red"});
 	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
+	        		VALUATION.hasFieldErrors =  true;
 	        	}else{
+	        		VALUATION.hasFieldErrors =  false;
 	        		$('#'+event.target.id).css({"borderColor":""});
 	        	}
 	        });
@@ -366,6 +375,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	
     	validatedCompanies: [],
     	validateFlag: true,
+    	hasFieldErrors : false,
     	
     	record_modified: false,
     	
@@ -1086,7 +1096,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				if(me.buySellValidate()){
 					me.insertTransactionRecords();
 					me.clearFieldData();
+					VALUATION.hasFieldErrors = false;
 				}else{
+					VALUATION.hasFieldErrors = true;
 					if(transItemModel!=null)me.transItems.remove(transItemModel);
 				}
 				
@@ -2020,11 +2032,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						 }
 						 
 						 me.validateFlag = false;
+						 VALUATION.hasFieldErrors = true;
 					}else{
 						$('#date'+sentItem.id()).css({"borderColor":""});
 						$('#share'+sentItem.id()).css({"borderColor":""});
 						$('#tradeDate').css({"borderColor":""}) ;
 						$('#initialNumberOfShares').css({"borderColor":""}) ;
+						VALUATION.hasFieldErrors = false;
 					}
 					bought = 0.00;
 			    	sell = 0.00;
@@ -2034,11 +2048,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    buySellValidate: function(){
 	    	var me = this;
-	    	var flag = true;
     		
 			ko.utils.arrayForEach(me.transItems(), function (item) {
 				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
 					me.validateFlag = false;
+					VALUATION.hasFieldErrors = true;
 					return false;
 				}else{
     				if(item.transactionType() === "SELL"){
