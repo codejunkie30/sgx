@@ -11,12 +11,12 @@ import java.util.List;
  */
 public class StockListPriceHistory {
 
-	private List<CompanyPriceHistory> companiesPriceHistory;
+	private List<StockListCompanyPriceHistory> companiesPriceHistory;
 
 	/**
 	 * @return the companiesPriceHistory
 	 */
-	public List<CompanyPriceHistory> getCompaniesPriceHistory() {
+	public List<StockListCompanyPriceHistory> getCompaniesPriceHistory() {
 		return companiesPriceHistory;
 	}
 
@@ -24,7 +24,7 @@ public class StockListPriceHistory {
 	 * @param companiesPriceHistory
 	 *            the companiesPriceHistory to set
 	 */
-	public void setCompaniesPriceHistory(List<CompanyPriceHistory> companiesPriceHistory) {
+	public void setCompaniesPriceHistory(List<StockListCompanyPriceHistory> companiesPriceHistory) {
 		this.companiesPriceHistory = companiesPriceHistory;
 	}
 

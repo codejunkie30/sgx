@@ -3,58 +3,40 @@
  */
 package com.wmsi.sgx.model;
 
+import java.util.List;
+
+import com.google.common.base.Objects;
+
 /**
  * @author dt84327
  *
  */
 public class CompanyPriceHistory {
+
+	private List<HistoricalValue> price;
 	
-	private String tickerCode;
-	private PriceHistory priceHistory;
-
-	/**
-	 * @return the tickerCode
-	 */
-	public String getTickerCode() {
-		return tickerCode;
+	
+	public List<HistoricalValue> getPrice() {
+		return price;
 	}
 
-	/**
-	 * @param tickerCode
-	 *            the tickerCode to set
-	 */
-	public void setTickerCode(String tickerCode) {
-		this.tickerCode = tickerCode;
+	public void setPrice(List<HistoricalValue> price) {
+		this.price = price;
 	}
-
-	/**
-	 * @return the priceHistory
-	 */
-	public PriceHistory getPriceHistory() {
-		return priceHistory;
-	}
-
-	/**
-	 * @param priceHistory
-	 *            the priceHistory to set
-	 */
-	public void setPriceHistory(PriceHistory priceHistory) {
-		this.priceHistory = priceHistory;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
+	
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CompanyPriceHistory [tickerCode=");
-		builder.append(tickerCode);
-		builder.append(", priceHistory=");
-		builder.append(priceHistory);
-		builder.append("]");
-		return builder.toString();
+		return Objects.toStringHelper(this)
+			.add("price", price)
+			.toString();
+	}
+
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof CompanyPriceHistory) {
+			CompanyPriceHistory that = (CompanyPriceHistory) object;
+			return Objects.equal(this.price, that.price);
+		}
+		return false;
 	}
 }
