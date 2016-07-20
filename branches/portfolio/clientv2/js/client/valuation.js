@@ -1307,11 +1307,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	model.multiCompData.sort(sortByDate);
 	    	function sortByDate(a, b){
-	    		var a = new Date(a.intTradeDate);
-	    		var b = new Date(b.intTradeDate);
+	    		var a = new Date(a.tradeDateForSort);
+	    		var b = new Date(b.tradeDateForSort);
 	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	    	}
 		    model.tradeDate = model.multiCompData()[model.multiCompData().length-1].intTradeDate;
+		    model.tradeDateForSort = model.multiCompData()[model.multiCompData().length-1].tradeDateForSort;
 	    },
 	    
 	    displayAddTransactions: function(data){
@@ -1804,8 +1805,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
-	    	    	var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
-    	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : ""; 
+	    	    	var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
+    	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : ""; 
     	    		if (a == "" && b){
 	    	    	    return 1;
 	    	    	}
@@ -1818,8 +1819,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		$('#perTradeDate').removeClass('datedesc').addClass('dateasc');
 	    		me.displayTransactions.sort(sortByTradeDate);
 	    	    function sortByTradeDate(a, b){
-    	    		var a = !UTIL.isEmpty(a.tradeDate) ? new Date(a.tradeDate).getTime() : "";
-    	    		var b = !UTIL.isEmpty(b.tradeDate) ? new Date(b.tradeDate).getTime() : "";
+    	    		var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
+    	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : "";
 	  			 	if (a == "" && b){
 	    	    	    return 1;
 	    	    	}
@@ -2083,6 +2084,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.tickerCode = tickerCode;
     	me.transactionType = transactionType;
     	me.tradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
+    	me.tradeDateForSort = !UTIL.isEmpty(tradeDate) ? tradeDate : "";
     	me.numberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
     	me.costAtPurchase = costAtPurchase;
     	me.lastClosePrice = !UTIL.isEmpty(lastCloseLivePrice) ? "$" + lastCloseLivePrice: "";
@@ -2098,6 +2100,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.intTickerCode = tickerCode;
     	me.intTransactionType = transactionType;
     	me.intTradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
+    	me.tradeDateForSort = !UTIL.isEmpty(tradeDate) ? tradeDate : "";
     	me.intNumberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
     	me.intCostAtPurchase = !UTIL.isEmpty(costAtPurchase) ? "$" + costAtPurchase.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
     	me.intId = id;
