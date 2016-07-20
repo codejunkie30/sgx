@@ -733,6 +733,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$('#transItemsId').paginathing({
 				    insertAfter: '#transItemsId'
 				});
+				$('#performance-chart-content').show()
+            	$('#performance-chart-header').show();
+            	me.multiChartUnchart(me, true);
 			}
 			else {
 				me.displayTransactions.sort(sortByName);
