@@ -156,8 +156,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			
+			$('#keyDevelopemntContentDiv input[type=checkbox]').each(function () {
+				this.checked = true;
+			});
 			me.getKeyDevData(me, me.allCompanies);
+			me.showHideCheckboxes(me);
 		},
 		
 		searchKeyDev: function(){
