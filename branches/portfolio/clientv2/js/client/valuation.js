@@ -1108,8 +1108,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				//validation related attributes
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
-			}else{
-				VALUATION.hasFieldErrors = true;
 			}
 	    },
 	    
