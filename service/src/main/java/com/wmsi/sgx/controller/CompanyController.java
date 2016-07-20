@@ -33,6 +33,7 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.StockListCompanyPriceHistory;
 import com.wmsi.sgx.model.StockListPriceHistory;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.charts.BalanceSheet;
@@ -304,27 +305,17 @@ public class CompanyController{
 		String currency = setCurrency(request);
 		List<WatchlistCompany> companies = watchlistService.getStockListCompanies(search.getId());
 		StockListPriceHistory stockListPriceHistory = new StockListPriceHistory();
-		List<CompanyPriceHistory> companiesPriceHistoryList = new ArrayList<>();
+		List<StockListCompanyPriceHistory> companiesPriceHistoryList = new ArrayList<>();
 		for (WatchlistCompany company : companies) {
-			CompanyPriceHistory companyPriceHistory = new CompanyPriceHistory();
-			companyPriceHistory.setTickerCode(company.getTickerCode());
-			PriceHistory ret = new PriceHistory();
+			StockListCompanyPriceHistory stockListCompanyPriceHistory = new StockListCompanyPriceHistory();
+			stockListCompanyPriceHistory.setTickerCode(company.getTickerCode());
+			CompanyPriceHistory ret = new CompanyPriceHistory();
 
 			List<HistoricalValue> price = companyService.loadPriceHistory(company.getTickerCode(), currency);
-			List<HistoricalValue> highPrice = companyService.loadHighPriceHistory(company.getTickerCode(), currency);
-			List<HistoricalValue> lowPrice = companyService.loadLowPriceHistory(company.getTickerCode(), currency);
-			List<HistoricalValue> openPrice = companyService.loadOpenPriceHistory(company.getTickerCode(), currency);
-			List<HistoricalValue> volume = companyService.loadVolumeHistory(company.getTickerCode(), currency);
-
-			setData(price, highPrice, lowPrice, openPrice, volume);
 
 			ret.setPrice(price);
-			ret.setHighPrice(highPrice);
-			ret.setLowPrice(lowPrice);
-			ret.setOpenPrice(openPrice);
-			ret.setVolume(volume);
-			companyPriceHistory.setPriceHistory(ret);
-			companiesPriceHistoryList.add(companyPriceHistory);
+			stockListCompanyPriceHistory.setPriceHistory(ret);
+			companiesPriceHistoryList.add(stockListCompanyPriceHistory);
 		}
 		stockListPriceHistory.setCompaniesPriceHistory(companiesPriceHistoryList);
 		return stockListPriceHistory;
