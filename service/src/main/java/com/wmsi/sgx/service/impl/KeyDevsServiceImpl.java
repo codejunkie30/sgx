@@ -110,7 +110,7 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 			Long to = null;
 			Calendar calendar = Calendar.getInstance();
 			from = calendar.getTime().getTime();
-			calendar.add(Calendar.MONTH, -5);
+			calendar.add(Calendar.MONTH, -1);
 			to = calendar.getTime().getTime();
 			Map<String, StockListKeyDev> map = new HashMap<>();
 			StockListKeyDev stockListKeyDev=null;
