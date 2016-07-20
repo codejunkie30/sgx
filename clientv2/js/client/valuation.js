@@ -1172,6 +1172,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    clearFieldData: function(){
 	    	var me = this;
 	    	me.selectedCompanyValue(null);
+	    	me.selectedAvailableType('BUY');
 	    	me.initialTradeDate(null);
 	    	me.initialNumberOfShares(null);
 	    	me.initialCostAtPurchase(null);
