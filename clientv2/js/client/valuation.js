@@ -1028,6 +1028,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 		    		me.watchlistCompanies(data.companyPrice);
+		    		me.watchlistCompanies.sort(sortByName);
+			    	function sortByName(a, b){
+						  var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
+						  var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
 		    	}
 		    	PAGE.hideLoading();
 				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);

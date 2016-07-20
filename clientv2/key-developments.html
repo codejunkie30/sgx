@@ -43,31 +43,31 @@
 			<hr/>
 				<table>
 					<tr>
-						<td><label><input type="checkbox" id="kdAnounceCompTransactionsCheckbox">Announced/Completed Transactions</label></td>
+						<td><label><input type="checkbox" id="kdAnounceCompTransactionsCheckbox" checked="checked">Announced/Completed Transactions</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdCompanyForecastsCheckbox">Company Forecasts and Ratings</label></td>
+						<td><label><input type="checkbox" id="kdCompanyForecastsCheckbox" checked="checked">Company Forecasts and Ratings</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdCorporateStructureRelatedCheckbox">Corporate Structure Related </label></td>
+						<td><label><input type="checkbox" id="kdCorporateStructureRelatedCheckbox" checked="checked">Corporate Structure Related </label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdCustProdRelatedCheckbox">Customer/Product Related</label></td>
+						<td><label><input type="checkbox" id="kdCustProdRelatedCheckbox" checked="checked">Customer/Product Related</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdDividensSplitsCheckbox">Dividends/Splits</label></td>
+						<td><label><input type="checkbox" id="kdDividensSplitsCheckbox" checked="checked">Dividends/Splits</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdListTradeRelatedCheckbox">Listing/Trading Related</label></td>
+						<td><label><input type="checkbox" id="kdListTradeRelatedCheckbox" checked="checked">Listing/Trading Related</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdPotentialRedFlagsCheckbox">Potential Red Flags/Distress Indicators</label></td>
+						<td><label><input type="checkbox" id="kdPotentialRedFlagsCheckbox" checked="checked">Potential Red Flags/Distress Indicators</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdPotentialTransactionsCheckbox">Potential Transactions</label></td>
+						<td><label><input type="checkbox" id="kdPotentialTransactionsCheckbox" checked="checked">Potential Transactions</label></td>
 					</tr>
 					<tr>
-						<td><label><input type="checkbox" id="kdResultsCorpAnnouncementsCheckbox">Results and Corporate Announcements</label></td>
+						<td><label><input type="checkbox" id="kdResultsCorpAnnouncementsCheckbox" checked="checked">Results and Corporate Announcements</label></td>
 					</tr>
 					<tr>
 						<td><a class="search-button" data-bind="click: searchKeyDev">Search</a></td>
@@ -86,7 +86,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -100,7 +100,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -114,7 +114,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -128,7 +128,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -142,7 +142,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -156,7 +156,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -170,7 +170,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -184,7 +184,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -198,7 +198,7 @@
 							<tr>
 								<td>
 									<span class="key-header" data-bind="text: headline, click: $root.keyDevClick.bind($root)"></span>
-									<div class="key-company">Companies:  <span data-bind="text: companies"></span></div>
+									<div class="key-company"><span data-bind="companytext: companies"></span>&nbsp;<span data-bind="text: companies"></span></div>
 								</td>
 							</tr>
 						</table>

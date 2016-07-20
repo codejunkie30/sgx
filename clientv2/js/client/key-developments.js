@@ -1,6 +1,19 @@
 define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messages.json","jquery-placeholder" ], function(UTIL, ko, validation, MESSAGES) {
 
 	ko.components.register('premium-preview', { require: 'client/components/premium-preview'});
+	
+	ko.bindingHandlers.companytext = {
+		    init: function (element, valueAccessor, allBindingsAccessor) {
+		    	var value = ko.utils.unwrapObservable(valueAccessor());
+		    	if(!UTIL.isEmpty(value) && value.length > 1){
+		    		$(element).html("Companies:");
+		    	}else{
+		    		$(element).html("Company:");
+		    	}
+	    		
+		    }
+		};
+	
 	var KEYDEV = {
 		sectionName:'Key developments',	
 		finalWL: ko.observableArray(),
@@ -435,7 +448,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 			    	me.watchlistCompanies(data.companyPrice);
-			    	
+			    	me.watchlistCompanies.sort(sortByName);
+			    	function sortByName(a, b){
+						  var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
+						  var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}
 		    	}
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
