@@ -179,6 +179,7 @@
 	color: #fff !important;
 	cursor: pointer;
 	text-decoration: none !important;
+	border-radius: 4px;
 }
 
 .save-button {
@@ -191,6 +192,7 @@
 	margin-right: 20px;
 	font: normal 15px/15px Arial, Helvetica, sans-serif;
 	text-decoration: none !important;
+	border-radius: 4px;
 }
 
 .imgCenterAllign {
@@ -393,6 +395,7 @@
     padding: 0 10px;
     color: #fff !important;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .w935p {
@@ -402,7 +405,6 @@
 .multiTransCompany { 
 	color :#0e236b;
 	padding-top:8px;
-	text-decoration: underline;
 }
 
 .multiTransCompany span{ 
