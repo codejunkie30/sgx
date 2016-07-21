@@ -182,11 +182,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						if(!$.isEmptyObject(data)){
+						/*if(!$.isEmptyObject(data)){
 							$('#noRecordAvail').hide();
 						}else{
 							$('#noRecordAvail').show();
-						}
+						}*/
 						me.refractKeyDevData(data, me);
 						me.showHideCheckboxes(me);
 						PAGE.hideLoading();
@@ -224,11 +224,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						if(!$.isEmptyObject(data)){
+						/*if(!$.isEmptyObject(data)){
 							$('#noRecordAvail').hide();
 						}else{
 							$('#noRecordAvail').show();
-						}
+						}*/
 						me.refractKeyDevData(data, me);
 						PAGE.hideLoading();
 					}, 
