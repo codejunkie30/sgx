@@ -110,10 +110,10 @@ div.news {
 
 hr{
 	width:234px;
-	margin-left:16px;
+	position:relative;
 	color: #ccc;
 	margin-top: 2px;
-	
+	left:-11px;	
 }
 
 .deleteTran {
