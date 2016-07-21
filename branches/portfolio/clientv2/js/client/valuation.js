@@ -179,7 +179,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			        		 }
 			        		 _self.currentPage = pageNumber;
 					          _self.show(pageNumber);
-					          PAGE.resizeIframeSimple();
+					          PAGE.resizeIframeSimple($('#transTableContainer').offset().top);
 				         }else{
 				        	 $('#pagingTextBox').val(_self.currentPage);
 				         }
@@ -193,7 +193,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			        		var page = _li.data('page');
 				          	_self.currentPage = page;
 				          	_self.show(page);
-				          	PAGE.resizeIframeSimple();
+				          	PAGE.resizeIframeSimple($('#transTableContainer').offset().top);
 			        	}
 			        });
 		         }
