@@ -12,7 +12,7 @@
 
 .valuation-performance a:hover {
 	text-decoration: none;
-	color:#eee;
+	color:#eee !important;
 }
 
 .valuation-performance ul {
