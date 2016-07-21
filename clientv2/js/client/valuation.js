@@ -234,7 +234,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    liClass: 'page',
 		    activeClass: 'active',
 		    disabledClass: 'disabled',
-		    insertAfter: null
+		    insertAfter: '#transItemsIdTable'
 		  }
 
 		}(jQuery, window, document));
@@ -740,9 +740,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.setSortingToDefault();
 				me.getTransactionsData(me);
 				$(".pagination-container").remove();
-				$('#transItemsId').paginathing({
-				    insertAfter: '#transItemsId'
-				});
+				$('#transItemsId').paginathing();
 				$('#performance-chart-content').show()
             	$('#performance-chart-header').show();
             	me.multiChartUnchart(me, true);
@@ -1356,8 +1354,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    $(".pagination-container").remove();
 			}
 			$('#transItemsId').paginathing({
-				currentPage: currentPage,
-			    insertAfter: '#transItemsId'
+				currentPage: currentPage
 			});
 		    $('#transItemsId input').change(function() { 
 		    	VALUATION.record_modified = true; 
@@ -1574,9 +1571,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
@@ -1610,9 +1605,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');	    	
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
@@ -1646,9 +1639,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
@@ -1682,9 +1673,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
@@ -1722,9 +1711,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpriceasc');
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
@@ -1762,9 +1749,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transPrice').removeClass('priceasc');
 	    	$('#transPrice').removeClass('pricedesc');
 	    	$(".pagination-container").remove();
-	    	$('#transItemsId').paginathing({
-			    insertAfter: '#transItemsId'
-			});
+	    	$('#transItemsId').paginathing();
 	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
 	    },
 	    
