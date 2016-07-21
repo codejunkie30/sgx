@@ -178,6 +178,7 @@
 	padding: 8px 15px 8px 15px;
 	color: #fff !important;
 	cursor: pointer;
+	text-decoration: none !important;
 }
 
 .save-button {
@@ -189,6 +190,7 @@
 	cursor: pointer;
 	margin-right: 20px;
 	font: normal 15px/15px Arial, Helvetica, sans-serif;
+	text-decoration: none !important;
 }
 
 .imgCenterAllign {

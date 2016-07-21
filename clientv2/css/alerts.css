@@ -1,4 +1,4 @@
-.alerts-wrapper select { background: #ddd; height: 22px; border: 1px solid #d4d4d4; border-radius: 4px; min-width: 80px; }
+.alerts-wrapper select { background: #FFFFFF; height: 22px; border: 1px solid #808080; border-radius: 4px; min-width: 80px; }
 .alerts-wrapper a { color: #0b236b; text-decoration: none; }
 .alerts-wrapper a:hover { text-decoration: underline; }
 
@@ -62,7 +62,7 @@
 .wl-container .alerts ul li { list-style-type: none; margin: 0 0 12px 0; }
 .wl-container .alerts ul li input[type="text"] { width: 32px; height: 22px; border: 1px solid #c4c4c4; border-radius: 4px; }
 
-.button-wrapper { margin: 35px 0 0 245px; }
+.button-wrapper { margin: 35px 0 0 205px; }
 .button-wrapper a { cursor: pointer; }
 .button-wrapper a.email { margin-left: 10px; }
 
@@ -131,4 +131,14 @@
 #stockListValuation .header .profilestocklist nav ul li.stocklist-valuation a,
 #stockListKeydev .header .profilestocklist nav ul li.stocklist-keydev a { background: #ffffff; border: 2px solid #ebecec; }
 
-
+.save-button {
+	display: inline-block;
+	background: #0e236b;
+	-webkit-border-radius: 4px;
+	padding: 8px 25px;
+	color: #fff !important;
+	cursor: pointer;
+	margin-right: 20px;
+	font: normal 15px/15px Arial, Helvetica, sans-serif;
+	text-decoration: none !important;
+}
