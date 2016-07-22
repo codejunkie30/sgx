@@ -1550,6 +1550,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 	    },
 	    
+	    toogleCompanyLink: function(id, data){	 
+	    	
+	       	var me = this;
+	    	if(($('#minus_'+id).is(':visible'))) {
+	    		me.toogleCompanyMinus(id,data);
+	    	}
+	    	else {
+	    		me.toogleCompanyPlus(id,data)
+	    	}
+	    },
+	    
 	    transSortByCompanyName: function(data, event){
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){

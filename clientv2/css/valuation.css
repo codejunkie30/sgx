@@ -414,6 +414,7 @@
 
 .multiTransCompany span{ 
     color :#0e236b;
+    cursor: pointer;
 }
 
 .valuation-results table tbody tr td input[type=checkbox] {
