@@ -37,6 +37,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		libCurrency: ko.observable(),
 		premiumUserEmail: ko.observable(),
 		currentDay: ko.observable(),
+		noResultsFlag: true,
 		
 		kdAnounceCompTransactions: ko.observableArray(),//Announced/Completed Transactions
 		kdCompanyForecasts: ko.observableArray(),//Company Forecasts and Ratings
@@ -159,12 +160,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			$('#keyDevelopemntContentDiv input[type=checkbox]').each(function () {
 				this.checked = true;
 			});
+			me.noResultsFlag = true;
 			me.getKeyDevData(me, me.allCompanies);
-			me.showHideCheckboxes(me);
 		},
 		
 		searchKeyDev: function(){
 			var me = this;
+			me.noResultsFlag = true;
 			var tickers = me.allCompanies; 
 			if(!UTIL.isEmpty(me.keydevCompSelectedVal())){
 				tickers = $.makeArray(me.keydevCompSelectedVal());
@@ -182,33 +184,41 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						/*if(!$.isEmptyObject(data)){
+						if(!$.isEmptyObject(data)){
 							$('#noRecordAvail').hide();
 						}else{
 							$('#noRecordAvail').show();
-						}*/
+						}
 						me.refractKeyDevData(data, me);
 						me.showHideCheckboxes(me);
+						if(me.noResultsFlag){
+							$('#noRecordAvail').show();
+						}else{
+							$('#noRecordAvail').hide();
+						}
 						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
 		},
 		
 		showHideCheckboxes: function(me){
-			me.showHideCheckboxeRenderer($('#kdAnounceCompTransactionsCheckbox'), $('#kdAnounceCompTransactionsId') );
-			me.showHideCheckboxeRenderer($('#kdCompanyForecastsCheckbox'), $('#kdCompanyForecastsId') );
-			me.showHideCheckboxeRenderer($('#kdCorporateStructureRelatedCheckbox'), $('#kdCorporateStructureRelatedId') );
-			me.showHideCheckboxeRenderer($('#kdCustProdRelatedCheckbox'), $('#kdCustProdRelatedId') );
-			me.showHideCheckboxeRenderer($('#kdDividensSplitsCheckbox'), $('#kdDividensSplitsId') );
-			me.showHideCheckboxeRenderer($('#kdListTradeRelatedCheckbox'), $('#kdListTradeRelatedId') );
-			me.showHideCheckboxeRenderer($('#kdPotentialRedFlagsCheckbox'), $('#kdPotentialRedFlagsId') );
-			me.showHideCheckboxeRenderer($('#kdPotentialTransactionsCheckbox'), $('#kdPotentialTransactionsId') );
-			me.showHideCheckboxeRenderer($('#kdResultsCorpAnnouncementsCheckbox'), $('#kdResultsCorpAnnouncementsId') );
+			me.showHideCheckboxeRenderer($('#kdAnounceCompTransactionsCheckbox'), $('#kdAnounceCompTransactionsId'), me.kdAnounceCompTransactions() );
+			me.showHideCheckboxeRenderer($('#kdCompanyForecastsCheckbox'), $('#kdCompanyForecastsId'), me.kdCompanyForecasts() );
+			me.showHideCheckboxeRenderer($('#kdCorporateStructureRelatedCheckbox'), $('#kdCorporateStructureRelatedId'), me.kdCorporateStructureRelated() );
+			me.showHideCheckboxeRenderer($('#kdCustProdRelatedCheckbox'), $('#kdCustProdRelatedId'), me.kdCustProdRelated() );
+			me.showHideCheckboxeRenderer($('#kdDividensSplitsCheckbox'), $('#kdDividensSplitsId'), me.kdDividensSplits() );
+			me.showHideCheckboxeRenderer($('#kdListTradeRelatedCheckbox'), $('#kdListTradeRelatedId'), me.kdListTradeRelated() );
+			me.showHideCheckboxeRenderer($('#kdPotentialRedFlagsCheckbox'), $('#kdPotentialRedFlagsId'), me.kdPotentialRedFlags() );
+			me.showHideCheckboxeRenderer($('#kdPotentialTransactionsCheckbox'), $('#kdPotentialTransactionsId'), me.kdPotentialTransactions() );
+			me.showHideCheckboxeRenderer($('#kdResultsCorpAnnouncementsCheckbox'), $('#kdResultsCorpAnnouncementsId'), me.kdResultsCorpAnnouncements() );
 		},
 		
-		showHideCheckboxeRenderer: function(idCheckbox, idDiv){
+		showHideCheckboxeRenderer: function(idCheckbox, idDiv, array){
 			if(idCheckbox.prop('checked') === true){
 				idDiv.show();
+				if(array.length > 0){
+					this.noResultsFlag = false;
+				}
 	        }else{
 	        	idDiv.hide();
 	        }
@@ -224,12 +234,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					postType,
 					params,
 					function(data, textStatus, jqXHR){	
-						/*if(!$.isEmptyObject(data)){
+						if(!$.isEmptyObject(data)){
 							$('#noRecordAvail').hide();
 						}else{
 							$('#noRecordAvail').show();
-						}*/
+						}
 						me.refractKeyDevData(data, me);
+						me.showHideCheckboxes(me);
+						if(me.noResultsFlag){
+							$('#noRecordAvail').show();
+						}else{
+							$('#noRecordAvail').hide();
+						}
 						PAGE.hideLoading();
 					}, 
 					PAGE.customSGXError);
