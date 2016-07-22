@@ -482,6 +482,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var pcPriceDropError = 0;
 			var pcTradingVolumeError = 0;
 			var estChangePriceDropError = 0;
+			var re = RegExp('^\\d*(\\.\\d{1,3})?$');
 			
 			if(ALERTS.PCPriceCheck() == true){
 				ALERTS.displayList().optionList.pcPriceDropBelow = $('.pcPriceDropBelow').val();
@@ -498,7 +499,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
 				}
-				else if (ALERTS.displayList().optionList.pcPriceDropBelow < 1 || ALERTS.displayList().optionList.pcPriceRiseAbove < 1 || ALERTS.displayList().optionList.pcPriceDropBelow > 100 || ALERTS.displayList().optionList.pcPriceRiseAbove > 100 ) {
+				else if (!ALERTS.displayList().optionList.pcPriceDropBelow.match(re) || !ALERTS.displayList().optionList.pcPriceRiseAbove.match(re) ||
+						  ALERTS.displayList().optionList.pcPriceDropBelow < .001 || ALERTS.displayList().optionList.pcPriceRiseAbove < .001 || ALERTS.displayList().optionList.pcPriceDropBelow > 100 || ALERTS.displayList().optionList.pcPriceRiseAbove > 100 ) {
 					$('.price-drop.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');
 					PAGE.resizeIframeSimple();
@@ -528,7 +530,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
 				}
-				else if (ALERTS.displayList().optionList.pcTradingVolumeValue < 1 ||  ALERTS.displayList().optionList.pcTradingVolumeValue > 100) {
+				else if (!ALERTS.displayList().optionList.pcTradingVolumeValue.match(re) || ALERTS.displayList().optionList.pcTradingVolumeValue < .001 ||  ALERTS.displayList().optionList.pcTradingVolumeValue > 100) {
 					$('.trade-volume.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');
 					PAGE.resizeIframeSimple();
@@ -560,7 +562,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
 				}
-				else if (ALERTS.displayList().optionList.estChangePriceDropBelow < 1 || ALERTS.displayList().optionList.estChangePriceDropAbove < 1 || ALERTS.displayList().optionList.estChangePriceDropBelow > 100 || ALERTS.displayList().optionList.estChangePriceDropAbove > 100) {
+				else if (!ALERTS.displayList().optionList.estChangePriceDropBelow.match(re) || !ALERTS.displayList().optionList.estChangePriceDropAbove.match(re) || ALERTS.displayList().optionList.estChangePriceDropBelow < .001 || ALERTS.displayList().optionList.estChangePriceDropAbove < .001 || ALERTS.displayList().optionList.estChangePriceDropBelow > 100 || ALERTS.displayList().optionList.estChangePriceDropAbove > 100) {
 					$('.target-price.error-messages').empty();
 					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');
 					PAGE.resizeIframeSimple();
