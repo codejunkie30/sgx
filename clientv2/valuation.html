@@ -137,14 +137,17 @@
 			
 			<!-- div content for transactions functionality -->
 			<div class="grid transactions" data-bind="css:{'show-hidden': activeTab() == 'transactions'}">
-			<div style="margin: 15px 0px 30px 20px">
-				<b>Enter transaction to view additional details on your StockList.</b>
-			</div>
 			
 			<div id="transTableContainer">
-				 <div align="right">
-					<a class="save-button" name="transactionSave" data-bind="click: addSaveTransactions">Save</a>
+				<div style="margin: 15px 0px 15px 20px">
+					 <div style="float: left">
+						<b>Enter transaction to view additional details on your StockList.</b>
+					 </div>
+					 <div style="float: right">
+						<a class="save-button" name="transactionSave" data-bind="click: addSaveTransactions">Save</a>
+					</div>
 				</div>
+				<div style="clear: both"></div>
 				<table id="transItemsIdTable">
 					<thead>
 						<tr>
