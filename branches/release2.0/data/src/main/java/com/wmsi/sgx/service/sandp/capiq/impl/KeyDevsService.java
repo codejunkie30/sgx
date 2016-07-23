@@ -121,12 +121,17 @@ public class KeyDevsService extends AbstractDataService {
 			ids.add(record.get(2));
 			
 			KeyDev keydev = new KeyDev();
-			keydev.setSource(record.get(7));
 			keydev.setDate(new Date(record.get(3)));
 			keydev.setHeadline(record.get(4));
 			keydev.setSituation(record.get(5));
 			keydev.setType(record.get(6));
 			keydev.setKeyDevId(record.get(2));
+			try {
+				keydev.setSource(record.get(7));
+			} catch (Exception e) {
+				log.info("Key development source not available for ticker " + keydev.getId() + " - " +keydev.getKeyDevId());
+				keydev.setSource(null);
+			}
 			list.add(keydev);
 		}
 		kD.setKeyDevs(list);
@@ -136,7 +141,7 @@ public class KeyDevsService extends AbstractDataService {
 	public Boolean init() {
 
 		try {
-
+			log.info("Retrieving key developments source content");
 			File f = new File(rawDir + keyDevDir + ".csv");
 			if(!f.exists()){
 				log.error("Unable to process key dev source content as key devs file doesn't exists");
@@ -186,6 +191,7 @@ public class KeyDevsService extends AbstractDataService {
 					}
 				}
 			}
+			log.info("Finished retrieving key developments source content");
 			loadSourceContent(keyDevSource);
 
 		} catch (Exception e) {
