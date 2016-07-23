@@ -22,6 +22,8 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	ClassPathResource keyDevFile;
 	private Map<String, List<String>> keyDevMap;
 	private Map<String, String> keyDevLabel;
+	private Map<String, String> keyDevTypeLabelMap;
+	private Map<String, String> keyDevTypeCodeLabelMap;
 	
 	@Override
 	public Map<String, List<String>> getMap(){
@@ -30,6 +32,11 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 	@Override
 	public String getKeyDevLabel(String key){
 		return keyDevLabel.get(key);
+	}
+	
+	@Override
+	public String getKeyDevLabelByType(String type){
+		return keyDevTypeCodeLabelMap.get(keyDevTypeLabelMap.get(type));
 	}
 	
 	
@@ -50,11 +57,12 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		List<String> kdPotentialTransactions = new ArrayList<String>();
 		List<String> kdResultsCorpAnnouncements = new ArrayList<String>();
 		
-	
+		keyDevTypeLabelMap = new HashMap<>();
 		try{
 			reader = new InputStreamReader(keyDevFile.getInputStream());
 			csvReader = new CSVReader(reader, ',');
 			while((record = csvReader.readNext()) != null){
+				keyDevTypeLabelMap.put(record[0], record[1]);
 				switch(record[1]){
 				case "Announced/Completed Transactions":
 					kdAnounceCompTransactions.add(record[0]);
@@ -72,7 +80,7 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 					kdPotentialRedFlags.add(record[0]);
 				case "Potential Transactions":
 					kdPotentialTransactions.add(record[0]);
-				case "Corporate Communications":
+				case "Results and Corporate Announcements":
 					kdResultsCorpAnnouncements.add(record[0]);
 
 				}
@@ -105,7 +113,16 @@ public class KeyDevsMapImpl implements KeyDevsMap{
 		keyDevLabel.put("kdListTradeRelated", "Listing/Trading Related");
 		keyDevLabel.put("kdPotentialRedFlags", "Potential Red Flags/Distress Indicators");
 		keyDevLabel.put("kdPotentialTransactions", "Potential Transactions");
-		keyDevLabel.put("kdResultsCorpAnnouncements", "Corporate Communications");
+		keyDevLabel.put("kdResultsCorpAnnouncements", "Results and Corporate Announcements");
+		
+		keyDevTypeCodeLabelMap = reverse(keyDevLabel);
 		
 		}
+	
+	public static HashMap<String, String> reverse(Map<String, String> map) {
+	    HashMap<String, String> rev = new HashMap<String, String>();
+	    for(Map.Entry<String, String> entry : map.entrySet())
+	        rev.put(entry.getValue(), entry.getKey());
+	    return rev;
+	}
 }

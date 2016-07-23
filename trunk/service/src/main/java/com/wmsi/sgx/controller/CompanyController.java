@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.domain.WatchlistCompany;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
 import com.wmsi.sgx.model.CompanyNameAndTicker;
 import com.wmsi.sgx.model.CompanyNameAndTickerList;
+import com.wmsi.sgx.model.CompanyPriceHistory;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
@@ -31,6 +33,8 @@ import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.Holders;
 import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.model.StockListCompanyPriceHistory;
+import com.wmsi.sgx.model.StockListPriceHistory;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.charts.BalanceSheet;
 import com.wmsi.sgx.model.charts.BalanceSheets;
@@ -52,6 +56,7 @@ import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.AccountService;
+import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
@@ -73,6 +78,9 @@ public class CompanyController{
 	
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
+	
+	@Autowired
+	private WatchlistService watchlistService;
 	
 	private String defaultIndexName = "sgd_premium";
 	
@@ -290,6 +298,27 @@ public class CompanyController{
 		ret.setOpenPrice(openPrice);
 		ret.setVolume(volume);
 		return ret;
+	}
+	
+	@RequestMapping("company/stockListpriceHistory")
+	public StockListPriceHistory getStockListPriceHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
+		String currency = setCurrency(request);
+		List<WatchlistCompany> companies = watchlistService.getStockListCompanies(search.getId());
+		StockListPriceHistory stockListPriceHistory = new StockListPriceHistory();
+		List<StockListCompanyPriceHistory> companiesPriceHistoryList = new ArrayList<>();
+		for (WatchlistCompany company : companies) {
+			StockListCompanyPriceHistory stockListCompanyPriceHistory = new StockListCompanyPriceHistory();
+			stockListCompanyPriceHistory.setTickerCode(company.getTickerCode());
+			CompanyPriceHistory ret = new CompanyPriceHistory();
+
+			List<HistoricalValue> price = companyService.loadPriceHistory(company.getTickerCode(), currency);
+
+			ret.setPrice(price);
+			stockListCompanyPriceHistory.setPriceHistory(ret);
+			companiesPriceHistoryList.add(stockListCompanyPriceHistory);
+		}
+		stockListPriceHistory.setCompaniesPriceHistory(companiesPriceHistoryList);
+		return stockListPriceHistory;
 	}
 	
 	/***

@@ -8,5 +8,7 @@ public interface KeyDevsMap {
 	Map<String, List<String>> getMap();
 
 	String getKeyDevLabel(String key);
+	
+	String getKeyDevLabelByType(String type);
 
 }

@@ -30,6 +30,8 @@ import com.wmsi.sgx.security.token.StatelessLoginFilter;
 import com.wmsi.sgx.security.token.TokenAuthenticationService;
 import com.wmsi.sgx.service.account.UserService;
 
+import net.sf.ehcache.constructs.web.filter.GzipFilter;
+
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.security"})
 @EnableWebSecurity
@@ -85,6 +87,7 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 			
 		.and()
 		.addFilterBefore(this.statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+		.addFilterBefore(this.gzipFilter(),StatelessLoginFilter.class)
 		.logout().logoutUrl("/logout")
 		.logoutSuccessHandler(logoutSuccessHandler);
 		
@@ -134,6 +137,12 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 		StatelessLoginFilter statelessLoginFilter = new StatelessLoginFilter(authenticationSuccessHandler, authenticationFailureHandler, tokenAuthenticationService, objectMapper, userService);
 		statelessLoginFilter.setAuthenticationManager(this.authenticationManagerBean());		
 	  return statelessLoginFilter;
+	}
+	
+	@Bean
+	GzipFilter gzipFilter() throws Exception {
+		GzipFilter gzipFilter = new GzipFilter();
+	  return gzipFilter;
 	}
 
 }

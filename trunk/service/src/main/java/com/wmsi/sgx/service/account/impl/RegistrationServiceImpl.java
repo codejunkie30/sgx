@@ -196,15 +196,15 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Override
 	public void sendVerificationEmail(String email, String token) throws MessagingException{
-		emailService.send(email, "SGX StockFacts Premium: Verify Your Email Address", token, emailBody);
+		emailService.send(email, "SGX StockFacts Plus: Verify Your Email Address", token, emailBody);
 	}
 	
 	private void sendResetEmail(String email, String token) throws MessagingException{
-		emailService.send(email, "SGX StockFacts Premium: Reset Your Password", token, resetEmailBody);
+		emailService.send(email, "SGX StockFacts Plus: Reset Your Password", token, resetEmailBody);
 	}
 
 	private void sendResetConfirmationEmail(String email) throws MessagingException{
-		emailService.send(email, "SGX StockFacts Premium: Password Reset", null, resetConfirmEmailBody);
+		emailService.send(email, "SGX StockFacts Plus: Password Reset", null, resetConfirmEmailBody);
 	}
 
 
