@@ -267,6 +267,10 @@ define(["jquery", "moment"], function($, moment) {
     	isValidDate: function(d) {
     		if ( Object.prototype.toString.call(d) !== "[object Date]" ) return false;
     		return !isNaN(d.getTime());
+    	},
+    	
+    	isEmpty: function(val){
+    	    return (val === undefined || val == null || val.length <= 0) ? true : false;
     	}
 		
 	}

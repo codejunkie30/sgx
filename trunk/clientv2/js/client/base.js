@@ -168,6 +168,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			$(element).tabs({
 	            active: 0,
+	            activate: function(event, ui) {
+	            	var headerHeight = 200;
+	            	PAGE.resizeIframeSimple(window.parent.$("body").scrollTop()-headerHeight);
+	            },
 	            load: function(event, ui) {
 	            	KO.cleanNode(ui.panel[0]);
 	            	try { KO.applyBindings(viewModel, ui.panel[0]); } catch(err) {}
@@ -227,6 +231,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			if (vals.hasOwnProperty("id")) {
 				id = vals.id;
 				extra = vals.extra;
+				if(extra!=null&&extra.indexOf('code')>-1) {
+				    if(extra.indexOf('=')>-1)
+					extra='code='+encodeURIComponent(extra.substr(extra.indexOf('=')+1,extra.len));
+				}
 				url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
 			}
 			else {
@@ -234,6 +242,22 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			}
 			$(element).attr("href", url).attr("target", "_parent");
 		}
+	};
+	
+	KO.bindingHandlers.stockListSiteLink = {
+			update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+				var vals = KO.unwrap(valueAccessor());
+				var url = null;
+				if (vals.hasOwnProperty("id")) {
+					id = vals.id;
+					extra = vals.extra;
+					url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
+				}
+				else {
+					url = PAGE.getPage(PAGE.pageData.getPage(vals));
+				}
+				$(element).attr("href", url).attr("target", "_parent");
+			}
 	};
 	
 	// Input field to only allow numeric values
@@ -898,9 +922,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					
 					var companies = wl.companies;
 					
-					if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
+					if (companies.length >= 25) { alert("You have added 25 companies to this StockList. Please choose another."); PAGE.hideLoading(); return; }
 					
-					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
+					if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this StockList."); PAGE.hideLoading(); return; }
 					
 					wl.companies = KO.observableArray(companies);
 					
@@ -937,10 +961,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 			var newWLNameLC = PAGE.newWLName();
 			
-			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); PAGE.hideLoading(); return; }
-			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Watchlist name already exists."); PAGE.hideLoading(); return; }
+			if (newWLNameLC.trim()==="" ) {  alert("Stocklist name is empty."); PAGE.hideLoading(); return; }
+			if (newWLNameLC.trim().length < 2 || newWLNameLC.trim().length > 40) {  alert("Stocklist must be between 1 and 40 characters."); PAGE.hideLoading(); return; }
 			
-			if (wlLength >= 10) { alert("You can create up to 10 Watch Lists."); PAGE.hideLoading(); return; }
+			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Stocklist name already exists."); PAGE.hideLoading(); return; }
+			if (wlLength >= 25) { alert("You can create up to 25 StockLists."); PAGE.hideLoading(); return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
@@ -959,9 +984,9 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						if (wl.name == PAGE.newWLName()){
 							var companies = wl.companies;
 				
-							if (companies.length >= 10) { alert("You have added 10 companies to this watchlist. Please choose another."); PAGE.hideLoading(); return; }
+							if (companies.length >= 25) { alert("You have added 25 companies to this StockList. Please choose another."); PAGE.hideLoading(); return; }
 							
-							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this watch list."); PAGE.hideLoading(); return; }
+							if ($.inArray( ticker, companies ) != -1) { alert("This company already exists in this StockList."); PAGE.hideLoading(); return; }
 							
 							wl.companies = KO.observableArray(companies);
 							

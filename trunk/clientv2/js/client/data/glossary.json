@@ -233,7 +233,7 @@
 		},
 		{
 			"id": "exchange",
-			"definition": "Exchange allows you to search for companies located in other exchanges. This option is only available to StockFacts Premium trial users and subscribers."
+			"definition": "Exchange allows you to search for companies located in other exchanges. This option is only available to StockFacts Plus trial users and subscribers."
 		},
 		{
 			"id": "est_targetPrice",
@@ -278,6 +278,59 @@
 		{
 			"id":"revenue",
 			"definition":"Analysts define Revenue as the total proceeds from the sale of products and/or services.<br/>All Estimates with suffix - E indicate \"Estimated Value\" and   suffix - A indicate \"Actual Value\". Estimates will be displayed when there are 3 or more analyst contributions."
+		},
+		{
+			"id":"chart",
+			"definition":"Remove one or more companies from displaying in the price chart by deselecting them."
+		},
+		{
+			"id":"firstTradeDate",
+			"definition":"The date the trade was made.If there are more than one transaction, this will show the first trade date."
+		},
+		{
+			"id":"numberOfShares",
+			"definition":"The total number of shares for this company"
+		},
+		{
+			"id":"lastClosePrice",
+			"definition":"The last close price for the company."
+		},
+		{
+			"id":"currentValue",
+			"definition":"The current value of the stock, which is the total number of shares multiplied by the last close price. "
+		},
+		{
+			"id":"Delete",
+			"definition":"Select this option to delete the transaction. This will not remove the company from the StockList."
+		},
+		{
+			"id":"tranTradeDate",
+			"definition":"The date the shares were purchased."
+		},
+		{
+			"id":"transNoOfShares",
+			"definition":"The number of shares that were purchased."
+		},
+		{
+			"id":"transPrice",
+			"definition":"The per share price when the purchase (buy or sell) was made."
+		},
+		{
+			"id":"transLastClosePrice",
+			"definition":"The price per share at the last close price."
+		},
+		{
+			"id":"portfolioTotalInvested",
+			"definition":"Total invested includes all transactions."
+		},
+		{
+			"id":"currentPortfolioValue",
+			"definition":"Current value includes purchases and sales.It does not include dividend, stock splits."
+		},
+		{
+			"id":"portfolioPercentChange",
+			"definition":"Percent change is based on total invested vs current value."
 		}
+		
 	]
 }
