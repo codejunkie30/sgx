@@ -147,10 +147,21 @@ public class KeyDevsService extends AbstractDataService {
 				log.error("Unable to process key dev source content as key devs file doesn't exists");
 				return false;
 			}
+			
 			File backupFile = new File(rawDir + keyDevDir + "-bck.csv");
+			File tempFile = new File(rawDir + keyDevDir + "-temp.csv");
+			File originalBackupFile = new File(rawDir + keyDevDir + "-original.csv");
+			
 			if(backupFile.exists()){
 				FileUtils.deleteQuietly(backupFile);
 			}
+			if(tempFile.exists()){
+				FileUtils.deleteQuietly(tempFile);
+			}
+			if(originalBackupFile.exists()){
+				FileUtils.deleteQuietly(originalBackupFile);
+			}
+			
 			FileUtils.copyFile(f, backupFile);
 			if (!backupFile.exists()){
 				log.error("Unable to process key dev source content as key devs back up file doesn't created");
