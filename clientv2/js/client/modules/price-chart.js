@@ -208,7 +208,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
                     data: []
                 }    
              ];
-			 //Adds real time data to chart if user is premium and runs every minute
+			 //Adds real time data to chart if user is Plus and runs every minute
 			if (CHART.userStatus == 'TRIAL'){
 				//Pushes to events
 				base.chart.events = {				

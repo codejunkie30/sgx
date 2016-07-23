@@ -32,7 +32,7 @@
 										<img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="25" alt="" style="display: block;" />
 									</div>
 									<h2 style="font-family: Arial, Helvetica, sans-serif; font-size: 27px; color: #0b236b; margin: 0 0 25px 0;">Your Alerts</h2>
-									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 25px 0;">The following events have triggered alerts for <span th:text="${watchlistName}">Watchlist Name</span>.<br />
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 25px 0;">The following events have triggered alerts for <span th:text="${watchlistName}">StockList Name</span>.<br />
 									Select the company name to view the company profile.</div>
 									<div style="margin: 0 0 25px 0;" class="category-wrapper">									
 										<div style="margin: 0 0 20px 0;" th:each="alert : ${alerts}">
@@ -73,7 +73,7 @@
 									<table width="725" border="0" cellpadding="0" cellspacing="0">
 										<tr>
 											<td>
-												<div th:text="${watchlistName}" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: #333; text-align: left;">WATCHLIST A</div>
+												<div th:text="${watchlistName}" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: #333; text-align: left;">STOCKLIST A</div>
 											</td>
 											<td>
 												<div style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: #333; text-align: right;">Last Close Price</div>
@@ -139,7 +139,7 @@
 				<tr>
 					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>
 					<td width="725">
-						<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #fff; margin: 25px 0 0 0;">You are receiving this email because you signed up for SGX StockFacts Premium.</div>
+						<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #fff; margin: 25px 0 0 0;">You are receiving this email because you signed up for SGX StockFacts Plus.</div>
 						<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #fff; margin: 0 0 25px 0;">If you did not make this request, you may ignore this email.</div>
 					</td>
 					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>

@@ -19,16 +19,19 @@
 
 <body style="width: auto;" id="premium">
 	<div class="grid scan">
+		<h1>StockFacts Plus</h1>
 		<h5>Enhance your search for investment opportunities</h5>
-		<h1>StockFacts Premium</h1>
 	</div>
 	
 	<div class="grid premium-wrapper">
 		<div class="trial-box">
-			<p>Ability to create and manage a watch list</p>
-			<!--<p>Access to additional companies and currencies</p>-->
-			<p>Access to estimates and advanced charting</p>
-			<p>Real time market data <i>(only available with a paid Premium account)</i></p>
+		<b>Key benefits:</b>
+			<ul>
+				<li><p>Ability to create and manage a StockList</p></li>
+				<!--<li><p>Access to additional companies and currencies</p></li>-->
+				<li><p>Access to estimates and advanced charting</p></li>
+				<li><p>Real time market data <i>(only available with a paid Plus account)</i></p></li>
+				</ul>
 			<div>
 				<a class="button" data-bind="siteLink:'sign-up'">Start free trial</a>
 				<a class="cancel not" data-bind="click:$root.cancel">Not Now</a>
@@ -36,7 +39,6 @@
 		</div>
 		<div class="view-price">
 			<div class="price" data-bind="html:price"></div>
-			<div class="content" data-bind="html:content"></div>
 		</div>
 	</div>
 	<div class="grid disclosure scan">

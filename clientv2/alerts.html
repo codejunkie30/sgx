@@ -18,39 +18,43 @@
 
 </head>
 
-<body style="width: auto;" class="alerts-wrapper">
-	
-	<header class="header">
-		<div class="grid scan">
-			<span data-bind="template: 'login-bar'"></span>
-		</div>
-	</header>
-	
+<body style="width: auto;" id="stockListAlerts" class="alerts-wrapper">
+	<div class="grid">
+		<span data-bind="template: 'stocklist-header'"></span>
+	</div>
 	
 	<section id="alerts-content-alternative" data-bind="if:(userStatus() == 'UNAUTHORIZED' || userStatus() == 'EXPIRED')">
 		<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName, userStatus: userStatus} }"></div>
 	</section>
 
-
+<!-- ko {if: finalWL().length} -->
 	<section id="alerts" data-bind="if:premiumUser() == true">
-		<h1>Alerts</h1>
 		<div class="grid scan intro">
-			<p>Create a Watch List with up to 10 companies in each. For each Watch List, indicate which alerts you would like to receive. Alerts are sent daily and will send to the email address that is in your account.</p>
-			<p>Enter a Watch List name: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName"> <a class="button" data-bind="click:$root.addWatchlist">Add Watch List</a></p>
-			<span class="error-messages" data-bind="validationMessage:newWLName">
-			</span>
+				<p>Select the types of events that you'd like to be alerted to. Alerts are sent daily to the email address listed in your account.</p>
 		</div>
-		
+		<!-- ko {if: finalWL().length} -->
+		<div class="search" data-bind="if: displayList">
+			<h5>Search for companies to add to your StockList</h5>
+			<div>
+				<span class="searchbar">
+					<input type="text" placeholder="Company name or stock code" data-bind="enable:searchReady, value:searchInput, valueUpdate:'keyup'" />
+					<span class="search-submit" class="button" value="" alt="Search Submit" data-bind="click:$root.searchCompanies"></span>
+				</span>
+			</div>
+		</div>
+		<!-- /ko -->
 		<div class="grid scan wl-container" data-bind="visible: finalWL().length > 0">
 			<section class="watchlist">
-				<select data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name'"></select>
-				<!-- ko if: selectedValue() != null -->
-					<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
-				<!-- /ko -->
-				<div data-bind="visible: showChange()" class="edit-watchlist">
-					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
+				<div class="results" data-bind="if: displayList">
+					<h5>Your Matches</h5>
+					<ul data-bind="foreach: searchResults">
+						<li>
+							<span class="add" data-bind="value:tickerCode, click:$root.addCompany"></span>
+							<span class="name"><span data-bind="text:companyName"></span> (<span class="ticker" data-bind="text:tickerCode"></span>)</span>
+						</li>
+					</ul>
+					<span class="error-messages" data-bind="validationMessage:editWLName">
 				</div>
-				
 				<div class="wl-companies">					
 					<div data-bind="if: displayListCompanies().length > 0">
 						<ul data-bind="foreach: displayListCompanies">
@@ -72,24 +76,6 @@
 						</ul>
 					</div>-->
 				</div>
-				<div class="search" data-bind="if: displayList">
-					<h5>Search for companies to add to your Watch List</h5>
-					<div>
-						<span class="searchbar">
-							<input type="text" placeholder="Company name or stock code" data-bind="enable:searchReady, value:searchInput, valueUpdate:'keyup'" />
-							<span class="search-submit" class="button" value="" alt="Search Submit" data-bind="click:$root.searchCompanies"></span>
-						</span>
-					</div>
-				</div>
-				<div class="results" data-bind="if: displayList" style="height:330px">
-					<h5>Your Matches</h5>
-					<ul class="company" data-bind="foreach: searchResults">
-						<li>
-							<span class="add" data-bind="value:tickerCode, click:$root.addCompany"></span>
-							<span class="name"><span data-bind="text:companyName"></span> (<span class="ticker" data-bind="text:tickerCode"></span>)</span>
-						</li>
-					</li>
-				</div>			
 			</section>
 			
 			<section class="alerts" data-bind="if: displayList">
@@ -244,12 +230,13 @@
 					</ul>
 				</div>
 				<div class="button-wrapper">
-					<a class="button" data-bind="click:$root.saveWatchlist">Save</a>	
+					<a class="save-button" data-bind="click:$root.saveWatchlist">Save</a>	
 					<!-- <a class="button email" data-bind="click:$root.sendEmail">Generate Email</a> -->
 				</div>
 			</section>
 		</div>
 	</section>
+<!-- /ko -->	
 	<div class="grid disclosure scan">
 		<p>SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a data-bind="siteLink:'terms-conditions'">terms and conditions</a>.</p>
 	</div>	
