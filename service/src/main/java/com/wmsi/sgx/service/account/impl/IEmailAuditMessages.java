@@ -2,7 +2,7 @@ package com.wmsi.sgx.service.account.impl;
 
 public class IEmailAuditMessages {
 
-	public static final String EMAIL_SUBJECT = "SGX StockFacts Premium Alert";
+	public static final String EMAIL_SUBJECT = "SGX StockFacts Plus Alert";
 
 	public static final String EMAIL_SUCCESS = "Success";
 

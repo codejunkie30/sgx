@@ -7,20 +7,22 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.CompanyWatchlistTransactionHistoryModel;
 import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.model.WatchlistAddCompany;
+import com.wmsi.sgx.model.WatchlistAddTransaction;
+import com.wmsi.sgx.model.WatchlistDeleteTransaction;
 import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.model.WatchlistRenameModel;
+import com.wmsi.sgx.model.WatchlistTransactionModel;
 import com.wmsi.sgx.repository.UserRepository;
 import com.wmsi.sgx.repository.WatchlistRepository;
-import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.security.token.TokenAuthenticationService;
 import com.wmsi.sgx.security.token.TokenHandler;
 import com.wmsi.sgx.service.CompanyServiceException;
@@ -104,6 +106,40 @@ public class WatchlistController {
 		List<String> companies = model.getCompanies();
 		
 		return watchlistService.addCompanies(usr, id, companies);
+		
+	}
+	
+	@RequestMapping(value = "watchlist/addTransaction")
+	public Response addTransaction(HttpServletRequest request, @RequestBody WatchlistAddTransaction model){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
+		String id = model.getId();
+		List<WatchlistTransactionModel> transactions = model.getTransactions();
+		
+		return watchlistService.addTransactions(usr, id, transactions);
+		
+	}
+	
+	@RequestMapping(value = "watchlist/deleteTransaction")
+	public Response deleteTransaction(HttpServletRequest request, @RequestBody WatchlistDeleteTransaction model){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
+		
+		return watchlistService.deleteTransactions(usr,model.getId(), model.getTransactionId());
+		
+	}
+	
+	@RequestMapping(value = "watchlist/transactions")
+	public Map<String, List<WatchlistTransactionModel>> getTransactions(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
+		String id = response.getMessage();
+		return watchlistService.getTransactions(usr,id);
+		
+	}
+	
+	@RequestMapping(value = "watchlist/watchlistTransactions")
+	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(HttpServletRequest request, @RequestBody Response response){
+		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
+		String id = response.getMessage();
+		return watchlistService.getWatchListTransactions(usr,id);
 		
 	}
 	
