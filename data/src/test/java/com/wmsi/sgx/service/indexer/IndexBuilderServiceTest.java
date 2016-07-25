@@ -26,7 +26,7 @@ public class IndexBuilderServiceTest{
 	private IndexBuilderService indexBuilderService;
 	
 	@BeforeMethod
-	public void before(){
+	public void before() throws IndexerServiceException{
 		
 		CapIQRequestExecutor executor = mock(CapIQRequestExecutor.class);
 		

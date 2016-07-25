@@ -70,9 +70,9 @@ public class CapIQServiceTest extends AbstractTestNGSpringContextTests{
 				.withTicker(ticker)
 				.build();
 
-		KeyDevs keyDevs = capIQService.getKeyDevelopments(rec);
+	/*	KeyDevs keyDevs = capIQService.getKeyDevelopments(rec);
 		assertNotNull(keyDevs);		
-		assertNotNull(keyDevs.getKeyDevs());		
+		assertNotNull(keyDevs.getKeyDevs());		*/
 	}
 	
 }
