@@ -833,6 +833,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 
 			me.wlNameError = ko.validation.group(VALUATION.newWLName);  //grouping error for wlName only
+			
+			VALUATION.editWLName
+			.extend({
+				minLength: { params: 2, message: displayMessage.watchlist.error },
+				maxLength: { params: 40, message: displayMessage.watchlist.error }
+			});
+
+			this.editWLNameError = ko.validation.group(VALUATION.editWLName);  //grouping error for editWLName only
+
 			me.errors = ko.validation.group(me);			
 			me.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
@@ -919,6 +928,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							VALUATION.selectedValue(data.id);
 							
 							VALUATION.watchlistId = data.id;
+							VALUATION.clearWatchListErrors();
+							VALUATION.editWLName(data.name);	
 							
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
@@ -941,6 +952,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		editWLNameSubmit: function(){
 			var me=this;
+			if(me.editWLNameError().length != 0) return;
 			var editedName = VALUATION.editWLName().trim();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
