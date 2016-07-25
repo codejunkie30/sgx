@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    
+    <diskStore path="java.io.tmpdir"/>
+		
+	<cache name="company"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="keyDevs"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="holders"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="financials"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="estimate"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>	
+
+	<cache name="gtis"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="priceHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="highPriceHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="lowPriceHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="openPriceHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="volumeHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="dividendHistory"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="alphaFactor"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="alphaFactorSearch"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="relatedCompanies"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="searchCompany"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+	<cache name="keyDevsSearch"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="distributions"
+		maxElementsInMemory="100000"
+		eternal="false"
+		timeToLiveSeconds="7200"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="240"
+		memoryStoreEvictionPolicy="LRU"/>
+		
+</ehcache>

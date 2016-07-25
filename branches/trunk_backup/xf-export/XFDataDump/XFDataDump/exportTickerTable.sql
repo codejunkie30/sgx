@@ -1,0 +1,1 @@
+SELECT * FROM ##sgxpop WHERE TradingItemId is not null

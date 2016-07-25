@@ -1,0 +1,911 @@
+{
+	"settings": 
+	{
+		"number_of_shards": 5,
+		"analysis": 
+		{
+			"analyzer": 
+			{
+				"full_name": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"syn_indexer": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"sgx_synonyms"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"starts_with": 
+				{
+					"filter": 
+					[
+						"lowercase"
+					],
+
+					"tokenizer": "keyword"
+				},
+
+				"partial_ticker": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"ticker_edgeNngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_ticker_middle": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"ticker_ngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_ticker_back": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"reverse",
+						"ticker_edgeNngram_tokenizer",
+						"reverse"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_name": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"name_edgeNgram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_name_middle": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"name_ngram_tokenizer"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				},
+
+				"partial_name_back": 
+				{
+					"filter": 
+					[
+						"standard",
+						"lowercase",
+						"asciifolding",
+						"reverse",
+						"name_edgeNgram_tokenizer",
+						"reverse"
+					],
+
+					"type": "custom",
+					"tokenizer": "standard"
+				}
+			},
+
+			"filter": 
+			{
+				"name_edgeNgram_tokenizer": 
+				{
+					"type": "edgeNgram",
+					"min_gram": "2",
+					"max_gram": "20"
+				},
+
+				"name_ngram_tokenizer": 
+				{
+					"type": "ngram",
+					"min_gram": "3",
+					"max_gram": "20"
+				},
+
+				"ticker_edgeNngram_tokenizer": 
+				{
+					"type": "edgeNgram",
+					"min_gram": "1",
+					"max_gram": "5"
+				},
+
+				"ticker_ngram_tokenizer": 
+				{
+					"type": "ngram",
+					"min_gram": "1",
+					"max_gram": "5"
+				},
+
+				"sgx_synonyms": 
+				{
+					"type": "synonym",
+					"synonyms": 
+					[
+						"reit, real estate inv trust, real estate investment trust, reits",
+						"ltd, limited",
+						"hldg, hldgs, holding, holdings",
+						"corp, cor, corporation",
+						"mfg, manufacturing",
+						"grp, group",
+						"co, company",
+						"intl, int'l, international"
+					]
+				}
+			}
+		}
+	},
+
+	"mappings": 
+	{
+		"company": 
+		{
+			"dynamic": false,
+			"_id": 
+			{
+				"path": "tickerCode"
+			},
+
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed",
+					"fields": 
+					{
+						"full": 
+						{
+							"type": "string",
+							"analyzer": "full_name"
+						},
+
+						"partial": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_ticker_middle"
+						}
+					}
+				},
+
+				"avgBrokerReq": 
+				{
+					"type": "double"
+				},
+
+				"avgTradedVolM3": 
+				{
+					"type": "double"
+				},
+
+				"avgVolumeM3": 
+				{
+					"type": "double"
+				},
+
+				"basicEpsIncl": 
+				{
+					"type": "double"
+				},
+
+				"beta5Yr": 
+				{
+					"type": "double"
+				},
+
+				"companyName": 
+				{
+					"type": "string",
+					"index": "not_analyzed",
+					"fields": 
+					{
+						"full": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "syn_indexer"
+						},
+
+						"startsWith": 
+						{
+							"type": "string",
+							"analyzer": "starts_with"
+						},
+
+						"partial": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name"
+						},
+
+						"partial_middle": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name_middle"
+						},
+
+						"partial_back": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name_back"
+						}
+					}
+				},
+
+				"dividendYield": 
+				{
+					"type": "double"
+				},
+
+				"ebitdaMargin": 
+				{
+					"type": "double"
+				},
+
+				"eps": 
+				{
+					"type": "double"
+				},
+				"exchange":
+				{
+					"type": "string",
+					"index": "not_analyzed"	
+				},
+
+				"floatPercentage": 
+				{
+					"type": "double"
+				},
+
+				"gtiScore": 
+				{
+					"type": "integer"
+				},
+
+				"gtiRankChange": 
+				{
+					"type": "integer"
+				},
+
+				"gvKey": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"industry": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"industryGroup": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"marketCap": 
+				{
+					"type": "double"
+				},
+
+				"netProfitMargin": 
+				{
+					"type": "double"
+				},
+
+				"peRatio": 
+				{
+					"type": "double"
+				},
+
+				"priceToBookRatio": 
+				{
+					"type": "double"
+				},
+
+				"priceVs52WeekHigh": 
+				{
+					"type": "double"
+				},
+
+				"priceVs52WeekLow": 
+				{
+					"type": "double"
+				},
+
+				"priceVolHistYr": 
+				{
+					"type": "double"
+				},
+
+				"priceHistory": 
+				{
+					"type": "nested",
+					"properties": 
+					{
+						"value": 
+						{
+							"type": "double"
+						},
+
+						"date": 
+						{
+							"type": "date"
+						}
+					}
+				},
+
+				"returnOnEquity": 
+				{
+					"type": "double"
+				},
+
+				"targetPriceNum": 
+				{
+					"type": "double"
+				},
+
+				"totalDebtEquity": 
+				{
+					"type": "double"
+				},
+
+				"totalRev1YrAnnGrowth": 
+				{
+					"type": "double"
+				},
+
+				"totalRev3YrAnnGrowth": 
+				{
+					"type": "double"
+				},
+
+				"totalRev5YrAnnGrowth": 
+				{
+					"type": "double"
+				},
+
+				"totalRevenue": 
+				{
+					"type": "double"
+				},
+
+				"tradeName": 
+				{
+					"type": "string",
+					"fields": 
+					{
+						"full": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "syn_indexer"
+						},
+
+						"startsWith": 
+						{
+							"type": "string",
+							"analyzer": "starts_with"
+						},
+
+						"partial": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name"
+						},
+
+						"partial_middle": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name_middle"
+						},
+
+						"partial_back": 
+						{
+							"type": "string",
+							"search_analyzer": "full_name",
+							"index_analyzer": "partial_name_back"
+						}
+					}
+				},
+				
+				"volWeightedAvgPrice": 
+				{
+					"type": "double"
+				},
+				
+				"vwapCurrency": 
+				{
+					"type": "string"
+				},
+				
+				"vwapAsOfDate": 
+				{
+					"type": "date"
+				},
+
+				"volume": 
+				{
+					"type": "double"
+				},
+				
+				"volatility": {
+					"type": "double"
+				}
+			}
+		},
+
+		"gtis": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"gtis": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"date": 
+						{
+							"type": "date"
+						},
+
+						"totalScore": 
+						{
+							"type": "integer"
+						},
+
+						"rankChange": 
+						{
+							"type": "integer"
+						},
+
+						"rank": 
+						{
+							"type": "integer"
+						}
+					}
+				}
+			}
+		},
+		
+		"dividendHistory": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"dividendValue": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"dividendExDate": 
+						{
+							"type": "date"
+						},
+						
+						"dividendPayDate": 
+						{
+							"type": "date"
+						},
+
+						"dividendPrice": 
+						{
+							"type": "double"
+						},
+
+						"dividendType": 
+						{
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		
+		"fxdata": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"from": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+	
+				"to": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+	
+				"day": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+	
+				"multiplier": 
+				{
+					"type": "double"
+				}
+				
+			}
+		},	
+
+		"financial": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"absPeriod": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				}
+			}
+		},
+		
+		"estimate": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"period": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				}
+			}
+		},
+
+		"price": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+
+		"highPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+
+		"lowPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+
+		"openPrice": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},
+
+		"volume": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"date": 
+				{
+					"type": "date"
+				},
+
+				"value": 
+				{
+					"type": "double"
+				}
+			}
+		},		
+
+		"holders": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"holder": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"name": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						},
+
+						"shares": 
+						{
+							"type": "long"
+						},
+
+						"percent": 
+						{
+							"type": "double"
+						}
+					}
+				}
+			}
+		},
+
+		"keyDevs": 
+		{
+			"dynamic": false,
+			"properties": 
+			{
+				"tickerCode": 
+				{
+					"type": "string",
+					"index": "not_analyzed"
+				},
+
+				"keyDevs": 
+				{
+					"type": "object",
+					"properties": 
+					{
+						"headline": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						},
+
+						"date": 
+						{
+							"type": "date"
+						},
+
+						"situation": 
+						{
+							"type": "string",
+							"index": "not_analyzed"
+						}
+					}
+				}
+			}
+		}
+	},
+
+	"alphaFactor": 
+	{
+		"dynamic": false,
+		"_id": 
+		{
+			"path": "id"
+		},
+
+		"properties": 
+		{
+			"id": 
+			{
+				"type": "string",
+				"index": "not_analyzed"
+			},
+			
+			"companyId": 
+			{
+				"type": "string",
+				"index": "not_analyzed"
+			},
+
+			"date": 
+			{
+				"type": "date"
+			},
+
+			"analystExpectations": 
+			{
+				"type": "integer"
+			},
+
+			"capitalEfficiency": 
+			{
+				"type": "integer"
+			},
+
+			"earningsQuality": 
+			{
+				"type": "integer"
+			},
+
+			"historicalGrowth": 
+			{
+				"type": "integer"
+			},
+
+			"priceMomentum": 
+			{
+				"type": "integer"
+			},
+
+			"valuation": 
+			{
+				"type": "integer"
+			},
+
+			"volatility": 
+			{
+				"type": "integer"
+			},
+
+			"size": 
+			{
+				"type": "integer"
+			}
+		}
+	},
+
+	"_default_": 
+	{
+		"dynamic": false,
+		"properties": 
+		{
+			"id": 
+			{
+				"type": "string",
+				"index": "not_analyzed",
+				"index_name": "id"
+			}
+		}
+	}
+}
