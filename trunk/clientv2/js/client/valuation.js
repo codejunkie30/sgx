@@ -635,7 +635,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
+			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy',beforeShow: function() {
+				setTimeout(function(){
+		            $('.ui-datepicker').css('z-index', 999);
+		        }, 0);
+		    } });
 		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
