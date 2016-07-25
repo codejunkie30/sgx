@@ -1,6 +1,7 @@
 package com.wmsi.sgx.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,4 +40,7 @@ public class TemplateUtil{
 		return writer.toString();
 	}
 
+	public static InputStream resourceToStream(Resource res) throws IOException{
+		return res.getInputStream();
+	}
 }

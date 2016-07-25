@@ -19,9 +19,12 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<testNG.version>6.8.8</testNG.version>
-		<spring.version>4.0.2.RELEASE</spring.version>
+		<spring.version>4.1.7.RELEASE</spring.version>
 		<guava.version>14.0.1</guava.version>
 		<jackson.version>2.3.2</jackson.version>
+		<spring.data.version>1.10.1.RELEASE</spring.data.version>
+		<spring.data.jpa.version>1.8.2.RELEASE</spring.data.jpa.version>
+		<hibernate.version>4.3.10.Final</hibernate.version>
 	</properties>
 
 	<repositories>
@@ -34,6 +37,21 @@
 			<id>Java.Net</id>
 			<url>http://download.java.net/maven/2/</url>
 		</repository>
+		
+		<!--Local jars -->
+		<repository>
+			<id>lib</id>
+			<name>lib</name>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>${project.baseUri}/lib</url>
+		</repository>
+		
 	</repositories>
 
 
@@ -80,6 +98,18 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+			
 		</plugins>
 	</build>
 	<dependencies>
@@ -146,6 +176,56 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- Spring Data -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring.data.jpa.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${spring.data.version}</version>
+		</dependency>
+
+		<!-- Database Access -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sql</groupId>
+			<artifactId>sqlserver</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.2</version>
 		</dependency>
 
 		<!-- Spring Integration -->
@@ -261,6 +341,17 @@
 			<artifactId>stringtemplate</artifactId>
 			<version>3.2</version>
 		</dependency>
+    	<dependency>
+      		<groupId>org.thymeleaf</groupId>
+     		<artifactId>thymeleaf</artifactId>
+      		<version>2.1.4.RELEASE</version>
+    	</dependency>
+    
+		<dependency>
+      		<groupId>org.thymeleaf</groupId>
+      		<artifactId>thymeleaf-spring3</artifactId>
+      		<version>2.1.4.RELEASE</version>
+    	</dependency>
 
 
 		<dependency>
@@ -268,29 +359,25 @@
 			<artifactId>opencsv</artifactId>
 			<version>2.0</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>net.sf.supercsv</groupId>
+		    <artifactId>super-csv</artifactId>
+		    <version>2.4.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.8.3</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.6.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.6.6</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-http</artifactId>
