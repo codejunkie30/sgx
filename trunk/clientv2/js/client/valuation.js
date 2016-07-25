@@ -1136,7 +1136,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					params,
 					function(data, textStatus, jqXHR){					
 						$('.save').remove();
-						$('<div class="valuation-save">Your changes have been saved.</div>').insertBefore('#transItemsIdTable').delay(4000).fadeOut(function() {$(this).remove();});
+						if($('#valuation-save').length){
+							$('#valuation-save').remove();
+						}
+						$('<div id="valuation-save" class="valuation-save">Your changes have been saved.</div>').insertBefore('#transItemsIdTable').delay(7000).fadeOut(function() {$(this).remove();});
 						me.getTransactionsData(me);
 						PAGE.hideLoading();
 						PAGE.resizeIframeSimple();
