@@ -1126,7 +1126,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if( isFieldsNotEmpty || (VALUATION.record_modified &&
 					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
 				if(isFieldsNotEmpty){
-					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate));
+					var parsedValue = null;
+			        try{
+			        	parsedValue = $.datepicker.parseDate( "dd/M/yy", tradeDate ).getTime();
+			    	}catch(e){parsedValue = tradeDate;}
+			    	
+					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
+
 					me.convertTickerAndClosePrice(tickerCode, me);
 					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 					me.transItems.push(transItemModel);
