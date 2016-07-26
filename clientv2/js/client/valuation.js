@@ -297,10 +297,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    update: function(element, valueAccessor) {
 		        var value = ko.utils.unwrapObservable(valueAccessor()),
 		            $el = $(element),
-		            current = $el.datepicker("getDate");
-
-		        if (value - current !== 0) {
-		            $el.datepicker("setDate", value);   
+		            current = $el.datepicker("getDate").getTime();
+		        var parsedValue = null;
+		        try{
+		        	parsedValue = $.datepicker.parseDate( "dd/M/yy", value ).getTime();
+		    	}catch(e){parsedValue = value;}
+		    	
+		    	var myValue = valueAccessor();
+		    	myValue(parsedValue);
+		    	 
+		    	var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
+		    	$(element).val(date);
+		    	
+		        if (parsedValue - current !== 0) {
+		            $el.datepicker("setDate", parsedValue);   
 		        }
 		    }
 		};
