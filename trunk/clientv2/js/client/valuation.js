@@ -308,10 +308,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 
 		    	var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
 		    	$(element).val(date);
-		    	
-		        if (parsedValue - current !== 0) {
-		            $el.datepicker("setDate", parsedValue);   
-		        }
+
 		    }
 		};
 	
