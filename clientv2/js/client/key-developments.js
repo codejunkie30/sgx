@@ -171,6 +171,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			me.noResultsFlag = true;
 			me.getKeyDevData(me, me.allCompanies);
+			me.showChange(false);
 		},
 		
 		searchKeyDev: function(){
@@ -371,7 +372,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			
+			me.showChange(false);
 			//Clears add WL after submit
 			me.newWLName(null);
 		},
@@ -422,7 +423,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p">Cancel</span></div>', width: 400 }); 
 			
-			 $('.confirm-delete').click(function(e) {				
+			 $('.confirm-delete').click(function(e) {
+				 me.showChange(false);
 				me.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });

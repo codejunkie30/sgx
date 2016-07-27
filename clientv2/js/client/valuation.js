@@ -889,7 +889,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			
+			VALUATION.showChange(false);
 			//get the performance chart data
 			me.getChartData(me);
 			me.setSortingToDefault();
@@ -956,7 +956,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			
+			VALUATION.showChange(false);
 			//Clears add WL after submit
 			VALUATION.newWLName(null);
 		},
@@ -1008,7 +1008,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
-			 $('.confirm-delete').click(function(e) {				
+			 $('.confirm-delete').click(function(e) {	
+				 VALUATION.showChange(false);
 				VALUATION.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });
