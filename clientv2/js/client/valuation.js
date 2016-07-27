@@ -1317,17 +1317,19 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    totalCalculation: function(me){
 	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(2);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(2); 
-	    	var percentageChange = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
+	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
+	    	var percentageChange = isNaN(percentageChangeVal)? 0 :percentageChangeVal;
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+	    	
 	    	if(percentageChange < 0.00){
 	    		$('#percentageChange').html(percentageChange+"%").addClass('negativePerChange');
 	    	}
 	    	else {
 	    		$('#percentageChange').html(percentageChange+"%")
-	    	}
-	    	
+	    	}	    	
+    	
 	    	me.userEnteredPurchasedPrice = 0.00;
 	    	me.userEnteredSellPrice = 0.00;
 	    	me.totalCurrentValue = 0.00;
