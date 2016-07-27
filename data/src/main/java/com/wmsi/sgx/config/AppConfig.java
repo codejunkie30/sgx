@@ -7,6 +7,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.thymeleaf.spring3.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.UrlTemplateResolver;
 
 @Configuration
 @PropertySources(value = {
@@ -28,5 +32,36 @@ public class AppConfig{
 		ppc.setIgnoreUnresolvablePlaceholders(true);
 		return ppc;
 	}
+	
+	@Bean
+	public JavaMailSender mailSender() {
+		JavaMailSenderImpl sender = new JavaMailSenderImpl();
+		sender.setHost(env.getProperty("mail.host"));
+		sender.setUsername(env.getProperty("mail.user"));
+		sender.setPassword(env.getProperty("mail.password"));
+		return sender;
+	}
+
+	@Bean
+	public UrlTemplateResolver emailTemplateResolver() {
+		UrlTemplateResolver emailTemplateResolver = new UrlTemplateResolver();
+		emailTemplateResolver.setTemplateMode("HTML5");
+		emailTemplateResolver.setCharacterEncoding("UTF-8");
+		emailTemplateResolver.setOrder(1);
+/*		emailTemplateResolver.setCacheable(cachable);
+		if (cachable) {
+			emailTemplateResolver.setCacheTTLMs(cacheDuration);
+		}
+*/
+		return emailTemplateResolver;
+	}
+
+	@Bean
+	public SpringTemplateEngine templateEngine() {
+		SpringTemplateEngine engine = new SpringTemplateEngine();
+		engine.setTemplateResolver(this.emailTemplateResolver());
+		return engine;
+	}
+
 	
 }

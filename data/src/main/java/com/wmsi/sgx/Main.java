@@ -57,13 +57,14 @@ public final class Main{
 
 		final Scanner scanner = new Scanner(System.in);
 
-		MessageChannel chan = (MessageChannel) context.getBean("indexRequestChannel");
+		MessageChannel chan = (MessageChannel) context.getBean("inputDataRequestChannel");
 
 		Resource companyIds = new ClassPathResource("data/sgx_companies.txt");
 
 		chan.send(MessageBuilder.withPayload(companyIds)
 				.setHeader("jobId", System.currentTimeMillis())
-				.setHeader("jobDate", new Date()).build());
+				.setHeader("jobDate", new Date())
+				.setHeader("indexName", "").build());
 
 		try{
 			while(true){

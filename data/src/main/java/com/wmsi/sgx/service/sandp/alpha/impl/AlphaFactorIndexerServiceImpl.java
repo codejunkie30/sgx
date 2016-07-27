@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.net.ftp.FTPFile;
@@ -140,6 +141,22 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 	
 	private int toInt(String str){
 		return NumberUtils.toInt(str);
+	}
+	
+	public File getLatestDownloadedFileFromLocalDirectory() throws IOException{
+		File dir = new File(tmpDir);
+		List<String> names = new ArrayList<String>();
+		if(!dir.exists() && !dir.mkdirs()) throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());
+		File []flist = dir.listFiles();
+		for(File f:flist){
+			names.add(FilenameUtils.getBaseName(f.getName()));
+		}
+		// Sort by name, which includes date, get latest file
+		Collections.sort(names);
+		String fileName = names.get(names.size() - 1);
+		
+		return new File(tmpDir + fileName);
+
 	}
 
 }
