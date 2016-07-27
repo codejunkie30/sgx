@@ -270,7 +270,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        		event.target.value = "";
 	        		event.target.focus();
 	        		$('#'+event.target.id).css({"borderColor":"red"});
-	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
+	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
 	        		VALUATION.hasFieldErrors =  true;
 	        	}else{
 	        		VALUATION.hasFieldErrors =  false;
@@ -1105,7 +1105,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						(!tradeDate && (tickerCode || costAtPurchase || numberOfShares)) || 
 							(!numberOfShares && (tradeDate || costAtPurchase || tickerCode)) ||
 								(!costAtPurchase && (tradeDate || numberOfShares || tickerCode)) ){
-					PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
+					PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
 				}
 			}
 			return flag;
