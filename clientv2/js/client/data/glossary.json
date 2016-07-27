@@ -285,15 +285,15 @@
 		},
 		{
 			"id":"firstTradeDate",
-			"definition":"The date the trade was made.If there are more than one transaction, this will show the first trade date."
+			"definition":"The date the trade was made. If there are more than one transaction, this will show the first trade date."
 		},
 		{
 			"id":"numberOfShares",
-			"definition":"The total number of shares for this company"
+			"definition":"The total number of shares for this company."
 		},
 		{
 			"id":"lastClosePrice",
-			"definition":"The last close price for the company."
+			"definition":"The last close price for this company."
 		},
 		{
 			"id":"currentValue",
@@ -305,11 +305,11 @@
 		},
 		{
 			"id":"tranTradeDate",
-			"definition":"The date the shares were purchased."
+			"definition":"The date the shares were purchased or sold."
 		},
 		{
 			"id":"transNoOfShares",
-			"definition":"The number of shares that were purchased."
+			"definition":"The number of shares that were purchased or sold."
 		},
 		{
 			"id":"transPrice",
