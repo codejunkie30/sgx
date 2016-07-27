@@ -125,9 +125,7 @@ public class KeyDevsService extends AbstractDataService {
 			keydev.setHeadline(record.get(4));
 			keydev.setSituation(record.get(5));
 			keydev.setType(record.get(6));
-<<<<<<< .working
 			keydev.setKeyDevId(record.get(2));
-=======
 			keydev.setKeyDevId(record.get(2));
 			try {
 				keydev.setSource(record.get(7));
@@ -135,7 +133,6 @@ public class KeyDevsService extends AbstractDataService {
 				log.info("Key development source not available for ticker " + keydev.getId() + " - " +keydev.getKeyDevId());
 				keydev.setSource(null);
 			}
->>>>>>> .merge-right.r2282
 			list.add(keydev);
 		}
 		kD.setKeyDevs(list);
