@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.logging.LoggingAspect;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
+import com.wmsi.sgx.service.indexer.IndexerServiceException;
 import com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl;
 import com.wmsi.sgx.service.indexer.impl.IndexerServiceImpl;
 import com.wmsi.sgx.service.sandp.capiq.DataService;
@@ -56,11 +57,11 @@ import com.wmsi.sgx.service.sandp.capiq.impl.KeyDevsService;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages={"com.wmsi.sgx.service"})
+@ComponentScan(basePackages={"com.wmsi.sgx.service","com.wmsi.sgx.repository","com.wmsi.sgx.util"})
 @PropertySources(value = {
-	@PropertySource("classpath:META-INF/properties/capiq.properties")
+@PropertySource("classpath:META-INF/properties/capiq.properties")
 })
-@Import(AppConfig.class)
+@Import(value = { AppConfig.class,DataConfig.class})
 public class HttpConfig{
 	
 	@Autowired
@@ -179,7 +180,7 @@ public class HttpConfig{
 	}
 	
 	@Bean
-	public IndexBuilderService indexBuilderService(){		
+	public IndexBuilderService indexBuilderService() throws IndexerServiceException{		
 		return new IndexBuilderServiceImpl();
 	}
 	

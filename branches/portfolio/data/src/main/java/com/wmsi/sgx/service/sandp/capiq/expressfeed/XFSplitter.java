@@ -10,7 +10,11 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.wmsi.sgx.exception.ErrorBeanHelper;
+import com.wmsi.sgx.model.ErrorBean;
 
 public class XFSplitter {
 
@@ -22,33 +26,40 @@ public class XFSplitter {
 	@Value("${loader.raw.dir}")
 	private String rawDir = "/mnt/data/raw/";
 	
+	@Value("${loader.ftp.rawFiles}")
+	private String rawFiles = "company-data.csv,consensus-estimates.csv,dividend-history.csv,key-devs.csv,ownership.csv,adjustment-factor.csv";
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
 	public Boolean init() {
 		
 		try {
 			
-			
-			File dir = new File(rawDir);
-			
-			for (File f : dir.listFiles()) {
-				
-				log.info("Splitting File: " + f.getAbsolutePath());
-				Map<String,ArrayList<String>> companies = new HashMap<String,ArrayList<String>>();
-				String key = null;
-				
-				try(BufferedReader br = new BufferedReader(new FileReader(f))) {
-				    for(String line; (line = br.readLine()) != null; ) { 
-				    	String tmp = getKey(line);
-				    	if (tmp != null) key = tmp;
-				    	if (key != null) {
-				    		if (companies.get(key) == null) companies.put(key, new ArrayList<String>());
-				    		companies.get(key).add(line);
-				    	}
-				    }
+			String[] rawFileNames = rawFiles.split(",");
+			for (String rawFile : rawFileNames) {
+				File f = new File(rawDir+rawFile);
+				if (f.exists()) {
+					log.info("Splitting File: " + f.getAbsolutePath());
+					Map<String, ArrayList<String>> companies = new HashMap<String, ArrayList<String>>();
+					String key = null;
+
+					try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+						for (String line; (line = br.readLine()) != null;) {
+							String tmp = getKey(line);
+							if (tmp != null)
+								key = tmp;
+							if (key != null) {
+								if (companies.get(key) == null)
+									companies.put(key, new ArrayList<String>());
+								companies.get(key).add(line);
+							}
+						}
+					}
+
+					String name = f.getName();
+					writeFiles(companies, name.substring(0, name.indexOf(".")));
 				}
-				
-				String name = f.getName();
-				writeFiles(companies, name.substring(0, name.indexOf(".")));
-				
 			}
 			
 			
@@ -57,9 +68,10 @@ public class XFSplitter {
 			
 		}
 		catch(Exception e) {
+			errorBeanHelper
+					.addError(new ErrorBean("XFSplitter:init", "Splitting XF Files", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			log.error("Splitting XF Files", e);
 		}
-		
 		
 		return false;
 	}

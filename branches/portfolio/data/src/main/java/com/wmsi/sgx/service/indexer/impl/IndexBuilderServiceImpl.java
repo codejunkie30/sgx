@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -25,10 +26,13 @@ import org.springframework.integration.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CurrencyModel;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
+import com.wmsi.sgx.model.ErrorBean;
 import com.wmsi.sgx.model.Estimate;
 import com.wmsi.sgx.model.Estimates;
 import com.wmsi.sgx.model.FXRecord;
@@ -45,6 +49,7 @@ import com.wmsi.sgx.model.VolWeightedAvgPrices;
 import com.wmsi.sgx.model.indexer.Index;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.model.integration.CompanyInputRecord;
+import com.wmsi.sgx.service.currency.CurrencyService;
 import com.wmsi.sgx.service.gti.GtiService;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexerService;
@@ -94,9 +99,60 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 	@Autowired
 	private IndexerService indexerService;
+	
+	@Autowired
+	private CurrencyService currencyService;
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
+	private LinkedList<String> currencyList = new LinkedList<String>();
 
 	@Autowired
 	private VwapService vwapService;
+	
+	@Autowired
+	private com.wmsi.sgx.util.EmailService emailService;
+	
+	@Value ("${email.dataload.complete}")
+	public String toSite;
+
+	@Value("${loader.currencies.file}")
+	public String currenciesFile;
+	
+	@Value("${loader.workdir}")
+	private String tmpDir;
+
+	public boolean saveCurrencyList()throws IndexerServiceException{
+		String[] record = null;
+		CSVReader csvReader = null;
+		InputStreamReader reader = null;
+		List<CurrencyModel>currencyModelList = new ArrayList<CurrencyModel>();
+		try {
+			reader = new InputStreamReader(new FileInputStream(currenciesFile));
+			csvReader = new CSVReader(reader, ',');
+			csvReader.readNext();
+			while ((record = csvReader.readNext()) != null) {
+				CurrencyModel model =new CurrencyModel();
+				model.setCompleted(false);
+				model.setCurrencyName(record[0].toLowerCase() + "_premium");
+				model.setDescription(record[1]);
+				currencyModelList.add(model);
+			}
+			//delete existing records
+			currencyService.deleteAll();
+			return currencyService.addCurrencies(currencyModelList);
+
+		} catch (IOException e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:saveCurrencyList",
+					"Error saving currency list ", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
+			throw new IndexerServiceException("Error saving currency list ", e);
+		} finally {
+			IOUtils.closeQuietly(csvReader);
+			IOUtils.closeQuietly(reader);
+		}
+		
+	}
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
@@ -141,6 +197,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 			return ret;
 		} catch (IOException e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:readTickers",
+					"Error parsing ticker input file", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			throw new IndexerServiceException("Error parsing ticker input file", e);
 		} finally {
 			IOUtils.closeQuietly(csvReader);
@@ -159,8 +217,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			indexRecord(indexName, input);
 		} catch (InvalidIdentifierException e) {
 			// Allow bad tickers to flow through ie. don't consider it an error
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:index",
+					"Invalid Id", ErrorBean.ERROR, e.getMessage()));
 			log.error("Invalid id " + input.getTicker());
 		} catch (Exception ex) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:index",
+					"Invalid record: " + input.getTicker(), ErrorBean.ERROR, errorBeanHelper.getStackTrace(ex)));
 			log.error("Invalid record: " + input.getTicker(), ex);
 		}
 
@@ -173,11 +235,13 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 	@Override
 	public Boolean buildAlphaFactors(@Header String indexName)
-			throws AlphaFactorServiceException, IndexerServiceException {
+			throws AlphaFactorServiceException, IndexerServiceException{
 
 		log.info("Building alpha factors");
 
-		File file = alphaFactorService.getLatestFile();
+		File file = null;
+		file = alphaFactorService.getLatestFile();
+		if(file==null)return false;
 		List<AlphaFactor> factors = alphaFactorService.loadAlphaFactors(file);
 
 		for (AlphaFactor f : factors) {
@@ -196,7 +260,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	 * @throws IndexerServiceException
 	 */
 	@Override
-	public Boolean isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName)
+	public int isJobSuccessful(@Payload List<CompanyInputRecord> records, @Header String indexName)
 			throws IndexerServiceException {
 
 		log.info("Checking job successful with failure threshold: {}", FAILURE_THRESHOLD);
@@ -223,9 +287,41 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		if (success) {
 			indexerService.createIndexAlias(indexName);
 			deleteOldIndexes();
+			updateCurrencyCompletedFlag(indexName);
 		}
 
-		return success;
+		boolean flag = hasCurrenciesCompleted();
+		//send email if error 
+		if(!success||flag){
+			errorBeanHelper.sendEmail();
+		}
+		/*
+		 * return (((currencyList != null & !currencyList.isEmpty() && indexName
+		 * != null) &&
+		 * currencyList.getLast().equalsIgnoreCase(indexName.substring(0,
+		 * indexName.lastIndexOf("_")))) || currencyList.isEmpty()) ? 0 :
+		 * (Boolean.TRUE.equals(success) ? 1 : -1);
+		 */
+		if (flag) {
+			return 0;
+		} else {
+			if (success) {
+				return 1;
+			} else {
+				return -1;
+			}
+		}
+	}
+
+	private void updateCurrencyCompletedFlag(String indexName) {
+		CurrencyModel model = new CurrencyModel();
+		model.setCompleted(true);
+		model.setCurrencyName(indexName.substring(0, indexName.lastIndexOf("_")));
+		currencyService.updateCurrency(model);
+	}
+	
+	private boolean hasCurrenciesCompleted(){
+		return currencyService.getCountOfCurrenciesToComplete()<=0;
 	}
 
 	private static final int INDEX_REMOVAL_THRESHOLD = 5;
@@ -496,6 +592,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				indexerService.bulkSave("fxdata", buffer.toString(), indexName);
 			buffer.setLength(0);
 		} catch (Exception e) {
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:createFXIndex",
+					"Trying to create FX conversion index", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
 		}
 
@@ -503,4 +601,18 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		return true;
 	}
+	
+	@Override
+	public String computeIndexName(@Header String jobId, @Header String indexName) throws IndexerServiceException {
+		CurrencyModel currencyModel = currencyService.getNonCompleteCurrency();
+		if (currencyModel != null) {
+			return currencyModel.getCurrencyName()+ "_" + jobId;
+		} else{
+			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:computeIndexName",
+					"IndexName not available", ErrorBean.ERROR, ""));
+			throw new IndexerServiceException("IndexName not available");
+		}
+
+	}
+
 }

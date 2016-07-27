@@ -26,5 +26,4 @@ public interface IndexerService{
 	
 	String getIndexName();
 	
-	
 }
