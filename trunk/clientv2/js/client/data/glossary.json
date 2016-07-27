@@ -325,7 +325,7 @@
 		},
 		{
 			"id":"currentPortfolioValue",
-			"definition":"Current value includes purchases and sales.It does not include dividend, stock splits."
+			"definition":"Current value includes purchases and sales. It does not include dividend, stock splits."
 		},
 		{
 			"id":"portfolioPercentChange",
