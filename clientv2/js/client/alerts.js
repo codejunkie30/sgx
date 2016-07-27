@@ -302,7 +302,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				};
 		    }, this);
 			
-			
+			ALERTS.showChange(false);
 			PAGE.resizeIframeSimple();
 		},
 		
@@ -402,7 +402,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			
+			ALERTS.showChange(false);
 			//Clears add WL after submit
 			ALERTS.newWLName(null);
 		},
@@ -490,6 +490,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			 $('.confirm-delete').click(function(e) {				
 				ALERTS.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
+				ALERTS.showChange(false);
 	        });
 			
 			 $('.cancel').click(function(e) {
