@@ -21,15 +21,15 @@
 
 	<!-- Loggers -->
 	<logger name="org.springframework.integration">
-		<level value="debug" />
+		<level value="error" />
 	</logger>
 
 	<logger name="com.wmsi.sgx">
-		<level value="debug" />
+		<level value="error" />
 	</logger>
 
 	<logger name="org.apache.http.wire">
-		<level value="debug"/>
+		<level value="error"/>
 	</logger>
 	
 	<logger name="net.sf.ehcache.constructs.web.filter">
