@@ -32,6 +32,10 @@
 		<level value="debug"/>
 	</logger>
 	
+	<logger name="net.sf.ehcache.constructs.web.filter">
+		<level value="debug"/>
+	</logger>
+	
 	<!-- Root Logger -->
 	<root>
 		<priority value="debug" />
