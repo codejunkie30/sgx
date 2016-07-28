@@ -666,7 +666,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			if(event.target.checked || displayChart){
+			if((typeof event != 'undefined' && event.target.checked) || displayChart) {
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
 			    me.singleChartUnchart(me, item.tickerCode, value);
