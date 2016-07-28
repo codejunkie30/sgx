@@ -651,6 +651,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
 			var me = this;
+			VALUATION.showChange(false);
 			var value = item.selectedTransaction();
 			var showChart = false;
 			var displayChart = false;
@@ -692,7 +693,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
 	                });
 	                $('#selectAllId').prop('checked', selectAllTransaction);	                
-	                
+	                VALUATION.showChange(false);
 	                return selectAllTransaction;
 	            },
 	            write: function (value) {
@@ -743,6 +744,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		changeTab: function(tabName){
+			VALUATION.showChange(false);
 			var me = this;
 			
 			if( tabName == me.activeTab ) return;
@@ -1114,6 +1116,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		addSaveTransactions: function() {
 			var me = this;
+			VALUATION.showChange(false);
 			var transItemModel = null;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
@@ -1481,6 +1484,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    removePerformanceItem: function(item) {
+	    	VALUATION.showChange(false);
 	    	var me = this;
 			PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
@@ -1597,6 +1601,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortByCompanyName: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
@@ -1631,6 +1636,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyType: function(){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transType').hasClass('typeasc')){
 	    		$('#transType').removeClass('typeasc').addClass('typedesc');
@@ -1665,6 +1671,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyTradeDate: function(){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transTradeDate').hasClass('dateasc')){
 	    		$('#transTradeDate').removeClass('dateasc').addClass('datedesc');
@@ -1699,6 +1706,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyNumberShare: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transNumShare').hasClass('shareasc')){
 	    		$('#transNumShare').removeClass('shareasc').addClass('sharedesc')
@@ -1733,6 +1741,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyPrice: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transPrice').hasClass('priceasc')){
 	    		$('#transPrice').removeClass('priceasc').addClass('pricedesc');
@@ -1771,6 +1780,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyLastPrice: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transLastPrice').hasClass('lastpriceasc')){
 	    		$('#transLastPrice').removeClass('lastpriceasc').addClass('lastpricedesc')
@@ -1809,6 +1819,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
@@ -1830,6 +1841,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },  
 	    
 	    perSortByCompanyName: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perCompanyName').hasClass('asc')){
 	    		$('#perCompanyName').removeClass('asc').addClass('desc');
@@ -1859,6 +1871,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortbyTradeDate: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perTradeDate').hasClass('dateasc')){
 	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
@@ -1901,6 +1914,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortbyNumShares: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perNumOfShares').hasClass('shareasc')){
 	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
@@ -1942,6 +1956,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortLastClsPrice: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perLastClosePrice').hasClass('closepasc')){
 	    		$('#perLastClosePrice').removeClass('closepasc').addClass('closepdesc')
@@ -1987,6 +2002,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortCurrentValue: function(data, event){
+	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perCurPrice').hasClass('currrentpasc')){
 	    		$('#perCurPrice').removeClass('currrentpasc').addClass('currrentpdesc')

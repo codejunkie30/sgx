@@ -176,6 +176,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		searchKeyDev: function(){
 			var me = this;
+			me.showChange(false);
 			me.noResultsFlag = true;
 			var tickers = me.allCompanies; 
 			if(!UTIL.isEmpty(me.keydevCompSelectedVal())){
@@ -500,6 +501,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		keyDevClick: function(item) {
+		me.showChange(false);
 			var source;
 			if (item.source != null){
 				source = item.source

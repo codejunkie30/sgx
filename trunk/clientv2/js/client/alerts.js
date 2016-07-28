@@ -494,6 +494,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        });
 			
 			 $('.cancel').click(function(e) {
+				 ALERTS.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });		
 		},		
