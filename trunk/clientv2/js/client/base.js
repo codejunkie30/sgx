@@ -605,6 +605,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					height: settings.hasOwnProperty("height") ? settings.height : false,
 					width: settings.hasOwnProperty("width") ? settings.width : 550,
             		maxWidth: settings.hasOwnProperty("maxWidth") ? settings.maxWidth : 550,
+            		maxHeight: settings.hasOwnProperty("maxHeight") ? settings.maxHeight : false,
 					scrolling: settings.hasOwnProperty("scrolling") ? settings.scrolling : false,
             		onComplete: function() {
             			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)

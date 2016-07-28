@@ -501,7 +501,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		keyDevClick: function(item) {
-		me.showChange(false);
+			var me = this;
+			me.showChange(false);
 			var source;
 			if (item.source != null){
 				source = item.source
@@ -516,7 +517,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			   "</p>" +
 			   "<div class='news'>" + item.situation + "</div>";
 			
-			PAGE.modal.open({ content: copy, type: 'alert' });
+			PAGE.modal.open({ content: copy, type: 'alert',,maxHeight:700,scrolling:true });
 			
 		},
 		
