@@ -1318,7 +1318,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(2);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(2); 
 	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
-	    	var percentageChange = isNaN(percentageChangeVal)? 0 :percentageChangeVal;
+	    	var percentageChange = isNaN(percentageChangeVal)? "0.00" :percentageChangeVal;
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
