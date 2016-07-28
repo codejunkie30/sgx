@@ -517,7 +517,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			   "</p>" +
 			   "<div class='news'>" + item.situation + "</div>";
 			
-			PAGE.modal.open({ content: copy, type: 'alert',,maxHeight:700,scrolling:true });
+			PAGE.modal.open({ content: copy, type: 'alert',maxHeight:700,scrolling:true });
 			
 		},
 		
