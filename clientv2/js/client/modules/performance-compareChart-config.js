@@ -6,7 +6,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			chart : {
 				backgroundColor : 'rgba(255, 255, 255, 0.1)',
 				height : 445,
-				width : 900
+				width : 1000
 			},
 			
 			rangeSelector: {
@@ -68,7 +68,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
                     	color: "#000000",
                     	fontWeight: "bold"
                     },
-    				x: 0
+    				x: 10
     			}
 
     		},
