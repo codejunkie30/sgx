@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-3.0.xsd
+		http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int:chain id="initChain" input-channel="inputDataRequestChannel" output-channel="indexRequestChannel">
+     		<int:service-activator ref="xfRetrievalService" method="init"/>
+ 				<int:service-activator ref="keyDevsService" method="init"/>
+				<int:service-activator ref="xfSplitterService" method="init"/>
+ 				<int:service-activator ref="indexBuilderService" method="saveCurrencyList"/>
+ 				<int:service-activator ref="gtiService" method="init"/>
+ 				<int:service-activator ref="vwapService" method="init"/> 
+ 				<!-- <int:service-activator ref="alphaFactorIndexerServiceImpl" method="getLatestFile"/> -->
+	</int:chain>
+	<!-- TODO Do we need router? -->
+ 	<int:chain id="indexerChain" input-channel="indexRequestChannel" output-channel="indexChannel">
+		<int:header-enricher>
+			<int:header name="indexName"  method="computeIndexName" ref="resolveIndexNameSvc" overwrite="true"/>
+			<int:header name="indexDate" expression="headers.jobDate" />	
+			<int:header name="fxBatchSize" value="${loader.fx.fxBatchSize}" />
+		</int:header-enricher>	
+			<int:service-activator ref="indexerService" method="createIndex"/>
+		<int:service-activator ref="indexBuilderService" method="buildAlphaFactors" />
+		<int:service-activator ref="indexBuilderService" method="createFXIndex" />
+		<int:service-activator ref="indexerService" method="flush" />
+	<!-- 	<int:gateway request-channel="httpTickerRequestChannel" error-channel="httpTickerErrorChannel" /> -->
+	</int:chain>
+	<!-- 
+		BEGIN HACK SECTION FOR CHANNEL PROCESSING 
+	 -->
+	<!-- Http gateway to request latest ticker from SGX web service -->
+	<int-http:outbound-gateway 
+		request-channel="httpTickerRequestChannel" 
+		http-method="GET"
+		url="${loader.tickers.url}"
+		expected-response-type="org.springframework.core.io.Resource"		
+		request-factory="clientHttpRequestFactory"/>    
+	
+	<!-- Error handler, if http outbound gateway throws and exception default to local copy of ticker file -->
+	<int:service-activator input-channel="httpTickerErrorChannel" expression="@tickerFileResource" />
+	<!-- Local ticker file resource, used as backup is http request for latest ticker fails -->
+	<bean id="tickerFileResource" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="${loader.ticker.file}"/>
+	</bean>
+
+	<!-- 
+		END HACK SECTION FOR CHANNEL PROCESSING 
+	 -->
+
+	<!-- Split on tickers for multi-threading -->
+	<int:splitter 
+		id="tickerSplitter"
+		input-channel="indexChannel" 
+		output-channel="indexTickerChannel"
+		ref="indexBuilderService" 
+		method="readTickers"/>
+
+ 	<!-- Load Data -->
+ 	<int:chain 
+ 		id="indexDataChain"
+		input-channel="indexTickerChannel"
+		output-channel="tickerAggregatorChannel">
+
+		
+		<int:service-activator ref="indexBuilderService" method="index">
+			<int:request-handler-advice-chain >
+				<ref bean="retryAdvice"/>
+			</int:request-handler-advice-chain>
+		</int:service-activator>
+	</int:chain>
+		
+	<!-- Indexing Error Handling -->
+	<int:chain 
+		id="indexErrorHandlingChain"
+		input-channel="indexErrorChannel" 
+		output-channel="tickerAggregatorChannel">		
+			
+			<int:transformer expression="payload.failedMessage"/>
+						
+			<int:enricher>
+				<int:property name="indexed" value="false"/>
+			</int:enricher>
+	</int:chain>
+		
+	<int:aggregator id="tickerAggregtor" 
+		input-channel="tickerAggregatorChannel"
+	 	output-channel="aggregationCompleteChannel"
+		release-strategy-expression="#this.size() == #this[0].headers.sequenceSize"
+		>	    
+	</int:aggregator>
+	
+	<int:router	input-channel="aggregationCompleteChannel" 
+		ref="indexBuilderService"
+		method="isJobSuccessful">
+				
+    	<int:mapping value="1" channel="indexRequestChannel"/>
+    	<int:mapping value="0" channel="createAlias7"/>
+    	<int:mapping value="-1" channel="failedJobChannel"/>
+    	    	
+	</int:router>
+ 	
+ 	<!--  Job Completed successfully, create index and remove old indexes -->
+ 	<int:chain input-channel="createAlias7" output-channel="loggingChannel">
+ 		<int:service-activator ref="indexerService" method="createIndexAlias" />
+ 		<int:service-activator ref="indexBuilderService" method="deleteOldIndexes" /> 
+ 	</int:chain>
+
+	<int:logging-channel-adapter channel="loggingChannel" level="INFO" expression=" 'Job Complete ' + payload.toString()"/>
+	
+	<!-- Job failed -->
+	<int:header-enricher input-channel="failedJobChannel" output-channel="failedLogger">
+		<int:header name="failedJob" value="true"/>
+	</int:header-enricher>	
+		
+	<int:logging-channel-adapter channel="failedLogger" level="INFO" expression=" 'Job Failed ' + payload.toString()"/>
+	
+	<!-- 
+	  Channel definitions
+	 -->
+	<task:executor id="indexerTaskExecutor" pool-size="${loader.threads}" queue-capacity="100" rejection-policy="CALLER_RUNS" />
+	<task:executor id="indexerRequestChannelExecutor" pool-size="1" queue-capacity="1" rejection-policy="DISCARD" />
+	
+	<int:channel id="indexRequestChannel">
+		<int:dispatcher task-executor="indexerRequestChannelExecutor" />
+	</int:channel>
+			
+	<int:channel id="indexChannel"/>
+	<int:channel id="loggingChannel"/>
+	<int:channel id="failedLogger"/>
+	<int:publish-subscribe-channel id="aggregationCompleteChannel"/>
+
+	<int:channel id="indexTickerChannel" datatype="com.wmsi.sgx.model.integration.CompanyInputRecord">	
+		<int:dispatcher task-executor="indexerTaskExecutor" />
+	</int:channel>
+	
+	<int:channel id="indexErrorChannel">
+		<int:interceptors>
+			<int:wire-tap channel="errorLoggerChannel"/>
+		</int:interceptors>
+	</int:channel>
+	
+	<!--  Error Logging -->
+	<int:channel id="errorLoggerChannel"/>		
+	<int:service-activator input-channel="errorLoggerChannel" ref="loggerAdapter" method="error"/>
+	<bean id="loggerAdapter" class="com.wmsi.sgx.logging.integration.IntegrationLoggerAdapter"/>
+
+	<int:channel id="tickerAggregatorChannel">
+		<int:interceptors>
+			<int:wire-tap channel="statusLoggingChannel" />
+		</int:interceptors>
+	</int:channel>
+	
+	<int:channel id="statusLoggingChannel"/>	
+	<int:logging-channel-adapter channel="statusLoggingChannel" level="INFO" expression=" 'Processing ' + headers.sequenceNumber + ' of ' + headers.sequenceSize"/>
+ 	
+	<!-- Retry Handler -->
+	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
+		<property name="retryTemplate">
+			<bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">	
+				<property name="retryPolicy">
+					<bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+						<property name="maxAttempts" value="4" />
+					</bean>
+				</property>
+				<property name="backOffPolicy">
+					<bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+						<property name="initialInterval" value="1000" />
+						<property name="multiplier" value="5" />
+					</bean>
+				</property>
+			</bean>			
+		</property>
+		<property name="recoveryCallback">
+			<bean
+				class="org.springframework.integration.handler.advice.ErrorMessageSendingRecoverer">
+				<constructor-arg ref="indexErrorChannel" />
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- Simple http client bean -->
+	<bean id="clientHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"/>
+	
+	<bean id="vwapFileResource" class="org.springframework.core.io.UrlResource">
+		<constructor-arg value="${loader.vwap.url}"/>
+	</bean>
+	
+	<bean id="gtiFileResource" class="org.springframework.core.io.UrlResource">
+		<constructor-arg value="${loader.gti.url}"/>
+	</bean>
+	
+	<bean id="gtiService" class="com.wmsi.sgx.service.gti.impl.GtiServiceImpl">
+		<property name="gtiData" ref="gtiFileResource"/>
+	</bean>
+	
+	<bean id="vwapService" class="com.wmsi.sgx.service.vwap.impl.VwapServiceImpl">
+		<property name="vwapData" ref="vwapFileResource"/>
+	</bean>
+	 	
+	<bean id="xfRetrievalService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFRetrievalService" />
+	
+	<bean id="xfSplitterService" class="com.wmsi.sgx.service.sandp.capiq.expressfeed.XFSplitter" />
+	
+	<bean id="resolveIndexNameSvc" class="com.wmsi.sgx.service.indexer.impl.IndexBuilderServiceImpl"/>
+	
+	<bean id="errorBeanHelper" class="com.wmsi.sgx.exception.ErrorBeanHelper"/>
+	
+	<bean id="alphaFactorIndexerServiceImpl" class="com.wmsi.sgx.service.sandp.alpha.impl.AlphaFactorIndexerServiceImpl"/>
+</beans>

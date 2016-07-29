@@ -1,0 +1,20 @@
+{
+    "GDSSDKResponse": [
+        {
+            "Function": "GDSP",
+            "Mnemonic": "IQ_CLOSEPRICE",
+            "NumCols": 1,
+            "NumRows": 0,
+            "ErrMsg": "An error has been encountered",
+            "CacheExpiryTime": "0",
+            "Headers": [
+                "IQ_CLOSEPRICE"
+            ],
+            "Identifier": "C6L",
+            "StartDate": "",
+            "Seniority": "",
+            "Frequency": "",
+            "SnapType": ""
+        }
+    ]
+}
