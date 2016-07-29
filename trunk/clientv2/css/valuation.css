@@ -308,6 +308,10 @@
 	width: 65%
 }
 
+.w85P {
+	width: 85%
+}
+
 .w20P {
 	width: 20%
 }
@@ -375,7 +379,7 @@
 .portfolioMenu ul li {
     display: inline;
     float: left;
-    width: 25%;
+    width: 19%;
     margin-left: 15px;
     border-right: 1px solid #cccccc;
 }
@@ -435,7 +439,11 @@ height: 17px;
 	padding-left: 25px;
 }
 
-
+.totInv
+{
+	float: left;
+    margin-left: -15px;
+}
 /* ---------pagination------------- */
 .pagination-container {
     text-align: right;
