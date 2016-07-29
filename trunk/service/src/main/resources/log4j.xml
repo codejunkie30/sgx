@@ -33,12 +33,12 @@
 	</logger>
 	
 	<logger name="net.sf.ehcache.constructs.web.filter">
-		<level value="debug"/>
+		<level value="error"/>
 	</logger>
 	
 	<!-- Root Logger -->
 	<root>
-		<priority value="debug" />
+		<priority value="error" />
 		<appender-ref ref="console" />  
 		<appender-ref ref="file" />
 	</root>
