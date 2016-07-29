@@ -75,7 +75,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
 		
-/*		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
+		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
 		if(event.size() > 0){
 			for(TradeEvent e : event){
 				if(e.getLastTradeTime().compareTo(date) < 0){
@@ -83,7 +83,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 				}
 			}
 		}
-		*/
+		
 		return fallbackPriceForRealTimePricing(id);
 	}
 
@@ -214,8 +214,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 				currencies[i]=m.getCurrencyName();
 				i++;
 			}
-			//currencies =  (String[]) currencySvc.getAllCurrencies().toArray();
-		}
+			}else{
+				currencies =  (String[]) currencySvc.getAllCurrencies().toArray();
+			}
+			
+
 		if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
 			comp.setFilingCurrency("SGD");
 		}
