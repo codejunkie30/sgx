@@ -1545,6 +1545,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    toogleCompanyPlus: function(id, data){	 
 	    	var isChrome = !!window.chrome && !!window.chrome.webstore;
+	    	var isFirefox = typeof InstallTrigger !== 'undefined';
+	    	
+	    	if(isFirefox){
+	    		$(".imgIntCenterAllign").css("padding-bottom", "5.6px");
+	    	}
 
 	       	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
