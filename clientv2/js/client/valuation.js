@@ -1547,10 +1547,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var isChrome = !!window.chrome && !!window.chrome.webstore;
 	    	var isFirefox = typeof InstallTrigger !== 'undefined';
 	    	
-	    	if(isFirefox){
-	    		$(".imgIntCenterAllign").css("padding-bottom", "5.6px");
-	    	}
-
 	       	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
 	    	
@@ -1562,10 +1558,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
 			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    			}else{
-	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10.3px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10.3px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
+	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10.4px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10.4px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    			}
 		    		$('#multiCompData'+id).css({"padding-top":"15px"});
+		    		if(isFirefox){
+			    		$(".imgIntCenterAllign").css("padding-bottom", "5.7px");
+			    	}
 	    		}else{
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
 	    			if(isChrome){
@@ -1575,6 +1574,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='height: 25.3px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
 			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='height: 25.3px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    			}
+	    			if(isFirefox){
+	    	    		$(".imgIntCenterAllign").css("padding-bottom", "5.6px");
+	    	    	}
 	    		}
 	    	});
 	    	
