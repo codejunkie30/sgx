@@ -1,5 +1,6 @@
 package com.wmsi.sgx.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +37,11 @@ public class DataController {
 	
 	@RequestMapping("currencyList")
 	public String getCurrencyList() {
-		Map<Object, Object> map = utilService.convertCurrencyCSVtoMap(fileLocation);
+		//Map<Object, Object> map = utilService.convertCurrencyCSVtoMap(fileLocation);
 		
 		
 		Gson gson = new Gson(); 
-		return gson.toJson(map); 
+		return gson.toJson(getCurrencyMap()); 
 	}
 	
 	private void createCurrencyCSVFile(){
@@ -50,14 +51,19 @@ public class DataController {
 		gson.toJson(currencyList, typeOfSrc);
 	}
 	
-	private Map<String,String> getCurrencyMap(){
+	private ArrayList getCurrencyMap(){
 		Gson gson = new Gson();	
 		List<CurrencyModel> currencyList = currencySvc.getAllCurrencies();
-		Map<String,String>currencyMap = new HashMap<String,String>();
+		ArrayList currencyResponseList = new ArrayList();
+		int i=0;
 		for(CurrencyModel m : currencyList){
-			currencyMap.put(m.getCurrencyName(), m.getDescription());
+			Map<String,String>currencyMap = new HashMap<String,String>();
+			currencyMap.put("id",m.getCurrencyName().substring(0, m.getCurrencyName().lastIndexOf("premium")-1).toLowerCase());
+			currencyMap.put("name",m.getDescription());
+			i++;
+			currencyResponseList.add(currencyMap);
 		}
-		return currencyMap;
+		return currencyResponseList;
 	}
 	
 
