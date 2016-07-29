@@ -25,7 +25,25 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			this.accountSettings(displayMessage);
 			
-			this.getCurrencies(this.currencyDD.currencyList);
+			    //898
+			var endpoint = PAGE.fqdn + "/sgx/currencyList";
+			var postType = 'POST';
+			var params = {};
+			UTIL.handleAjaxRequestJSON(
+				endpoint,
+				postType,
+				params,
+				function(data, textStatus, jqXHR){
+					
+					console.log(data);
+					SAVECHANGES.getCurrencies(data);
+				}, 
+				PAGE.customSGXError);
+		
+		    //ends
+
+			
+			//this.getCurrencies(this.currencyDD.currencyList);
 						
 			SAVECHANGES.showChange.subscribe(function(newValue){	
 				SAVECHANGES.isFormValid(false);			

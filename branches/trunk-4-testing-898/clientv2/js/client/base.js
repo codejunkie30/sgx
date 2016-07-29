@@ -830,19 +830,34 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
 
-							PAGE.getCurrencies(PAGE.currencyDD.currencyList);
+						    //898
+							var endpoint = PAGE.fqdn + "/sgx/currencyList";
+							var postType = 'POST';
+							var params = {};
+							UTIL.handleAjaxRequestJSON(
+								endpoint,
+								postType,
+								params,
+								function(data, textStatus, jqXHR){
+									
+									console.log(data);
+									PAGE.getCurrencies(data);
+								              PAGE.selectedCurrency(UTILS.retrieveCurrency().toLowerCase());
 
-              PAGE.selectedCurrency(UTILS.retrieveCurrency().toLowerCase());
+								              PAGE.selectedCurrency.subscribe(function(newValue) {
+								                if (newValue != UTILS.retrieveCurrency()){                
+								                  UTILS.saveCurrency(newValue.toLowerCase());
+								                  setTimeout(function(){
+								                    location.reload();
+								                  }, 100);
+								                }
 
-              PAGE.selectedCurrency.subscribe(function(newValue) {
-                if (newValue != UTILS.retrieveCurrency()){                
-                  UTILS.saveCurrency(newValue.toLowerCase());
-                  setTimeout(function(){
-                    location.reload();
-                  }, 100);
-                }
+								              });
+								}, 
+								PAGE.customSGXError);
+							//PAGE.getCurrencies(PAGE.currencyDD.currencyList);
 
-              });
+
 					
 						}
 					}
