@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"></meta>
+<title>SGX StockFacts Plus Trial: Buy Now</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="600" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="600">
+			<div style="text-align: center;">
+				<img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="50" alt="" />
+			</div>
+			<div style="text-align: center;">
+				<img th:src="${baseUrl + '/email/_images/logo.gif'}" width="181" height="52" alt="SGX" />
+			</div>
+			<div style="text-align: center;">
+				<img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="25" alt="" />
+			</div>
+			<table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#f0f1f1">
+				<tr>
+					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>
+					<td width="550">
+						<table border="0" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="1" alt="" /></td>
+							</tr>
+							<tr>
+								<td width="550">
+									<div style="text-align: center;">
+										<img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="25" alt="" />
+									</div>
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 23px; color: #0e236b; margin: 0 0 25px 0;" th:text="${'Trial - ' + halfway + ' Days Remaining'}">Trial - 7 Days Remaining</div>
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 25px 0;"><b>You are halfway through your StockFacts Plus trial account.</b> In order to continue using the Plus features, purchase a Plus account now.</div>
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 10px 0;">A Plus account includes:</div>
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 0 0;">- Ability to create and manage a StockList</div>
+									<!--<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 0 0;">- Access to additional companies and currencies</div>-->
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 0 0;">- Access to estimates and advanced charting</div>
+									<div style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #333; margin: 0 0 25px 0;">- Real time market data (only available with a paid Plus account).</div>
+									<div style="text-align: center;"><a th:href="${emailSite + '?page=14&amp;lang=en-us'}"><img th:src="${baseUrl + '/email/_images/purchase.gif'}" width="280" height="32" alt="Purchase StockFacts Plus" /></a></div>
+									<div style="text-align: center;">
+										<img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="1" height="75" alt="" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>
+				</tr>
+			</table>
+			<table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#5f6062">
+				<tr>
+					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>
+					<td width="550">
+						<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #fff; margin: 25px 0 0 0;">You are receiving this email because you signed up for SGX StockFacts Plus.</div>
+						<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #fff; margin: 0 0 25px 0;">If you did not make this request, you may ignore this email.</div>
+					</td>
+					<td width="25"><img th:src="${baseUrl + '/email/_images/spacer.gif'}" width="25" height="1" alt="" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+	"promos": [
+		{
+			"type": "image",
+			"src": "img/promos/sgx_premium_promo_soon.jpg",
+			"page": "8"
+		},
+		{
+			"type": "image",
+			"src": "img/promos/tool.jpg",
+			"href": "https://youtu.be/ilD66DQczBs"
+		}
+	]
+}

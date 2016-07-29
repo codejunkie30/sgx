@@ -1,0 +1,2 @@
+Company Name,Stock Code:Market,ISIN Code,HP Short Name,
+"FORTUNE REAL ESTATE INV TRUST",F25U:SGX MAINBOARD,SG1O33912138,Fortune Reit HKD,
