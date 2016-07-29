@@ -70,7 +70,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
 		
-/*		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
+		List<TradeEvent> event = tradeEventService.getEventsForDate(market, toMarketId(id), d);
 		if(event.size() > 0){
 			for(TradeEvent e : event){
 				if(e.getLastTradeTime().compareTo(date) < 0){
@@ -78,7 +78,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 				}
 			}
 		}
-		*/
+		
 		return fallbackPriceForRealTimePricing(id);
 	}
 
@@ -157,42 +157,6 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		
 	}
 	
-	@Override
-	public List<CompanyPrice> getPriceChangeForWatchlistCompanies(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
-		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
-		
-		if(companies == null)
-			return list;
-		
-		for(String company : companies){
-			CompanyPrice companyPrice = new CompanyPrice();
-			companyPrice.setPrice(0.0);
-			companyPrice.setChange(0.0);
-			companyPrice.setCurrency("SGD");
-			Price p = new Price();
-			DecimalFormat df = new DecimalFormat("0.###");
-			
-			try{
-				//Company comp = companyService.getById(company,"sgd");
-				Company comp = companyService.getCompanyByIdAndIndex(company, "sgd_premium");
-				p = fallbackPrice(company);
-				companyPrice.setChange(Double.valueOf(df.format(p.getChange())));
-				companyPrice.setCompanyName(comp.getCompanyName());
-				companyPrice.setCurrency(p.getTradingCurrency());
-				if(p.getLastPrice() != null)
-					companyPrice.setPrice(Double.valueOf(df.format(p.getLastPrice())));
-				
-			}catch(CompanyServiceException e){
-				continue; //continue because email should be sent as other companies have information.
-			}
-			companyPrice.setTicker(company);
-			list.add(companyPrice);
-		}
-		
-		return list;
-		
-	}
-
 	private String toMarketId(String id){
 		return id.concat(MARKET_EXTENTION);
 	}

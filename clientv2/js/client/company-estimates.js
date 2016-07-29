@@ -134,6 +134,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
             PAGE.hideLoading();
             $('#estimates-content-alternative').show();
             ko.applyBindings(this, $("body")[0]);
+      		setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
         },
 
 		initFinancials: function(me, data) {
@@ -543,7 +544,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
 
             //adjusting min/max for y-axis so that the grid lines line up
             // remove if it's causing problems
-            /*var seriesLen = this.series().length;
+            var seriesLen = this.series().length;
             if(seriesLen != 0){
                 yAxis0Extremes = chart.yAxis[1].getExtremes();
                 yAxisMaxMinRatio = yAxis0Extremes.max / yAxis0Extremes.min;
@@ -551,7 +552,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/estimates.json", "client/mo
                 yAxis1Min = (yAxis1Extremes.max / yAxisMaxMinRatio).toFixed(0);
                 chart.yAxis[seriesLen+1].setExtremes(yAxis1Min, yAxis1Extremes.max);
 
-            }*/
+            }
 
 			chart.setSize(me.getChartWidth(chart.series.length), me.getChartHeight(), true);
     		setTimeout(function() { me.resizeIframe(me.getTrueContentHeight(), $('#bar-chart').position().top); }, 100);

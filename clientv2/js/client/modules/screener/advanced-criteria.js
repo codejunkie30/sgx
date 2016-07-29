@@ -195,14 +195,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         		// get the random distributions
         		var buckets = {};
 				if (this.field == 'avgBrokerReq'){ 
-					$.each(field.values, function(vIdx, val) { 
-					    var val = Math.round(val * 10) / 10; 
-					    CRITERIA.randomizeBucket(buckets, val, type, bCount);
-					    });
+					$.each(field.values, function(vIdx, val) { var val = Math.round(val * 10) / 10; CRITERIA.randomizeBucket(buckets, val, type, bCount);});
 				 } else {
 					 $.each(field.values, function(vIdx, val) {CRITERIA.randomizeBucket(buckets, val, type, bCount);});
 				 }
-				if(CRITERIA.isValuationCriteria(this.field))
+				if(this.field == 'avgBrokerReq')
 				{
 					CRITERIA.info = field;
 				}
@@ -277,11 +274,6 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     		return ret;
     	},
     	
-    	isValuationCriteria:function(fieldCriteria){
-    	  if( fieldCriteria == 'avgBrokerReq' || fieldCriteria == 'gtiRankChange' || fieldCriteria == 'dividendYield' || fieldCriteria == 'totalRev5YrAnnGrowth' || fieldCriteria == 'gtiScore')
-    	      return true;
-    	},
-    	
     	maxCriteriaMsg: function() {
     		
             this.screener.modal.open({
@@ -344,7 +336,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
         				var slider = $(".search-criteria [data-id='" + this.field.id + "'] .slider-bar");
         				var min = slider.hasClass("ui-slider") ? $(slider).slider("values", 0) : 0;
 	        			var max = slider.hasClass("ui-slider") ? $(slider).slider("values", 1) : this.field.buckets.length - 1;
-						if(this.criteria.isValuationCriteria(this.field.id))
+						if(this.field.id == 'avgBrokerReq')
 						{
 	        				var cnt = CRITERIA.info.values.lastIndexOf(CRITERIA.maximum) - CRITERIA.info.values.indexOf(CRITERIA.minimum);
 	        				return cnt+1

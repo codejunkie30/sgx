@@ -25,9 +25,9 @@ public interface AccountRepository extends CustomRepository<Account, Serializabl
 	List<Account> findAllById(@Param("id") long id);
 	
 	@Modifying
-	@Query("update Accounts set Type = :type, Active = :active, Always_Active = :alwaysActive where user_id = :user_id and start_dt = :start_dt")	
+	@Query("update Accounts set Type = :type, Active = :active, Always_Active = :alwaysActive where user_id = :user_id")	
 	@Transactional
-	void updateAccountSetAdmin(@Param("type") String type, @Param("active") boolean active, @Param("alwaysActive") boolean alwaysActive, @Param("user_id")long user_id, @Param("start_dt") Date start_dt);
+	void updateAccountSetAdmin(@Param("type") String type, @Param("active") boolean active, @Param("alwaysActive") boolean alwaysActive, @Param("user_id")long user_id);
 	
 	@Modifying
 	@Query("update Accounts set Active = :active, expiration_dt = :expiration_dt where user_id = :user_id")	

@@ -270,7 +270,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        		event.target.value = "";
 	        		event.target.focus();
 	        		$('#'+event.target.id).css({"borderColor":"red"});
-	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
+	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
 	        		VALUATION.hasFieldErrors =  true;
 	        	}else{
 	        		VALUATION.hasFieldErrors =  false;
@@ -297,18 +297,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    update: function(element, valueAccessor) {
 		        var value = ko.utils.unwrapObservable(valueAccessor()),
 		            $el = $(element),
-		            current = $el.datepicker("getDate").getTime();
-		        var parsedValue = null;
-		        try{
-		        	parsedValue = $.datepicker.parseDate( "dd/M/yy", value ).getTime();
-		    	}catch(e){parsedValue = value;}
-		    	
-		    	var myValue = valueAccessor();
-		    	myValue(parsedValue);
-		    	 
-		    	var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-		    	$(element).val(date);
+		            current = $el.datepicker("getDate");
 
+		        if (value - current !== 0) {
+		            $el.datepicker("setDate", value);   
+		        }
 		    }
 		};
 	
@@ -642,16 +635,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy',beforeShow: function() {
-				setTimeout(function(){
-		            $('.ui-datepicker').css('z-index', 999);
-		        }, 0);
-		    } });
+			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
 		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
 			var me = this;
-			VALUATION.showChange(false);
 			var value = item.selectedTransaction();
 			var showChart = false;
 			var displayChart = false;
@@ -667,7 +655,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			if((typeof event != 'undefined' && event.target.checked) || displayChart) {
+			if(event.target.checked || displayChart){
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
 			    me.singleChartUnchart(me, item.tickerCode, value);
@@ -693,7 +681,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	                	selectAllTransaction = selectAllTransaction && item.selectedTransaction();
 	                });
 	                $('#selectAllId').prop('checked', selectAllTransaction);	                
-	                VALUATION.showChange(false);
+	                
 	                return selectAllTransaction;
 	            },
 	            write: function (value) {
@@ -744,7 +732,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		changeTab: function(tabName){
-			VALUATION.showChange(false);
 			var me = this;
 			
 			if( tabName == me.activeTab ) return;
@@ -846,15 +833,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 
 			me.wlNameError = ko.validation.group(VALUATION.newWLName);  //grouping error for wlName only
-			
-			VALUATION.editWLName
-			.extend({
-				minLength: { params: 2, message: displayMessage.watchlist.error },
-				maxLength: { params: 40, message: displayMessage.watchlist.error }
-			});
-
-			this.editWLNameError = ko.validation.group(VALUATION.editWLName);  //grouping error for editWLName only
-
 			me.errors = ko.validation.group(me);			
 			me.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
@@ -891,7 +869,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			VALUATION.showChange(false);
+			
 			//get the performance chart data
 			me.getChartData(me);
 			me.setSortingToDefault();
@@ -941,8 +919,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							VALUATION.selectedValue(data.id);
 							
 							VALUATION.watchlistId = data.id;
-							VALUATION.clearWatchListErrors();
-							VALUATION.editWLName(data.name);	
 							
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
@@ -958,14 +934,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			VALUATION.showChange(false);
+			
 			//Clears add WL after submit
 			VALUATION.newWLName(null);
 		},
 
 		editWLNameSubmit: function(){
 			var me=this;
-			if(me.editWLNameError().length != 0) return;
 			var editedName = VALUATION.editWLName().trim();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
@@ -1010,8 +985,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
-			 $('.confirm-delete').click(function(e) {	
-				 VALUATION.showChange(false);
+			 $('.confirm-delete').click(function(e) {				
 				VALUATION.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });
@@ -1108,7 +1082,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						(!tradeDate && (tickerCode || costAtPurchase || numberOfShares)) || 
 							(!numberOfShares && (tradeDate || costAtPurchase || tickerCode)) ||
 								(!costAtPurchase && (tradeDate || numberOfShares || tickerCode)) ){
-					PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
+					PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors higlighted in red.</p>', width: 400 });
 				}
 			}
 			return flag;
@@ -1116,7 +1090,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		addSaveTransactions: function() {
 			var me = this;
-			VALUATION.showChange(false);
 			var transItemModel = null;
 			var tickerCode = me.selectedCompanyValue();
 			var transactionType = me.selectedAvailableType();
@@ -1127,13 +1100,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if( isFieldsNotEmpty || (VALUATION.record_modified &&
 					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
 				if(isFieldsNotEmpty){
-					var parsedValue = null;
-			        try{
-			        	parsedValue = $.datepicker.parseDate( "dd/M/yy", tradeDate ).getTime();
-			    	}catch(e){parsedValue = tradeDate;}
-			    	
-					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-
+					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate));
 					me.convertTickerAndClosePrice(tickerCode, me);
 					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 					me.transItems.push(transItemModel);
@@ -1320,19 +1287,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    totalCalculation: function(me){
 	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(2);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(2); 
-	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
-	    	var percentageChange = isNaN(percentageChangeVal)? "0.00" :percentageChangeVal;
+	    	var percentageChange = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
-	    	
 	    	if(percentageChange < 0.00){
 	    		$('#percentageChange').html(percentageChange+"%").addClass('negativePerChange');
 	    	}
 	    	else {
 	    		$('#percentageChange').html(percentageChange+"%")
-	    	}	    	
-    	
+	    	}
+	    	
 	    	me.userEnteredPurchasedPrice = 0.00;
 	    	me.userEnteredSellPrice = 0.00;
 	    	me.totalCurrentValue = 0.00;
@@ -1484,7 +1449,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    removePerformanceItem: function(item) {
-	    	VALUATION.showChange(false);
 	    	var me = this;
 			PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
@@ -1544,37 +1508,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    toogleCompanyPlus: function(id, data){	 
-	    	var isChrome = !!window.chrome && !!window.chrome.webstore;
-	    	var isFirefox = typeof InstallTrigger !== 'undefined';
-	    	
-	    	if(isFirefox){
-	    		$(".imgIntCenterAllign").css("padding-bottom", "5.6px");
-	    	}
-
 	       	$('#plus_'+id).hide();
 	    	$('#minus_'+id).show();
 	    	
 	    	$.each(data.multiCompData(), function (index, item) {
 	    		var intTransType = item.intTransactionType === "BUY" ? "Transaction Type <b>BOUGHT</b>" : "Transaction Type <b>SOLD</b>";
-	    		if($('#intMultiComp'+id).text().length > 38){
+	    		if($('#intMultiComp'+id).text().length > 36){
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
-	    			if(isChrome){
-	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
-	    			}else{
-	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10.3px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10.3px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
-	    			}
+		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='padding-top: 15px;height: 10px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='padding-top:15px;height: 10px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 		    		$('#multiCompData'+id).css({"padding-top":"15px"});
 	    		}else{
 	    			$('#comptd'+id).append("<div id='intcompdiv"+item.intId+"' style='padding-left: 22px;padding-top: inherit;font: normal 12px/12px Arial, Helvetica, sans-serif;'>" + intTransType + "</div>");
-	    			if(isChrome){
-	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='height: 25px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='height: 25px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
-	    			}else{
-	    				$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='height: 25.3px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
-			    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='height: 25.3px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
-	    			}
+		    		$('#datetd'+id).append("<div id='intdatediv"+item.intId+"' style='height: 25px;font: normal 12px/12px Arial, Helvetica, sans-serif;'><b>" + item.intTradeDate + "</b></div>");
+		    		$('#sharetd'+id).append("<div id='intsharediv"+item.intId+"' style='height: 25px;font: normal 12px/16px Arial, Helvetica, sans-serif;'>" + item.intNumberOfShares+ "</div>");
 	    		}
 	    	});
 	    	
@@ -1618,7 +1565,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortByCompanyName: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
@@ -1653,7 +1599,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyType: function(){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transType').hasClass('typeasc')){
 	    		$('#transType').removeClass('typeasc').addClass('typedesc');
@@ -1688,7 +1633,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyTradeDate: function(){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transTradeDate').hasClass('dateasc')){
 	    		$('#transTradeDate').removeClass('dateasc').addClass('datedesc');
@@ -1723,7 +1667,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyNumberShare: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transNumShare').hasClass('shareasc')){
 	    		$('#transNumShare').removeClass('shareasc').addClass('sharedesc')
@@ -1758,7 +1701,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyPrice: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transPrice').hasClass('priceasc')){
 	    		$('#transPrice').removeClass('priceasc').addClass('pricedesc');
@@ -1797,7 +1739,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    transSortbyLastPrice: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#transLastPrice').hasClass('lastpriceasc')){
 	    		$('#transLastPrice').removeClass('lastpriceasc').addClass('lastpricedesc')
@@ -1836,7 +1777,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
@@ -1858,7 +1798,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },  
 	    
 	    perSortByCompanyName: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perCompanyName').hasClass('asc')){
 	    		$('#perCompanyName').removeClass('asc').addClass('desc');
@@ -1888,7 +1827,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortbyTradeDate: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perTradeDate').hasClass('dateasc')){
 	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
@@ -1931,7 +1869,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortbyNumShares: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perNumOfShares').hasClass('shareasc')){
 	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
@@ -1973,7 +1910,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortLastClsPrice: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perLastClosePrice').hasClass('closepasc')){
 	    		$('#perLastClosePrice').removeClass('closepasc').addClass('closepdesc')
@@ -2019,7 +1955,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    perSortCurrentValue: function(data, event){
-	    	VALUATION.showChange(false);
 	    	var me = this;
 	    	if($('#perCurPrice').hasClass('currrentpasc')){
 	    		$('#perCurPrice').removeClass('currrentpasc').addClass('currrentpdesc')

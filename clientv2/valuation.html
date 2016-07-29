@@ -71,7 +71,7 @@
 													<img src="img/ico-plus_blue.png" style="cursor: pointer;" alt="" data-bind="attr: { id:'plus_'+$index()}, click: $root.toogleCompanyPlus.bind($root, $index())" />
 													<img src="img/ico-minus_blue.png" style="cursor: pointer;" alt="" data-bind="visible: false, attr: { id:'minus_'+$index()}, click: $root.toogleCompanyMinus.bind($root, $index())" />
 												</div>
-												<div data-bind="attr: { id:'intMultiComp'+$index()}" class="multiTransCompany" style="color: #0e236b;width: 265px"><span style="color: #0e236b;" data-bind="text:companyName, click: $root.toogleCompanyLink.bind($root, $index())"></span>&nbsp;(<span style="color: #0e236b;" data-bind="text:tickerCode,click: $root.toogleCompanyLink.bind($root, $index())"></span>)</div>
+												<div data-bind="attr: { id:'intMultiComp'+$index()}" class="multiTransCompany" style="color: #0e236b; width:240px; word-wrap:break-word;"><span  style="color: #0e236b;" data-bind="text:companyName,click: $root.toogleCompanyLink.bind($root, $index())">&nbsp;</span>&nbsp;(<span style="color: #0e236b;" data-bind="text:tickerCode,click: $root.toogleCompanyLink.bind($root, $index())"></span>)&nbsp;</div>
 											</div>
 										</td>
 									<!-- /ko -->
@@ -130,7 +130,7 @@
 					</ul>
 				</div>
 					<div class="clear mt15p ml10p">
-						Total invested includes all transactions but does not factor in dividends or stock splits. Current value is based on the most recent closing price. Totals do not account for the potential impacts of taxes or any trading of corporate actions. Percentage change is based on the total amount invested vs.the current value of the holding.
+						Total invested includes all transactions. Current value includes purchases and sales. It does not include dividend, stock splits or... Percent change is based on total invested vs. current value.
 				</div>
 				<!-- /ko -->
 			</div>

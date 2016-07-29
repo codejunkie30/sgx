@@ -170,7 +170,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			
 			if(map.get("pcTradingVolume")!=null&&map.get("pcTradingVolume").toString().equals("true")){				
 				Double volume = getLastMonthsVolume(companyService.loadVolumeHistory(company,defaultCurrency), todaysDate);
-				if(volume != 0.0 && comp.getVolume() != null){
+				if(volume > 0.0 && comp.getVolume() != null){
 					Double priceChange = Math.abs(MathUtil.percentChange(volume, comp.getVolume(), 4));
 					if(Math.abs(Double.parseDouble(verifyStringAsNumber(map.get("pcTradingVolumeValue").toString()))) < priceChange){
 						volumeOptions.put(company, companyName);
@@ -281,29 +281,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			alertList.add(alert);
 		}
 		
-		
-		//TODO Refactor to a method?
-		if(noUpdatesFlag&&alertList.isEmpty()){
-			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
-			pair.setRight(errorList);
-			pair.setLeft(null);
-		}else if(watchlist.getCompanies()==null||watchlist.getCompanies().isEmpty()){
-			errorList.add(IEmailAuditMessages.WATCHLIST_UNAVAILABLE);
-			pair.setRight(errorList);
-			pair.setLeft(null);
-		}else if(alertList.size()>0){
-			addKeyDevOptions(alertList, keyDevOptions);
-			pair.setRight(null);
-			pair.setLeft(alertList);
-		}else if(alertList.isEmpty()){
-			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
-			pair.setRight(errorList);
-			pair.setLeft(null);
-		}
-		return pair;
-		}
-
-	private void addKeyDevOptions(List<AlertOption> alertList, Map<String, Map<String, String>> keyDevOptions) {
 		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
 			if(entry.getValue().size() > 0){
 				AlertOption alert = new AlertOption();
@@ -312,7 +289,21 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 				alertList.add(alert);
 			}
 		}
-	}	
+		
+		//TODO Refactor to a method?
+		if(errorList.size()>0){
+			pair.setRight(errorList);
+			pair.setLeft(null);
+		}else if(noUpdatesFlag){
+			errorList.add(IEmailAuditMessages.NO_UPDATE_AVAILABLE);
+			pair.setRight(errorList);
+			pair.setLeft(null);
+		}else{
+			pair.setRight(null);
+			pair.setLeft(alertList);
+		}
+		return pair;
+		}	
 	
 
 	public Estimate getEstimate(List<Estimate> estimate){

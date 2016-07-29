@@ -309,8 +309,7 @@ public class AdminServiceImpl implements AdminService {
 		edit.setActive(true);
 		edit.setAlwaysActive(true);
 		
-		
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate());
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId());
 
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
@@ -342,7 +341,7 @@ public class AdminServiceImpl implements AdminService {
 		edit.setType(AccountType.PREMIUM);
 		edit.setAlwaysActive(false);
 		edit.setExpirationDate(null);
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate());
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId());
 
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);

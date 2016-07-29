@@ -9,7 +9,7 @@
 					<p>Create a StockList with up to 25 companies in each. For each StockList, see the current valuation, key developments, and setup to receive email alerts.</p>
 			</div>
 			
-			<div data-bind="validationOptions: { insertMessages: false}">
+			<div>
 				<div>
 					<!-- ko {if: finalWL().length} -->
 						<select	data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: $root.watchListChange.bind($root) }"></select>
@@ -23,7 +23,6 @@
 				
 				<div data-bind="visible: showChange()" class="edit-watchlist">
 					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
-					<span class="error-messages" data-bind="validationMessage:editWLName">
 				</div>
 			</div>
 			

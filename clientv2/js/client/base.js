@@ -168,10 +168,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			$(element).tabs({
 	            active: 0,
-	            activate: function(event, ui) {
-	            	var headerHeight = 200;
-	            	PAGE.resizeIframeSimple(window.parent.$("body").scrollTop()-headerHeight);
-	            },
 	            load: function(event, ui) {
 	            	KO.cleanNode(ui.panel[0]);
 	            	try { KO.applyBindings(viewModel, ui.panel[0]); } catch(err) {}
@@ -231,10 +227,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			if (vals.hasOwnProperty("id")) {
 				id = vals.id;
 				extra = vals.extra;
-				if(extra!=null&&extra.indexOf('code')>-1) {
-				    if(extra.indexOf('=')>-1)
-					extra='code='+encodeURIComponent(extra.substr(extra.indexOf('=')+1,extra.len));
-				}
 				url = PAGE.getPage(PAGE.pageData.getPage(id), extra); 
 			}
 			else {
@@ -605,7 +597,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 					height: settings.hasOwnProperty("height") ? settings.height : false,
 					width: settings.hasOwnProperty("width") ? settings.width : 550,
             		maxWidth: settings.hasOwnProperty("maxWidth") ? settings.maxWidth : 550,
-            		maxHeight: settings.hasOwnProperty("maxHeight") ? settings.maxHeight : false,
 					scrolling: settings.hasOwnProperty("scrolling") ? settings.scrolling : false,
             		onComplete: function() {
             			if (settings.hasOwnProperty("postLoad")) settings.postLoad(settings)
@@ -962,11 +953,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						
 			var newWLNameLC = PAGE.newWLName();
 			
-			if (newWLNameLC.trim()==="" ) {  alert("Stocklist name is empty."); PAGE.hideLoading(); return; }
-			if (newWLNameLC.trim().length < 2 || newWLNameLC.trim().length > 40) {  alert("Stocklist must be between 1 and 40 characters."); PAGE.hideLoading(); return; }
-			
+			if (newWLNameLC.trim()==="" ) {  alert("Watchlist name is empty."); PAGE.hideLoading(); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Stocklist name already exists."); PAGE.hideLoading(); return; }
-			if (wlLength >= 25) { alert("You can create up to 25 StockLists."); PAGE.hideLoading(); return; }
+			
+			if (wlLength >= 10) { alert("You can create up to 10 StockLists."); PAGE.hideLoading(); return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';

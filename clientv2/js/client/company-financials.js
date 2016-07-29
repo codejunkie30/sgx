@@ -301,8 +301,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
                 yAxis: data.name,
                 zIndex: me.getSeriesType(data.group) == "line" ? 50 : 1,
                 parentName: $(".section", $(trigger).closest("tbody").prev()).text().trim(),
-                color: me.getColor(chart.series),
-                minPointLength : me.getSeriesType(data.group) == "column" ? 3 : 0
+                color: me.getColor(chart.series)
 			};
 				
 			// add the series data

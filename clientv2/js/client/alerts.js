@@ -228,14 +228,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 			this.wlNameError = ko.validation.group(ALERTS.newWLName);  //grouping error for wlName only
 
-			ALERTS.editWLName
-			.extend({
-				minLength: { params: 2, message: displayMessage.watchlist.error },
-				maxLength: { params: 40, message: displayMessage.watchlist.error }
-			});
-
-			this.editWLNameError = ko.validation.group(ALERTS.editWLName);  //grouping error for editWLName only
-
 			this.errors = ko.validation.group(this);			
 			
 			this.errors.subscribe(function () {
@@ -302,7 +294,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				};
 		    }, this);
 			
-			ALERTS.showChange(false);
+			
 			PAGE.resizeIframeSimple();
 		},
 		
@@ -321,7 +313,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			var newWLNameLC = ALERTS.newWLName();
 			
-			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
+			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return; }
 			
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 StockLists.</p>', width: 600 }); return; }
@@ -402,7 +394,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			ALERTS.showChange(false);
+			
 			//Clears add WL after submit
 			ALERTS.newWLName(null);
 		},
@@ -443,8 +435,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 
 		editWLNameSubmit: function(){
-			if(this.editWLNameError().length != 0) return;
-
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
 			
@@ -490,11 +480,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			 $('.confirm-delete').click(function(e) {				
 				ALERTS.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
-				ALERTS.showChange(false);
 	        });
 			
 			 $('.cancel').click(function(e) {
-				 ALERTS.showChange(false);
 				$('.cboxWrapper').colorbox.close();
 	        });		
 		},		
@@ -588,7 +576,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var pcPriceDropError = 0;
 			var pcTradingVolumeError = 0;
 			var estChangePriceDropError = 0;
-			var re = RegExp('^\\d*(\\.\\d{1,3})?$');
 			
 			if(ALERTS.PCPriceCheck() == true){
 				ALERTS.displayList().optionList.pcPriceDropBelow = $('.pcPriceDropBelow').val();
@@ -604,14 +591,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('<p/>').html('Please enter valid numbers.').appendTo('.price-drop.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
-				}
-				else if (!ALERTS.displayList().optionList.pcPriceDropBelow.match(re) || !ALERTS.displayList().optionList.pcPriceRiseAbove.match(re) ||
-						  ALERTS.displayList().optionList.pcPriceDropBelow < .001 || ALERTS.displayList().optionList.pcPriceRiseAbove < .001 || ALERTS.displayList().optionList.pcPriceDropBelow > 100 || ALERTS.displayList().optionList.pcPriceRiseAbove > 100 ) {
-					$('.price-drop.error-messages').empty();
-					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.price-drop.error-messages');
-					PAGE.resizeIframeSimple();
-					pcPriceDropError = 1;
-				}
+				} 
 				else {
 					$('.price-drop.error-messages').empty();
 					pcPriceDropError = 0;
@@ -635,13 +615,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('<p/>').html('Please enter valid numbers.').appendTo('.trade-volume.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
-				}
-				else if (!ALERTS.displayList().optionList.pcTradingVolumeValue.match(re) || ALERTS.displayList().optionList.pcTradingVolumeValue < .001 ||  ALERTS.displayList().optionList.pcTradingVolumeValue > 100) {
-					$('.trade-volume.error-messages').empty();
-					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.trade-volume.error-messages');
-					PAGE.resizeIframeSimple();
-					pcPriceDropError = 1;
-				}
+				} 				
 				else {
 					$('.trade-volume.error-messages').empty();
 					pcTradingVolumeError = 0;
@@ -665,12 +639,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				else if (isNaN(ALERTS.displayList().optionList.estChangePriceDropBelow) || isNaN(ALERTS.displayList().optionList.estChangePriceDropAbove) ) {
 					$('.target-price.error-messages').empty();
 					$('<p/>').html('Please enter valid numbers.').appendTo('.target-price.error-messages');
-					PAGE.resizeIframeSimple();
-					pcPriceDropError = 1;
-				}
-				else if (!ALERTS.displayList().optionList.estChangePriceDropBelow.match(re) || !ALERTS.displayList().optionList.estChangePriceDropAbove.match(re) || ALERTS.displayList().optionList.estChangePriceDropBelow < .001 || ALERTS.displayList().optionList.estChangePriceDropAbove < .001 || ALERTS.displayList().optionList.estChangePriceDropBelow > 100 || ALERTS.displayList().optionList.estChangePriceDropAbove > 100) {
-					$('.target-price.error-messages').empty();
-					$('<p/>').html(displayMessage.watchlist.blankField).appendTo('.target-price.error-messages');
 					PAGE.resizeIframeSimple();
 					pcPriceDropError = 1;
 				}

@@ -134,15 +134,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 
 			me.wlNameError = ko.validation.group(me.newWLName);  //grouping error for wlName only
-			
-			me.editWLName
-			.extend({
-				minLength: { params: 2, message: displayMessage.watchlist.error },
-				maxLength: { params: 40, message: displayMessage.watchlist.error }
-			});
-
-			this.editWLNameError = ko.validation.group(me.editWLName);  //grouping error for editWLName only
-			
 			me.errors = ko.validation.group(me);			
 			me.errors.subscribe(function () {
 				PAGE.resizeIframeSimple();
@@ -171,12 +162,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			me.noResultsFlag = true;
 			me.getKeyDevData(me, me.allCompanies);
-			me.showChange(false);
 		},
 		
 		searchKeyDev: function(){
 			var me = this;
-			me.showChange(false);
 			me.noResultsFlag = true;
 			var tickers = me.allCompanies; 
 			if(!UTIL.isEmpty(me.keydevCompSelectedVal())){
@@ -327,7 +316,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			});
 			
 			if (me.wlNameError().length != 0) return;
-			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
+			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>Watchlist name is empty.</p>', width: 600 }); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), me.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return; }
 			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 StockLists.</p>', width: 600 }); return; }
 			
@@ -351,9 +340,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if (data.name == newWLNameLC){
 							me.selectedValue(data.id);
 							
-							me.clearWatchListErrors();
-							me.editWLName(data.name);
-							
 							me.watchlistCompanies.removeAll();
 							me.kdAnounceCompTransactions.removeAll();
 							me.kdCompanyForecasts.removeAll();
@@ -373,14 +359,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			me.showChange(false);
+			
 			//Clears add WL after submit
 			me.newWLName(null);
 		},
 
 		editWLNameSubmit: function(){
 			var me=this;
-			if(me.editWLNameError().length != 0) return;
 			var editedName = me.editWLName().trim();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
 			var postType = 'POST';
@@ -424,8 +409,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p">Cancel</span></div>', width: 400 }); 
 			
-			 $('.confirm-delete').click(function(e) {
-				 me.showChange(false);
+			 $('.confirm-delete').click(function(e) {				
 				me.deleteWatchlist();
 				$('.cboxWrapper').colorbox.close();
 	        });
@@ -501,8 +485,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		keyDevClick: function(item) {
-			var me = this;
-			me.showChange(false);
 			var source;
 			if (item.source != null){
 				source = item.source
@@ -517,7 +499,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			   "</p>" +
 			   "<div class='news'>" + item.situation + "</div>";
 			
-			PAGE.modal.open({ content: copy, type: 'alert',maxHeight:700,scrolling:true });
+			PAGE.modal.open({ content: copy, type: 'alert' });
 			
 		},
 		
