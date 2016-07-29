@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.TradeEvent;
 import com.wmsi.sgx.model.Company;
+import com.wmsi.sgx.model.CurrencyModel;
 import com.wmsi.sgx.model.Price;
 import com.wmsi.sgx.model.search.CompanyPrice;
 import com.wmsi.sgx.service.CompanyService;
@@ -21,6 +22,7 @@ import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
 import com.wmsi.sgx.service.account.TradeEventService;
+import com.wmsi.sgx.service.currency.CurrencyService;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
@@ -42,6 +44,9 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 	@Autowired
 	private TradeEventService tradeEventService;
+
+	@Autowired
+	private CurrencyService currencySvc;
 
 	/**
 	 * Get intraday price data for the given id within the given market
@@ -201,6 +206,16 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		Price p = new Price();
 		//first call to check the trading currency
 		Company comp = companySearch.getByIdUsingIndexName(id, "sgd_premium", Company.class);;
+		List<CurrencyModel> currencyList = currencySvc.getAllCurrencies();
+		int i = 0;
+		if(currencyList!=null&&!currencyList.isEmpty()){
+			currencies = new String[currencyList.size()];
+			for(CurrencyModel m:currencyList){
+				currencies[i]=m.getCurrencyName();
+				i++;
+			}
+			//currencies =  (String[]) currencySvc.getAllCurrencies().toArray();
+		}
 		if(!Arrays.asList(currencies).contains(comp.getFilingCurrency().toLowerCase())){
 			comp.setFilingCurrency("SGD");
 		}
