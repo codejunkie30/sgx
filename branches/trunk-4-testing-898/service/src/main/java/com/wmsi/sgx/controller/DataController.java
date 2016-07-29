@@ -40,7 +40,7 @@ public class DataController {
 		
 		
 		Gson gson = new Gson(); 
-		return gson.toJson(map); 
+		return gson.toJson(getCurrencyMap()); 
 	}
 	
 	private void createCurrencyCSVFile(){
