@@ -35,7 +35,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				function(data, textStatus, jqXHR){
 					
-					console.log(data);
 					SAVECHANGES.getCurrencies(data);
 				}, 
 				PAGE.customSGXError);
