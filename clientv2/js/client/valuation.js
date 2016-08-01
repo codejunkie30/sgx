@@ -263,18 +263,28 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        });
 	        $(element).on("change", function (event) {
 	        	event.preventDefault();
-	        	var value = event.target.value;
-	        	value = value.replace("$","");
-	        	value = value.replace(/,/gi,"");
-	        	if( (parseFloat(value) === parseFloat("0")) || (value==="")){
-	        		event.target.value = "";
-	        		event.target.focus();
-	        		$('#'+event.target.id).css({"borderColor":"red"});
+	        	var textBox = event.target;
+	        	
+	        	textBox.value = textBox.value.replace("$","");
+	        	textBox.value = textBox.value.replace(/,/gi,"");
+	        	
+	        	var max = 99999999.999;
+	        	if(textBox.value > max){
+	        		textBox.value = "";
+	        		textBox.focus();
+	        	}else{
+	        		textBox.value = Number(textBox.value.toString().match(/^\d+(?:\.\d{0,3})?/));
+	        	}
+	        	
+	        	if( (parseFloat(textBox.value) === parseFloat("0")) || (textBox.value==="")){
+	        		textBox.value = "";
+	        		textBox.focus();
+	        		$('#'+textBox.id).css({"borderColor":"red"});
 	        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
 	        		VALUATION.hasFieldErrors =  true;
 	        	}else{
 	        		VALUATION.hasFieldErrors =  false;
-	        		$('#'+event.target.id).css({"borderColor":""});
+	        		$('#'+textBox.id).css({"borderColor":""});
 	        	}
 	        });
 	    }    
@@ -320,7 +330,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	            var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
                 symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currency.symbol);
             	var returnValue = symbol + value;
-	            return returnValue === "$0.00" ? "-" : returnValue;
+	            return returnValue === "$0.000" ? "-" : returnValue;
 	        });
 	    }
 	};
@@ -330,7 +340,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    init: function (element, valueAccessor, allBindingsAccessor) {
 	    	var value = +(ko.utils.unwrapObservable(valueAccessor()) || 0),
             symbol = ko.utils.unwrapObservable(allBindingsAccessor().symbol === undefined ? allBindingsAccessor().symbol : ko.bindingHandlers.currencyInput.symbol);
-    		$(element).val(symbol + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+    		$(element).val(symbol + value.toFixed(3).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    }
 	};
 	
@@ -899,7 +909,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 				
 		addWatchlist: function(){
-			VALUATION.showChange(false);
 			var me = this;
 			var newWLNameLC = VALUATION.newWLName();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
@@ -1008,7 +1017,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		confirmDelete: function(){
 			var deleteName = VALUATION.editWLName();
-			VALUATION.showChange(false);
+			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {	
@@ -1229,20 +1238,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    calcCurrentValue: function(item, me){
 	    	var numberOfShares = parseFloat(item.numberOfShares);
 	    	var liveClosingPrice = parseFloat(me.liveClosingPrice);
-	    	return (numberOfShares * liveClosingPrice).toFixed(2);
+	    	return (numberOfShares * liveClosingPrice).toFixed(3);
 	    },
 	    
 	    calcMultiCompCurrentValue: function(noOfShares, me){
 	    	var numberOfShares = parseFloat(noOfShares);
 	    	var liveClosingPrice = parseFloat(me.liveClosingPrice);
-	    	return (numberOfShares * liveClosingPrice).toFixed(2);
+	    	return (numberOfShares * liveClosingPrice).toFixed(3);
 	    },
 	    
 	    calcTotalInvested: function(item, me){
     		if(item.transactionType === "BUY"){
-    			me.userEnteredPurchasedPrice = parseFloat( parseFloat(me.userEnteredPurchasedPrice) + ( item.numberOfShares * item.costAtPurchase) ).toFixed(2);
+    			me.userEnteredPurchasedPrice = parseFloat( parseFloat(me.userEnteredPurchasedPrice) + ( item.numberOfShares * item.costAtPurchase) ).toFixed(3);
     		}else{
-    			me.userEnteredSellPrice = parseFloat( parseFloat(me.userEnteredSellPrice) + (item.numberOfShares * item.costAtPurchase) ).toFixed(2);
+    			me.userEnteredSellPrice = parseFloat( parseFloat(me.userEnteredSellPrice) + (item.numberOfShares * item.costAtPurchase) ).toFixed(3);
     		}
 	    },
 	    
@@ -1258,7 +1267,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    			sellShare += parseFloat(item.numberOfShares);
 	    		}
 	    	}
-	    	noOfShares = (parseFloat(buyShare) - parseFloat(sellShare)).toFixed(2);
+	    	noOfShares = (parseFloat(buyShare) - parseFloat(sellShare)).toFixed(3);
 	    	return noOfShares;
 	    },
 	    
@@ -1288,7 +1297,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    			me.calcTotalInvested(item, me);
 	    			var currentValue  = me.calcCurrentValue(item, me);
 	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
-					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(2), 
+					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(3), 
 																item.costAtPurchase, me.liveClosingPrice, item.id, false, currentValue);
 					me.displayTransactions.push(transItemModel);
 	    		}
@@ -1319,9 +1328,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    totalCalculation: function(me){
-	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(2);
-	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(2); 
-	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(2); 
+	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(3);
+	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(3); 
+	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3); 
 	    	var percentageChange = isNaN(percentageChangeVal)? "0.00" :percentageChangeVal;
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
@@ -1366,7 +1375,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	for(i =0; i<data.length; i++){
 	    		var item = data[i];
 	    		me.calcTotalInvested(item, me);
-	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(2), item.costAtPurchase, item.id);
+	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(3), item.costAtPurchase, item.id);
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
 	    	
@@ -1433,13 +1442,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    		 if(item.tickerCode() === tickerCode){
 		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 		    			 if(item.transactionType() === "BUY"){
-		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
+		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }else{
-		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
+		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }
 		    		 }
 		    	 });
-		    	 bought = parseFloat( parseFloat(bought) - parseFloat(numberOfShares) ).toFixed(2);
+		    	 bought = parseFloat( parseFloat(bought) - parseFloat(numberOfShares) ).toFixed(3);
 		    	 if(parseFloat(sell) > parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
@@ -2097,9 +2106,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							if( new Date(item.tradeDate()) < new Date(selldate) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(selldate).setHours(0,0,0,0) )){
 								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 								if(item.transactionType() === "BUY"){
-									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(2);
+									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
 								}else{
-									sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(2);
+									sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
 								}
 							}
 						}
@@ -2199,7 +2208,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.intTradeDate = !UTIL.isEmpty(tradeDate) ? $.datepicker.formatDate("dd/M/yy", Date.fromISO(tradeDate)) : "";
     	me.tradeDateForSort = !UTIL.isEmpty(tradeDate) ? tradeDate : "";
     	me.intNumberOfShares = !UTIL.isEmpty(numberOfShares) ? numberOfShares.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): "" ;
-    	me.intCostAtPurchase = !UTIL.isEmpty(costAtPurchase) ? "$" + costAtPurchase.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
+    	me.intCostAtPurchase = !UTIL.isEmpty(costAtPurchase) ? "$" + costAtPurchase.toFixed(3).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"): "";
     	me.intId = id;
     }
 	
