@@ -179,6 +179,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			this.actualEstimates(JSON.parse(AL).alerts[0].actualEstimates);
 
 			me.searchInput.subscribe(function(data){
+				ALERTS.showChange(false);
 				//ratelimiting the search 200ms
 				if(this._localTimeout) {
 					clearTimeout(this._localTimeout);
@@ -311,6 +312,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
         },
 		
 		addWatchlist: function(){
+			ALERTS.showChange(false);
 			if(this.wlNameError().length != 0) return;
 			var wlLength = ALERTS.finalWL().length;
 			ALERTS.addWatchlistName([]);
@@ -324,7 +326,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			if (newWLNameLC.trim()==="" ) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name is empty.</p>', width: 600 }); return; }
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), ALERTS.addWatchlistName() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>StockList name already exists.</p>', width: 600 }); return; }
 			
-			if (wlLength >= 10) { PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 StockLists.</p>', width: 600 }); return; }
+			if (wlLength >= 10) { ALERTS.showChange(false);PAGE.modal.open({ type: 'alert',  content: '<p>You can create up to 10 StockLists.</p>', width: 600 }); return; }
 
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
@@ -402,7 +404,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}, 
 				PAGE.customSGXError);	
 			
-			ALERTS.showChange(false);
 			//Clears add WL after submit
 			ALERTS.newWLName(null);
 		},
@@ -523,6 +524,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				undefined);			
 		},
 		deleteCompany: function(data){
+			ALERTS.showChange(false);
 			PAGE.modal.open({ content: '<p>By deleting this company from your StockList, you will also be removing any associated transactions.</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
@@ -539,7 +541,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 
 		addCompany: function(data){
-
+			ALERTS.showChange(false);
 			if (ALERTS.companies().length >= 25) { PAGE.modal.open({ type: 'alert',  content: '<p>You have reached the maximum number of companies that can be included in a StockList.</p>', width: 300 }); return; }
 			if ($.inArray( data.tickerCode, ALERTS.companies() ) != -1) {  PAGE.modal.open({ type: 'alert',  content: '<p>This company already exists in this StockList.</p>', width: 600 }); return; }
 			
@@ -550,7 +552,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 		},
 		searchCompanies: function(){
-
+			ALERTS.showChange(false);
 			//noop
 
 		},
@@ -583,6 +585,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 
 		saveWatchlist: function(callback){
+			ALERTS.showChange(false);
 			var displayMessage = ALERTS.messages.messages[0];
 			var errors = 0;
 			var pcPriceDropError = 0;
