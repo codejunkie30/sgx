@@ -899,6 +899,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 				
 		addWatchlist: function(){
+			VALUATION.showChange(false);
 			var me = this;
 			var newWLNameLC = VALUATION.newWLName();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
@@ -1007,7 +1008,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		confirmDelete: function(){
 			var deleteName = VALUATION.editWLName();
-			
+			VALUATION.showChange(false);
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {	

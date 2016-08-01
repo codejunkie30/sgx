@@ -315,6 +315,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 		addWatchlist: function(){
 			var me = this;
+			me.showChange(false);
 			var newWLNameLC = me.newWLName();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
@@ -380,6 +381,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 
 		editWLNameSubmit: function(){
 			var me=this;
+			me.showChange(false);
 			if(me.editWLNameError().length != 0) return;
 			var editedName = me.editWLName().trim();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/rename";
@@ -420,6 +422,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		confirmDelete: function(){
 			var me = this;
+			me.showChange(false);
 			var deleteName = me.editWLName();
 			
 			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p">Cancel</span></div>', width: 400 }); 
