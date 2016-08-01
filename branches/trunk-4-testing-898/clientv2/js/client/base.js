@@ -840,7 +840,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								params,
 								function(data, textStatus, jqXHR){
 									
-									console.log(data);
 									PAGE.getCurrencies(data);
 								              PAGE.selectedCurrency(UTILS.retrieveCurrency().toLowerCase());
 
