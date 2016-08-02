@@ -281,6 +281,7 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			alertList.add(alert);
 		}
 		
+		addKeyDevOptions(alertList, keyDevOptions);
 		
 		//TODO Refactor to a method?
 		if(noUpdatesFlag&&alertList.isEmpty()){
@@ -292,7 +293,6 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 			pair.setRight(errorList);
 			pair.setLeft(null);
 		}else if(alertList.size()>0){
-			addKeyDevOptions(alertList, keyDevOptions);
 			pair.setRight(null);
 			pair.setLeft(alertList);
 		}else if(alertList.isEmpty()){
