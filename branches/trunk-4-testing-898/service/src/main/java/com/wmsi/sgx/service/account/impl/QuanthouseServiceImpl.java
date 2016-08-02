@@ -211,7 +211,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		if(currencyList!=null&&!currencyList.isEmpty()){
 			currencies = new String[currencyList.size()];
 			for(CurrencyModel m:currencyList){
-				currencies[i]=m.getCurrencyName();
+				currencies[i]=m.getCurrencyName().substring(0, m.getCurrencyName().lastIndexOf("premium")-1).toLowerCase();
 				i++;
 			}
 			}else{
