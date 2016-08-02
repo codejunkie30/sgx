@@ -6,7 +6,9 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 			chart : {
 				backgroundColor : 'rgba(255, 255, 255, 0.1)',
 				height : 445,
-				width : 1000
+				width : 1000,
+				spacingLeft:50,
+				spacingRight:50
 			},
 			
 			rangeSelector: {
@@ -69,14 +71,13 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
                     	fontWeight: "bold"
                     },
     				x: 10
-    			}
+    			},    			
+    			ordinal:false,
+    			minTickInterval: 24 * 3600 * 1000
 
     		},
 
     		yAxis : [{
-				/*lineWidth : 2,
-				animation : false,
-				minRange : .001,*/
 				labels : {
 					formatter: function () {
 						return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -85,14 +86,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 						color : "#000000",
 						fontWeight : "bold"
 					}
-				},
-				/*title: {
-					style : {
-						color : "#000000",
-						fontWeight : "bold"
-					},
-			          text: 'PRICE'
-		        }*/
+				}
 			}],
 
             plotOptions: {
