@@ -909,6 +909,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 				
 		addWatchlist: function(){
+			VALUATION.showChange(false);
 			var me = this;
 			var newWLNameLC = VALUATION.newWLName();
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
