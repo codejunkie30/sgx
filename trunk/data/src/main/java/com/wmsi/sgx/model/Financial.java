@@ -12,7 +12,6 @@ public class Financial{
 	@ConversionAnnotation(name = "IQ_ABS_PERIOD")
 	private String absPeriod;
 	
-	
 	@ConversionAnnotation(name = "IQ_ASSET_TURNS")
 	private Double assetTurns;
 	
@@ -95,9 +94,13 @@ public class Financial{
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI_1YR_ANN_GROWTH")
 	private Double netIncome1YrAnnGrowth;
+	
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_NI_MARGIN")
 	private Double netIncomeMargin;
+	
+	@FXAnnotation
+	private Double netProfitMargin;
 	
 	@ConversionAnnotation(name = "IQ_NPPE")
 	private Double netPpe;
@@ -121,6 +124,11 @@ public class Financial{
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RETURN_CAPITAL")
 	private Double returnCapital;
+	
+	@FXAnnotation
+	@ConversionAnnotation(name = "IQ_RETURN_EQUITY")
+	private Double returnOnEquity;
+	
 	@FXAnnotation
 	@ConversionAnnotation(name = "IQ_RETURN_EQUITY")
 	private Double returnEquity;
@@ -389,14 +397,22 @@ public class Financial{
 	public void setNetIncome1YrAnnGrowth(Double netIncome1YrAnnGrowth) {
 		this.netIncome1YrAnnGrowth = netIncome1YrAnnGrowth;
 	}
+	public Double getNetProfitMargin() {
+		return netProfitMargin;
+	}
+
+	public void setNetProfitMargin(Double netProfitMargin) {
+		this.netProfitMargin = netProfitMargin;
+		this.netIncomeMargin = netProfitMargin;
+	}
 
 	public Double getNetIncomeMargin() {
-		return netIncomeMargin;
+		return netProfitMargin;
 	}
 
-	public void setNetIncomeMargin(Double netIncomeMargin) {
-		this.netIncomeMargin = netIncomeMargin;
-	}
+	/*public void setNetIncomeMargin(Double netIncomeMargin) {
+		this.netIncomeMargin = netProfitMargin;
+	}*/
 
 	public Double getNetPpe() {
 		return netPpe;
@@ -461,14 +477,24 @@ public class Financial{
 	public void setReturnCapital(Double returnCapital) {
 		this.returnCapital = returnCapital;
 	}
+	
+	public Double getReturnOnEquity() {
+		return returnOnEquity;
+	}
+
+	public void setReturnOnEquity(Double returnOnEquity) {
+		this.returnOnEquity = returnOnEquity;
+		this.returnEquity = returnOnEquity;
+	}
+
 
 	public Double getReturnEquity() {
-		return returnEquity;
+		return returnOnEquity;
 	}
 
-	public void setReturnEquity(Double returnEquity) {
-		this.returnEquity = returnEquity;
-	}
+	/*public void setReturnEquity(Double returnEquity) {
+		this.returnEquity = returnOnEquity;
+	}*/
 
 	public String getTickerCode() {
 		return tickerCode;
@@ -573,10 +599,11 @@ public class Financial{
 				.add("grossProfit", grossProfit).add("longTermDebt", longTermDebt)
 				.add("minorityInterest", minorityInterest).add("netChange", netChange).add("netIncome", netIncome)
 				.add("netIncome1YrAnnGrowth", netIncome1YrAnnGrowth).add("netIncomeMargin", netIncomeMargin)
+				.add("netProfitMargin", netProfitMargin)
 				.add("netPpe", netPpe).add("payoutRatio", payoutRatio).add("periodDate", periodDate)
 				.add("periodEndDate", periodEndDate).add("quickRatio", quickRatio)
 				.add("retainedEarnings", retainedEarnings).add("returnAssets", returnAssets)
-				.add("returnCapital", returnCapital).add("returnEquity", returnEquity).add("tickerCode", tickerCode)
+				.add("returnCapital", returnCapital).add("returnEquity", returnEquity).add("returnOnEquity", returnOnEquity).add("tickerCode", tickerCode)
 				.add("totalAssets", totalAssets).add("totalCurrentAssets", totalCurrentAssets)
 				.add("totalCurrentLiabily", totalCurrentLiabily).add("totalDebtEquity", totalDebtEquity)
 				.add("totalEquity", totalEquity).add("totalLiability", totalLiability).add("totalRevenue", totalRevenue)
@@ -590,8 +617,8 @@ public class Financial{
 				cashFinancing, cashInvesting, cashOperations, commonEquity1YrAnnGrowth, commonStock, currentRatio,
 				dividendsPerShare, ebitda, ebitda1YrAnnGrowth, ebitdaInterest, ebitdaMargin, eps, eps1YrAnnGrowth,
 				filingDate, filingCurrency, grossMargin, grossProfit, longTermDebt, minorityInterest, netChange,
-				netIncome, netIncome1YrAnnGrowth, netIncomeMargin, netPpe, payoutRatio, periodDate, periodEndDate,
-				quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, tickerCode, totalAssets,
+				netIncome, netIncome1YrAnnGrowth, netIncomeMargin,netProfitMargin, netPpe, payoutRatio, periodDate, periodEndDate,
+				quickRatio, retainedEarnings, returnAssets, returnCapital, returnEquity, returnOnEquity, tickerCode, totalAssets,
 				totalCurrentAssets, totalCurrentLiabily, totalDebtEquity, totalEquity, totalLiability, totalRevenue,
 				totalRev1YrAnnGrowth, totalRev3YrAnnGrowth, totalRev5YrAnnGrowth);
 	}
@@ -625,6 +652,7 @@ public class Financial{
 					&& Objects.equal(this.minorityInterest, that.minorityInterest)
 					&& Objects.equal(this.netChange, that.netChange) && Objects.equal(this.netIncome, that.netIncome)
 					&& Objects.equal(this.netIncome1YrAnnGrowth, that.netIncome1YrAnnGrowth)
+					&& Objects.equal(this.netProfitMargin, that.netProfitMargin)
 					&& Objects.equal(this.netIncomeMargin, that.netIncomeMargin)
 					&& Objects.equal(this.netPpe, that.netPpe) && Objects.equal(this.payoutRatio, that.payoutRatio)
 					&& Objects.equal(this.periodDate, that.periodDate)
@@ -634,6 +662,7 @@ public class Financial{
 					&& Objects.equal(this.returnAssets, that.returnAssets)
 					&& Objects.equal(this.returnCapital, that.returnCapital)
 					&& Objects.equal(this.returnEquity, that.returnEquity)
+					&& Objects.equal(this.returnOnEquity, that.returnOnEquity)
 					&& Objects.equal(this.tickerCode, that.tickerCode)
 					&& Objects.equal(this.totalAssets, that.totalAssets)
 					&& Objects.equal(this.totalCurrentAssets, that.totalCurrentAssets)
