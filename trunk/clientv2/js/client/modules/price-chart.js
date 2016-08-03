@@ -218,11 +218,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 						var firstRun = true;
 						var today = new Date();
 						var todaysDate = today.setHours(0,0,0,0);
-						CHART.getPremData(todaysDate);
+						CHART.getPremData(todaysDate,series);
 						setInterval(function () {							
 							var today = new Date();
 							var todaysDate = today.setMinutes(today.getMinutes() - 1);
-							CHART.getPremData(todaysDate);											
+							CHART.getPremData(todaysDate,series);											
 						}, 60000);
 					}
 				}
@@ -232,7 +232,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				if (typeof finished !== "undefined") finished();
 			});
 		},
-		getPremData: function(todaysDate){			
+		getPremData: function(todaysDate,series){			
 			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
 			var postType = 'POST';
 			var params = { "id": CHART.currentTicker, "date": todaysDate };
