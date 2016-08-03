@@ -290,6 +290,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    }    
 	};
 	
+	ko.bindingHandlers.companiesOnchange = {
+	    init: function (element) {
+	        $(element).on("change", function (event) {
+	        	event.preventDefault();
+	        	var textBox = event.target;
+	        	if(textBox.value){
+	        		$('#'+textBox.id).css({"borderColor":""});
+	        	}
+	        });
+	    }    
+	};
+	
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
@@ -2082,7 +2094,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var loopFlag = true;
 	    	var bought = 0.00;
 	    	var sell = 0.00;
-	    	sellDates = [];
+	    	var sellDates = [];
+	    	var ids = [];
 	    	
 	    	$.each(me.validatedCompanies, function(i, data){
 	    		if(data === sentItem.tickerCode()){
@@ -2096,6 +2109,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
    	   	    			 if(item.transactionType() === "SELL"){
    	   	    				 sellDates.push(item.tradeDate());
+   	   	    				 ids.push(item.id());
    	   	    			 }
 	   	    		 }
 	    	 	});
@@ -2116,6 +2130,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					});
 					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
 						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+						 $.each(ids, function(i, id){
+							 if( UTIL.isEmpty(id) ){
+								 $('#tradeDate').css({"borderColor":"red"}) ;
+								 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
+							 }
+						 });
 						 if( !UTIL.isEmpty(sentItem.id()) ){
 							 $('#date'+sentItem.id()).css({"borderColor":"red"});
 							 $('#share'+sentItem.id()).css({"borderColor":"red"});
@@ -2123,7 +2143,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							 $('#tradeDate').css({"borderColor":"red"}) ;
 							 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
 						 }
-						 
 						 me.validateFlag = false;
 						 VALUATION.hasFieldErrors = true;
 					}else{
@@ -2141,7 +2160,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    buySellValidate: function(){
 	    	var me = this;
-    		
+	    	$('#tradeDate').css({"borderColor":""}) ;
+			$('#initialNumberOfShares').css({"borderColor":""}) ;
 			ko.utils.arrayForEach(me.transItems(), function (item) {
 				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
 					me.validateFlag = false;
