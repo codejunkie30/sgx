@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,6 +141,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				model.setDescription(record[1]);
 				currencyModelList.add(model);
 			}
+			checkForCurrencyChanges(currencyModelList);
 			//delete existing records
 			currencyService.deleteAll();
 			return currencyService.addCurrencies(currencyModelList);
@@ -152,6 +155,31 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			IOUtils.closeQuietly(reader);
 		}
 		
+	}
+
+	private void checkForCurrencyChanges(List<CurrencyModel> currencyModelList) {
+		//check if new currency added or deleted
+		List<CurrencyModel> oldList = currencyService.getAllCurrencies();
+		List<CurrencyModel> newCurrencyList = new ArrayList<CurrencyModel>();
+		newCurrencyList.addAll(currencyModelList);
+		StringBuffer sb = new StringBuffer();
+		boolean newFlag=newCurrencyList.removeAll(oldList);
+		boolean oldFlag=oldList.removeAll(currencyModelList);
+		if(!oldList.isEmpty()&&oldFlag){
+			sb.append("\n Following Currencies removed :- "+oldList.toString());
+		}
+		if(!newCurrencyList.isEmpty()&&newFlag){
+			sb.append(" \n Following Currencies added :- "+newCurrencyList.toString());
+		}
+		if(sb.length()>0){
+			//send email
+			try {
+				emailService.send(toSite, " Currency updates ", sb.toString());
+			} catch (MessagingException e) {
+				// Don't stop the process ; continue with dataload
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void setCapIQService(CapIQService capIQService) {
