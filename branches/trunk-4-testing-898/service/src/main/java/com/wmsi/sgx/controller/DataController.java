@@ -62,10 +62,11 @@ public class DataController {
 			String currencyName = m.getCurrencyName().substring(0, m.getCurrencyName().lastIndexOf("premium")-1).toLowerCase();
 			currencyMap.put("id",currencyName);
 			currencyMap.put("name",m.getDescription());
-			++i;
 			if(currencyName.equalsIgnoreCase("sgd")){
+				currencyResponseList.remove(0);
 				currencyResponseList.add(0,currencyMap);
 			}else{
+				++i;
 				currencyResponseList.add(i,currencyMap);
 			}
 		}
