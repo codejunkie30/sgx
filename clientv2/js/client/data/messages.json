@@ -44,7 +44,7 @@
 				"invalidUser": "Your account is currently disabled."	
 			},
 			"purchaseAccount": {
-				"success": "You have successfully purchased an SGX Plus subscription.",
+				"success": "You have successfully purchased an StockFacts Plus subscription.",
 				"cancelFail": "There was an error processing your transaction. Please try again."
 			},
 			"watchlist": {
