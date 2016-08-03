@@ -162,7 +162,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
+							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="companiesOnchange, options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType" ></select></td>
 							<td><input type="text" id="tradeDate" data-bind="value: initialTradeDate" readonly="readonly"/></td>
 							<td><input type="text" id="initialNumberOfShares" data-bind="valuationNumeric, valueUpdate: 'afterkeydown', value: initialNumberOfShares"/></td>
