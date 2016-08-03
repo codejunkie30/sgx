@@ -2148,8 +2148,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}else{
 						$('#date'+sentItem.id()).css({"borderColor":""});
 						$('#share'+sentItem.id()).css({"borderColor":""});
-						$('#tradeDate').css({"borderColor":""}) ;
-						$('#initialNumberOfShares').css({"borderColor":""}) ;
 						VALUATION.hasFieldErrors = false;
 					}
 					bought = 0.00;
