@@ -51,19 +51,21 @@ public class KeyDevsServiceImpl implements KeyDevsService{
 			KeyDevs keyDevs = keyDevsSearch.getById(req.getTickerCode(), KeyDevs.class);
 			
 			List<KeyDev> filtered = new ArrayList<KeyDev>();
-			
+			if(req.getTo() == null){
+				DateFormat dF = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = new Date();
+				req.setTo(dF.format(date));
+			}
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(getTime(req.getTo()));
+			calendar.add(Calendar.DATE,1);
 			for(KeyDev dev : keyDevs.getKeyDevs()){
 				Long devDate = dev.getDate().getTime();
 				
-				if(req.getTo() == null){
-					DateFormat dF = new SimpleDateFormat("yyyy-MM-dd");
-					Date date = new Date();
-					req.setTo(dF.format(date));
-				}
 				if (req.getFrom() == null)
 					filtered.add(dev);
 				else if(devDate.compareTo(getTime(req.getFrom())) > 0 
-					&& devDate.compareTo(getTime(req.getTo())) < 0){
+					&& devDate.compareTo(calendar.getTime().getTime()) < 0){
 					
 					filtered.add(dev);
 				}		
