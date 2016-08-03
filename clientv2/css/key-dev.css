@@ -80,6 +80,7 @@ h3, h3 span {
 
 div.news {
 	margin-bottom: 10px;
+	cursor:default;
 }
 
 .matches .key-company {

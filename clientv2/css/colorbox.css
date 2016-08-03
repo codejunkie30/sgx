@@ -21,7 +21,7 @@
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay{background:#EEE;}
-#colorbox{outline:0; border: 5px solid rgba(122, 122, 122, .2); -webkit-background-clip: padding-box; background-clip: padding-box; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; }
+#colorbox{outline:0; border: 5px solid rgba(122, 122, 122, .2); -webkit-background-clip: padding-box; background-clip: padding-box; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px;cursor:pointer; }
     #cboxContent{background:#fff; overflow:hidden; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; }
         .cboxIframe{background:#fff;}
         #cboxError{padding:50px; border:1px solid #ccc;}
