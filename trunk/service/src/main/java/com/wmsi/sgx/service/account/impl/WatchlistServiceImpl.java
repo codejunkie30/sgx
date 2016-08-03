@@ -120,14 +120,25 @@ public class WatchlistServiceImpl implements WatchlistService {
 				
 				
 				}
-			if(companies.length != existingCompanies.size())
+			if(companies.length != existingCompanies.size()){
 				addCompanies(user, id.toString(), existingCompanies);
+				deleteMissingCompaniesTransactions(id,ret);
+			}
 			
 		}
 		return ret;
 		
 	}
 	
+	private void deleteMissingCompaniesTransactions(Long id, List<String> ret) {
+		for (String tickerCode : ret) {
+			WatchlistTransaction[] deleteCompanyTransactions = transactionRepository.findByTickerCode(id, tickerCode);
+			if (deleteCompanyTransactions.length >= 1) {
+				transactionRepository.delete(Arrays.asList(deleteCompanyTransactions));
+			}
+		}
+	}
+
 	@Override
 	public List<WatchlistModel> getWatchlist(User user){
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
