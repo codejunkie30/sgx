@@ -55,13 +55,19 @@ public class DataController {
 		Gson gson = new Gson();	
 		List<CurrencyModel> currencyList = currencySvc.getAllCurrencies();
 		ArrayList currencyResponseList = new ArrayList();
+		currencyResponseList.add(0,new HashMap<String,String>());
 		int i=0;
 		for(CurrencyModel m : currencyList){
 			Map<String,String>currencyMap = new HashMap<String,String>();
-			currencyMap.put("id",m.getCurrencyName().substring(0, m.getCurrencyName().lastIndexOf("premium")-1).toLowerCase());
+			String currencyName = m.getCurrencyName().substring(0, m.getCurrencyName().lastIndexOf("premium")-1).toLowerCase();
+			currencyMap.put("id",currencyName);
 			currencyMap.put("name",m.getDescription());
-			i++;
-			currencyResponseList.add(currencyMap);
+			++i;
+			if(currencyName.equalsIgnoreCase("sgd")){
+				currencyResponseList.add(0,currencyMap);
+			}else{
+				currencyResponseList.add(i,currencyMap);
+			}
 		}
 		return currencyResponseList;
 	}
