@@ -187,6 +187,17 @@
 	border-radius: 4px;
 }
 
+.clear-button {
+	display: inline-block;
+	background: #0e236b;
+	-webkit-border-radius: 4px;
+	padding: 8px 15px 8px 15px;
+	color: #fff !important;
+	cursor: pointer;
+	text-decoration: none !important;
+	border-radius: 4px;
+}
+
 .save-button {
 	display: inline-block;
 	background: #0e236b;

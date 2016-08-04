@@ -1139,6 +1139,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			return flag;
 		},
 		
+		clearTransaction: function(){
+			this.clearFieldData();
+		},
+		
 		addSaveTransactions: function() {
 			var me = this;
 			VALUATION.showChange(false);
