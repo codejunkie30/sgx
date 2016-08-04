@@ -237,8 +237,8 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			var postType = 'POST';
 			var params = { "id": CHART.currentTicker };
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined,function(data) {
-			var price = '{"price":{"bidPrice":null,"askPrice":null,"highPrice":0.73,"lowPrice":0.72,"lastPrice":0.72,"lastTradeVolume":0.1433,"openPrice":0.73,"closePrice":0.72,"previousDate":1469125800000,"currentDate":1469125800000,"lastTradeTimestamp":1470182400000,"tradingCurrency":"SGD","volume":2219800.0,"percentChange":0.0,"change":0.0}}';
-		    data = JSON.parse(price);
+			/*var price = '{"price":{"bidPrice":null,"askPrice":null,"highPrice":0.73,"lowPrice":0.72,"lastPrice":0.72,"lastTradeVolume":0.1433,"openPrice":0.73,"closePrice":0.72,"previousDate":1469125800000,"currentDate":1469125800000,"lastTradeTimestamp":1470182400000,"tradingCurrency":"SGD","volume":2219800.0,"percentChange":0.0,"change":0.0}}';
+		    data = JSON.parse(price);*/
 			var chart = $('#price-volume').highcharts();
 			if (data.price){
 				data = data.price;
