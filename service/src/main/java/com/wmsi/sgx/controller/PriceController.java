@@ -1,5 +1,6 @@
 package com.wmsi.sgx.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.elasticsearch.common.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,9 +113,39 @@ public class PriceController {
 	}
 	
 	@RequestMapping(value="/price/pricingHistory")
-	public Map<String, List<Price>> getPricingHistory(@RequestBody PriceCall priceCall) throws QuanthouseServiceException{
+	public Map<String, List<Price>> getPricingHistory(HttpServletRequest request, @RequestBody PriceCall priceCall) throws QuanthouseServiceException, CompanyServiceException{
+		log.info("price requested for id: --{}--",priceCall.getId() );
+		if(priceCall.getId()== null || priceCall.getId().isEmpty()){
+			throw new CompanyServiceException("Request company ticker is null");
+		}
+		Price p = new Price();
+		User user = findUserFromToken(request);
+		AccountModel acct = new AccountModel();
+		if(user != null)
+			acct = accountService.getAccountForUsername(user.getUsername());
+		else
+			acct.setType(AccountType.TRIAL);
 		Map<String, List<Price>> ret = new HashMap<String, List<Price>>();
-		ret.put("pricingHistory", service.getPricingHistory(market, priceCall.getId(), priceCall.getDate()));
+		List<Price> price = new ArrayList<>();
+					
+		try {
+			if (acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN)
+					|| acct.getType().equals(AccountType.MASTER)) {
+				Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
+				price = service.getPricingHistory(market, priceCall.getId(), date);
+			} else {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.HOUR, -3);
+				Date date = new DateTime(cal.getTime()).withTimeAtStartOfDay().toDate();
+				price = service.getPricingHistory(market, priceCall.getId(), date);
+
+			}
+		}
+		catch(QuanthouseServiceException e){
+			log.error("Failed to get intra day price from QuanthouseService");
+		}
+		ret.put("pricingHistory", price);		
+		
 		return ret;
 		
 	}
