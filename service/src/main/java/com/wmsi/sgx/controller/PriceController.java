@@ -114,7 +114,7 @@ public class PriceController {
 	
 	@RequestMapping(value="/price/pricingHistory")
 	public Map<String, List<Price>> getPricingHistory(HttpServletRequest request, @RequestBody PriceCall priceCall) throws QuanthouseServiceException, CompanyServiceException{
-		log.info("price requested for id: --{}--",priceCall.getId() );
+		log.info("Real time price requested for id: --{}--",priceCall.getId() );
 		if(priceCall.getId()== null || priceCall.getId().isEmpty()){
 			throw new CompanyServiceException("Request company ticker is null");
 		}
