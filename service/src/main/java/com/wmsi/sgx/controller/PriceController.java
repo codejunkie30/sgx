@@ -131,12 +131,14 @@ public class PriceController {
 		try {
 			if (acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN)
 					|| acct.getType().equals(AccountType.MASTER)) {
-				Date date = new DateTime(new Date()).withTimeAtStartOfDay().toDate();
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.MINUTE, -1);
+				Date date = new DateTime(cal.getTime()).toDate();
 				price = service.getPricingHistory(market, priceCall.getId(), date);
 			} else {
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.HOUR, -3);
-				Date date = new DateTime(cal.getTime()).withTimeAtStartOfDay().toDate();
+				cal.add(Calendar.MINUTE, -16);
+				Date date = new DateTime(cal.getTime()).toDate();
 				price = service.getPricingHistory(market, priceCall.getId(), date);
 
 			}
