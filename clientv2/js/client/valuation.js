@@ -1140,6 +1140,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		clearTransaction: function(){
+			VALUATION.hasFieldErrors = false;
 			this.clearFieldData();
 		},
 		
