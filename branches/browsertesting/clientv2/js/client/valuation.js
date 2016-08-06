@@ -646,12 +646,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									jsonObj.push(item);
 								}
 								me.displayTransCompanies(jsonObj);
-								me.displayTransCompanies.sort(sortByName);
-						    	function sortByName(a, b){
+								me.displayTransCompanies.sort(function(a, b){
 									  var a = a.companyName.toLowerCase();
 									  var b = b.companyName.toLowerCase(); 
 									  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-								}
+								});
 								me.computeSelectAllTrans(me);
 							}
 							$(".pagination-container").remove();
@@ -792,12 +791,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
             	me.multiChartUnchart(me, true);
 			}
 			else {
-				me.displayTransactions.sort(sortByName);
-				function sortByName(a, b){
+				me.displayTransactions.sort(function(a, b){
 		    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 		    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 		    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-				}
+				});
 				$('#perCompanyName').addClass('asc');
 		    	$('#perCompanyName').removeClass('desc');
 		    	$('#perNumOfShares').removeClass('shareasc');
@@ -828,12 +826,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    	    console.log('Watchlists unavailable');
 			    	    return;
 			    	}
-					VALUATION.finalWL(data.watchlists.sort(sortByName));
-					function sortByName(a, b){
+					VALUATION.finalWL(data.watchlists.sort(function(a, b){
 						  var a = a.name.toLowerCase();
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					}));
 					PAGE.hideLoading();
 					
 					me.selectedValue(UTIL.getParameterByName("code"));
@@ -953,13 +950,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.displayTransactions.removeAll();
 					me.displayTransCompanies.removeAll();
 					me.watchlistCompanies.removeAll();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
@@ -1013,12 +1009,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					PAGE.hideLoading();
 				}, 
 				PAGE.customSGXError,
@@ -1060,13 +1055,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}))
 				}, 
 				PAGE.customSGXError,
 				undefined
@@ -1086,12 +1080,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 		    		me.watchlistCompanies(data.companyPrice);
-		    		me.watchlistCompanies.sort(sortByName);
-			    	function sortByName(a, b){
+		    		me.watchlistCompanies.sort(function(a, b){
 						  var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 						  var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					})
 		    	}
 		    	PAGE.hideLoading();
 				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
@@ -1337,12 +1330,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.displayTransactions.push(transItemCompModel);
 	    	}
 	    	
-	    	me.displayTransactions.sort(sortByName);
-	    	function sortByName(a, b){
+	    	me.displayTransactions.sort(function(a, b){
 	    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 	    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 	    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-			}
+			});
 	    	
 	    	me.totalCalculation(me);
 	    },
@@ -1399,12 +1391,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
 	    	
-	    	model.multiCompData.sort(sortByDate);
-	    	function sortByDate(a, b){
+	    	model.multiCompData.sort(function(a, b){
 	    		var a = new Date(a.tradeDateForSort);
 	    		var b = new Date(b.tradeDateForSort);
 	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	}
+	    	});
 		    model.tradeDate = model.multiCompData()[model.multiCompData().length-1].intTradeDate;
 		    model.tradeDateForSort = model.multiCompData()[model.multiCompData().length-1].tradeDateForSort;
 	    },
@@ -1419,12 +1410,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
-	    	me.transItems.sort(sortByName);
-	    	function sortByName(a, b){
+	    	me.transItems.sort(function(a, b){
 				  var a = !UTIL.isEmpty(a.companyName()) ? a.companyName().toLowerCase() : "";
 				  var b = !UTIL.isEmpty(b.companyName()) ? b.companyName().toLowerCase() : ""; 
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-			}
+			});
 	    	var currentPage = 1;
 			if($(".pagination-container").length){
 				currentPage = isNaN($('#pagingTextBox').val()) ? 1 : parseInt($('#pagingTextBox').val());
@@ -1654,20 +1644,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
-	    		me.transItems.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.transItems.sort(function(a, b){
 	  			  var a = a.companyName().toLowerCase();
 	  			  var b = b.companyName().toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
-	    		me.transItems.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.transItems.sort(function(a, b){
 	  			  var a = a.companyName().toLowerCase();
 	  			  var b = b.companyName().toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
@@ -1689,20 +1677,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transType').hasClass('typeasc')){
 	    		$('#transType').removeClass('typeasc').addClass('typedesc');
-	    		me.transItems.sort(sortByType);
-	    	    function sortByType(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.transactionType().toLowerCase();
     	    		var b = b.transactionType().toLowerCase(); 
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transType').removeClass('typedesc').addClass('typeasc');
-	    		me.transItems.sort(sortByType);
-	    	    function sortByType(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.transactionType().toLowerCase();
     	    		var b = b.transactionType().toLowerCase(); 
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1724,20 +1710,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transTradeDate').hasClass('dateasc')){
 	    		$('#transTradeDate').removeClass('dateasc').addClass('datedesc');
-	    		me.transItems.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = new Date(a.tradeDate()).getTime();
     	    		var b = new Date(b.tradeDate()).getTime(); 
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transTradeDate').removeClass('datedesc').addClass('dateasc');
-	    		me.transItems.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = new Date(a.tradeDate()).getTime();
     	    		var b = new Date(b.tradeDate()).getTime();
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1759,20 +1743,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transNumShare').hasClass('shareasc')){
 	    		$('#transNumShare').removeClass('shareasc').addClass('sharedesc')
-	    		me.transItems.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,"")); 
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transNumShare').removeClass('sharedesc').addClass('shareasc')
-	    		me.transItems.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,""));
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1794,24 +1776,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transPrice').hasClass('priceasc')){
 	    		$('#transPrice').removeClass('priceasc').addClass('pricedesc');
-	    		me.transItems.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
 	    	       var b = b.costAtPurchase().toString().replace(/,/gi,"");
 	    	       a = parseFloat(a.replace("$",""));
 		  		   b = parseFloat(b.replace("$",""));
 			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transPrice').removeClass('pricedesc').addClass('priceasc');
-	    		me.transItems.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
 		    	   var b = b.costAtPurchase().toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
 			  	   b = parseFloat(b.replace("$",""));
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1833,24 +1813,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transLastPrice').hasClass('lastpriceasc')){
 	    		$('#transLastPrice').removeClass('lastpriceasc').addClass('lastpricedesc')
-	    		me.transItems.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
 	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$",""));  
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transLastPrice').removeClass('lastpricedesc').addClass('lastpriceasc')
-	    		me.transItems.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
 	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1872,20 +1850,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
-	    		me.displayTransCompanies.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransCompanies.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
-	    		me.displayTransCompanies.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransCompanies.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    },  
 	    
@@ -1894,20 +1870,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perCompanyName').hasClass('asc')){
 	    		$('#perCompanyName').removeClass('asc').addClass('desc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perCompanyName').removeClass('desc').addClass('asc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perTradeDate').removeClass('dateasc');
 	    	$('#perTradeDate').removeClass('datedesc');
@@ -1924,8 +1898,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perTradeDate').hasClass('dateasc')){
 	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
-	    		me.displayTransactions.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : ""; 
     	    		if (a == "" && b){
@@ -1935,11 +1908,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 	    	    	}
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perTradeDate').removeClass('datedesc').addClass('dateasc');
-	    		me.displayTransactions.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.displayTransactions.sort(function(a, b){
     	    		var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : "";
 	  			 	if (a == "" && b){
@@ -1949,7 +1921,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 	    	    	}
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -1967,8 +1939,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perNumOfShares').hasClass('shareasc')){
 	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
-	    		me.displayTransactions.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,"")); 
 		  			if (!$.isNumeric(a) && b){
@@ -1978,11 +1949,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perNumOfShares').removeClass('sharedesc').addClass('shareasc')
-	    		me.displayTransactions.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,""));
 	  			  	if (!$.isNumeric(a) && b){
@@ -1992,7 +1962,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -2009,8 +1979,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perLastClosePrice').hasClass('closepasc')){
 	    		$('#perLastClosePrice').removeClass('closepasc').addClass('closepdesc')
-	    		me.displayTransactions.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
 	    	       var b = b.lastClosePrice.toString().replace(/,/gi,"");
 	    	       a = parseFloat(a.replace("$",""));
@@ -2022,11 +1991,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	   }
 			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perLastClosePrice').removeClass('closepdesc').addClass('closepasc')
-	    		me.displayTransactions.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
 		    	   var b = b.lastClosePrice.toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
@@ -2038,7 +2006,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	   }
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -2055,8 +2023,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perCurPrice').hasClass('currrentpasc')){
 	    		$('#perCurPrice').removeClass('currrentpasc').addClass('currrentpdesc')
-	    		me.displayTransactions.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
@@ -2068,11 +2035,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perCurPrice').removeClass('currrentpdesc').addClass('currrentpasc')
-	    		me.displayTransactions.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
@@ -2084,7 +2050,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
