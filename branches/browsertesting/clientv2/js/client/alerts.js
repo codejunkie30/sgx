@@ -106,12 +106,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				function(data, textStatus, jqXHR){
 					PAGE.hideLoading();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					ALERTS.finalWL(data.watchlists.sort(sortByName));
+					ALERTS.finalWL(data.watchlists.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+						}));
 					ALERTS.selectedValue(UTIL.getParameterByName("code"));
 					callback();
 					
@@ -337,13 +336,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params,
 				function(data, textStatus, jqXHR){					
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
@@ -469,12 +467,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback);
@@ -512,13 +509,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				undefined);			
@@ -735,13 +731,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.save').remove();
 					$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 					PAGE.hideLoading();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					if( callback && typeof callback === 'function') { callback() };
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					var resetAfter = ko.computed(function(){
 				if(ALERTS.displayList().optionList.pcPriceDrop == false){
 					ALERTS.displayList().optionList.pcPriceDropBelow = null;
