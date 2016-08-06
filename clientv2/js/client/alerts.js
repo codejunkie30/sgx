@@ -188,6 +188,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var resultArray;
 				if(data.length == 0) {
 					me.searchResults.removeAll();
+					PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 					return;
 				}
 
