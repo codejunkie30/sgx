@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{%= o.htmlWebpackPlugin.options.title %}</title>
+  <link rel="stylesheet" href="css/vendor.css">
+</head>
+<body>
+<div id="general">
+  
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">SGX StockFacts Premium Admin</span>
+      </div>
+
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li data-bind="css:{active: page == 'users'}"><a href="#" data-bind="click:goToPage.bind($data, 'users')">Users</a></li>
+          <li data-bind="css:{active: page == 'general'}"><a href="#" data-bind="click:goToPage.bind($data, 'general')">General</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="" data-bind="click:logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    
+  <div class="container">
+
+      <section class="modify-duration">
+      <div class="panel panel-default">
+        <div class="panel-heading">Trial Duration</div>
+        <div class="panel-body">
+        <!--<h4>Trial duration</h4>-->
+        <p>This will change the trial duration for all new and existing accounts. <br/> It will not impact expired accounts.</p>
+        <div class="form-inline">
+          <div class="form-group" data-bind="ifnot:durationInEdit">
+            <input type="text" class="form-control" data-bind="value:trialDurationDisplay" disabled>
+            <a href="#" class="btn btn-default" data-bind="click:initiateDurationEdit">Change</a>
+          </div>
+
+          <div class="form-group hide" data-bind="if:durationInEdit, css:{'show-inline':durationInEdit}">
+            <input type="text" class="form-control" data-bind="value:trialDuration">
+            <button type="button" class="btn btn-success" data-bind="click:changeTrialDuration, disable: trialDurationError().length > 0">Save</button>
+            <a href="#" class="btn btn-danger" data-bind="click:cancelDurationEdit">Cancel</a>
+            <span class="validationMessage-inline" data-bind="validationMessage:trialDuration"></span>
+          </div>
+        </div>
+        </div>
+      </div>
+      </section>
+
+      <section class="user-report">
+        <div class="panel panel-default">
+          <div class="panel-heading">Run report</div>
+          <!-- <h4>Run report</h4 -->
+          <div class="panel-body">
+            <p>Export user details in Excel format.</p>
+            <button type="button" class="btn btn-default" data-bind="click:exportReport">Export</button>
+          </div>
+        </div>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

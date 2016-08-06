@@ -1,0 +1,15 @@
+{
+  "inputRequests": 
+	[
+		{
+			"function": "GDSHE",
+			"identifier": "$id$",
+			"mnemonic": "IQ_KEY_DEV_ID",
+			"properties": 
+			{
+				"STARTDATE": "$startDate$",
+				"FREQUENCY": "D"
+			}
+		}
+	]
+}

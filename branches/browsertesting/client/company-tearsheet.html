@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SGX - Company Profile</title>
+    <link rel="stylesheet" href="stylesheets/style.css?v=2.0" />
+	<link rel="stylesheet" href="stylesheets/vendor/colorbox/colorbox.css" />
+	<!--[if lt IE 9]>
+    	<link rel="stylesheet" href="stylesheets/ie8.css" />
+    	<script type="text/javascript" src="javascripts/vendor/json2.js"></script>
+	<![endif]-->
+	<link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="javascripts/app/XD.js"></script>
+    <script type="text/javascript" src="javascripts/vendor/requirejs/require.js" data-main="javascripts/main.js"></script>
+</head>
+
+
+<body class="company-tearsheet-page">
+
+    <div id="tooltip-template">
+    
+		<div class="tooltip tooltip-active">
+			<div class="tooltip-content"></div>
+			<div class="tooltip-arrow"></div>
+		</div>
+    
+    </div>
+
+    <div class="container_3">
+
+        <div class="row">
+            <div class="grid_2">
+            
+            	<div class="module dark-module">
+                	<div id="area-chart">Loading price and volume history</div>
+            	</div>
+                
+                <div class="module tabbed-content">
+                    <ul class="tab-nav">
+                        <li>
+                            <a href="#panel1">Overview</a>
+                        </li>
+                        <li>
+                            <a href="#panel2">Valuation</a>
+                        </li>
+                        <li>
+                            <a href="#panel3">Financials</a>
+                        </li>
+                        <li>
+                            <a href="#panel4">Dividends</a>
+                        </li>
+                        <li>
+                            <a href="#panel5">Ownership</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="panel1" class="panel">
+                            <table cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="25%">Previous Open Price</td>
+                                        <td width="25%" class="property formattable" data-format="dollars" data-name="openPrice">-</td>
+                                        <td width="25%">Previous Day High/Low</td>
+                                        <td width="25%" class="right">
+                                            <span class="property formattable" data-format="dollars" data-name="highPrice">-</span>-<span class="property formattable" data-format="dollars" data-name="lowPrice">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>Previous Day Volume</td>
+                                        <td class="property formattable" data-name="volume" data-format="volume">-</td>
+                                        <td>Previous Close</td>
+                                        <td class="property formattable" data-format="number" data-name="previousClosePrice">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Previous Close Date</td>
+                                        <td class="property formattable" data-name="previousCloseDate" data-format="date">-</td>
+                                        <td>52 Week High/Low</td>
+                                        <td class="custom right">
+                                            <span class="property formattable" data-format="number" data-name="yearHigh">-</span>-<span class="property formattable" data-format="number" data-name="yearLow">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>5-Year Beta</td>
+                                        <td class="property formattable" data-format="number" data-name="beta5Yr">-</td>
+                                        <td>Shares Outstanding</td>
+                                        <td class="property formattable" data-format="volume" data-name="sharesOutstanding"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Average 3-month Volume</td>
+                                        <td class="property formattable" data-format="volume" data-name="avgVolumeM3"></td>
+                                        <td>Normalized Diluted EPS</td>
+                                        <td class="property formattable" data-format="number" data-name="eps">-</td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>Total Market Cap</td>
+                                        <td class="property formattable" data-format="millions" data-name="marketCap"></td>
+                                        <td>Float</td>
+                                        <td class="property formattable" data-format="percent" data-name="floatPercentage" data-unit="percent">-</td>
+                                    </tr>
+                                    <tr class="odd">
+                                    	<td>6-month VWAP <img src="img/info.jpg" alt="" class="glossary-item glossary-right" glossary-key="vwap" width="11" height="11" /></td>
+                                    	<td class="custom right">
+                                    		<span class="has-vwap">
+                                    			<span class="property" data-name="vwapCurrency"></span> <span class="property formattable" data-format="dollars" data-name="volWeightedAvgPrice"></span> <span class="normal">as of</span> <span class="property formattable"data-name="vwapAsOfDate" data-format="date"></span>
+                                    		</span>
+                                    		<span class="no-vwap">-</span>
+                                    	</td>
+                                    	<td>&nbsp;</td>
+                                    	<td>&nbsp;</td>
+                                    </tr>
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div id="panel2" class="panel">
+                            <table cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="25%">Price/Book Value</td>
+                                        <td width="25%" class="property formattable" data-format="number" data-name="priceToBookRatio">-</td>
+                                        <td width="25%">P/E Ratio</td>
+                                        <td width="25%" class="property formattable" data-format="number" data-name="peRatio">-</td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>Dividend Yield</td>
+                                        <td class="property formattable" data-format="percent" data-name="dividendYield" data-unit="percent">-</td>
+                                        <td>EV/EBITDA</td>
+                                        <td class="property formattable" data-format="number" data-name="evEbitData">-</td>
+                                    </tr>
+                                    <tr>
+                                    	<td colspan="4" class="right note">All data based on previous day information.</td>
+                                    </tr>
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div id="panel3" class="panel">
+                            <table cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="25%">Debt/EBITDA</td>
+                                        <td width="25%" class="property formattable" data-format="number" data-name="totalDebtEbitda">-</td>
+                                        <td width="25%">Cap Ex</td>
+                                        <td width="25%" class="property formattable" data-format="millions" data-name="capitalExpenditures">-</td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>Total Debt</td>
+                                        <td class="property formattable" data-format="millions" data-name="totalDebt">-</td>
+                                        <td>EBIT</td>
+                                        <td class="property formattable" data-format="millions" data-name="ebit" data-unit="mil">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Enterprise Value</td>
+                                        <td class="property formattable" data-format="millions" data-name="enterpriseValue">-</td>
+                                        <td>Total Revenue</td>
+                                        <td class="property formattable" data-format="millions" data-name="totalRevenue" data-unit="mil">-</td>
+                                    </tr>
+                                    <tr class="even">
+                                        <td>Total Assets</td>
+                                        <td class="property formattable" data-format="millions" data-name="totalAssets" data-unit="mil">-</td>
+                                        <td>Net Income</td>
+                                        <td class="property formattable" data-format="millions" data-name="netIncome">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cash &amp; ST Investments</td>
+                                        <td class="property formattable" data-format="millions" data-name="cashInvestments">-</td>
+                                        <td>EBITDA</td>
+                                        <td class="property formattable" data-format="millions" data-name="ebitda" data-unit="mil">-</td>
+                                    </tr>
+                                    <tr>
+                                    	<td colspan="4" class="right note">
+                                    		All data based on last reported information from <span class="property formattable"data-name="filingDate" data-format="date"></span>.  
+                                    	</td>
+                                    </tr>
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div id="panel4" class="panel">
+                        
+                        	<table cellspacing="0">
+                        		<thead class="has-dividend-hist">
+                        			<tr>
+                        				<td width="25%">Ex-Date</td>
+                        				<td width="25%">Pay Date</td>
+                        				<td width="25%">Type</td>
+                        				<td width="25%">Price</td>
+                        			</tr>
+                        		</thead>
+                        		<tbody class="dividend-hist">
+                        			<tr class="no-dividend-hist">
+                        				<td class="custom note"><span>There is no dividend data available.</span></td>
+                        			</tr>
+                        		</tbody>
+                        	</table>
+                        	
+                        </div>
+                        
+                        <div id="panel5" class="panel">
+                            <table cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <td width="50%">Substantial Shareholders</td>
+                                        <td width="25%" class="right">Number of shares held</td>
+                                        <td width="25%" class="right">Percent of shares held</td>
+                                    </tr>
+                                </thead>
+                                <tbody class="owners">
+                                    <tr>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="module right">
+                    <div class="button view-financials">View recent financial statement data</div>
+                </div>
+
+                <div class="module businessDescription">
+                    <div class="title">
+                        <div class="label">Company Description</div>
+                    </div>
+                    <p class="property" data-name="businessDescription">-</p>
+                </div>
+
+                <div class="module dark-module module-info">
+	                <div class="title">
+	                    <div class="label">General Information</div>
+	                </div>
+	                <div class="content">
+	                    <div class="col-1">
+	                        <h5>Contact</h5>
+	                        <div class="property" data-name="companyAddress">-</div>
+	                    </div>
+	                    <div class="col-2">
+	                        <h5>Current Fiscal Year End</h5>
+	                        <div class="property formattable" data-name="fiscalYearEnd" data-format="date">-</div>
+	                    </div>
+	                    <div class="col-3">
+	                        <h5>Year Founded</h5>
+	                        <div class="property formattable" data-name="yearFounded">-</div>
+	                    </div>
+	                    <a href="#" target="_blank" alt="" class="link property companyWebsite" data-name="companyWebsite"><span class="property" data-name="companyWebsite"></span></a>
+	                </div>
+                </div>
+            </div>
+            <div class="grid_1">
+
+            	<div class="module">
+            		<a class="button trade-button">GO TO BUY/SELL</a>
+            	</div>
+            
+                <div class="module stock-events">
+                    <div class="title">
+                        <div class="label">In The News <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="keyDevs" width="11" height="11" /></div>
+                    </div>
+                    <ul></ul>
+					<div class="no-data">There is no data to show for the selected period.</div>
+                </div>
+                
+                <div class="module dark-module progress-estimate">
+                    <div class="title">
+                        <div class="label">S&amp;P Capital IQ Consensus Estimates <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="consensusRec" width="11" height="11" /></div>
+                    </div>
+                    <div class="has-estimate">
+                    	<p class="centered">Consensus Recommendation</p>
+	                    <div class="bar-container">
+	                        <ul class="progress-mask theme-three-bubble-progress">
+	                            <li class="sell">
+	                                <span href="">Sell</span>
+	                            </li>
+	                            <li class="hold">
+	                                <span href="">Hold</span>
+	                            </li>
+	                            <li class="buy">
+	                                <span href="">Buy</span>
+	                            </li>
+	                        </ul>
+	                    </div>
+	                    <hr>
+	                    <p class="centered">
+	                        Consensus Target Price
+	                    </p>
+	                    <div class="price formattable" data-format="number">--</div>
+                    </div>
+                    <div class="no-estimate">
+                    	No Recommendation
+                    </div>
+                </div>
+                <div class="module dark-module alpha-factors">
+                    <div class="title">
+                        <div class="label label-small">S&amp;P Capital IQ Alpha Factor Composites <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="alphaFactors" width="11" height="11" /></div>
+                    </div>
+                    <div class="no-factors">
+                    	No Data Available
+                    </div>
+                    <div class="has-factors">
+	                    <p class="left">Click on the composite to see companies with the same rank.</p>
+	                    <hr>
+	                    <div class="slider" data-name="valuation">
+	                        <div class="slider-label">
+	                        	Valuation 
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Under</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Over</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="analystExpectations">
+	                        <div class="slider-label">
+	                        	Analyst Expectations
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="capitalEfficiency">
+	                        <div class="slider-label">
+	                        	Capital Efficiency
+								<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="priceMomentum">
+	                        <div class="slider-label">
+	                        	Price Momentum
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="earningsQuality">
+	                        <div class="slider-label">
+	                        	Earnings Quality
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="volatility">
+	                        <div class="slider-label">
+	                        	Volatility
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="size">
+	                        <div class="slider-label">
+	                        	Size
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">Small</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Large</div>
+	                        </div>
+	                    </div>
+	                    <div class="slider" data-name="historicalGrowth">
+	                        <div class="slider-label">
+	                        	Growth
+	                        	<img src="img/info.jpg" alt="" class="glossary-item" width="11" height="11" />
+	                        </div>
+	                        <div class="bar-container">
+	                            <div class="slider-left-label">High</div>
+	                            <div class="bar-progress"></div>
+	                            <div class="bar"></div>
+	                            <div class="slider-right-label">Low</div>
+	                        </div>
+	                    </div>
+					</div>
+                </div>
+
+                <div class="module dark-module gti-block">
+                    <div class="title">
+                        <div class="label label-small">Governance & Transparency Index (GTI) <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="gtiAbout" width="11" height="11" /></div>
+                    </div>
+                    <div class="gti-table">
+						<div class="row header">
+							<span>GTI Year</span>
+							<span>Rank <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="gtiRank" width="11" height="11" /></span>
+							<span>Score <img src="img/info.jpg" alt="" class="glossary-item glossary-left" glossary-key="gtiScore" width="11" height="11" /></span>
+						</div>  
+                    </div>
+                    <div class="gti-link"><a target="_blank" href="http://bschool.nus.edu.sg/CGIO.aspx">Learn more about GTI <sup>&raquo;</sup></a></div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row">
+			<div class="grid_3">
+				Source: S&amp;P Capital IQ - <a href="terms-conditions.html" class="terms-conditions">Use of this information is subject to terms and conditions</a>
+			</div>
+		</div>
+
+    </div>
+    
+</body>
+
+</html>
