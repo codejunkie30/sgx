@@ -163,9 +163,9 @@
 					<tbody>
 						<tr>
 							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="companiesOnchange, options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
-							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType" ></select></td>
-							<td><input type="text" id="tradeDate" data-bind="value: initialTradeDate" readonly="readonly"/></td>
-							<td><input type="text" id="initialNumberOfShares" data-bind="valuationNumeric, valueUpdate: 'afterkeydown', value: initialNumberOfShares"/></td>
+							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType, event: { change: validateInitialBuySell }" ></select></td>
+							<td><input type="text" id="tradeDate" data-bind="value: initialTradeDate, event: { change: validateInitialBuySell }" readonly="readonly"/></td>
+							<td><input type="text" id="initialNumberOfShares" data-bind="valuationNumeric, valueUpdate: 'afterkeydown', value: initialNumberOfShares, event: { change: validateInitialBuySell }"/></td>
 							<td><input type="text" id="initialCostAtPurchase" data-bind="valuationNumeric, value: initialCostAtPurchase" /></td>
 							<td class="textCenter"><a class="clear-button" data-bind="click: clearTransaction">Clear</a></td>
 							<td><a class="add-button" data-bind="click: addSaveTransactions">Add</a></td>
@@ -174,9 +174,9 @@
 					<tbody data-bind="foreach: transItems" id="transItemsId">
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="company-row" data-bind="text: companyName"></td>
-							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType" ></select></td>
-							<td><input data-bind="value: tradeDate, attr: { id: 'date'+id()}, datepicker:tradeDate" type="text" readonly="readonly"/></td>
-							<td><input data-bind="valuationNumeric, attr: { id: 'share'+id()}, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares" type="text"/></td>
+							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType, event: { change: $root.validateBuySell }" ></select></td>
+							<td><input data-bind="value: tradeDate, attr: { id: 'date'+id()}, datepicker:tradeDate, event: { change: $root.validateBuySell }" type="text" readonly="readonly"/></td>
+							<td><input data-bind="valuationNumeric, attr: { id: 'share'+id()}, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares, event: { change: $root.validateBuySell }" type="text"/></td>
 							<td><input data-bind="valuationNumeric, attr: { id: 'cost'+id()}, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$'" type="text"/></td>
 							<td data-bind="text: currentPrice, currency: currentPrice, symbol: '$'"></td>
 							<td><div class="imgCenterAllign"><img src="img/x-button.png" alt="" data-bind="click: $root.removeItem.bind($root)" /></div></td>

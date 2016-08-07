@@ -411,10 +411,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
     	
-    	validatedCompanies: [],
-    	validateFlag: true,
     	hasFieldErrors : false,
-    	
     	record_modified: false,
     	
 		initPage: function() {
@@ -1147,8 +1144,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
 			var isFieldsNotEmpty = me.isFieldsEmpty(tradeDate, numberOfShares, costAtPurchase, tickerCode);
-			if( isFieldsNotEmpty || (VALUATION.record_modified &&
-					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
+			if( (isFieldsNotEmpty || (VALUATION.record_modified &&
+					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode))) &&
+					!VALUATION.hasFieldErrors ){
 				if(isFieldsNotEmpty){
 					var parsedValue = null;
 			        try{
@@ -1162,21 +1160,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.transItems.push(transItemModel);
 				}
 				
-				if(me.buySellValidate()){
-					me.insertTransactionRecords();
-					me.clearFieldData();
-					VALUATION.hasFieldErrors = false;
-				}else{
-					VALUATION.hasFieldErrors = true;
-					if(transItemModel!=null)me.transItems.remove(transItemModel);
-				}
+				me.insertTransactionRecords();
+				me.clearFieldData();
+				
+				VALUATION.hasFieldErrors = false;
 				
 				//dirty flag settings
 				VALUATION.record_modified = false;
-				
-				//validation related attributes
-				me.validatedCompanies = [];
-		    	me.validateFlag = true;
 			}
 	    },
 	    
@@ -2062,93 +2052,61 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#perLastClosePrice').removeClass('closepdesc');
 	    },
 	    
-	    transactionValidator: function(sentItem){
-	    	var me= this;
-	    	var loopFlag = true;
-	    	var bought = 0.00;
-	    	var sell = 0.00;
-	    	var sellDates = [];
-	    	var ids = [];
-	    	
-	    	$.each(me.validatedCompanies, function(i, data){
-	    		if(data === sentItem.tickerCode()){
-	    			loopFlag = false;
+	    validateInitialBuySell: function(data, event){
+	    	var me = this;
+	    	if( data.initialNumberOfShares() && data.initialTradeDate() ){
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(),data.initialTradeDate()) ){
+	    			$('#tradeDate').css({"borderColor":"red"}) ;
+	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
+	    		}else{
+	    			$('#tradeDate').css({"borderColor":""}) ;
+					$('#initialNumberOfShares').css({"borderColor":""}) ;
 	    		}
-	    	});
-	    		
-	    	if(loopFlag){
-	    		me.validatedCompanies.push(sentItem.tickerCode());
-	    		ko.utils.arrayForEach(me.transItems(), function (item) {
-	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
-   	   	    			 if(item.transactionType() === "SELL"){
-   	   	    				 sellDates.push(item.tradeDate());
-   	   	    				 ids.push(item.id());
-   	   	    			 }
-	   	    		 }
-	    	 	});
-	    		
-	    		
-				$.each(sellDates, function(i, selldate){
-					ko.utils.arrayForEach(me.transItems(), function (item) {
-						if(sentItem.tickerCode() === item.tickerCode()){
-							if( new Date(item.tradeDate()) < new Date(selldate) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(selldate).setHours(0,0,0,0) )){
-								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-								if(item.transactionType() === "BUY"){
-									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-								}else{
-									sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
-								}
-							}
-						}
-					});
-					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
-						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
-						 $.each(ids, function(i, id){
-							 if( UTIL.isEmpty(id) ){
-								 $('#tradeDate').css({"borderColor":"red"}) ;
-								 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
-							 }
-						 });
-						 if( !UTIL.isEmpty(sentItem.id()) ){
-							 $('#date'+sentItem.id()).css({"borderColor":"red"});
-							 $('#share'+sentItem.id()).css({"borderColor":"red"});
-						 }else{
-							 $('#tradeDate').css({"borderColor":"red"}) ;
-							 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
-						 }
-						 me.validateFlag = false;
-						 VALUATION.hasFieldErrors = true;
-					}else{
-						$('#date'+sentItem.id()).css({"borderColor":""});
-						$('#share'+sentItem.id()).css({"borderColor":""});
-						VALUATION.hasFieldErrors = false;
-					}
-					bought = 0.00;
-			    	sell = 0.00;
-				});
 	    	}
 	    },
 	    
-	    buySellValidate: function(){
-	    	var me = this;
-	    	$('#tradeDate').css({"borderColor":""}) ;
-			$('#initialNumberOfShares').css({"borderColor":""}) ;
-			ko.utils.arrayForEach(me.transItems(), function (item) {
-				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
-					me.validateFlag = false;
-					VALUATION.hasFieldErrors = true;
-					return false;
-				}else{
-    				if(item.transactionType() === "SELL"){
-						me.transactionValidator(item);
-    				}else{
-   	   	    			$('#date'+item.id()).css({"borderColor":""});
-						$('#share'+item.id()).css({"borderColor":""});
-    				}
-				}
-    	 	});
-    		
-    		return me.validateFlag;
+	    validateBuySell: function(data, event){
+	    	if( data.numberOfShares() && data.tradeDate() ){
+	    		if( VALUATION.validateNumberOfShares(data.transactionType(), 0.00, VALUATION.transItems(), data.tickerCode(), data.tradeDate()) ){
+    				$('#date'+data.id()).css({"borderColor":"red"});
+    				$('#share'+data.id()).css({"borderColor":"red"});
+	    		}else{
+	    			$('#date'+data.id()).css({"borderColor":""});
+    				$('#share'+data.id()).css({"borderColor":""});
+	    		}
+	    	}
+	    },
+	    
+	    validateNumberOfShares: function(type, shares, transItems, ticker, date){
+	    	var bought = 0.00;
+	    	var sell = 0.00;
+	    	var flag = false;
+	    	
+	    	if(type === "SELL"){
+	    		sell = shares;
+	    		ko.utils.arrayForEach(transItems, function (item) {
+					if(ticker === item.tickerCode()){
+						if( new Date(item.tradeDate()) < new Date(date) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(date).setHours(0,0,0,0) )){
+							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+							if(item.transactionType() === "BUY"){
+								bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
+							}else{
+								sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+							}
+						}
+					}
+				});
+	    	}
+	    	
+	    	if( parseFloat(sell) > parseFloat(bought) ){
+				 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+				 flag = true;
+				 VALUATION.hasFieldErrors = true;
+			}else{
+				VALUATION.hasFieldErrors =  false;
+			}
+	    	
+	    	return flag;
 	    }
 	};
 	
