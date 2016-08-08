@@ -16,6 +16,8 @@ public interface QuanthouseService {
 			throws QuanthouseServiceException, CompanyServiceException, SearchServiceException;
 	List<Price> getPricingHistory(String market, String id, Date date)
 			throws QuanthouseServiceException;
+	List<Price> getPricingHistoryBetweenDates(String market, String id, Date from, Date to)
+			throws QuanthouseServiceException;
 	
 	List<CompanyPrice> getCompanyPrice(List<String> companies)
 			throws QuanthouseServiceException, CompanyServiceException, SearchServiceException;	
