@@ -2054,8 +2054,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    validateInitialBuySell: function(data, event){
 	    	var me = this;
-	    	if( data.initialNumberOfShares() && data.initialTradeDate() ){
-	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(),data.initialTradeDate()) ){
+	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() ){
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), data.initialTradeDate()) ){
 	    			$('#tradeDate').css({"borderColor":"red"}) ;
 	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
 	    		}else{
@@ -2066,7 +2066,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    validateBuySell: function(data, event){
-	    	if( data.numberOfShares() && data.tradeDate() ){
+	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() ){
 	    		if( VALUATION.validateNumberOfShares(data.transactionType(), 0.00, VALUATION.transItems(), data.tickerCode(), data.tradeDate()) ){
     				$('#date'+data.id()).css({"borderColor":"red"});
     				$('#share'+data.id()).css({"borderColor":"red"});
