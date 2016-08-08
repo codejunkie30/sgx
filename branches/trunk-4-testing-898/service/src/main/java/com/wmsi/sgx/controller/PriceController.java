@@ -136,10 +136,14 @@ public class PriceController {
 				Date date = new DateTime(cal.getTime()).toDate();
 				price = service.getPricingHistory(market, priceCall.getId(), date);
 			} else {
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.MINUTE, -16);
-				Date date = new DateTime(cal.getTime()).toDate();
-				price = service.getPricingHistory(market, priceCall.getId(), date);
+				Calendar fromCal = Calendar.getInstance();
+				fromCal.add(Calendar.MINUTE, -16);
+				Date fromDate = new DateTime(fromCal.getTime()).toDate();
+				
+				Calendar toCal = Calendar.getInstance();
+				toCal.add(Calendar.MINUTE, -15);
+				Date toDate = new DateTime(toCal.getTime()).toDate();
+				price = service.getPricingHistoryBetweenDates(market, priceCall.getId(), fromDate, toDate);
 
 			}
 		}
