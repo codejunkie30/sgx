@@ -419,6 +419,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	hasFieldErrors : false,
     	record_modified: false,
     	
+    	validatedCompanies: [],
+    	validateFlag: true,
+    	
 		initPage: function() {
 			var me = this;
 			
@@ -923,8 +926,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			VALUATION.showChange(false);
 			//get the performance chart data
 			me.getChartData(me);
+			
 			me.setSortingToDefault();
 			me.clearFieldData();
+			VALUATION.hasFieldErrors = false;
+			VALUATION.record_modified = false;
 		},
 				
 		addWatchlist: function(){
@@ -1141,8 +1147,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		clearTransaction: function(){
-			VALUATION.hasFieldErrors = false;
-			this.clearFieldData();
+			var me = this;
+			if(me.initialCostAtPurchase() && me.initialNumberOfShares() && me.initialTradeDate()){
+				VALUATION.hasFieldErrors = false;
+				me.clearFieldData();
+			}
 		},
 		
 		addSaveTransactions: function() {
@@ -1171,13 +1180,21 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.transItems.push(transItemModel);
 				}
 				
-				me.insertTransactionRecords();
-				me.clearFieldData();
-				
-				VALUATION.hasFieldErrors = false;
+				if( me.buySellValidate() ){
+					me.insertTransactionRecords();
+					me.clearFieldData();
+					VALUATION.hasFieldErrors = false;
+				}else{
+					VALUATION.hasFieldErrors = true;
+					if(transItemModel!=null)me.transItems.remove(transItemModel);
+				}
 				
 				//dirty flag settings
 				VALUATION.record_modified = false;
+				
+				//validation related attributes
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
 			}
 	    },
 	    
@@ -1488,6 +1505,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 										console.log(data);
 										me.transItems.remove(item);
 										me.getTransactionsData(me);
+										VALUATION.hasFieldErrors = false;
+										VALUATION.record_modified = false;
 										PAGE.hideLoading();
 									}, 
 									PAGE.customSGXError);
@@ -2124,7 +2143,74 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}
 	    	
 	    	return flag;
+	    },
+	
+		buySellValidate: function(){
+			var me = this;
+			ko.utils.arrayForEach(me.transItems(), function (item) {
+				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
+					me.validateFlag = false;
+					VALUATION.hasFieldErrors = true;
+					return false;
+				}else{
+					if(item.transactionType() === "SELL"){
+						me.transactionValidator(item);
+					}
+				}
+		 	});
+			
+			return me.validateFlag;
+		},
+	
+		transactionValidator: function(sentItem){
+	    	var me= this;
+	    	var loopFlag = true;
+	    	var bought = 0.00;
+	    	var sell = 0.00;
+	    	var sellDates = [];
+	    	
+	    	$.each(me.validatedCompanies, function(i, data){
+	    		if(data === sentItem.tickerCode()){
+	    			loopFlag = false;
+	    		}
+	    	});
+	    		
+	    	if(loopFlag){
+	    		me.validatedCompanies.push(sentItem.tickerCode());
+	    		ko.utils.arrayForEach(me.transItems(), function (item) {
+	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
+	   	    			 if(item.transactionType() === "SELL"){
+	   	    				 sellDates.push(item.tradeDate());
+	   	    			 }
+	   	    		 }
+	    	 	});
+	    		
+				$.each(sellDates, function(i, selldate){
+					ko.utils.arrayForEach(me.transItems(), function (item) {
+						if(sentItem.tickerCode() === item.tickerCode()){
+							if( new Date(item.tradeDate()) < new Date(selldate) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(selldate).setHours(0,0,0,0) )){
+								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+								if(item.transactionType() === "BUY"){
+									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
+								}else{
+									sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+								}
+							}
+						}
+					});
+					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
+						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+						 me.validateFlag = false;
+						 VALUATION.hasFieldErrors = true;
+					}else{
+						VALUATION.hasFieldErrors = false;
+					}
+					bought = 0.00;
+			    	sell = 0.00;
+				});
+	    	}
 	    }
+    
 	};
 	
 	function insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {
