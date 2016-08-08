@@ -1524,6 +1524,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									me.displayTransactions.remove(item);
 									PAGE.hideLoading();
 									me.getTransactionsData(me);
+									me.multiChartUnchart(me, true);
+									$('#performance-chart-content').show();
+				                	$('#performance-chart-header').show();
 								}, 
 								PAGE.customSGXError);
 			    	}else{
@@ -1554,6 +1557,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							console.log(data);
 							PAGE.hideLoading();
 							me.getTransactionsData(me);
+							me.multiChartUnchart(me, true);
+							$('#performance-chart-content').show();
+		                	$('#performance-chart-header').show();
 						}, 
 					PAGE.customSGXError);
 					$('.cboxWrapper').colorbox.close();
