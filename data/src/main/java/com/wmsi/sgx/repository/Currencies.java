@@ -24,4 +24,5 @@ public interface Currencies extends CustomRepository<Currency, Serializable> {
 	
 	@Query(value="select  top 1 *  from Currencies where complete=0", nativeQuery = true)
 	Currency getNextCurrency();
+	
 }

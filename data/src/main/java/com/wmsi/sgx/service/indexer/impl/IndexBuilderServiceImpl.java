@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,9 +141,11 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				model.setDescription(record[1]);
 				currencyModelList.add(model);
 			}
+			//check for updates
+			return checkForCurrencyChanges(currencyModelList);
 			//delete existing records
-			currencyService.deleteAll();
-			return currencyService.addCurrencies(currencyModelList);
+			//currencyService.deleteAll();
+			//return currencyService.addCurrencies(currencyModelList);
 
 		} catch (IOException e) {
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:saveCurrencyList",
@@ -153,6 +157,36 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		}
 		
 	}
+	
+	private boolean checkForCurrencyChanges(List<CurrencyModel> currencyModelList) {
+		boolean flag=true;
+		//check if new currency added or deleted
+		List<CurrencyModel> oldList = currencyService.getAllCurrencies();
+		List<CurrencyModel> newCurrencyList = new ArrayList<CurrencyModel>();
+		newCurrencyList.addAll(currencyModelList);
+		StringBuffer sb = new StringBuffer();
+		boolean newFlag=newCurrencyList.removeAll(oldList);
+		boolean oldFlag=oldList.removeAll(currencyModelList);
+		if(!oldList.isEmpty()&&oldFlag){
+			sb.append("\n Note :- Following Currencies are removed  :- "+oldList.toString());
+			currencyService.deleteCurrenciesList(oldList);
+		}
+		if(!newCurrencyList.isEmpty()){
+			sb.append(" \n Note :- Following currencies are indexed :- "+newCurrencyList.toString());
+			flag=currencyService.addCurrencies(newCurrencyList);
+		}
+		if(sb.length()>0){
+			//send email
+			try {
+				emailService.send(toSite, " Currency updates ", sb.toString());
+			} catch (MessagingException e) {
+				// Don't stop the process ; continue with dataload
+				e.printStackTrace();
+			}
+		}
+		return flag;
+	}
+
 
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
@@ -604,7 +638,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	
 	@Override
 	public String computeIndexName(@Header String jobId, @Header String indexName) throws IndexerServiceException {
-		CurrencyModel currencyModel = currencyService.getNonCompleteCurrency();
+		CurrencyModel currencyModel = currencyService.getNextCurrency();
 		if (currencyModel != null) {
 			return currencyModel.getCurrencyName()+ "_" + jobId;
 		} else{
