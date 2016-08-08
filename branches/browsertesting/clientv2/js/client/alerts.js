@@ -51,6 +51,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.getJSON(endpoint+"?callback=?").done(function(data){
 					self.allCompanies = data.companyNameAndTickerList;
 					self.searchReady(true);
+					PAGE.resizeIframeSimple();
 
 				}).fail(function(jqXHR, textStatus, errorThrown){
 					console.log('error making makeAggregateCompanyDataCall');
@@ -111,14 +112,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 						}));
-					ALERTS.selectedValue(UTIL.getParameterByName("code"));
-					callback();
 					
-					var watchlists = ALERTS.finalWL();
-
-					for(var i = 0, len = watchlists.length; i < len; i++) {
-						var wl = watchlists[i]
-						if( wl.id == UTIL.getParameterByName("code")) {
+					var watchlists = ALERTS.finalWL();
+					var code = UTIL.getParameterByName("code");
+					if(code.length < 1 && ALERTS.finalWL().length > 0){
+						code = ALERTS.finalWL()[0].id;
+					}
+					ALERTS.selectedValue(code);
+					callback();
+					for(var i = 0, len = watchlists.length; i < len; i++) {
+					var wl = watchlists[i];
+					if( wl.id == code) {
 							ALERTS.companies(wl.companies);
 							ALERTS.displayList(wl);
 							ALERTS.clearWatchListErrors();
@@ -135,7 +139,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 					});
 					
-					ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+					if(ALERTS.displayList()){
+						ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+						ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+						ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+					}
 					
 					ALERTS.PCPriceCheck.subscribe(function (i,v) {
 						if (ALERTS.PCPriceCheck() == false){
@@ -144,7 +152,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						};
 				    }, this);
 					
-					ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
 					
 					ALERTS.PCTradeVol.subscribe(function (i,v) {
 						if (ALERTS.PCTradeVol() == false){
@@ -152,7 +159,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						};
 				    }, this);
 					
-					ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
 					
 					ALERTS.ESTChangePrice.subscribe(function (i,v) {
 						if (ALERTS.ESTChangePrice() == false){
@@ -166,8 +172,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if (arr.length > 0) {
 						$('<div class="save">The companies below have been removed from one or more of your StockLists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
-					
-					PAGE.resizeIframeSimple();
 					
 				}, 
 				PAGE.customSGXError);
