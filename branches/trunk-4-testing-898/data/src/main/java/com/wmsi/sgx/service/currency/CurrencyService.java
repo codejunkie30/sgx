@@ -18,5 +18,7 @@ public interface CurrencyService {
 	
 	void deleteAll();
 	
-	CurrencyModel getNonCompleteCurrency();
+	CurrencyModel getNextCurrency();
+	
+	public void deleteCurrenciesList(List<CurrencyModel> currencyModelList);
 }

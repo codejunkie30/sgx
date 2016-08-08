@@ -66,7 +66,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	@Override
-	public CurrencyModel getNonCompleteCurrency() {
+	public CurrencyModel getNextCurrency() {
 		Currency domain = currencyRepository.getNextCurrency();
 		CurrencyModel currencyModel = new CurrencyModel();
 		if(domain!=null)
@@ -74,6 +74,20 @@ public class CurrencyServiceImpl implements CurrencyService {
 		else
 			return null;
 		return currencyModel;
+	}
+	
+	public void deleteCurrenciesList(List<CurrencyModel> currencyModelList ){
+		//currencyModelList:- File from currencies.csv
+		//currencyDomainList1 :- DB list
+		List<Currency> removeCurrencyDomainList = new ArrayList<Currency>();
+		StringBuffer sb = new StringBuffer();
+		for (CurrencyModel model : currencyModelList) {
+			Currency c = new Currency();
+			BeanUtils.copyProperties(model, c);
+			removeCurrencyDomainList.add(c);
+			
+		}
+		currencyRepository.delete(removeCurrencyDomainList);
 	}
 
 }
