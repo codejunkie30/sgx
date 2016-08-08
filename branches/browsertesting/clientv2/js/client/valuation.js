@@ -305,7 +305,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
-		        $(element).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
+		        $(element).datepicker({
+		        	maxDate: new Date(),
+		        	dateFormat: 'dd/M/yy',
+		        	changeMonth: true,
+			        changeYear: true
+        		});
 
 		        //handle disposal (if KO removes by the template binding)
 		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
@@ -660,11 +665,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy',beforeShow: function() {
-				setTimeout(function(){
-		            $('.ui-datepicker').css('z-index', 999);
-		        }, 0);
-		    } });
+			$( "#tradeDate" ).datepicker({
+				maxDate: new Date(),
+				dateFormat: 'dd/M/yy',
+				changeMonth: true,
+		        changeYear: true,
+				beforeShow: function() {
+					setTimeout(function(){
+			            $('.ui-datepicker').css('z-index', 999);
+			        }, 0);
+				} 
+			});
 		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
