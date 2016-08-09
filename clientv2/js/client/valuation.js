@@ -1144,10 +1144,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		clearTransaction: function(){
 			var me = this;
-			if(me.initialCostAtPurchase() || me.initialNumberOfShares() || me.initialTradeDate() || $('#watchlistCompaniesSelect').val() !="" ) {
+			if(me.initialCostAtPurchase() || me.initialNumberOfShares() || me.initialTradeDate() || me.selectedCompanyValue() ) {
 				VALUATION.hasFieldErrors = false;
-				me.clearFieldData();
 			}
+			me.clearFieldData();
 		},
 		
 		addSaveTransactions: function() {
