@@ -51,6 +51,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.getJSON(endpoint+"?callback=?").done(function(data){
 					self.allCompanies = data.companyNameAndTickerList;
 					self.searchReady(true);
+					PAGE.resizeIframeSimple();
 
 				}).fail(function(jqXHR, textStatus, errorThrown){
 					console.log('error making makeAggregateCompanyDataCall');
@@ -106,20 +107,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				function(data, textStatus, jqXHR){
 					PAGE.hideLoading();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					ALERTS.finalWL(data.watchlists.sort(sortByName));
-					ALERTS.selectedValue(UTIL.getParameterByName("code"));
-					callback();
+					ALERTS.finalWL(data.watchlists.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+						}));
 					
-					var watchlists = ALERTS.finalWL();
-
-					for(var i = 0, len = watchlists.length; i < len; i++) {
-						var wl = watchlists[i]
-						if( wl.id == UTIL.getParameterByName("code")) {
+					var watchlists = ALERTS.finalWL();
+					var code = UTIL.getParameterByName("code");
+					if(code.length < 1 && ALERTS.finalWL().length > 0){
+						code = ALERTS.finalWL()[0].id;
+					}
+					ALERTS.selectedValue(code);
+					callback();
+					for(var i = 0, len = watchlists.length; i < len; i++) {
+					var wl = watchlists[i];
+					if( wl.id == code) {
 							ALERTS.companies(wl.companies);
 							ALERTS.displayList(wl);
 							ALERTS.clearWatchListErrors();
@@ -136,7 +139,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						if ($(this).val() == '') { $(this).removeClass('percent') } else { $(this).addClass('percent'); }
 					});
 					
-					ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+					if(ALERTS.displayList()){
+						ALERTS.PCPriceCheck(ALERTS.displayList().optionList.pcPriceDrop);
+						ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
+						ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
+					}
 					
 					ALERTS.PCPriceCheck.subscribe(function (i,v) {
 						if (ALERTS.PCPriceCheck() == false){
@@ -145,7 +152,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						};
 				    }, this);
 					
-					ALERTS.PCTradeVol(ALERTS.displayList().optionList.pcTradingVolume);
 					
 					ALERTS.PCTradeVol.subscribe(function (i,v) {
 						if (ALERTS.PCTradeVol() == false){
@@ -153,7 +159,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						};
 				    }, this);
 					
-					ALERTS.ESTChangePrice(ALERTS.displayList().optionList.estChangePriceDrop);
 					
 					ALERTS.ESTChangePrice.subscribe(function (i,v) {
 						if (ALERTS.ESTChangePrice() == false){
@@ -167,8 +172,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					if (arr.length > 0) {
 						$('<div class="save">The companies below have been removed from one or more of your StockLists. No data is available at this time.<br>'+removedTicker+'</div>').insertBefore('header.header');
 					}
-					
-					PAGE.resizeIframeSimple();
 					
 				}, 
 				PAGE.customSGXError);
@@ -189,6 +192,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var resultArray;
 				if(data.length == 0) {
 					me.searchResults.removeAll();
+					PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
 					return;
 				}
 
@@ -337,13 +341,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				postType,
 				params,
 				function(data, textStatus, jqXHR){					
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
@@ -469,12 +472,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback);
@@ -512,13 +514,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				undefined);			
@@ -735,13 +736,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.save').remove();
 					$('<div class="save">Your changes have been saved.</div>').insertBefore('header.header').delay(4000).fadeOut(function() {$(this).remove();});
 					PAGE.hideLoading();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					if( callback && typeof callback === 'function') { callback() };
-					ALERTS.finalWL(data.sort(sortByName));
+					ALERTS.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					var resetAfter = ko.computed(function(){
 				if(ALERTS.displayList().optionList.pcPriceDrop == false){
 					ALERTS.displayList().optionList.pcPriceDropBelow = null;

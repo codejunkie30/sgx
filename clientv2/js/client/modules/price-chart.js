@@ -233,33 +233,36 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			});
 		},
 		getPremData: function(todaysDate){
-			var endpoint = PAGE.fqdn + "/sgx/price";		
+			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
 			var postType = 'POST';
-			var params = { "id": CHART.currentTicker };
+			var params = { "id": CHART.currentTicker, "date": todaysDate };
 			UTIL.handleAjaxRequest(endpoint, postType, params, undefined,function(data) {
-			/*var price = '{"price":{"bidPrice":null,"askPrice":null,"highPrice":0.73,"lowPrice":0.72,"lastPrice":0.72,"lastTradeVolume":0.1433,"openPrice":0.73,"closePrice":0.72,"previousDate":1469125800000,"currentDate":1469125800000,"lastTradeTimestamp":1470182400000,"tradingCurrency":"SGD","volume":2219800.0,"percentChange":0.0,"change":0.0}}';
-		    data = JSON.parse(price);*/
+			/*var myprices='{"pricingHistory":[{"bidPrice":0.0,"askPrice":0.0,"highPrice":7.55,"lowPrice":7.5,"lastPrice":7.51,"lastTradeVolume":100.0,"openPrice":7.5,"closePrice":7.53,"previousDate":1470096000000,"currentDate":1470182400000,"lastTradeTimestamp":1470199777883,"tradingCurrency":"SGD","volume":648600.0,"change":-0.02,"percentChange":-0.2656}]}';
+			data = JSON.parse(myprices)*/
+
 			var chart = $('#price-volume').highcharts();
-			if (data.price){
-				data = data.price;
-				
-				var x = Date.fromISO(data.lastTradeTimestamp).getTime()
-				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
-				chart.series[0].addPoint([x, data.lastPrice], true, true);
-				CHART.chartData[key] = {}
-				CHART.chartData[key].close = data.closePrice;
-				 if( data.lowPrice)
-					 CHART.chartData[key].low = data.lowPrice;
-				 if( data.openPrice)
-					 CHART.chartData[key].open = data.openPrice;
-				 if( data.highPrice)
-					 CHART.chartData[key].high = data.highPrice;
-				 var volume = data.volume;
-				 if(volume){
-					 volume = data.volume/1000000.0;	 
-				 }
-				 chart.series[1].addPoint([x, volume], true, true);
-				
+			if (data.pricingHistory && data.pricingHistory.length > 0 ){
+				$.each(data, function(key,data){
+					$.each(data,function(i,data){
+						var x = Date.fromISO(data.lastTradeTimestamp).getTime()
+						var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+						chart.series[0].addPoint([x, data.lastPrice], false, false);
+						CHART.chartData[key] = {}
+						 if( data.closePrice)
+							 CHART.chartData[key].close = data.closePrice;
+						 if( data.lowPrice)
+							 CHART.chartData[key].low = data.lowPrice;
+						 if( data.openPrice)
+							 CHART.chartData[key].open = data.openPrice;
+						 if( data.highPrice)
+							 CHART.chartData[key].high = data.highPrice;
+						 var volume = data.volume;
+						 if(volume){
+							 volume = data.volume/1000000.0;	 
+						 }
+						 chart.series[1].addPoint([x, volume], false, false);
+					});					
+				});
 				chart.redraw();
 			}
 		} , PAGE.customSGXError, undefined);	

@@ -305,7 +305,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	ko.bindingHandlers.datepicker = {
 		    init: function (element, valueAccessor, allBindingsAccessor) {
 		        var options = allBindingsAccessor().datepickerOptions || {};
-		        $(element).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy' });
+		        $(element).datepicker({
+		        	maxDate: new Date(),
+		        	dateFormat: 'dd/M/yy'
+        		});
 
 		        //handle disposal (if KO removes by the template binding)
 		        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
@@ -411,11 +414,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		userEnteredPurchasedPrice: 0.00,
     	userEnteredSellPrice: 0.00,
     	
+    	hasFieldErrors : false,
+    	record_modified: false,
+    	
     	validatedCompanies: [],
     	validateFlag: true,
-    	hasFieldErrors : false,
-    	
-    	record_modified: false,
     	
 		initPage: function() {
 			var me = this;
@@ -646,12 +649,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									jsonObj.push(item);
 								}
 								me.displayTransCompanies(jsonObj);
-								me.displayTransCompanies.sort(sortByName);
-						    	function sortByName(a, b){
+								me.displayTransCompanies.sort(function(a, b){
 									  var a = a.companyName.toLowerCase();
 									  var b = b.companyName.toLowerCase(); 
 									  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-								}
+								});
 								me.computeSelectAllTrans(me);
 							}
 							$(".pagination-container").remove();
@@ -664,11 +666,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({  maxDate: new Date(), dateFormat: 'dd/M/yy',beforeShow: function() {
-				setTimeout(function(){
-		            $('.ui-datepicker').css('z-index', 999);
-		        }, 0);
-		    } });
+			$( "#tradeDate" ).datepicker({
+				maxDate: new Date(),
+				dateFormat: 'dd/M/yy',
+				beforeShow: function() {
+					setTimeout(function(){
+			            $('.ui-datepicker').css('z-index', 999);
+			        }, 0);
+				} 
+			});
 		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
@@ -689,7 +695,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					break;
 				}
 			}
-			if((typeof event != 'undefined' && event.target.checked) || displayChart) {
+			if((typeof event != 'undefined' && typeof event.target != 'undefined' && event.target.checked) || displayChart) {
 			    $('#performance-chart-content').show();
         	    $('#performance-chart-header').show();
 			    me.singleChartUnchart(me, item.tickerCode, value);
@@ -792,12 +798,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
             	me.multiChartUnchart(me, true);
 			}
 			else {
-				me.displayTransactions.sort(sortByName);
-				function sortByName(a, b){
+				me.displayTransactions.sort(function(a, b){
 		    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 		    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 		    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-				}
+				});
 				$('#perCompanyName').addClass('asc');
 		    	$('#perCompanyName').removeClass('desc');
 		    	$('#perNumOfShares').removeClass('shareasc');
@@ -828,12 +833,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    	    console.log('Watchlists unavailable');
 			    	    return;
 			    	}
-					VALUATION.finalWL(data.watchlists.sort(sortByName));
-					function sortByName(a, b){
+					VALUATION.finalWL(data.watchlists.sort(function(a, b){
 						  var a = a.name.toLowerCase();
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					}));
 					PAGE.hideLoading();
 					
 					me.selectedValue(UTIL.getParameterByName("code"));
@@ -918,8 +922,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			VALUATION.showChange(false);
 			//get the performance chart data
 			me.getChartData(me);
+			
 			me.setSortingToDefault();
 			me.clearFieldData();
+			VALUATION.hasFieldErrors = false;
+			VALUATION.record_modified = false;
 		},
 				
 		addWatchlist: function(){
@@ -953,13 +960,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.displayTransactions.removeAll();
 					me.displayTransCompanies.removeAll();
 					me.watchlistCompanies.removeAll();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
@@ -1013,12 +1019,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					PAGE.hideLoading();
 				}, 
 				PAGE.customSGXError,
@@ -1060,13 +1065,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					VALUATION.finalWL(data.sort(sortByName));
+					VALUATION.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}))
 				}, 
 				PAGE.customSGXError,
 				undefined
@@ -1086,12 +1090,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 		    		me.watchlistCompanies(data.companyPrice);
-		    		me.watchlistCompanies.sort(sortByName);
-			    	function sortByName(a, b){
+		    		me.watchlistCompanies.sort(function(a, b){
 						  var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 						  var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					})
 		    	}
 		    	PAGE.hideLoading();
 				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
@@ -1140,8 +1143,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		
 		clearTransaction: function(){
-			VALUATION.hasFieldErrors = false;
-			this.clearFieldData();
+			var me = this;
+			if(me.initialCostAtPurchase() && me.initialNumberOfShares() && me.initialTradeDate()){
+				VALUATION.hasFieldErrors = false;
+				me.clearFieldData();
+			}
 		},
 		
 		addSaveTransactions: function() {
@@ -1154,8 +1160,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var numberOfShares = me.initialNumberOfShares();
 			var costAtPurchase = me.initialCostAtPurchase();
 			var isFieldsNotEmpty = me.isFieldsEmpty(tradeDate, numberOfShares, costAtPurchase, tickerCode);
-			if( isFieldsNotEmpty || (VALUATION.record_modified &&
-					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode)) ){
+			if( (isFieldsNotEmpty || (VALUATION.record_modified &&
+					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode))) &&
+					!VALUATION.hasFieldErrors ){
 				if(isFieldsNotEmpty){
 					var parsedValue = null;
 			        try{
@@ -1169,7 +1176,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.transItems.push(transItemModel);
 				}
 				
-				if(me.buySellValidate()){
+				if( me.buySellValidate() ){
 					me.insertTransactionRecords();
 					me.clearFieldData();
 					VALUATION.hasFieldErrors = false;
@@ -1337,12 +1344,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				me.displayTransactions.push(transItemCompModel);
 	    	}
 	    	
-	    	me.displayTransactions.sort(sortByName);
-	    	function sortByName(a, b){
+	    	me.displayTransactions.sort(function(a, b){
 	    		var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 	    		var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 	    		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-			}
+			});
 	    	
 	    	me.totalCalculation(me);
 	    },
@@ -1399,12 +1405,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
 	    	
-	    	model.multiCompData.sort(sortByDate);
-	    	function sortByDate(a, b){
+	    	model.multiCompData.sort(function(a, b){
 	    		var a = new Date(a.tradeDateForSort);
 	    		var b = new Date(b.tradeDateForSort);
 	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	}
+	    	});
 		    model.tradeDate = model.multiCompData()[model.multiCompData().length-1].intTradeDate;
 		    model.tradeDateForSort = model.multiCompData()[model.multiCompData().length-1].tradeDateForSort;
 	    },
@@ -1419,12 +1424,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    														item.numberOfShares, item.costAtPurchase, me.liveClosingPrice, item.id);
 	    		me.transItems.push(transItemModel);
 	    	});
-	    	me.transItems.sort(sortByName);
-	    	function sortByName(a, b){
+	    	me.transItems.sort(function(a, b){
 				  var a = !UTIL.isEmpty(a.companyName()) ? a.companyName().toLowerCase() : "";
 				  var b = !UTIL.isEmpty(b.companyName()) ? b.companyName().toLowerCase() : ""; 
 				  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-			}
+			});
 	    	var currentPage = 1;
 			if($(".pagination-container").length){
 				currentPage = isNaN($('#pagingTextBox').val()) ? 1 : parseInt($('#pagingTextBox').val());
@@ -1497,6 +1501,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 										console.log(data);
 										me.transItems.remove(item);
 										me.getTransactionsData(me);
+										VALUATION.hasFieldErrors = false;
+										VALUATION.record_modified = false;
 										PAGE.hideLoading();
 									}, 
 									PAGE.customSGXError);
@@ -1533,6 +1539,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 									me.displayTransactions.remove(item);
 									PAGE.hideLoading();
 									me.getTransactionsData(me);
+									me.multiChartUnchart(me, true);
+									$('#performance-chart-content').show();
+				                	$('#performance-chart-header').show();
 								}, 
 								PAGE.customSGXError);
 			    	}else{
@@ -1563,6 +1572,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							console.log(data);
 							PAGE.hideLoading();
 							me.getTransactionsData(me);
+							me.multiChartUnchart(me, true);
+							$('#performance-chart-content').show();
+		                	$('#performance-chart-header').show();
 						}, 
 					PAGE.customSGXError);
 					$('.cboxWrapper').colorbox.close();
@@ -1654,20 +1666,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
-	    		me.transItems.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.transItems.sort(function(a, b){
 	  			  var a = a.companyName().toLowerCase();
 	  			  var b = b.companyName().toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
-	    		me.transItems.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.transItems.sort(function(a, b){
 	  			  var a = a.companyName().toLowerCase();
 	  			  var b = b.companyName().toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transType').removeClass('typeasc');
 	    	$('#transType').removeClass('typedesc');
@@ -1689,20 +1699,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transType').hasClass('typeasc')){
 	    		$('#transType').removeClass('typeasc').addClass('typedesc');
-	    		me.transItems.sort(sortByType);
-	    	    function sortByType(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.transactionType().toLowerCase();
     	    		var b = b.transactionType().toLowerCase(); 
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transType').removeClass('typedesc').addClass('typeasc');
-	    		me.transItems.sort(sortByType);
-	    	    function sortByType(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.transactionType().toLowerCase();
     	    		var b = b.transactionType().toLowerCase(); 
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1724,20 +1732,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transTradeDate').hasClass('dateasc')){
 	    		$('#transTradeDate').removeClass('dateasc').addClass('datedesc');
-	    		me.transItems.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = new Date(a.tradeDate()).getTime();
     	    		var b = new Date(b.tradeDate()).getTime(); 
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transTradeDate').removeClass('datedesc').addClass('dateasc');
-	    		me.transItems.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = new Date(a.tradeDate()).getTime();
     	    		var b = new Date(b.tradeDate()).getTime();
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1759,20 +1765,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transNumShare').hasClass('shareasc')){
 	    		$('#transNumShare').removeClass('shareasc').addClass('sharedesc')
-	    		me.transItems.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,"")); 
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transNumShare').removeClass('sharedesc').addClass('shareasc')
-	    		me.transItems.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares().toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares().toString().replace(/,/gi,""));
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1794,24 +1798,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transPrice').hasClass('priceasc')){
 	    		$('#transPrice').removeClass('priceasc').addClass('pricedesc');
-	    		me.transItems.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
 	    	       var b = b.costAtPurchase().toString().replace(/,/gi,"");
 	    	       a = parseFloat(a.replace("$",""));
 		  		   b = parseFloat(b.replace("$",""));
 			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transPrice').removeClass('pricedesc').addClass('priceasc');
-	    		me.transItems.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	       var a = a.costAtPurchase().toString().replace(/,/gi,"");
 		    	   var b = b.costAtPurchase().toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
 			  	   b = parseFloat(b.replace("$",""));
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1833,24 +1835,22 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#transLastPrice').hasClass('lastpriceasc')){
 	    		$('#transLastPrice').removeClass('lastpriceasc').addClass('lastpricedesc')
-	    		me.transItems.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
 	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$",""));  
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#transLastPrice').removeClass('lastpricedesc').addClass('lastpriceasc')
-	    		me.transItems.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.transItems.sort(function(a, b){
 	    	    	var a = a.currentPrice().toString().replace(/,/gi,"");
 	    	    	var b = b.currentPrice().toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#transCompanyNameColumn').removeClass('asc');
 	    	$('#transCompanyNameColumn').removeClass('desc');
@@ -1872,20 +1872,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#'+event.target.id).hasClass('asc')){
 	    		$('#'+event.target.id).removeClass('asc').addClass('desc');
-	    		me.displayTransCompanies.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransCompanies.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#'+event.target.id).removeClass('desc').addClass('asc');
-	    		me.displayTransCompanies.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransCompanies.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    },  
 	    
@@ -1894,20 +1892,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perCompanyName').hasClass('asc')){
 	    		$('#perCompanyName').removeClass('asc').addClass('desc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perCompanyName').removeClass('desc').addClass('asc');
-	    		me.displayTransactions.sort(sortByName);
-	    	    function sortByName(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	  			  var a = a.companyName.toLowerCase();
 	  			  var b = b.companyName.toLowerCase(); 
 	  			  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perTradeDate').removeClass('dateasc');
 	    	$('#perTradeDate').removeClass('datedesc');
@@ -1924,8 +1920,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perTradeDate').hasClass('dateasc')){
 	    		$('#perTradeDate').removeClass('dateasc').addClass('datedesc');
-	    		me.displayTransactions.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : ""; 
     	    		if (a == "" && b){
@@ -1935,11 +1930,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 	    	    	}
     	    		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perTradeDate').removeClass('datedesc').addClass('dateasc');
-	    		me.displayTransactions.sort(sortByTradeDate);
-	    	    function sortByTradeDate(a, b){
+	    		me.displayTransactions.sort(function(a, b){
     	    		var a = !UTIL.isEmpty(a.tradeDateForSort) ? new Date(a.tradeDateForSort).getTime() : "";
     	    		var b = !UTIL.isEmpty(b.tradeDateForSort) ? new Date(b.tradeDateForSort).getTime() : "";
 	  			 	if (a == "" && b){
@@ -1949,7 +1943,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 	    	    	}
 	  			 	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -1967,8 +1961,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perNumOfShares').hasClass('shareasc')){
 	    		$('#perNumOfShares').removeClass('shareasc').addClass('sharedesc')
-	    		me.displayTransactions.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,"")); 
 		  			if (!$.isNumeric(a) && b){
@@ -1978,11 +1971,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perNumOfShares').removeClass('sharedesc').addClass('shareasc')
-	    		me.displayTransactions.sort(sortByNumShares);
-	    	    function sortByNumShares(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,""));
 	  			  	if (!$.isNumeric(a) && b){
@@ -1992,7 +1984,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -2009,8 +2001,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perLastClosePrice').hasClass('closepasc')){
 	    		$('#perLastClosePrice').removeClass('closepasc').addClass('closepdesc')
-	    		me.displayTransactions.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
 	    	       var b = b.lastClosePrice.toString().replace(/,/gi,"");
 	    	       a = parseFloat(a.replace("$",""));
@@ -2022,11 +2013,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	   }
 			  	   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perLastClosePrice').removeClass('closepdesc').addClass('closepasc')
-	    		me.displayTransactions.sort(sortByClsPrice);
-	    	    function sortByClsPrice(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	       var a = a.lastClosePrice.toString().replace(/,/gi,"");
 		    	   var b = b.lastClosePrice.toString().replace(/,/gi,"");
 		    	   a = parseFloat(a.replace("$",""));
@@ -2038,7 +2028,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	   }
 			  	   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -2055,8 +2045,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
 	    	if($('#perCurPrice').hasClass('currrentpasc')){
 	    		$('#perCurPrice').removeClass('currrentpasc').addClass('currrentpdesc')
-	    		me.displayTransactions.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
@@ -2068,11 +2057,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-	    	    }
+	    	    });
 	    	}else{
 	    		$('#perCurPrice').removeClass('currrentpdesc').addClass('currrentpasc')
-	    		me.displayTransactions.sort(sortByCurrentVal);
-	    	    function sortByCurrentVal(a, b){
+	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = a.currentValue.toString().replace(/,/gi,"");
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
@@ -2084,7 +2072,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	    	    }
+	    	    });
 	    	}
 	    	$('#perCompanyName').removeClass('asc');
 	    	$('#perCompanyName').removeClass('desc');
@@ -2096,13 +2084,86 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#perLastClosePrice').removeClass('closepdesc');
 	    },
 	    
-	    transactionValidator: function(sentItem){
+	    validateInitialBuySell: function(data, event){
+	    	var me = this;
+	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() ){
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), data.initialTradeDate()) ){
+	    			$('#tradeDate').css({"borderColor":"red"}) ;
+	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
+	    		}else{
+	    			$('#tradeDate').css({"borderColor":""}) ;
+					$('#initialNumberOfShares').css({"borderColor":""}) ;
+	    		}
+	    	}
+	    },
+	    
+	    validateBuySell: function(data, event){
+	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() ){
+	    		if( VALUATION.validateNumberOfShares(data.transactionType(), 0.00, VALUATION.transItems(), data.tickerCode(), data.tradeDate()) ){
+    				$('#date'+data.id()).css({"borderColor":"red"});
+    				$('#share'+data.id()).css({"borderColor":"red"});
+	    		}else{
+	    			$('#date'+data.id()).css({"borderColor":""});
+    				$('#share'+data.id()).css({"borderColor":""});
+	    		}
+	    	}
+	    },
+	    
+	    validateNumberOfShares: function(type, shares, transItems, ticker, date){
+	    	var bought = 0.00;
+	    	var sell = 0.00;
+	    	var flag = false;
+	    	
+	    	if(type === "SELL"){
+	    		sell = shares;
+	    		ko.utils.arrayForEach(transItems, function (item) {
+					if(ticker === item.tickerCode()){
+						if( new Date(item.tradeDate()) < new Date(date) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(date).setHours(0,0,0,0) )){
+							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+							if(item.transactionType() === "BUY"){
+								bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
+							}else{
+								sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+							}
+						}
+					}
+				});
+	    	}
+	    	
+	    	if( parseFloat(sell) > parseFloat(bought) ){
+				 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
+				 flag = true;
+				 VALUATION.hasFieldErrors = true;
+			}else{
+				VALUATION.hasFieldErrors =  false;
+			}
+	    	
+	    	return flag;
+	    },
+	
+		buySellValidate: function(){
+			var me = this;
+			ko.utils.arrayForEach(me.transItems(), function (item) {
+				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
+					me.validateFlag = false;
+					VALUATION.hasFieldErrors = true;
+					return false;
+				}else{
+					if(item.transactionType() === "SELL"){
+						me.transactionValidator(item);
+					}
+				}
+		 	});
+			
+			return me.validateFlag;
+		},
+	
+		transactionValidator: function(sentItem){
 	    	var me= this;
 	    	var loopFlag = true;
 	    	var bought = 0.00;
 	    	var sell = 0.00;
 	    	var sellDates = [];
-	    	var ids = [];
 	    	
 	    	$.each(me.validatedCompanies, function(i, data){
 	    		if(data === sentItem.tickerCode()){
@@ -2114,13 +2175,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		me.validatedCompanies.push(sentItem.tickerCode());
 	    		ko.utils.arrayForEach(me.transItems(), function (item) {
 	   	    		 if(sentItem.tickerCode() === item.tickerCode()){
-   	   	    			 if(item.transactionType() === "SELL"){
-   	   	    				 sellDates.push(item.tradeDate());
-   	   	    				 ids.push(item.id());
-   	   	    			 }
+	   	    			 if(item.transactionType() === "SELL"){
+	   	    				 sellDates.push(item.tradeDate());
+	   	    			 }
 	   	    		 }
 	    	 	});
-	    		
 	    		
 				$.each(sellDates, function(i, selldate){
 					ko.utils.arrayForEach(me.transItems(), function (item) {
@@ -2137,53 +2196,17 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					});
 					if( (parseFloat(sell) > parseFloat(bought)) || (sell==0.00 && bought==0.00) ){
 						 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
-						 $.each(ids, function(i, id){
-							 if( UTIL.isEmpty(id) ){
-								 $('#tradeDate').css({"borderColor":"red"}) ;
-								 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
-							 }
-						 });
-						 if( !UTIL.isEmpty(sentItem.id()) ){
-							 $('#date'+sentItem.id()).css({"borderColor":"red"});
-							 $('#share'+sentItem.id()).css({"borderColor":"red"});
-						 }else{
-							 $('#tradeDate').css({"borderColor":"red"}) ;
-							 $('#initialNumberOfShares').css({"borderColor":"red"}) ;
-						 }
 						 me.validateFlag = false;
 						 VALUATION.hasFieldErrors = true;
 					}else{
-						$('#date'+sentItem.id()).css({"borderColor":""});
-						$('#share'+sentItem.id()).css({"borderColor":""});
 						VALUATION.hasFieldErrors = false;
 					}
 					bought = 0.00;
 			    	sell = 0.00;
 				});
 	    	}
-	    },
-	    
-	    buySellValidate: function(){
-	    	var me = this;
-	    	$('#tradeDate').css({"borderColor":""}) ;
-			$('#initialNumberOfShares').css({"borderColor":""}) ;
-			ko.utils.arrayForEach(me.transItems(), function (item) {
-				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
-					me.validateFlag = false;
-					VALUATION.hasFieldErrors = true;
-					return false;
-				}else{
-    				if(item.transactionType() === "SELL"){
-						me.transactionValidator(item);
-    				}else{
-   	   	    			$('#date'+item.id()).css({"borderColor":""});
-						$('#share'+item.id()).css({"borderColor":""});
-    				}
-				}
-    	 	});
-    		
-    		return me.validateFlag;
 	    }
+    
 	};
 	
 	function insertTrans(companyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, currentPrice, id) {

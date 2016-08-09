@@ -91,12 +91,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				    	    console.log('Watchlists unavailable');
 				    	    return;
 				    	}
-					me.finalWL(data.watchlists.sort(sortByName));
-					function sortByName(a, b){
+					me.finalWL(data.watchlists.sort(function(a, b){
 						  var a = a.name.toLowerCase();
 						  var b = b.name.toLowerCase(); 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					}));
 					
 					me.selectedValue(UTIL.getParameterByName("code"));
 					
@@ -340,13 +339,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params,
 				function(data, textStatus, jqXHR){
 					me.watchlistCompanies.removeAll();
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					me.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 					
 					$.each(data, function(i,data){
 						if (data.name == newWLNameLC){
@@ -404,12 +402,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
-					me.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				jsonpCallback
@@ -453,13 +450,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				params, 
 				undefined, 
 				function(data, textStatus, jqXHR){
-					function sortByName(a, b){
-					  var a = a.name.toLowerCase();
-					  var b = b.name.toLowerCase(); 
-					  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
 					PAGE.hideLoading();
-					me.finalWL(data.sort(sortByName));
+					me.finalWL(data.sort(function(a, b){
+						  var a = a.name.toLowerCase();
+						  var b = b.name.toLowerCase(); 
+						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+					}));
 				}, 
 				PAGE.customSGXError,
 				undefined
@@ -486,12 +482,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    $.getJSON(endpoint+"?callback=?", { 'json': JSON.stringify(params) }).done(function(data){
 		    	if(!$.isEmptyObject(data)){
 			    	me.watchlistCompanies(data.companyPrice);
-			    	me.watchlistCompanies.sort(sortByName);
-			    	function sortByName(a, b){
+			    	me.watchlistCompanies.sort(function(a, b){
 						  var a = !UTIL.isEmpty(a.companyName) ? a.companyName.toLowerCase() : "";
 						  var b = !UTIL.isEmpty(b.companyName) ? b.companyName.toLowerCase() : ""; 
 						  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-					}
+					});
 		    	}
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
