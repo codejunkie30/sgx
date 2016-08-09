@@ -89,5 +89,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 		}
 		currencyRepository.delete(removeCurrencyDomainList);
 	}
+	
+	public void resetCompletedFlag(){
+		currencyRepository.resetCompletedFlag();
+	}
 
 }

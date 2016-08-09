@@ -175,6 +175,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			sb.append(" \n Note :- Following currencies are indexed :- "+newCurrencyList.toString());
 			flag=currencyService.addCurrencies(newCurrencyList);
 		}
+		//reset the completed flag
+		currencyService.resetCompletedFlag();
 		if(sb.length()>0){
 			//send email
 			try {
@@ -184,6 +186,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				e.printStackTrace();
 			}
 		}
+
 		return flag;
 	}
 
@@ -643,8 +646,8 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			return currencyModel.getCurrencyName()+ "_" + jobId;
 		} else{
 			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:computeIndexName",
-					"IndexName not available", ErrorBean.ERROR, ""));
-			throw new IndexerServiceException("IndexName not available");
+					"Please check the Dataabase if any currencies exist for indexing.", ErrorBean.ERROR, ""));
+			throw new IndexerServiceException("Please check if IndexName is available.");
 		}
 
 	}
