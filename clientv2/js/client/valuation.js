@@ -2133,34 +2133,35 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}
 					}
 				});
-	    	}
-	    	
-	    	if( parseFloat(sell) > parseFloat(bought) ){
-				 isError = true;
-			}else{
-				VALUATION.hasFieldErrors =  false;
-				bought = 0.00;
-		    	sell = shares;
-				ko.utils.arrayForEach(transItems, function (item) {
-					if(ticker === item.tickerCode()){
-						var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-						if(item.transactionType() === "BUY"){
-							bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-						}else{
-							sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+	    		
+	    		if( parseFloat(sell) > parseFloat(bought) ){
+					 isError = true;
+				}else{
+					bought = 0.00;
+			    	sell = shares;
+					ko.utils.arrayForEach(transItems, function (item) {
+						if(ticker === item.tickerCode()){
+							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+							if(item.transactionType() === "BUY"){
+								bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
+							}else{
+								sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+							}
 						}
+					});
+					if( parseFloat(sell) > parseFloat(bought) ){
+						isError = true;
 					}
-				});
-				if( parseFloat(sell) > parseFloat(bought) ){
-					isError = true;
 				}
-			}
+	    	}
 	    	
 	    	if( isError ){
 				 PAGE.modal.open({ type: 'alert',  content: '<p>You are trying to sell more shares that you have bought or are attempting to sell a quantity before all shares were purchased. Please correct and try again.</p>', width: 500 });
 				 flag = true;
 				 VALUATION.hasFieldErrors = true;
-			}
+			}else {
+				VALUATION.hasFieldErrors = false;
+	    	}
 	    	
 	    	return flag;
 	    },
