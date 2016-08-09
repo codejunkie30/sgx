@@ -21,4 +21,6 @@ public interface CurrencyService {
 	CurrencyModel getNextCurrency();
 	
 	public void deleteCurrenciesList(List<CurrencyModel> currencyModelList);
+
+	public void resetCompletedFlag();
 }
