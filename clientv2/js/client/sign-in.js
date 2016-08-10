@@ -132,7 +132,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							
 							UTIL.handleAjaxRequestLogout(
 								endpoint,
-								params,
 								function(data, textStatus, jqXHR){
 									PAGE.resizeIframeSimple();
 								}, 
