@@ -273,7 +273,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        		textBox.value = "";
 	        		textBox.focus();
 	        	}else{
-	        		textBox.value = Number(textBox.value.toString().match(/^\d+(?:\.\d{0,3})?/));
+	        		textBox.value = Number(parseFloat(textBox.value).toString().match(/^\d+(?:\.\d{0,3})?/));
 	        	}
 	        	
 	        	if( (parseFloat(textBox.value) === parseFloat("0")) || (textBox.value==="")){
@@ -1041,8 +1041,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		confirmDelete: function(){
 			var deleteName = VALUATION.editWLName();
-			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
+			var stockListName = $("#stockListSelect option:selected").text();
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + stockListName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {	
 				 VALUATION.showChange(false);
@@ -1360,8 +1360,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    totalCalculation: function(me){
 	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(3);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(3); 
-	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3); 
-	    	var percentageChange = isNaN(percentageChangeVal)? "0.00" :percentageChangeVal;
+	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3);
+	    	if (percentageChangeVal == Number.POSITIVE_INFINITY || percentageChangeVal == Number.NEGATIVE_INFINITY) {
+	    		percentageChangeVal = "0.000";
+	    	}
+	    	var percentageChange = isNaN(percentageChangeVal)? "0.000" :percentageChangeVal;
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));

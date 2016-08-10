@@ -487,8 +487,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 		confirmDelete: function(){
 			var deleteName = ALERTS.editWLName();
+			var stockListName = $("#stockListSelect option:selected").text();
 			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + stockListName +'?</p> <div calss="button-wrapper"><span class="confirm-delete button">Delete</span> <span class="cancel button">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {				
 				ALERTS.deleteWatchlist();
