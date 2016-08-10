@@ -169,7 +169,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			
 			base.xAxis.events = {
 				afterSetExtremes: function(e) {
-					if (typeof periodChange !== "undefined") periodChange();
+					if (e.rangeSelectorButton && typeof periodChange !== "undefined") periodChange();
 		        }
 			};
 			
