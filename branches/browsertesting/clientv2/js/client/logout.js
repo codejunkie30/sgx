@@ -13,6 +13,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 					UTIL.deleteAuthToken();
 					UTIL.deleteCurrency();
 					UTIL.deleteState();
+					$("#logoutProgressMessage").css("display", "none");
+					$("#logoutMessage").css("display", "block");
 				}, 
 				PAGE.customSGXError);
 			
