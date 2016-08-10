@@ -2050,10 +2050,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$",""));  
-		  			if (!$.isNumeric(a) && b){
+		  			if ((!$.isNumeric(a) || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
 	    	    	    return 1;
 		  			}
-			  	  	if (!$.isNumeric(b) && a){
+		  			if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
@@ -2065,10 +2065,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
-		  			if (!$.isNumeric(a) && b){
+		  			if ((!$.isNumeric(a) || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
 	    	    	    return 1;
 		  			}
-			  	  	if (!$.isNumeric(b) && a){
+		  			if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
@@ -2087,7 +2087,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    validateInitialBuySell: function(data, event){
 	    	var me = this;
 	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() ){
-	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), data.initialTradeDate()) ){
+	    		
+	    		var dateArr = data.initialTradeDate().split("/");
+				var dateStr = dateArr[0]+" "+dateArr[1]+" "+dateArr[2];
+				var date = new Date(dateStr);
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), date) ){
 	    			$('#tradeDate').css({"borderColor":"red"}) ;
 	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
 	    		}else{
@@ -2119,9 +2123,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		sell = shares;
 	    		ko.utils.arrayForEach(transItems, function (item) {
 					if(ticker === item.tickerCode()){
-						var dateArr = date.split("/");
-						var dateStr = dateArr[0]+" "+dateArr[1]+" "+dateArr[2];
-						if( new Date(item.tradeDate()) < new Date(dateStr) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(dateStr).setHours(0,0,0,0) )){
+						if( new Date(item.tradeDate()) < new Date(date) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(date).setHours(0,0,0,0) )){
 							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 							if(item.transactionType() === "BUY"){
 								bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
