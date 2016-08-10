@@ -90,7 +90,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
             	this.parentURL = this.parentURL.split("?")[0].split("#")[0];
         	}
          	else {
-         		this.parentURL = window.location.pathname;
+         		this.parentURL = window.location.href;
          	}
         	return this.parentURL;
         },
