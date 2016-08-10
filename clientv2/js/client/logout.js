@@ -3,6 +3,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 	var LOGOUT = {
 				
 		initPage: function() {
+			PAGE.showLoading();
 			var endpoint = PAGE.fqdn + "/sgx/logout";
 			var params = {};
 			
@@ -13,6 +14,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 					UTIL.deleteAuthToken();
 					UTIL.deleteCurrency();
 					UTIL.deleteState();
+					PAGE.hideLoading();
 				}, 
 				PAGE.customSGXError);
 			
