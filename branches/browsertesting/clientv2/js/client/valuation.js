@@ -1475,7 +1475,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	return codes;
 	    },
 	    
-	    isDeleteValid: function(transactionType, tickerCode, numberOfShares){
+	    isDeleteValid: function(transactionType, tickerCode, numberOfShares, date){
 	    	var flag = true;
 	    	numberOfShares = numberOfShares.toString().replace(/,/gi,"");
 	    	if(transactionType === "BUY"){
@@ -1484,11 +1484,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 var sell = 0.00;
 		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 		    		 if(item.tickerCode() === tickerCode){
-		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-		    			 if(item.transactionType() === "BUY"){
-		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-		    			 }else{
-		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+		    			 if( new Date(item.tradeDate()) < new Date(date) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(date).setHours(0,0,0,0) ) ){
+		    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+			    			 if(item.transactionType() === "BUY"){
+			    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
+			    			 }else{
+			    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
+			    			 }
 		    			 }
 		    		 }
 		    	 });
@@ -1503,7 +1505,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares()) ){
+	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares(), item.tradeDate() ) ){
 		    	PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
@@ -1576,7 +1578,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeIntPerItem: function(item){
 	    	var me = this;
-	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares) ){
+	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares, item.intTradeDate) ){
 				PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
