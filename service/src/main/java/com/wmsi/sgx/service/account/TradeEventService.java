@@ -12,4 +12,6 @@ public interface TradeEventService{
 	void saveEvent(TradeEvent p);
 
 	List<TradeEvent> getEventsForDate(String market, String id, Date d);
+	
+	List<TradeEvent> getEventsForDatesBetween(String market, String id, Date from, Date to);
 }

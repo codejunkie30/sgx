@@ -127,6 +127,23 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	@Override
+	public List<Price> getPricingHistoryBetweenDates(String market, String id, Date from, Date to) throws QuanthouseServiceException {
+
+		List<Price> ret = new ArrayList<Price>();
+		List<TradeEvent> events = tradeEventService.getEventsForDatesBetween(market, toMarketId(id), from, to);
+		
+		Double currentPrice = 0.0;
+		for(TradeEvent e : events){
+			if(!e.getLastPrice().equals(currentPrice)){
+				currentPrice = e.getLastPrice();
+				ret.add(bindPriceData(e));
+			}
+		}
+		
+		return ret;
+	}
+	
+	@Override
 	public List<CompanyPrice> getCompanyPrice(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
 		
