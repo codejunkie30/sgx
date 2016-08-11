@@ -27,9 +27,10 @@
 .watchlist .wl-companies ul li.odd { background: #ebecec; }
 .watchlist .wl-companies ul li span { font-size: 22px; color: #444; font-weight: bold; display: inline-block; }
 .watchlist .wl-companies ul li .ticker { width: 115px; }
-.watchlist .wl-companies ul li .currency { width: 60px; }
-.watchlist .wl-companies ul li .price { width: 75px; }
-.watchlist .wl-companies ul li .change { width: 100px; color: #b5cf34; }
+.watchlist .wl-companies ul li .currency { width: 55px; }
+.watchlist .wl-companies ul li .price { width: 90px; }
+.watchlist .wl-companies ul li .priceFont { width: 90px;font-size: 12px }
+.watchlist .wl-companies ul li .change { width: 90px; color: #b5cf34; }
 .watchlist .wl-companies ul li .change.negative { color: #bf0052; }
 
 .search h5{float: left; padding-right: 10px; margin-top: 11px;}
