@@ -70,8 +70,8 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
                     	color: "#000000",
                     	fontWeight: "bold"
                     },
-    				x: -10,
-    				rotation: 45
+    				x: 0,
+    				rotation: -45
     			},    			
     			ordinal:false,
     			minTickInterval: 24 * 3600 * 1000
