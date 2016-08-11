@@ -307,9 +307,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        var options = allBindingsAccessor().datepickerOptions || {};
 		        $(element).datepicker({
 		        	maxDate: new Date(),
-		        	dateFormat: 'dd/M/yy',
+		        	dateFormat: 'yy/mm/dd',
+		        	constrainInput: false,
+		        	yearRange: "-100:+0",
 		        	changeMonth: true,
-			        changeYear: true
+			        changeYear: true,
+					beforeShow: function() {
+						setTimeout(function(){
+			            	$('.ui-datepicker').css('z-index', 999);
+			        	}, 0);
+					} 
         		});
 
 		        //handle disposal (if KO removes by the template binding)
@@ -317,25 +324,51 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		            $(element).datepicker("destroy");
 		        });
 		        
-		        var value = parseInt($(element).val());
-		        var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(value));
-		        $(element).val(date);
-		    },
-		    update: function(element, valueAccessor) {
-		        var value = ko.utils.unwrapObservable(valueAccessor()),
-		            $el = $(element),
-		            current = $el.datepicker("getDate").getTime();
-		        var parsedValue = null;
-		        try{
-		        	parsedValue = $.datepicker.parseDate( "dd/M/yy", value ).getTime();
-		    	}catch(e){parsedValue = value;}
-		    	
-		    	var myValue = valueAccessor();
-		    	myValue(parsedValue);
-		    	 
-		    	var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-		    	$(element).val(date);
-
+		        if($(element).val()){
+			        var value = parseInt($(element).val());
+			        var date = $.datepicker.formatDate("yy/mm/dd", Date.fromISO(value));
+			        $(element).val(date);
+		        }
+		        
+	    	    $(element).on("change", function (event) {
+		        	event.preventDefault();
+		        	var textBox = event.target;
+		        	var flag = false;
+		        	var maxYear = (new Date()).getFullYear();
+		        	var maxDate = new Date();
+		        	
+		        	if(textBox.value){
+		        		var re=/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+		        		if( regs = textBox.value.match(re) ){
+		        			if( regs[1] > maxYear || regs[2] < 1 || regs[2] > 12 ||
+		        					regs[3] < 1 || regs[3] > 31 || new Date(textBox.value) > maxDate ){
+		        				flag = true;
+		        			}else{
+		        				var lastDayOfMonth = VALUATION.daysInMonth(regs[2], regs[1]);
+		        				if(regs[3] > lastDayOfMonth){
+		        					flag = true;
+		        				}
+		        			}
+		        		}else{
+		        			flag = true;
+		        		}
+		        	}else{
+		        		flag = true;
+		        	}
+		        	
+		        	if(flag){
+		        		textBox.value = "";
+		        		$('#'+textBox.id).css({"borderColor":"red"});
+		        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
+		        		VALUATION.hasFieldErrors =  true;
+		        		VALUATION.dateValidatorFlag = true;
+		        	}else{
+		        		$('#'+textBox.id).css({"borderColor":""});
+		        		VALUATION.hasFieldErrors =  false;
+		        		VALUATION.dateValidatorFlag = false;
+		        	}
+		        	
+		        });
 		    }
 		};
 	
@@ -421,6 +454,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	
     	validatedCompanies: [],
     	validateFlag: true,
+    	
+    	dateValidatorFlag: false,
     	
 		initPage: function() {
 			var me = this;
@@ -661,25 +696,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$(".pagination-container").remove();
 						}
 						PAGE.hideLoading();
-						me.showDatePicker();
 						setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 					}, 
 					PAGE.customSGXError);
 		},
 		
-		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({
-				maxDate: new Date(),
-				dateFormat: 'dd/M/yy',
-				changeMonth: true,
-		        changeYear: true,
-				beforeShow: function() {
-					setTimeout(function(){
-			            $('.ui-datepicker').css('z-index', 999);
-			        }, 0);
-				} 
-			});
-		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
 			var me = this;
@@ -1168,13 +1189,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode))) &&
 					!VALUATION.hasFieldErrors ){
 				if(isFieldsNotEmpty){
-					var parsedValue = null;
-			        try{
-			        	parsedValue = $.datepicker.parseDate( "dd/M/yy", tradeDate ).getTime();
-			    	}catch(e){parsedValue = tradeDate;}
-			    	
-					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-
 					me.convertTickerAndClosePrice(tickerCode, me);
 					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 					me.transItems.push(transItemModel);
@@ -1423,7 +1437,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    displayAddTransactions: function(data){
 	    	var me = this;
-	    	me.showDatePicker();
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
 	    		me.convertTickerAndClosePrice(item.tickerCode, me);
@@ -2093,12 +2106,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    validateInitialBuySell: function(data, event){
 	    	var me = this;
-	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() ){
+	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() && !VALUATION.dateValidatorFlag){
 	    		
-	    		var dateArr = data.initialTradeDate().split("/");
+	    		/*var dateArr = data.initialTradeDate().split("/");
 				var dateStr = dateArr[0]+" "+dateArr[1]+" "+dateArr[2];
-				var date = new Date(dateStr);
-	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), date) ){
+				var date = new Date(dateStr);*/
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), data.initialTradeDate()) ){
 	    			$('#tradeDate').css({"borderColor":"red"}) ;
 	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
 	    		}else{
@@ -2109,7 +2122,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    validateBuySell: function(data, event){
-	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() ){
+	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() && !VALUATION.dateValidatorFlag ){
 	    		if( VALUATION.validateNumberOfShares(data.transactionType(), 0.00, VALUATION.transItems(), data.tickerCode(), data.tradeDate()) ){
     				$('#date'+data.id()).css({"borderColor":"red"});
     				$('#share'+data.id()).css({"borderColor":"red"});
@@ -2176,7 +2189,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		buySellValidate: function(){
 			var me = this;
 			ko.utils.arrayForEach(me.transItems(), function (item) {
-				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
+				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase()) || UTIL.isEmpty(item.tradeDate()) ){
 					me.validateFlag = false;
 					VALUATION.hasFieldErrors = true;
 					return false;
@@ -2237,7 +2250,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    	sell = 0.00;
 				});
 	    	}
-	    }
+	    },
+	    
+	    daysInMonth: function(month, year) {
+	    	var m = [31,28,31,30,31,30,31,31,30,31,30,31];
+	    	if (month != 2) return m[month - 1];
+	    	if (year%4 != 0) return m[1];
+	    	if (year%100 == 0 && year%400 != 0) return m[1];
+	    	return m[1] + 1;
+    	}
     
 	};
 	
