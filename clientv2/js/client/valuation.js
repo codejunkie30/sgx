@@ -1492,8 +1492,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    			 }
 		    		 }
 		    	 });
-		    	 bought = parseFloat( parseFloat(bought) - parseFloat(numberOfShares) ).toFixed(3);
-		    	 if(parseFloat(sell) > parseFloat(bought)){
+		    	 if(parseFloat(sell) >= parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
 		    	 }
