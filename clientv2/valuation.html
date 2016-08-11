@@ -164,9 +164,9 @@
 						<tr>
 							<td class="company-row"><select class="select-company" id="watchlistCompaniesSelect" data-bind="companiesOnchange, options: watchlistCompanies, optionsCaption: 'Select a Company', value: selectedCompanyValue, optionsValue: 'ticker', optionsText: 'companyName'"></select></td>
 							<td><select class="select-type" data-bind="options: availableTypes, value: selectedAvailableType, event: { change: validateInitialBuySell }" ></select></td>
-							<td><input type="text" id="tradeDate" data-bind="value: initialTradeDate, datepicker:initialTradeDate, event: { change: validateInitialBuySell }" placeholder="YYYY/MM/DD"/></td>
+							<td><input type="text" id="tradeDate" data-bind="value: initialTradeDate, datepicker:initialTradeDate, valueUpdate: 'afterkeydown', event: { change: validateInitialBuySell }" placeholder="YYYY/MM/DD"/></td>
 							<td><input type="text" id="initialNumberOfShares" data-bind="valuationNumeric, valueUpdate: 'afterkeydown', value: initialNumberOfShares, event: { change: validateInitialBuySell }"/></td>
-							<td><input type="text" id="initialCostAtPurchase" data-bind="valuationNumeric, value: initialCostAtPurchase, event: { change: validateInitialBuySell }" /></td>
+							<td><input type="text" id="initialCostAtPurchase" data-bind="valuationNumeric, value: initialCostAtPurchase, valueUpdate: 'afterkeydown', event: { change: validateInitialBuySell }" /></td>
 							<td class="textCenter"><a class="clear-button" data-bind="click: clearTransaction">Clear</a></td>
 							<td><a class="add-button" data-bind="click: addSaveTransactions">Add</a></td>
 						</tr>
@@ -175,7 +175,7 @@
 						<tr data-bind="css: { 'odd': ($index() % 2 == 0) }">
 							<td class="company-row" data-bind="text: companyName"></td>
 							<td><select class="select-type" data-bind="options: $root.availableTypes, value: transactionType, event: { change: $root.validateBuySell }" ></select></td>
-							<td><input data-bind="value: tradeDate, attr: { id: 'date'+id()}, datepicker:tradeDate, event: { change: $root.validateBuySell }" type="text"  placeholder="YYYY/MM/DD"/></td>
+							<td><input data-bind="value: tradeDate, attr: { id: 'date'+id()}, datepicker:tradeDate, valueUpdate: 'afterkeydown', event: { change: $root.validateBuySell }" type="text"  placeholder="YYYY/MM/DD"/></td>
 							<td><input data-bind="valuationNumeric, attr: { id: 'share'+id()}, value: numberOfShares, valueUpdate: 'afterkeydown', largeNumber: numberOfShares, event: { change: $root.validateBuySell }" type="text"/></td>
 							<td><input data-bind="valuationNumeric, attr: { id: 'cost'+id()}, value: costAtPurchase, valueUpdate: 'afterkeydown', currencyInput: costAtPurchase, symbol: '$', event: { change: $root.validateBuySell }" type="text"/></td>
 							<td data-bind="text: currentPrice, currency: currentPrice, symbol: '$'"></td>
