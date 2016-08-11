@@ -24,7 +24,7 @@
 		<span data-bind="template: 'stocklist-header'"></span>
 	</div>
 	<section id="alerts-content-alternative" data-bind="if:(userStatus() == 'UNAUTHORIZED' || userStatus() == 'EXPIRED')">
-		<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName, userStatus: userStatus} }"></div>
+		<div data-bind="component:{ name:'premium-preview', params:{sectionName: 'StockLists', userStatus: userStatus} }"></div>
 	</section>
 <!-- ko {if: finalWL().length} -->	
 	<section class="key-dev-match">
