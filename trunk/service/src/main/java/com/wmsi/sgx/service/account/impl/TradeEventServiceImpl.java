@@ -43,4 +43,18 @@ public class TradeEventServiceImpl implements TradeEventService{
 				);
 	}
 	
+	@Override	
+	public List<TradeEvent> getEventsForDatesBetween(String market, String ticker, Date from, Date to) {
+		Date d = new DateTime(from).toDate();
+		
+		return tradeEventRepository
+				.findByMarketAndTickerAndLastTradeTimeBetweenOrderByLastTradeTimeDesc
+				(
+					market, 
+					ticker, 
+					from,
+					to
+				);
+	}
+	
 }
