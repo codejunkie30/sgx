@@ -191,7 +191,6 @@ define(["jquery", "moment"], function($, moment) {
 		handleAjaxRequestLogout: function(endpoint, successFN, errorFN) {        	
         	var config = {
                 url: endpoint,
-                dataType: 'json',         	
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};        	

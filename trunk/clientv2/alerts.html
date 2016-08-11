@@ -24,7 +24,7 @@
 	</div>
 	
 	<section id="alerts-content-alternative" data-bind="if:(userStatus() == 'UNAUTHORIZED' || userStatus() == 'EXPIRED')">
-		<div data-bind="component:{ name:'premium-preview', params:{sectionName: sectionName, userStatus: userStatus} }"></div>
+		<div data-bind="component:{ name:'premium-preview', params:{sectionName: 'StockLists', userStatus: userStatus} }"></div>
 	</section>
 
 <!-- ko {if: finalWL().length} -->
@@ -60,7 +60,7 @@
 							<li data-bind="css: { 'odd': ($index() % 2 == 0) }">							
 								<span class="ticker" data-bind="text: ticker"></span>
 								<span class="currency" data-bind="text: currency"></span> 
-								<span class="price" data-bind="text: price, format: 'number'"></span>
+								<span class="price" data-bind="text: price, format: 'number',css: { 'priceFont' : price.toString().length>7}"></span>
 								<span class="change" data-bind="text: change, format: 'number', css: { 'negative': change < 0  }, prependIf: '+', conditional: change > 0"></span>
 								<span class="remove" data-bind="value: ticker, click:$root.deleteCompany"></span>
 								<div class="company" data-bind="text: companyName"></div>

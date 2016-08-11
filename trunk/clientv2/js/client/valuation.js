@@ -273,7 +273,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        		textBox.value = "";
 	        		textBox.focus();
 	        	}else{
-	        		textBox.value = Number(textBox.value.toString().match(/^\d+(?:\.\d{0,3})?/));
+	        		textBox.value = Number(parseFloat(textBox.value).toString().match(/^\d+(?:\.\d{0,3})?/));
 	        	}
 	        	
 	        	if( (parseFloat(textBox.value) === parseFloat("0")) || (textBox.value==="")){
@@ -307,7 +307,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		        var options = allBindingsAccessor().datepickerOptions || {};
 		        $(element).datepicker({
 		        	maxDate: new Date(),
-		        	dateFormat: 'dd/M/yy'
+		        	dateFormat: 'yy/mm/dd',
+		        	constrainInput: false,
+		        	yearRange: "-100:+0",
+		        	changeMonth: true,
+			        changeYear: true,
+					beforeShow: function() {
+						setTimeout(function(){
+			            	$('.ui-datepicker').css('z-index', 999);
+			        	}, 0);
+					} 
         		});
 
 		        //handle disposal (if KO removes by the template binding)
@@ -315,25 +324,51 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		            $(element).datepicker("destroy");
 		        });
 		        
-		        var value = parseInt($(element).val());
-		        var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(value));
-		        $(element).val(date);
-		    },
-		    update: function(element, valueAccessor) {
-		        var value = ko.utils.unwrapObservable(valueAccessor()),
-		            $el = $(element),
-		            current = $el.datepicker("getDate").getTime();
-		        var parsedValue = null;
-		        try{
-		        	parsedValue = $.datepicker.parseDate( "dd/M/yy", value ).getTime();
-		    	}catch(e){parsedValue = value;}
-		    	
-		    	var myValue = valueAccessor();
-		    	myValue(parsedValue);
-		    	 
-		    	var date = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-		    	$(element).val(date);
-
+		        if($(element).val()){
+			        var value = parseInt($(element).val());
+			        var date = $.datepicker.formatDate("yy/mm/dd", Date.fromISO(value));
+			        $(element).val(date);
+		        }
+		        
+	    	    $(element).on("change", function (event) {
+		        	event.preventDefault();
+		        	var textBox = event.target;
+		        	var flag = false;
+		        	var maxYear = (new Date()).getFullYear();
+		        	var maxDate = new Date();
+		        	
+		        	if(textBox.value){
+		        		var re=/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+		        		if( regs = textBox.value.match(re) ){
+		        			if( regs[1] > maxYear || regs[2] < 1 || regs[2] > 12 ||
+		        					regs[3] < 1 || regs[3] > 31 || new Date(textBox.value) > maxDate ){
+		        				flag = true;
+		        			}else{
+		        				var lastDayOfMonth = VALUATION.daysInMonth(regs[2], regs[1]);
+		        				if(regs[3] > lastDayOfMonth){
+		        					flag = true;
+		        				}
+		        			}
+		        		}else{
+		        			flag = true;
+		        		}
+		        	}else{
+		        		flag = true;
+		        	}
+		        	
+		        	if(flag){
+		        		textBox.value = "";
+		        		$('#'+textBox.id).css({"borderColor":"red"});
+		        		PAGE.modal.open({ type: 'alert',  content: '<p>Please correct errors highlighted in red.</p>', width: 400 });
+		        		VALUATION.hasFieldErrors =  true;
+		        		VALUATION.dateValidatorFlag = true;
+		        	}else{
+		        		$('#'+textBox.id).css({"borderColor":""});
+		        		VALUATION.hasFieldErrors =  false;
+		        		VALUATION.dateValidatorFlag = false;
+		        	}
+		        	
+		        });
 		    }
 		};
 	
@@ -419,6 +454,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	
     	validatedCompanies: [],
     	validateFlag: true,
+    	
+    	dateValidatorFlag: false,
     	
 		initPage: function() {
 			var me = this;
@@ -659,23 +696,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$(".pagination-container").remove();
 						}
 						PAGE.hideLoading();
-						me.showDatePicker();
 						setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
 					}, 
 					PAGE.customSGXError);
 		},
 		
-		showDatePicker: function(){
-			$( "#tradeDate" ).datepicker({
-				maxDate: new Date(),
-				dateFormat: 'dd/M/yy',
-				beforeShow: function() {
-					setTimeout(function(){
-			            $('.ui-datepicker').css('z-index', 999);
-			        }, 0);
-				} 
-			});
-		},
 		handleIndividualCheckbox:function(item){
 			PAGE.showLoading();
 			var me = this;
@@ -1037,8 +1062,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		confirmDelete: function(){
 			var deleteName = VALUATION.editWLName();
-			
-			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + deleteName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
+			var stockListName = $("#stockListSelect option:selected").text();
+			PAGE.modal.open({ content: '<p>Are you sure you want to delete ' + stockListName +'?</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 			
 			 $('.confirm-delete').click(function(e) {	
 				 VALUATION.showChange(false);
@@ -1164,13 +1189,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					UTIL.isEmpty(tradeDate) && UTIL.isEmpty(numberOfShares) && UTIL.isEmpty(costAtPurchase) && UTIL.isEmpty(tickerCode))) &&
 					!VALUATION.hasFieldErrors ){
 				if(isFieldsNotEmpty){
-					var parsedValue = null;
-			        try{
-			        	parsedValue = $.datepicker.parseDate( "dd/M/yy", tradeDate ).getTime();
-			    	}catch(e){parsedValue = tradeDate;}
-			    	
-					tradeDate = $.datepicker.formatDate("dd/M/yy", Date.fromISO(parsedValue));
-
 					me.convertTickerAndClosePrice(tickerCode, me);
 					transItemModel = new insertTrans(me.disCompanyName, tickerCode, transactionType, tradeDate, numberOfShares, costAtPurchase, me.liveClosingPrice, "");
 					me.transItems.push(transItemModel);
@@ -1356,8 +1374,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    totalCalculation: function(me){
 	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(3);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(3); 
-	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3); 
-	    	var percentageChange = isNaN(percentageChangeVal)? "0.00" :percentageChangeVal;
+	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3);
+	    	if (percentageChangeVal == Number.POSITIVE_INFINITY || percentageChangeVal == Number.NEGATIVE_INFINITY) {
+	    		percentageChangeVal = "0.000";
+	    	}
+	    	var percentageChange = isNaN(percentageChangeVal)? "0.000" :percentageChangeVal;
 	    	
 	    	$('#totalInvested').html("$" + totalInvested.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
@@ -1416,7 +1437,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    displayAddTransactions: function(data){
 	    	var me = this;
-	    	me.showDatePicker();
 	    	var serverTransData = me.refractTransData(data);
 	    	ko.utils.arrayMap(serverTransData, function(item) {
 	    		me.convertTickerAndClosePrice(item.tickerCode, me);
@@ -1464,7 +1484,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 var sell = 0.00;
 		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 		    		 if(item.tickerCode() === tickerCode){
-		 	    		 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 		    			 if(item.transactionType() === "BUY"){
 		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }else{
@@ -1472,8 +1492,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    			 }
 		    		 }
 		    	 });
-		    	 bought = parseFloat( parseFloat(bought) - parseFloat(numberOfShares) ).toFixed(3);
-		    	 if(parseFloat(sell) > parseFloat(bought)){
+		    	 if(parseFloat(sell) >= parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
 		    	 }
@@ -1484,7 +1503,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares()) ){
+	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares() ) ){
 		    	PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
@@ -1964,10 +1983,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,"")); 
-		  			if ((!$.isNumeric(a) || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
+			    	if ((!$.isNumeric(a) || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
 	    	    	    return 1;
 		  			}
-			  	  	if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
+			    	if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
 	    	    	    return -1;
 			  	  	}
 			  	  	return ((a < b) ? 1 : ((a > b) ? -1 : 0));
@@ -1977,10 +1996,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		me.displayTransactions.sort(function(a, b){
 	    	    	var a = parseFloat(a.numberOfShares.toString().replace(/,/gi,""));
 			    	var b = parseFloat(b.numberOfShares.toString().replace(/,/gi,""));
-	  			  	if ((!$.isNumeric(a)  || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
+			    	if ((!$.isNumeric(a)  || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
 	    	    	    return 1;
 		  			}
-			  	  	if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
+			    	if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
 	    	    	    return -1;
 			  	  	}
 	  			  	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
@@ -2065,7 +2084,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	    	var b = b.currentValue.toString().replace(/,/gi,"");
 	    	    	a = parseFloat(a.replace("$",""));
 		  			b = parseFloat(b.replace("$","")); 
-		  			if ((!$.isNumeric(a) || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
+		  			if ((!$.isNumeric(a)  || isNaN(a)) && ($.isNumeric(b) && !isNaN(b))){
 	    	    	    return 1;
 		  			}
 		  			if ((!$.isNumeric(b) || isNaN(b)) && ($.isNumeric(a) && !isNaN(a))){
@@ -2086,12 +2105,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    validateInitialBuySell: function(data, event){
 	    	var me = this;
-	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() ){
+	    	if( data.initialCostAtPurchase() && data.initialNumberOfShares() && data.initialTradeDate() && !VALUATION.dateValidatorFlag){
 	    		
-	    		var dateArr = data.initialTradeDate().split("/");
+	    		/*var dateArr = data.initialTradeDate().split("/");
 				var dateStr = dateArr[0]+" "+dateArr[1]+" "+dateArr[2];
-				var date = new Date(dateStr);
-	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), date) ){
+				var date = new Date(dateStr);*/
+	    		if( me.validateNumberOfShares(data.selectedAvailableType(), data.initialNumberOfShares(), data.transItems(), data.selectedCompanyValue(), data.initialTradeDate()) ){
 	    			$('#tradeDate').css({"borderColor":"red"}) ;
 	    			$('#initialNumberOfShares').css({"borderColor":"red"}) ;
 	    		}else{
@@ -2102,7 +2121,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    validateBuySell: function(data, event){
-	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() ){
+	    	if( data.costAtPurchase() && data.numberOfShares() && data.tradeDate() && !VALUATION.dateValidatorFlag ){
 	    		if( VALUATION.validateNumberOfShares(data.transactionType(), 0.00, VALUATION.transItems(), data.tickerCode(), data.tradeDate()) ){
     				$('#date'+data.id()).css({"borderColor":"red"});
     				$('#share'+data.id()).css({"borderColor":"red"});
@@ -2169,7 +2188,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		buySellValidate: function(){
 			var me = this;
 			ko.utils.arrayForEach(me.transItems(), function (item) {
-				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase())){
+				if(UTIL.isEmpty(item.numberOfShares()) || UTIL.isEmpty(item.costAtPurchase()) || UTIL.isEmpty(item.tradeDate()) ){
 					me.validateFlag = false;
 					VALUATION.hasFieldErrors = true;
 					return false;
@@ -2230,7 +2249,15 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    	sell = 0.00;
 				});
 	    	}
-	    }
+	    },
+	    
+	    daysInMonth: function(month, year) {
+	    	var m = [31,28,31,30,31,30,31,31,30,31,30,31];
+	    	if (month != 2) return m[month - 1];
+	    	if (year%4 != 0) return m[1];
+	    	if (year%100 == 0 && year%400 != 0) return m[1];
+	    	return m[1] + 1;
+    	}
     
 	};
 	
