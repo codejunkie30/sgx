@@ -1459,10 +1459,31 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		 var me = this;
 		    	 var bought = 0.00;
 		    	 var sell = 0.00;
+		    	 var tempDate = null;
+		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
+		    		
+		    		 if(item.tickerCode() === tickerCode){
+	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+		    			 if(item.transactionType() === "SELL") {
+		    				 if(tempDate == null) {
+		    					 if(new Date(item.tradeDate()) >= new Date(date)) {
+		    						 tempDate = new Date(item.tradeDate());
+			    				 }
+		    				 }
+		    				 else {
+		    					 if(new Date(item.tradeDate()) >= new Date(date) && tempDate <=new Date(item.tradeDate())) {
+		    						 tempDate = new Date(item.tradeDate());
+			    				 }
+		    				 }
+		    				 
+		    			 }
+		    		 }
+		    	 });
+		    	 
 		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 		    		 if(item.tickerCode() === tickerCode){
 	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-		    			 if(item.transactionType() === "BUY"  && new Date(item.tradeDate()) <= new Date(date)){
+		    			 if(item.transactionType() === "BUY"  && (new Date(item.tradeDate()) <= new Date(date) || new Date(item.tradeDate())<=tempDate)){
 		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }else if(item.transactionType() === "SELL"  && new Date(item.tradeDate()) >= new Date(date)) {
 		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
@@ -1472,7 +1493,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 if(transactionType === "BUY") {
 		    		 bought=bought-numberOfShares;
 		    	 }
-		    	 if(parseFloat(sell) > parseFloat(bought)){
+		    	 if(parseFloat(sell) != 0 && parseFloat(sell) >= parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
 		    	 }
@@ -1483,7 +1504,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares(),item.tradeDate() ) ){
+	    	var buySellValidateFlag = true;
+	    	if(item.transactionType() === "BUY") {
+	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid( item.transactionType(), item.tickerCode(), item.numberOfShares(),item.tradeDate() );
+	    		//validation related attributes
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
+	    	}
+	    	if( buySellValidateFlag ){
 		    	PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
@@ -1515,6 +1543,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.cboxWrapper').colorbox.close();
 		        });
 	    	}
+	    	
+	    	
 			 
 	    },
 	    
@@ -1556,7 +1586,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeIntPerItem: function(item){
 	    	var me = this;
-	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares,item.intTradeDate) ){
+    		var buySellValidateFlag = true;
+	    	if(item.intTransactionType === "BUY") {
+	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares,item.intTradeDate );
+	    		//validation related attributes
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
+	    	}
+	    	if( buySellValidateFlag ){	
 				PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";
