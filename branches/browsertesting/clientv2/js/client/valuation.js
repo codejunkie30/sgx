@@ -476,6 +476,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		renderChart: function(me, responseData){
 			VALUATION.transactionTickers = [];
 			me.tickerColors.removeAll();
+			VALUATION.chartPoints = [];
 			$.each(responseData.companiesPriceHistory, function(i, data){
 				VALUATION.transactionTickers.push(data.tickerCode);
 				VALUATION.chartPoints[data.tickerCode] = {}
