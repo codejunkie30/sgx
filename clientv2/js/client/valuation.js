@@ -1588,7 +1588,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	var me = this;
     		var buySellValidateFlag = true;
 	    	if(item.intTransactionType === "BUY") {
-	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares,item.intTradeDate );
+	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares,item.tradeDateForSort );
 	    		//validation related attributes
 				me.validatedCompanies = [];
 		    	me.validateFlag = true;
