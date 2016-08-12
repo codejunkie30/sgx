@@ -740,6 +740,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		multiChartUnchart: function(me, value){
 			var chart = $('#performance-chart-content').highcharts();
+			var seriesOptions = new Array();
+			var index = 0;
 			if(!UTIL.isEmpty(chart)){				
 				var seriesLength = chart.series.length;
 				var selectedRange = chart.rangeSelector.selected;
