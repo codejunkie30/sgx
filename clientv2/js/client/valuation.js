@@ -721,7 +721,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					seriesOptions[index++]={
 		                name: seriesName,
 		                data: VALUATION.chartPoints[seriesName].priceData,
-		                //chartData: me.chartData,
 		                threshold : null,
 						turboThreshold : 0,
 						color:VALUATION.chartPoints[seriesName].color
@@ -745,9 +744,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var seriesLength = chart.series.length;
 				var selectedRange = chart.rangeSelector.selected;
 				if(value){
-					//first make all series visible so that seriesOptions are updated
-					for(var i = seriesLength -1; i > -1; i--) {					
-			        	chart.series[i].setVisible(value,false);					
+					for(var seriesName in VALUATION.chartPoints) {
+								seriesOptions[index++]={
+					                name: seriesName,
+					                data: VALUATION.chartPoints[seriesName].priceData,
+					                threshold : null,
+									turboThreshold : 0,
+									color:VALUATION.chartPoints[seriesName].color
+			        			};
 					}
 					chart.destroy();
 					var newOptions = {
@@ -756,7 +760,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							}
 					};
 					
-					me.performanceChartRenderer(me.seriesOptions, newOptions);
+					me.performanceChartRenderer(seriesOptions, newOptions);
 				}else{
 					for(var i = seriesLength -1; i > -1; i--) {					
 			        	chart.series[i].setVisible(value,false);					
@@ -898,7 +902,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var chart = $('#performance-chart-content').highcharts();
 			if(!UTIL.isEmpty(chart)){
 				me.seriesOptions = [];
-				me.performanceChartRenderer(me);
+				me.performanceChartRenderer(me.seriesOptions);
 			}
 			if(!UTIL.isEmpty(chart)){
 				$('#performance-chart-content').show();
@@ -973,7 +977,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
 								me.seriesOptions = [];
-								me.performanceChartRenderer(me);
+								me.performanceChartRenderer(me.seriesOptions);
 							}
 							
 							//get the performance chart data
