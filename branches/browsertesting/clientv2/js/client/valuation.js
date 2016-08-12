@@ -1471,7 +1471,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    				 }
 		    				 }
 		    				 else {
-		    					 if(new Date(item.tradeDate()) >= new Date(date) && tempDate <=new Date(item.tradeDate())) {
+		    					 if(new Date(item.tradeDate()) >= new Date(date) && tempDate >= new Date(item.tradeDate())) {
 		    						 tempDate = new Date(item.tradeDate());
 			    				 }
 		    				 }
@@ -1485,7 +1485,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 		    			 if(item.transactionType() === "BUY"  && (new Date(item.tradeDate()) <= new Date(date) || new Date(item.tradeDate())<=tempDate)){
 		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-		    			 }else if(item.transactionType() === "SELL"  && new Date(item.tradeDate()) >= new Date(date)) {
+		    			 }else if(item.transactionType() === "SELL"  && (new Date(item.tradeDate()) >= new Date(date) || new Date(item.tradeDate())<=tempDate)) {
 		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }
 		    		 }
@@ -1493,7 +1493,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 if(transactionType === "BUY") {
 		    		 bought=bought-numberOfShares;
 		    	 }
-		    	 if(parseFloat(sell) != 0 && parseFloat(sell) >= parseFloat(bought)){
+		    	 if(parseFloat(sell) != 0 && parseFloat(sell) > parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
 		    	 }
