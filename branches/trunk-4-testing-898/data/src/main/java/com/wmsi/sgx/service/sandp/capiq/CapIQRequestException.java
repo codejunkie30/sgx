@@ -1,17 +1,33 @@
 package com.wmsi.sgx.service.sandp.capiq;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.base.Objects;
+import com.wmsi.sgx.exception.ErrorBeanHelper;
+import com.wmsi.sgx.model.ErrorBean;
 
 public class CapIQRequestException extends Exception{
 
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+
 
 	public CapIQRequestException(String msg){
 		super(msg);
+		errorBeanHelper.addError(new ErrorBean("AlphaFactorServiceException",
+				msg, ErrorBean.ERROR, ""));
+		errorBeanHelper.sendEmail();
+
 	}
 
 	public CapIQRequestException(String msg, Throwable e){
 		super(msg, e);
+		errorBeanHelper.addError(new ErrorBean("AlphaFactorServiceException",
+				msg, ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
+		errorBeanHelper.sendEmail();
+
 	}
 
 	private String statusCode;
