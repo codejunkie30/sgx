@@ -121,5 +121,11 @@ public class ErrorBeanHelper {
 		ex.printStackTrace(new PrintWriter(errors));
 		return errors.toString();
 	}
-	
+
+	public String getStackTrace(Throwable t){
+		StringWriter errors = new StringWriter();
+		t.printStackTrace(new PrintWriter(errors));
+		return errors.toString();
+	}
+
 }
