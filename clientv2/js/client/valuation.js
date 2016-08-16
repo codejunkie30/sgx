@@ -442,6 +442,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		seriesOptions: [],
 		transactionTickers: [],
 		chartData: [],
+		chartPoints:[],
 		seriesColors:ko.observableArray(['#5273cf','#db12be','#e527fd','#5dcc68','#ed9db4','#4c995f','#86b9b5','#f41901','#395b47','#cefb68','#f75900','#a4506c','#0d359b','#7cb5ec','#434348','#90ed7d','#f7a35c','#8085e9','#f15c80','#e4d354','#8d4653','#91e8e1','#60a114','#9866f4','#a401ad']),
 		tickerColors:ko.observableArray(),
 
@@ -475,33 +476,20 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		renderChart: function(me, responseData){
 			VALUATION.transactionTickers = [];
 			me.tickerColors.removeAll();
+			VALUATION.chartPoints = [];
 			$.each(responseData.companiesPriceHistory, function(i, data){
 				VALUATION.transactionTickers.push(data.tickerCode);
+				VALUATION.chartPoints[data.tickerCode] = {}
 				
 				var allData = data.priceHistory;
 				var priceData = me.toHighCharts(allData.price);
-				/*var lowPrice = me.toHighCharts(allData.lowPrice);
-				var openPrice = me.toHighCharts(allData.openPrice);
-				var highPrice = me.toHighCharts(allData.highPrice);
-				
-				$.each(priceData, function(k, record) {
-					var key = Highcharts.dateFormat("%e/%b/%Y", new Date(record.x));
-					
-			        me.chartData[key] = {}
-			        me.chartData[key].close = record.y;
-					 if( lowPrice[k])
-						 me.chartData[key].low = lowPrice[k].y;
-					 if( openPrice[k])
-						 me.chartData[key].open = openPrice[k].y;
-					 if( highPrice[k])
-						 me.chartData[key].high = highPrice[k].y;
-				});*/
+				VALUATION.chartPoints[data.tickerCode].priceData = priceData;
+				VALUATION.chartPoints[data.tickerCode].color = me.seriesColors()[i];
 
 				me.tickerColors()[data.tickerCode] = me.seriesColors()[i];
 				me.seriesOptions[i] = {
 		                name: data.tickerCode,
 		                data: priceData,
-		                //chartData: me.chartData,
 		                threshold : null,
 						turboThreshold : 0,
 						color:me.seriesColors()[i]
@@ -509,7 +497,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				
 			});	
 
-			me.performanceChartRenderer(me);
+			me.performanceChartRenderer(me.seriesOptions);
 			
 			//get the transaction data
 			me.getTransactionsData(me);
@@ -530,87 +518,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			return ret;
 		},
 		
-		performanceChartRenderer:function(me){
+		performanceChartRenderer:function(seriesOptions, newOptions){
 			var perfChart;
 			var baseChart = PER_CHART_CONFIG;
 			
-			baseChart.series = me.seriesOptions;
+			baseChart.series = seriesOptions;
 			// set the zoom
 			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
-			
-			//tooltip custom positioning
-			/*baseChart.tooltip.positioner= function (labelWidth, labelHeight, point) {
-                var tooltipX, tooltipY;
-                if (point.plotX + labelWidth > perfChart.plotWidth) {
-                    tooltipX = point.plotX + perfChart.plotLeft - labelWidth - 20;
-                } else {
-                    tooltipX = point.plotX + perfChart.plotLeft + 20;
-                }
-                tooltipY = point.plotY + perfChart.plotTop - 20;
-                return {
-                    x: tooltipX,
-                    y: tooltipY
-                };
-            }
-			
-			baseChart.tooltip.formatter = function() {
-				if (!this.hasOwnProperty("point")) return;
-				
-				var key = Highcharts.dateFormat("%e/%b/%Y", this.key);
-				var userOption =  this.series.userOptions.chartData[key];
-		    	var priceData = me.cloneDataAndFormat( userOption, me );
-				
-		    	var ret = "<b>" + key+" "+ "("+this.series.userOptions.name+")" + "</b>";
-
-		    	// not a trading day
-		    	if (priceData == undefined) {
-		    		ret += "<br />";
-		    		ret += "No trading data available.";
-		    		return ret;
-		    	}
-		    	
-				var openVal = Highcharts.numberFormat(priceData.open,3);
-				if(parseFloat(openVal) == parseFloat("0.000")){
-					openVal = "-"
-				}else{
-					openVal = "$" + openVal.replace(/\.?0+$/,'');
-				}
-				
-				var closeVal = Highcharts.numberFormat(priceData.close,3);
-				if(parseFloat(closeVal) == parseFloat("0.000")){
-					closeVal="-";
-				}else{
-					closeVal="$" + closeVal.replace(/\.?0+$/,'');
-				}
-				
-				var lowVal = Highcharts.numberFormat(priceData.low,3);
-				if(parseFloat(lowVal) == parseFloat("0.000")){
-					lowVal="-";
-				}else{
-					lowVal="$" + lowVal.replace(/\.?0+$/,'');
-				}
-				
-				var highVal = Highcharts.numberFormat(priceData.high,3);
-				if(parseFloat(highVal) == parseFloat("0.000")){
-					highVal="-";
-				}else{
-					highVal="$" + highVal.replace(/\.?0+$/,'');
-				}
-				
-		    	// is a trading day
-		    	ret += "<span class='chart-mouseover'>";
-		    	ret += "<br />";
-		    	ret += "<span>Open</span>: " + openVal;
-		    	ret += "<br />";
-		    	ret += "<span>Close</span>: " + closeVal;
-		    	ret += "<br />";
-		    	ret += "<span>Low</span>: " + lowVal;
-		    	ret += "<br />";
-		    	ret += "<span>High</span>: " + highVal;
-		    	ret += "</span>";
-		    	
-		    	return ret;
-			};*/
+			if(newOptions){
+				baseChart.rangeSelector.selected = newOptions.rangeSelector.selected;
+			}
 			
 			perfChart = $('#performance-chart-content').highcharts('StockChart', baseChart).highcharts();
 		},
@@ -774,25 +691,85 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		
 		singleChartUnchart: function(me, seriesName, value){
 			var chart = $('#performance-chart-content').highcharts();
+			var seriesOptions = new Array();
+			var index = 0;
+
 			if(!UTIL.isEmpty(chart)){
+				var visibleSeries = new Array();
 				var seriesLength = chart.series.length;
+				var selectedRange = chart.rangeSelector.selected;
+				
 				for(var i = seriesLength -1; i > -1; i--) {
-					if(chart.series[i].name == seriesName){
-		        		chart.series[i].setVisible(value);
-		        		break;
+					if(chart.series[i].visible){		        		
+						visibleSeries.push(chart.series[i].name);
+					}
+				} 
+				for(var seriesName1 in VALUATION.chartPoints) {
+					for(var j =0; j < visibleSeries.length; j++){
+						if(visibleSeries[j] == seriesName1 && seriesName1 !=seriesName){
+							seriesOptions[index++]={
+				                name: seriesName1,
+				                data: VALUATION.chartPoints[seriesName1].priceData,
+				                //chartData: me.chartData,
+				                threshold : null,
+								turboThreshold : 0,
+								color:VALUATION.chartPoints[seriesName1].color
+		        			};
+						}
 					}
 				}
+				if(value){
+					seriesOptions[index++]={
+		                name: seriesName,
+		                data: VALUATION.chartPoints[seriesName].priceData,
+		                threshold : null,
+						turboThreshold : 0,
+						color:VALUATION.chartPoints[seriesName].color
+	            };
+        		}        		
+
+				chart.destroy();
+				var newOptions = {
+						rangeSelector: {							
+							selected : selectedRange
+						}
+				};
+				
+				me.performanceChartRenderer(seriesOptions, newOptions);
 			}
 		},
 		
 		multiChartUnchart: function(me, value){
 			var chart = $('#performance-chart-content').highcharts();
+			var seriesOptions = new Array();
+			var index = 0;
 			if(!UTIL.isEmpty(chart)){				
 				var seriesLength = chart.series.length;
-				for(var i = seriesLength -1; i > -1; i--) {					
-		        		chart.series[i].setVisible(value,false);					
+				var selectedRange = chart.rangeSelector.selected;
+				if(value){
+					for(var seriesName in VALUATION.chartPoints) {
+								seriesOptions[index++]={
+					                name: seriesName,
+					                data: VALUATION.chartPoints[seriesName].priceData,
+					                threshold : null,
+									turboThreshold : 0,
+									color:VALUATION.chartPoints[seriesName].color
+			        			};
+					}
+					chart.destroy();
+					var newOptions = {
+							rangeSelector: {							
+								selected : selectedRange
+							}
+					};
+					
+					me.performanceChartRenderer(seriesOptions, newOptions);
+				}else{
+					for(var i = seriesLength -1; i > -1; i--) {					
+			        	chart.series[i].setVisible(value,false);					
+					}
+					chart.redraw();
 				}
-				chart.redraw();
 			}
 		},
 		
@@ -928,7 +905,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var chart = $('#performance-chart-content').highcharts();
 			if(!UTIL.isEmpty(chart)){
 				me.seriesOptions = [];
-				me.performanceChartRenderer(me);
+				me.performanceChartRenderer(me.seriesOptions);
 			}
 			if(!UTIL.isEmpty(chart)){
 				$('#performance-chart-content').show();
@@ -1003,7 +980,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							var chart = $('#performance-chart-content').highcharts();
 							if(!UTIL.isEmpty(chart)){
 								me.seriesOptions = [];
-								me.performanceChartRenderer(me);
+								me.performanceChartRenderer(me.seriesOptions);
 							}
 							
 							//get the performance chart data
@@ -1475,24 +1452,48 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	return codes;
 	    },
 	    
-	    isDeleteValid: function(transactionType, tickerCode, numberOfShares){
+	    isDeleteValid: function(transactionType, tickerCode, numberOfShares,date){
 	    	var flag = true;
 	    	numberOfShares = numberOfShares.toString().replace(/,/gi,"");
 	    	if(transactionType === "BUY"){
 	    		 var me = this;
 		    	 var bought = 0.00;
 		    	 var sell = 0.00;
+		    	 var tempDate = null;
+		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
+		    		
+		    		 if(item.tickerCode() === tickerCode){
+	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
+		    			 if(item.transactionType() === "SELL") {
+		    				 if(tempDate == null) {
+		    					 if(new Date(item.tradeDate()) >= new Date(date)) {
+		    						 tempDate = new Date(item.tradeDate());
+			    				 }
+		    				 }
+		    				 else {
+		    					 if(new Date(item.tradeDate()) >= new Date(date) && tempDate >= new Date(item.tradeDate())) {
+		    						 tempDate = new Date(item.tradeDate());
+			    				 }
+		    				 }
+		    				 
+		    			 }
+		    		 }
+		    	 });
+		    	 
 		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 		    		 if(item.tickerCode() === tickerCode){
 	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-		    			 if(item.transactionType() === "BUY"){
+		    			 if(item.transactionType() === "BUY"  && (new Date(item.tradeDate()) <= new Date(date) || new Date(item.tradeDate())<=tempDate)){
 		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-		    			 }else{
+		    			 }else if(item.transactionType() === "SELL"  && (new Date(item.tradeDate()) >= new Date(date) || new Date(item.tradeDate())<=tempDate)) {
 		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }
 		    		 }
 		    	 });
-		    	 if(parseFloat(sell) >= parseFloat(bought)){
+		    	 if(transactionType === "BUY") {
+		    		 bought=bought-numberOfShares;
+		    	 }
+		    	 if(parseFloat(sell) != 0 && parseFloat(sell) > parseFloat(bought)){
 		    		 PAGE.modal.open({ type: 'alert',  content: '<p>You cannot delete this transaction as it would create a negative position for this security.</p>', width: 400 });
 		    		 flag = false;
 		    	 }
@@ -1503,7 +1504,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeItem: function(item) {
 	    	var me = this;
-	    	if( me.isDeleteValid(item.transactionType(), item.tickerCode(), item.numberOfShares() ) ){
+	    	var buySellValidateFlag = true;
+	    	if(item.transactionType() === "BUY") {
+	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid( item.transactionType(), item.tickerCode(), item.numberOfShares(),item.tradeDate() );
+	    		//validation related attributes
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
+	    	}
+	    	if( buySellValidateFlag ){
 		    	PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				
 				 $('.confirm-delete').click(function(e) {				
@@ -1535,6 +1543,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					$('.cboxWrapper').colorbox.close();
 		        });
 	    	}
+	    	
+	    	
 			 
 	    },
 	    
@@ -1576,7 +1586,14 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    
 	    removeIntPerItem: function(item){
 	    	var me = this;
-	    	if( me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares) ){
+    		var buySellValidateFlag = true;
+	    	if(item.intTransactionType === "BUY") {
+	    		buySellValidateFlag = me.buySellValidate() && me.isDeleteValid(item.intTransactionType, item.intTickerCode, item.intNumberOfShares,item.tradeDateForSort );
+	    		//validation related attributes
+				me.validatedCompanies = [];
+		    	me.validateFlag = true;
+	    	}
+	    	if( buySellValidateFlag ){	
 				PAGE.modal.open({ content: '<p>This will delete this transaction. Click Delete to delete this transaction. This will not remove the company from your StockList.</p> <div class="button-wrapper deleteTran"><span class="confirm-delete button floatLeft">Delete</span> <span class="cancel button ml5p ">Cancel</span></div>', width: 400 }); 
 				 $('.confirm-delete').click(function(e) {				
 			    	var endpoint = PAGE.fqdn + "/sgx/watchlist/deleteTransaction";

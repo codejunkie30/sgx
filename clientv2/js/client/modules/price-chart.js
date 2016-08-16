@@ -63,7 +63,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
     cloneDataAndFormat: function(obj) {
       var returnObj = {};
       $.each(obj, function(key, val) {
-        returnObj[key] = roundMe(val, 3);
+    	if(isNaN(val)){
+    		returnObj[key] = val;
+    	}else{
+    		returnObj[key] = roundMe(val, 3);	
+    	}
       });
 
       return returnObj;
@@ -96,6 +100,10 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    		return ret;
 		    	}
 		    	
+		    	var currencyFormat = PAGE.currentFormats.chart.format;
+		    	if(point.currencyFormat){
+		    		currencyFormat = point.currencyFormat;
+		    	}
 				var openVal = Highcharts.numberFormat(point.open,3);
 				if(parseFloat(openVal) == parseFloat("0.000"))
 				{
@@ -103,7 +111,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				}
 				else
 				{
-					openVal = PAGE.currentFormats.chart.format + openVal.replace(/\.?0+$/,'')
+					openVal = currencyFormat + openVal.replace(/\.?0+$/,'')
 				}
 				
 				var closeVal = Highcharts.numberFormat(point.close,3);
@@ -113,7 +121,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				}
 				else
 				{
-					closeVal=PAGE.currentFormats.chart.format + closeVal.replace(/\.?0+$/,'');
+					closeVal=currencyFormat + closeVal.replace(/\.?0+$/,'');
 				}
 				
 				var lowVal = Highcharts.numberFormat(point.low,3);
@@ -123,7 +131,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				}
 				else
 				{
-					lowVal=PAGE.currentFormats.chart.format + lowVal.replace(/\.?0+$/,'');
+					lowVal=currencyFormat + lowVal.replace(/\.?0+$/,'');
 				}
 				
 				var highVal = Highcharts.numberFormat(point.high,3);
@@ -133,7 +141,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				}
 				else
 				{
-					highVal=PAGE.currentFormats.chart.format + highVal.replace(/\.?0+$/,'');
+					highVal=currencyFormat + highVal.replace(/\.?0+$/,'');
 				}
 				
 		    	// is a trading day
@@ -256,6 +264,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 							 CHART.chartData[key].open = data.openPrice;
 						 if( data.highPrice)
 							 CHART.chartData[key].high = data.highPrice;
+						 if(data.tradingCurrency){
+							 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+						 }
 						 var volume = data.volume;
 						 if(volume){
 							 volume = data.volume/1000000.0;	 
