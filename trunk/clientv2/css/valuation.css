@@ -450,6 +450,18 @@ height: 17px;
 	padding-left: 25px;
 }
 
+.fs16p{
+	font-size:16pt;
+	padding-top:10px;
+	padding-right:10px;
+}
+
+.fs18p{
+	font-size:18pt;
+	padding-top:10px;
+	padding-right:10px;
+}
+
 .totInv
 {
 	float: left;
