@@ -325,7 +325,7 @@
 		},
 		{
 			"id":"currentPortfolioValue",
-			"definition":"Current value includes purchases and sales. It does not include dividend, stock splits."
+			"definition":"Current Total Value is the sum of all shares currently owned multiplied by the last close price.  This figure is an estimate only, as it is not inclusive of fees or other trading charges."
 		},
 		{
 			"id":"portfolioPercentChange",
