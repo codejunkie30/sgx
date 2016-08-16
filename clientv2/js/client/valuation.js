@@ -1316,7 +1316,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		}else{
 	    			item = data[i][0];
 	    			me.convertTickerAndClosePrice(item.tickerCode, me);
-	    			me.calcTotalInvested(item, me);
+//	    			me.calcTotalInvested(item, me);
 	    			var currentValue  = me.calcCurrentValue(item, me);
 	    			me.totalCurrentValue = me.totalCurrentValue + parseFloat(currentValue);
 					transItemModel =  new insertPerTrans(me.disCompanyName, item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(3), 
@@ -1349,7 +1349,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    },
 	    
 	    totalCalculation: function(me){
-	    	var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(3);
+	    	/*var totalInvested = parseFloat(me.userEnteredPurchasedPrice - me.userEnteredSellPrice).toFixed(3);
 	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(3); 
 	    	var percentageChangeVal = (((totalCurrentValue - totalInvested) / totalInvested) * 100).toFixed(3);
 	    	if (percentageChangeVal == Number.POSITIVE_INFINITY || percentageChangeVal == Number.NEGATIVE_INFINITY) {
@@ -1369,7 +1369,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	
 	    	me.userEnteredPurchasedPrice = 0.00;
 	    	me.userEnteredSellPrice = 0.00;
+	    	me.totalCurrentValue = 0.00;*/
+	    	var totalCurrentValue = parseFloat(me.totalCurrentValue).toFixed(3);
+	    	$('#totalCurrentValue').html("$" + totalCurrentValue.replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
 	    	me.totalCurrentValue = 0.00;
+	    	
 	    },
 	    
 	    convertTickerCodeToCompany: function(tickerCode, me){
@@ -1398,7 +1402,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    getMultiCompData: function(data, model, me){
 	    	for(i =0; i<data.length; i++){
 	    		var item = data[i];
-	    		me.calcTotalInvested(item, me);
+//	    		me.calcTotalInvested(item, me);
 	    		var muiltiCompTransModel = new insertMultiPerTrans(item.tickerCode, item.transactionType, item.tradeDate, parseFloat(item.numberOfShares).toFixed(3), item.costAtPurchase, item.id);
 	    		model.multiCompData.push(muiltiCompTransModel);
 	    	}
