@@ -865,7 +865,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		},
 		timedLogout: function(){
 			$('body').idleTimeout({
-			  idleTimeLimit: 1200,
+			  idleTimeLimit: 900,
 			  idleCheckHeartbeat: 60,
 			   customCallback:    function () {    // define optional custom js function
 				   top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
