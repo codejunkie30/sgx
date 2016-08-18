@@ -49,6 +49,11 @@ public class XFRetrievalService {
 	@Autowired
 	private ErrorBeanHelper errorBeanHelper;
 
+	@Autowired
+	private com.wmsi.sgx.util.EmailService emailService;
+
+	@Value ("${email.dataload.complete}")
+	public String toSite;
 	
 	public DefaultSftpSessionFactory getSFTPSessionFactory(){
 		DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
@@ -60,7 +65,7 @@ public class XFRetrievalService {
 	}
 	
 	public Boolean init() throws Exception {
-		
+		emailService.send(toSite," Starting dataload........","");
 		String[] base = baseFiles.split(",");
 		String[] raw = rawFiles.split(",");
 		

@@ -19,9 +19,15 @@ public interface Currencies extends CustomRepository<Currency, Serializable> {
 	@Query("update Currencies set complete = :complete where currency_name = :currency_name")
 	void updateComplete(@Param("complete") boolean complete,@Param("currency_name")String currencyName);
 	
+	@Transactional
+	@Modifying
+	@Query("update Currencies set complete = 0")
+	void resetCompletedFlag();
+	
 	@Query("select count(*) from Currencies where complete=0")
 	int getCountOfCurrenciesToComplete();
 	
 	@Query(value="select  top 1 *  from Currencies where complete=0", nativeQuery = true)
 	Currency getNextCurrency();
+	
 }
