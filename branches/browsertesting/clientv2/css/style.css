@@ -362,7 +362,7 @@ header.header { margin: 10px 0 0 0; }
 #premium .premium-wrapper .trial-box .button { font-size: 13pt; margin: 0 15px 0 0; padding: 7px 25px; text-decoration: none; }
 #premium .premium-wrapper .trial-box .not { color: #0e236b; font-size: 10pt; text-transform: uppercase; text-decoration: none; }
 #premium .premium-wrapper .trial-box .not:hover { text-decoration: underline; }
-#premium .premium-wrapper .view-price { position: relative; top:-30px; background:url(../img/bg-premium-views-price-lg.png) no-repeat; display: inline-block; height: 380px; width: 538px; }
+#premium .premium-wrapper .view-price { position: relative; top:-30px; background:url(../img/bg-premium-views-price-lg.png) no-repeat; display: inline-block; height: 480px; width: 538px; }
 #premium .premium-wrapper #preview-comp.view-price { top: -90px !important; }
 #premium .premium-wrapper #preview-comp {  }
 #premium .premium-wrapper .view-price .price { position: absolute; right: 20px; top: 30px; width: 110px; }
