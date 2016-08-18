@@ -37,7 +37,7 @@ public class CSVHelperUtil {
 		}
 		finally {
 			try { if (parsed != null) parsed.close(); }
-			catch(Exception e) {}
+			catch(Exception e) {log.error("Exception in getRecords() ", e);}
 		}
 		return null;
 	}

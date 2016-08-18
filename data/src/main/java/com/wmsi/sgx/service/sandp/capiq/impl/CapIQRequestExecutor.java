@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.CapIQResponseConversionException;
@@ -53,6 +55,9 @@ public class CapIQRequestExecutor implements RequestExecutor{
 	private static final String PARAM_INPUTS = "inputRequests";
 	private static final String PARAM_USERID = "userId";
 	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
 	@Override
 	public CapIQResponse execute(CapIQRequestImpl req, Map<String, Object> ctx) throws CapIQRequestException {
 
@@ -71,6 +76,7 @@ public class CapIQRequestExecutor implements RequestExecutor{
 				throw new CapIQRequestException("Null response received from capitalIQ api");
 		}
 		catch(HttpMessageNotReadableException ex){
+			errorBeanHelper.sendEmail(ex);
 			// Catch any errors transforming the api response. The CapIQ api can be
 			// very inconsistent with it's json structure. Occasionally fields that are strings
 			// on good response are arrays on errors. Since we have no way of knowing which fields
@@ -78,7 +84,7 @@ public class CapIQRequestExecutor implements RequestExecutor{
 			throw new CapIQResponseConversionException("Could not convert response from api", ex);
 		}
 		catch(HttpClientErrorException | HttpServerErrorException ex){
-			
+			errorBeanHelper.sendEmail(ex);
 			CapIQRequestException exception = new CapIQRequestException("Recieved error code response from api server", ex);			
 			
 			exception.setStatusCode(ex.getStatusCode().toString());

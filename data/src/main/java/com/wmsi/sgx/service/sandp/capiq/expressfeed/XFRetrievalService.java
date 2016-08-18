@@ -2,6 +2,7 @@ package com.wmsi.sgx.service.sandp.capiq.expressfeed;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -103,12 +104,13 @@ public class XFRetrievalService {
 		
 	}
 	
-	public void grabFiles(Session<LsEntry> session, String[] names, String localDir) throws Exception {
+	public void grabFiles(Session<LsEntry> session, String[] names, String localDir)  {
 		
 		for (String name : names) {
 			log.info("Retrieving {} from FTP", name);
-			FileOutputStream out = new FileOutputStream(localDir + name); 
+			FileOutputStream out = null; 
 			try {
+				out = new FileOutputStream(localDir + name);
 				session.read(name, out);
 			}
 			catch(Exception e) {
@@ -118,7 +120,15 @@ public class XFRetrievalService {
 				log.error("Downloading file: " + name, e);
 			}
 			finally {
-				if (out != null) out.close();
+				if (out != null)
+					try {
+						out.close();
+					} catch (IOException e) {
+						errorBeanHelper
+						.addError(new ErrorBean("XFRetrievalService:grabFiles", "Error in downloading file", ErrorBean.ERROR, e.getMessage()));
+						errorBeanHelper.sendEmail();
+						log.error("Downloading file: " + name, e);
+					}
 			}
 		}		
 		

@@ -8,9 +8,13 @@ import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.DividendHistory;
 import com.wmsi.sgx.model.DividendValue;
 import com.wmsi.sgx.service.indexer.IndexerServiceException;
@@ -20,6 +24,11 @@ import com.wmsi.sgx.service.sandp.capiq.CompanyCSVRecord;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 public class DividendService extends AbstractDataService{
 	
+	private Logger log = LoggerFactory.getLogger(DividendService.class);
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+
 	@Value("${loader.dividend-history.dir}")
 	private String dividendHistoryDir;
 	
@@ -33,6 +42,7 @@ public class DividendService extends AbstractDataService{
 			return getDividendData(id);
 		}
 		catch(Exception e) {
+			errorBeanHelper.sendEmail(e);
 			throw new ResponseParserException("loading dividends for " + id, e);
 		}
 		
@@ -44,7 +54,7 @@ public class DividendService extends AbstractDataService{
 		
 		Iterable<CSVRecord> records = null; 
 		try { records = getCompanyData(id, dividendHistoryDir); }
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Exception in getDividendData() ", e);}
 		
 		// don't need a history
 		if (records == null) return dH;
@@ -53,7 +63,7 @@ public class DividendService extends AbstractDataService{
 		
 		Field field = null;
 		try { field = DividendValue.class.getDeclaredField("dividendPrice"); }
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Exception in getDividendData() ", e);}
 		
 				
 		for (CSVRecord record : records) {

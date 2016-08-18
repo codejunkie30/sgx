@@ -13,14 +13,16 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
-import au.com.bytecode.opencsv.CSVReader;
-
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.GovTransparencyIndex;
 import com.wmsi.sgx.model.GovTransparencyIndexes;
 import com.wmsi.sgx.service.gti.GTIServiceException;
 import com.wmsi.sgx.service.gti.GtiService;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Service for loading Government Transparency Index data. This service loads this 
@@ -31,6 +33,9 @@ import com.wmsi.sgx.service.gti.GtiService;
 public class GtiServiceImpl implements GtiService{
 
 	private static final Logger log = LoggerFactory.getLogger(GtiServiceImpl.class);
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
 	
 	private Resource gtiData;	
 	public Resource getGtiData(){return gtiData;}
@@ -134,6 +139,7 @@ public class GtiServiceImpl implements GtiService{
 
 		}
 		catch(IOException e){
+			errorBeanHelper.sendEmail(e);
 			throw new GTIServiceException("Error parsing GTI file", e);
 		}
 		finally{
