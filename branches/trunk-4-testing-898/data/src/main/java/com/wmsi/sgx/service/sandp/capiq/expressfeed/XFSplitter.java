@@ -84,7 +84,7 @@ public class XFSplitter {
 			String key = line.substring(0, line.indexOf(",", line.indexOf(",")+1));
 			return key;
 		}
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Exception in getKey() ", e);}
 		
 		return null;
 	}

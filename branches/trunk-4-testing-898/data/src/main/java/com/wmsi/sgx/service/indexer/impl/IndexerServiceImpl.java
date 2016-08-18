@@ -30,7 +30,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.wmsi.sgx.model.indexer.Index;
+import com.wmsi.sgx.exception.ErrorBeanHelper;
+import com.wmsi.sgx.model.ErrorBean;
 import com.wmsi.sgx.model.indexer.Indexes;
 import com.wmsi.sgx.service.indexer.IndexBuilderService;
 import com.wmsi.sgx.service.indexer.IndexQueryResponse;
@@ -56,6 +57,9 @@ public class IndexerServiceImpl implements IndexerService{
 	public String indexName;
 	
 	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+	
+	@Autowired
 	private IndexBuilderService indexBuilderService;
 	
 	private Resource indexMappingResource = new ClassPathResource("META-INF/mappings/elasticsearch/sgx-mapping.json");
@@ -76,6 +80,7 @@ public class IndexerServiceImpl implements IndexerService{
 			return new IndexQueryResponse(res);
 		}
 		catch(Exception e){
+			errorBeanHelper.sendEmail(e);
 			throw new IndexerServiceException(String.format("Executing query for {}", endpoint), e);
 		}
 
@@ -96,6 +101,7 @@ public class IndexerServiceImpl implements IndexerService{
 			
 		}
 		catch(Exception e){
+			errorBeanHelper.sendEmail(e);
 			throw new IndexerServiceException("Executing refresh", e);
 		}
 		
@@ -125,7 +131,9 @@ public class IndexerServiceImpl implements IndexerService{
 		int statusCode = postJson(indexUri, readTree);
 		
 		// Check for 200 range response code
-		if(statusCode / 100 != 2){			
+		if(statusCode / 100 != 2){	
+			errorBeanHelper.addError(new ErrorBean( "Create index request failed ","Create index request returned " + statusCode + " http response code. Could not create index", ErrorBean.ERROR, ""));
+			errorBeanHelper.sendEmail();
 			throw new IndexerServiceException("Create index request returned " + statusCode + " http response code. Could not create index");
 		}		
 		
@@ -146,6 +154,8 @@ public class IndexerServiceImpl implements IndexerService{
 			
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){	
+			errorBeanHelper.addError(new ErrorBean( "Create index request failed ","Create index request returned " + statusCode + " http response code. Could not create index", ErrorBean.ERROR, ""));
+			errorBeanHelper.sendEmail();
 			throw new IndexerServiceException("Create alias request returned " + statusCode + " http response code. Could not create alias.");
 		}
 		
@@ -176,6 +186,8 @@ public class IndexerServiceImpl implements IndexerService{
 			
 		// Check for 200 range response code
 		if(statusCode / 100 != 2){	
+			errorBeanHelper.addError(new ErrorBean( "Create index request failed ","Create index request returned " + statusCode + " http response code. Could not create index", ErrorBean.ERROR, ""));
+			errorBeanHelper.sendEmail();
 			throw new IndexerServiceException("Create previous day alias request returned " + statusCode + " http response code. Could not create alias.");
 		}		
 		
@@ -200,7 +212,10 @@ public class IndexerServiceImpl implements IndexerService{
         int statusCode = res.getStatusCode().value();
         
 		// Check for 200 range response code
-		if(statusCode / 100 != 2) throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+		if(statusCode / 100 != 2) {
+			errorBeanHelper.addError(new ErrorBean( "Create index request failed ","Create index request returned " + statusCode + " http response code. Could not create index", ErrorBean.ERROR, ""));
+			errorBeanHelper.sendEmail();
+			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");}
 
         return true;
 	}
@@ -217,7 +232,10 @@ public class IndexerServiceImpl implements IndexerService{
         int statusCode = res.getStatusCode().value();
         
 		// Check for 200 range response code
-		if(statusCode / 100 != 2) throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");
+		if(statusCode / 100 != 2) {
+			errorBeanHelper.addError(new ErrorBean( "Create index request failed ","Create index request returned " + statusCode + " http response code. Could not create index", ErrorBean.ERROR, ""));
+			errorBeanHelper.sendEmail();
+			throw new IndexerServiceException("Error indexing object: " + statusCode + " http response code.");}
 
         return true;
 	}
@@ -247,6 +265,7 @@ public class IndexerServiceImpl implements IndexerService{
 			return new URI(esUrl + path);
 		}
 		catch(URISyntaxException e){
+			errorBeanHelper.sendEmail(e);
 			throw new IndexerServiceException("Invalid uri syntax for alaias request.", e);
 		}
 	}

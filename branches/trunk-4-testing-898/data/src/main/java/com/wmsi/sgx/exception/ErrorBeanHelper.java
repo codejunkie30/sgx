@@ -128,4 +128,12 @@ public class ErrorBeanHelper {
 		return errors.toString();
 	}
 
+	public void sendEmail(Throwable t){
+		try{
+			emailService.send(toSite, DATALOAD_COMPLETE_WITH_ERRORS, getStackTrace(t));
+		}catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

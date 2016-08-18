@@ -11,11 +11,15 @@ import java.util.Map;
 import org.apache.commons.lang3.ObjectUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.integration.annotation.Header;
 
 import com.google.common.base.Objects;
 
 public class FXRecord {
+	
+	private static final Logger log = LoggerFactory.getLogger(FXRecord.class);
 	
 	static DateTimeFormatter FMT = DateTimeFormat.forPattern("yyyyMMdd");
 	
@@ -132,7 +136,7 @@ public class FXRecord {
 			
 			return record;
 		}
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Exception in parseFXLine method " , e);}
 		return null;
 	}
 	

@@ -629,8 +629,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 				indexerService.bulkSave("fxdata", buffer.toString(), indexName);
 			buffer.setLength(0);
 		} catch (Exception e) {
-			errorBeanHelper.addError(new ErrorBean("IndexBuilderServiceImpl:createFXIndex",
-					"Trying to create FX conversion index", ErrorBean.ERROR, errorBeanHelper.getStackTrace(e)));
+			errorBeanHelper.sendEmail(e);
 			throw new IndexerServiceException("Trying to create FX conversion index", e);
 		}
 

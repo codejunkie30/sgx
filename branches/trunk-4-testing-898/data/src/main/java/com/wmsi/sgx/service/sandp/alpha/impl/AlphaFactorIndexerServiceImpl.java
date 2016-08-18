@@ -22,16 +22,20 @@ import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 import org.springframework.stereotype.Service;
 
-import au.com.bytecode.opencsv.CSVReader;
-
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.AlphaFactor;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorIndexerService;
 import com.wmsi.sgx.service.sandp.alpha.AlphaFactorServiceException;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Service
 public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 
 	private static final Logger log = LoggerFactory.getLogger(AlphaFactorIndexerServiceImpl.class);
+	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
 
 	@Autowired
 	private DefaultFtpSessionFactory ftpSessionFactory;
@@ -70,7 +74,9 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			}
 			
 			File dir = new File(tmpDir);
-			if(!dir.exists() && !dir.mkdirs()) throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());
+			if(!dir.exists() && !dir.mkdirs()) {
+				errorBeanHelper.sendEmail(new IOException("Failed to create tmp directory " + dir.getAbsolutePath()));
+				throw new IOException("Failed to create tmp directory " + dir.getAbsolutePath());}
 
 			// Transfer
 			File ret = new File(tmpDir + fileName);
@@ -83,6 +89,7 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			return ret;
 		}
 		catch(IOException e){
+			errorBeanHelper.sendEmail(e);
 			throw new AlphaFactorServiceException("Exception downloading alpha factors file ", e);
 		}
 		finally{
@@ -130,6 +137,7 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 			}
 		}
 		catch(IOException | ParseException e){
+			errorBeanHelper.sendEmail(e);
 			throw new AlphaFactorServiceException("Could not parse alpha factors file", e);
 		}
 		finally{

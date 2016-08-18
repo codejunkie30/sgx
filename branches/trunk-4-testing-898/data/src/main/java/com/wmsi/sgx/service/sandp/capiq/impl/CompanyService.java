@@ -109,7 +109,7 @@ public class CompanyService extends AbstractDataService {
 				if (fields.contains(item.getName())) records.add(item);
 			}
 		}
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Exception in setConsensus ", e);}
 		
 	}
 

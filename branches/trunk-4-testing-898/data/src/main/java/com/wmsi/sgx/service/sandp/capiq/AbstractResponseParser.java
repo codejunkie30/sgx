@@ -14,7 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.wmsi.sgx.exception.ErrorBeanHelper;
 import com.wmsi.sgx.model.annotation.ConversionAnnotation;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
@@ -24,6 +26,9 @@ public abstract class AbstractResponseParser implements ResponseParser{
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractResponseParser.class);
 	
+	@Autowired
+	private ErrorBeanHelper errorBeanHelper;
+
 	private Map<String, Field> annotedFields;
 	private static final String[] DEFAULT_DATE_FORMATS = new String[]{ "yyyy-MM-dd", "MMM dd yyyy hh:mma", "MM/dd/yyyy hh:mm:ss"};
 	
@@ -75,6 +80,7 @@ public abstract class AbstractResponseParser implements ResponseParser{
 			}
 		}
 		catch(IllegalAccessException | InvocationTargetException | ParseException e){
+			errorBeanHelper.sendEmail(e);
 			throw new ResponseParserException("Couldn't parse results", e);
 		}
 	}
