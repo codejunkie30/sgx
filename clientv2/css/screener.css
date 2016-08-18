@@ -1,8 +1,8 @@
 /** headeder */
 
 .user-guide {
-	background-color: #565a5c;
 	float: right;
+	cursor: pointer;
 }
 
 .screener-header {
