@@ -25,3 +25,9 @@ DELETE FROM watchlist_option
 
 DELETE FROM enets 
 Where user_id != '1'
+
+DELETE FROM email_audit
+Where user_id != '1'
+
+DELETE FROM watchlist_transaction
+Where id ! = '1';
