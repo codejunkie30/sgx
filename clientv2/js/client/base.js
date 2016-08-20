@@ -865,7 +865,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		},
 		timedLogout: function(){
 			$('body').idleTimeout({
-			  idleTimeLimit: 1200,
+			  idleTimeLimit: 900,
 			  idleCheckHeartbeat: 60,
 			   customCallback:    function () {    // define optional custom js function
 				   top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
@@ -980,7 +980,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			if (newWLNameLC.trim().length < 2 || newWLNameLC.trim().length > 40) {  alert("Stocklist must be between 1 and 40 characters."); PAGE.hideLoading(); return; }
 			
 			if ($.inArray( newWLNameLC.toLowerCase().trim(), PAGE.addWatchlistName() ) != -1) {  alert("Stocklist name already exists."); PAGE.hideLoading(); return; }
-			if (wlLength >= 25) { alert("You can create up to 25 StockLists."); PAGE.hideLoading(); return; }
+			if (wlLength >= 10) { alert("You can create up to 10 StockLists."); PAGE.hideLoading(); return; }
 			
 			var endpoint = PAGE.fqdn + "/sgx/watchlist/create";
 			var postType = 'POST';
