@@ -215,12 +215,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			//Pushes to events
 			base.chart.events = {				
 				load: function () {
-					// set up the updating of the chart each second
-					var series = this.series[0];
-					var firstRun = true;
-					var today = new Date();
-					var todaysDate = today.setHours(0,0,0,0);
-					CHART.getPremData(todaysDate);
+					CHART.getPriceData();
 					if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
 						setInterval(function () {							
 							var today = new Date();
@@ -234,6 +229,41 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			$(element).highcharts('StockChart', base, function() {
 				if (typeof finished !== "undefined") finished();
 			});
+		},
+		
+		getPriceData: function(){
+			endpoint = PAGE.fqdn + "/sgx/price";
+    		params = { id: CHART.currentTicker };
+    		var postType = 'POST';
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
+
+			var chart = $('#price-volume').highcharts();
+			if (data.hasOwnProperty("price")){
+				var dateField = data.price.hasOwnProperty("lastTradeTimestamp") && data.price.lastTradeTimestamp != null ? data.price.lastTradeTimestamp : data.price.previousDate;
+	    		var price = data.price.hasOwnProperty("lastPrice") && data.price.lastPrice != null ? data.price.lastPrice : data.price.closePrice;
+				var x = Date.fromISO(dateField).getTime();
+				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+				chart.series[0].addPoint([x, price], false, false);
+				CHART.chartData[key] = {}
+				 if( data.closePrice)
+					 CHART.chartData[key].close = data.closePrice;
+				 if( data.lowPrice)
+					 CHART.chartData[key].low = data.lowPrice;
+				 if( data.openPrice)
+					 CHART.chartData[key].open = data.openPrice;
+				 if( data.highPrice)
+					 CHART.chartData[key].high = data.highPrice;
+				 if(data.tradingCurrency){
+					 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+				 }
+				 var volume = data.volume;
+				 if(volume){
+					 volume = data.volume/1000000.0;	 
+				 }
+				 chart.series[1].addPoint([x, volume], false, false);
+				 chart.redraw();
+			}
+    		} , PAGE.customSGXError, undefined);	
 		},
 		getPremData: function(todaysDate){
 			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		
