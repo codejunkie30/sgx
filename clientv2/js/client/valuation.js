@@ -613,7 +613,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 							$(".pagination-container").remove();
 						}
 						PAGE.hideLoading();
-						setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
+						setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 500);
 					}, 
 					PAGE.customSGXError);
 		},
@@ -786,7 +786,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			}else{
 				$(".header-bar > ul > li:last").addClass("downArrow");
 			}
-			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 100);
+			setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 100);
 			if(tabName === "performance"){
 				VALUATION.hasFieldErrors = false;
 				VALUATION.record_modified = false;
@@ -1099,7 +1099,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					})
 		    	}
 		    	PAGE.hideLoading();
-				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
+				setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 500);
 
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log('error making service call');
@@ -1666,7 +1666,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	
 	    	$('#tr'+id).addClass('panel');
 
-	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
+	    	PAGE.resizeIframeSimple(100);
 	    	//setTimeout(function(){ PAGE.resizeIframeSimple(); }, 500);
 	    },
 	    
@@ -1687,7 +1687,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	    alert($(this).find('td'));
 	    });*/
 	    	
-	    	PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
+	    	PAGE.resizeIframeSimple(100);
 	    },
 	    
 	    toogleCompanyLink: function(id, data){	 
@@ -1731,7 +1731,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    transSortbyType: function(){
@@ -1764,7 +1764,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpricedesc');	    	
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    transSortbyTradeDate: function(){
@@ -1797,7 +1797,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    transSortbyNumberShare: function(data, event){
@@ -1830,7 +1830,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    transSortbyPrice: function(data, event){
@@ -1867,7 +1867,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transLastPrice').removeClass('lastpricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    transSortbyLastPrice: function(data, event){
@@ -1904,7 +1904,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	$('#transPrice').removeClass('pricedesc');
 	    	$(".pagination-container").remove();
 	    	$('#transItemsId').paginathing();
-	    	setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) });
+	    	setTimeout(function(){ PAGE.resizeIframeSimple(100) });
 	    },
 	    
 	    sortColumnByAsc: function(data, event){
