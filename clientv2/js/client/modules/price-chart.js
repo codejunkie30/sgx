@@ -74,12 +74,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
     },
 
 		initChart: function(element, data, finished, periodChange) {
-			// Premium chart options vs non premium
-			if (CHART.userStatus == 'PREMIUM'){
-				var base = CHART_DEFAULTS_PREM;
-			} else {
-				var base = CHART_DEFAULTS;
-			}
+			var base = CHART_DEFAULTS_PREM;
 			
 			var self = this;
 			
@@ -217,16 +212,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
                 }    
              ];
 			 //Adds real time data to chart if user is Plus and runs every minute
-			if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
-				//Pushes to events
-				base.chart.events = {				
-					load: function () {
-						// set up the updating of the chart each second
-						var series = this.series[0];
-						var firstRun = true;
-						var today = new Date();
-						var todaysDate = today.setHours(0,0,0,0);
-						CHART.getPremData(todaysDate);
+			//Pushes to events
+			base.chart.events = {				
+				load: function () {
+					// set up the updating of the chart each second
+					var series = this.series[0];
+					var firstRun = true;
+					var today = new Date();
+					var todaysDate = today.setHours(0,0,0,0);
+					CHART.getPremData(todaysDate);
+					if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
 						setInterval(function () {							
 							var today = new Date();
 							var todaysDate = today.setMinutes(today.getMinutes() - 1);
