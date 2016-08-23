@@ -170,7 +170,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	            active: 0,
 	            activate: function(event, ui) {
 	            	var headerHeight = 200;
-	            	PAGE.resizeIframeSimple(window.parent.$("body").scrollTop()-headerHeight);
+	            	PAGE.resizeIframeSimple(600);
 	            },
 	            load: function(event, ui) {
 	            	KO.cleanNode(ui.panel[0]);

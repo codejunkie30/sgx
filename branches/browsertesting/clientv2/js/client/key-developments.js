@@ -295,7 +295,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				}
 			}
 			
-			setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
+			setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 500);
 		},
 		
 		addKeyDevCompanies: function(data, me){
