@@ -239,8 +239,9 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 
 			var chart = $('#price-volume').highcharts();
 			if (data.hasOwnProperty("price")){
-				var dateField = data.price.hasOwnProperty("lastTradeTimestamp") && data.price.lastTradeTimestamp != null ? data.price.lastTradeTimestamp : data.price.previousDate;
-	    		var price = data.price.hasOwnProperty("lastPrice") && data.price.lastPrice != null ? data.price.lastPrice : data.price.closePrice;
+				data = data.price;
+				var dateField = data.hasOwnProperty("lastTradeTimestamp") && data.lastTradeTimestamp != null ? data.lastTradeTimestamp : data.previousDate;
+	    		var price = data.hasOwnProperty("lastPrice") && data.lastPrice != null ? data.lastPrice : data.closePrice;
 				var x = Date.fromISO(dateField).getTime();
 				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
 				chart.series[0].addPoint([x, price], false, false);
@@ -275,30 +276,27 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 
 			var chart = $('#price-volume').highcharts();
 			if (data.pricingHistory && data.pricingHistory.length > 0 ){
-				$.each(data, function(key,data){
-					$.each(data,function(i,data){
-						var x = Date.fromISO(data.lastTradeTimestamp).getTime()
-						var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
-						chart.series[0].addPoint([x, data.lastPrice], false, false);
-						CHART.chartData[key] = {}
-						 if( data.closePrice)
-							 CHART.chartData[key].close = data.closePrice;
-						 if( data.lowPrice)
-							 CHART.chartData[key].low = data.lowPrice;
-						 if( data.openPrice)
-							 CHART.chartData[key].open = data.openPrice;
-						 if( data.highPrice)
-							 CHART.chartData[key].high = data.highPrice;
-						 if(data.tradingCurrency){
-							 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
-						 }
-						 var volume = data.volume;
-						 if(volume){
-							 volume = data.volume/1000000.0;	 
-						 }
-						 chart.series[1].addPoint([x, volume], false, false);
-					});					
-				});
+				data = data.pricingHistory[0];
+				var x = Date.fromISO(data.lastTradeTimestamp).getTime()
+				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+				chart.series[0].addPoint([x, data.lastPrice], false, false);
+				CHART.chartData[key] = {}
+				 if( data.closePrice)
+					 CHART.chartData[key].close = data.closePrice;
+				 if( data.lowPrice)
+					 CHART.chartData[key].low = data.lowPrice;
+				 if( data.openPrice)
+					 CHART.chartData[key].open = data.openPrice;
+				 if( data.highPrice)
+					 CHART.chartData[key].high = data.highPrice;
+				 if(data.tradingCurrency){
+					 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+				 }
+				 var volume = data.volume;
+				 if(volume){
+					 volume = data.volume/1000000.0;	 
+				 }
+				 chart.series[1].addPoint([x, volume], false, false);
 				chart.redraw();
 			}
 		} , PAGE.customSGXError, undefined);	
