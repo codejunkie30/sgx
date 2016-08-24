@@ -192,7 +192,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				var resultArray;
 				if(data.length == 0) {
 					me.searchResults.removeAll();
-					PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200);
+					PAGE.resizeIframeSimple(100);
 					return;
 				}
 
@@ -209,7 +209,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					me.searchResults( resultArray );
 				}, 200)
 
-				setTimeout(function(){ PAGE.resizeIframeSimple(window.parent.$('body').scrollTop()-200) }, 500);
+				setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 500);
 
 			});
 			
