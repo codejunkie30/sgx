@@ -83,13 +83,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    	if (!this.hasOwnProperty("points")) return;
 		    	
 		    	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
-		    	var point = self.cloneDataAndFormat( self.chartData[key] );
-
+		    	var data = self.chartData[key];
+		    	
+		    	if(data){
+		    		var point = self.cloneDataAndFormat( self.chartData[key] );
+		    	}
 		    	
 		    	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
 
 		    	// not a trading day
-		    	if (point == undefined) {
+		    	if (!point) {
 		    		ret += "<br />";
 		    		ret += "No trading data available.";
 		    		return ret;
