@@ -62,6 +62,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.makeAggregateCompanyDataCall(me);
+			me.trackPage("SGX - StockList Key Developments");
 		},
 		
 		makeAggregateCompanyDataCall: function(me){
