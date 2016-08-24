@@ -88,8 +88,10 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me= this;
 			var encrypt = new JSEncrypt();
 			encrypt.setPublicKey( me.pubkey );
-			me.encEmail = encrypt.encrypt( me.email() );
-			me.encPassword = encrypt.encrypt( me.password() );
+		    var dateUTCString = new Date().toUTCString();
+			var timeInMilliSeconds = Math.round(new Date(dateUTCString).getTime()/1000.0);
+			me.encEmail = encrypt.encrypt( timeInMilliSeconds + me.email() );
+			me.encPassword = encrypt.encrypt( timeInMilliSeconds + me.password() );
 		},
 		
 		loginUser: function(){
