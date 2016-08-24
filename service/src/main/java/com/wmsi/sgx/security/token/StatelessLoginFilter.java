@@ -38,6 +38,8 @@ import com.wmsi.sgx.web.filter.PostRequestMapper;
 
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 	
+	private static final int TIME_TOKEN_VALIDITY = 60;
+
 	private static final Logger log = LoggerFactory.getLogger(StatelessLoginFilter.class);
 	
 	private final TokenAuthenticationService tokenAuthenticationService;
@@ -83,9 +85,21 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
 		//final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 		user = new ObjectMapper().readValue(request.getInputStream(), com.wmsi.sgx.domain.User.class);
+		
 		try {
-			user.setUsername(rsaKeyService.decrypt(user.getUsername()));
-			user.setPassword(rsaKeyService.decrypt(user.getPassword()));
+			
+			if (user.getUsername().length() > 11 && user.getPassword().length() > 11) {
+				String decryptedPassword = rsaKeyService.decrypt(user.getPassword());
+				String password = decryptedPassword.substring(10);
+				String dateInMilliSeconds = decryptedPassword.substring(0, 10);
+
+				Long differentIntime = Math.round(System.currentTimeMillis() / 1000.0)
+						- Long.parseLong(dateInMilliSeconds);
+				if (differentIntime < TIME_TOKEN_VALIDITY) {
+					user.setUsername(rsaKeyService.decrypt(user.getUsername()).substring(10));
+					user.setPassword(password);
+				}
+			}
 		} catch (RSAKeyException e) {
 			log.error("Error in decrypting the username or password",e);
 		}
