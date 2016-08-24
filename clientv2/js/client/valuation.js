@@ -470,7 +470,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			PAGE.libCurrency(true);
 			
 			me.getWatchListData(me); 
-			
+			me.trackPage("SGX - StockList Valuation Performance");
 		},
 		
 		renderChart: function(me, responseData){
@@ -798,6 +798,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$('#performance-chart-content').show()
             	$('#performance-chart-header').show();
             	me.multiChartUnchart(me, true);
+            	
+            	me.trackPage("SGX - StockList Valuation Performance");
 			}
 			else {
 				me.displayTransactions.sort(function(a, b){
@@ -813,6 +815,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	$('#perLastClosePrice').removeClass('closepdesc');
 		    	$('#perCurPrice').removeClass('currrentpasc');
 		    	$('#perCurPrice').removeClass('currrentpdesc');
+		    	me.trackPage("SGX - StockList Valuation Transactions");
 			}
 			me.activeTab(tabName);
 	    },
