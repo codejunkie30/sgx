@@ -264,7 +264,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 				 if(volume){
 					 volume = data.volume/1000000.0;	 
 				 }
-				 chart.series[1].addPoint([x, volume], false, false);
+				 chart.series[1].addPoint([x, volume], true, false);
 				 chart.redraw();
 			}
     		} , PAGE.customSGXError, undefined);	
@@ -279,27 +279,30 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 
 			var chart = $('#price-volume').highcharts();
 			if (data.pricingHistory && data.pricingHistory.length > 0 ){
-				data = data.pricingHistory[0];
-				var x = Date.fromISO(data.lastTradeTimestamp).getTime()
-				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
-				chart.series[0].addPoint([x, data.lastPrice], false, false);
-				CHART.chartData[key] = {}
-				 if( data.closePrice)
-					 CHART.chartData[key].close = data.closePrice;
-				 if( data.lowPrice)
-					 CHART.chartData[key].low = data.lowPrice;
-				 if( data.openPrice)
-					 CHART.chartData[key].open = data.openPrice;
-				 if( data.highPrice)
-					 CHART.chartData[key].high = data.highPrice;
-				 if(data.tradingCurrency){
-					 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
-				 }
-				 var volume = data.volume;
-				 if(volume){
-					 volume = data.volume/1000000.0;	 
-				 }
-				 chart.series[1].addPoint([x, volume], false, false);
+				$.each(data, function(key,data){
+					$.each(data,function(i,data){
+						var x = Date.fromISO(data.lastTradeTimestamp).getTime()
+						var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+						chart.series[0].addPoint([x, data.lastPrice], false, false);
+						CHART.chartData[key] = {}
+						 if( data.closePrice)
+							 CHART.chartData[key].close = data.closePrice;
+						 if( data.lowPrice)
+							 CHART.chartData[key].low = data.lowPrice;
+						 if( data.openPrice)
+							 CHART.chartData[key].open = data.openPrice;
+						 if( data.highPrice)
+							 CHART.chartData[key].high = data.highPrice;
+						 if(data.tradingCurrency){
+							 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+						 }
+						 var volume = data.volume;
+						 if(volume){
+							 volume = data.volume/1000000.0;	 
+						 }
+						 chart.series[1].addPoint([x, volume], false, false);
+					});					
+				});
 				chart.redraw();
 			}
 		} , PAGE.customSGXError, undefined);	
