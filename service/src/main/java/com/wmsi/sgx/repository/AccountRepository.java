@@ -30,9 +30,9 @@ public interface AccountRepository extends CustomRepository<Account, Serializabl
 	void updateAccountSetAdmin(@Param("type") String type, @Param("active") boolean active, @Param("alwaysActive") boolean alwaysActive, @Param("user_id")long user_id, @Param("start_dt") Date start_dt);
 	
 	@Modifying
-	@Query("update Accounts set Active = :active, expiration_dt = :expiration_dt where user_id = :user_id")	
+	@Query("update Accounts set Active = :active, expiration_dt = :expiration_dt , currency=:currency where user_id = :user_id")	
 	@Transactional
-	void updateAccountDeactivate(@Param("active") boolean active, @Param("expiration_dt") Date expiration_dt, @Param("user_id")long user_id);
+	void updateAccountDeactivate(@Param("active") boolean active, @Param("expiration_dt") Date expiration_dt, @Param("user_id")long user_id,@Param("currency") String currency);
 	
 	@Modifying
 	@Query("update Accounts set expiration_dt = :expiration_dt where user_id = :user_id")	

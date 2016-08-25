@@ -73,7 +73,7 @@ public class AccountExpiedCheck implements Job{
 				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
-					accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId());
+					accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD");
 					try{
 					sendTrialExpiredEmail(acc.getUser().getUsername());
 					
