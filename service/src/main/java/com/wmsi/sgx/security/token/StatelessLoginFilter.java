@@ -87,16 +87,13 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		user = new ObjectMapper().readValue(request.getInputStream(), com.wmsi.sgx.domain.User.class);
 		
 		try {
-			
-			if (user.getUsername().length() > 11 && user.getPassword().length() > 11) {
-				String decryptedPassword = rsaKeyService.decrypt(user.getPassword());
-				String password = decryptedPassword.substring(10);
-				String dateInMilliSeconds = decryptedPassword.substring(0, 10);
-
-				Long differentIntime = Math.round(System.currentTimeMillis() / 1000.0)
-						- Long.parseLong(dateInMilliSeconds);
+			String userName = rsaKeyService.decrypt(user.getUsername());
+			String password = rsaKeyService.decrypt(user.getPassword());
+			String[] temp = userName.split("\\@", 2);
+			if (temp.length == 2) {
+				Long differentIntime = Math.round(System.currentTimeMillis() / 1000.0) - Long.parseLong(temp[0]);
 				if (differentIntime < TIME_TOKEN_VALIDITY) {
-					user.setUsername(rsaKeyService.decrypt(user.getUsername()).substring(10));
+					user.setUsername(temp[1]);
 					user.setPassword(password);
 				}
 			}
