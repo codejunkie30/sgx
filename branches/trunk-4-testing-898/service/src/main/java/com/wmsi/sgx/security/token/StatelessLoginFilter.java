@@ -95,6 +95,8 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 				if (differentIntime < TIME_TOKEN_VALIDITY) {
 					user.setUsername(temp[1]);
 					user.setPassword(password);
+				}else{
+					return null;
 				}
 			}
 		} catch (RSAKeyException e) {

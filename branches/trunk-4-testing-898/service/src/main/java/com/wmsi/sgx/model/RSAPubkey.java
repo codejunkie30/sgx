@@ -8,8 +8,9 @@ package com.wmsi.sgx.model;
  *
  */
 public class RSAPubkey {
-	
+
 	private String pubKey;
+	private long timeStamp;
 
 	/**
 	 * @return the pubKey
@@ -26,6 +27,21 @@ public class RSAPubkey {
 		this.pubKey = pubKey;
 	}
 
+	/**
+	 * @return the timeStamp
+	 */
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+
+	/**
+	 * @param timeStamp
+	 *            the timeStamp to set
+	 */
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,6 +52,8 @@ public class RSAPubkey {
 		StringBuilder builder = new StringBuilder();
 		builder.append("RSAPubkey [pubKey=");
 		builder.append(pubKey);
+		builder.append(", timeStamp=");
+		builder.append(timeStamp);
 		builder.append("]");
 		return builder.toString();
 	}
