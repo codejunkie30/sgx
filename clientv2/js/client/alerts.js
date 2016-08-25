@@ -217,7 +217,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     		ko.applyBindings(this, $("body")[0]);	
 			
 
-			me.trackPage("SGX Company Watchlist");
+			me.trackPage("SGX - StockList Alerts");
     		
 						$("<div />").addClass('right-this').appendTo(".header .login-bar.premium");
 
