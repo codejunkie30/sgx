@@ -173,7 +173,7 @@ table th, table td {
   margin-left: auto;
   margin-right: auto;
   width: 1000px;
-  padding-left: 0px;
+  padding-left: 2px;
   vertical-align: top;
 }
 
@@ -186,11 +186,12 @@ table th, table td {
 }
 
 .grid .column-one {
-    width:699px;
+    width:660px;
 }
 
 .grid .column-two {
-	width:297px;
+	margin-left: 15px;
+    width:320px;
 }
 
 .grid.disclosure {
