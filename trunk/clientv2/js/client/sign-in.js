@@ -71,24 +71,18 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	        }
 			
 			PAGE.showLoading();
-			if(!me.pubkey){
-				$.getJSON(endpoint, function( data ) {
-					me.pubkey = data.pubKey;
-					me.encryptUserNamePwd();
-					me.loginUser();
-	    		});
-			}else{
-				me.encryptUserNamePwd();
+			$.getJSON(endpoint, function( data ) {
+				me.pubkey = data.pubKey;
+				me.encryptUserNamePwd(data.timeStamp);
 				me.loginUser();
-			}
-			
+    		});
 		},
 		
-		encryptUserNamePwd: function(){
+		encryptUserNamePwd: function(timeStamp){
 			var me= this;
 			var encrypt = new JSEncrypt();
 			encrypt.setPublicKey( me.pubkey );
-			me.encEmail = encrypt.encrypt( me.email() );
+			me.encEmail = encrypt.encrypt( timeStamp +"@"+ me.email() );
 			me.encPassword = encrypt.encrypt( me.password() );
 		},
 		
