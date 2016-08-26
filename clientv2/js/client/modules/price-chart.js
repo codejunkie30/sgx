@@ -218,7 +218,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			//Pushes to events
 			base.chart.events = {				
 				load: function () {
-					CHART.getPriceData();
+//					CHART.getPriceData();
 					if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
 						setInterval(function () {							
 							var today = new Date();
@@ -243,29 +243,31 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			var chart = $('#price-volume').highcharts();
 			if (data.hasOwnProperty("price")){
 				data = data.price;
-				var dateField = data.hasOwnProperty("lastTradeTimestamp") && data.lastTradeTimestamp != null ? data.lastTradeTimestamp : data.previousDate;
-	    		var price = data.hasOwnProperty("lastPrice") && data.lastPrice != null ? data.lastPrice : data.closePrice;
-				var x = Date.fromISO(dateField).getTime();
-				var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
-				chart.series[0].addPoint([x, price], false, false);
-				CHART.chartData[key] = {}
-				 if( data.closePrice)
-					 CHART.chartData[key].close = data.closePrice;
-				 if( data.lowPrice)
-					 CHART.chartData[key].low = data.lowPrice;
-				 if( data.openPrice)
-					 CHART.chartData[key].open = data.openPrice;
-				 if( data.highPrice)
-					 CHART.chartData[key].high = data.highPrice;
-				 if(data.tradingCurrency){
-					 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
-				 }
-				 var volume = data.volume;
-				 if(volume){
-					 volume = data.volume/1000000.0;	 
-				 }
-				 chart.series[1].addPoint([x, volume], true, false);
-				 chart.redraw();
+				if(data.tradingCurrency.toLowerCase() === "sgd"){
+					var dateField = data.hasOwnProperty("lastTradeTimestamp") && data.lastTradeTimestamp != null ? data.lastTradeTimestamp : data.previousDate;
+		    		var price = data.hasOwnProperty("lastPrice") && data.lastPrice != null ? data.lastPrice : data.closePrice;
+					var x = Date.fromISO(dateField).getTime();
+					var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+					chart.series[0].addPoint([x, price], false, false);
+					CHART.chartData[key] = {}
+					 if( data.closePrice)
+						 CHART.chartData[key].close = data.closePrice;
+					 if( data.lowPrice)
+						 CHART.chartData[key].low = data.lowPrice;
+					 if( data.openPrice)
+						 CHART.chartData[key].open = data.openPrice;
+					 if( data.highPrice)
+						 CHART.chartData[key].high = data.highPrice;
+					 if(data.tradingCurrency){
+						 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+					 }
+					 var volume = data.volume;
+					 if(volume){
+						 volume = data.volume/1000000.0;	 
+					 }
+					 chart.series[1].addPoint([x, volume], true, false);
+					 chart.redraw();
+				}
 			}
     		} , PAGE.customSGXError, undefined);	
 		},
