@@ -28,6 +28,7 @@ public class RSAKeyController {
 	public @ResponseBody RSAPubkey getRSAPubKey(HttpServletRequest request) throws Exception {
 		RSAPubkey rsaPubkey = new RSAPubkey();
 		rsaPubkey.setPubKey(rsaKeyService.getEncodedPublickey());
+		rsaPubkey.setTimeStamp(Math.round(System.currentTimeMillis() / 1000.0));
 		return rsaPubkey;
 	}
 }
