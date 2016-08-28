@@ -219,7 +219,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			base.chart.events = {				
 				load: function () {
 //					CHART.getPriceData();
-					if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
+					if (UTIL.retrieveCurrency().toLowerCase() === "sgd" && (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM')){
 						setInterval(function () {							
 							var today = new Date();
 							var todaysDate = today.setMinutes(today.getMinutes() - 1);
