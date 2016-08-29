@@ -32,7 +32,7 @@ public class TransactionTokenAuthenticationService
       String token = trasactionSessionTokenVerificatioService.verifyTransactionSessionToken( user, "" );
       if("".equals( token ))
       {
-        token =  trasactionSessionTokenVerificatioService.createTransactionSessionToken( user );
+        token =  trasactionSessionTokenVerificatioService.createTransactionSessionToken( user,token );
         response.addHeader(TRANSACTION_HEADER_NAME, token);
       }
       else
