@@ -20,5 +20,8 @@ public interface TransactionSessionTokenRepository extends CustomRepository<Tran
   @Query("from TransactionSessionVerification where user_id = :user_id and userStatus = :userStatus")
   TransactionSessionVerification findByUserIDAndStatus(@Param("user_id") long user_id,@Param("userStatus") Long userStatus);
   
+  @Query("DELETE FROM TransactionSessionVerification where user_id= :user_id")
+  int deleteUserTransactionSessionTokens(@Param("user_id") long user_id);
+  
   //TransactionSessionVerification[] findByUser(User user);
 }

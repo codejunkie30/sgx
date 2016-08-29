@@ -9,6 +9,6 @@ public interface TrasactionSessionTokenVerificationService
 
   public String verifyTransactionSessionToken(User user,String token) throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException;
   
-  public Response deleteTransactionSessionTokens(User user);
+  public int deleteTransactionSessionTokens(User user);
   
 }
