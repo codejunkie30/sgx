@@ -82,7 +82,6 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			var me= this;
 			var encrypt = new JSEncrypt();
 			encrypt.setPublicKey( me.pubkey );
-		    var dateUTCString = new Date().toUTCString();
 			me.encEmail = encrypt.encrypt( timeStamp +"@"+ me.email() );
 			me.encPassword = encrypt.encrypt( me.password() );
 		},
