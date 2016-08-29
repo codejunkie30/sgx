@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.TransactionSessionVerification;
 import com.wmsi.sgx.domain.User;
-import com.wmsi.sgx.model.Response;
 import com.wmsi.sgx.repository.TransactionSessionTokenRepository;
 import com.wmsi.sgx.security.token.TransactionTokenHandler;
+import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.TransactionSessionTokenVerificationException;
 import com.wmsi.sgx.service.account.TrasactionSessionTokenVerificationService;
 import com.wmsi.sgx.service.account.VerifiedTransactionSessionTokenPremiumException;
@@ -21,7 +21,9 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
   @Autowired
   private TransactionSessionTokenRepository transactionSessionTokenReposistory;
   
- 
+	@Autowired
+	private AccountService accountService;
+
   public String createTransactionSessionToken(User user)
   {
     TransactionSessionVerification transSessVerification = new TransactionSessionVerification();
@@ -118,21 +120,8 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
     return transSessionToken;
   }
   
-  public Response deleteTransactionSessionTokens(User user)
+  public int deleteTransactionSessionTokens(User user)
   {
-    Response response = new Response();
-    TransactionSessionVerification[] transSessList = transactionSessionTokenReposistory.findByUserID(user.getId());
-    for (TransactionSessionVerification list : transSessList) {
-      if (list.getUser_id().equals(user.getId()) && (list.getExpiryTime().before( new Timestamp(System.currentTimeMillis())) || list.getUserStatus()==0)) {
-        //TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory.findByUserID(user.getId());
-        transactionSessionTokenReposistory.delete(list);
-        response.setMessage("success");
-        return response;
-      }
-    }
-    
-    response.setMessage("failure");
-    return response;
-  
+    return transactionSessionTokenReposistory.deleteUserTransactionSessionTokens(user.getId());
   }
 }
