@@ -55,14 +55,21 @@ public final class TokenHandler {
 		return null;
 	}
 
+	//TODO ENCRYPT THE TOKEN
 	public String createTokenForUser(User user) {
+		final StringBuilder sb = hashUserToken(user);
+		//TODO Encrypt the token
+		return sb.toString();
+	}
+
+	private StringBuilder hashUserToken(User user) {
 		byte[] userBytes = toJSON(user);
 		byte[] hash = createHmac(userBytes);
 		final StringBuilder sb = new StringBuilder(170);
 		sb.append(toBase64(userBytes));
 		sb.append(SEPARATOR);
 		sb.append(toBase64(hash));
-		return sb.toString();
+		return sb;
 	}
 
 	private User fromJSON(final byte[] userBytes) {
