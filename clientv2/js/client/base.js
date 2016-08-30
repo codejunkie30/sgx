@@ -827,6 +827,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						PAGE.timedLogout();
+						PAGE.callout();
 						
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
 
@@ -875,6 +876,27 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			  sessionKeepAliveTimer: false
 			});	
 		},
+		//something similar for renewing the token.call to ajax 
+		
+		
+		    callout : function () {
+			var set_delay = 5000;
+			var endpoint = PAGE.fqdn + "/sgx/publickey";
+			$.getJSON(endpoint, function( data ) {
+				console.log(data.pubKey);
+				//console.log(loginUser());
+		})
+		     /*   .done(function (response) {
+		            // update the page
+		        })*/
+		        .always(function () {
+		            setTimeout(PAGE.callout, set_delay);
+		        });
+		    }
+
+		// initial call
+		
+		,
 		addWatchlist: function(me) {
 			me.currentCompanyName(me.company.companyInfo.companyName);
 			me.currentTicker(me.company.companyInfo.tickerCode);

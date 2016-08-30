@@ -20,7 +20,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		pubkey: null,
 		
 		initPage: function() {
-			
+		    	PAGE.checkStatus();
 			var displayMessage = SAVECHANGES.messages.messages[0];
 
 			this.accountSettings(displayMessage);
