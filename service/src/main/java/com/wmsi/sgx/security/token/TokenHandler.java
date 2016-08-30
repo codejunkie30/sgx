@@ -34,7 +34,7 @@ public final class TokenHandler {
 		}
 	}
 
-	public User parseUserFromToken(String token) {
+	public final User parseUserFromToken(String token) {
 		final String[] parts = token.split(SEPARATOR_SPLITTER);
 		if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
 			try {
@@ -56,7 +56,7 @@ public final class TokenHandler {
 	}
 
 	//TODO ENCRYPT THE TOKEN
-	public String createTokenForUser(User user) {
+	public final String createTokenForUser(User user) {
 		final StringBuilder sb = hashUserToken(user);
 		//TODO Encrypt the token
 		return sb.toString();
