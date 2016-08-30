@@ -21,94 +21,91 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity(name = "TransactionSessionVerification")
 @Table(name = "transactionSession_verification")
 public class TransactionSessionVerification {
-  @Id
-  @GeneratedValue(generator = "transactionSessionVerificationGenerator")
-  @GenericGenerator(name = "transactionSessionVerificationGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
-  private Long id;
+	@Id
+	@GeneratedValue(generator = "transactionSessionVerificationGenerator")
+	@GenericGenerator(name = "transactionSessionVerificationGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
+	private Long id;
 
-  @Column(name = "user_id", nullable = false)
-  public Long user_id;
+	@Column(name = "user_id", nullable = false)
+	public Long user_id;
 
-  @Column(name = "token", nullable = false)
-  public String token;
+	@Column(name = "token", nullable = false)
+	public String token;
 
-  @Column(name = "creationTime", nullable = false)
-  public Date creationTime;
-  
-  @Column(name = "expiryTime", nullable = false)
-  public Date expiryTime;
+	@Column(name = "creationTime", nullable = false)
+	public Date creationTime;
 
-  @Column(name = "userStatus", nullable = false)
-  public Long userStatus;
+	@Column(name = "expiryTime", nullable = false)
+	public Date expiryTime;
 
-  public Long getId()
-  {
-    return id;
-  }
+	@Column(name = "tx_session_token_status", nullable = false)
+	public boolean txSessionTokenStatus;
 
-  public void setId( Long id )
-  {
-    this.id = id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public Long getUser_id()
-  {
-    return user_id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setUser_id( Long user_id )
-  {
-    this.user_id = user_id;
-  }
+	public Long getUser_id() {
+		return user_id;
+	}
 
-  public String getToken()
-  {
-    return token;
-  }
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}
 
-  public void setToken( String token )
-  {
-    this.token = token;
-  }
+	public String getToken() {
+		return token;
+	}
 
-  public Date getCreationTime()
-  {
-    return creationTime;
-  }
+	public void setToken(String token) {
+		this.token = token;
+	}
 
-  public void setCreationTime( Date creationTime )
-  {
-    this.creationTime = creationTime;
-  }
+	public Date getCreationTime() {
+		return creationTime;
+	}
 
-  public Date getExpiryTime()
-  {
-    return expiryTime;
-  }
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
+	}
 
-  public void setExpiryTime( Date expiryTime )
-  {
-    this.expiryTime = expiryTime;
-  }
+	public Date getExpiryTime() {
+		return expiryTime;
+	}
 
-  public Long getUserStatus()
-  {
-    return userStatus;
-  }
+	public void setExpiryTime(Date expiryTime) {
+		this.expiryTime = expiryTime;
+	}
 
-  public void setUserStatus( Long userStatus )
-  {
-    this.userStatus = userStatus;
-  }
+	/**
+	 * @return the txSessionTokenStatus
+	 */
+	public boolean getTxSessionTokenStatus() {
+		return txSessionTokenStatus;
+	}
 
-  @Override
-  public String toString()
-  {
-    return "TransactionSessionVerification [id=" + id + ", user_id=" + user_id
-           + ", token=" + token + ", creationTime=" + creationTime
-           + ", expiryTime=" + expiryTime + ", userStatus=" + userStatus + "]";
-  }
+	/**
+	 * @param txSessionTokenStatus
+	 *            the txSessionTokenStatus to set
+	 */
+	public void setTxSessionTokenStatus(boolean txSessionTokenStatus) {
+		this.txSessionTokenStatus = txSessionTokenStatus;
+	}
 
-  
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "TransactionSessionVerification [id=" + id + ", user_id=" + user_id + ", token=" + token
+				+ ", creationTime=" + creationTime + ", expiryTime=" + expiryTime + ", txSessionTokenStatus="
+				+ txSessionTokenStatus + "]";
+	}
 
 }
