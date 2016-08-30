@@ -51,4 +51,22 @@ public class TransactionTokenAuthenticationService
     
   }
   
+  public void validateTransactionSessionToken(HttpServletResponse response, User user,String token)
+  {
+    
+    try
+    {
+      trasactionSessionTokenVerificatioService.verifyTransactionSessionToken( user,token);
+    }
+    catch(TransactionSessionTokenVerificationException exec)
+    {
+      
+    }
+    catch(VerifiedTransactionSessionTokenPremiumException exec)
+    {
+      
+    }
+  }
+  
+  
 }

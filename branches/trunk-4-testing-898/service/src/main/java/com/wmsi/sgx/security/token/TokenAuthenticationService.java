@@ -47,17 +47,23 @@ public class TokenAuthenticationService {
 	}
 
 	public boolean validateTransactionAuthenticationToken() {
+		//query the DB and check if token expires at 13th minute 
 		return false;
 	}
 
 	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
-		// disable the existing token
-		// create new token
-		int cnt = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
-		if (cnt > 0) {
+		//validate
+		if(validateTransactionAuthenticationToken()){
+			// disable the existing token
 			// create new token
-			createAndAddTokenToResponseHeader(response, user);
+			int cnt = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
+			if (cnt > 0) {
+				// create new token
+				createAndAddTokenToResponseHeader(response, user);
+				return true;
+			}
 		}
+
 		return false;
 	}
 	
