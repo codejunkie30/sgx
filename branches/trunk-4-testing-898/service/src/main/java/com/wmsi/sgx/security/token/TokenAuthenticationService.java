@@ -50,12 +50,12 @@ public class TokenAuthenticationService {
 		return false;
 	}
 
-	public boolean renewTransactionAuthToken(HttpServletResponse response,User user) {
-		//disable the existing token
-		//create new token
+	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
+		// disable the existing token
+		// create new token
 		int cnt = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
-		if(cnt>0){
-			//create new token
+		if (cnt > 0) {
+			// create new token
 			createAndAddTokenToResponseHeader(response, user);
 		}
 		return false;
