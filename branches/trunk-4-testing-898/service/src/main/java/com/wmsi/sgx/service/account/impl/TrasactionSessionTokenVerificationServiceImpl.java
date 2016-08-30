@@ -46,6 +46,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
 		TransactionSessionVerification transSessverification = null;
 		if ("".equals(transSessionToken)) {
+			//TODO replace with appropriate transaction session token 
 			transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(), new Long(1));
 			if (transSessverification != null) {
 				if (new Timestamp(System.currentTimeMillis()).before(transSessverification.getExpiryTime())) {
