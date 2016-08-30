@@ -28,7 +28,7 @@ INSERT INTO [dbo].[transactionSession_verification]
            ,[token]
            ,[creationTime]
            ,[expiryTime]
-           ,[userStatus])
+           ,[tx_session_token_status])
      VALUES
            (1,
 		   1,
