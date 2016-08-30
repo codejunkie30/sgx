@@ -35,7 +35,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		expiryTimeStamp = new Timestamp(cal.getTime().getTime());
 		transSessVerification.setExpiryTime(expiryTimeStamp);
 
-		transSessVerification.setUserStatus(new Long(1));
+		transSessVerification.setTxSessionTokenStatus(true);//TODO Set the correct value
 
 		transactionSessionTokenReposistory.save(transSessVerification);
 
@@ -47,7 +47,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		TransactionSessionVerification transSessverification = null;
 		if ("".equals(transSessionToken)) {
 			//TODO replace with appropriate transaction session token 
-			transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(), new Long(1));
+			transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(), true);//TODO check the tx status
 			if (transSessverification != null) {
 				if (new Timestamp(System.currentTimeMillis()).before(transSessverification.getExpiryTime())) {
 					System.out.println("User is active and in another browser");
@@ -86,10 +86,10 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 				newTransSessverification.setCreationTime(new Timestamp(originalTime));
 
 				newTransSessverification.setExpiryTime(expiryTimeStamp);
-				newTransSessverification.setUserStatus(new Long(1));
+				newTransSessverification.setTxSessionTokenStatus(true);//TODO set the correct value
 				newTransSessverification.setToken(transSessionToken);
 
-				transSessverification.setUserStatus(new Long(0));
+				transSessverification.setTxSessionTokenStatus(false);//TODO set the correct value
 
 				transactionSessionTokenReposistory.save(newTransSessverification);
 			}
