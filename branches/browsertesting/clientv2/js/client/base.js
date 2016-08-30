@@ -880,7 +880,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		
 		    callout : function () {
-			var set_delay = 5000;
+			var set_delay = 720000;
 			var endpoint = PAGE.fqdn + "/sgx/publickey";
 			$.getJSON(endpoint, function( data ) {
 				console.log(data.pubKey);
