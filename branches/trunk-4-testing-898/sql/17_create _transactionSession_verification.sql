@@ -11,7 +11,7 @@ GO
 CREATE TABLE [dbo].[transactionSession_verification](
 	[id] [bigint] NOT NULL,
 	[user_id] [bigint] NOT NULL,
-	[token] [nvarchar](512) NOT NULL,
+	[token] [nvarchar](4000) NOT NULL,
 	[creationTime] [datetime] NOT NULL,
 	[expiryTime] [datetime] NOT NULL,
 	[tx_session_token_status] [bit] NOT NULL
