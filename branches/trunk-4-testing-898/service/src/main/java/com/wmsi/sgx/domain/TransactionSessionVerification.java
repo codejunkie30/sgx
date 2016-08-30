@@ -39,7 +39,7 @@ public class TransactionSessionVerification {
 	public Date expiryTime;
 
 	@Column(name = "tx_session_token_status", nullable = false)
-	public boolean txSessionTokenStatus;
+	public Boolean txSessionTokenStatus;
 
 	public Long getId() {
 		return id;
@@ -92,7 +92,7 @@ public class TransactionSessionVerification {
 	 * @param txSessionTokenStatus
 	 *            the txSessionTokenStatus to set
 	 */
-	public void setTxSessionTokenStatus(boolean txSessionTokenStatus) {
+	public void setTxSessionTokenStatus(Boolean txSessionTokenStatus) {
 		this.txSessionTokenStatus = txSessionTokenStatus;
 	}
 
