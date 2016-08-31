@@ -22,7 +22,7 @@ public class TransactionSessionFilter extends Filter {
 	private TokenAuthenticationService tokenAuthSvc;
 
 	/**
-	 * Performs initialisation.
+	 * Performs initialization.
 	 * 
 	 * @param filterConfig
 	 */
