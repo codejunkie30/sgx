@@ -79,5 +79,13 @@ public class TokenAuthenticationService {
 
 		return false;
 	}
+	
+	/**
+	 * Delete all session tokens of that user
+	 * @param user
+	 */
+	public void clearAllTxSessionTokens(User user){
+		sessionTokenVerificationSvc.deleteTransactionSessionTokens(user);
+	}
 
 }
