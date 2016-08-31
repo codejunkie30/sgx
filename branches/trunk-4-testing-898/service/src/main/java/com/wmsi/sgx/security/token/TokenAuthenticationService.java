@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.service.account.TransactionSessionTokenVerificationException;
 import com.wmsi.sgx.service.account.TrasactionSessionTokenVerificationService;
+import com.wmsi.sgx.service.account.VerifiedTransactionSessionTokenPremiumException;
 
 @Service
 public class TokenAuthenticationService {
@@ -18,46 +20,57 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 
 	private final TokenHandler tokenHandler;
-	private static final long ONE_HOUR = 1000 * 60 * 60;
 
 	public TokenAuthenticationService() {
 		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(
 				"9SyECk96oDsTmXfogIieDI0cD/8FpnojlYSUJT5U9I/FGVmBz5oskmjOR8cbXTvoPjX+Pq/T/b1PqpHX0lYm0oCBjXWICA=="));
 	}
 
+	/**
+	 * addAuthentication() API should be used ONLY after successful sign-in and only once.
+	 * @param response
+	 * @param user
+	 */
 	public void addAuthentication(HttpServletResponse response, User user) {
 		createAndAddTokenToResponseHeader(response, user);
 	}
 
 	private void createAndAddTokenToResponseHeader(HttpServletResponse response, User user) {
-		user.setExpires(System.currentTimeMillis() + ONE_HOUR);
+		user.setExpires(sessionTokenVerificationSvc.getTokenExpirationTime().getTime());
 		response.addHeader(AUTH_HEADER_NAME, createToken(user));
 	}
 
 	private String createToken(User user) {
-		return sessionTokenVerificationSvc.createTransactionSessionToken(user,tokenHandler.createTokenForUser(user));
+		return sessionTokenVerificationSvc.createTransactionSessionToken(user, tokenHandler.createTokenForUser(user));
 	}
 
 	public TokenHandler getTokenHandler() {
 		return tokenHandler;
 	}
 
-	public int insertTransactionAuthenticationToken() {
-		return 0;
-	}
-
-	public boolean validateTransactionAuthenticationToken() {
-		//query the DB and check if token expires at 13th minute 
+	protected boolean validateTransactionAuthenticationToken(User user, String token) {
+		// check for fake tokens
+		try {
+			return sessionTokenVerificationSvc.validateTransactionSessionToken(user, token);
+		} catch (TransactionSessionTokenVerificationException | VerifiedTransactionSessionTokenPremiumException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
+	/**
+	 * Validates and  Creates new Transaction Authentication token. Use this API to Renew Tokens 
+	 * @param response
+	 * @param user
+	 * @return
+	 */
 	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
-		//validate
-		if(validateTransactionAuthenticationToken()){
+		// validate and expiration time and then disable the token
+		if (validateTransactionAuthenticationToken(user, response.getHeader(AUTH_HEADER_NAME))) {
 			// disable the existing token
 			// create new token
-			int cnt = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
-			if (cnt > 0) {
+			boolean oldDisabled = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
+			if (oldDisabled) {
 				// create new token
 				createAndAddTokenToResponseHeader(response, user);
 				return true;
@@ -66,6 +79,5 @@ public class TokenAuthenticationService {
 
 		return false;
 	}
-	
-	
+
 }

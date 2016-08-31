@@ -1,13 +1,9 @@
 package com.wmsi.sgx.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.wmsi.sgx.security.token.TransactionTokenAuthenticationService;
-
 public class TransactionTimeCheckController
 {
-  @Autowired
-  private TransactionTokenAuthenticationService transactionTokenAuthenticationService;  
+//  @Autowired
+//  private TransactionTokenAuthenticationService transactionTokenAuthenticationService;  
   
   private String transactionToken = "";
   
