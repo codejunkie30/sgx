@@ -2,8 +2,10 @@ package com.wmsi.sgx.repository;
 
 import java.io.Serializable;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wmsi.sgx.domain.TransactionSessionVerification;
 import com.wmsi.sgx.domain.User;
@@ -20,6 +22,8 @@ public interface TransactionSessionTokenRepository extends CustomRepository<Tran
   @Query("from TransactionSessionVerification where user_id = :user_id and tx_session_token_status = :tx_session_token_status")
   TransactionSessionVerification findByUserIDAndStatus(@Param("user_id") long user_id,@Param("tx_session_token_status") boolean tx_session_token_status);
   
+  @Modifying
+  @Transactional
   @Query("DELETE FROM TransactionSessionVerification where user_id= :user_id")
   int deleteUserTransactionSessionTokens(@Param("user_id") long user_id);
   
