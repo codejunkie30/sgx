@@ -15,89 +15,59 @@ import com.wmsi.sgx.service.account.VerifiedTransactionSessionTokenPremiumExcept
 
 @Service
 public class TrasactionSessionTokenVerificationServiceImpl implements TrasactionSessionTokenVerificationService {
+
 	@Autowired
 	private TransactionSessionTokenRepository transactionSessionTokenReposistory;
 
 	public String createTransactionSessionToken(User user, String transSessionToken) {
 		TransactionSessionVerification transSessVerification = new TransactionSessionVerification();
-
 		transSessVerification.setUser_id(user.getId());
-
 		transSessVerification.setToken(transSessionToken);
-
-		long originalTime = System.currentTimeMillis();
-		transSessVerification.setCreationTime(new Timestamp(originalTime));
-
-		Timestamp expiryTimeStamp = new Timestamp(originalTime);
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(expiryTimeStamp.getTime());
-		cal.add(Calendar.MINUTE, 12);
-		expiryTimeStamp = new Timestamp(cal.getTime().getTime());
-		transSessVerification.setExpiryTime(expiryTimeStamp);
-
-		transSessVerification.setTxSessionTokenStatus(true);//TODO Set the correct value
-
+		transSessVerification.setCreationTime(new Timestamp(System.currentTimeMillis()));
+		/**
+		 * minor time difference between creation time and expiration time
+		 * because user expiration time is set before the invoking this API
+		 */
+		transSessVerification.setExpiryTime(new Timestamp(user.getExpires()));
+		transSessVerification.setTxSessionTokenStatus(true);// Enable the token
 		transactionSessionTokenReposistory.save(transSessVerification);
-
 		return transSessVerification.getToken();
 	}
 
-	public String verifyTransactionSessionToken(User user, String transSessionToken)
+	public boolean validateTransactionSessionToken(User user, String transSessionToken)
 			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
-		TransactionSessionVerification transSessverification = null;
-		if ("".equals(transSessionToken)) {
-			//TODO replace with appropriate transaction session token 
-			transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(), true);//TODO check the tx status
-			if (transSessverification != null) {
-				if (new Timestamp(System.currentTimeMillis()).before(transSessverification.getExpiryTime())) {
-					System.out.println("User is active and in another browser");
-					transSessverification.getToken();
-				} else {
-					deleteTransactionSessionTokens(user);
-					return "";
-				}
-			}
-		} else {
-			transSessverification = transactionSessionTokenReposistory.findByUserIDAndToken(user.getId(),
-					transSessionToken);
+		// Verify if its valid token
+		if (TrasactionSessionTokenVerificationServiceImpl.isNullOrEmpty(transSessionToken) || user == null)
+			throw new TransactionSessionTokenVerificationException("Transaction token not found.");
+		// Verify if active token exists
+		TransactionSessionVerification transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(
+				user.getId(), true/** interested only in active token **/
+		);
 
-			if (transSessverification == null)
-				throw new TransactionSessionTokenVerificationException("Transaction token not found.");
+		if (transSessverification == null)
+			throw new TransactionSessionTokenVerificationException("Transaction token not found.");
+		else
+			return true;
+	}
 
-			long originalTime = System.currentTimeMillis();
+	private Timestamp incrementCurrentTimeBy2Minutes() {
+		long originalTime = System.currentTimeMillis();
+		Timestamp expiryTimeStamp = new Timestamp(originalTime);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(expiryTimeStamp.getTime());
+		cal.add(Calendar.MINUTE, 2);
+		expiryTimeStamp = new Timestamp(cal.getTime().getTime());
+		return expiryTimeStamp;
+	}
 
-			Timestamp expiryTimeStamp = new Timestamp(originalTime);
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeInMillis(expiryTimeStamp.getTime());
-			cal.add(Calendar.MINUTE, 2);
-			expiryTimeStamp = new Timestamp(cal.getTime().getTime());
-			transSessionToken = transSessverification.getToken();
-			if (expiryTimeStamp.equals(transSessverification.getExpiryTime())) {
-				expiryTimeStamp = new Timestamp(originalTime);
-				cal = Calendar.getInstance();
-				cal.setTimeInMillis(expiryTimeStamp.getTime());
-				cal.add(Calendar.MINUTE, 12);
-				expiryTimeStamp = new Timestamp(cal.getTime().getTime());
-
-				TransactionSessionVerification newTransSessverification = new TransactionSessionVerification();
-				newTransSessverification.setUser_id(user.getId());
-
-				originalTime = System.currentTimeMillis();
-				newTransSessverification.setCreationTime(new Timestamp(originalTime));
-
-				newTransSessverification.setExpiryTime(expiryTimeStamp);
-				newTransSessverification.setTxSessionTokenStatus(true);//TODO set the correct value
-				newTransSessverification.setToken(transSessionToken);
-
-				transSessverification.setTxSessionTokenStatus(false);//TODO set the correct value
-
-				transactionSessionTokenReposistory.save(newTransSessverification);
-			}
-
-			transactionSessionTokenReposistory.save(transSessverification);
-		}
-
-		return transSessionToken;
+	public Timestamp getTokenExpirationTime() {
+		Timestamp expiryTimeStamp = new Timestamp(System.currentTimeMillis());
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(expiryTimeStamp.getTime());
+		cal.add(Calendar.MINUTE, 12);
+		/** TODO REvalidate cal.getTime() vs cal.getTime().getTime() **/
+		expiryTimeStamp = new Timestamp(cal.getTime().getTime());
+		return expiryTimeStamp;
 	}
 
 	public int deleteTransactionSessionTokens(User user) {
@@ -105,8 +75,19 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 	}
 
 	@Override
-	public int disableTransactionSessionToken(User user) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean disableTransactionSessionToken(User user) {
+		// Verify if its valid token
+		TransactionSessionVerification transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(
+				user.getId(), true/** interested only in active token **/
+		);
+		if (transSessverification == null)
+			return false;
+		transSessverification.setTxSessionTokenStatus(false);
+		return transactionSessionTokenReposistory.save(transSessverification) != null;
 	}
+
+	private static boolean isNullOrEmpty(String myString) {
+		return myString == null || "".equals(myString);
+	}
+
 }

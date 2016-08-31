@@ -27,19 +27,19 @@ public class TransactionSessionVerification {
 	private Long id;
 
 	@Column(name = "user_id", nullable = false)
-	public Long user_id;
+	private Long user_id;
 
 	@Column(name = "token", nullable = false)
-	public String token;
+	private String token;
 
 	@Column(name = "creationTime", nullable = false)
-	public Date creationTime;
+	private Date creationTime;
 
 	@Column(name = "expiryTime", nullable = false)
-	public Date expiryTime;
+	private Date expiryTime;
 
 	@Column(name = "tx_session_token_status", nullable = false)
-	public Boolean txSessionTokenStatus;
+	private Boolean txSessionTokenStatus;
 
 	public Long getId() {
 		return id;
