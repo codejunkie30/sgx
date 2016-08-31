@@ -40,8 +40,8 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		if (TrasactionSessionTokenVerificationServiceImpl.isNullOrEmpty(transSessionToken) || user == null)
 			throw new TransactionSessionTokenVerificationException("Transaction token not found.");
 		// Verify if active token exists
-		TransactionSessionVerification transSessverification = transactionSessionTokenReposistory.findByUserIDAndStatus(
-				user.getId(), true/** interested only in active token **/
+		TransactionSessionVerification transSessverification = transactionSessionTokenReposistory.findByTokenUserStatus(
+				user.getId(), true/** interested only in active token **/,transSessionToken
 		);
 
 		if (transSessverification == null)

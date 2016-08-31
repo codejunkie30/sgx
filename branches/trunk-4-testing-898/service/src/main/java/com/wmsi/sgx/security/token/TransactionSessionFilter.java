@@ -54,12 +54,13 @@ public class TransactionSessionFilter extends Filter {
 
 		if ((request.getMethod() == "GET" || request.getMethod() == "POST")
 				&& (parms.containsKey("callback") || parms.containsValue("jsonpCallback"))
-				&& (request.getServletPath().equals("/publickey"))) {
-			// validate the token
-			// disable the token
-			// create new token
+				&& (request.getServletPath().equals("/reqNewTxToken"))) {
+		/**	 validate the token -> disable the token->create new token
+			 TODO validate if token newly created and doesn't require one
+		 **/
 			tokenAuthSvc.renewTransactionAuthToken(response, tokenHandler.parseUserFromToken(token));
 		}
+		//TODO VALIDATE IF TOKEN IS ACTIVE
 		chain.doFilter(request, response);
 	}
 

@@ -11,11 +11,13 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.model.RSAPubkey;
+import com.wmsi.sgx.service.RSAKeyService;
 
 public final class TokenHandler {
 
@@ -24,6 +26,9 @@ public final class TokenHandler {
 	private static final String SEPARATOR_SPLITTER = "\\.";
 
 	private final Mac hmac;
+	
+	@Autowired
+	private RSAKeyService rsaKeyService;
 
 	public TokenHandler(byte[] secretKey) {
 		try {
@@ -60,6 +65,12 @@ public final class TokenHandler {
 		final StringBuilder sb = hashUserToken(user);
 		//TODO Encrypt the token
 		return sb.toString();
+	}
+	
+	private String encryptToken(StringBuilder token){
+		RSAPubkey rsaPubkey = new RSAPubkey();
+		//rsaKeyService.decrypt(toBeDecrypted)
+		return "";
 	}
 
 	private StringBuilder hashUserToken(User user) {
