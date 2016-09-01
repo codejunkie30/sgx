@@ -59,6 +59,8 @@ public class TransactionSessionFilter extends Filter {
 			 TODO validate if token newly created and doesn't require one
 		 **/
 			tokenAuthSvc.renewTransactionAuthToken(response, tokenHandler.parseUserFromToken(token));
+		}else{
+			tokenAuthSvc.createTxTokenB4Expiration(tokenHandler.parseUserFromToken(token),response);
 		}
 		//TODO VALIDATE IF TOKEN IS ACTIVE
 		chain.doFilter(request, response);
