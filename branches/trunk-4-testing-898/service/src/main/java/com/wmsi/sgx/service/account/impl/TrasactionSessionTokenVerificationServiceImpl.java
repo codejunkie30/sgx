@@ -49,12 +49,25 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		);
 
 		if (transSessverification == null)
+		{
 			throw new TransactionSessionTokenVerificationException("Transaction token not found.");
+		}
 		else
+		{
+		  TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(),true);
+	    
+	    long originalTime = System.currentTimeMillis();
+	    Timestamp originalTimeStamp = new Timestamp(originalTime);
+	    
+	    if(originalTimeStamp.after(transSessVerification.getExpiryTime()) || originalTimeStamp.equals( transSessVerification.getExpiryTime() ))
+	    {
+	      throw new TransactionSessionTokenVerificationException("Transaction Session expired.");
+	    }
 			return true;
+		}
 	}
 
-	public String validateTransactionSession(User user, String transSessionToken)
+	public String preIncreementSessionTime(User user, String transSessionToken)
 	{
 	  TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(),true);
 	  
