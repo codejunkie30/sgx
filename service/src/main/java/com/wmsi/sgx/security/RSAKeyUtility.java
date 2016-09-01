@@ -31,7 +31,7 @@ import com.wmsi.sgx.service.RSAKeyException;
 public class RSAKeyUtility {
 
 	private static final String ALGORITHAM_NAME = "RSA";
-	
+
 	private static final String TRANSAFORMATION_NAME = "RSA/ECB/PKCS1Padding";
 
 	private RSAKeyUtility() {
@@ -49,8 +49,8 @@ public class RSAKeyUtility {
 	public static String decrypt(String toBeDecrypted, String privateKeyPath) throws RSAKeyException {
 		byte[] dectyptedText;
 		final Cipher cipher;
-		
-		if(toBeDecrypted == null){
+
+		if (toBeDecrypted == null) {
 			return null;
 		}
 
@@ -131,4 +131,21 @@ public class RSAKeyUtility {
 				}
 		}
 	}
+
+	public static byte[] encrypt(String text, String publicKeyFileName) throws RSAKeyException {
+		byte[] cipherText = null;
+		// get an RSA cipher object and print the provider
+		Cipher cipher;
+		try {
+			cipher = Cipher.getInstance(TRANSAFORMATION_NAME);
+			cipher.init(Cipher.ENCRYPT_MODE, getPublicKey( publicKeyFileName));
+			cipherText = cipher.doFinal(Base64.encodeBase64(text.getBytes()));
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+				| BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return cipherText;
+	} 
 }

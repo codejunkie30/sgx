@@ -38,4 +38,8 @@ public class RSAKeyServiceImpl implements RSAKeyService {
 	public String decrypt(String toBeDecrypted) throws RSAKeyException {
 		return RSAKeyUtility.decrypt(toBeDecrypted, privatePath);
 	}
+	
+	public byte[] encrypt(String toBeEncrypted) throws RSAKeyException{
+		return RSAKeyUtility.encrypt(toBeEncrypted,publicPath);
+	}
 }
