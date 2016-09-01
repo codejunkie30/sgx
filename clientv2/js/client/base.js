@@ -881,10 +881,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		    callout : function () {
 			var set_delay = 720000;
-			var endpoint = PAGE.fqdn + "/sgx/publickey";
+			var endpoint = PAGE.fqdn + "/sgx/reqNewTxToken";
 			$.getJSON(endpoint, function( data ) {
-				console.log(data.pubKey);
+				console.log(data);
 				//console.log(loginUser());
+				//TODO ReDirect to login page if response has errors or empty or token invalid
 		})
 		     /*   .done(function (response) {
 		            // update the page
