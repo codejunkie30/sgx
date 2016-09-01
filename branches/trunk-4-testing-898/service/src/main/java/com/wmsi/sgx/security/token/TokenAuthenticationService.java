@@ -27,7 +27,9 @@ public class TokenAuthenticationService {
 	}
 
 	/**
-	 * addAuthentication() API should be used ONLY after successful sign-in and only once.
+	 * addAuthentication() API should be used ONLY after successful sign-in and
+	 * only once.
+	 * 
 	 * @param response
 	 * @param user
 	 */
@@ -58,8 +60,17 @@ public class TokenAuthenticationService {
 		return false;
 	}
 
+	public void createTxTokenB4Expiration(User user, HttpServletResponse response) {
+		if (sessionTokenVerificationSvc.isTokenExpiring(user, response.getHeader(AUTH_HEADER_NAME))) {
+			sessionTokenVerificationSvc.disableTransactionSessionToken(user);
+			addAuthentication(response, user);
+		}
+	}
+
 	/**
-	 * Validates and  Creates new Transaction Authentication token. Use this API to Renew Tokens 
+	 * Validates and Creates new Transaction Authentication token. Use this API
+	 * to Renew Tokens
+	 * 
 	 * @param response
 	 * @param user
 	 * @return
@@ -79,12 +90,13 @@ public class TokenAuthenticationService {
 
 		return false;
 	}
-	
+
 	/**
 	 * Delete all session tokens of that user
+	 * 
 	 * @param user
 	 */
-	public void clearAllTxSessionTokens(User user){
+	public void clearAllTxSessionTokens(User user) {
 		sessionTokenVerificationSvc.deleteTransactionSessionTokens(user);
 	}
 

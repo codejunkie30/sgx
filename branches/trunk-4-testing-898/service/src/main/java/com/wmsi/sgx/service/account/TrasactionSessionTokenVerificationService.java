@@ -16,4 +16,6 @@ public interface TrasactionSessionTokenVerificationService
   
   public Timestamp getTokenExpirationTime();
   
+  public boolean isTokenExpiring(User user, String transSessionToken);
+  
 }
