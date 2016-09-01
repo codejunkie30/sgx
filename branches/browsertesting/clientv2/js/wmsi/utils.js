@@ -193,7 +193,14 @@ define(["jquery", "moment"], function($, moment) {
                 url: endpoint,
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
-        	};        	
+        	};
+        	var token = UTILS.retrieveAuthToken();
+            config.beforeSend=function(request) {
+            	if (token !== false) {
+                	request.setRequestHeader('x-auth-token', token);
+				}
+				
+            }
         	$.ajax(config);        	
         },
 		
