@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.domain.TransactionSessionVerification;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.repository.TransactionSessionTokenRepository;
+import com.wmsi.sgx.security.token.TokenAuthenticationService;
 import com.wmsi.sgx.service.account.TransactionSessionTokenVerificationException;
 import com.wmsi.sgx.service.account.TrasactionSessionTokenVerificationService;
 import com.wmsi.sgx.service.account.VerifiedTransactionSessionTokenPremiumException;
@@ -18,6 +19,9 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 
 	@Autowired
 	private TransactionSessionTokenRepository transactionSessionTokenReposistory;
+	
+	@Autowired
+  private TokenAuthenticationService tokenAuthenticationService;
 
 	public String createTransactionSessionToken(User user, String transSessionToken) {
 		TransactionSessionVerification transSessVerification = new TransactionSessionVerification();
@@ -50,6 +54,49 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 			return true;
 	}
 
+	public String validateTransactionSession(User user, String transSessionToken)
+	{
+	  TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory.findByUserIDAndStatus(user.getId(),true);
+	  
+	  long originalTime = System.currentTimeMillis();
+    Timestamp originalTimeStamp = new Timestamp(originalTime);
+    
+    Timestamp beforeExpireTime = decrementCurrentTimeBy2Minutes();
+    
+	  if(originalTimeStamp.after( beforeExpireTime ) && originalTimeStamp.before( transSessVerification.getExpiryTime() ))
+	  {
+	    System.out.println( "originalTimeStamp = "+originalTimeStamp+" beforeExpireTime = "+beforeExpireTime+" transSessverification.getExpiryTime() = "+transSessVerification.getExpiryTime() );
+	    
+      TransactionSessionVerification newTransSessverification = new TransactionSessionVerification();
+      newTransSessverification.setUser_id( user.getId() );
+      
+      originalTime = System.currentTimeMillis();
+      newTransSessverification.setCreationTime( new Timestamp(originalTime));
+      
+      newTransSessverification.setExpiryTime( getTokenExpirationTime() );
+      newTransSessverification.setTxSessionTokenStatus( true );
+      
+      transSessionToken = tokenAuthenticationService.getTokenHandler().createTokenForUser( user );
+      newTransSessverification.setToken( transSessionToken );
+      
+      transSessVerification.setTxSessionTokenStatus( false ); //old one
+      transactionSessionTokenReposistory.save(newTransSessverification);
+      
+      transactionSessionTokenReposistory.save(transSessVerification); // old one saving
+	  }
+	  return transSessionToken;
+	}
+	
+	private Timestamp decrementCurrentTimeBy2Minutes() {
+    long originalTime = System.currentTimeMillis();
+    Timestamp expiryTimeStamp = new Timestamp(originalTime);
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(expiryTimeStamp.getTime());
+    cal.add(Calendar.MINUTE, -2);
+    expiryTimeStamp = new Timestamp(cal.getTime().getTime());
+    return expiryTimeStamp;
+  }
+	
 	private Timestamp incrementCurrentTimeBy2Minutes() {
 		long originalTime = System.currentTimeMillis();
 		Timestamp expiryTimeStamp = new Timestamp(originalTime);
