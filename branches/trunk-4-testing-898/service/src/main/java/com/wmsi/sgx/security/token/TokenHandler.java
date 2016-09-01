@@ -17,6 +17,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.RSAPubkey;
+import com.wmsi.sgx.security.RSAKeyUtility;
+import com.wmsi.sgx.service.RSAKeyException;
 import com.wmsi.sgx.service.RSAKeyService;
 
 public final class TokenHandler {
@@ -26,7 +28,7 @@ public final class TokenHandler {
 	private static final String SEPARATOR_SPLITTER = "\\.";
 
 	private final Mac hmac;
-	
+
 	@Autowired
 	private RSAKeyService rsaKeyService;
 
@@ -40,6 +42,8 @@ public final class TokenHandler {
 	}
 
 	public final User parseUserFromToken(String token) {
+		// decrypt
+		token = decryptToken(token);
 		final String[] parts = token.split(SEPARATOR_SPLITTER);
 		if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
 			try {
@@ -54,23 +58,39 @@ public final class TokenHandler {
 					}
 				}
 			} catch (IllegalArgumentException e) {
-				//log tempering attempt here
+				// log tempering attempt here
 			}
 		}
 		return null;
 	}
 
-	//TODO ENCRYPT THE TOKEN
+	// TODO ENCRYPT THE TOKEN
 	public final String createTokenForUser(User user) {
 		final StringBuilder sb = hashUserToken(user);
-		//TODO Encrypt the token
-		return sb.toString();
+		// TODO Encrypt the token
+		return encryptToken(sb);
 	}
-	
-	private String encryptToken(StringBuilder token){
-		RSAPubkey rsaPubkey = new RSAPubkey();
-		//rsaKeyService.decrypt(toBeDecrypted)
-		return "";
+
+	public final String decryptToken(String hashStr) {
+		byte[] origByte = fromBase64(hashStr);
+		try {
+			return rsaKeyService.decrypt(hashStr);
+		} catch (RSAKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private String encryptToken(StringBuilder token) {
+		try {
+			return toBase64(rsaKeyService.encrypt(token.toString()));
+		} catch (RSAKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// rsaKeyService.decrypt(toBeDecrypted)
+		return null;
 	}
 
 	private StringBuilder hashUserToken(User user) {
@@ -112,24 +132,19 @@ public final class TokenHandler {
 		return hmac.doFinal(content);
 	}
 
-	/*public static void main(String[] args) {
-		Date start = new Date();
-		byte[] secret = new byte[70];
-		new java.security.SecureRandom().nextBytes(secret);
-
-		TokenHandler tokenHandler = new TokenHandler(secret);
-		for (int i = 0; i < 1000; i++) {
-			String randomUUID = java.util.UUID.randomUUID().toString().substring(0, 8);
-			final User user = new User(randomUUID, new Date(
-					new Date().getTime() + 10000));
-			user.grantRole(UserRole.ADMIN);
-			final String token = tokenHandler.createTokenForUser(user);
-			final User parsedUser = tokenHandler.parseUserFromToken(token);
-			if (parsedUser == null || parsedUser.getUsername() == null) {
-				System.out.println("error");
-			}
-		}
-		System.out.println(System.currentTimeMillis() - start.getTime());
-	}
-*/
+	/*
+	 * public static void main(String[] args) { Date start = new Date(); byte[]
+	 * secret = new byte[70]; new
+	 * java.security.SecureRandom().nextBytes(secret);
+	 * 
+	 * TokenHandler tokenHandler = new TokenHandler(secret); for (int i = 0; i <
+	 * 1000; i++) { String randomUUID =
+	 * java.util.UUID.randomUUID().toString().substring(0, 8); final User user =
+	 * new User(randomUUID, new Date( new Date().getTime() + 10000));
+	 * user.grantRole(UserRole.ADMIN); final String token =
+	 * tokenHandler.createTokenForUser(user); final User parsedUser =
+	 * tokenHandler.parseUserFromToken(token); if (parsedUser == null ||
+	 * parsedUser.getUsername() == null) { System.out.println("error"); } }
+	 * System.out.println(System.currentTimeMillis() - start.getTime()); }
+	 */
 }
