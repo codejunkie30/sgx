@@ -78,7 +78,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		long originalTime = System.currentTimeMillis();
 		Timestamp originalTimeStamp = new Timestamp(originalTime);
 
-		Timestamp beforeExpireTime = decrementCurrentTimeBy2Minutes();
+		Timestamp beforeExpireTime = decrementCurrentTimeBy2Minutes(transSessVerification);
 
 		if (originalTimeStamp.after(beforeExpireTime)
 				&& originalTimeStamp.before(transSessVerification.getExpiryTime())){
@@ -89,9 +89,8 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return false;
 	}
 
-	private Timestamp decrementCurrentTimeBy2Minutes() {
-		long originalTime = System.currentTimeMillis();
-		Timestamp expiryTimeStamp = new Timestamp(originalTime);
+	private Timestamp decrementCurrentTimeBy2Minutes(TransactionSessionVerification transSessVerification) {
+		Timestamp expiryTimeStamp = new Timestamp(transSessVerification.getExpiryTime().getTime());
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(expiryTimeStamp.getTime());
 		cal.add(Calendar.MINUTE, -2);

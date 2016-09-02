@@ -43,7 +43,7 @@ public final class TokenHandler {
 
 	public final User parseUserFromToken(String token) {
 		// decrypt
-		token = decryptToken(token);
+		//token = decryptToken(token);
 		final String[] parts = token.split(SEPARATOR_SPLITTER);
 		if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
 			try {
@@ -68,7 +68,8 @@ public final class TokenHandler {
 	public final String createTokenForUser(User user) {
 		final StringBuilder sb = hashUserToken(user);
 		// TODO Encrypt the token
-		return encryptToken(sb);
+		return sb.toString();
+		//return encryptToken(sb);
 	}
 
 	public final String decryptToken(String hashStr) {
@@ -84,8 +85,8 @@ public final class TokenHandler {
 
 	private String encryptToken(StringBuilder token) {
 		try {
-			return toBase64(rsaKeyService.encrypt(token.toString()));
-		} catch (RSAKeyException e) {
+			return token.toString();//toBase64(rsaKeyService.encrypt(token.toString()));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
