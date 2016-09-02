@@ -60,7 +60,8 @@ public class TransactionSessionFilter extends Filter {
 		 **/
 			tokenAuthSvc.renewTransactionAuthToken(response, tokenHandler.parseUserFromToken(token));
 		}else{
-			tokenAuthSvc.createTxTokenB4Expiration(tokenHandler.parseUserFromToken(token),response);
+		  if(token!=null && !"".equals( token ))
+		    tokenAuthSvc.createTxTokenB4Expiration(tokenHandler.parseUserFromToken(token),response);
 		}
 		//TODO VALIDATE IF TOKEN IS ACTIVE
 		chain.doFilter(request, response);
