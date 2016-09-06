@@ -1,9 +1,11 @@
 package com.wmsi.sgx.security.token;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.User;
@@ -20,6 +22,8 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 
 	private final TokenHandler tokenHandler;
+	
+	private @Autowired AutowireCapableBeanFactory beanFactory;
 
 	public TokenAuthenticationService() {
 		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(
@@ -34,6 +38,7 @@ public class TokenAuthenticationService {
 	 * @param user
 	 */
 	public void addAuthentication(HttpServletResponse response, User user) {
+		beanFactory.autowireBeanProperties(tokenHandler, AutowireCapableBeanFactory.AUTOWIRE_NO, true);
 		createAndAddTokenToResponseHeader(response, user);
 	}
 
@@ -47,6 +52,7 @@ public class TokenAuthenticationService {
 	}
 
 	public TokenHandler getTokenHandler() {
+		beanFactory.autowireBeanProperties(tokenHandler, AutowireCapableBeanFactory.AUTOWIRE_NO, true);
 		return tokenHandler;
 	}
 
@@ -74,10 +80,24 @@ public class TokenAuthenticationService {
 	 * @param response
 	 * @param user
 	 * @return
+	 * @deprecated Use {@link #renewTransactionAuthToken(HttpServletRequest,HttpServletResponse,User)} instead
 	 */
 	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
+		return renewTransactionAuthToken(null, response, user);
+	}
+
+	/**
+	 * Validates and Creates new Transaction Authentication token. Use this API
+	 * to Renew Tokens
+	 * @param request TODO
+	 * @param response
+	 * @param user
+	 * 
+	 * @return
+	 */
+	public boolean renewTransactionAuthToken(HttpServletRequest request, HttpServletResponse response, User user) {
 		// validate and expiration time and then disable the token
-		if (validateTransactionAuthenticationToken(user, response.getHeader(AUTH_HEADER_NAME))) {
+		if (validateTransactionAuthenticationToken(user, request.getHeader(AUTH_HEADER_NAME))) {
 			// disable the existing token
 			// create new token
 			boolean oldDisabled = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
