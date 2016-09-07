@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.model.AccountModelWithAuthToken;
 import com.wmsi.sgx.model.account.AccountModel;
+import com.wmsi.sgx.security.AuthenticationFailure;
 import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.account.UserService;
 
@@ -23,6 +24,8 @@ import net.sf.ehcache.constructs.web.filter.Filter;
 public class TransactionSessionFilter extends Filter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TransactionSessionFilter.class);
+	
+	private static final String ERROR_MSG = "Invalid Token";
 
 	@Autowired
 	private TokenAuthenticationService tokenAuthSvc;
@@ -86,8 +89,12 @@ public class TransactionSessionFilter extends Filter {
 				 **/
 				boolean renewTransactionAuthToken = tokenAuthSvc.renewTransactionAuthToken(request, response,
 						tokenHandler.parseUserFromToken(token));
-				if (!renewTransactionAuthToken)
-					throw new AuthenticationServiceException("Invalid Token");
+				if (!renewTransactionAuthToken) {
+				  response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
+          objectMapper.writeValue(response.getOutputStream(), authFailure);
+				}
+					
 				// Wrap json with jsonp callback
 				objectMapper.writeValue(response.getOutputStream(),
 						createAccountModel(response.getHeader("X-AUTH-TOKEN")));
@@ -95,7 +102,9 @@ public class TransactionSessionFilter extends Filter {
 			} else {
 				if (!tokenAuthSvc.validateTransactionAuthenticationToken(token)) {
 					// throw error message
-					throw new AuthenticationServiceException("Invalid Token");
+				  response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
+          objectMapper.writeValue(response.getOutputStream(), authFailure);
 				}
 
 				chain.doFilter(request, response);
