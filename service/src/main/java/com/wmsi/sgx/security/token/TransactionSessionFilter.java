@@ -108,17 +108,20 @@ public class TransactionSessionFilter extends Filter {
 				}
 
 			} else {
-				if (!tokenAuthSvc.validateTransactionAuthenticationToken(token)) {
-					// throw error message
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
-					objectMapper.writeValue(response.getOutputStream(), authFailure);
-				}
-
-				chain.doFilter(request, response);
-
+			  try {
+			    
+			    boolean isValidToken = tokenAuthSvc.validateTransactionAuthenticationToken(token);
+			    System.out.println( "isValidToken = = "+isValidToken );
+			    
+			  }
+			  catch (TransactionSessionTokenVerificationException
+            | VerifiedTransactionSessionTokenPremiumException e) {
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
+          objectMapper.writeValue(response.getOutputStream(), authFailure);
+        }
 			}
-
+			chain.doFilter(request, response);
 		}
 	}
 
