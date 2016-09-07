@@ -139,7 +139,6 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	TransactionSessionFilter transactionFilter() throws Exception {
 		TransactionSessionFilter transFilter = new TransactionSessionFilter();
-		transFilter.setAuthenticationManager(this.authenticationManagerBean());
 		return transFilter;
 	}
 

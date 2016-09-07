@@ -22,7 +22,7 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 
 	private final TokenHandler tokenHandler;
-	
+
 	private @Autowired AutowireCapableBeanFactory beanFactory;
 
 	public TokenAuthenticationService() {
@@ -56,10 +56,19 @@ public class TokenAuthenticationService {
 		return tokenHandler;
 	}
 
+	/**
+	 * Use {@link #validateTransactionAuthenticationToken(String)} instead
+	 */
 	protected boolean validateTransactionAuthenticationToken(User user, String token) {
+		return validateTransactionAuthenticationToken(token);
+	}
+
+	protected boolean validateTransactionAuthenticationToken(String token) {
 		// check for fake tokens
 		try {
-			return sessionTokenVerificationSvc.validateTransactionSessionToken(user, token);
+
+			return sessionTokenVerificationSvc
+					.validateTransactionSessionToken(getTokenHandler().parseUserFromToken(token), token);
 		} catch (TransactionSessionTokenVerificationException | VerifiedTransactionSessionTokenPremiumException e) {
 			e.printStackTrace();
 		}
@@ -80,7 +89,9 @@ public class TokenAuthenticationService {
 	 * @param response
 	 * @param user
 	 * @return
-	 * @deprecated Use {@link #renewTransactionAuthToken(HttpServletRequest,HttpServletResponse,User)} instead
+	 * @deprecated Use
+	 *             {@link #renewTransactionAuthToken(HttpServletRequest,HttpServletResponse,User)}
+	 *             instead
 	 */
 	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
 		return renewTransactionAuthToken(null, response, user);
@@ -89,7 +100,9 @@ public class TokenAuthenticationService {
 	/**
 	 * Validates and Creates new Transaction Authentication token. Use this API
 	 * to Renew Tokens
-	 * @param request TODO
+	 * 
+	 * @param request
+	 *            TODO
 	 * @param response
 	 * @param user
 	 * 
@@ -97,7 +110,7 @@ public class TokenAuthenticationService {
 	 */
 	public boolean renewTransactionAuthToken(HttpServletRequest request, HttpServletResponse response, User user) {
 		// validate and expiration time and then disable the token
-		if (validateTransactionAuthenticationToken(user, request.getHeader(AUTH_HEADER_NAME))) {
+		if (validateTransactionAuthenticationToken(request.getHeader(AUTH_HEADER_NAME))) {
 			// disable the existing token
 			// create new token
 			boolean oldDisabled = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
