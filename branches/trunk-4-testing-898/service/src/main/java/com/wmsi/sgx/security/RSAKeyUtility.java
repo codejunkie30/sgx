@@ -139,7 +139,7 @@ public class RSAKeyUtility {
 		try {
 			cipher = Cipher.getInstance(TRANSAFORMATION_NAME);
 			cipher.init(Cipher.ENCRYPT_MODE, getPublicKey( publicKeyFileName));
-			cipherText = cipher.doFinal(Base64.encodeBase64(text.getBytes()));
+			cipherText = cipher.doFinal((text.getBytes()));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
 				| BadPaddingException e) {
 			// TODO Auto-generated catch block
