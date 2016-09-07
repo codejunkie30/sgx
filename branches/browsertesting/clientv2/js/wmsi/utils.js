@@ -221,6 +221,10 @@ define(["jquery", "moment"], function($, moment) {
          * @param er the error message return from the server
          */
         genericAjaxError: function(data, status, er) {
+        	
+        	if(data.status==401) {
+        		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+        	}
         	console.log("NO error method provided");
         	console.log(status);
         	console.log(data);
