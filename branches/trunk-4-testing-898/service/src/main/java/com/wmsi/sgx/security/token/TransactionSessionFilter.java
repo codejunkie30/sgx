@@ -12,6 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.model.AccountModelWithAuthToken;
+import com.wmsi.sgx.model.account.AccountModel;
+import com.wmsi.sgx.service.account.AccountService;
+import com.wmsi.sgx.service.account.UserService;
+
 import net.sf.ehcache.constructs.web.filter.Filter;
 
 public class TransactionSessionFilter extends Filter {
@@ -20,6 +26,15 @@ public class TransactionSessionFilter extends Filter {
 
 	@Autowired
 	private TokenAuthenticationService tokenAuthSvc;
+
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private AccountService accountService;
 
 	/**
 	 * Performs initialization.
@@ -73,6 +88,9 @@ public class TransactionSessionFilter extends Filter {
 						tokenHandler.parseUserFromToken(token));
 				if (!renewTransactionAuthToken)
 					throw new AuthenticationServiceException("Invalid Token");
+				// Wrap json with jsonp callback
+				objectMapper.writeValue(response.getOutputStream(),
+						createAccountModel(response.getHeader("X-AUTH-TOKEN")));
 
 			} else {
 				if (!tokenAuthSvc.validateTransactionAuthenticationToken(token)) {
@@ -85,5 +103,17 @@ public class TransactionSessionFilter extends Filter {
 			}
 
 		}
+	}
+
+	private AccountModelWithAuthToken createAccountModel(String token) {
+		String username = tokenAuthSvc.getTokenHandler().parseUserFromToken(token).getUsername();
+		AccountModel acc = accountService.getAccountForUsername(username);
+		AccountModelWithAuthToken res = new AccountModelWithAuthToken();
+		res.setEmail(acc.getEmail());
+		res.setCurrency(acc.getCurrency());
+		res.setContactOptIn(acc.getContactOptIn());
+		res.setType(acc.getType());
+		res.setToken(token);
+		return res;
 	}
 }
