@@ -57,14 +57,11 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		if (transSessverification == null) {
 			throw new TransactionSessionTokenVerificationException("Transaction token not found.");
 		} else {
-			TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory
-					.findByUserIDAndStatus(user.getId(), true);
-
 			long originalTime = System.currentTimeMillis();
 			Timestamp originalTimeStamp = new Timestamp(originalTime);
 
-			if (originalTimeStamp.after(transSessVerification.getExpiryTime())
-					|| originalTimeStamp.equals(transSessVerification.getExpiryTime())) {
+			if (originalTimeStamp.after(transSessverification.getExpiryTime())
+					|| originalTimeStamp.equals(transSessverification.getExpiryTime())) {
 				throw new TransactionSessionTokenVerificationException("Transaction Session expired.");
 			}
 			return true;
@@ -134,7 +131,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return transactionSessionTokenReposistory.save(transSessverification) != null;
 	}
 
-	private static boolean isNullOrEmpty(String myString) {
+	public static boolean isNullOrEmpty(String myString) {
 		return myString == null || "".equals(myString);
 	}
 
