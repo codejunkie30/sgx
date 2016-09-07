@@ -58,21 +58,25 @@ public class TokenAuthenticationService {
 
 	/**
 	 * Use {@link #validateTransactionAuthenticationToken(String)} instead
+	 * 
+	 * @throws TransactionSessionTokenVerificationException,
+	 *             VerifiedTransactionSessionTokenPremiumException
 	 */
-	protected boolean validateTransactionAuthenticationToken(User user, String token) {
+	protected boolean validateTransactionAuthenticationToken(User user, String token)
+			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
 		return validateTransactionAuthenticationToken(token);
 	}
 
-	protected boolean validateTransactionAuthenticationToken(String token) {
+	protected boolean validateTransactionAuthenticationToken(String token)
+			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
 		// check for fake tokens
 		try {
 
 			return sessionTokenVerificationSvc
 					.validateTransactionSessionToken(getTokenHandler().parseUserFromToken(token), token);
 		} catch (TransactionSessionTokenVerificationException | VerifiedTransactionSessionTokenPremiumException e) {
-			e.printStackTrace();
+			throw e;
 		}
-		return false;
 	}
 
 	public void createTxTokenB4Expiration(User user, HttpServletResponse response) {
@@ -89,11 +93,13 @@ public class TokenAuthenticationService {
 	 * @param response
 	 * @param user
 	 * @return
+	 * @throws TransactionSessionTokenVerificationException,
+	 *             VerifiedTransactionSessionTokenPremiumException
 	 * @deprecated Use
 	 *             {@link #renewTransactionAuthToken(HttpServletRequest,HttpServletResponse,User)}
 	 *             instead
 	 */
-	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) {
+	public boolean renewTransactionAuthToken(HttpServletResponse response, User user) throws Exception {
 		return renewTransactionAuthToken(null, response, user);
 	}
 
@@ -107,10 +113,15 @@ public class TokenAuthenticationService {
 	 * @param user
 	 * 
 	 * @return
+	 * @throws TransactionSessionTokenVerificationException,
+	 *             VerifiedTransactionSessionTokenPremiumException
 	 */
-	public boolean renewTransactionAuthToken(HttpServletRequest request, HttpServletResponse response, User user) {
+	public boolean renewTransactionAuthToken(HttpServletRequest request, HttpServletResponse response, User user)
+			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
 		// validate and expiration time and then disable the token
-		if (validateTransactionAuthenticationToken(request.getHeader(AUTH_HEADER_NAME))) {
+		String token = request.getHeader(AUTH_HEADER_NAME);
+		if (!isNullOrEmpty(token) && validateTransactionAuthenticationToken(token)
+				&& sessionTokenVerificationSvc.isTokenExpiring(user, token)) {
 			// disable the existing token
 			// create new token
 			boolean oldDisabled = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
@@ -131,6 +142,10 @@ public class TokenAuthenticationService {
 	 */
 	public void clearAllTxSessionTokens(User user) {
 		sessionTokenVerificationSvc.deleteTransactionSessionTokens(user);
+	}
+
+	private boolean isNullOrEmpty(String myString) {
+		return myString == null || "".equals(myString);
 	}
 
 }
