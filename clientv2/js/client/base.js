@@ -336,6 +336,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		changedCurrency: KO.observable(false),
 		
+		TIMEOUT_SECONDS:1000,
+		
 		pageData: {
 			
 			pages: {}, 
@@ -827,8 +829,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						PAGE.timedLogout();
-						PAGE.callout();
-						
+						setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
+						PAGE.TIMEOUT_SECONDS=100000000;//No need to call again!!
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
 
 						    //898
@@ -880,24 +882,24 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		
 		    callout : function () {
-			var set_delay = 720000;
+			//var set_delay = 720000;
+			var set_delay = 200000; //dev testing the code;call for every 3mins
 			var endpoint = PAGE.fqdn + "/sgx/reqNewTxToken";
-			$.getJSON(endpoint, function( data ) {
-				console.log(data);
-				//console.log(loginUser());
-				//TODO ReDirect to login page if response has errors or empty or token invalid
-		})
-		     /*   .done(function (response) {
-		            // update the page
-		        })*/
-		        .always(function () {
-		            setTimeout(PAGE.callout, set_delay);
-		        });
-		    }
-
-		// initial call
-		
-		,
+			var params = {};
+			var jsonp = 'jsonp';
+			var postType = 'POST';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+				    UTIL.saveAuthToken(data.token);
+				},PAGE.customSGXError,jsonpCallback
+				);
+				setInterval(PAGE.callout, set_delay);//call every 12mins!!
+		    },
 		addWatchlist: function(me) {
 			me.currentCompanyName(me.company.companyInfo.companyName);
 			me.currentTicker(me.company.companyInfo.tickerCode);
@@ -1062,7 +1064,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
-      PAGE.hideLoading();
+		    console.log(textStatus+"   "+errorThrown + "  "+jqXHR);
+		    PAGE.hideLoading();
 			//Developer to use in case of custom error handling
         }
 		
