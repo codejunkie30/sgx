@@ -1064,6 +1064,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
+			
+			
+			if(jqXHR.responseText.indexOf('Invalid Token')>=0) {
+        		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+        	}
+        	
 		    console.log(textStatus+"   "+errorThrown + "  "+jqXHR);
 		    PAGE.hideLoading();
 			//Developer to use in case of custom error handling
