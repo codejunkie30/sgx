@@ -52,7 +52,7 @@
 				"blankField": "Enter a value between .001 and 100% with maximum of 3 decimals."
 			},
 			"premium": {
-				"price": "<div><span class='sign'>S$</span><span class='total'>30</span></div> <div class='sub-month'>per month</div>"
+				"price": "<div><span class='sign'>S$</span><span class='total'>15</span></div> <div class='sub-month'>per month</div>"
 			}
 		}		
 	]
