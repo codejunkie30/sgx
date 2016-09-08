@@ -223,6 +223,7 @@ define(["jquery", "moment"], function($, moment) {
         genericAjaxError: function(data, status, er) {
         	
         	if(data.status==401) {
+        		UTILS.saveAuthToken("");
         		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
         	}
         	console.log("NO error method provided");

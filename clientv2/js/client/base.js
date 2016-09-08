@@ -1067,6 +1067,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 			
 			if(jqXHR.responseText.indexOf('Invalid Token')>=0) {
+				UTILS.saveAuthToken("");
         		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
         	}
         	
