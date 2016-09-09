@@ -336,6 +336,22 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		changedCurrency: KO.observable(false),
 		
+		premiumUser: KO.observable(false),
+		
+		libTrialExpired: KO.observable(true),
+		
+		libLoggedIn: KO.observable(true),
+		
+		libTrialPeriod: KO.observable(true),
+		
+		libAlerts: KO.observable(true),
+		
+		libCurrency: KO.observable(true),
+		
+		libCurrSelect: KO.observable(true),	
+		
+		currentDay: KO.observable(),
+		
 		TIMEOUT_SECONDS:1000,
 		
 		pageData: {
@@ -814,7 +830,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								PAGE.libTrialPeriod(true);
 								PAGE.libAlerts(true);
 								PAGE.libCurrency(true);	
-								PAGE.libCurrSelect(true);	
+								//PAGE.libCurrSelect(true);	
 							}
 						
 						}
