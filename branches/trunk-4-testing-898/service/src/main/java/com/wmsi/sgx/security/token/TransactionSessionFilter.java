@@ -102,7 +102,7 @@ public class TransactionSessionFilter extends Filter {
 					}
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.setStatus(HttpServletResponse.SC_OK);
 					AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
 					objectMapper.writeValue(response.getOutputStream(), authFailure);
 				}
@@ -115,7 +115,7 @@ public class TransactionSessionFilter extends Filter {
 
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.setStatus(HttpServletResponse.SC_OK);
 					AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
 					objectMapper.writeValue(response.getOutputStream(), authFailure);
 				}
