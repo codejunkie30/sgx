@@ -10,6 +10,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 				endpoint,
 				function(data, textStatus, jqXHR){
 					PAGE.resizeIframeSimple();
+					UTILS.saveAuthToken("");
 					UTIL.deleteAuthToken();
 					UTIL.deleteCurrency();
 					UTIL.deleteState();

@@ -1066,8 +1066,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
 			if(jqXHR.responseText.indexOf('Invalid Token')>=0) {
-				UTILS.saveAuthToken("");
-        		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+				top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
         	}
         	
 		    console.log(textStatus+"   "+errorThrown + "  "+jqXHR);
