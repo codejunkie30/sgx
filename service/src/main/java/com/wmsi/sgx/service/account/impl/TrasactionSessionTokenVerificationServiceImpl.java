@@ -109,7 +109,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		Timestamp expiryTimeStamp = new Timestamp(System.currentTimeMillis());
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(expiryTimeStamp.getTime());
-		cal.add(Calendar.MINUTE, 12);
+		cal.add(Calendar.MINUTE, 13);
 		/** TODO REvalidate cal.getTime() vs cal.getTime().getTime() **/
 		expiryTimeStamp = new Timestamp(cal.getTime().getTime());
 		return expiryTimeStamp;
