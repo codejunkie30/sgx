@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AccountModelWithAuthToken;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.security.AuthenticationFailure;
@@ -107,7 +108,13 @@ public class TransactionSessionFilter extends Filter {
 					objectMapper.writeValue(response.getOutputStream(), authFailure);
 				}
 
-			} else {
+			}
+			if ((request.getMethod().equals("GET") || request.getMethod().equals("POST"))
+          && (request.getServletPath().equals("/logout"))) {
+			  User user = tokenHandler.parseUserFromToken(token);
+			  tokenAuthSvc.clearAllTxSessionTokens( user );
+			}
+			else {
 				try {
 
 					boolean isValidToken = tokenAuthSvc.validateTransactionAuthenticationToken(token);
