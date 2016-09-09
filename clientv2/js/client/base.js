@@ -895,10 +895,11 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 				params,
 				jsonp,
 				function(data, textStatus, jqXHR){
+				    //console.log(textStatus);
 				    UTIL.saveAuthToken(data.token);
 				},PAGE.customSGXError,jsonpCallback
 				);
-				setInterval(PAGE.callout, set_delay);//call every 12mins!!
+				setTimeout(PAGE.callout, set_delay);//call every 12mins!!
 		    },
 		addWatchlist: function(me) {
 			me.currentCompanyName(me.company.companyInfo.companyName);
@@ -1064,8 +1065,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
-			
-			
 			if(jqXHR.responseText.indexOf('Invalid Token')>=0) {
 				UTILS.saveAuthToken("");
         		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
