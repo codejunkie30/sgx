@@ -1,5 +1,6 @@
 package com.wmsi.sgx.security.token;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -10,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationServiceException;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.AccountModelWithAuthToken;
@@ -88,7 +90,7 @@ public class TransactionSessionFilter extends Filter {
 					&& (request.getServletPath().equals("/reqNewTxToken"))) {
 				/**
 				 * validate the token -> disable the token->create new token
-				 * TODO validate if token newly created and doesn't require one
+				 * validate if token newly created and doesn't require one
 				 **/
 				try {
 					boolean renewTransactionAuthToken = tokenAuthSvc.renewTransactionAuthToken(request, response,
@@ -103,37 +105,43 @@ public class TransactionSessionFilter extends Filter {
 					}
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
-					response.setStatus(HttpServletResponse.SC_OK);
-					AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
-					objectMapper.writeValue(response.getOutputStream(), authFailure);
+					writeErrorToResponseStream(response);
 				}
 
-			}
-			if ((request.getMethod().equals("GET") || request.getMethod().equals("POST"))
-          && (request.getServletPath().equals("/logout"))) {
-			  User user = tokenHandler.parseUserFromToken(token);
-			  tokenAuthSvc.clearAllTxSessionTokens( user );
-			}
-			else {
+			} else if ((request.getMethod().equals("GET") || request.getMethod().equals("POST"))
+					&& (request.getServletPath().equals("/logout"))) {
+				User user = tokenHandler.parseUserFromToken(token);
+				tokenAuthSvc.clearAllTxSessionTokens(user);
+			} else {
 				try {
-
 					boolean isValidToken = tokenAuthSvc.validateTransactionAuthenticationToken(token);
 					System.out.println("isValidToken = = " + isValidToken);
-
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
-					response.setStatus(HttpServletResponse.SC_OK);
-					AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
-					objectMapper.writeValue(response.getOutputStream(), authFailure);
+					writeErrorToResponseStream(response);
 				}
 				chain.doFilter(request, response);
 			}
-			
+
 		}
 	}
 
+	/**
+	 * @param response
+	 * @throws IOException
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 */
+	private void writeErrorToResponseStream(HttpServletResponse response)
+			throws IOException, JsonGenerationException, JsonMappingException {
+		response.setStatus(HttpServletResponse.SC_OK);
+		AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
+		objectMapper.writeValue(response.getOutputStream(), authFailure);
+	}
+
 	private AccountModelWithAuthToken createAccountModel(String token) {
-		String username = tokenAuthSvc.getTokenHandler().parseUserFromToken(token).getUsername();
+		User userFromToken = tokenAuthSvc.getTokenHandler().parseUserFromToken(token);
+		String username = userFromToken.getUsername();
 		AccountModel acc = accountService.getAccountForUsername(username);
 		AccountModelWithAuthToken res = new AccountModelWithAuthToken();
 		res.setEmail(acc.getEmail());
