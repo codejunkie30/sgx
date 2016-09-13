@@ -120,6 +120,8 @@ public class TokenAuthenticationService {
 			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
 		// validate and expiration time and then disable the token
 		String token = request.getHeader(AUTH_HEADER_NAME);
+    if( isNullOrEmpty( token ) )
+      throw new TransactionSessionTokenVerificationException( "Transaction token not found." );
 		if (!isNullOrEmpty(token) && validateTransactionAuthenticationToken(token)
 				&& sessionTokenVerificationSvc.isTokenExpiring(user, token)) {
 			// disable the existing token
