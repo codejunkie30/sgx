@@ -69,7 +69,7 @@ public class TransactionSessionFilter extends Filter {
 	protected void doFilter(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain)
 			throws Throwable {
 
-		System.out.println("doFilter of  TransactionSessionFilter");
+	  LOG.debug("doFilter of  TransactionSessionFilter");
 		HttpServletRequest request = httpRequest;
 		HttpServletResponse response = httpResponse;
 
@@ -85,24 +85,30 @@ public class TransactionSessionFilter extends Filter {
 		} else {
 
 			TokenHandler tokenHandler = tokenAuthSvc.getTokenHandler();
-
+			LOG.debug("when arrived token = = " + token);
 			if ((request.getMethod().equals("GET") || request.getMethod().equals("POST"))
 					&& (request.getServletPath().equals("/reqNewTxToken"))) {
 				/**
 				 * validate the token -> disable the token->create new token
 				 * validate if token newly created and doesn't require one
 				 **/
-				try {
+			  try {
 					boolean renewTransactionAuthToken = tokenAuthSvc.renewTransactionAuthToken(request, response,
 							tokenHandler.parseUserFromToken(token));
-					// if (!renewTransactionAuthToken)
-					// throw new AuthenticationServiceException("Invalid
-					// Token");
-					// Wrap json with jsonp callback
+					LOG.debug("renewTransactionAuthToken = = " + renewTransactionAuthToken);
 					if (renewTransactionAuthToken) {
-						objectMapper.writeValue(response.getOutputStream(),
+					  LOG.debug("renew token = = " + response.getHeader("X-AUTH-TOKEN"));
+					  objectMapper.writeValue(response.getOutputStream(),
 								createAccountModel(response.getHeader("X-AUTH-TOKEN")));
 					}
+					else
+					{
+					  LOG.debug("not renewed token = = " + request.getHeader( "X-AUTH-TOKEN" ));
+					  objectMapper.writeValue(response.getOutputStream(),
+					                          createAccountModel(request.getHeader( "X-AUTH-TOKEN" )));
+					  
+					}
+					
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
 					writeErrorToResponseStream(response);
@@ -115,7 +121,7 @@ public class TransactionSessionFilter extends Filter {
 			} else {
 				try {
 					boolean isValidToken = tokenAuthSvc.validateTransactionAuthenticationToken(token);
-					System.out.println("isValidToken = = " + isValidToken);
+					LOG.debug("isValidToken = = " + isValidToken);
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
 					writeErrorToResponseStream(response);
