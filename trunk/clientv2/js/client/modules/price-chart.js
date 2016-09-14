@@ -74,12 +74,7 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
     },
 
 		initChart: function(element, data, finished, periodChange) {
-			// Premium chart options vs non premium
-			if (CHART.userStatus == 'PREMIUM'){
-				var base = CHART_DEFAULTS_PREM;
-			} else {
-				var base = CHART_DEFAULTS;
-			}
+			var base = CHART_DEFAULTS_PREM;
 			
 			var self = this;
 			
@@ -88,13 +83,16 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 		    	if (!this.hasOwnProperty("points")) return;
 		    	
 		    	var key = Highcharts.dateFormat("%e/%b/%Y", this.points[0].x);
-		    	var point = self.cloneDataAndFormat( self.chartData[key] );
-
+		    	var data = self.chartData[key];
+		    	
+		    	if(data){
+		    		var point = self.cloneDataAndFormat( self.chartData[key] );
+		    	}
 		    	
 		    	var ret = "<b>" + Highcharts.dateFormat("%e/%b/%Y", this.points[0].x) + "</b>";
 
 		    	// not a trading day
-		    	if (point == undefined) {
+		    	if (!point) {
 		    		ret += "<br />";
 		    		ret += "No trading data available.";
 		    		return ret;
@@ -217,16 +215,11 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
                 }    
              ];
 			 //Adds real time data to chart if user is Plus and runs every minute
-			if (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM'){
-				//Pushes to events
-				base.chart.events = {				
-					load: function () {
-						// set up the updating of the chart each second
-						var series = this.series[0];
-						var firstRun = true;
-						var today = new Date();
-						var todaysDate = today.setHours(0,0,0,0);
-						CHART.getPremData(todaysDate);
+			//Pushes to events
+			base.chart.events = {				
+				load: function () {
+//					CHART.getPriceData();
+					if (UTIL.retrieveCurrency().toLowerCase() === "sgd" && (CHART.userStatus == 'TRIAL' || CHART.userStatus == 'PREMIUM')){
 						setInterval(function () {							
 							var today = new Date();
 							var todaysDate = today.setMinutes(today.getMinutes() - 1);
@@ -239,6 +232,43 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart-config", "client/
 			$(element).highcharts('StockChart', base, function() {
 				if (typeof finished !== "undefined") finished();
 			});
+		},
+		getPriceData: function(){
+			endpoint = PAGE.fqdn + "/sgx/price";
+    		params = { id: CHART.currentTicker };
+    		var postType = 'POST';
+    		UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(data) {
+
+			var chart = $('#price-volume').highcharts();
+			if (data.hasOwnProperty("price")){
+				data = data.price;
+				if(data.tradingCurrency.toLowerCase() === "sgd"){
+					var dateField = data.hasOwnProperty("lastTradeTimestamp") && data.lastTradeTimestamp != null ? data.lastTradeTimestamp : data.previousDate;
+		    		var price = data.hasOwnProperty("lastPrice") && data.lastPrice != null ? data.lastPrice : data.closePrice;
+					var x = Date.fromISO(dateField).getTime();
+					var key = Highcharts.dateFormat("%e/%b/%Y", new Date(x));
+					chart.series[0].addPoint([x, price], false, false);
+					CHART.chartData[key] = {}
+					 if( data.closePrice)
+						 CHART.chartData[key].close = data.closePrice;
+					 if( data.lowPrice)
+						 CHART.chartData[key].low = data.lowPrice;
+					 if( data.openPrice)
+						 CHART.chartData[key].open = data.openPrice;
+					 if( data.highPrice)
+						 CHART.chartData[key].high = data.highPrice;
+					 if(data.tradingCurrency){
+						 CHART.chartData[key].currencyFormat = PAGE["numberFormats-"+ data.tradingCurrency.toLowerCase()].chart.format;	 
+					 }
+					 var volume = data.volume;
+					 if(volume){
+						 volume = data.volume/1000000.0;	 
+					 }
+					 chart.series[1].addPoint([x, volume], true, false);
+					 chart.redraw();
+				}
+			}
+    		} , PAGE.customSGXError, undefined);	
 		},
 		getPremData: function(todaysDate){
 			var endpoint = PAGE.fqdn + "/sgx/price/pricingHistory";		

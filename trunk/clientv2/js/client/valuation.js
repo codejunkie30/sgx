@@ -503,12 +503,16 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			me.getTransactionsData(me);
 			
 		},
-		
+		retrieveDateOnlyInMilliseconds: function(milliseconds){
+			var date = new Date(milliseconds);
+			date.setHours(0,0,0,0);
+			return date.getTime();
+		},
 		toHighCharts : function(data) {
 			var ret = [];
 			$.each(data, function(idx, row) {
 				ret.push({
-					x : Date.fromISO(row.date).getTime(),
+					x : VALUATION.retrieveDateOnlyInMilliseconds(Date.fromISO(row.date).getTime()),
 					y : row.value
 				});
 			});
@@ -524,7 +528,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			
 			baseChart.series = seriesOptions;
 			// set the zoom
-			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }});
+			Highcharts.setOptions({ lang: { rangeSelectorZoom: "", thousandsSep: "," }, global: {useUTC: false}});
 			if(newOptions){
 				baseChart.rangeSelector.selected = newOptions.rangeSelector.selected;
 			}
