@@ -11,19 +11,28 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmsi.sgx.domain.User;
+import com.wmsi.sgx.repository.UserRepository;
+import com.wmsi.sgx.service.RSAKeyException;
+import com.wmsi.sgx.service.RSAKeyService;
 
 public final class TokenHandler {
 
 	private static final String HMAC_ALGO = "HmacSHA256";
-	private static final String SEPARATOR = ".";
-	private static final String SEPARATOR_SPLITTER = "\\.";
+	private static final String SEPARATOR = "&&";
+	private static final String SEPARATOR_SPLITTER = "\\&&";
 
 	private final Mac hmac;
+
+	@Autowired
+	private RSAKeyService rsaKeyService;
+
+	@Autowired
+	private UserRepository userReposistory;
 
 	public TokenHandler(byte[] secretKey) {
 		try {
@@ -34,7 +43,9 @@ public final class TokenHandler {
 		}
 	}
 
-	public User parseUserFromToken(String token) {
+	public final User parseUserFromToken(String token) {
+		// decrypt
+		token = decryptToken(token);
 		final String[] parts = token.split(SEPARATOR_SPLITTER);
 		if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
 			try {
@@ -43,26 +54,61 @@ public final class TokenHandler {
 
 				boolean validHash = Arrays.equals(createHmac(userBytes), hash);
 				if (validHash) {
-					User user = fromJSON(userBytes);
-					if (new Date().getTime() < user.getExpires()) {
-						return user;
+					String[] decryptedToken = parts[0].split("\\@@");
+					if (decryptedToken.length == 2 && decryptedToken[0].length() > 0
+							&& decryptedToken[1].length() > 0) {
+						User user = userReposistory.findByUsername(decryptedToken[0]);
+						user.setExpires(Long.parseLong(decryptedToken[1]));
+						if (new Date().getTime() < user.getExpires()) {
+							return user;
+						}
 					}
 				}
 			} catch (IllegalArgumentException e) {
-				//log tempering attempt here
+				// log tempering attempt here
 			}
 		}
 		return null;
 	}
 
-	public String createTokenForUser(User user) {
-		byte[] userBytes = toJSON(user);
+	// TODO ENCRYPT THE TOKEN
+	protected final String createTokenForUser(User user) {
+		final StringBuilder sb = hashUserToken(user);
+		// Encrypt the token
+		return encryptToken(sb);
+	}
+
+	protected final String decryptToken(String hashStr) {
+		byte[] origByte = fromBase64(hashStr);
+		try {
+			return rsaKeyService.decrypt(hashStr);
+		} catch (RSAKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private String encryptToken(StringBuilder token) {
+		try {
+			return toBase64(rsaKeyService.encrypt(token.toString()));
+		} catch (RSAKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// rsaKeyService.decrypt(toBeDecrypted)
+		return null;
+	}
+
+	private StringBuilder hashUserToken(User user) {
+		String token = user.getUsername() + "@@" + user.getExpires();
+		byte[] userBytes = fromBase64(token);
 		byte[] hash = createHmac(userBytes);
 		final StringBuilder sb = new StringBuilder(170);
-		sb.append(toBase64(userBytes));
+		sb.append(token);
 		sb.append(SEPARATOR);
 		sb.append(toBase64(hash));
-		return sb.toString();
+		return sb;
 	}
 
 	private User fromJSON(final byte[] userBytes) {
@@ -94,24 +140,19 @@ public final class TokenHandler {
 		return hmac.doFinal(content);
 	}
 
-	/*public static void main(String[] args) {
-		Date start = new Date();
-		byte[] secret = new byte[70];
-		new java.security.SecureRandom().nextBytes(secret);
-
-		TokenHandler tokenHandler = new TokenHandler(secret);
-		for (int i = 0; i < 1000; i++) {
-			String randomUUID = java.util.UUID.randomUUID().toString().substring(0, 8);
-			final User user = new User(randomUUID, new Date(
-					new Date().getTime() + 10000));
-			user.grantRole(UserRole.ADMIN);
-			final String token = tokenHandler.createTokenForUser(user);
-			final User parsedUser = tokenHandler.parseUserFromToken(token);
-			if (parsedUser == null || parsedUser.getUsername() == null) {
-				System.out.println("error");
-			}
-		}
-		System.out.println(System.currentTimeMillis() - start.getTime());
-	}
-*/
+	/*
+	 * public static void main(String[] args) { Date start = new Date(); byte[]
+	 * secret = new byte[70]; new
+	 * java.security.SecureRandom().nextBytes(secret);
+	 * 
+	 * TokenHandler tokenHandler = new TokenHandler(secret); for (int i = 0; i <
+	 * 1000; i++) { String randomUUID =
+	 * java.util.UUID.randomUUID().toString().substring(0, 8); final User user =
+	 * new User(randomUUID, new Date( new Date().getTime() + 10000));
+	 * user.grantRole(UserRole.ADMIN); final String token =
+	 * tokenHandler.createTokenForUser(user); final User parsedUser =
+	 * tokenHandler.parseUserFromToken(token); if (parsedUser == null ||
+	 * parsedUser.getUsername() == null) { System.out.println("error"); } }
+	 * System.out.println(System.currentTimeMillis() - start.getTime()); }
+	 */
 }

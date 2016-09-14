@@ -28,16 +28,17 @@ import com.wmsi.sgx.security.RestLogoutSuccessHandler;
 import com.wmsi.sgx.security.SecureTokenGenerator;
 import com.wmsi.sgx.security.token.StatelessLoginFilter;
 import com.wmsi.sgx.security.token.TokenAuthenticationService;
+import com.wmsi.sgx.security.token.TransactionSessionFilter;
 import com.wmsi.sgx.service.account.UserService;
 
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
 
 @Configuration
-@ComponentScan(basePackages = { "com.wmsi.sgx.security"})
+@ComponentScan(basePackages = { "com.wmsi.sgx.security" })
 @EnableWebSecurity
 @EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
+public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public DataSource dataSource;
@@ -47,10 +48,10 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-	
+
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
-	
+
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authProvider());
@@ -63,34 +64,26 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	public RestAuthenticationEntryPoint authenticationEntry;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		http
-		
-		.exceptionHandling().authenticationEntryPoint(authenticationEntry)
-		
 
-		
+				.exceptionHandling().authenticationEntryPoint(authenticationEntry)
 
-		.and()
+				.and()
 
-		.csrf().disable()
-		
-		.formLogin()		     
-			.loginProcessingUrl("/login")
-			.usernameParameter("username")
-			.passwordParameter("password")
-			.successHandler(authenticationSuccessHandler)
-			.failureHandler(authenticationFailureHandler)
-			
-		.and()
-		.addFilterBefore(this.statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-		.addFilterBefore(this.gzipFilter(),StatelessLoginFilter.class)
-		.logout().logoutUrl("/logout")
-		.logoutSuccessHandler(logoutSuccessHandler);
-		
+				.csrf().disable()
+
+				.formLogin().loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
+				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler)
+
+				.and().addFilterBefore(this.statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(this.gzipFilter(), StatelessLoginFilter.class)
+				.addFilterAfter(this.transactionFilter(), StatelessLoginFilter.class).logout().logoutUrl("/logout")
+				.logoutSuccessHandler(logoutSuccessHandler);
+
 	}
 
 	@Autowired
@@ -101,17 +94,15 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	public RestAuthenticationFailureHandler authenticationFailureHandler;
-	
-	
 
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return customUserDetailsService;
 	}
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Bean
 	public DaoAuthenticationProvider authProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -124,25 +115,31 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter{
 	public SecureTokenGenerator tokenGenerator() {
 		return new SecureTokenGenerator();
 	}
-	
-	
+
 	@Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-	
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
 	@Bean
 	StatelessLoginFilter statelessLoginFilter() throws Exception {
-		StatelessLoginFilter statelessLoginFilter = new StatelessLoginFilter(authenticationSuccessHandler, authenticationFailureHandler, tokenAuthenticationService, objectMapper, userService);
-		statelessLoginFilter.setAuthenticationManager(this.authenticationManagerBean());		
-	  return statelessLoginFilter;
+		StatelessLoginFilter statelessLoginFilter = new StatelessLoginFilter(authenticationSuccessHandler,
+				authenticationFailureHandler, tokenAuthenticationService, objectMapper, userService);
+		statelessLoginFilter.setAuthenticationManager(this.authenticationManagerBean());
+		return statelessLoginFilter;
 	}
-	
+
 	@Bean
 	GzipFilter gzipFilter() throws Exception {
 		GzipFilter gzipFilter = new GzipFilter();
-	  return gzipFilter;
+		return gzipFilter;
+	}
+
+	@Bean
+	TransactionSessionFilter transactionFilter() throws Exception {
+		TransactionSessionFilter transFilter = new TransactionSessionFilter();
+		return transFilter;
 	}
 
 }

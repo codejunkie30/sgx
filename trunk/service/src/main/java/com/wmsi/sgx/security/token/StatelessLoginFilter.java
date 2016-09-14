@@ -254,6 +254,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 		//final User authenticatedUser = userDetailsService.loadUserByUsername(authentication.getName());
 		//final UserAuthentication userAuthentication = new UserAuthentication(user);
 		// Add the authentication to the Security context
+		tokenAuthenticationService.clearAllTxSessionTokens(user);
 		tokenAuthenticationService.addAuthentication(response, user);
 		restAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
 	}
