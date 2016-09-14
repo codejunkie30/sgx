@@ -99,8 +99,40 @@ define([ "wmsi/utils", "knockout", "client/modules/price-chart", "text!client/da
 			};
 			var update = function() { parent.initNews(parent, data);  };
 			//Pushes params to chart for use
-			if (data.price.length > 0) { 
-				PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
+			if (data.price.length > 0) {
+				if(UTIL.retrieveCurrency().toLowerCase() === "sgd"){
+					//To add the real time pricing to the chart
+					endpoint = PAGE.fqdn + "/sgx/price";
+					var params = { id: me.ticker };
+		    		var postType = 'POST';
+					UTIL.handleAjaxRequest(endpoint, postType, params, undefined, function(priceData) {
+						if(priceData && priceData.hasOwnProperty("price") && priceData.price.tradingCurrency.toLowerCase() === "sgd"){
+							priceData = priceData.price;
+							//Adding the same data point twice to handle 1d option being active always
+							for(i=0;i<2;i++){
+								var date = priceData.hasOwnProperty("lastTradeTimestamp") && priceData.lastTradeTimestamp != null ? priceData.lastTradeTimestamp : priceData.previousDate;
+					    		var price = priceData.hasOwnProperty("lastPrice") && priceData.lastPrice != null ? priceData.lastPrice : priceData.closePrice;
+								
+								if( priceData.closePrice)
+									data.price.push({date: date, value: price});
+								 if( priceData.lowPrice)
+									 data.lowPrice.push({date: date, value: priceData.lowPrice});
+								 if( priceData.openPrice)
+									 data.openPrice.push({date: date, value: priceData.openPrice});
+								 if( priceData.highPrice)
+									 data.highPrice.push({date: date, value: priceData.highPrice});
+								 var volume = priceData.volume;
+								 if(volume){
+									 volume = priceData.volume/1000000.0;	 
+								 }
+								 data.volume.push({date: date, value: volume});
+							}
+						}
+						PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
+					}, PAGE.customSGXError, undefined);
+				}else{
+					PRICE_CHART.init("#price-volume", data, finished, update, me.ticker, CP.cpUserStatus);
+				}
 			} else {
 				parent.resizeIframeSimple();	
 			}

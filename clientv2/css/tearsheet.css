@@ -409,3 +409,17 @@ div.news {
     text-decoration: none;
     color:#0b236b;	
 }
+
+.grid .tearsheet-column-one, .grid .tearsheet-column-two {
+    display:inline-block;
+	vertical-align: top;
+}
+
+.grid .tearsheet-column-one {
+    width:660px;
+}
+
+.grid .tearsheet-column-two {
+	margin-left: 15px;
+    width:320px;
+}

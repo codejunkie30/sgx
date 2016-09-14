@@ -336,6 +336,24 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		changedCurrency: KO.observable(false),
 		
+		premiumUser: KO.observable(false),
+		
+		libTrialExpired: KO.observable(true),
+		
+		libLoggedIn: KO.observable(true),
+		
+		libTrialPeriod: KO.observable(true),
+		
+		libAlerts: KO.observable(true),
+		
+		libCurrency: KO.observable(true),
+		
+		libCurrSelect: KO.observable(true),	
+		
+		currentDay: KO.observable(),
+		
+		TIMEOUT_SECONDS:1000,
+		
 		pageData: {
 			
 			pages: {}, 
@@ -812,7 +830,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								PAGE.libTrialPeriod(true);
 								PAGE.libAlerts(true);
 								PAGE.libCurrency(true);	
-								PAGE.libCurrSelect(true);	
+								//PAGE.libCurrSelect(true);	
 							}
 						
 						}
@@ -827,7 +845,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						}
 						
 						PAGE.timedLogout();
-						
+						setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
+						PAGE.TIMEOUT_SECONDS=100000000;//No need to call again!!
 						if (data.type == 'PREMIUM' || data.type == 'TRIAL') {
 
 						    //898
@@ -875,6 +894,29 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			  sessionKeepAliveTimer: false
 			});	
 		},
+		//something similar for renewing the token.call to ajax 
+		
+		
+		    callout : function () {
+			var set_delay = 660000;
+			//var set_delay = 200000; //dev testing the code;call for every 3mins
+			var endpoint = PAGE.fqdn + "/sgx/reqNewTxToken";
+			var params = {};
+			var jsonp = 'jsonp';
+			var postType = 'POST';
+			var jsonpCallback = 'jsonpCallback';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params,
+				jsonp,
+				function(data, textStatus, jqXHR){
+				    //console.log(textStatus);
+				    UTIL.saveAuthToken(data.token);
+				},PAGE.customSGXError,jsonpCallback
+				);
+				setTimeout(PAGE.callout, set_delay);//call every 12mins!!
+		    },
 		addWatchlist: function(me) {
 			me.currentCompanyName(me.company.companyInfo.companyName);
 			me.currentTicker(me.company.companyInfo.tickerCode);
@@ -1039,7 +1081,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
          * @param customMessage will be the message passed in to let the user know what the error is
          */
 		customSGXError: function(jqXHR, textStatus, errorThrown) {
-      PAGE.hideLoading();
+			if(jqXHR.responseText.indexOf('Invalid Token')>=0) {
+				top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+        	}
+        	
+		    console.log(textStatus+"   "+errorThrown + "  "+jqXHR);
+		    PAGE.hideLoading();
 			//Developer to use in case of custom error handling
         }
 		

@@ -193,7 +193,14 @@ define(["jquery", "moment"], function($, moment) {
                 url: endpoint,
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
-        	};        	
+        	};
+        	var token = UTILS.retrieveAuthToken();
+            config.beforeSend=function(request) {
+            	if (token !== false) {
+                	request.setRequestHeader('x-auth-token', token);
+				}
+				
+            }
         	$.ajax(config);        	
         },
 		
@@ -214,6 +221,11 @@ define(["jquery", "moment"], function($, moment) {
          * @param er the error message return from the server
          */
         genericAjaxError: function(data, status, er) {
+        	
+            	if(data.responseText.indexOf('Invalid Token')>=0) {
+        		UTILS.saveAuthToken("");
+        		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
+        	}
         	console.log("NO error method provided");
         	console.log(status);
         	console.log(data);
