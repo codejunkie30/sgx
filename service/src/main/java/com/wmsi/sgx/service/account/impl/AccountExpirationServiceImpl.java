@@ -82,6 +82,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
+					acc.setCurrency("SGD");
 					accountRepository.save(acc);
 					try{
 					sendTrialExpiredEmail(acc.getUser().getUsername());

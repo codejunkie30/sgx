@@ -118,36 +118,42 @@ public class PriceController {
 		if(priceCall.getId()== null || priceCall.getId().isEmpty()){
 			throw new CompanyServiceException("Request company ticker is null");
 		}
-		Price p = new Price();
+		Price p;
 		User user = findUserFromToken(request);
 		AccountModel acct = new AccountModel();
 		if(user != null)
 			acct = accountService.getAccountForUsername(user.getUsername());
-		else
-			acct.setType(AccountType.TRIAL);
 		Map<String, List<Price>> ret = new HashMap<String, List<Price>>();
 		List<Price> price = new ArrayList<>();
 					
 		try {
-			if (acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN)
-					|| acct.getType().equals(AccountType.MASTER)) {
+			if(user == null || AccountType.EXPIRED.equals(acct.getType())){
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.MINUTE, -1);
-				Date date = new DateTime(cal.getTime()).toDate();
-				price = service.getPricingHistory(market, priceCall.getId(), date);
-			} else {
-				Calendar fromCal = Calendar.getInstance();
-				fromCal.add(Calendar.MINUTE, -16);
-				Date fromDate = new DateTime(fromCal.getTime()).toDate();
-				
-				Calendar toCal = Calendar.getInstance();
-				toCal.add(Calendar.MINUTE, -15);
-				Date toDate = new DateTime(toCal.getTime()).toDate();
-				price = service.getPricingHistoryBetweenDates(market, priceCall.getId(), fromDate, toDate);
+				cal.add(Calendar.MINUTE, -15);
+				Date delayedTime = cal.getTime();
+				p = service.getPriceAt(market, priceCall.getId(), delayedTime);
+				price.add(p);
+			}else{
+				if (acct.getType().equals(AccountType.PREMIUM) || acct.getType().equals(AccountType.ADMIN)
+						|| acct.getType().equals(AccountType.MASTER)) {
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.MINUTE, -1);
+					Date date = new DateTime(cal.getTime()).toDate();
+					price = service.getPricingHistory(market, priceCall.getId(), date);
+				} else if(acct.getType().equals(AccountType.TRIAL)){
+					Calendar fromCal = Calendar.getInstance();
+					fromCal.add(Calendar.MINUTE, -16);
+					Date fromDate = new DateTime(fromCal.getTime()).toDate();
+					
+					Calendar toCal = Calendar.getInstance();
+					toCal.add(Calendar.MINUTE, -15);
+					Date toDate = new DateTime(toCal.getTime()).toDate();
+					price = service.getPricingHistoryBetweenDates(market, priceCall.getId(), fromDate, toDate);
 
+				}
 			}
 		}
-		catch(QuanthouseServiceException e){
+		catch(QuanthouseServiceException | SearchServiceException e){
 			log.error("Failed to get intra day price from QuanthouseService");
 		}
 		ret.put("pricingHistory", price);		

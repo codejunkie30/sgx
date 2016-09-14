@@ -250,7 +250,7 @@ public class AdminServiceImpl implements AdminService {
 				acc.setExpirationDate(new Date());
 				model.setStatus("EXPIRED");
 				model.setExpiration_date(acc.getExpirationDate());
-				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId());
+				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD");
 
 			}
 		}
@@ -283,7 +283,7 @@ public class AdminServiceImpl implements AdminService {
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
 
-		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId());
+		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency());
 		ret.setResponseCode(0);
 		ret.setData(model);
 		return ret;
