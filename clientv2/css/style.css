@@ -370,6 +370,7 @@ header.header { margin: 10px 0 0 0; }
 #premium .premium-wrapper .view-price .sub-content { font-size: 13px; color: #666; position: relative; top: -8px; text-align: center; }
 #premium .premium-wrapper .view-price .price .total { font-size: 39px; color: #666; }
 #premium .premium-wrapper .view-price .price .sign { font-size: 27px; color: #666; }
+#premium .premium-wrapper .view-price .note { font-size: 14px; color: #666; position: absolute; right: 100px; top: 400px; width: 390px; }
 
 .cancel { cursor: pointer; }
 
