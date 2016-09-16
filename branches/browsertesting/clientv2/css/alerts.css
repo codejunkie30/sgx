@@ -1,5 +1,5 @@
 .alerts-wrapper select { background: #FFFFFF; height: 22px; border: 1px solid #808080; border-radius: 4px; min-width: 80px; }
-.alerts-wrapper a { color: #0b236b; text-decoration: none; }
+.alerts-wrapper a { color: #0b236b; text-decoration: underline; }
 .alerts-wrapper a:hover { text-decoration: underline; }
 
 .intro { margin: 12px 0; display: block; }
