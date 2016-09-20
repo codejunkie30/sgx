@@ -25,7 +25,7 @@
 #estimates-content table tbody tr td {font-weight:normal;}
 #estimates-content-alternative {display:none; margin-top:20px; padding:15px;}
 #premium .premium-wrapper .trial-box { margin: 0 15px 0 0 !important; }
-#premium .premium-wrapper .view-price .price { right: 65px !important; }
+/*#premium .premium-wrapper .view-price .price { right: 65px !important; }*/
 .data-point-container {
   margin-top:15px;
 }

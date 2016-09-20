@@ -267,7 +267,7 @@ div.wrapper {
 }
   .technical-charting-alternative .premium-preview {padding: 10px; }
 #premium .premium-wrapper .trial-box { margin: 0 15px 0 0 !important; }
-#premium .premium-wrapper .view-price .price { right: 65px !important; }
+/*#premium .premium-wrapper .view-price .price { right: 65px !important; }*/
 .indicators-description {
   /*margin-top:30px;*/
   padding-top:5px;
