@@ -4,13 +4,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
@@ -24,10 +21,8 @@ import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.EnetsRepository;
-import com.wmsi.sgx.security.UserDetailsWrapper;
 import com.wmsi.sgx.service.account.AccountCreationException;
 import com.wmsi.sgx.service.account.AccountService;
-import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.util.DateUtil;
 
@@ -68,10 +63,11 @@ public class AccountServiceImpl implements AccountService{
 			account = accounts.get(0);
 			ret = new AccountModel();
 			ret.setEmail(account.getUser().getUsername());
-			ret.setStartDate(account.getStartDate());
-			if(account.getExpirationDate() != null)
-				ret.setExpirationDate(account.getExpirationDate());
-			else{
+			ret.setStartDate(resetToMidnightTime(account.getStartDate()));
+			if(account.getExpirationDate() != null){
+				ret.setExpirationDate(resetToMidnightTime(account.getExpirationDate()));
+				
+			}else{
 				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()), Calendar.DAY_OF_MONTH, account.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				ret.setExpirationDate(expiration);
 			}
@@ -80,7 +76,7 @@ public class AccountServiceImpl implements AccountService{
 			}else{
 				ret.setType(account.getType());
 			}
-			
+			ret.setDaysRemaining(getDaysRemaining(ret));
 			ret.setContactOptIn(account.getContactOptIn());
 			ret.setCurrency(account.getCurrency());
 			if(account.getType() == AccountType.PREMIUM || account.getType() == AccountType.ADMIN 
@@ -100,7 +96,27 @@ public class AccountServiceImpl implements AccountService{
 			
 			return ret;
 	}
+
+	/**
+	 * @param ret
+	 */
+	private long getDaysRemaining(AccountModel ret) {
+		long diff = ret.getExpirationDate().getTime() - new Date().getTime();
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+	}
 	
+	private Date resetToMidnightTime(Date expirationDate) {
+		// TODO Auto-generated method stub
+		Calendar cal = Calendar.getInstance(); // locale-specific
+		cal.setTime(expirationDate);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		long time = cal.getTimeInMillis();
+		return cal.getTime();
+	}
+
 	@Override
 	public User findUserForTransactionId(String transId){
 		return enetsRepository.findByTransactionId(transId);
@@ -192,11 +208,11 @@ public class AccountServiceImpl implements AccountService{
 		Account acc = new Account();
 		acc.setType(type);
 		acc.setUser(user);
-		acc.setStartDate(new Date());
+		acc.setStartDate(resetToMidnightTime(new Date()));
 		if(type == AccountType.TRIAL)
 			acc.setExpirationDate(null);
 		else
-			acc.setExpirationDate(new DateTime().plusDays(expirationDays).toDate());
+			acc.setExpirationDate(resetToMidnightTime(new DateTime().plusDays(expirationDays).toDate()));
 		acc.setActive(true);
 		acc.setAlwaysActive(false);
 		acc.setContactOptIn(user.getContactOptIn());
