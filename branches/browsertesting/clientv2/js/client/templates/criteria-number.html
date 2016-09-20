@@ -2,7 +2,7 @@
 	<span data-bind="text: field.name"></span>
 	<img data-bind="tooltip: field.id" src="img/info-tab-large.png" alt="" width="20" height="20" />
 </td>
-<td data-bind="text: updatesMin(), format: field.format" class="middle"></td>
+<td data-bind="text: updatesMin(), format: field.format,css: { 'wrap-tdvalue' : updatesMin().toString().length>10}" class="middle" ></td>
 <td class="criteria-slider middle">
 	<div class="module-stock-slider">
 		<div data-bind="slider" class="slider-bar"></div>
@@ -11,5 +11,5 @@
 		<div data-bind="text: matches() + ' matches'" class="matches"></div>
 	</div>
 </td>
-<td data-bind="text: updatesMax(), format: field.format" class="middle"></td>
+<td data-bind="text: updatesMax(), format: field.format ,css: { 'wrap-tdvalue' : updatesMax().toString().length>7}" class="middle"></td>
 <td class="remove"><img data-bind="tooltip: 'criteriaRemove', click: criteria.clickEvents.removeCriteria" src="img/x-button.png" alt="" /></td>
