@@ -125,7 +125,7 @@ public class AccountController{
 		User user = findUserFromToken(request);
 		String username = user.getUsername();
 		dto.setEmail(username);
-		return accountService.updateAccount(dto);
+		return accountService.updateAccount(dto,user.getId());
 		
 	}
 	

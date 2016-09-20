@@ -228,7 +228,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse deactivate(String username) {
+	public AdminResponse deactivate(String username, long updatedBy) {
 		List<Account> accounts = accountRepository.findByUsername(username);
 		User u = userReposistory.findByUsername(username);
 		AdminResponse ret = new AdminResponse();
@@ -250,7 +250,7 @@ public class AdminServiceImpl implements AdminService {
 				acc.setExpirationDate(new Date());
 				model.setStatus("EXPIRED");
 				model.setExpiration_date(acc.getExpirationDate());
-				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD");
+				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD", updatedBy, new Date());
 
 			}
 		}
@@ -260,7 +260,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse extension(String username, Date period) {
+	public AdminResponse extension(String username, Date period, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -283,14 +283,14 @@ public class AdminServiceImpl implements AdminService {
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
 
-		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency());
+		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency(), updatedBy, new Date());
 		ret.setResponseCode(0);
 		ret.setData(model);
 		return ret;
 	}
 
 	@Override
-	public AdminResponse setAdmin(String username) {
+	public AdminResponse setAdmin(String username, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -310,7 +310,7 @@ public class AdminServiceImpl implements AdminService {
 		edit.setAlwaysActive(true);
 		
 		
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate());
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate(), updatedBy, new Date());
 
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
@@ -324,7 +324,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse removeAdmin(String username) {
+	public AdminResponse removeAdmin(String username, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -342,7 +342,7 @@ public class AdminServiceImpl implements AdminService {
 		edit.setType(AccountType.PREMIUM);
 		edit.setAlwaysActive(false);
 		edit.setExpirationDate(null);
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate());
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate(), updatedBy, new Date());
 
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);

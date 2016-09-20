@@ -113,14 +113,14 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Override
 	//@Secured("ROLE_USER")
-	public AccountModel updateAccount(UpdateAccountModel dto){
+	public AccountModel updateAccount(UpdateAccountModel dto, long updatedBy){
 		
 		List<Account> accounts = accountRepository.findByUsername(dto.getEmail());		
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		if(accounts.size() > 0){
 		accounts.get(0).setContactOptIn(dto.getContactOptIn());
 		accounts.get(0).setCurrency(dto.getCurrency());
-		accountRepository.accountserviceUpdateAccount(accounts.get(0).getContactOptIn(), accounts.get(0).getCurrency(), accounts.get(0).getUser().getId());
+		accountRepository.accountserviceUpdateAccount(accounts.get(0).getContactOptIn(), accounts.get(0).getCurrency(), accounts.get(0).getUser().getId(), updatedBy, new Date());
 		}
 		return getAccountForUsername(dto.getEmail());
 		
@@ -150,7 +150,7 @@ public class AccountServiceImpl implements AccountService{
 			// Deactivate trial and Premium accounts
 			if(acc.getType().equals(AccountType.TRIAL) || acc.getType().equals(AccountType.PREMIUM)){
 				acc.setActive(false);
-				accountRepository.updateActive(acc.getActive(), acc.getUser().getId());
+				accountRepository.updateActive(acc.getActive(), acc.getUser().getId(), acc.getUser().getId(), new Date());
 			}
 		}
 		
@@ -179,7 +179,7 @@ public class AccountServiceImpl implements AccountService{
 			// Deactivate trial account
 			if(acc.getType().equals(AccountType.TRIAL) || (acc.getType().equals(AccountType.PREMIUM))){
 				acc.setActive(false);
-				accountRepository.updateActive(acc.getActive(), acc.getUser().getId());
+				accountRepository.updateActive(acc.getActive(), acc.getUser().getId(), acc.getUser().getId(), new Date());
 				success  = true;
 			}
 		}
@@ -200,7 +200,6 @@ public class AccountServiceImpl implements AccountService{
 		acc.setActive(true);
 		acc.setAlwaysActive(false);
 		acc.setContactOptIn(user.getContactOptIn());
-		
 		return accountRepository.save(acc);
 		
 	}

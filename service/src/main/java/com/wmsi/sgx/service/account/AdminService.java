@@ -13,12 +13,12 @@ import com.wmsi.sgx.model.account.TrialResponse;
 public interface AdminService {
 
 	//Trial Days
-	AdminResponse deactivate(String username);
+	AdminResponse deactivate(String username, long updatedBy);
 	AdminResponse searchByDate(Date period);
-	AdminResponse extension(String username, Date period);
-	AdminResponse setAdmin(String username);
+	AdminResponse extension(String username, Date period, long updatedBy);
+	AdminResponse setAdmin(String username, long updatedBy);
 	AdminResponse findByUser(String user);
-	AdminResponse removeAdmin(String username);
+	AdminResponse removeAdmin(String username, long updatedBy);
 	AdminResponse trialDay(TrialResponse response, String email);
 	AdminResponse getTrialDays();
 	AdminAccountModel convertAccountModelToAdminAccountModel(AccountModel accModel);

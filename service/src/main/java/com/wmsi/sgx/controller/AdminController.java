@@ -106,29 +106,32 @@ public class AdminController {
 	
 	@RequestMapping(value = "deactivate", method = RequestMethod.POST)
 	public AdminResponse deactivate(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		User user = findUserFromToken(request);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
-		return adminService.deactivate(response.getId());
+		return adminService.deactivate(response.getId(), user.getId());
 		
 	}
 	
 	@RequestMapping(value = "extension", method = RequestMethod.POST)
 	public AdminResponse extension(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		User user = findUserFromToken(request);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
-		return adminService.extension(response.getId(), response.getDateParam());
+		return adminService.extension(response.getId(), response.getDateParam(), user.getId());
 		
 	}
 	
 	@RequestMapping(value = "setAdmin", method = RequestMethod.POST)
 	public AdminResponse setAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		User user = findUserFromToken(request);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
 		if(acct.getType() == AccountType.MASTER){
-			return adminService.setAdmin(response.getId());
+			return adminService.setAdmin(response.getId(), user.getId());
 		}
 		
 		return response;
@@ -137,11 +140,12 @@ public class AdminController {
 	
 	@RequestMapping(value = "removeAdmin", method = RequestMethod.POST)
 	public AdminResponse removeAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+		User user = findUserFromToken(request);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
 		if(acct.getType() == AccountType.MASTER){
-			return adminService.removeAdmin(response.getId());
+			return adminService.removeAdmin(response.getId(), user.getId());
 		}
 		
 		return response;

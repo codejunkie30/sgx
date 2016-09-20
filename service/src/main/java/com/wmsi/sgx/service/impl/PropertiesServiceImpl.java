@@ -1,6 +1,8 @@
 package com.wmsi.sgx.service.impl;
 
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -66,6 +68,7 @@ public class PropertiesServiceImpl implements PropertiesService{
 		conf.setProperty(key);
 		conf.setValue(value1);
 		conf.setModifiedBy(username);
+		conf.setModifiedDate(new Date());
 		configurationsRepository.save(conf);
 	}
 	@Override

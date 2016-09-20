@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AcccountExiprationService;
@@ -83,6 +84,10 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
 					acc.setCurrency("SGD");
+					User user = new User();
+					user.setId(1L);
+					acc.setLastModifiedBy(user);
+					acc.setLastModifiedDate(new Date());
 					accountRepository.save(acc);
 					try{
 					sendTrialExpiredEmail(acc.getUser().getUsername());
