@@ -243,8 +243,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						var home = PAGE.getPage(PAGE.pageData.getPage('index'));
 						top.location.href = home;
 					}					
-					
-					if (data.type == 'PREMIUM'){						
+					var start = moment(data.startDate);
+					var end = moment(data.expirationDate);
+					var daysRemaining = data.daysRemaining;
+					if (data.type == 'PREMIUM'){
+					    	if(daysRemaining === 0){
+					    		$('.settings .intro .content').html(displayMessage.accountSettings.introPremiumLastDay);
+					    	}
 						$('.settings .intro .content').html(displayMessage.accountSettings.introPremium);
 						$('.settings .intro a').remove();
 						var end = $.datepicker.formatDate("dd/M/yy", Date.fromISO(data.expirationDate));
@@ -255,10 +260,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 					}
 					
 					if (data.type == 'TRIAL'){
-						var start = moment(data.startDate);
-						var end = moment(data.expirationDate);
-						var trialPeriod = end.diff(start, 'days');
-						var daysRemaining = end.diff(moment().startOf('day'), 'days');
+
 												
 						if (daysRemaining >= 1) {
 							if(daysRemaining > 1)
@@ -268,7 +270,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 								$('.settings .intro .content .current-day').html(daysRemaining);
 							
 								$('.settings .intro .date').remove();
-						} else {
+						}else if(daysRemaining == 0){
+						    $('.settings .intro .content').html(displayMessage.accountSettings.introTrialLastDay);
+						}else {
 							$('.settings .intro .content').html(displayMessage.accountSettings.introExpired);
 							$('.settings .intro .date').remove();
 						}
