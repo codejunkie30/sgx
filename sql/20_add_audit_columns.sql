@@ -12,3 +12,6 @@ ALTER TABLE premium_verification
     
 ALTER TABLE user_verification
     ADD updated_dt datetime2(3) NOT NULL DEFAULT GETDATE()
+    
+ALTER TABLE watchlist
+    ADD updated_dt datetime2(3) NOT NULL DEFAULT GETDATE()
