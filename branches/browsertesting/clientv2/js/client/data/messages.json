@@ -35,8 +35,10 @@
 			},
 			"accountSettings": {
 				"introPremium": "You are currently enrolled in a StockFacts Plus account. It is set to expire on <span class='expiration-date'></span>",
+				"introPremiumLastDay": "Your account is expiring today.",
 				"introTrial": "You have <span class='current-day'></span> days left in your trial.",
 				"introTrialDayOne": "You have <span class='current-day'></span> day left in your trial.",
+				"introTrialLastDay": "Your account is expiring today.",
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {

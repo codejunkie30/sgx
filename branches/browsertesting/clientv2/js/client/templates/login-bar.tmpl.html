@@ -9,7 +9,12 @@
 	<div class="login-bar" data-bind="css: {'premium': (premiumUser() ==  true)}">		
 		<span class="stock-facts"><b>StockFacts <i>Plus</i></b></span>
 		<span class="logged-in-as" data-bind="css: {'hide': (libLoggedIn() == true)}">Logged in as <span data-bind="text: premiumUserEmail"></span></span>
-		<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> <span data-bind="text: (currentDay() > 1)? 'days':'day'"></span> left in your trial.</span>
+		<!-- ko {if: libLoggedIn() && currentDay() > 0} -->
+			<span class="trial-period" data-bind="css: {'hide': (libTrialPeriod() == true)}">: You have <span data-bind="text: currentDay"></span> <span data-bind="text: (currentDay() > 1)? 'days':'day'"></span> left in your trial.</span>
+		<!-- /ko -->
+		<!-- ko ifnot -->
+			<span class="trial-period" id="introTrialLastDay"></span> 
+		<!-- /ko -->
 		<span class="trial-expired" data-bind="visible: (libTrialExpired() == true)">: Your trial has expired.</span>
 		<ul>
 			<li class="subscribe" data-bind="css: {'hide': (libSubscribe() == true)}"><a target="_top" href="purchase-account.html">Purchase</a></li>
