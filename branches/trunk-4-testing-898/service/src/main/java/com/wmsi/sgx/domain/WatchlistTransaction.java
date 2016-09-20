@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity(name = "WatchlistTransaction")
 @Table(name = "watchlist_transaction")
-public class WatchlistTransaction {
+public class WatchlistTransaction extends AbstractAuditable{
 	@Id
 	@GeneratedValue(generator = "watchlistTransactionsGenerator")
 	@GenericGenerator(name = "watchlistTransactionsGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")

@@ -32,6 +32,9 @@ public class Watchlist {
 	
 	@Column(name = "watchlist_name", nullable = false)
 	private String name;
+	
+	@Column(name = "updated_dt", nullable = false)
+	private Date updatedDate = new Date();
 
 	public User getUser() {
 		return user;
@@ -64,10 +67,24 @@ public class Watchlist {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * @return the updatedDate
+	 */
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	/**
+	 * @param updatedDate the updatedDate to set
+	 */
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(user, watchlist_id, date_created, name);
+		return Objects.hashCode(user, watchlist_id, date_created, name, updatedDate);
 	}
 	
 	@Override
@@ -77,7 +94,8 @@ public class Watchlist {
 			return Objects.equal(this.user, that.user)
 				&& Objects.equal(this.watchlist_id, that.watchlist_id)
 				&& Objects.equal(this.date_created, that.date_created)
-				&& Objects.equal(this.name, that.name);
+				&& Objects.equal(this.name, that.name)
+			    && Objects.equal(this.updatedDate, that.updatedDate);
 		}
 		return false;
 	}@Override
@@ -87,6 +105,7 @@ public class Watchlist {
 			.add("watchlist_id", watchlist_id)
 			.add("date_created", date_created)
 			.add("name", name)
+			.add("updatedDate", updatedDate)
 			.toString();
 	}
 
