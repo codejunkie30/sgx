@@ -277,6 +277,16 @@ define([ "jquery", "knockout", "wmsi/page", "highstock" ], function( $, ko, PAGE
       legend: {
         enabled:true
       },
+      xAxis: {
+      	
+	        labels: {
+              formatter: function() {
+                  return Highcharts.dateFormat("%e. %b", this.value);
+              }
+	        },
+	        minTickInterval: 24 * 3600 * 1000
+	        
+  	  },
       yAxis: [{
         id:'primary-axis',
         height: '68%',
