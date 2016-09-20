@@ -49,6 +49,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 		res.setContactOptIn(acc.getContactOptIn());
 		res.setType(acc.getType());
 		res.setToken(response.getHeader("X-AUTH-TOKEN"));
+		res.setDaysRemaining(acc.getDaysRemaining());
 		
 		objectMapper.writeValue(response.getOutputStream(), res);
 		WebAuthenticationDetails auth = (WebAuthenticationDetails) authentication.getDetails();

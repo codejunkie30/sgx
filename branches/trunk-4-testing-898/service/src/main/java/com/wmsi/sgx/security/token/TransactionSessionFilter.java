@@ -155,6 +155,7 @@ public class TransactionSessionFilter extends Filter {
 		res.setContactOptIn(acc.getContactOptIn());
 		res.setType(acc.getType());
 		res.setToken(token);
+		res.setDaysRemaining(acc.getDaysRemaining());
 		return res;
 	}
 }
