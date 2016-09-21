@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wmsi.sgx.domain.CustomAuditorAware;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.ApiResponse;
 import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.ResetUser;
@@ -46,6 +48,9 @@ public class UserController{
 	
 	@Autowired
 	private LocalValidatorFactoryBean validator;
+	
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public @ResponseBody Boolean register(@RequestBody UserModel user, BindingResult result) throws UserExistsException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
@@ -54,6 +59,9 @@ public class UserController{
 		if (result.hasErrors()) {
 			throw new MethodArgumentNotValidException(null, result);
 		}
+		User auditUser = new User();
+		auditUser.setId(1L);
+		auditorProvider.setUser(auditUser);
 		CreateUserReponse res = registrationService.registerUser(user);
 		try {
 			registrationService.sendVerificationEmail(res.getUsername(), res.getToken());
@@ -115,6 +123,11 @@ public class UserController{
 
 	@RequestMapping(value = "password", method = RequestMethod.POST)
 	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @RequestBody ChangePasswordModel user, BindingResult result) throws InvalidTokenException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
+		//For auditing purpose
+		User auditUser = new User();
+		auditUser.setId(1L);
+		auditorProvider.setUser(auditUser);
+		
 		decryptChangePasswordModel(user);
 		validator.validate(user, result);
 		if (result.hasErrors()) {
