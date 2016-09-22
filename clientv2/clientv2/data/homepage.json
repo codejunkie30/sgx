@@ -1,0 +1,9 @@
+{
+	"promos": [
+		{
+			"type": "image",
+			"src": "img/promos/stockFacts.jpg",
+			"href": "?page=11&lang=en-us"
+		}	
+	]
+}

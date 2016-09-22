@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+    <title>IFRAME - SGX</title>
+    <link rel="shortcut icon" href="img/sgxPortal.ico">
+    <script type="text/javascript" src="js/wmsi/XD.js"></script>		
+    <script type="text/javascript" src="js/vendor/jquery/jquery.1.11.3.min.js"></script>		
+    <script type="text/javascript">
+
+    	/**
+    	 * base variables for domain, pages and defaults
+    	 */
+     	var currentDomain = document.location.href;
+		var remoteDomain = window.location.protocol + "//" +  window.location.hostname;
+		var remotePages = [ "index", "company-tearsheet", "financials", "related", "alpha-factor", "", "trade", "terms-conditions" ];
+    	var defaultSection = 0;
+    
+    	/**
+    	 * Register the resize event function
+    	 */
+	    XD.receiveMessage( function(message){ resizeFrame(message.data); }, remoteDomain );
+
+    	/**
+    	 * get a querystring parameter by name
+    	 * @param name the name of the querystring parameter
+    	 * @return the value of the querystring parameter or null if it doesn't exist
+    	 */
+        function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    	}
+
+    	/**
+    	 * get the page name from the remotePages variable based on an id
+    	 * @param id the position of the page in the array
+    	 * @return the name for the HTML page
+    	 */
+	    function getPageBase(id) {
+    		try { id = parseInt(id); } catch(err) { id = defaultSection };
+	    	if (isNaN(id) || id >= remotePages.length) id = defaultSection;
+	    	return "/" + remotePages[id] + ".html" + location.search;
+	    }
+
+    	/**
+    	 * handle the resize of the iframe
+    	 * @param data a tokenized string of height and scroll position (e.g. the place to start the page view)
+    	 */
+	    function resizeFrame(data) {
+    		
+	    	// page objects 
+	    	var headerHeight = 200;
+			var cFrame = $("#company-info");
+	        var height = 600, scrollPos = 0;
+	        var scrolling = "no";
+	        try{
+	        	var pieces = data.split("-");
+				height = parseInt(pieces[0]);
+				scrollPos = parseInt(pieces[1]);
+				if (scrollPos > 0) scrollPos += headerHeight;
+				scrolling = "no";
+	        }
+	        catch(err){}
+	        
+	        // set the resized size
+	        $(cFrame).attr("height", height).attr("scrolling", scrolling);
+	        if (!isNaN(scrollPos) && scrollPos >= 0) window.scrollTo(0, scrollPos);
+	    	
+		}
+    	
+    	//////////////////////////////////////////////////////////////////////////////
+    	//// new for plus
+    	///////
+    	
+    	/**
+    	 * if it has a configuration object, reset the pages variable
+    	 * otherwise just use whatever was set by default
+    	 * @param configuration remotely hosted array of page names
+    	 */
+    	function _finishSFLoad(configuration) {
+    		 
+     		// reset pages to whatever is in current release
+    		if (typeof configuration !== "undefined" && configuration.hasOwnProperty("pages")) remotePages = configuration.pages;
+     		
+    		// load the page
+    		var curId = getParameterByName("page");
+    		var curPage = getPageBase(curId);
+    		var companyURL = remoteDomain + curPage + "#" + encodeURIComponent(currentDomain);
+    		//$("#company-info").attr("src", companyURL);
+			
+			// Fix for history issue in Firefox.  Works across browsers
+			var frame = $("#company-info")[0];
+			frame.contentWindow.location.replace(companyURL);
+    		
+    	}
+    	
+    	/**
+    	 * returns a unique string based on day/hour, allowing for a cache refresh to take place hourly
+    	 * @return the ISO string up until the hour
+    	 */
+    	function getCacheParam() {
+    		var cacheTime = new Date();
+    		return cacheTime.toISOString().slice(0,13).replace(/-/g,"");
+    	}
+    	
+    	/**
+    	 * load the page dynamically
+    	 */
+    	$(document).ready(function() {
+    		
+    		// load remote page configuration
+        	$.ajax({
+                url: remoteDomain + "/data/pages.jsonp",
+                type: 'GET',
+                cache: true,
+                data: { 'cache': getCacheParam() },
+                dataType: 'jsonp',
+                jsonpCallback: 'configuration',
+                success: _finishSFLoad,
+                error: _finishSFLoad
+        	});
+
+    	});
+    	
+    </script>
+    
+    <style>
+    
+    	body {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	
+    	.container {
+			margin-left: auto;
+			margin-right: auto;
+			width: 1000px;
+    	}
+    	
+    	.header {
+    		height: 300px;
+    	}
+    	
+    	p {
+    		padding: 30px;
+    		font-family: Arial;
+    	}
+    
+    </style>
+    
+</head>
+
+<body>
+
+<div class="container">
+	<img src="/img/sgx-iframe-header.jpg" />
+</div>
+
+<div class="container">
+	<iframe id="company-info" style="overflow: hidden; padding: 0px; margin:0px;" allowTransparency="true" frameborder="0" width="1000" height="850" scrolling="no"></iframe>
+</div>
+
+<div class="container">
+	<img src="/img/sgx-iframe-footer.jpg" />
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<header class="header">	
+	<div data-bind="template: 'login-bar'"></div>
+	
+	<section data-bind="if:premiumUser() == true && PAGE.userStatus() != 'EXPIRED' && PAGE.userStatus() != 'UNAUTHORIZED'">
+		<h1>StockList</h1>
+		
+		<div>
+			<div class="grid scan intro">
+					<p>Create a StockList with up to 25 companies in each. For each StockList, see the current valuation, key developments, and setup to receive email alerts.</p>
+			</div>
+			
+			<div data-bind="validationOptions: { insertMessages: false}">
+				<div>
+					<!-- ko {if: finalWL().length} -->
+						<select	id="stockListSelect" data-bind="options: finalWL, value: selectedValue, optionsValue: 'id', optionsText: 'name', event: { change: $root.watchListChange.bind($root) }"></select>
+						<a data-bind="click: showChange">EDIT</a> | <a data-bind="click:$root.confirmDelete">DELETE</a>
+						&nbsp;
+					<!-- /ko -->
+					Create a StockList: <input name="newWLName" type="text" class="text" class="addWatchlistName" data-bind="value: newWLName">
+					<a class="button" data-bind="click:$root.addWatchlist">CREATE</a>
+					<span class="error-messages" data-bind="validationMessage:newWLName"></span>
+				</div>
+				
+				<div data-bind="visible: showChange()" class="edit-watchlist">
+					<input name="editWLName" type="text" class="text" data-bind="value: editWLName"> <a class="button" data-bind="click:$root.editWLNameSubmit">Save</a>
+					<span class="error-messages" data-bind="validationMessage:editWLName">
+				</div>
+			</div>
+			
+			<div class="profilestocklist" data-bind="visible: finalWL().length > 0">
+				<nav>
+					<ul>
+						<li class="stocklist-alerts"><a data-bind="stockListSiteLink: { id: 'alerts', extra: 'code=' + selectedValue()}">Alerts</a></li>
+						<li class="stocklist-valuation"><a data-bind="stockListSiteLink: { id: 'valuation', extra: 'code=' + selectedValue()}">Valuation</a></li>
+						<li class="stocklist-keydev"><a data-bind="stockListSiteLink: { id: 'key-developments', extra: 'code=' + selectedValue()}">Key Developments</a></li>
+					</ul>		
+				</nav>
+			</div>
+		</div>	
+	</section>
+</header>
