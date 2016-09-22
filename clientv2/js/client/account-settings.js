@@ -20,7 +20,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		pubkey: null,
 		
 		initPage: function() {
-		    	PAGE.checkStatus();
+			
 			PAGE.timedLogout();
 			setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
 			PAGE.TIMEOUT_SECONDS=100000000;//No need to call again!!
