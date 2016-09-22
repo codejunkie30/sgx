@@ -274,7 +274,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
 			});
 			
 			$(el).siblings().not(".uncheck").each(function(idx, td) {
-				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : parseFloat($(td).attr("data-value"));
+				var val = typeof $(td).attr("data-value") === "undefined" ? 0 : _roundGraphValue(parseFloat($(td).attr("data-value")), 3);
 				seriesData.push({ y: val, events: eventsConfig, ttFormat: formatType });
 			});
 			
@@ -423,6 +423,12 @@ define([ "wmsi/utils", "knockout", "text!client/data/financials.json", "client/m
     }, CF); 
 	
 	return CF;
+	
+	function _roundGraphValue(num, places) {
+	    var rounder = Math.pow(10, places);
+	    var roundee = num * rounder;
+	    return Math.round(roundee)/rounder;
+	  }
 	
 	//helper function for decimals
   function _round(num, places) {
