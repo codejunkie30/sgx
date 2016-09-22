@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -80,7 +79,7 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				
 				
-				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
+				if (DateUtil.getDaysRemaining(expiration) <= -1){
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
 					acc.setCurrency("SGD");

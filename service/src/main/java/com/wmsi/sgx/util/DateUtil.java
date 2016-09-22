@@ -4,17 +4,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DateUtil{
+public class DateUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
 
 	private static final String DEFAULT_DATE_FMT = "MM/dd/yyyy";
-	
-	public static String adjustDate(String date, int field, int amount){
+
+	public static String adjustDate(String date, int field, int amount) {
 		Date currentDate = toDate(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(currentDate);
@@ -27,20 +28,37 @@ public class DateUtil{
 		return df.format(d);
 	}
 
-	public static Date toDate(String d){
+	public static Date toDate(String d) {
 		return toDate(d, DEFAULT_DATE_FMT);
 	}
 
-	public static Date toDate(String d, String fmt){
+	public static Date toDate(String d, String fmt) {
 		SimpleDateFormat df = new SimpleDateFormat(fmt);
-		
-		try{
+
+		try {
 			return df.parse(d);
-		}
-		catch(ParseException e){
+		} catch (ParseException e) {
 			log.error("Could not parse string to date", e);
 			return null;
 		}
+	}
+
+	/**
+	 * @param ret
+	 */
+	public static long getDaysRemaining(Date expirationDate) {
+		long diff = resetToMidnightTime(expirationDate).getTime() - resetToMidnightTime(new Date()).getTime();
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+	}
+
+	public static Date resetToMidnightTime(Date expirationDate) {
+		Calendar cal = Calendar.getInstance(); // locale-specific
+		cal.setTime(expirationDate);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 
 }
