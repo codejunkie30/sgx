@@ -48,6 +48,9 @@ public class DateUtil {
 	 */
 	public static long getDaysRemaining(Date expirationDate) {
 		long diff = resetToMidnightTime(expirationDate).getTime() - resetToMidnightTime(new Date()).getTime();
+		System.out.println("expirationDate.getTime():\t"+resetToMidnightTime(expirationDate).getTime());
+		System.out.println("resetToMidnightTime(new Date()).getTime():\t"+resetToMidnightTime(new Date()).getTime());
+		System.out.println("DIFF"+diff);
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
