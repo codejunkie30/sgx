@@ -1,0 +1,66 @@
+section { margin: 0 auto 50px auto; width: 700px; }
+section header { background: #5f6062; height: 110px; }
+section header h2 { color: #fff; font-size: 31px; text-align: center; position: relative; top: 60px; font-weight: normal !important; }
+section .form { background: #ebecec; text-align: center; }
+section .form.confirm,
+section .form.rp-sent,
+section .form.sign-up { min-height: 175px; padding: 25px; }
+section .form h4, 
+section .form h4 span { padding: 14px 0; font-weight: normal; }
+section .form p { padding: 15px 0; margin: 0; }
+section .form p.forgot,
+section .form p.link { padding: 0 0 15px 0; margin: 0; }
+section .form input.text { background: #f5f5f5; border: 1px solid #c4c4c4; color: #333; display: block; margin: 0 auto 17px auto; width: 349px; padding: 0 12px; line-height: 32px; height: 32px; }
+
+section .link a,
+section .form .checkbox a { cursor: pointer; color: #0e236b; text-decoration: underline; }
+section .link a:hover,
+section .form .checkbox a:hover { text-decoration: none; }
+section .form .agree-email { margin: 0 auto; width: 373px; position: relative; }
+section .form .checkbox { color: #000; font-size: 12px; line-height: 16px; text-align: left; }
+section .form .checkbox input { height: 16px; width: 16px; line-height: 16px; }
+section .form .checkbox label { position: relative; top: -2px; }
+section .form .button { font-size: 17px !important; margin: 20px 0; padding: 5px 25px !important; }
+section .form .error-messages p { color: #bf0052 !important; line-height: 16px; padding: 0 0 10px 0; }
+
+.error-messages .resend-email { display: none; }
+.error-messages .resend-email a { color: #bf0052; }
+.error-messages .resend-email a:hover { text-decoration: none; }
+
+section.settings { text-align: left; width: 992px; }
+section.settings p a { color: #0e236b; text-decoration: none; }
+section.settings p a:hover { text-decoration: underline; }
+/*section.settings .intro .date { text-transform: uppercase; }*/
+section.settings .form { background: #ebecec; padding: 0 30px 30px 30px; width: 932px; text-align: left; }
+section.settings .form-wrapper { padding: 30px 0 0 0; }
+section.settings .form-wrapper label { width: 200px; display: inline-block; color: #333; font-weight: bold; }
+section.settings .form-wrapper span { display: inline-block; color: #767676; }
+section.settings a { cursor: pointer; color: #0e236b; }
+section.settings a:hover { text-decoration: underline; }
+section.settings .form-wrapper span input[type="password"] { background: #f5f5f5; border: 1px solid #c4c4c4; color: #848484; width: 148px; padding: 0 12px; line-height: 28px; height: 28px; display: inline-block !important; margin: 0 12px 0 0; }
+section.settings .form-wrapper span input[type="password"].password { background: none; border: 0; margin: 0; padding: 0; width: 100px; }
+section.settings .form-wrapper span.note { font-size: 8pt; font-weight: bold; margin: 0 0 0 35px; }
+section.settings .form-wrapper .error-messages { text-align: center; margin: 12px 0 0 0; }
+section.settings .form-wrapper .error-messages p { padding: 0; }
+section.settings .cancel { margin: 0 15px; font-size: 17px !important; }
+section.settings .form-wrapper label.mailings { width: 45px; cursor: pointer; margin: 0 15px 0 0; }
+section.settings .form-wrapper label.mailings input[type="radio"] { margin: 0; padding: 0; position: relative; top: 2px; cursor: pointer; }
+
+.modal-container .terms .underline { font-weight: bold; text-decoration: underline; }
+.modal-container .terms ol, .modal-container .terms ul { margin: 1em 2em 1em 2em !important; }
+.modal-container .terms ol li, .modal-container .terms ul li { margin: 0 0 .5em 0 !important; }
+.modal-container .terms ol li ol, .modal-container .terms ul li ul { margin-top: .15em 0 !important; }
+.modal-container .terms a { color: #0e236b; text-decoration: underline; }
+.modal-container .terms a:hover { text-decoration: none; }
+
+section footer { background: #bcbdbe; height: 40px; overflow: hidden; }
+section footer span { display: inline-block; padding: 0 15px; }
+section footer .left { float: left; line-height: 40px; }
+section footer .right { float: right; line-height: 40px; }
+section footer a { color: #0e236b; text-decoration: none; }
+section footer a:hover { text-decoration: underline; }
+
+.save { width: 970px; background: #f2f0db; border: 1px solid #b3c5cf; line-height: 28px; padding: 0 10px; color: #333; font-size: 11.5px; font-style: italic; margin: 0 0 10px 0; }
+
+.modal-container .terms ul.tc-disclosure { margin-top:5px !important;}
+.modal-container .terms ul.tc-disclosure li{ margin-bottom:0 !important;}

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Screener - SGX</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=1.4" />
+    <link rel="stylesheet" href="css/sign-in.css?v=1.0" />
+    
+	<!--[if lt IE 9]>
+    	<script type="text/javascript" src="js/vendor/json2.js"></script>
+    	<script type="text/javascript" src="js/wmsi/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body style="width: auto;">
+	<section class="settings">
+		<h1>StockFacts Plus Account</h1>
+		<p class="intro"><span class="content"></span> <span class="date" data-bind="text: subExpire"></span><a href="purchase-account.html" target="_top">Purchase a StockFacts Plus account now</a>.</p>
+		<div class="form">
+			<div class="form-wrapper">
+				<label>Email Address</label>
+				<span data-bind="text: userEmail"></span>
+				<span class="note">Note: email address cannot be changed.</span>
+			</div>
+			<div class="form-wrapper">
+				<label>Password</label>
+				<span><input name="password" type="password" value="password" class="password" disabled readonly></span>
+				<span class="new-pass" data-bind="visible: showChange()">
+					<input name="newPassword" type="password" data-bind="value: newPassword" placeholder="New Password">
+					<input name="retypeNewPassword" type="password" data-bind="value: retypeNewPassword" placeholder="Retype New Password">
+				</span>
+				<span class="change" data-bind="click: showChange, visible: !showChange()"><a>CHANGE</a></span>
+				
+				<div class="error-messages">
+					<p data-bind="validationMessage: newPassword"></p>
+					<p data-bind="validationMessage: retypeNewPassword"></p>
+				</div>
+				
+			</div>
+			<div class="form-wrapper">
+				<label>Default Currency</label>
+				<span data-bind="visible: defaultCurrency() != 'EXPIRED'">
+					<select class="currency" data-bind="options: getCurrencies, value: selectedCurrency, optionsValue: 'id', optionsText: 'name'"></select>
+				</span>
+				<span data-bind="visible: defaultCurrency() == 'EXPIRED'">Singapore Dollar</span>
+			</div>
+			<div class="form-wrapper">
+				<label>Receive Mailings</label>
+				<label class="mailings">
+					<input type="radio" name="contactOptIn" data-bind="checked:contactOptIn, checkedValue: true"> Yes
+				</label> 
+				<label class="mailings">				
+					<input type="radio" name="contactOptIn" data-bind="checked:contactOptIn, checkedValue: false"> No	
+				</label>
+			</div>
+			<div style="text-align: center; margin: 15px 0;">
+				<a class="button" data-bind="click:$root.saveChanges, css: {'disabled-btn': (isFormValid() == false)}">Save changes</a>
+				<a class="cancel" data-bind="click:$root.cancel">CANCEL</a>
+			</div>
+		</div>
+	</section>
+
+	
+<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/encryption/jsencrypt.js"></script>
+<script type="text/javascript" src="js/vendor/store.js"></script>
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base", "client/account-settings" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>
+
+</body>
+
+</html>

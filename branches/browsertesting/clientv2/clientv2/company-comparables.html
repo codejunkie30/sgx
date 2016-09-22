@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Screener - SGX</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=1.4" />
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />
+    <link rel="stylesheet" href="css/results.css?v=1.2" />
+    
+	<!--[if lt IE 9]>
+    	<script type="text/javascript" src="js/vendor/json2.js"></script>
+    	<script type="text/javascript" src="js/wmsi/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body style="width: auto;" id="comparables">
+	
+	<div class="grid scan">
+		<span data-bind="template: 'company-header'"></span>
+	</div>
+	<!-- ko if: responseReceived -->
+	<div class="data-point-container section-break hidden" data-bind="showHidden: results.viewModel.refinedCompanies().length <= 0">
+		<div class="comparable-companies--dataEmpty">
+			There is no data available for this company
+		</div>
+	</div>
+	<!-- /ko -->
+
+	<div class="grid search-results company-comparables" data-bind="visible: results.viewModel.refinedCompanies().length > 0">
+		
+		<!-- header -->
+		<div class="title">
+<!-- 			<h3 data-bind="visible: results.viewModel.refinedCompanies().length <= 0">No results found</h3> -->
+			<h3 data-bind="visible: results.viewModel.refinedCompanies().length > 0"><span data-bind="text: results.viewModel.refinedCompanies().length"></span> companies found</h3>
+		</div>
+		
+		<!-- results customization -->
+		<div class="toolbar" data-bind="visible: results.viewModel.refinedCompanies().length > 0">
+			<span class="column results">Select a column header to change the sort order.</span>
+		</div>
+	
+	 	<!--  results display -->
+		<table data-bind="visible: results.viewModel.refinedCompanies().length > 0">
+			<thead>
+				<tr data-bind="foreach: results.viewModel.headers">
+					<th data-bind="click: function(data, event) { $parent.results.viewModel.sort($data, $parent); }, attr: { 'data-id': id }, css: id "><span data-bind="text: $data.hasOwnProperty('shortName') ? shortName : name"></span><span class="fmt" data-bind="text: $parent.currentFormats[format].header"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-bind="repeat: { foreach: results.viewModel.currentCompanies() }" data-repeat-bind="css: { 'odd': ($index % 2 != 0) }">
+					<!-- ko foreach: results.viewModel.headers -->
+	            		<td data-bind="formatResultColumn: { row: $item(), prop: id }, css: id" ></td>
+	            	<!-- /ko -->
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div class="grid disclosure scan">
+		<p>SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a style="color:#1e217c;" data-bind="siteLink:'terms-conditions'">terms and conditions</a>.</p>
+	</div>	
+	
+<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/store.js"></script>
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base", "client/company-comparables" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>
+
+</body>
+
+</html>

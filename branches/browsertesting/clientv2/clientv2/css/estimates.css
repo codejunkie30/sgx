@@ -1,0 +1,58 @@
+#estimates nav.tabs ul { background: #cacdd3; text-align: center; font-weight: bold; margin: 0; padding: 10px 0; width: 99.2%; }
+#estimates nav.tabs ul li { display: inline-block; list-style-type: none; padding: 0 10px; }
+#estimates nav.tabs ul li a {  color:#0b236b; text-decoration: none; cursor:pointer; }
+#estimates nav.tabs ul li a.active { color: #4d4e50; position: relative; cursor: default; }
+/*#estimates nav.tabs ul li a.active:after { bottom: -12px; left: 50%;border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(255, 255, 255, 0); border-bottom-color: #ffffff; border-width: 8px; margin-left: -8px; }*/
+#estimates nav.tabs ul li.annual { border-left: 1px solid #fff; }
+.summary { margin: 10px 0 15px 0; }
+.summary .left { width: 64%; margin: 0 3% 0 0; display: inline-block; }
+.summary .right { width: 32%; background: #ccc; display: inline-block; vertical-align: top; }
+
+.summary table { border-spacing: 0; border-collapse: collapse; margin: 0 0 20px 0; border-right: 1px solid #ccc; border-top: 1px solid #ccc; }
+.summary table tr th { color: #0e236b; border: 1px solid #ccc; padding: 8px 12px; font: bold 14px/12px Arial, Helvetica, sans-serif; text-align: center; cursor: default; vertical-align: top; }
+.summary table tr th span {	color: #0e236b; display: block; }
+.summary table tbody td { color: #000; border: 1px solid #ccc; padding: 8px 12px; font: normal 12px/12px Arial, Helvetica, sans-serif; text-align: center; line-height: 125%; vertical-align: top; }
+.summary table tbody td.name { font-weight: bold; }
+
+.summary .left h4 { margin: 0 0 5px 0; line-height: 16px; }
+.summary .left p { margin: 0 0 10px 0; }
+
+.summary .progress-estimate { display: block; background: #f2f2f2; text-align: center; }
+
+.summary .progress-estimate .recommendation { margin: 10px auto; width: 292px; }
+#estimates-content .summary .progress-estimate .right { background: none;}
+#estimates-content {display:none;}
+#estimates-content table tbody tr td {font-weight:normal;}
+#estimates-content-alternative {display:none; margin-top:20px; padding:15px;}
+#premium .premium-wrapper .trial-box { margin: 0 15px 0 0 !important; }
+/*#premium .premium-wrapper .view-price .price { right: 65px !important; }*/
+.data-point-container {
+  margin-top:15px;
+}
+.no-data-message {
+  margin-top:30px;
+}
+#estimates .data-point-container .checkbox { position:relative; }
+#estimates .data-point-container .checkbox .trigger { background: none; }
+#estimates .data-point-container .checkbox .trigger .check-icon { 
+  background: url("../img/bg-checkboxes.png") no-repeat 0 -26px; 
+  display: block;
+  width:18px; 
+  height:18px;
+  position: absolute;
+  left:10px;
+  top:20%;
+}
+
+#estimates .data-point-container .checkbox .trigger .check-icon:hover {
+  background-position: 0 -54px;
+}
+
+#estimates .data-point-container .checkbox.checked .trigger .check-icon {
+  background-position: 0 0;
+}
+.filing-currency-info {
+  margin-top:-10px;
+  margin-bottom:20px;
+  font-style: italic;
+}

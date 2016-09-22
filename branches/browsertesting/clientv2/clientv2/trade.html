@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Screener - SGX</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=1.4" />
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />
+    <link rel="stylesheet" href="css/trade.css?v=1.2" />
+    
+	<!--[if lt IE 9]>
+    	<script type="text/javascript" src="js/vendor/json2.js"></script>
+    	<script type="text/javascript" src="js/wmsi/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body style="width: auto;">
+
+	<div class="grid">
+		<span data-bind="template: 'company-header'"></span>
+	</div>
+		
+	<div class="grid">
+
+		<div class="brokers">		
+			<div class="title">
+				<h3>Our Retail Brokers</h3>
+			</div>
+	                
+			<div class="padded gray">
+               
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_img/broker/#cimb_securities';"><img src="img/broker/cimb_big.jpg" width="184" height="69" /></span>
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#dbs_vickers_online';"><img src="img/broker/dbs_big.jpg" width="184" height="69" /></span>
+               	<span><a href="http://www.rhbinvest.com.sg/" target="_blank"><img src="img/broker/rhb-securities-pte-ltd.jpg" width="184" height="69" /></a></span>
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#lim_tan';"><img src="img/broker/limtan_big.jpg" width="184" height="69" /></span>
+				
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#maybank_kim_eng';"><img src="img/broker/maybank_big.jpg" width="184" height="69" /></span>
+               	<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#ocbc_securities';"><img src="img/broker/ocbc_big.jpg" width="184" height="69" /></span>
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#philip_capital';"><img src="img/broker/phillip_big.jpg" width="184" height="69" /></span>
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers#utrade';"><img src="img/broker/uob_big.jpg" width="184" height="69" /></span>
+
+				<span><a href="https://www.capital.com.tw/en_v7/" target="_blank"><img src="img/broker/capital_group_logo.jpg" width="184" height="69"></a></span>
+				<span onclick="window.top.location.href='http://www.sgx.com/wps/portal/sgxweb/home/mygateway/brokers/retail_brokers';"><img src="img/broker/kgi_logo.jpg" width="184" height="69"></span>
+				<span><a href="https://www.rcbcsec.com/" target="_blank"><img src="img/broker/rcbc_sec_logo.jpg" width="184" height="69"></a></span>
+				<span><a href="http://securities.sinopac.com/en/main.htm" target="_blank"><img src="img/broker/sinopac_logo.jpg" width="184" height="69"></a></span>
+				
+			</div>
+		</div>
+
+	</div>
+
+	<div class="grid disclosure">
+		SGX StockFacts is a collaboration between SGX and S&amp;P Global Market Intelligence, a division of S&amp;P Global. Use of this information is subject to <a style="color:#1e217c;" data-bind="siteLink:'terms-conditions'">terms and conditions</a>.
+	</div>	
+	
+<!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/store.js"></script>
+<script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
+<script type="text/javascript">
+
+	function loadPage() {
+		require([ "client/base", "client/company-tearsheet" ],
+			function(base, pg) {
+				$(document).ready(function(e) {
+					var page = base.init(pg);
+				});
+			}
+		);
+	}
+	
+</script>
+
+</body>
+
+</html>

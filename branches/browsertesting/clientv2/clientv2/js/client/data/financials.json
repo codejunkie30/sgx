@@ -1,0 +1,277 @@
+{
+	"financials": [
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"totalRevenue",
+	            "glossaryTerm":"totalRevenue",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Revenue"
+	         },
+	         {
+	            "property":"grossProfit",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Gross Profit"
+	         },
+	         {
+	            "property":"netIncome",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Net Income"
+	         },
+	         {
+	            "property":"ebitda",
+	            "group":"pure",
+	            "name":"EBITDA"
+	         },
+	         {
+	            "property":"eps",
+	            "glossaryTerm":"eps",
+	            "format":"cash",
+	            "group":"per",
+	            "name":"Normalized Diluted EPS"
+	         },
+	         {
+	            "property":"payoutRatio",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Payout Ratio"
+	         },
+	         {
+	            "property":"dividendsPerShare",
+	            "group":"per",
+	            "name":"Dividends (per share)"
+	         }
+	      ],
+	      "name":"Income Statement"
+	   },
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"totalAssets",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Assets"
+	         },
+	         {
+	            "property":"totalCurrentAssets",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Current Assets"
+	         },
+	         {
+	            "property":"netPpe",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Net PP&E"
+	         },
+	         {
+	            "property":"totalCurrentLiabily",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Current Liabilities"
+	         },
+	         {
+	            "property":"longTermDebt",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Long-Term Debt"
+	         },
+	         {
+	            "property":"totalLiability",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Liabilities"
+	         },
+	         {
+	            "property":"retainedEarnings",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Retained Earnings"
+	         },
+	         {
+	            "property":"commonStock",
+	            "group":"pure",
+	            "name":"Common Stock"
+	         },
+	         {
+	            "property":"totalEquity",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Total Equity"
+	         },
+	         {
+	            "property":"minorityInterest",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Minority Interest"
+	         }
+	      ],
+	      "name":"Balance Sheet"
+	   },
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"cashOperations",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Operations"
+	         },
+	         {
+	            "property":"cashInvesting",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Investing"
+	         },
+	         {
+	            "property":"cashFinancing",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Financing"
+	         },
+	         {
+	            "property":"netChange",
+	            "format":"cash",
+	            "group":"pure",
+	            "name":"Net Change in Cash"
+	         }
+	      ],
+	      "name":"Cash Flows"
+	   },
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"returnAssets",
+	            "glossaryTerm":"roa",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Return on Assets"
+	         },
+	         {
+	            "property":"returnCapital",
+	            "glossaryTerm":"roc",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Return on Capital"
+	         },
+	         {
+	            "property":"returnEquity",
+	            "glossaryTerm":"returnOnEquity",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Return on Equity"
+	         },
+	         {
+	            "property":"grossMargin",
+	            "glossaryTerm":"grossMargin",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Gross Margin"
+	         },
+	         {
+	            "property":"ebitdaMargin",
+	            "glossaryTerm":"ebitdaMargin",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"EBITDA Margin"
+	         },
+	         {
+	            "property":"netIncomeMargin",
+	            "glossaryTerm":"netIncomeMargin",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Net Income Margin"
+	         },
+	         {
+	            "property":"assetTurns",
+	            "glossaryTerm":"totalAssetTurnover",
+	            "group":"ratio",
+	            "name":"Total Asset Turnover"
+	         },
+	         {
+	            "property":"currentRatio",
+	            "glossaryTerm":"currentRatio",
+	            "group":"ratio",
+	            "name":"Current Ratio"
+	         },
+	         {
+	            "property":"quickRatio",
+	            "glossaryTerm":"quickRatio",
+	            "group":"ratio",
+	            "name":"Quick Ratio"
+	         },
+	         {
+	            "property":"avgDaysInventory",
+	            "glossaryTerm":"avgDaysInventory",
+	            "group":"ratio",
+	            "name":"Avg Days Inventory"
+	         },
+	         {
+	            "property":"avgDaysPayable",
+	            "glossaryTerm":"avgDaysPayable",
+	            "group":"ratio",
+	            "name":"Avg Days Payable"
+	         },
+	         {
+	            "property":"cashConversion",
+	            "glossaryTerm":"avgCashConversion",
+	            "group":"ratio",
+	            "name":"Avg Cash Conversion"
+	         },
+	         {
+	            "property":"totalDebtEquity",
+	            "glossaryTerm":"totalDebtEquityFinancial",
+	            "format":"ratio",
+	            "group":"ratio",
+	            "name":"Total Debt/Equity"
+	         },
+	         {
+	            "property":"ebitdaInterest",
+	            "glossaryTerm":"ebitdaIntExp",
+	            "group":"ratio",
+	            "name":"EBITDA/Interest Expense"
+	         }
+	      ],
+	      "name":"Ratios"
+	   },
+	   {
+	      "dataPoints":[
+	         {
+	            "property":"totalRev1YrAnnGrowth",
+	            "glossaryTerm": "totalRev1YrAnnGrowth",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Total Revenue"
+	         },
+	         {
+	            "property":"ebitda1YrAnnGrowth",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"EBITDA"
+	         },
+	         {
+	            "property":"netIncome1YrAnnGrowth",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Net Income"
+	         },
+	         {
+	            "property":"eps1YrAnnGrowth",
+	            "glossaryTerm":"eps",
+	            "format":"percent",
+	            "group":"per",
+	            "name":"Normalized Diluted EPS"
+	         },
+	         {
+	            "property":"commonEquity1YrAnnGrowth",
+	            "format":"percent",
+	            "group":"ratio",
+	            "name":"Common Equity"
+	         }
+	      ],
+	      "name":"Growth over Prior Year (%)"
+	   }
+	]
+}

@@ -1,0 +1,13 @@
+{ 
+	"tempCompanies": [
+		{
+			"ticker": "A34",
+			"companyName": "Amara Holdings Limited"
+		},
+		{
+			"ticker": "T14",
+			"companyName": "Tianjin Zhongxin Pharmaceutical Group Corporation Limited"
+		}
+	]	
+		
+}

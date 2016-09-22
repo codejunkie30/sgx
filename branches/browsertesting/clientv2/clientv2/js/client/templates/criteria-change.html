@@ -1,0 +1,12 @@
+<td class="label" data-bind="configureAdditionalCriteria: 'criteria-change-configure'">
+	<span data-bind="text: field.name"></span>
+	<img data-bind="tooltip: field.id" src="img/info-tab-large.png" alt="" width="20" height="20" />
+</td>
+<td colspan="3" class="middle">
+	<span data-bind="text: val"></span>% 
+	from 
+	<span data-bind="text: $.datepicker.formatDate('dd/M/yy', min())"></span> 
+	to 
+	<span data-bind="text: $.datepicker.formatDate('dd/M/yy', max())"></span>
+</td>
+<td class="remove"><img data-bind="tooltip: 'criteriaRemove', click: criteria.clickEvents.removeCriteria" src="img/x-button.png" alt="" /></td>
