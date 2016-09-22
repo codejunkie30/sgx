@@ -35,8 +35,10 @@
 			},
 			"accountSettings": {
 				"introPremium": "You are currently enrolled in a StockFacts Plus account. It is set to expire on <span class='expiration-date'></span>",
+				"introPremiumLastDay": "Your account is expiring today.",
 				"introTrial": "You have <span class='current-day'></span> days left in your trial.",
 				"introTrialDayOne": "You have <span class='current-day'></span> day left in your trial.",
+				"introTrialLastDay": "Your account is expiring today.",
 				"introExpired": "Your trial has expired."			
 			},
 			"resendValidation": {
@@ -52,7 +54,7 @@
 				"blankField": "Enter a value between .001 and 100% with maximum of 3 decimals."
 			},
 			"premium": {
-				"price": "<div><span class='sign'>S$</span><span class='total'>30</span></div> <div class='sub-month'>per month</div>"
+				"price": "<div><span class='sign'>S$</span><span class='total'>15</span></div> <div class='sub-month'>per month*</div><div class='sub-month-note'>* Launch offer ends 31 December 2016</div>"
 			}
 		}		
 	]
