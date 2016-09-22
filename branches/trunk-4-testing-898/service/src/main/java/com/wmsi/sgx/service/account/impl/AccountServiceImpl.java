@@ -63,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
 			ret.setEmail(account.getUser().getUsername());
 			ret.setStartDate(DateUtil.resetToMidnightTime(account.getStartDate()));
 			if (account.getExpirationDate() != null) {
+				System.out.println("account.getId():\t"+account.getId()+"account.getExpirationDate():\t"+account.getExpirationDate()+"account.getUser().getUsername():\t"+account.getUser().getUsername());
 				ret.setExpirationDate(DateUtil.resetToMidnightTime(account.getExpirationDate()));
 
 			} else {
