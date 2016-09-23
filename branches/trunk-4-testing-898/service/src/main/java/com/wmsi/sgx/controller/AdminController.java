@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.account.AccountModel;
@@ -43,7 +44,10 @@ public class AdminController {
 	private TrialProperty getTrial;
 	
 	@Autowired
-	private TokenAuthenticationService tokenAuthenticationService;	
+	private TokenAuthenticationService tokenAuthenticationService;
+	
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
 	
 	@RequestMapping(value = "info", method = RequestMethod.POST)
 	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{		
@@ -78,8 +82,11 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value= "setTrial", method = RequestMethod.POST)
-	public AdminResponse setTrial(HttpServletRequest request, @RequestBody TrialResponse response){		
-		AccountModel acct = accountService.getAccountForUsername(findUserFromToken(request).getUsername());
+	public AdminResponse setTrial(HttpServletRequest request, @RequestBody TrialResponse response){
+		User user = findUserFromToken(request);
+		//For Auditing
+		auditorProvider.setUser(user);
+		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN )
 			return isAdmin();
@@ -107,6 +114,8 @@ public class AdminController {
 	@RequestMapping(value = "deactivate", method = RequestMethod.POST)
 	public AdminResponse deactivate(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
 		User user = findUserFromToken(request);
+		//For Auditing
+		auditorProvider.setUser(user);
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
@@ -117,6 +126,8 @@ public class AdminController {
 	@RequestMapping(value = "extension", method = RequestMethod.POST)
 	public AdminResponse extension(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
 		User user = findUserFromToken(request);
+		//For Auditing
+		auditorProvider.setUser(user);
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER && acct.getType() != AccountType.ADMIN)
 			return isAdmin();
@@ -127,6 +138,8 @@ public class AdminController {
 	@RequestMapping(value = "setAdmin", method = RequestMethod.POST)
 	public AdminResponse setAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
 		User user = findUserFromToken(request);
+		//For Auditing
+		auditorProvider.setUser(user);
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
@@ -141,6 +154,8 @@ public class AdminController {
 	@RequestMapping(value = "removeAdmin", method = RequestMethod.POST)
 	public AdminResponse removeAdmin(HttpServletRequest request, @RequestBody AdminResponse response) throws UserExistsException{
 		User user = findUserFromToken(request);
+		//For Auditing
+		auditorProvider.setUser(user);
 		AccountModel acct = accountService.getAccountForUsername(user.getUsername());
 		if(acct.getType() != AccountType.MASTER)
 			return isAdmin();
