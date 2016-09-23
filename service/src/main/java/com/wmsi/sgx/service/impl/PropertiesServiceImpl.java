@@ -8,13 +8,15 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.domain.Configurations;
+import com.wmsi.sgx.domain.ConfigurationsAudit;
+import com.wmsi.sgx.repository.ConfigurationsAuditRepository;
 import com.wmsi.sgx.repository.ConfigurationsRepository;
 import com.wmsi.sgx.service.PropertiesService;
 
@@ -31,6 +33,9 @@ public class PropertiesServiceImpl implements PropertiesService{
 	
 	@Autowired
 	public ConfigurationsRepository configurationsRepository;
+	
+	@Autowired
+	public ConfigurationsAuditRepository configurationsAuditRepository;
 
 	@PostConstruct
 	public void init() {		
@@ -70,6 +75,11 @@ public class PropertiesServiceImpl implements PropertiesService{
 		conf.setModifiedBy(username);
 		conf.setModifiedDate(new Date());
 		configurationsRepository.save(conf);
+		
+		//Auditing
+		ConfigurationsAudit configurationsAudit = new ConfigurationsAudit();
+		BeanUtils.copyProperties(conf,configurationsAudit);
+		configurationsAuditRepository.save(configurationsAudit);
 	}
 	@Override
 	public void save() {

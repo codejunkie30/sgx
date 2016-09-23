@@ -13,12 +13,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.AccountAudit;
 import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.SortDatesDecendingEnetsTransactionId;
@@ -28,6 +30,7 @@ import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.model.account.TrialResponse;
+import com.wmsi.sgx.repository.AccountAuditRepository;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.EnetsRepository;
 import com.wmsi.sgx.repository.UserLoginRepository;
@@ -49,6 +52,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private AccountAuditRepository accountAuditRepository;
 
 	@Autowired
 	private UserRepository userReposistory;
@@ -251,6 +257,11 @@ public class AdminServiceImpl implements AdminService {
 				model.setStatus("EXPIRED");
 				model.setExpiration_date(acc.getExpirationDate());
 				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD", updatedBy, new Date());
+				
+				//Auditing
+				AccountAudit accountAudit = new AccountAudit();
+				BeanUtils.copyProperties(acc,accountAudit);
+				accountAuditRepository.save(accountAudit);
 
 			}
 		}
@@ -284,6 +295,12 @@ public class AdminServiceImpl implements AdminService {
 		model.setUsername(username);
 
 		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency(), updatedBy, new Date());
+		
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+		
 		ret.setResponseCode(0);
 		ret.setData(model);
 		return ret;
@@ -311,7 +328,11 @@ public class AdminServiceImpl implements AdminService {
 		
 		
 		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate(), updatedBy, new Date());
-
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+		
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
 		model.setCreated_date(edit.getCreatedDate());
@@ -341,9 +362,14 @@ public class AdminServiceImpl implements AdminService {
 						edit.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 		edit.setType(AccountType.PREMIUM);
 		edit.setAlwaysActive(false);
-		edit.setExpirationDate(null);
+		//edit.setExpirationDate(null);
 		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate(), updatedBy, new Date());
 
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+		
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
 		model.setCreated_date(edit.getCreatedDate());
