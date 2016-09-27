@@ -1,7 +1,10 @@
 package com.wmsi.sgx.model.account;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.JsonDateSerializer;
 
 public class AdminAccountModel {
 	public String username;
@@ -22,6 +25,7 @@ public class AdminAccountModel {
 	public void setCreated_date(Date created_date) {
 		this.created_date = created_date;
 	}
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getExpiration_date() {
 		return expiration_date;
 	}
