@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.wmsi.sgx.model.JsonDateSerializer;
 import com.wmsi.sgx.service.PropertiesService;
 
 import net.sf.ehcache.management.ManagementService;
@@ -148,6 +149,11 @@ public class AppConfig {
 		return engine;
 	}
 
+	@Bean
+	public JsonDateSerializer dateSerializer(){
+		return new JsonDateSerializer();
+		
+	}
 	public class TrialProperty {
 		private String trialDuration;
 		private String halfwayDuration;
