@@ -122,11 +122,11 @@ public class TransactionSessionFilter extends Filter {
 				try {
 					boolean isValidToken = tokenAuthSvc.validateTransactionAuthenticationToken(token);
 					LOG.debug("isValidToken = = " + isValidToken);
+					chain.doFilter(request, response);
 				} catch (TransactionSessionTokenVerificationException
 						| VerifiedTransactionSessionTokenPremiumException e) {
 					writeErrorToResponseStream(response);
 				}
-				chain.doFilter(request, response);
 			}
 
 		}
