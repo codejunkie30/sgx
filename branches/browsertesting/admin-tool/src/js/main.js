@@ -2,6 +2,7 @@
 require('../sass/main.scss');
 
 var ko = require('knockout');
+var API = require('./api');
 
 var UsersPage = require('./pages/users');
 var LoginPage = require('./pages/login');
@@ -35,5 +36,26 @@ for( var i = 0, len = pagesArray.length; i < len; i++) {
 
 }
 
+var inactivityTime = function () {
+    var t;
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    document.onwheel = resetTimer;
+    document.onscroll = resetTimer;
+    document.onclick = resetTimer;
+
+    function logout() {
+        API.logout();
+    }
+
+    function resetTimer() {
+    	console.log("fine ah!")
+        clearTimeout(t);
+        t = setTimeout(logout, 15 * 60000); // 60000 is equal to one minute
+    }
+};
+
+inactivityTime();
 
 
