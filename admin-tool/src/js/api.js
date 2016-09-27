@@ -228,6 +228,9 @@ function supplementBackend(jsonResp) {
   if(typeof jsonResp == 'string'){
     return {responseCode:0, data: jsonResp};
   }
+  else if( jsonResp.reason == "Invalid Token" ){
+	  API.logout();
+  }
 
   else if( jsonResp.reason == "Full authentication is required to access this resource" ){
     jsonResp.responseCode = 32;
