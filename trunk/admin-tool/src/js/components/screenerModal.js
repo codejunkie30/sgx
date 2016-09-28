@@ -41,7 +41,7 @@ function modalVM( params ) {
 
     //set expiration date on modal
     if( data.expiration_date !== null ) {
-      expirationDate = moment(data.expiration_date()).format('MM-DD-YYYY');
+      expirationDate = data.expiration_date();
       this.accountExpiration(expirationDate);
     }else {
       this.accountExpiration(null);
@@ -74,7 +74,7 @@ function modalVM( params ) {
 
   this.turnToAdmin = function() {
     var user = this.userData().username;
-    var params = {id: user};
+    var params = {id: user,userTypeStatus:this.userData().status()};
 
     API.showLoading();
     API.post( API.paths.makeAdmin, successFN.bind(this), params );
@@ -141,7 +141,7 @@ function modalVM( params ) {
 
     switch(ko.unwrap(user.status)) {
       case 'TRIAL':
-        var a = moment(user.expiration_date());
+        var a = moment(user.expiration_date(),'MM-DD-YYYY');
         var b = moment().startOf('day');
         var daysLeft = a.diff(b, 'days');
         this.accountType('Trial');
