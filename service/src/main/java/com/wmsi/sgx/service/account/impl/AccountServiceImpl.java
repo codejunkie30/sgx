@@ -61,16 +61,16 @@ public class AccountServiceImpl implements AccountService {
 			account = accounts.get(0);
 			ret = new AccountModel();
 			ret.setEmail(account.getUser().getUsername());
-			ret.setStartDate(DateUtil.resetToMidnightTime(account.getStartDate()));
+			ret.setStartDate(DateUtil.resetTimeStamp(account.getStartDate()));
 			if (account.getExpirationDate() != null) {
 				System.out.println("account.getId():\t"+account.getId()+"account.getExpirationDate():\t"+account.getExpirationDate()+"account.getUser().getUsername():\t"+account.getUser().getUsername());
-				ret.setExpirationDate(DateUtil.resetToMidnightTime(account.getExpirationDate()));
+				ret.setExpirationDate(DateUtil.resetTimeStamp(account.getExpirationDate()));
 
 			} else {
 				Date expiration = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(account.getStartDate()),
 						Calendar.DAY_OF_MONTH,
 						account.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				ret.setExpirationDate(DateUtil.resetToMidnightTime(expiration));
+				ret.setExpirationDate(DateUtil.resetTimeStamp(expiration));
 			}
 			if (account.getActive().equals(false)) {
 				ret.setType(AccountType.EXPIRED);
@@ -196,11 +196,11 @@ public class AccountServiceImpl implements AccountService {
 		Account acc = new Account();
 		acc.setType(type);
 		acc.setUser(user);
-		acc.setStartDate(DateUtil.resetToMidnightTime(new Date()));
+		acc.setStartDate(DateUtil.resetTimeStamp(new Date()));
 		if (type == AccountType.TRIAL)
 			acc.setExpirationDate(null);
 		else
-			acc.setExpirationDate(DateUtil.resetToMidnightTime(new DateTime().plusDays(expirationDays).toDate()));
+			acc.setExpirationDate(DateUtil.resetTimeStamp(new DateTime().plusDays(expirationDays).toDate()));
 		acc.setActive(true);
 		acc.setAlwaysActive(false);
 		acc.setContactOptIn(user.getContactOptIn());

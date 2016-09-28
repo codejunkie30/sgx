@@ -161,12 +161,12 @@ public class AdminServiceImpl implements AdminService {
 			if (accounts.size() != 0) {
 				Account curr = accounts.get(0);
 				model.setUsername(u.getUsername());
-				model.setCreated_date(u.getCreatedDate());
+				model.setCreated_date(DateUtil.resetTimeStamp(u.getCreatedDate()));
 				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
 				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(curr.getStartDate()),
 						Calendar.DAY_OF_MONTH,
 						curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
+				model.setExpiration_date(DateUtil.resetTimeStamp(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp));
 				List<EnetsTransactionDetails> enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
 				if(enetsTrasactionDetail.size() != 0){
 					Collections.sort(enetsTrasactionDetail, new SortDatesDecendingEnetsTransactionId());

@@ -47,14 +47,14 @@ public class DateUtil {
 	 * @param ret
 	 */
 	public static long getDaysRemaining(Date expirationDate) {
-		long diff = resetToMidnightTime(expirationDate).getTime() - resetToMidnightTime(new Date()).getTime();
-		System.out.println("expirationDate.getTime():\t"+resetToMidnightTime(expirationDate).getTime());
-		System.out.println("resetToMidnightTime(new Date()).getTime():\t"+resetToMidnightTime(new Date()).getTime());
+		long diff = resetTimeStamp(expirationDate).getTime() - resetTimeStamp(new Date()).getTime();
+		System.out.println("expirationDate.getTime():\t"+resetTimeStamp(expirationDate).getTime());
+		System.out.println("resetToMidnightTime(new Date()).getTime():\t"+resetTimeStamp(new Date()).getTime());
 		System.out.println("DIFF"+diff);
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
-	public static Date resetToMidnightTime(Date expirationDate) {
+	public static Date resetTimeStamp(Date expirationDate) {
 		Calendar cal = Calendar.getInstance(); // locale-specific
 		cal.setTime(expirationDate);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
