@@ -418,7 +418,7 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
     				if (typeof vm.val() === "undefined" || vm.val() == null || vm.val() == vm.field.label) return;
 					//Fix for REITs as it's no longer part of industryGroup
     				(vm.val() != 'Real Estate Investment Trusts (REITs)') ? param.field = vm.field.id : param.field = 'industry';
-    				param.value = vm.val();					
+    				(vm.val() != 'Real Estate Investment Trusts (REITs)') ? param.value = vm.val() : param.value = 'Equity Real Estate Investment Trusts (REITs)';					
 					
     			}
     			else if (vm.field.template == "change") {
