@@ -289,7 +289,7 @@ public class AdminServiceImpl implements AdminService {
 			edit.setActive(true);
 
 		AdminAccountModel model = new AdminAccountModel();
-		model.setExpiration_date(DateUtil.resetTimeStamp(period));
+		model.setExpiration_date(period);
 		model.setCreated_date(edit.getCreatedDate());
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
