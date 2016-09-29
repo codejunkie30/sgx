@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -289,7 +290,11 @@ public class AdminServiceImpl implements AdminService {
 			edit.setActive(true);
 
 		AdminAccountModel model = new AdminAccountModel();
-		model.setExpiration_date(period);
+		try {
+			model.setExpiration_date(sdf.parse(sdf.format(period)));
+		} catch (ParseException e) {
+			model.setExpiration_date(period);
+		}
 		model.setCreated_date(edit.getCreatedDate());
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
