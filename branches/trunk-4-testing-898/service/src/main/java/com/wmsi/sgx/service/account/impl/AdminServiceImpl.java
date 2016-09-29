@@ -284,13 +284,16 @@ public class AdminServiceImpl implements AdminService {
 
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
-		edit.setExpirationDate(period);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		edit.setExpirationDate(period);
+		
 		if (sdf.format(period).compareTo(sdf.format(new Date())) > 0)
 			edit.setActive(true);
 
 		AdminAccountModel model = new AdminAccountModel();
 		try {
+			edit.setExpirationDate(sdf.parse(sdf.format(period)));
 			model.setExpiration_date(sdf.parse(sdf.format(period)));
 		} catch (ParseException e) {
 			model.setExpiration_date(period);
