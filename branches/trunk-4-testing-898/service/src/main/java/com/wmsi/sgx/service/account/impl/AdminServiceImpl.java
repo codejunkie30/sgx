@@ -295,6 +295,7 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			edit.setExpirationDate(sdf.parse(sdf.format(period)));
 			model.setExpiration_date(sdf.parse(sdf.format(period)));
+			System.out.println("sdf.parse(sdf.format(period)):-\t"+sdf.parse(sdf.format(period)));
 		} catch (ParseException e) {
 			model.setExpiration_date(period);
 		}
