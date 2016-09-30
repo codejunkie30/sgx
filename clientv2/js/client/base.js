@@ -352,6 +352,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		currentDay: KO.observable(),
 		
+		//Make this value true on actions where the page reloads and if that is valid navigatin
+		//and if you don't want the singed-in user to not logout
+		validNavigation: KO.observable(false),
+		
 		TIMEOUT_SECONDS:1000,
 		
 		messages: JSON.parse(MESSAGES),
@@ -482,6 +486,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
         },
 		
 		init: function(child) {
+			UTIL.retrieveRefreshNavigation("");
 			if ( location.pathname.split("/")[1] == "print.html" && UTIL.getParameterByName("currency")!= undefined){
 				this.currentFormats = PAGE["numberFormats-"+UTIL.getParameterByName("currency")];
 			}
@@ -494,6 +499,43 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			// extend parent
 			$.extend(true, this, PAGEIMPL);
 			
+			$(window).on('click', function(e) {
+		    	if(e.target.nodeName.toLowerCase() === "a" || e.target.nodeName.toLowerCase() === "img" || e.target.nodeName.toLowerCase() === "span" || e.target.nodeName.toLowerCase() === "select"){
+		    		console.log("anchor tag cliked");
+		    		PAGE.validNavigation(true);
+		    	}
+		    	else {
+		    		console.log("not an anchor tag cliked");
+		    		PAGE.validNavigation(false);
+		    	}
+	            
+	        });
+			
+			$(window).on('popstate', function (e) {
+			    PAGE.validNavigation(true);
+			});
+			
+			$(window).on('beforeunload', function(e){
+				if(!PAGE.validNavigation() && UTILS.retrieveAuthToken()!=false) {
+						PAGE.validNavigation(true);
+						var endpoint = PAGE.fqdn + "/sgx/logout";
+						
+						var params = {};
+						
+						UTIL.handleRefreshAjaxRequestLogout(
+							endpoint,
+							function(data, textStatus, jqXHR){
+							console.log("logout");
+							}, 
+							PAGE.customSGXError);
+						UTIL.saveAuthToken("");
+						UTIL.deleteAuthToken();
+						UTIL.deleteCurrency();
+						UTIL.deleteState();
+						UTIL.saveRefreshNavigation("refresh");
+				}
+			}); 
+			
 			// initialize the core object (something broke somewhere and this stopped being called)
 			PAGEIMPL.initPage();
 			
@@ -501,8 +543,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			$.extend(true, this, child);
 			
 			// initialize the core object
-			this.initPage();			
-			
+			this.initPage();
+			if(UTIL.getParameterByName("page") != 14 && UTIL.retrieveRefreshNavigation() === "refresh"){
+				top.location.href = PAGE.getPage(PAGE.pageData.getPage('sign-in'));
+			}
 			return this;
 			
 		},

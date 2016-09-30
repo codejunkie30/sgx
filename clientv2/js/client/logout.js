@@ -3,6 +3,7 @@ define([ "wmsi/utils", "knockout" ], function(UTIL, ko) {
 	var LOGOUT = {
 				
 		initPage: function() {
+			UTIL.saveRefreshNavigation("");
 			var endpoint = PAGE.fqdn + "/sgx/logout";
 			var params = {};
 			
