@@ -28,7 +28,6 @@ public class AdminResponse {
 	public void setTrialDay(Date trialDay) {
 		this.trialDay = trialDay;
 	}
-	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getDateParam() {
 		return dateParam;
 	}
