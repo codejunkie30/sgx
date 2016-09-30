@@ -1,7 +1,10 @@
 package com.wmsi.sgx.model.account;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Objects;
+import com.wmsi.sgx.model.JsonDateSerializer;
 
 public class AdminResponse {
 	public int trialDuration;
@@ -28,6 +31,7 @@ public class AdminResponse {
 	public Date getDateParam() {
 		return dateParam;
 	}
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public void setDateParam(Date dateParam) {
 		this.dateParam = dateParam;
 	}
