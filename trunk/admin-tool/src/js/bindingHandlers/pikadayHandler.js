@@ -2,6 +2,8 @@
 var ko = require('knockout');
 var pikaday = require('pikaday');
 
+var moment = require('moment');
+
 ko.bindingHandlers.pikaday = {
 
   init: function(element, valueAccessor) {
@@ -17,7 +19,7 @@ ko.bindingHandlers.pikaday = {
         },
         onOpen: function() {
           if(value() != null)
-            this.setDate(value());
+          this.setDate( moment(value(),'MM-DD-YYYY').toDate());
         }
     });
 
