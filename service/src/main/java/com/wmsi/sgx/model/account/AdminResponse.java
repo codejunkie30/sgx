@@ -31,7 +31,6 @@ public class AdminResponse {
 	public Date getDateParam() {
 		return dateParam;
 	}
-	@JsonSerialize(using=JsonDateSerializer.class)
 	public void setDateParam(Date dateParam) {
 		this.dateParam = dateParam;
 	}
