@@ -116,8 +116,7 @@ function modalVM( params ) {
       this.deactivateAcount();
       return;
     }
-    
-    var params = { id: user, dateParam: newExpirationDate };
+    var params = { id: user, dateParam: moment(this.accountExpiration(), "MM-DD-YYYY").format('YYYY-MM-DD')}; 
 
     API.showLoading();
     API.post( API.paths.extendExpiration , successFN.bind(this), params );
