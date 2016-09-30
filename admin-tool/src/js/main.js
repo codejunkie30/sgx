@@ -50,7 +50,6 @@ var inactivityTime = function () {
     }
 
     function resetTimer() {
-    	console.log("fine ah!")
         clearTimeout(t);
         t = setTimeout(logout, 15 * 60000); // 60000 is equal to one minute
     }
