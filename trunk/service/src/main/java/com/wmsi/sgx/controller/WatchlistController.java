@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.CompanyWatchlistTransactionHistoryModel;
 import com.wmsi.sgx.model.Response;
@@ -48,7 +49,10 @@ public class WatchlistController {
 	private WatchlistEmailService emailService;
 	
 	@Autowired
-	private TokenAuthenticationService tokenAuthenticationService;	
+	private TokenAuthenticationService tokenAuthenticationService;
+	
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
 	
 	@RequestMapping(value="watchlist/sendEmail")
 	public void sendEmail(HttpServletRequest request, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
@@ -114,7 +118,7 @@ public class WatchlistController {
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		String id = model.getId();
 		List<WatchlistTransactionModel> transactions = model.getTransactions();
-		
+		auditorProvider.setUser(usr);
 		return watchlistService.addTransactions(usr, id, transactions);
 		
 	}

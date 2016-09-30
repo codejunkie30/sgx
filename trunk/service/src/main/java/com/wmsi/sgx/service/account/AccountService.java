@@ -15,7 +15,7 @@ public interface AccountService{
 	
 	Boolean convertToExpiry(User user);
 	
-	AccountModel updateAccount(UpdateAccountModel dto);
+	AccountModel updateAccount(UpdateAccountModel dto, long updatedBy);
 	
 	Boolean isPremiumUser(User u);
 	

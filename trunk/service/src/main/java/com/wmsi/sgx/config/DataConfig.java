@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
@@ -24,6 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.wmsi.sgx.domain.AuditorAwareImpl;
+import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.User;
 
 @Configuration
@@ -87,7 +87,7 @@ public class DataConfig{
 	}
 
 	@Bean
-	public AuditorAware<User> auditorProvider() {
+	public CustomAuditorAware<User> auditorProvider() {
 		return new AuditorAwareImpl();
 	}
 

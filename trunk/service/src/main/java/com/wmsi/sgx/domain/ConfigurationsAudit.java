@@ -12,13 +12,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.google.common.base.Objects;
 
-@Entity(name = "Configurations")
-@Table(name="configurations")
-public class Configurations {
+@Entity(name = "ConfigurationsAudit")
+@Table(name="configurations_audit")
+public class ConfigurationsAudit {
 	
 	@Id
-	@GeneratedValue(generator = "configurationsGenerator")
-	@GenericGenerator(name = "configurationsGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
+	@GeneratedValue(generator = "configurationsAuditGenerator")
+	@GenericGenerator(name = "configurationsAuditGenerator", strategy = "com.wmsi.sgx.generator.IDGenerator")
+	private Long audit_id;
+	
+	@Column(name = "id", nullable = false)
 	private Long id;
 	
 	@Column(name = "Property", nullable = false)
@@ -86,8 +89,8 @@ public class Configurations {
 	}
 	@Override
 	public boolean equals(Object object) {
-		if (object instanceof Configurations) {
-			Configurations that = (Configurations) object;
+		if (object instanceof ConfigurationsAudit) {
+			ConfigurationsAudit that = (ConfigurationsAudit) object;
 			return Objects.equal(this.property, that.property) && Objects.equal(this.value, that.value)
 					&& Objects.equal(this.modifiedBy, that.modifiedBy)
 					&& Objects.equal(this.modifiedDate, that.modifiedDate)

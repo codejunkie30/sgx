@@ -29,6 +29,8 @@ public class AccountModel{
 	
 	private String enetsTranId;
 	
+	private long daysRemaining;
+	
 	public String getReason() {
 		return reason;
 	}
@@ -118,6 +120,20 @@ public class AccountModel{
 
 	public void setEnetsTranId(String enetsTranId) {
 		this.enetsTranId = enetsTranId;
+	}
+
+	/**
+	 * @return the daysRemaining
+	 */
+	public long getDaysRemaining() {
+		return daysRemaining;
+	}
+
+	/**
+	 * @param daysRemaining the daysRemaining to set
+	 */
+	public void setDaysRemaining(long daysRemaining) {
+		this.daysRemaining = daysRemaining;
 	}
 
 	@Override

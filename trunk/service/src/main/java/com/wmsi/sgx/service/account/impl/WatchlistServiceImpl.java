@@ -59,6 +59,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			if(list.getWatchlist_id().equals(Long.parseLong(id))){
 				Watchlist update = watchlistRepository.findOne(list.getWatchlist_id());
 				update.setName(watchlistName);
+				update.setUpdatedDate(new Date());
 				watchlistRepository.save(update);
 			}
 		}		
@@ -74,6 +75,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			newWatchlist.setUser(user);
 			newWatchlist.setDate_created(new Date());
 			newWatchlist.setName(watchlistName);
+			newWatchlist.setUpdatedDate(new Date());
 			watchlistRepository.save(newWatchlist);
 			
 			setOptions(getDefaultOptions(), newWatchlist.getWatchlist_id());
@@ -242,7 +244,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 			Watchlist[] watchlist = watchlistRepository.findByUser(user);
 			for (Watchlist list : watchlist) {
 				if (list.getWatchlist_id().equals(id)) {
-					setTransactions(transactions, id);
+					setTransactions(transactions, id, user);
 					response.setMessage("success");
 					return response;
 				}
@@ -360,10 +362,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		return companyWatchlistTransactionHistoryModel;
 	}
 
-	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id) {
+	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id, User user) {
 		for (WatchlistTransactionModel watchlistTransactionModel : transactions) {
 			WatchlistTransaction transaction = new WatchlistTransaction();
 			BeanUtils.copyProperties(watchlistTransactionModel,transaction);
+			transaction.setLastModifiedBy(user);
+			transaction.setLastModifiedDate(new Date());
+			transaction.setCreatedBy(user);
+			transaction.setCreatedDate(new Date());
 			transaction.setWatchlistId(id);
 			transactionRepository.save(transaction);
 		}
