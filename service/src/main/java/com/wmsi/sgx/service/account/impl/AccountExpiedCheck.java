@@ -26,69 +26,68 @@ import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.util.DateUtil;
 
-
 @Service
 @DisallowConcurrentExecution
-public class AccountExpiedCheck implements Job{
-	
-	
+public class AccountExpiedCheck implements Job {
+
 	@Autowired
 	AccountRepository accountRepository;
-	
+
 	@Autowired
 	EmailService emailService;
-	
-	@Value ("${email.trialExpired.notice.subject}")
+
+	@Value("${email.trialExpired.notice.subject}")
 	private String trialExpiredSubject;
-	
-	@Value ("${email.trialExpired.notice}")
+
+	@Value("${email.trialExpired.notice}")
 	private String trialExpiredEmailBody;
-	
+
 	@Autowired
 	private TrialProperty getTrial;
-	
+
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(AccountExpiedCheck.class);
-	
-	
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		
+
 		log.info("Executing Account Expired Check");
 		List<Account> accounts = accountRepository.findAll();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		
-		//Username Password does not exist its only for faking user to system default
+
+		// Username Password does not exist its only for faking user to system
+		// default
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("example@gmail.com",
 				"Test1234@");
 		SecurityContextHolder.getContext().setAuthentication(authRequest);
-		
-		for( Account acc: accounts)	{
-			if(acc.getAlwaysActive() == false && acc.getActive() == true){
-				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate() :
-					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				
-				
-				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
+
+		for (Account acc : accounts) {
+			if (acc.getAlwaysActive() == false && acc.getActive() == true) {
+				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate()
+						: DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()),
+								Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays()
+										: PREMIUM_EXPIRATION_DAYS));
+
+				if (DateUtil.getDaysRemaining(expiration) <= -1) {
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
-					accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD");
-					try{
-					sendTrialExpiredEmail(acc.getUser().getUsername());
-					
-					}
-					catch(MessagingException e){
-						log.error("exception while sending email to "+acc.getUser().getUsername());
+					accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(),
+							acc.getUser().getId(), "SGD", 1, new Date());
+					try {
+						sendTrialExpiredEmail(acc.getUser().getUsername());
+
+					} catch (MessagingException e) {
+						log.error("exception while sending email to " + acc.getUser().getUsername());
 					}
 				}
 			}
 		}
-		
+
 	}
-	
-	private void sendTrialExpiredEmail(String email) throws MessagingException{
+
+	private void sendTrialExpiredEmail(String email) throws MessagingException {
 		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
 	}
-	
+
 }

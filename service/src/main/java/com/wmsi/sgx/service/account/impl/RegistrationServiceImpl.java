@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.Role;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.ApiResponse;
@@ -42,6 +43,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	
 	@Autowired
 	private MessageSource messages;
+	
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
 	
 	@Override
 	@Transactional
@@ -92,7 +96,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	public Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException{
 	
 		User user = userVerificationService.verifyToken(token);
-		
+		auditorProvider.setUser(user);
 		// Create trial account record
 		accountService.createTrialAccount(user);
 		
@@ -113,7 +117,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 		// TODO ECommerce validation to make sure user has paid.
 
 		User user = userService.getUserByUsername(dto.getEmail());
-		
+		auditorProvider.setUser(user);
 		// Remove trial access
 		if(user.hasRole(Role.ROLE_TRIAL))
 			user.removeRole(Role.ROLE_TRIAL);
@@ -134,7 +138,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 	public Boolean convertToExpiredAccount(String email) throws UserNotFoundException{
 
 		User user = userService.getUserByUsername(email);
-		
+		auditorProvider.setUser(user);
 		
 		accountService.convertToExpiry(user);
 		

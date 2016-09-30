@@ -35,6 +35,9 @@ public class UserVerification{
 
 	@Column(name = "date", nullable = false)
 	private Date date = new Date();
+	
+	@Column(name = "updated_dt", nullable = false)
+	private Date updatedDate = new Date();
 
 	public Long getId() {
 		return id;
@@ -75,10 +78,24 @@ public class UserVerification{
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	/**
+	 * @return the updatedDate
+	 */
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	/**
+	 * @param updatedDate the updatedDate to set
+	 */
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
 
 	@Override
 	public int hashCode(){
-		return Objects.hashCode(user, token, redeemed, date);
+		return Objects.hashCode(user, token, redeemed, date, updatedDate);
 	}
 	
 	@Override
@@ -88,7 +105,8 @@ public class UserVerification{
 			return Objects.equal(this.user, that.user)
 				&& Objects.equal(this.token, that.token)
 				&& Objects.equal(this.redeemed, that.redeemed)
-				&& Objects.equal(this.date, that.date);
+				&& Objects.equal(this.date, that.date)
+				&& Objects.equal(this.updatedDate, that.updatedDate);
 		}
 		return false;
 	}
@@ -101,6 +119,7 @@ public class UserVerification{
 			.add("token", token)
 			.add("redeemed", redeemed)
 			.add("date", date)
+			.add("updatedDate", updatedDate)
 			.toString();
 	}
 	

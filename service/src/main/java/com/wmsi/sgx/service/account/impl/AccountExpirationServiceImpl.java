@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AcccountExiprationService;
@@ -79,10 +79,14 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 					DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 				
 				
-				if(sdf.format(expiration).compareTo(sdf.format(new Date()))<0){
+				if (DateUtil.getDaysRemaining(expiration) <= -1){
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
 					acc.setCurrency("SGD");
+					User user = new User();
+					user.setId(1L);
+					acc.setLastModifiedBy(user);
+					acc.setLastModifiedDate(new Date());
 					accountRepository.save(acc);
 					try{
 					sendTrialExpiredEmail(acc.getUser().getUsername());

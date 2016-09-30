@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,12 +14,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
 import com.wmsi.sgx.domain.Account.AccountType;
+import com.wmsi.sgx.domain.AccountAudit;
 import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.SortAccountByExpirationDateComparator;
 import com.wmsi.sgx.domain.SortDatesDecendingEnetsTransactionId;
@@ -28,6 +31,7 @@ import com.wmsi.sgx.model.account.AccountModel;
 import com.wmsi.sgx.model.account.AdminAccountModel;
 import com.wmsi.sgx.model.account.AdminResponse;
 import com.wmsi.sgx.model.account.TrialResponse;
+import com.wmsi.sgx.repository.AccountAuditRepository;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.repository.EnetsRepository;
 import com.wmsi.sgx.repository.UserLoginRepository;
@@ -49,6 +53,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private AccountAuditRepository accountAuditRepository;
 
 	@Autowired
 	private UserRepository userReposistory;
@@ -155,12 +162,12 @@ public class AdminServiceImpl implements AdminService {
 			if (accounts.size() != 0) {
 				Account curr = accounts.get(0);
 				model.setUsername(u.getUsername());
-				model.setCreated_date(u.getCreatedDate());
+				model.setCreated_date(DateUtil.resetTimeStamp(u.getCreatedDate()));
 				model.setStatus(curr.getActive() ? curr.getType().toString() : "expired");
 				Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(curr.getStartDate()),
 						Calendar.DAY_OF_MONTH,
 						curr.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
-				model.setExpiration_date(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp);
+				model.setExpiration_date(DateUtil.resetTimeStamp(curr.getExpirationDate() != null ? curr.getExpirationDate() : exp));
 				List<EnetsTransactionDetails> enetsTrasactionDetail = enetsRepository.findByUserAndActive(curr.getActive(), curr.getUser().getId());
 				if(enetsTrasactionDetail.size() != 0){
 					Collections.sort(enetsTrasactionDetail, new SortDatesDecendingEnetsTransactionId());
@@ -228,7 +235,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse deactivate(String username) {
+	public AdminResponse deactivate(String username, long updatedBy) {
 		List<Account> accounts = accountRepository.findByUsername(username);
 		User u = userReposistory.findByUsername(username);
 		AdminResponse ret = new AdminResponse();
@@ -250,7 +257,12 @@ public class AdminServiceImpl implements AdminService {
 				acc.setExpirationDate(new Date());
 				model.setStatus("EXPIRED");
 				model.setExpiration_date(acc.getExpirationDate());
-				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD");
+				accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(), acc.getUser().getId(),"SGD", updatedBy, new Date());
+				
+				//Auditing
+				AccountAudit accountAudit = new AccountAudit();
+				BeanUtils.copyProperties(acc,accountAudit);
+				accountAuditRepository.save(accountAudit);
 
 			}
 		}
@@ -260,7 +272,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse extension(String username, Date period) {
+	public AdminResponse extension(String username, Date period, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -272,25 +284,39 @@ public class AdminServiceImpl implements AdminService {
 
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account edit = accounts.get(0);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		edit.setExpirationDate(period);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		
 		if (sdf.format(period).compareTo(sdf.format(new Date())) > 0)
 			edit.setActive(true);
 
 		AdminAccountModel model = new AdminAccountModel();
-		model.setExpiration_date(period);
+		try {
+			edit.setExpirationDate(sdf.parse(sdf.format(period)));
+			model.setExpiration_date(sdf.parse(sdf.format(period)));
+			System.out.println("sdf.parse(sdf.format(period)):-\t"+sdf.parse(sdf.format(period)));
+		} catch (ParseException e) {
+			model.setExpiration_date(period);
+		}
 		model.setCreated_date(edit.getCreatedDate());
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
 
-		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency());
+		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency(), updatedBy, new Date());
+		
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+
 		ret.setResponseCode(0);
 		ret.setData(model);
 		return ret;
 	}
 
 	@Override
-	public AdminResponse setAdmin(String username) {
+	public AdminResponse setAdmin(String username, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -310,8 +336,12 @@ public class AdminServiceImpl implements AdminService {
 		edit.setAlwaysActive(true);
 		
 		
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate());
-
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(), edit.getStartDate(), updatedBy, new Date());
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+		
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
 		model.setCreated_date(edit.getCreatedDate());
@@ -324,7 +354,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public AdminResponse removeAdmin(String username) {
+	public AdminResponse removeAdmin(String username, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
 		List<Account> accounts = accountRepository.findByUsername(username);
 
@@ -341,9 +371,14 @@ public class AdminServiceImpl implements AdminService {
 						edit.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
 		edit.setType(AccountType.PREMIUM);
 		edit.setAlwaysActive(false);
-		edit.setExpirationDate(null);
-		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate());
+		//edit.setExpirationDate(null);
+		accountRepository.updateAccountSetAdmin(edit.getType().toString(), edit.getActive(),edit.getAlwaysActive(), edit.getUser().getId(),edit.getStartDate(), updatedBy, new Date());
 
+		//Auditing
+		AccountAudit accountAudit = new AccountAudit();
+		BeanUtils.copyProperties(edit,accountAudit);
+		accountAuditRepository.save(accountAudit);
+		
 		AdminAccountModel model = new AdminAccountModel();
 		model.setExpiration_date(expiration);
 		model.setCreated_date(edit.getCreatedDate());
