@@ -3,7 +3,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 	var PURCHASE = {
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
-			
+			//To not logout the user
+			PAGE.validNavigation(true);
 			var token = this.getURLParam('ec');
 			var endpoint = PAGE.fqdn + "/sgx/account/errorCode";
 			var postType = 'POST';

@@ -294,6 +294,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		},
 			
 		cancel: function () {
+			PAGE.validNavigation(true);
         	history.back();
   		}
 

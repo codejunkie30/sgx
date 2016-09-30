@@ -4,6 +4,8 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 		messages: JSON.parse(MESSAGES),
 		purchaseToken: ko.observable(),
 		initPage: function() {
+			//To not logout the user
+			PAGE.validNavigation(true);
 			
 			var endpoint = PAGE.fqdn + "/sgx/account/premiumMessage";
 			var postType = 'POST';
