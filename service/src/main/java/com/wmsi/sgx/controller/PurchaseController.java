@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.wiz.enets2.transaction.umapi.CreditMerchant;
 import com.wiz.enets2.transaction.umapi.Merchant;
 import com.wiz.enets2.transaction.umapi.data.TxnRes;
+import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.EnetsTransactionDetails;
 import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.model.Response;
@@ -53,12 +54,16 @@ public class PurchaseController {
 	@Autowired
 	AccountService accountService;
 	
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
+	
 	@RequestMapping(value = "success", method = RequestMethod.POST)
 	public RedirectView success(@ModelAttribute("response") Response response, Model model) throws PremiumVerificationException, VerifiedPremiumException{		
 				
 		TxnRes res = unpack(response);					
 		String token = res.getMerchantTxnRef();		
 		User usr = premiumService.verifyPremiumToken(token);
+		auditorProvider.setUser(usr);
 		accountService.createPremiumAccount(usr);
 		
 		EnetsTransactionDetails enets = new EnetsTransactionDetails();
