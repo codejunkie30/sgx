@@ -509,10 +509,6 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	            
 	        });
 			
-			$(window).on('popstate', function (e) {
-			    PAGE.validNavigation(true);
-			});
-			
 			$(window).on('beforeunload', function(e){
 				if(!PAGE.validNavigation() && UTILS.retrieveAuthToken()!=false) {
 						PAGE.validNavigation(true);
