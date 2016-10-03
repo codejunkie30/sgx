@@ -58,6 +58,19 @@ define(["jquery", "moment"], function($, moment) {
 			}
 			return context[func].apply(this||window, args);
 		},
+		
+		saveRefreshNavigation: function(fromNavigation) {
+            
+            store.set('fromNavigation', {value: fromNavigation});
+        },
+
+
+        retrieveRefreshNavigation: function() {
+            var fromNavigation = store.get('fromNavigation');
+            if(!fromNavigation) 
+            	return;
+            return fromNavigation.value;
+        },
 
         //X-AUTH-TOKEN
         saveAuthToken: function(token) {
@@ -191,6 +204,25 @@ define(["jquery", "moment"], function($, moment) {
 		handleAjaxRequestLogout: function(endpoint, successFN, errorFN) {        	
         	var config = {
                 url: endpoint,
+                success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+                error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+        	};
+        	var token = UTILS.retrieveAuthToken();
+            config.beforeSend=function(request) {
+            	if (token !== false) {
+                	request.setRequestHeader('x-auth-token', token);
+				}
+				
+            }
+        	$.ajax(config);        	
+        },
+        
+        handleRefreshAjaxRequestLogout: function(endpoint, successFN, errorFN) {        	
+        	var config = {
+                url: endpoint,
+                async: false,
+                type: 'POST',
+                dataType: 'json',
                 success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
                 error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
         	};
