@@ -499,19 +499,13 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 			
 			$(window).on('click', function(e) {
 		    	if(e.target.nodeName.toLowerCase() === "a" || e.target.nodeName.toLowerCase() === "img" || e.target.nodeName.toLowerCase() === "span" || e.target.nodeName.toLowerCase() === "select"){
-		    		console.log("anchor tag cliked");
 		    		PAGE.validNavigation(true);
 		    	}
 		    	else {
-		    		console.log("not an anchor tag cliked");
 		    		PAGE.validNavigation(false);
 		    	}
 	            
 	        });
-			
-			$(window).on('popstate', function (e) {
-			    PAGE.validNavigation(true);
-			});
 			
 			$(window).on('beforeunload', function(e){
 				if(!PAGE.validNavigation() && UTILS.retrieveAuthToken()!=false) {
