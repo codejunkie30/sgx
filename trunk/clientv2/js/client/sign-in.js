@@ -19,6 +19,11 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 			    return this.email() && this.password();
 			}, this);			
 			
+			if(UTIL.retrieveRefreshNavigation() === "refresh"){
+				$('.message').html("Please login again as the page has timed out. If you have used Reload/Refresh/Back button while accessing, please do not do so.");
+				UTIL.saveRefreshNavigation("");
+				$('.message').show();
+			}
 			
 			PAGE.trackPage("SGX Sign In");
 			

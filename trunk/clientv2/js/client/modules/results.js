@@ -43,6 +43,9 @@ define([ "wmsi/utils", "knockout", "text!client/data/fields.json", "text!client/
 				data.endpoint = endpoint;
 				data.params = params;
 				if (typeof keywords !== "undefined") data.keywords = keywords;
+				if(data.size === 1){
+					PAGE.validNavigation(true);
+				}
 				results.render(data); 
 				results.parent.hideLoading(); 
 
