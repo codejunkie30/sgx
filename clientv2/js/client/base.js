@@ -1,4 +1,4 @@
-define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment", "text!client/data/currency.json", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment, CUR) {
+define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glossary.json", "text!client/templates/tooltip.html", "text!../../data/pages.jsonp", "text!client/templates/add-watchlist.html", "moment", "text!client/data/currency.json","text!client/data/messages.json", "knockout-amd-helpers", "text", "jquery-ui", "colorbox", "jquery-timeout"], function($, PAGEIMPL, UTIL, KO, GLOSSARY, TOOLTIP, PAGEINFO, addWatchlist, moment, CUR, MESSAGES) {
 
 	/** change the default template path */
 	KO.amdTemplateEngine.defaultPath = "client/templates";
@@ -358,8 +358,10 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		TIMEOUT_SECONDS:1000,
 		
+		messages: JSON.parse(MESSAGES),
+		
 		pageData: {
-			
+		    	
 			pages: {}, 
 			
 			configuration: function(data) {
@@ -854,9 +856,12 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						if (data.type == 'TRIAL'){
 				            var start = moment(data.startDate);
 				            var end = moment(data.expirationDate);
-				            var trialPeriod = end.diff(start, 'days');
-				            var daysRemaining = end.diff(moment().startOf('day'), 'days');
-							if (daysRemaining >= 1) {
+				            var daysRemaining = data.daysRemaining;
+							if (daysRemaining >= 0) {
+							    	if(daysRemaining==0){
+							    	    var displayMessage = PAGE.messages.messages[0];
+							    	    $('#introTrialLastDay').html('&nbsp;'+displayMessage.accountSettings.introPremiumLastDay);
+							    	}
 								PAGE.userStatus('TRIAL');
 								PAGE.libLoggedIn(true);
 								PAGE.libTrialExpired(false);
