@@ -54,7 +54,6 @@ public class AccountServiceImpl implements AccountService {
 
 		// TODO, ensure there is only ever one active account
 		List<Account> accounts = accountRepository.findByUsername(username);
-		System.out.println(accounts);
 		AccountModel ret = null;
 		Collections.sort(accounts, new SortAccountByExpirationDateComparator());
 		Account account;
@@ -197,7 +196,7 @@ public class AccountServiceImpl implements AccountService {
 		Account acc = new Account();
 		acc.setType(type);
 		acc.setUser(user);
-		acc.setStartDate(DateUtil.resetTimeStamp(new Date()));
+		acc.setStartDate(new Date());
 		if (type == AccountType.TRIAL)
 			acc.setExpirationDate(null);
 		else
