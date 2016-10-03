@@ -196,7 +196,7 @@ public class AccountServiceImpl implements AccountService {
 		Account acc = new Account();
 		acc.setType(type);
 		acc.setUser(user);
-		acc.setStartDate(DateUtil.resetTimeStamp(new Date()));
+		acc.setStartDate(new Date());
 		if (type == AccountType.TRIAL)
 			acc.setExpirationDate(null);
 		else
