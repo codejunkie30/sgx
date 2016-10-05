@@ -5,6 +5,8 @@ package com.wmsi.sgx.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author dt84327
  *
@@ -73,6 +75,7 @@ public class WatchlistTransactionModel {
 	/**
 	 * @return the tradeDate
 	 */
+	@JsonSerialize(using=JsonDateInMillisecondsSerializer.class)
 	public Date getTradeDate() {
 		return tradeDate;
 	}
@@ -81,6 +84,7 @@ public class WatchlistTransactionModel {
 	 * @param tradeDate
 	 *            the tradeDate to set
 	 */
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public void setTradeDate(Date tradeDate) {
 		this.tradeDate = tradeDate;
 	}
