@@ -30,6 +30,7 @@ import com.wmsi.sgx.repository.WatchlistTransactionRepository;
 import com.wmsi.sgx.service.CompanyService;
 import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.WatchlistService;
+import com.wmsi.sgx.util.DateUtil;
 
 @Service
 public class WatchlistServiceImpl implements WatchlistService {
@@ -366,6 +367,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 		for (WatchlistTransactionModel watchlistTransactionModel : transactions) {
 			WatchlistTransaction transaction = new WatchlistTransaction();
 			BeanUtils.copyProperties(watchlistTransactionModel,transaction);
+			transaction.setTradeDate(DateUtil.resetTimeStamp(transaction.getTradeDate()));
 			transaction.setLastModifiedBy(user);
 			transaction.setLastModifiedDate(new Date());
 			transaction.setCreatedBy(user);
