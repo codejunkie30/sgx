@@ -1477,13 +1477,13 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 		    			 if(item.transactionType() === "SELL") {
 		    				 if(tempDate == null) {
-		    					 if(new Date(item.tradeDate()) >= new Date(date)) {
-		    						 tempDate = new Date(item.tradeDate());
+		    					 if(item.tradeDate() >= new Date(date).setHours(0,0,0,0)) {
+		    						 tempDate = item.tradeDate();
 			    				 }
 		    				 }
 		    				 else {
-		    					 if(new Date(item.tradeDate()) >= new Date(date) && tempDate >= new Date(item.tradeDate())) {
-		    						 tempDate = new Date(item.tradeDate());
+		    					 if(item.tradeDate() >= new Date(date).setHours(0,0,0,0) && tempDate >= item.tradeDate()) {
+		    						 tempDate = item.tradeDate();
 			    				 }
 		    				 }
 		    				 
@@ -1494,9 +1494,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	 ko.utils.arrayForEach(me.transItems(), function (item) {
 		    		 if(item.tickerCode() === tickerCode){
 	    				 var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
-		    			 if(item.transactionType() === "BUY"  && (new Date(item.tradeDate()) <= new Date(date) || new Date(item.tradeDate())<=tempDate)){
+		    			 if(item.transactionType() === "BUY"  && (item.tradeDate() <= new Date(date).setHours(0,0,0,0) || item.tradeDate() <= tempDate)){
 		    				 bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
-		    			 }else if(item.transactionType() === "SELL"  && (new Date(item.tradeDate()) >= new Date(date) || new Date(item.tradeDate())<=tempDate)) {
+		    			 }else if(item.transactionType() === "SELL"  && (item.tradeDate() >= new Date(date).setHours(0,0,0,0) || item.tradeDate() <= tempDate)) {
 		    				 sell = parseFloat( parseFloat(sell) + parseFloat(numberOfShares) ).toFixed(3);
 		    			 }
 		    		 }
@@ -2170,7 +2170,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		sell = shares;
 	    		ko.utils.arrayForEach(transItems, function (item) {
 					if(ticker === item.tickerCode()){
-						if( new Date(item.tradeDate()) < new Date(date) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(date).setHours(0,0,0,0) )){
+						var dateInMilliSeconds = isNaN(date) ? new Date(date).setHours(0,0,0,0) : date;
+						var tradeDate = isNaN(item.tradeDate()) ? new Date(item.tradeDate()).setHours(0,0,0,0) : item.tradeDate();
+						if( tradeDate < dateInMilliSeconds || ( tradeDate == dateInMilliSeconds )){
 							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 							if(item.transactionType() === "BUY"){
 								bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
@@ -2256,7 +2258,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.each(sellDates, function(i, selldate){
 					ko.utils.arrayForEach(me.transItems(), function (item) {
 						if(sentItem.tickerCode() === item.tickerCode()){
-							if( new Date(item.tradeDate()) < new Date(selldate) || ( new Date(item.tradeDate()).setHours(0,0,0,0) == new Date(selldate).setHours(0,0,0,0) )){
+							var sellDateInMilliSeconds = isNaN(selldate) ? new Date(selldate).setHours(0,0,0,0) : selldate;
+							var tradeDate = isNaN(item.tradeDate()) ? new Date(item.tradeDate()).setHours(0,0,0,0) : item.tradeDate();
+							if( tradeDate < sellDateInMilliSeconds || ( tradeDate == sellDateInMilliSeconds )){
 								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 								if(item.transactionType() === "BUY"){
 									bought = parseFloat( parseFloat(bought) + parseFloat(numberOfShares) ).toFixed(3);
@@ -2294,7 +2298,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.companyName = ko.observable(companyName);
     	me.tickerCode = ko.observable(tickerCode);
     	me.transactionType = ko.observable(transactionType);
-    	me.tradeDate = ko.observable(tradeDate);
+    	me.tradeDate = ko.observable(new Date(tradeDate).setHours(0,0,0,0));
     	me.numberOfShares = ko.observable(numberOfShares);
     	me.costAtPurchase = ko.observable(costAtPurchase);
     	me.currentPrice = ko.observable(currentPrice);
