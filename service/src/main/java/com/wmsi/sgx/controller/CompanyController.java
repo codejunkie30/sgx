@@ -60,6 +60,10 @@ import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.service.conversion.ModelMapper;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
+/**
+ * The CompanyController class is used for performing actions on Companies
+ *
+ */
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class CompanyController{
@@ -84,6 +88,15 @@ public class CompanyController{
 	
 	private String defaultIndexName = "sgd_premium";
 	
+	/**
+	 * Retrieves the companies matching the search criteria provided
+	 * 
+	 * @param search IdSearch
+	 * @param request HttpServletRequest
+	 * @return Map<String, Object>
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company")
 	public Map<String, Object> getAll(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
 		Boolean isPremiumUser = false;
@@ -119,6 +132,17 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves information related to Technical chart based on the criteria
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return Map<String, Object>
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techChart")
 	public Map<String, Object> getTechChart(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException, SearchServiceException {
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -129,6 +153,16 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the company information based on the search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return Map<String, Company>
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/info")
 	public Map<String, Company> getCompany(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException{
 		
@@ -141,6 +175,14 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the index name based on the currency provided in the request
+	 * header
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return String index name
+	 */
 	private String getIndexName(HttpServletRequest request){
 		String index = defaultIndexName;
 				if(request.getHeader("currency") != null){
@@ -149,6 +191,15 @@ public class CompanyController{
 		return index;		
 	}
 	
+	/**
+	 * Retrieves the company key devs based on the search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return KeyDevs key devs
+	 * 
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/keyDevs")
 	public KeyDevs getKeyDevs(@RequestBody IdSearch search) throws CompanyServiceException{
 		KeyDevs keydevs = companyService.loadKeyDevs(search.getId(), defaultIndexName);
@@ -158,6 +209,15 @@ public class CompanyController{
 		return keydevs;
 	}
 
+	/**
+	 * Retrieves the Company holders information based on the search criteria
+	 * provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return Holders
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/holders")
 	public Holders getHolders(@RequestBody IdSearch search) throws CompanyServiceException {
 		Holders holders = companyService.loadHolders(search.getId());
@@ -168,6 +228,17 @@ public class CompanyController{
 		return holders;
 	}
 	
+	/**
+	 * Retrieves the company financial information based on the search criteria
+	 * provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/financials")
 	public Financials getFinancials(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
@@ -193,6 +264,16 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the Company estimates based on the search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return Estimates
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/estimates")
 	public Estimates getEstimates(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
@@ -202,6 +283,12 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves all the companies with the names and tickers information
+	 * 
+	 * @return CompanyNameAndTickerList
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/names")
 	public CompanyNameAndTickerList getCompanyNamesAndTickers() throws SearchServiceException {		
 		List<CompanyNameAndTicker> hits = companyService.loadCompanyNamesAndTickers();
@@ -210,6 +297,16 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the Company Balance sheet charts information based on the
+	 * search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return BalanceSheets
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techCharts/balanceSheets")
 	public BalanceSheets getBalanceSheetCharts(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {	
 		ChartRequestModel req = new ChartRequestModel();
@@ -223,6 +320,16 @@ public class CompanyController{
 	}
 	
 
+	/**
+	 * Retrieves the Company Ratio charts information based on the search
+	 * criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return Ratios
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techCharts/ratios")
 	public Ratios getRatioChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
 		ChartRequestModel req = new ChartRequestModel();
@@ -236,6 +343,14 @@ public class CompanyController{
 	}
 	
 
+	/**
+	 * Retrieves the company Income charts information based on the search criteria provided
+	 *  
+	 * @param search IdSearch
+	 * @return IncomeStatements
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techCharts/income")
 	public IncomeStatements getIncomeChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
 		ChartRequestModel req = new ChartRequestModel();
@@ -249,6 +364,16 @@ public class CompanyController{
 	}
 	
 
+	/**
+	 * Retrieves the Company Growth chart information based on the search
+	 * criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return GrowthOverPriorYears
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techCharts/growth")
 	public GrowthOverPriorYears getGrowthChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
 		ChartRequestModel req = new ChartRequestModel();
@@ -262,6 +387,16 @@ public class CompanyController{
 	}
 	
 
+	/**
+	 * Retrieves the Cash flow charts information based on the search criteria
+	 * provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return CashFlows
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="company/techCharts/cashFlow")
 	public CashFlows getCashFlowChartsData(@RequestBody IdSearch search) throws CompanyServiceException, SearchServiceException  {		
 		ChartRequestModel req = new ChartRequestModel();
@@ -274,11 +409,29 @@ public class CompanyController{
 		return ret;
 	}
 
+	/**
+	 * Retrieves the Company Gtis based on the search criteria provided.
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @return GovTransparencyIndexes
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/gtis")
 	public GovTransparencyIndexes getGtis(@RequestBody IdSearch search) throws CompanyServiceException {		
 		return companyService.loadGtis(search.getId());
 	}
 
+	/**
+	 * Retrieves the Company price history based on the search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return PriceHistory
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping("company/priceHistory")
 	public PriceHistory getHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
@@ -300,6 +453,17 @@ public class CompanyController{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the stock list companies price history informaiton based on the
+	 * search criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return StockListPriceHistory
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping("company/stockListpriceHistory")
 	public StockListPriceHistory getStockListPriceHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		String currency = setCurrency(request);
@@ -322,120 +486,122 @@ public class CompanyController{
 	}
 	
 	/***
-	 * Method to add missed data for a particular date.
+	 * Adds missed data for a particular date.
+	 * 
 	 * @param price
 	 * @param highPrice
 	 * @param lowPrice
 	 * @param openPrice
 	 * @param volume
 	 */
-	/***
-	 * Method to add missed data for a particular date.
-	 * @param price
-	 * @param highPrice
-	 * @param lowPrice
-	 * @param openPrice
-	 * @param volume
-	 */
-  private void setData( List<HistoricalValue> price,
-                        List<HistoricalValue> highPrice,
-                        List<HistoricalValue> lowPrice,
-                        List<HistoricalValue> openPrice,
-                        List<HistoricalValue> volume )
-  {
-    
-    int priceListSize = price.size();
-    int highPriceListSize = highPrice.size();
-    int lowPriceListSize = lowPrice.size();
-    int openPriceListSize = openPrice.size();
-    int volumeListSize = volume.size();
-    if( priceListSize != highPriceListSize || priceListSize != lowPriceListSize
-        || priceListSize != openPriceListSize
-        || priceListSize != volumeListSize )
-    {
-      if( priceListSize != highPriceListSize )
-      {
-        for( int i = 0; i < price.size(); i++ )
-        {
-          HistoricalValue priceH = price.get( i );
-          HistoricalValue priceHP = highPrice.get( i );
-          HistoricalValue temp = null;
-          if( !priceH.getDate().equals( priceHP.getDate() ) )
-          {
-            temp = new HistoricalValue();
-            temp.setDate( priceH.getDate() );
-            temp.setTickerCode( priceH.getTickerCode() );
-            temp.setValue( 0.0 );
-            highPrice.add( i, temp );
-          }
-        }
-      }
-      if( priceListSize != lowPriceListSize )
-      {
-        for( int i = 0; i < price.size(); i++ )
-        {
-          HistoricalValue priceH = price.get( i );
-          HistoricalValue priceLP = lowPrice.get( i );
-          HistoricalValue temp = null;
-          if( !priceH.getDate().equals( priceLP.getDate() ) )
-          {
-            temp = new HistoricalValue();
-            temp.setDate( priceH.getDate() );
-            temp.setTickerCode( priceH.getTickerCode() );
-            temp.setValue( 0.0 );
-            lowPrice.add( i, temp );
-          }
-          
-        }
-      }
-      if( priceListSize != openPriceListSize )
-      {
-        for( int i = 0; i < price.size(); i++ )
-        {
-          HistoricalValue priceH = price.get( i );
-          HistoricalValue priceOP = openPrice.get( i );
-          HistoricalValue temp = null;
-          if( !priceH.getDate().equals( priceOP.getDate() ) )
-          {
-            temp = new HistoricalValue();
-            temp.setDate( priceH.getDate() );
-            temp.setTickerCode( priceH.getTickerCode() );
-            temp.setValue( 0.0 );
-            openPrice.add( i, temp );
-          }
-        }
-      }
-      if( priceListSize != volumeListSize )
-      {
-        for( int i = 0; i < price.size(); i++ )
-        {
-          HistoricalValue priceH = price.get( i );
-          HistoricalValue volumev = volume.get( i );
-          HistoricalValue temp = null;
-          if( !priceH.getDate().equals( volumev.getDate() ) )
-          {
-            temp = new HistoricalValue();
-            temp.setDate( priceH.getDate() );
-            temp.setTickerCode( priceH.getTickerCode() );
-            temp.setValue( 0.0 );
-            volume.add( i, temp );
-          }
-        }
-      }
-      
-    }
-  }
+	private void setData(List<HistoricalValue> price, List<HistoricalValue> highPrice, List<HistoricalValue> lowPrice,
+			List<HistoricalValue> openPrice, List<HistoricalValue> volume) {
+
+		int priceListSize = price.size();
+		int highPriceListSize = highPrice.size();
+		int lowPriceListSize = lowPrice.size();
+		int openPriceListSize = openPrice.size();
+		int volumeListSize = volume.size();
+		if (priceListSize != highPriceListSize || priceListSize != lowPriceListSize
+				|| priceListSize != openPriceListSize || priceListSize != volumeListSize) {
+			if (priceListSize != highPriceListSize) {
+				for (int i = 0; i < price.size(); i++) {
+					HistoricalValue priceH = price.get(i);
+					HistoricalValue priceHP = highPrice.get(i);
+					HistoricalValue temp = null;
+					if (!priceH.getDate().equals(priceHP.getDate())) {
+						temp = new HistoricalValue();
+						temp.setDate(priceH.getDate());
+						temp.setTickerCode(priceH.getTickerCode());
+						temp.setValue(0.0);
+						highPrice.add(i, temp);
+					}
+				}
+			}
+			if (priceListSize != lowPriceListSize) {
+				for (int i = 0; i < price.size(); i++) {
+					HistoricalValue priceH = price.get(i);
+					HistoricalValue priceLP = lowPrice.get(i);
+					HistoricalValue temp = null;
+					if (!priceH.getDate().equals(priceLP.getDate())) {
+						temp = new HistoricalValue();
+						temp.setDate(priceH.getDate());
+						temp.setTickerCode(priceH.getTickerCode());
+						temp.setValue(0.0);
+						lowPrice.add(i, temp);
+					}
+
+				}
+			}
+			if (priceListSize != openPriceListSize) {
+				for (int i = 0; i < price.size(); i++) {
+					HistoricalValue priceH = price.get(i);
+					HistoricalValue priceOP = openPrice.get(i);
+					HistoricalValue temp = null;
+					if (!priceH.getDate().equals(priceOP.getDate())) {
+						temp = new HistoricalValue();
+						temp.setDate(priceH.getDate());
+						temp.setTickerCode(priceH.getTickerCode());
+						temp.setValue(0.0);
+						openPrice.add(i, temp);
+					}
+				}
+			}
+			if (priceListSize != volumeListSize) {
+				for (int i = 0; i < price.size(); i++) {
+					HistoricalValue priceH = price.get(i);
+					HistoricalValue volumev = volume.get(i);
+					HistoricalValue temp = null;
+					if (!priceH.getDate().equals(volumev.getDate())) {
+						temp = new HistoricalValue();
+						temp.setDate(priceH.getDate());
+						temp.setTickerCode(priceH.getTickerCode());
+						temp.setValue(0.0);
+						volume.add(i, temp);
+					}
+				}
+			}
+
+		}
+	}
 	
+  /**
+   * Retrieves the Company dividend history based on the search criteria provided
+   *  
+   * @param search IdSearch
+   * @param request HttpServletRequest
+   * @return DividendHistory
+   * @throws CompanyServiceException
+   */
 	@RequestMapping("company/dividendHistory")
 	public DividendHistory getDividendHistory(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {
 		return companyService.loadDividendHistory(search.getId(),setCurrency(request));
 	}
 
+	/**
+	 * Retrieves the Company alpha factor informaiton based on the search
+	 * criteria provided
+	 * 
+	 * @param search
+	 *            IdSearch
+	 * @param request
+	 *            HttpServletRequest
+	 * @return
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/alphaFactor")
 	public AlphaFactor getAlphas(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException {		
 		return companyService.loadAlphaFactors(search.getId(),setCurrency(request));
 	}
 
+	/**
+	 * Retrieves the Companies which can be comparable against a company based on the given search criteria.
+	 * 
+	 * @param search IdSearch
+	 * @param request HttpServletRequest
+	 * @return SearchResults
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="company/relatedCompanies")
 	public SearchResults getRelatedCompanies(@RequestBody IdSearch search, HttpServletRequest request) throws CompanyServiceException{		
 		User u = null;
@@ -467,6 +633,12 @@ public class CompanyController{
 		return searchResults;		
 	}
 	
+	/**
+	 * Returns the currency code based on the currency specified in the request
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public String setCurrency(HttpServletRequest request){
 		if(request.getHeader("currency") != null)
 			return request.getHeader("currency");
