@@ -14,6 +14,11 @@ import com.wmsi.sgx.model.search.SearchResults;
 import com.wmsi.sgx.service.AlphaFactorService;
 import com.wmsi.sgx.service.AlphaFactorServiceException;
 
+/**
+ * This AlphaFactorsController class is used for performing actions on Alpha
+ * Factors
+ * 
+ */
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class AlphaFactorsController{
@@ -21,6 +26,13 @@ public class AlphaFactorsController{
 	@Autowired
 	private AlphaFactorService alphaFactorService;
 	
+	/**
+	 * Returns list of companies matching the Alpha factors provided.
+	 * 
+	 * @param search AlphaFactorSearchRequest
+	 * @return SearchResults
+	 * @throws AlphaFactorServiceException
+	 */
 	@RequestMapping("search/alphaFactors")
 	public SearchResults searchAlphaFactors(@RequestBody AlphaFactorSearchRequest search) throws AlphaFactorServiceException{
 
