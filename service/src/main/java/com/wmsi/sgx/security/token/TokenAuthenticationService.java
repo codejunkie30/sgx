@@ -122,8 +122,7 @@ public class TokenAuthenticationService {
 		String token = request.getHeader(AUTH_HEADER_NAME);
     if( isNullOrEmpty( token ) )
       throw new TransactionSessionTokenVerificationException( "Transaction token not found." );
-		if (!isNullOrEmpty(token) && validateTransactionAuthenticationToken(token)
-				&& sessionTokenVerificationSvc.isTokenExpiring(user, token)) {
+		if (!isNullOrEmpty(token) && validateTransactionAuthenticationToken(token)) {
 			// disable the existing token
 			// create new token
 			boolean oldDisabled = sessionTokenVerificationSvc.disableTransactionSessionToken(user);
