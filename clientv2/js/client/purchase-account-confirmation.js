@@ -3,6 +3,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 	var PURCHASE = {
 		messages: JSON.parse(MESSAGES),
 		initPage: function() {
+			
+			PAGE.timedLogout();
+			setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
+			PAGE.TIMEOUT_SECONDS=100000000;
+			
 			//To not logout the user
 			PAGE.validNavigation(true);
 			var token = this.getURLParam('ec');
