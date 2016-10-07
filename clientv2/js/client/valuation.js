@@ -2170,8 +2170,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    		sell = shares;
 	    		ko.utils.arrayForEach(transItems, function (item) {
 					if(ticker === item.tickerCode()){
-						var dateInMilliSeconds = isNaN(date) ? new Date(date).setHours(0,0,0,0) : date;
-						var tradeDate = isNaN(item.tradeDate()) ? new Date(item.tradeDate()).setHours(0,0,0,0) : item.tradeDate();
+						var dateInMilliSeconds = isNaN(date) ? VALUATION.convertDateToUserTimeZone(date) : date;
+						var tradeDate = isNaN(item.tradeDate()) ? VALUATION.convertDateToUserTimeZone(item.tradeDate()) : item.tradeDate();
 						if( tradeDate < dateInMilliSeconds || ( tradeDate == dateInMilliSeconds )){
 							var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 							if(item.transactionType() === "BUY"){
@@ -2258,8 +2258,8 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				$.each(sellDates, function(i, selldate){
 					ko.utils.arrayForEach(me.transItems(), function (item) {
 						if(sentItem.tickerCode() === item.tickerCode()){
-							var sellDateInMilliSeconds = isNaN(selldate) ? new Date(selldate).setHours(0,0,0,0) : selldate;
-							var tradeDate = isNaN(item.tradeDate()) ? new Date(item.tradeDate()).setHours(0,0,0,0) : item.tradeDate();
+							var sellDateInMilliSeconds = isNaN(selldate) ? VALUATION.convertDateToUserTimeZone(selldate) : selldate;
+							var tradeDate = isNaN(item.tradeDate()) ? VALUATION.convertDateToUserTimeZone(item.tradeDate()) : item.tradeDate();
 							if( tradeDate < sellDateInMilliSeconds || ( tradeDate == sellDateInMilliSeconds )){
 								var numberOfShares = item.numberOfShares().toString().replace(/,/gi,"");
 								if(item.transactionType() === "BUY"){
@@ -2283,6 +2283,12 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 	    	}
 	    },
 	    
+	    convertDateToUserTimeZone: function(dateStr){
+	        var dt = new Date(dateStr); 
+	        var time = dt.getTime() - dt.getTimezoneOffset() * 60000;
+	        return time;
+	    },
+	    
 	    daysInMonth: function(month, year) {
 	    	var m = [31,28,31,30,31,30,31,31,30,31,30,31];
 	    	if (month != 2) return m[month - 1];
@@ -2298,7 +2304,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
     	me.companyName = ko.observable(companyName);
     	me.tickerCode = ko.observable(tickerCode);
     	me.transactionType = ko.observable(transactionType);
-    	me.tradeDate = ko.observable(new Date(tradeDate).setHours(0,0,0,0));
+    	me.tradeDate = ko.observable(VALUATION.convertDateToUserTimeZone(tradeDate));
     	me.numberOfShares = ko.observable(numberOfShares);
     	me.costAtPurchase = ko.observable(costAtPurchase);
     	me.currentPrice = ko.observable(currentPrice);
