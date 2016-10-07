@@ -941,7 +941,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		
 		    callout : function () {
-			var set_delay = 660000;
+			var set_delay = 180000;
 			//var set_delay = 200000; //dev testing the code;call for every 3mins
 			var endpoint = PAGE.fqdn + "/sgx/reqNewTxToken";
 			var params = {};
