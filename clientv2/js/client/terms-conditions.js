@@ -5,9 +5,11 @@ define([ "wmsi/utils", "knockout", "text!client/data/messages.json" ], function(
 	messages: JSON.parse(MESSAGES),
 			
 		initPage: function() {
-			PAGE.timedLogout();
-			setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
-			PAGE.TIMEOUT_SECONDS=100000000;//No need to call again!!
+			if(UTILS.retrieveAuthToken()!=false){
+				PAGE.timedLogout();
+				setTimeout(function(){ PAGE.callout(); }, PAGE.TIMEOUT_SECONDS);
+				PAGE.TIMEOUT_SECONDS=100000000;//No need to call again!!
+			}
 			
     		// resize
     		this.resizeIframeSimple();
