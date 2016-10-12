@@ -11,6 +11,11 @@ import com.wmsi.sgx.service.search.elasticsearch.Query;
 import com.wmsi.sgx.service.search.elasticsearch.QueryExecutor;
 import com.wmsi.sgx.service.search.elasticsearch.QueryResponse;
 
+/**
+ * 
+ * This class is used to generating Query Response.
+ *
+ */
 public class ESQueryExecutor implements QueryExecutor{
 	
 	private static final Logger log = LoggerFactory.getLogger(ESQueryExecutor.class);
@@ -21,6 +26,14 @@ public class ESQueryExecutor implements QueryExecutor{
 	private String indexUrl;	
 	public void setIndexUrl(String u){indexUrl = u;}
 
+	/**
+	 * Executes the query and generate the QueryRespone
+	 * 
+	 * @param q
+	 *            Query
+	 * @return QueryResponse
+	 * @throws ElasticSearchException
+	 */
 	@Override
 	public QueryResponse executeQuery(Query q) throws ElasticSearchException{
 		
@@ -45,6 +58,16 @@ public class ESQueryExecutor implements QueryExecutor{
 		}
 	}
 
+	/**
+	 * Executes the query and returns the template.
+	 * 
+	 * @param q
+	 *            Query
+	 * @param clz
+	 *            Class<T>
+	 * @return <T>
+	 * @throws ElasticSearchException
+	 */
 	@Override
 	public <T> T executeGet(Query q, Class<T> clz) throws ElasticSearchException{
 		

@@ -33,6 +33,12 @@ import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.account.UserService;
 
+/**
+ * This class create the user and save the user details in database. Verify the
+ * account is locked or not and change/reset the passwords.
+ *
+ */
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -54,6 +60,16 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserLoginRepository userLoginRepository;
 	
+	/**
+	 * Creates the user
+	 * 
+	 * @param dto
+	 *            UserModel
+	 * @return User If user account exists
+	 * @throws UserExistsException
+	 *             if user account doesn't exists
+	 */
+
 	@Override
 	@Transactional
 	public User createUser(UserModel dto) throws UserExistsException{
@@ -67,11 +83,23 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 
+	/**
+	 * Returns the Autorities based on user.
+	 * 
+	 * @param user
+	 *            User
+	 */
 	@Override
 	public Set<Authority> getAuthorities(User user){
 		return user.getAuthorities();
 	}
 	
+	/**
+	 * Returns the User by user name.
+	 * 
+	 * @param username
+	 *            String
+	 */
 	@Override
 	public User getUserByUsername(String username){		
 		return userReposistory.findByUsername(username);
@@ -82,6 +110,16 @@ public class UserServiceImpl implements UserService{
 	public User saveUser(User user){		
 		return userReposistory.save(user);
 	}
+	
+	/**
+	 * Saves the user , password and ContactOptIn.
+	 * 
+	 * @param user
+	 *            User, dto UserModel
+	 * 
+	 * @return User
+	 * 
+	 */
 
 	private User saveUser(User user, UserModel dto){
 
@@ -91,6 +129,16 @@ public class UserServiceImpl implements UserService{
 		
 		return saveUser(user);
 	}
+	
+	/**
+	 * Saves the change password.
+	 * 
+	 * @param user
+	 *            User, dto ChangePasswordModel
+	 * 
+	 * @return User
+	 * 
+	 */
 	
 	private User saveChangePasswordUser(User user, ChangePasswordModel dto){
 
@@ -102,6 +150,17 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private PasswordResetRepository passwordResetRepository;
+	
+	/**
+	 * Creates the password reset token.
+	 * 
+	 * @param username
+	 *            String
+	 * 
+	 * @return String
+	 * 
+	 * @throws UserNotFoundException
+	 */
 	
 	@Override
 	@Transactional
@@ -122,6 +181,16 @@ public class UserServiceImpl implements UserService{
 	}
 	@Value ("${password.reset.timer}")
 	private int PASSWORD_TTL_SECS;
+	
+	/**
+	 * Changes the password.
+	 * 
+	 * @param user
+	 *            ChangePasswordModel, token String
+	 * @return Boolean
+	 * 
+	 * @throws InvalidTokenException
+	 */
 	
 	@Override
 	@Transactional
@@ -153,6 +222,16 @@ public class UserServiceImpl implements UserService{
 		
 		return true;
 	}
+	
+	/**
+	 * Changes the password.
+	 * 
+	 * @param dto
+	 *            UserModel
+	 * @return Boolean
+	 * 
+	 * @throws UserNotFoundException
+	 */
 
 	@Override
 	@Transactional
@@ -171,6 +250,13 @@ public class UserServiceImpl implements UserService{
 		return true;
 	}
 
+	/**
+	 * Saves the login info to the repository.
+	 * 
+	 * @param login
+	 *            UserLogin
+	 * @throws UserLogin
+	 */
 	@Override
 	@Transactional
 	public UserLogin recordLogin(UserLogin login){
@@ -179,6 +265,14 @@ public class UserServiceImpl implements UserService{
 	
 	private static final int LOCKOUT_TIME = 30 * 60; // Thirty minutes
 	private static final int LOCKOUT_LIMIT = 3; // Three Attempts
+	
+	/**
+	 * Verifies the account is locked or not.
+	 * 
+	 * @param username
+	 *            String
+	 * @return Boolean
+	 */
 	
 	@Override
 	public Boolean isAccountLocked(String username){

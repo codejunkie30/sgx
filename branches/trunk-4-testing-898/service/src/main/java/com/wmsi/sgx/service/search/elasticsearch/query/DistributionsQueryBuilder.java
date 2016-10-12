@@ -20,6 +20,11 @@ import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.service.search.StatAggregation;
 import com.wmsi.sgx.util.Util;
 
+/**
+ * 
+ * This class is used to build queries related to distributions.
+ *
+ */
 public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 	private List<String> fields;
@@ -40,6 +45,11 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 		}
 	}
 
+	/**
+	 * Builds query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build() {
 		List<String> exchangesWhiteList = new ArrayList<String>();
@@ -79,6 +89,15 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 		return query.toString();
 	}
 
+	/**
+	 * Builds Aggregation Range builder.
+	 * 
+	 * @param field
+	 *            String
+	 * @param stat
+	 *            StatAggregation
+	 * @return AggregationBuilder<?>
+	 */
 	private AggregationBuilder<?> buildRangeAggregation(String field, StatAggregation stat) {
 		
 		double interval = calculateInterval(stat);
@@ -110,6 +129,15 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 
 	}
 
+	/**
+	 * Builds FilterBuilder for Aggregations.
+	 * 
+	 * @param agg
+	 *            AggregationBuilder<?>
+	 * @param field
+	 *            String
+	 * @return AggregationBuilder<?>
+	 */
 	private AggregationBuilder<?> getAggregationFilter(AggregationBuilder<?> agg, String field) {
 
 		AggregationBuilder<?> builder = agg;
@@ -123,6 +151,11 @@ public class DistributionsQueryBuilder extends AbstractQueryBuilder{
 		return builder;
 	}
 
+	/**
+	 * Calculates the interval
+	 * @param stat StatAggregation
+	 * @return Double
+	 */
 	private Double calculateInterval(StatAggregation stat) {
 		double total = stat.getMax() - stat.getMin();
 		double sqrt = Math.sqrt(stat.getCount());

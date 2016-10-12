@@ -4,6 +4,11 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
+/**
+ * 
+ * This class is used to build History Value Query Builder.
+ *
+ */
 public class HistoricalValueQueryBuilder extends AbstractQueryBuilder{
 	
 	private static final int MAX_RESULTS = 10000;
@@ -14,6 +19,11 @@ public class HistoricalValueQueryBuilder extends AbstractQueryBuilder{
 		this.id = id;
 	}
 	
+	/**
+	 * Builds History Value Query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		return	new SearchSourceBuilder()

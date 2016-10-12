@@ -10,7 +10,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.wmsi.sgx.service.search.elasticsearch.AbstractQuery;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchException;
 
-
+/**
+ * 
+ * This class is used for getting the end point url.
+ *
+ */
 public class SourceQuery extends AbstractQuery{
 	
 	private Logger log = LoggerFactory.getLogger(SourceQuery.class);
@@ -23,6 +27,12 @@ public class SourceQuery extends AbstractQuery{
 	@Override
 	public EndPoint getEndPoint(){return EndPoint.SOURCE;}
 	
+	/**
+	 * Retrieves the end point uri for elastic search.
+	 * 
+	 * @return URI
+	 * @throws ElasticSearchException
+	 */
 	@Override
 	public URI getURI() throws ElasticSearchException{
 		log.debug("StringUtils.isEmpty(getIndex()): {}  , StringUtils.isEmpty(getType()): {},StringUtils.isEmpty(id):{} ", 
