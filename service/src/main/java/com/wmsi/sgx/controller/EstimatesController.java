@@ -11,6 +11,10 @@ import com.wmsi.sgx.model.estimates.EstimatesRequest;
 import com.wmsi.sgx.service.EstimatesService;
 import com.wmsi.sgx.service.ServiceException;
 
+/**
+ * This controller is used to fetch estimates based on Ticker code
+ *
+ */
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class EstimatesController {
@@ -18,6 +22,13 @@ public class EstimatesController {
 	@Autowired
 	private EstimatesService estimateService;
 	
+	/**
+	 * Fetches estimates based on the ticker code.
+	 * 
+	 * @param search
+	 * @return Estimates
+	 * @throws ServiceException
+	 */
 	@RequestMapping("search/estimates")
 	public Estimates searchEstimates(@RequestBody EstimatesRequest search) throws ServiceException{
 
