@@ -34,7 +34,11 @@ import com.wmsi.sgx.service.account.QuanthouseService;
 import com.wmsi.sgx.service.account.QuanthouseServiceException;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
-
+/**
+ * 
+ * This controller is used for getting the pricing History of various companies.
+ *
+ */
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class PriceController {
@@ -51,6 +55,17 @@ public class PriceController {
 	
 	private String market = "XSES";	
 	
+	/**
+	 * Fetches the price info based on the company ID and also its type.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param query
+	 *            IdSearch
+	 * @return
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(HttpServletRequest request, @RequestBody IdSearch query) throws CompanyServiceException, SearchServiceException {
 		log.info("price requested for id: --{}--",query.getId() );
@@ -86,6 +101,16 @@ public class PriceController {
 		return ret;
 	}
 	
+	/**
+	 * Fetches price list of the companies that user sents as request.
+	 * 
+	 * @param companies
+	 *            WatchlistAddCompany
+	 * @return Map Map<String, List<CompanyPrice>>
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 */
 	@RequestMapping(value="/price/companyPrices")
 	public Map<String, List<CompanyPrice>> getCompanyPrices(@RequestBody WatchlistAddCompany companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Map<String, List<CompanyPrice>> ret = new HashMap<String, List<CompanyPrice>>();		
@@ -97,6 +122,12 @@ public class PriceController {
 		
 	}
 
+	/**
+	 * Fetches the price on Intra day.
+	 * 
+	 * @param query
+	 * @return list List<Price>
+	 */
 	@RequestMapping(value="/price/intraday")
 	public List<Price> getIntradayPrices(@RequestBody IdSearch query) {
 		List<Price> prices = null;
@@ -112,6 +143,15 @@ public class PriceController {
 		return prices;
 	}
 	
+	/**
+	 * Fetches the pricing history of the Company.
+	 * 
+	 * @param request
+	 * @param priceCall
+	 * @return Map Map<String, List<Price>>
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 */
 	@RequestMapping(value="/price/pricingHistory")
 	public Map<String, List<Price>> getPricingHistory(HttpServletRequest request, @RequestBody PriceCall priceCall) throws QuanthouseServiceException, CompanyServiceException{
 		log.info("Real time price requested for id: --{}--",priceCall.getId() );
@@ -162,6 +202,12 @@ public class PriceController {
 		
 	}
 	
+	/**
+	 * Finds the User Info from the X-AUTH-TOKEN
+	 * 
+	 * @param request
+	 * @return User
+	 */
 	public User findUserFromToken(HttpServletRequest request){
 		String token = request.getHeader("X-AUTH-TOKEN");
 		
