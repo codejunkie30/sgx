@@ -14,6 +14,12 @@ import com.wmsi.sgx.service.account.TransactionSessionTokenVerificationException
 import com.wmsi.sgx.service.account.TrasactionSessionTokenVerificationService;
 import com.wmsi.sgx.service.account.VerifiedTransactionSessionTokenPremiumException;
 
+/**
+ * This class create/validate transaction session token and verifies the token
+ * is active or not.
+ *
+ */
+
 @Service
 public class TrasactionSessionTokenVerificationServiceImpl implements TrasactionSessionTokenVerificationService {
 
@@ -22,6 +28,16 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
+	
+	/**
+	 * Creates the transaction session token.
+	 * 
+	 * @param user
+	 *            User, transSessionToken String
+	 * 
+	 * @return String
+	 * 
+	 */
 
 	public String createTransactionSessionToken(User user, String transSessionToken) {
 		/**
@@ -31,6 +47,17 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return createTransactionSessionToken(user, transSessionToken, new Timestamp(System.currentTimeMillis()),
 				new Timestamp(user.getExpires())).getToken();
 	}
+	
+	/**
+	 * Creates the transaction session token.
+	 * 
+	 * @param user
+	 *            User, transSessionToken String, creationTime Timestamp,
+	 *            expiryTime Timestamp
+	 * 
+	 * @return String
+	 * 
+	 */
 
 	private TransactionSessionVerification createTransactionSessionToken(User user, String transSessionToken,
 			Timestamp creationTime, Timestamp expiryTime) {
@@ -43,6 +70,18 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return transactionSessionTokenReposistory.save(transSessVerification);
 
 	}
+	
+	/**
+	 * Validates the transaction session token.
+	 * 
+	 * @param user
+	 *            User, transSessionToken String
+	 * 
+	 * @return String
+	 * 
+	 * @throws TransactionSessionTokenVerificationException,
+	 *             VerifiedTransactionSessionTokenPremiumException
+	 */
 
 	public boolean validateTransactionSessionToken(User user, String transSessionToken)
 			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
@@ -67,6 +106,16 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 			return true;
 		}
 	}
+	
+	/**
+	 * Verifies the token is expiring or not.
+	 * 
+	 * @param user
+	 *            User, transSessionToken String
+	 * 
+	 * @return boolean
+	 * 
+	 */
 
 	public boolean isTokenExpiring(User user, String transSessionToken) {
 		TransactionSessionVerification transSessVerification = transactionSessionTokenReposistory
@@ -85,6 +134,16 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		}
 		return false;
 	}
+	
+	/**
+	 * Decrements current time by three minutes.
+	 * 
+	 * @param transSessVerification
+	 *            TransactionSessionVerification
+	 * 
+	 * @return Timestamp
+	 * 
+	 */
 
 	private Timestamp decrementCurrentTimeBy3Minutes(TransactionSessionVerification transSessVerification) {
 		Timestamp expiryTimeStamp = new Timestamp(transSessVerification.getExpiryTime().getTime());
@@ -95,6 +154,15 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return expiryTimeStamp;
 	}
 
+	/**
+	 * Decrements current time by two minutes.
+	 * 
+	 * @param transSessVerification
+	 *            TransactionSessionVerification
+	 * 
+	 * @return Timestamp
+	 * 
+	 */
 	private Timestamp incrementCurrentTimeBy2Minutes() {
 		long originalTime = System.currentTimeMillis();
 		Timestamp expiryTimeStamp = new Timestamp(originalTime);
@@ -105,6 +173,12 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return expiryTimeStamp;
 	}
 
+	/**
+	 * Returns the token expiring time.
+	 * 
+	 * @return Timestamp
+	 * 
+	 */
 	public Timestamp getTokenExpirationTime() {
 		Timestamp expiryTimeStamp = new Timestamp(System.currentTimeMillis());
 		Calendar cal = Calendar.getInstance();
@@ -115,10 +189,24 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		return expiryTimeStamp;
 	}
 
+	/**
+	 * Deletes the transaction tokens based on user.
+	 * 
+	 * @param user
+	 *            User
+	 * @return int
+	 */
 	public int deleteTransactionSessionTokens(User user) {
 		return transactionSessionTokenReposistory.deleteUserTransactionSessionTokens(user.getId());
 	}
 
+	/**
+	 * Disables the transaction entries of the user.
+	 * 
+	 * @param user
+	 *            User
+	 * @return boolean
+	 */
 	@Override
 	public boolean disableTransactionSessionToken(User user) {
 		// Verify if its valid token
@@ -130,7 +218,12 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 		transSessverification.setTxSessionTokenStatus(false);
 		return transactionSessionTokenReposistory.save(transSessverification) != null;
 	}
-
+	
+	/**
+	 * Checks for the null object.
+	 * @param myString String
+	 * @return boolean
+	 */
 	public static boolean isNullOrEmpty(String myString) {
 		return myString == null || "".equals(myString);
 	}

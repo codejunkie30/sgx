@@ -1,5 +1,10 @@
 package com.wmsi.sgx.service.account.impl;
 
+/**
+ * 
+ * This interface defines the constants.
+ *
+ */
 public class IEmailAuditMessages {
 
 	public static final String EMAIL_SUBJECT = "SGX StockFacts Plus Alert";

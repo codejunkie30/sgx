@@ -26,6 +26,12 @@ import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.service.account.AcccountExiprationService;
 import com.wmsi.sgx.util.DateUtil;
 
+/**
+ * This class verifies the account expiration and if active user set the
+ * currency is SGD and active. Send the trail users expired email with subject
+ * and email body.
+ *
+ */
 @Service
 public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	
@@ -64,6 +70,13 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	//there is some issue its not picking up value form there 
 	//@Scheduled(cron="0 20 14 ? * *")
 	
+	/**
+	 * Checks account expiration and account should be active and set the
+	 * currency with SGD.
+	 * 
+	 * @throws MessagingException
+	 */
+	
 	public void checkAccountExpiration() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -101,6 +114,12 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		
 	}
 	
+	/**
+	 * Checks account expiration for trial users.
+	 * 
+	 * @throws MessagingException
+	 */
+	
 	//@Scheduled(cron="0 20 15 ? * *")
 	public void sendAccountExpirationHalfWayEmail() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
@@ -121,9 +140,21 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 		}
 	}
 	
+	/**
+	 * Sends the trial user expired emails.
+	 * 
+	 * @throws MessagingException
+	 */
+	
 	private void sendHalfWayTrialEmail(String email) throws MessagingException{
 		emailService.send(email, halfWaySubject, null, halfWayTrialEmailBody);
 	}
+	
+	/**
+	 * Sends the trial user expired emails.
+	 * 
+	 * @throws MessagingException
+	 */
 	
 	private void sendTrialExpiredEmail(String email) throws MessagingException{
 		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);

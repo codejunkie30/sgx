@@ -9,6 +9,11 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import com.wmsi.sgx.model.AlphaFactor;
 
+/**
+ * 
+ * This class is used to build the query related to Alpha Factors.
+ *
+ */
 public class AlphaFactorQueryBuilder extends AbstractQueryBuilder{
 	
 	private static final int MAX_RESULTS = 2000;
@@ -18,6 +23,11 @@ public class AlphaFactorQueryBuilder extends AbstractQueryBuilder{
 		this.alphas = alphas;
 	}
 	
+	/**
+	 * Return the query related to alpha factors.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		
@@ -29,6 +39,13 @@ public class AlphaFactorQueryBuilder extends AbstractQueryBuilder{
 		
 	}
 	
+	/**
+	 * Return the GV Keys based on the list of alpha factors.
+	 * 
+	 * @param alphas
+	 *            List<AlphaFactor>
+	 * @return List<String>
+	 */
 	private List<String> getGVKeys(List<AlphaFactor> alphas){
 
 		List<String> gvKeys = new ArrayList<String>();

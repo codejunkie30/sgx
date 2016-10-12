@@ -40,6 +40,12 @@ import com.wmsi.sgx.util.DateUtil;
 import com.wmsi.sgx.util.DefaultHashMap;
 import com.wmsi.sgx.util.MathUtil;
 
+/**
+ * This class retrives the watchlist related email and send the notifications as
+ * well. Alert the companies and keydev info.
+ *
+ */
+
 @Service
 public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 
@@ -67,6 +73,17 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceImpl.class);
 	
+	/**
+	 * Retrieves the emails for the user
+	 * 
+	 * @param usr
+	 *            User
+	 * 
+	 * @throws QuanthouseServiceException,
+	 *             CompanyServiceException, SearchServiceException,
+	 *             MessagingException
+	 */
+	
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();			
@@ -88,6 +105,20 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 	}
 	
+	/**
+	 * Pasrses the watchlist items and verifies the
+	 * priceOptions,volumeOptions,weekOptions,targetPriceOptions and
+	 * consensusRecOptions
+	 * 
+	 * @param watchlist
+	 *            WatchlistModel, acct Account
+	 * 
+	 * @return list
+	 * 
+	 * @throws QuanthouseServiceException,
+	 *             CompanyServiceException, SearchServiceException
+	 */
+
 	@Override
 	public MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		boolean noUpdatesFlag = false;
@@ -302,6 +333,14 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 		return pair;
 		}
+	
+	/**
+     * This method will alert the companies and description 
+     * 
+     * @param alertList
+     *            List, keyDevOptions Map
+     *            
+     */
 
 	private void addKeyDevOptions(List<AlertOption> alertList, Map<String, Map<String, String>> keyDevOptions) {
 		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
@@ -314,7 +353,15 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		}
 	}	
 	
-
+	/**
+	 * Retrieves the estimates with in period
+	 * 
+	 * @param estimate
+	 *            List
+	 * 
+	 * @return Estimate
+	 */
+	
 	public Estimate getEstimate(List<Estimate> estimate){
 		Estimate ret = null;
 		if(estimate != null)
@@ -325,6 +372,17 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		
 		return ret;
 	}
+	
+	/**
+	 * Retrieves the key devs
+	 * 
+	 * @param company
+	 *            String, date Date
+	 * 
+	 * @return List
+	 * 
+	 * @throws CompanyServiceException
+	 */
 	
 	public List<KeyDev> getKeyDevs(String company, Date date) throws CompanyServiceException{
 		List<KeyDev> ret = new ArrayList<KeyDev>();
@@ -341,6 +399,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		return companyService.getCompanyByIdAndIndex(company,"sgd_premium").getCompanyName();
 	}
 	
+	/**
+	 * Retrieves the start of the day.
+	 * 
+	 * @param date
+	 *            Date
+	 * 
+	 * @return Date
+	 * 
+	 */
+	
 	public Date getStartOfDay(Date date) {
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTime(date);
@@ -350,6 +418,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	    calendar.set(Calendar.MILLISECOND, 0);
 	    return calendar.getTime();
 	}
+	
+	/**
+	 * Retrives the last months volume.
+	 * 
+	 * @param lastYear
+	 *            list, startDate String
+	 * 
+	 * @return Double
+	 * 
+	 */
 	
 	private Double getLastMonthsVolume(List<HistoricalValue> lastYear, String startDate) {
 		String oneMonthsAgo = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -30);
@@ -367,12 +445,32 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		return avg(vol, lastYear.size(), 4);
 	}
 	
+	/**
+	 * Averages value of numbers.
+	 * 
+	 * @param sum
+	 *            Double, total Integer, scale int
+	 * 
+	 * @return Double
+	 * 
+	 */
+	
 	private Double avg(Double sum, Integer total, int scale) {
 		BigDecimal s = new BigDecimal(sum);
 		BigDecimal t = new BigDecimal(total);
 		BigDecimal avg = s.divide(t, RoundingMode.HALF_UP);
 		return avg.setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}
+	
+	/**
+	 * Verifies the String as number.
+	 * 
+	 * @param value
+	 *            String
+	 * 
+	 * @return String
+	 * 
+	 */
 
 	private String verifyStringAsNumber(String value) {
 		try {

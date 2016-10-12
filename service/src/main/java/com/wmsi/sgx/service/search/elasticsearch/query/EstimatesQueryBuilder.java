@@ -5,6 +5,11 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 
+/**
+ * 
+ * This class is used to build QUery Builder for estimates.
+ *
+ */
 public class EstimatesQueryBuilder extends AbstractQueryBuilder{
 	
 	private String id;
@@ -13,6 +18,11 @@ public class EstimatesQueryBuilder extends AbstractQueryBuilder{
 		this.id = id;
 	}
 	
+	/**
+	 * Builds the estimates query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build() {
 		

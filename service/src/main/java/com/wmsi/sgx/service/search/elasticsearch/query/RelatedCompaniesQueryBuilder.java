@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.Company;
 
+/**
+ * 
+ * This class is used to build a builder for related companies.
+ *
+ */
 public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 	
 	private static final int MAX_COMPANIES = 10;
@@ -31,6 +36,11 @@ public class RelatedCompaniesQueryBuilder extends AbstractQueryBuilder{
 		this.accType = accType;
 	}
 	
+	/**
+	 * Builds query for related companies.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		Double mk = company.getMarketCap();

@@ -1,5 +1,8 @@
 package com.wmsi.sgx.service.search.elasticsearch;
 
+/**
+ * This abstract class is used for querying based on index, type and company id
+ */
 import java.io.IOException;
 import java.net.URI;
 
@@ -45,6 +48,11 @@ public abstract class AbstractQuery implements Query{
 	
 	public abstract EndPoint getEndPoint();
 	
+	/**
+	 * Retrieves the end point URI.
+	 * 
+	 * @return URI
+	 */
 	@Override
 	public URI getURI() throws ElasticSearchException{
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
@@ -64,6 +72,12 @@ public abstract class AbstractQuery implements Query{
 		return builder.build().toUri();		
 	}
 	
+	/**
+	 * Returns JSON object.
+	 * 
+	 * @return JsonNode
+	 * @throws ElasticSearchException
+	 */
 	@Override
 	public JsonNode toJson() throws ElasticSearchException{
 		JsonNode node = null;

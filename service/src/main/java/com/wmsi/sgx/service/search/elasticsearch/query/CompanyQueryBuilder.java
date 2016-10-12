@@ -24,6 +24,11 @@ import org.springframework.beans.factory.annotation.Value;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.model.search.Criteria;
 
+/**
+ * 
+ * This class is used to build queries to fetch Company Info.
+ *
+ */
 public class CompanyQueryBuilder extends AbstractQueryBuilder{
 
 	private static final Logger log = LoggerFactory.getLogger(CompanyQueryBuilder.class);
@@ -40,6 +45,11 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		this.acctType = acctType;
 	}
 	
+	/**
+	 * Builds query to retrieve Company Info based different criteria s
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		List<String> exchanges = new ArrayList<String>();
@@ -119,6 +129,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 				.toString();
 	}
 	
+	/**
+	 * Builds the Query Builder based on the criteria.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return QueryBuilder
+	 */
 	private QueryBuilder buildCompanyOrTickerQuery(Criteria c){
 
 		String text = c.getValue();
@@ -171,7 +188,11 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			.boost(2));
 	}
 	
-	
+	/**
+	 * Adds the exchanges if they are available.
+	 * 
+	 * @return List<String>
+	 */
 	private List<String> checkExchangeCriteria(){
 		
 		List<String> exchanges = new ArrayList<String>();
@@ -226,7 +247,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 	}
 	
 	/**
-	 * Add a boolean query  
+	 * Adds boolean query to the already build Query.
+	 * 
+	 * @param builder
+	 *            QueryBuilder
+	 * @param query
+	 *            QueryBuilder
+	 * @return QueryBuilder
 	 */
 	private QueryBuilder addQuery(QueryBuilder builder, QueryBuilder query){
 		BoolQueryBuilder queryBuilder = (BoolQueryBuilder) builder;
@@ -237,8 +264,15 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		return queryBuilder.must(query);		
 	}
 
+	
 	/**
-	 * Add a boolean filter 
+	 * Adds boolean filter.
+	 * 
+	 * @param builder
+	 *            FilterBuilder
+	 * @param filter
+	 *            FilterBuilder
+	 * @return FilterBuilder
 	 */
 	private FilterBuilder addFilter(FilterBuilder builder, FilterBuilder filter){
 		BoolFilterBuilder filterBuilder = (BoolFilterBuilder) builder;
@@ -249,8 +283,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		return filterBuilder.must(filter);		
 	}
 	
+	
 	/**
-	 * Create a filter builder for ranges
+	 * Builds range filter.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return FilterBuilder
 	 */
 	private FilterBuilder buildRangeFilter(Criteria c){
 		RangeFilterBuilder rangeBuilder = FilterBuilders.rangeFilter(c.getField());
@@ -264,15 +303,26 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		return rangeBuilder;
 	}
 
+	
 	/**
-	 * Default filter builder for simple term queries
+	 * Builds default filter for simple term queries.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return FilterBuilder
 	 */
 	private FilterBuilder buildTermFilter(Criteria c){
 		return FilterBuilders.termFilter(c.getField(), c.getValue());
 	}
 
+	
 	/**
-	 * Name query builder using tokenizers and boosts for full and partial name matching. 
+	 * Builds query using tokenizers and boosts for full and partial name
+	 * matching.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return QueryBuilder
 	 */
 	private QueryBuilder buildNameQuery(Criteria c){
 
@@ -317,8 +367,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			);			
 	}
 	
+	
 	/**
-	 * Ticker query builder for full and partial matching
+	 * Builds query related to ticker for full and partial matching.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return QueryBuilder
 	 */
 	private QueryBuilder buildTickerCodeQuery(Criteria c){
 		
@@ -339,6 +394,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			.boost(2));
 	}
 	
+	/**
+	 * Builds query related to ticker of exact matching.
+	 * 
+	 * @param c
+	 *            Criteria
+	 * @return QueryBuilder
+	 */
 	private QueryBuilder buildTickerCodeExactMatchQuery(Criteria c){
 			
 			String text = c.getValue();
@@ -351,6 +413,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 				.matchQuery("tickerCode.full", text)));
 		}
 
+	/**
+	 * Builds exchange query.
+	 * 
+	 * @param exchanges
+	 *            List<String>
+	 * @return QueryBuilder
+	 */
 	private QueryBuilder buildExchangeQuery(List<String> exchanges){
 		
 		return QueryBuilders.boolQuery()
@@ -381,8 +450,18 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 			SCRIPT_SELECT_FRAGMENT +
 			"return prices.size() > 1 ? (prices[prices.size()-1] - prices[0]) * 100";
 
+	
 	/**
-	 * Script filter builder for calculating percent change from within nested fields
+	 * Builds script filter for calculating percent change from within nested
+	 * fields.
+	 * 
+	 * @param to
+	 *            Long
+	 * @param from
+	 *            Long
+	 * @param val
+	 *            String
+	 * @return FilterBuilder
 	 */
 	private FilterBuilder buildScriptFilter(Long to, Long from, String val){
 
@@ -401,9 +480,17 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 				.addParam("value", val);
 	}
 
+	
 	/**
-	 * Adds script field for percent complete so results of calculations on nested
-	 * fields show up in results
+	 * Adds script field for percent complete so that calculation results on the
+	 * nested fields show up in fields.
+	 * 
+	 * @param builder
+	 *            SearchSourceBuilder
+	 * @param to
+	 *            Long
+	 * @param from
+	 *            Long
 	 */
 	private void addScriptField(SearchSourceBuilder builder, Long to, Long from){
 		Map<String, Object> scriptParms = new HashMap<String, Object>();
@@ -412,8 +499,13 @@ public class CompanyQueryBuilder extends AbstractQueryBuilder{
 		builder.scriptField("percentChange", SCRIPT_FIELD, scriptParms);
 	}
 
+	
 	/**
-	 * Helper method for date conversion to long
+	 * Converts date to long.
+	 * 
+	 * @param object
+	 *            Object
+	 * @return long
 	 */
 	private long getTime(Object object){
 		try{

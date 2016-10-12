@@ -25,6 +25,12 @@ import com.wmsi.sgx.service.account.AccountService;
 import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.util.DateUtil;
 
+/**
+ * This class create trial/premium account and verifies the trail/premium period
+ * after expire of the accounts for the users. Update accounts with the currency.
+ *
+ */
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -47,6 +53,14 @@ public class AccountServiceImpl implements AccountService {
 	 * active? Add unique constraint user/active Add method to repo for
 	 * findByUserTypeActive
 	 */
+	
+	/**
+     * Retrieves the account details for the user name and set the currency and days remaining.
+     * 
+     * @param username String
+     *           
+     * @return AccountModel 
+     */
 
 	@Override
 	// @Secured("ROLE_USER")
@@ -110,6 +124,14 @@ public class AccountServiceImpl implements AccountService {
 		esSearchService.setIndexName(esIndexName);
 		return false;
 	}
+	
+	/**
+     * Updates the account with the Currency and ContactOptIn.
+     * 
+     * @param updatedBy long, dto UpdateAccountModel
+     *           
+     * @return AccountModel 
+     */
 
 	@Override
 	// @Secured("ROLE_USER")
@@ -126,6 +148,15 @@ public class AccountServiceImpl implements AccountService {
 		return getAccountForUsername(dto.getEmail());
 
 	}
+	
+	/**
+     * Creating PremiumAccount.
+     * 
+     * @param user
+     *            User
+     * @return AccountModel 
+     * @throws Account
+     */
 
 	@Override
 	public Account createTrialAccount(User user) throws AccountCreationException {
@@ -139,6 +170,13 @@ public class AccountServiceImpl implements AccountService {
 		return createAccount(user, AccountType.TRIAL, getTrial.getTrialDays());
 
 	}
+	
+	/**
+     * Creating PremiumAccount.
+     * 
+     * @param user User
+     * @return true or false 
+     */
 
 	@Override
 	public Account createPremiumAccount(User user) {
@@ -158,7 +196,14 @@ public class AccountServiceImpl implements AccountService {
 		return createAccount(user, AccountType.PREMIUM, PREMIUM_EXPIRATION_DAYS);
 
 	}
-
+	
+	/**
+     * Checking the is PremiumUser or not.
+     * 
+     * @param u User
+     * @return account
+     */
+	
 	@Override
 	public Boolean isPremiumUser(User u) {
 		if (u != null) {
@@ -169,7 +214,14 @@ public class AccountServiceImpl implements AccountService {
 		}
 		return false;
 	}
-
+	
+	/**
+     * Deactivates the trial accounts or PREMIUM accounts.
+     * 
+     * @param user User
+     * @return success 
+     */
+	
 	@Override
 	public Boolean convertToExpiry(User user) {
 		Boolean success = false;
@@ -189,6 +241,14 @@ public class AccountServiceImpl implements AccountService {
 		return success;
 
 	}
+
+	/**
+     * Retrieves the account information based on the X-AUTH-TOKEN sent in the
+     * request header
+     * 
+     * @param expirationDays int,type  AccountType, user User
+     * @return account 
+     */
 
 	private Account createAccount(User user, AccountType type, int expirationDays) {
 

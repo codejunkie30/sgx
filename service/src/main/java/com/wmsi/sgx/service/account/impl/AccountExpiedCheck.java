@@ -26,6 +26,12 @@ import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.util.DateUtil;
 
+/**
+ * This class verifies the account expiration and send the trail users expired
+ * email with subject and email body.
+ *
+ */
+
 @Service
 @DisallowConcurrentExecution
 public class AccountExpiedCheck implements Job {
@@ -48,6 +54,15 @@ public class AccountExpiedCheck implements Job {
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 
 	private static final Logger log = LoggerFactory.getLogger(AccountExpiedCheck.class);
+	
+	
+	/**
+     * Executes account expiration check and verify the Username Password exist in system.
+     * 
+     * @param context
+     *            JobExecutionContext
+     * @throws JobExecutionException
+     */
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -86,6 +101,14 @@ public class AccountExpiedCheck implements Job {
 
 	}
 
+	/**
+     * Sends the trail users expired email with subject and email body.
+     * 
+     * @param email
+     *            String
+     * @throws MessagingException
+     */
+	
 	private void sendTrialExpiredEmail(String email) throws MessagingException {
 		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
 	}
