@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.model.account.TrialResponse;
 
+/**
+ * This controller is used to read the properties from properties file.
+ *
+ */
 @RestController
 @RequestMapping(produces="application/json")
 public class PropertiesController {
@@ -19,6 +23,11 @@ public class PropertiesController {
 	@Autowired
 	private TrialProperty getTrial;
 	
+	/**
+	 * Returns the trial days.
+	 * 
+	 * @return TrialResponse
+	 */
 	@RequestMapping(value = "properties/trialDuration", method=RequestMethod.POST)
 	public TrialResponse getTrialDays(){
 		TrialResponse ret = new TrialResponse();

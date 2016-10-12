@@ -32,6 +32,11 @@ import com.wmsi.sgx.service.account.WatchlistEmailService;
 import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
+/**
+ * This controller is used for performimg various actions on user watchlists.
+ * 
+ *
+ */
 @RestController
 @RequestMapping(method = RequestMethod.POST, produces="application/json" )
 public class WatchlistController {
@@ -54,12 +59,32 @@ public class WatchlistController {
 	@Autowired
 	private CustomAuditorAware<User> auditorProvider;
 	
+	/**
+	 * Sends email after user performs any action on the watchlist.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @throws QuanthouseServiceException,
+	 *             CompanyServiceException, SearchServiceException,
+	 *             MessagingException
+	 */
 	@RequestMapping(value="watchlist/sendEmail")
 	public void sendEmail(HttpServletRequest request, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
 		emailService.getEmailsForUser(usr);
 	}
 	
+	/**
+	 * Creates watchlist to the user.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @return List WatchlistModel list
+	 */
 	@RequestMapping(value = "watchlist/create")
 	public List<WatchlistModel> createWatchlist(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());		
@@ -68,6 +93,15 @@ public class WatchlistController {
 		return watchlistService.createWatchlist(usr, watchlistName);		
 	}
 	
+	/**
+	 * Deletes the user waitchlist.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @return List WatchlistModel list
+	 */
 	@RequestMapping(value = "watchlist/delete")
 	public List<WatchlistModel> deleteWatchlist(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());		
@@ -76,6 +110,16 @@ public class WatchlistController {
 		
 		return watchlistService.getWatchlist(usr);
 	}
+	
+	/**
+	 * Retrieves the watchlists of the user.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @return Map capturing the removed ones and existing ones.
+	 */
 	@RequestMapping(value = "watchlist/get")
 	public Map<String, Object> getAllWatchList(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -85,6 +129,15 @@ public class WatchlistController {
 		return ret;
 	}
 	
+	/**
+	 * Modifies the watchlists of the user.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param model
+	 *            WatchlistModel
+	 * @return List WatchlistModel list
+	 */
 	@RequestMapping(value = "watchlist/edit")
 	public List<WatchlistModel> editWatchList(HttpServletRequest request, @RequestBody WatchlistModel model){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -93,6 +146,15 @@ public class WatchlistController {
 		return watchlistService.getWatchlist(usr);		
 	}
 	
+	/**
+	 * Renames the watchlist of the user.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param model
+	 *            WatchlistModel
+	 * @return List WatchlistModel list
+	 */
 	@RequestMapping(value = "watchlist/rename")
 	public List<WatchlistModel> renameWatchList(HttpServletRequest request, @RequestBody WatchlistRenameModel model){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -103,6 +165,15 @@ public class WatchlistController {
 		return watchlistService.getWatchlist(usr);
 	}	
 	
+	/**
+	 * Adds companies to the user created watchlist
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param model
+	 *            WatchlistAddCompany
+	 * @return Response
+	 */
 	@RequestMapping(value = "watchlist/addCompanies")
 	public Response addCompany(HttpServletRequest request, @RequestBody WatchlistAddCompany model){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -113,6 +184,15 @@ public class WatchlistController {
 		
 	}
 	
+	/**
+	 * Adds watchlist transactions.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param model
+	 *            WatchlistAddCompany
+	 * @return Response
+	 */
 	@RequestMapping(value = "watchlist/addTransaction")
 	public Response addTransaction(HttpServletRequest request, @RequestBody WatchlistAddTransaction model){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -123,6 +203,15 @@ public class WatchlistController {
 		
 	}
 	
+	/**
+	 * Deletes the transactions that are done for the watchlist.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param model
+	 *            WatchlistAddCompany
+	 * @return Response
+	 */
 	@RequestMapping(value = "watchlist/deleteTransaction")
 	public Response deleteTransaction(HttpServletRequest request, @RequestBody WatchlistDeleteTransaction model){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -131,6 +220,15 @@ public class WatchlistController {
 		
 	}
 	
+	/**
+	 * Retrieves the watchlist transactions that are there for the user.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @return Map
+	 */
 	@RequestMapping(value = "watchlist/transactions")
 	public Map<String, List<WatchlistTransactionModel>> getTransactions(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -139,6 +237,15 @@ public class WatchlistController {
 		
 	}
 	
+	/**
+	 * Retrieves the transactions that are assigned to a watchlist.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            Response
+	 * @return CompanyWatchlistTransactionHistoryModel
+	 */
 	@RequestMapping(value = "watchlist/watchlistTransactions")
 	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(HttpServletRequest request, @RequestBody Response response){
 		User usr = userRepository.findByUsername(findUserFromToken(request).getUsername());
@@ -147,6 +254,13 @@ public class WatchlistController {
 		
 	}
 	
+	/**
+	 * Retrieves the user information from the X-AUTH-TOKEN.
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return User
+	 */
 	public User findUserFromToken(HttpServletRequest request){
 		String token = request.getHeader("X-AUTH-TOKEN");
 		

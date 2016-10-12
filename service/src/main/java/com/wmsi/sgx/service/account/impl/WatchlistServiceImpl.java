@@ -32,6 +32,11 @@ import com.wmsi.sgx.service.CompanyServiceException;
 import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.util.DateUtil;
 
+/**
+ * This class retrieves the watchlist names and also edit/delete/rename
+ * watchlist names. Add the companies to the watchlist.
+ */
+
 @Service
 public class WatchlistServiceImpl implements WatchlistService {
 
@@ -53,6 +58,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 	//Alerts does not have currency conversion feature default currency is used here
 	public String defaultCurrency="sgd";
 	
+	/**
+	 * Renames the Watchlist name and update with the current date.
+	 * 
+	 * @param user
+	 *            User, watchlistName String, id String
+	 * 
+	 */
+	
 	@Override
 	public void renameWatchlist(User user, String watchlistName, String id){
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
@@ -65,6 +78,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 			}
 		}		
 	}
+	
+	/**
+	 * Creates the Watchlist name and update with the current date.
+	 * 
+	 * @param user
+	 *            User, watchlistName String, watchlistName String
+	 * 
+	 * @return list
+	 */
 	
 	@Override
 	public List<WatchlistModel> createWatchlist(User user, String watchlistName) {
@@ -84,6 +106,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		
 		return getWatchlist(user);
 	}
+	
+	/**
+	 * Deletes the watchlist along with the companies and related transactions.
+	 * 
+	 * @param user
+	 *            User, id String
+	 * 
+	 */
 
 	@Override
 	public void deleteWatchlist(User user, String id) {
@@ -102,6 +132,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 			}
 		}
 	}
+	
+	/**
+	 * Deletes the watchlist along with the companies and related transactions.
+	 * 
+	 * @param user
+	 *            User
+	 * 
+	 * @return
+	 */
 	
 	@Override
 	@Transactional
@@ -133,6 +172,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		
 	}
 	
+	/**
+	 * Retrievee the watchlists.
+	 * 
+	 * @param id
+	 *            Long, ret List.
+	 * 
+	 */
+	
 	private void deleteMissingCompaniesTransactions(Long id, List<String> ret) {
 		for (String tickerCode : ret) {
 			WatchlistTransaction[] deleteCompanyTransactions = transactionRepository.findByTickerCode(id, tickerCode);
@@ -141,6 +188,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 			}
 		}
 	}
+	
+	/**
+	 * Retrieves the watchlists.
+	 * 
+	 * @param user
+	 *            User.
+	 * 
+	 * @return list
+	 */
 
 	@Override
 	public List<WatchlistModel> getWatchlist(User user){
@@ -178,6 +234,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		return ret;
 	}
 	
+	/**
+	 * Edits the Watchlsit name.
+	 * 
+	 * @param user
+	 *            User, model WatchlistModel.
+	 * 
+	 */
+	
 	@Override
 	@Transactional
 	public void editWatchlist(User user, WatchlistModel model){
@@ -212,6 +276,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}		
 	}
 	
+	/**
+	 * Adds the companies in watchlist.
+	 * 
+	 * @param user
+	 *            User, addId String,companies List.
+	 * 
+	 * @return response
+	 */
+	
 	@Override
 	@Transactional
 	public Response addCompanies(User user, String addId, List<String> companies){
@@ -236,6 +309,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		return response;
 	}
 	
+	/**
+	 * Adds the watch list transactions.
+	 * 
+	 * @param user
+	 *            User, addId String,transactions List.
+	 * 
+	 * @return response
+	 */
+	
 	@Override
 	@Transactional
 	public Response addTransactions(User user, String addId, List<WatchlistTransactionModel> transactions) {
@@ -254,6 +336,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		response.setMessage("failure");
 		return response;
 	}
+	
+	/**
+	 * Deletes the watch list transactions.
+	 * 
+	 * @param user
+	 *            User, id String,transactionId String.
+	 * 
+	 * @return response
+	 */
 	
 	@Override
 	@Transactional
@@ -276,6 +367,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		response.setMessage("failure");
 		return response;
 	}
+	
+	/**
+	 * Retrieves the transactions.
+	 * 
+	 * @param user
+	 *            User, id String
+	 * 
+	 * @return Map
+	 */
 	
 	@Override
 	public Map<String, List<WatchlistTransactionModel>> getTransactions(User user, String id) {
@@ -307,6 +407,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}
 		return transactionMap;
 	}
+	
+	/**
+	 * Retrieves the stocklist companies.
+	 * 
+	 * @param id
+	 *            String, user User
+	 * 
+	 * @return companyWatchlistTransactionHistoryModel
+	 */
 	
 	@Override
 	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(User user, String id) {
@@ -362,6 +471,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}
 		return companyWatchlistTransactionHistoryModel;
 	}
+	
+	/**
+	 * Retrieves the stocklist companies.
+	 * 
+	 * @param transactions
+	 *            List, id Long, user User.
+	 * 
+	 */
 
 	public void setTransactions(List<WatchlistTransactionModel> transactions, Long id, User user) {
 		for (WatchlistTransactionModel watchlistTransactionModel : transactions) {
@@ -377,6 +494,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}
 	}
 	
+	/**
+	 * Sets the options in watchlist.
+	 * 
+	 * @param map
+	 *            Map, id Long.
+	 * 
+	 * @return Map
+	 */
+	
 	public void setOptions(Map<String, Object> map, Long id){
 		for(Map.Entry<String, Object> entry : map.entrySet()){
 			WatchlistOption newOptions = new WatchlistOption();
@@ -390,6 +516,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 		}
 	}
 	
+	/**
+	 * Sets the companies with id,tickercode and watchlistid.
+	 * 
+	 * @param companies
+	 *            List, id Long.
+	 * 
+	 */
+	
 	public void setCompanies(List<String> companies, Long id){
 		for(String comp : companies){
 			WatchlistCompany newComp = new WatchlistCompany();
@@ -399,6 +533,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 			companyRepository.save(newComp);
 		}
 	}
+	
+	/**
+	 * Retrieves the default option values.
+	 * 
+	 * @return Map
+	 */
 	
 	public Map<String, Object> getDefaultOptions(){
 		Map<String, Object> defaultOptions = new HashMap<String, Object>();
@@ -427,6 +567,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 		return defaultOptions;
 		
 	}
+	
+	/**
+	 * Retrieves the stocklist companies.
+	 * 
+	 * @param id
+	 *            String
+	 * 
+	 * @return AccountModel
+	 */
 
 	@Override
 	public List<WatchlistCompany> getStockListCompanies(String id) {

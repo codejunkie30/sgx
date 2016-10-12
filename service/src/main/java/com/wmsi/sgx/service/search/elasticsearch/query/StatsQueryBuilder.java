@@ -16,6 +16,11 @@ import com.wmsi.sgx.model.distribution.DistributionRequestField;
 import com.wmsi.sgx.model.search.SearchCompany;
 import com.wmsi.sgx.util.Util;
 
+/**
+ * 
+ * This class is used to build a stats query builder.
+ *
+ */
 public class StatsQueryBuilder extends AbstractQueryBuilder{
 	
 	private List<DistributionRequestField> fields;
@@ -29,6 +34,11 @@ public class StatsQueryBuilder extends AbstractQueryBuilder{
 	@Value("${list.permitted.exchanges}")
 	private String permittedExchangesList="SGX,CATALIST";
 
+	/**
+	 * Builds query related to stats.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build() {
 		
@@ -66,7 +76,15 @@ public class StatsQueryBuilder extends AbstractQueryBuilder{
 		return query.toString();
 	}
 	
-
+	/**
+	 * Builds the aggregation Filter
+	 * 
+	 * @param field
+	 *            String
+	 * @param agg
+	 *            AbstractAggregationBuilder
+	 * @return AbstractAggregationBuilder
+	 */
 	private AbstractAggregationBuilder getAggregationFilter(String field, AbstractAggregationBuilder agg){
 
 		AbstractAggregationBuilder builder = agg;

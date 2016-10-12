@@ -26,6 +26,13 @@ import com.wmsi.sgx.service.currency.CurrencyService;
 import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
+/**
+ * This class get intraday price data for the given id within the given market
+ * and retrieve the pricing history/price for watchlist companies.Set the fall
+ * back price also.
+ *
+ */
+
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
 
@@ -49,7 +56,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private CurrencyService currencySvc;
 
 	/**
-	 * Get intraday price data for the given id within the given market
+	 * Gets intraday price data for the given id within the given market
 	 * 
 	 * @param market
 	 *            - Market ID belongs too
@@ -57,8 +64,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 *            - Local Market identifier
 	 * @return The last price
 	 * @throws QuanthouseServiceException
-	 * @throws CompanyServiceException 
-	 * @throws SearchServiceException 
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
 	 */
 	@Override
 	//@Cacheable(value = "price")
@@ -71,6 +78,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return fallbackPriceForRealTimePricing(id);				
 	}
 	
+	/**
+	 * Retrieves the pricing.
+	 * 
+	 * @param market
+	 *            String, id String, date Date.
+	 * 
+	 * @return list
+	 * @throws QuanthouseServiceException,
+	 *             CompanyServiceException, SearchServiceException
+	 * 
+	 */
 	@Override
 	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();
@@ -88,7 +106,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 
 	/**
-	 * Get intraday prices for all trade events by day. 
+	 * Gets intraday prices for all trade events by day.
+	 * 
 	 * @param market
 	 *            - Market ID belongs too
 	 * @param id
@@ -109,6 +128,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the pricing history.
+	 * 
+	 * @param market
+	 *            String, id String, date Date.
+	 * 
+	 * @return list
+	 * @throws QuanthouseServiceException
+	 * 
+	 */
+	
 	@Override
 	public List<Price> getPricingHistory(String market, String id, Date date) throws QuanthouseServiceException {
 
@@ -126,6 +156,17 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return ret;
 	}
 	
+	/**
+	 * Retrieves the pricing history between the two companies .
+	 * 
+	 * @param market
+	 *            String, id String, from Date, to Date.
+	 * 
+	 * @return list
+	 * @throws QuanthouseServiceException
+	 * 
+	 */
+	
 	@Override
 	public List<Price> getPricingHistoryBetweenDates(String market, String id, Date from, Date to) throws QuanthouseServiceException {
 
@@ -142,6 +183,19 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		
 		return ret;
 	}
+	
+	/**
+	 * Retrieves the company price .
+	 * 
+	 * @param companies
+	 *            List
+	 * 
+	 * @return list
+	 * @throws CompanyServiceException,
+	 *             QuanthouseServiceException, SearchServiceException,
+	 *             NumberFormatException
+	 * 
+	 */
 	
 	@Override
 	public List<CompanyPrice> getCompanyPrice(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
@@ -178,6 +232,19 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return list;
 		
 	}
+	
+	/**
+	 * Retrieve the price for watchlist companies.
+	 * 
+	 * @param companies
+	 *            List
+	 * 
+	 * @return list
+	 * @throws CompanyServiceException,
+	 *             QuanthouseServiceException, SearchServiceException,
+	 *             NumberFormatException
+	 * 
+	 */
 	
 	@Override
 	public List<CompanyPrice> getPriceChangeForWatchlistCompanies(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
@@ -218,6 +285,18 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private String toMarketId(String id){
 		return id.concat(MARKET_EXTENTION);
 	}
+	
+	/**
+	 * Sets the fall back price.
+	 * 
+	 * @param id
+	 *            String
+	 * 
+	 * @return price
+	 * @throws CompanyServiceException,
+	 *             SearchServiceException
+	 * 
+	 */
 	
 	private Price fallbackPriceForRealTimePricing(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
@@ -277,6 +356,18 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		
 	}
 	
+	/**
+	 * Sets the fall back price.
+	 * 
+	 * @param id
+	 *            String
+	 * 
+	 * @return price
+	 * @throws CompanyServiceException,
+	 *             SearchServiceException
+	 * 
+	 */
+	
 	private Price fallbackPrice(String id) throws CompanyServiceException, SearchServiceException{
 		Price p = new Price();
 		Company comp = companySearch.getByIdUsingIndexName(id, "sgd_premium", Company.class);
@@ -300,6 +391,16 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		return p;
 		
 	}
+	
+	/**
+	 * Binds the price data
+	 * 
+	 * @param data
+	 *            TradeEvent
+	 * 
+	 * @return price
+	 */
+
 	private Price bindPriceData(TradeEvent data) {
 		Price p = new Price();
 		p.setLastPrice(data.getLastPrice());

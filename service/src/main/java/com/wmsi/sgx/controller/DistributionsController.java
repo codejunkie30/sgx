@@ -26,6 +26,10 @@ import com.wmsi.sgx.service.DistributionService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 
+/**
+ * This controller is used to fetch the distributions information of various companies.
+ *
+ */
 @RestController
 @RequestMapping(method=RequestMethod.POST, produces="application/json")
 public class DistributionsController{
@@ -39,7 +43,15 @@ public class DistributionsController{
 	
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;	
-
+  
+	/**
+	 * Retrieves the distribution information of all the companies.
+	 * 
+	 * @param req DistributionsRequest
+	 * @param request HttpServletRequest
+	 * @return Distributions
+	 * @throws ServiceException
+	 */
 	@RequestMapping(value="search/distributions", method = RequestMethod.POST)
 	public Distributions postChartHistograms(@Valid @RequestBody DistributionsRequest req, HttpServletRequest request) throws ServiceException{		
 		User u = null;

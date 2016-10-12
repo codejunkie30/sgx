@@ -15,6 +15,8 @@ import com.wmsi.sgx.model.RSAPubkey;
 import com.wmsi.sgx.service.RSAKeyService;
 
 /**
+ * This controller is used for retrieving the RSA Public Key
+ * 
  * @author dt84327
  */
 @RestController
@@ -24,6 +26,13 @@ public class RSAKeyController {
 	@Autowired
 	private RSAKeyService rsaKeyService;
 
+	/**
+	 * Fetches RSA Public Key.
+	 * 
+	 * @param request
+	 * @return RSAPubkey
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "publickey", method = RequestMethod.POST)
 	public @ResponseBody RSAPubkey getRSAPubKey(HttpServletRequest request) throws Exception {
 		RSAPubkey rsaPubkey = new RSAPubkey();

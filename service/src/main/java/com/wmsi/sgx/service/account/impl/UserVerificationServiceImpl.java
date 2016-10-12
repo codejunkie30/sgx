@@ -15,6 +15,11 @@ import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.UserVerificationService;
 import com.wmsi.sgx.service.account.VerifiedUserException;
 
+/**
+ * This class create/verify the user verification token.
+ *
+ */
+
 @Service
 public class UserVerificationServiceImpl implements UserVerificationService{
 
@@ -23,6 +28,16 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 
 	@Autowired
 	private SecureTokenGenerator tokenGenerator;
+	
+	/**
+	 * Creates the verification token.
+	 * 
+	 * @param user
+	 *            User
+	 *
+	 * @return String
+	 *
+	 */
 
 	@Override
 	@Transactional
@@ -37,6 +52,18 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 		
 		return userVerification.getToken(); 
 	}
+	
+	/**
+	 * Verifies token found or not and Verification token redeemed or not.
+	 * 
+	 * @param token
+	 *            String
+	 *
+	 * @return User
+	 *
+	 * @throws UserVerificationException,
+	 *             VerifiedUserException
+	 */
 	
 	@Override
 	@Transactional

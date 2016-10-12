@@ -23,6 +23,10 @@ import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 
+/**
+ * This class executing HalfWayTrialEmailService and send email for trails
+ *
+ */
 
 @Service
 @DisallowConcurrentExecution
@@ -45,6 +49,15 @@ public class HalfWayTrialEmailService implements Job{
 	@Value ("${email.halfway.expiration.notice.subject}")
 	private String halfWaySubject;
 	
+	/**
+	 * Executes HalfWayTrialEmailService.
+	 * 
+	 * @param context
+	 *            JobExecutionContext
+	 * 
+	 * @throws JobExecutionException
+	 */
+	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		log.info("Executing HalfWayTrialEmailService");
@@ -66,6 +79,15 @@ public class HalfWayTrialEmailService implements Job{
 		}
 		
 	}
+	
+	/**
+	 * Sends email for trails.
+	 * 
+	 * @param email
+	 *            String
+	 * 
+	 * @throws MessagingException
+	 */
 	
 	private void sendHalfWayTrialEmail(String email) throws MessagingException{
 		emailService.send(email, halfWaySubject, null, halfWayTrialEmailBody);

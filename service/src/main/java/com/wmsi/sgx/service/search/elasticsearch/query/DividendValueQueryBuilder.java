@@ -1,5 +1,8 @@
 package com.wmsi.sgx.service.search.elasticsearch.query;
 
+/**
+ * This class is used to build query builder for dividend values.
+ */
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -14,6 +17,11 @@ public class DividendValueQueryBuilder extends AbstractQueryBuilder{
 		this.id = id;
 	}
 	
+	/**
+	 * Builds the query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		return	new SearchSourceBuilder()

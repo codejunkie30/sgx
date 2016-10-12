@@ -5,6 +5,11 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 
+/**
+ * 
+ * This class is used to build Financial Query Builder.
+ *
+ */
 public class FinancialsQueryBuilder extends AbstractQueryBuilder{
 
 	private String id;
@@ -13,6 +18,11 @@ public class FinancialsQueryBuilder extends AbstractQueryBuilder{
 		this.id = id;
 	}
 	
+	/**
+	 * Builds financial query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build(){
 		return new SearchSourceBuilder()
