@@ -11,6 +11,11 @@ import org.elasticsearch.search.sort.SortOrder;
 import com.wmsi.sgx.model.keydevs.KeyDevsRequest;
 import com.wmsi.sgx.model.keydevs.StockListKeyDevsRequest;
 
+/**
+ * 
+ * This class is used to build a Key Developments Query builder.
+ *
+ */
 public class KeyDevsQueryBuilder extends AbstractQueryBuilder {
 
 	private static final int MAX_RESULTS = 10000;
@@ -27,6 +32,11 @@ public class KeyDevsQueryBuilder extends AbstractQueryBuilder {
 		this.stockListKeyDevsRequest = req;
 	}
 
+	/**
+	 * Builds query related to Key Developments.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String build() {
 		SearchSourceBuilder builder = new SearchSourceBuilder();
@@ -43,6 +53,12 @@ public class KeyDevsQueryBuilder extends AbstractQueryBuilder {
 		return builder.toString();
 	}
 	
+	/**
+	 * Returns the time.
+	 * 
+	 * @param object
+	 * @return long
+	 */
 	private long getTime(Object object){
 		try{
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");

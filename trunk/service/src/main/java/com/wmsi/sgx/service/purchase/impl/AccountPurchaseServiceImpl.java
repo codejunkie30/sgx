@@ -9,6 +9,10 @@ import com.wiz.enets2.transaction.umapi.data.TxnReq;
 import com.wmsi.sgx.security.SecureTokenGenerator;
 import com.wmsi.sgx.service.purchase.AccountPurchaseService;
 
+/**
+ * This class form a message with required details for the message.
+ */
+
 public class AccountPurchaseServiceImpl implements AccountPurchaseService{
 
 	@Override
@@ -28,6 +32,14 @@ public class AccountPurchaseServiceImpl implements AccountPurchaseService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/**
+     * Form a message with required details 
+     * 
+     * @param token String
+     *            
+     * @return String 
+     */
 
 	@Override
 	public String formMessage(String token) {

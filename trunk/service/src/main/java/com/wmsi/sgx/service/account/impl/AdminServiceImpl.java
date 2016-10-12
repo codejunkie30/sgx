@@ -42,6 +42,13 @@ import com.wmsi.sgx.util.DateUtil;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+/**
+ * This class create/deactivate the account and extend the trail/premium
+ * accounts. Search with date by using the user name or create date.Retrive the
+ * list of accounts and logins and expiration dates.
+ *
+ */
+
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -71,6 +78,12 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private EnetsRepository enetsRepository;
 
+	/**
+     * Retrieves trail days.
+     * 
+     * @return response
+     */
+	
 	@Override
 	public AdminResponse getTrialDays() {
 		AdminResponse ret = new AdminResponse();
@@ -83,6 +96,15 @@ public class AdminServiceImpl implements AdminService {
 		return ret;
 
 	}
+	
+	/**
+	 * Sets the full/halfway trail days.
+	 * 
+	 * @param username
+	 *            String, response TrialResponse
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse trialDay(TrialResponse response, String username) {
@@ -103,6 +125,15 @@ public class AdminServiceImpl implements AdminService {
 		ret.setData(response);
 		return ret;
 	}
+	
+	/**
+	 * Finds the users.
+	 * 
+	 * @param user
+	 *            String.
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse findByUser(String user) {
@@ -135,6 +166,15 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 	
+	/**
+	 * Converts from AccountModel to AdminAccount .
+	 * 
+	 * @param accModel
+	 *            AccountModel.
+	 * 
+	 * @return model
+	 */
+	
 	@Override
 	public AdminAccountModel convertAccountModelToAdminAccountModel(AccountModel accModel){
 		AdminAccountModel model = new AdminAccountModel();
@@ -148,6 +188,15 @@ public class AdminServiceImpl implements AdminService {
 		
 		
 	}
+	
+	/**
+	 * Searches with date by using the username or create date .
+	 * 
+	 * @param period
+	 *            Date.
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse searchByDate(Date period) {
@@ -179,6 +228,15 @@ public class AdminServiceImpl implements AdminService {
 		ret.setResponseCode(0);
 		return ret;
 	}
+	
+	/**
+	 * Retrieves the list of accounts and logins.
+	 * 
+	 * @param period
+	 *            Date.
+	 * 
+	 * @return list
+	 */
 
 	private List<String[]> getList(Date period) {
 		User[] users = userReposistory.findByDate(period);
@@ -224,6 +282,15 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return ret;
 	}
+	
+	/**
+	 * Retrieves the expiration date.
+	 * 
+	 * @param acct
+	 *            Account.
+	 * 
+	 * @return Date
+	 */
 
 	private Date getExpirationDate(Account acct) {
 		Date exp = DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acct.getStartDate()), Calendar.DAY_OF_MONTH,
@@ -232,6 +299,15 @@ public class AdminServiceImpl implements AdminService {
 
 		return expCheck;
 	}
+	
+	/**
+	 * Deactivates the account.
+	 * 
+	 * @param username
+	 *            String, updatedBy long.
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse deactivate(String username, long updatedBy) {
@@ -269,6 +345,15 @@ public class AdminServiceImpl implements AdminService {
 		ret.setData(deactivated ? model : "Account already deactivated.");
 		return ret;
 	}
+	
+	/**
+	 * Sets the expiration date extention.
+	 * 
+	 * @param username
+	 *            String, updatedBy long, period Date
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse extension(String username, Date period, long updatedBy) {
@@ -305,6 +390,15 @@ public class AdminServiceImpl implements AdminService {
 		ret.setData(model);
 		return ret;
 	}
+	
+	/**
+	 * Activates and Adds the account.
+	 * 
+	 * @param username
+	 *            String, updatedBy long
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse setAdmin(String username, long updatedBy) {
@@ -343,6 +437,15 @@ public class AdminServiceImpl implements AdminService {
 		ret.setData(model);
 		return ret;
 	}
+	
+	/**
+	 * Deactivate/removes the account.
+	 * 
+	 * @param username
+	 *            String, updatedBy long
+	 * 
+	 * @return response
+	 */
 
 	@Override
 	public AdminResponse removeAdmin(String username, long updatedBy) {
@@ -380,6 +483,17 @@ public class AdminServiceImpl implements AdminService {
 		ret.setData(model);
 		return ret;
 	}
+	
+	/**
+	 * Writes the into csv file.
+	 * 
+	 * @param name
+	 *            String, header String
+	 * 
+	 * @response response HttpServletResponse
+	 * 
+	 * @throws IOException
+	 */
 
 	@Override
 	public void writeCsv(HttpServletResponse response, String[] header, String name) throws IOException {
@@ -410,6 +524,15 @@ public class AdminServiceImpl implements AdminService {
 		}
 
 	}
+	
+	/**
+	 * Formats the date.
+	 * 
+	 * @param d
+	 *            Date
+	 * 
+	 * @return Date
+	 */
 
 	private String dateFmt(Date d) {
 		return new SimpleDateFormat("yyyy-MM-dd").format(d);

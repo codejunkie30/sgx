@@ -8,6 +8,11 @@ import org.springframework.util.StringUtils;
 
 import com.wmsi.sgx.model.search.AlphaFactorSearchRequest;
 
+/**
+ * 
+ * This class is used to build the query based on the various filter criteria.
+ *
+ */
 public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder{
 	
 	private AlphaFactorSearchRequest request;
@@ -16,6 +21,12 @@ public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder{
 		this.request = request;
 	}
 	
+	/**
+	 * Builds the query based on the filter criteria encapsulated in the
+	 * request.
+	 * 
+	 * @return String
+	 */
 	public String build(){
 		return new SearchSourceBuilder()
 			.query(QueryBuilders.constantScoreQuery(getBoolFilter(request)))
@@ -23,6 +34,13 @@ public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder{
 			.toString();	
 	}
 
+	/**
+	 * AddS different criteria.
+	 * 
+	 * @param req
+	 *            AlphaFactorSearchRequest
+	 * @return BoolFilterBuilder
+	 */
 	private BoolFilterBuilder getBoolFilter(AlphaFactorSearchRequest req){
 		BoolFilterBuilder boolFilter = FilterBuilders.boolFilter();
 		addTerm(boolFilter, "analystExpectations", req.getAnalystExpectations());
@@ -36,6 +54,18 @@ public class AlphaFactorSearchQueryBuilder extends AbstractQueryBuilder{
 		return boolFilter;
 	}
 	
+	/**
+	 * Tests the criteria is there or not, if it is available then it will be
+	 * added.
+	 * 
+	 * @param boolFilter
+	 *            BoolFilterBuilder
+	 * @param field
+	 *            String
+	 * @param value
+	 *            Integer
+	 * @return BoolFilterBuilder
+	 */
 	private BoolFilterBuilder addTerm(BoolFilterBuilder boolFilter, String field, Integer value){
 		if(!StringUtils.isEmpty(field) && value != null){
 			boolFilter.must(FilterBuilders.termFilter(field, value));

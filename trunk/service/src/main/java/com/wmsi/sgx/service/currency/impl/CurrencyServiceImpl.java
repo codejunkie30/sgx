@@ -12,16 +12,40 @@ import com.wmsi.sgx.model.CurrencyModel;
 import com.wmsi.sgx.repository.Currencies;
 import com.wmsi.sgx.service.currency.CurrencyService;
 
+/**
+ * This class retrieves the existing currencies from the database and the new
+ * currencies will adding to the currency entity.
+ * 
+ *
+ */
+
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
 	@Autowired
 	private Currencies currencyRepository;
 	
+	/**
+	 * Updates the currency values.
+	 * 
+	 * @param dto
+	 *            CurrencyModel
+	 * 
+	 */
+	
 	@Override
 	public void updateCurrency(CurrencyModel dto) {
 		currencyRepository.updateComplete(dto.isCompleted(), dto.getCurrencyName());
 	}
+	
+	/**
+	 * Adds the new currencies into currencies list.
+	 * 
+	 * @param currencyModelList
+	 *            List
+	 * 
+	 * @return boolean
+	 */
 
 	@Override
 	public boolean addCurrencies(List<CurrencyModel> currencyModelList) {
@@ -34,6 +58,12 @@ public class CurrencyServiceImpl implements CurrencyService {
 		Iterable<Currency> it = currencyRepository.save(currencyDomainList);
 		return it.iterator().hasNext();
 	}
+	
+	/**
+	 * Retrieves the all the currencies.
+	 * 
+	 * @return currencyModelList
+	 */
 
 	@Override
 	public List<CurrencyModel> getAllCurrencies() {
@@ -46,6 +76,15 @@ public class CurrencyServiceImpl implements CurrencyService {
 		}
 		return currencyModelList;
 	}
+	
+	/**
+	 * Adds the new currency into currency entity .
+	 * 
+	 * @param model
+	 *            CurrencyModel
+	 * 
+	 * @return CurrencyModel
+	 */
 
 	@Override
 	public CurrencyModel addCurrency(CurrencyModel model) {
@@ -56,14 +95,31 @@ public class CurrencyServiceImpl implements CurrencyService {
 		return model;
 	}
 	
+	/**
+	 * Deletse all the currencies.
+	 * 
+	 */
+	
 	public void deleteAll(){
 		currencyRepository.deleteAll();
 	}
+	
+	/**
+	 * Retrieves the count of incomplete currencies.
+	 * 
+	 * @return int
+	 */
 
 	@Override
 	public int getCountOfInCompleteCurrenciesCount() {
 		return currencyRepository.getCountOfInCompletedCurrencies();
 	}
+	
+	/**
+	 * Retrieves the non complete currency.
+	 * 
+	 * @return CurrencyModel
+	 */
 
 	@Override
 	public CurrencyModel getNonCompleteCurrency() {

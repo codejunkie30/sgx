@@ -30,6 +30,11 @@ import com.wmsi.sgx.service.account.PremiumVerificationException;
 import com.wmsi.sgx.service.account.PremiumVerificationService;
 import com.wmsi.sgx.service.account.VerifiedPremiumException;
 
+/**
+ * 
+ * This controller is used for making purchase related operations.
+ *
+ */
 @RestController
 @RequestMapping("/purchase")
 public class PurchaseController {
@@ -57,6 +62,15 @@ public class PurchaseController {
 	@Autowired
 	private CustomAuditorAware<User> auditorProvider;
 	
+	/**
+	 * Places enets transactions and then returning back to SGX.
+	 * 
+	 * @param response
+	 * @param model
+	 * @throws PremiumVerificationException
+	 * @throws VerifiedPremiumException
+	 * @return RedirectView
+	 */
 	@RequestMapping(value = "success", method = RequestMethod.POST)
 	public RedirectView success(@ModelAttribute("response") Response response, Model model) throws PremiumVerificationException, VerifiedPremiumException{		
 				
@@ -78,6 +92,13 @@ public class PurchaseController {
 		return view;
 	}
 	
+	/**
+	 * Redirects when any enets transaction gets failed and redirected to SGX.
+	 * 
+	 * @param response
+	 * @param model
+	 * @return RedirectView
+	 */
 	@RequestMapping(value = "fail", method = RequestMethod.POST)
 	public RedirectView fail(@ModelAttribute("response") Response response, Model model){
 		
@@ -89,6 +110,13 @@ public class PurchaseController {
 		return view;
 	}
 	
+	/**
+	 * Cancels the enets transaction and returning back to SGX.
+	 * 
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "cancel", method = RequestMethod.POST)
 	public RedirectView cancel(@ModelAttribute("response") Response response, Model model){
 		model.addAttribute("ec", "0");
@@ -97,6 +125,12 @@ public class PurchaseController {
 		return view;
 	}
 	
+	/**
+	 * Posts the enets info.
+	 * 
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "post", method = RequestMethod.POST)
 	public void post(@ModelAttribute("response") Response response) throws IOException{
 		File file = new File("/mnt/data/purchase_logging.txt");
@@ -118,6 +152,12 @@ public class PurchaseController {
 		bw.close();
 	}
 	
+	/**
+	 * Unpacks the Credit info.
+	 * 
+	 * @param response
+	 * @return TxnRes
+	 */
 	public TxnRes unpack(Response response){
 		CreditMerchant m = (CreditMerchant) Merchant.getInstance(Merchant.MERCHANT_TYPE_CREDIT);
 		TxnRes res = m.unpackResponse(response.getMessage());		

@@ -29,6 +29,12 @@ import com.wmsi.sgx.service.account.WatchlistEmailService;
 import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
+/**
+ * This class executes WatchlistEmailService and sends the notification emails.
+ * The user email details save into database.
+ *
+ */
+
 @Service
 @DisallowConcurrentExecution
 public class WatchlistEmailServiceHelper implements Job {
@@ -53,6 +59,14 @@ public class WatchlistEmailServiceHelper implements Job {
 
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceHelper.class);
 
+	/**
+	 * Executes WatchlistEmailService and send the notification emails.
+	 * 
+	 * @param context
+	 *            JobExecutionContext
+	 * 
+	 * @throws JobExecutionException
+	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		log.info("Executing WatchlistEmailService");
@@ -114,6 +128,15 @@ public class WatchlistEmailServiceHelper implements Job {
 		}
 	}
 
+	/**
+	 * Saves the email details into database.
+	 * 
+	 * @param user
+	 *            User, watchlist WatchlistModel, body String, subject String,
+	 *            status String, reason String
+	 * 
+	 */
+	
 	private void insertEmailTransaction(User user, WatchlistModel watchlist, String body, String subject, String status,
 			String reason) {
 		log.info("Inside the insertEmailTransaction method");

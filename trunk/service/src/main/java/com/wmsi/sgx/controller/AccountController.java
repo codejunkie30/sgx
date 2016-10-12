@@ -42,6 +42,10 @@ import com.wmsi.sgx.service.account.RegistrationService;
 import com.wmsi.sgx.service.account.UserExistsException;
 import com.wmsi.sgx.service.account.UserNotFoundException;
 
+/**
+ * The AccountController class is used for performing user Account operations
+ * 
+ */
 @RestController
 @RequestMapping("/account")
 public class AccountController{
@@ -86,6 +90,16 @@ public class AccountController{
 	private LocalValidatorFactoryBean validator;
 	
 	
+	/**
+	 * Retrieves the account information based on the X-AUTH-TOKEN sent in the
+	 * request header
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return AccountModel If user account exists
+	 * @throws UserExistsException
+	 *             if user account doesn't exists
+	 */
 	@RequestMapping(value = "info", method = RequestMethod.POST)
 	public @ResponseBody AccountModel account(HttpServletRequest request) throws UserExistsException{
 		AccountModel ret= new AccountModel();
@@ -105,6 +119,24 @@ public class AccountController{
 		return ret;
 	}
 
+	/**
+	 * Changes the account password
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param pass
+	 *            PasswordChangeModel which contains the password and password
+	 *            match
+	 * @param result
+	 *            If any validation errors in the details provided
+	 * @return {@code true} if password change is success
+	 * @throws UserNotFoundException
+	 *             If user account not exists
+	 * @throws MessagingException
+	 *             If validation fails
+	 * @throws RSAKeyException
+	 *             If decryption fails
+	 */
 	@RequestMapping(value = "password", method = RequestMethod.POST)
 	public @ResponseBody Boolean changePassword(HttpServletRequest request, @RequestBody PasswordChangeModel pass, BindingResult result) throws UserNotFoundException, MessagingException, RSAKeyException{
 		decryptPasswordChangeModelParams(pass);
@@ -120,6 +152,16 @@ public class AccountController{
 		return registrationService.changePassword(dto);
 	}
 	
+	/**
+	 * Updates the account details provided in UpdateAccountModel
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param dto
+	 *            UpdateAccountModel
+	 * @return AccountModel If user exists
+	 * @throws UserNotFoundException
+	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public @ResponseBody AccountModel updateAccount(HttpServletRequest request, @RequestBody UpdateAccountModel dto) throws UserNotFoundException{
 		User user = findUserFromToken(request);
@@ -129,6 +171,19 @@ public class AccountController{
 		
 	}
 	
+	/**
+	 * Creates a Premium token for the user which will be used during the
+	 * Purchase
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @param dto
+	 *            UpdateAccountModel
+	 * @return Response Premium token
+	 * @throws UserNotFoundException
+	 *             If user doesn't exists
+	 * @throws UnsupportedEncodingException
+	 */
 	@RequestMapping(value = "premiumMessage", method = RequestMethod.POST, produces="application/json")
 	public Response getMessage(HttpServletRequest request, @RequestBody UpdateAccountModel dto) throws UserNotFoundException, UnsupportedEncodingException {
 		User user = findUserFromToken(request);
@@ -141,6 +196,14 @@ public class AccountController{
 		return response;
 	}
 	
+	/**
+	 * Returns the message based on the error code during the Purchase of
+	 * premium account
+	 * 
+	 * @param errorCode ErrorCode
+	 * @return Response Contains the messages based on the error code
+	 * @throws UnsupportedEncodingException 
+	 */
 	@RequestMapping(value = "errorCode", method = RequestMethod.POST, produces="application/json")
 	public Response getErrorCode(@RequestBody ErrorCode errorCode) throws UnsupportedEncodingException{
 		String error = errorCode.getErrorCode();
@@ -171,6 +234,13 @@ public class AccountController{
 		
 	}
 	
+	/**
+	 * Creates the text which will be used during the Purchase of Premium
+	 * account
+	 * 
+	 * @param token
+	 * @return message as String
+	 */
 	public String formMessage(String token) {
 		TxnReq req = new TxnReq();
 		CreditTxnReq credReq = new CreditTxnReq();
@@ -197,6 +267,14 @@ public class AccountController{
 		return sMsg;
 	}
 	
+	/**
+	 * Retrieves the User from the X-AUTH-TOKEN provided in the
+	 * HttpServletRequest header
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return User
+	 */
 	public User findUserFromToken(HttpServletRequest request){
 		String token = request.getHeader("X-AUTH-TOKEN");
 		

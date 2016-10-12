@@ -20,6 +20,11 @@ import com.wmsi.sgx.service.CompanySearchService;
 import com.wmsi.sgx.service.ServiceException;
 import com.wmsi.sgx.service.account.AccountService;
 
+/**
+ * This controller is used for searching the companies based on the criteria.
+ * 
+ *
+ */
 @RestController()
 @RequestMapping(method = RequestMethod.POST, produces = "application/json")
 public class SearchController {
@@ -33,6 +38,16 @@ public class SearchController {
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
 
+	/**
+	 * Searches the companies based on the user sent request criteria.
+	 * 
+	 * @param req
+	 *            SearchRequest
+	 * @param request
+	 *            HttpServletRequest
+	 * @return SearchResults
+	 * @throws ServiceException
+	 */
 	@RequestMapping("search")
 	public SearchResults search(@Valid @RequestBody SearchRequest req, HttpServletRequest request)
 			throws ServiceException {

@@ -34,6 +34,10 @@ import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.VerifiedUserException;
 import com.wmsi.sgx.service.account.impl.CreateUserReponse;
 
+/**
+ * This controller is used for performing various actions related to the user.
+ *
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController{
@@ -52,6 +56,18 @@ public class UserController{
 	@Autowired
 	private CustomAuditorAware<User> auditorProvider;
 
+	/**
+	 * Registers the user and sends the mail after registration.
+	 * 
+	 * @param user
+	 *            UserModel
+	 * @param result
+	 *            BindingResult
+	 * @return Boolean
+	 * @throws UserExistsException,
+	 *             MessagingException, RSAKeyException,
+	 *             MethodArgumentNotValidException
+	 */
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public @ResponseBody Boolean register(@RequestBody UserModel user, BindingResult result) throws UserExistsException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
 		decryptUserModelParams(user);
@@ -71,18 +87,45 @@ public class UserController{
 		return true;
 	}
 	
+	/**
+	 * Verifies the validity of the token that is assigned to the user.
+	 * 
+	 * @param user
+	 *            VerifyUser
+	 * @return Boolean
+	 * @throws UserVerificationException,
+	 *             AccountCreationException, VerifiedUserException
+	 */
 	@RequestMapping(value = "verify", method = RequestMethod.POST)
 	public @ResponseBody Boolean verify(@RequestBody VerifyUser user) throws UserVerificationException, AccountCreationException, VerifiedUserException{
 	
 		return registrationService.verifyUser(user.getToken());
 	}
 	
+	/**
+	 * Resets the token that is assigned to the user.
+	 * 
+	 * @param user
+	 *            ResetUser
+	 * @return ApiResponse
+	 * @throws UserNotFoundException,
+	 *             MessagingException, RSAKeyException
+	 */
 	@RequestMapping(value = "resetToken", method = RequestMethod.POST)
 	public @ResponseBody ApiResponse resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException, RSAKeyException{
 		decryptUsername(user);
 		return registrationService.resendVerificationEmail(user.getUsername());
 	}
 
+	/**
+	 * Resets the password of the user.
+	 * 
+	 * @param user
+	 *            ResetUser
+	 * @return Boolean
+	 * @throws UserNotFoundException,
+	 *             RSAKeyException
+	 */
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
 	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException, RSAKeyException{
 	
@@ -102,6 +145,15 @@ public class UserController{
 		
 	}
 
+	/**
+	 * Expires the user explicitly.
+	 * 
+	 * @param user
+	 *            ResetUser
+	 * @return Boolean
+	 * @throws UserNotFoundException,
+	 *             RSAKeyException
+	 */
 	//Strictly used for internal testing, 
 	//you can make a user expired by calling this api endpoint  
 	@RequestMapping(value = "expireUser", method = RequestMethod.POST)
@@ -120,7 +172,21 @@ public class UserController{
 		return true;
 		
 	}
-
+	
+	/**
+	 * Changes the password of the user.
+	 * 
+	 * @param token
+	 *            String
+	 * @param user
+	 *            ChangePasswordModel
+	 * @param result
+	 *            BindingResult
+	 * @return Boolean
+	 * @throws InvalidTokenException,
+	 *             MessagingException, RSAKeyException,
+	 *             MethodArgumentNotValidExceptio
+	 */
 	@RequestMapping(value = "password", method = RequestMethod.POST)
 	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @RequestBody ChangePasswordModel user, BindingResult result) throws InvalidTokenException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
 		//For auditing purpose
@@ -136,9 +202,14 @@ public class UserController{
 		return registrationService.resetPassword(user, token);
 	}
 	
-	// TEMP TEMP TEMP TEMP
-	// The following endpoint is for proof of concept only and should be removed once ecommerce is full
-	// integrated. 
+	/**
+	 * Registers the premium user.
+	 * 
+	 * @param user
+	 *            UserModel
+	 * @return Boolean
+	 * @throws RSAKeyException
+	 */
 	@RequestMapping(value = "premium", method = RequestMethod.POST)
 	public @ResponseBody Boolean registerPremium(@RequestBody UserModel user) throws RSAKeyException{
 		
@@ -149,10 +220,11 @@ public class UserController{
 	}
 	
 	/**
-	 * Decrypts the {@link ResetUser} params
+	 * Decrypts the user info.
 	 * 
 	 * @param user
-	 * @throws RSAKeyException 
+	 *            ResetUser
+	 * @throws RSAKeyException
 	 */
 	private void decryptUsername(ResetUser user) throws RSAKeyException {
 		try {
@@ -164,10 +236,11 @@ public class UserController{
 	}
 
 	/**
-	 * Decrypts the {@link ChangePasswordModel} params
+	 * Decrypts the {@link ChangePasswordModel}
 	 * 
 	 * @param user
-	 * @throws RSAKeyException 
+	 *            ChangePasswordModel
+	 * @throws RSAKeyException
 	 */
 	private void decryptChangePasswordModel(ChangePasswordModel user) throws RSAKeyException {
 		try {
@@ -181,10 +254,11 @@ public class UserController{
 	}
 
 	/**
-	 * Decrypts the {@link UserModel} params
+	 * Decrypts the {@link UserModel}
 	 * 
 	 * @param user
-	 * @throws RSAKeyException 
+	 *            UserModel
+	 * @throws RSAKeyException
 	 */
 	private void decryptUserModelParams(UserModel user) throws RSAKeyException {
 		try {

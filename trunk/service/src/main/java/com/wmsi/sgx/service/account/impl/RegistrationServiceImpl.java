@@ -29,6 +29,12 @@ import com.wmsi.sgx.service.account.UserVerificationException;
 import com.wmsi.sgx.service.account.UserVerificationService;
 import com.wmsi.sgx.service.account.VerifiedUserException;
 
+/**
+ * This class create/register the user. Verify the expiration date and convert
+ * the premium account and send notification mail to the users.
+ *
+ */
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
 
@@ -47,6 +53,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Autowired
 	private CustomAuditorAware<User> auditorProvider;
 	
+	/**
+	 * Registers the user.
+	 * 
+	 * @param dto
+	 *            UserModel
+	 * 
+	 * @return Response
+	 * 
+	 * @throws UserExistsException,
+	 *             MessagingException
+	 */
+	
 	@Override
 	@Transactional
 	public CreateUserReponse registerUser(UserModel dto) throws UserExistsException, MessagingException{
@@ -63,6 +81,17 @@ public class RegistrationServiceImpl implements RegistrationService{
 		//sendVerificationEmail(user.getUsername(), token);
 		return res;
 	}
+	
+	/**
+	 * Resends the verification mail.
+	 * 
+	 * @param username
+	 *            String
+	 * 
+	 * @return ApiResponse
+	 * 
+	 * @throws MessagingException
+	 */
 	
 	@Override
 	@Transactional
@@ -91,6 +120,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 		}	
 	}
 	
+	/**
+	 * Verifies the user.
+	 * 
+	 * @param token
+	 *            String
+	 * 
+	 * @return Boolean
+	 * 
+	 * @throws UserVerificationException,
+	 *             AccountCreationException, VerifiedUserException
+	 */
+	
 	@Override
 	@Transactional
 	public Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException{
@@ -109,6 +150,16 @@ public class RegistrationServiceImpl implements RegistrationService{
 
 		return true;		
 	}
+	
+	/**
+	 * Converts to the Premium Account.
+	 * 
+	 * @param dto
+	 *            UserModel
+	 * 
+	 * @return Boolean
+	 * 
+	 */
 	
 	@Override
 	@Transactional
@@ -133,6 +184,17 @@ public class RegistrationServiceImpl implements RegistrationService{
 		return true;
 	}
 	
+	/**
+	 * Expires the account.
+	 * 
+	 * @param email
+	 *            String
+	 * 
+	 * @return Boolean
+	 * 
+	 * @throws UserNotFoundException
+	 */
+	
 	@Override
 	@Transactional
 	public Boolean convertToExpiredAccount(String email) throws UserNotFoundException{
@@ -144,6 +206,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 		
 		return true;
 	}
+	
+	/**
+	 * Sends email to for reset the password.
+	 * 
+	 * @param email
+	 *            String
+	 * 
+	 * @return created
+	 * 
+	 * @throws UserNotFoundException,
+	 *             MessagingException
+	 */
 	
 	@Override
 	@Transactional
@@ -158,6 +232,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 		
 		return created;
 	}
+	
+	/**
+	 * Resets the password.
+	 * 
+	 * @param user
+	 *            ChangePasswordModel, resetToken String
+	 * 
+	 * @return success
+	 * 
+	 * @throws InvalidTokenException,
+	 *             MessagingException
+	 */
 
 	@Override
 	@Transactional
@@ -170,6 +256,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 		
 		return success;
 	}
+	
+	/**
+	 * Changes the password.
+	 * 
+	 * @param user
+	 *            UserModel
+	 * 
+	 * @return success
+	 * 
+	 * @throws UserNotFoundException,
+	 *             MessagingException
+	 */
 
 	@Override
 	@Transactional
@@ -198,14 +296,41 @@ public class RegistrationServiceImpl implements RegistrationService{
 	@Value ("${email.reset.confirm}")
 	private String resetConfirmEmailBody;
 	
+	/**
+	 * Sends the verification mail to the user.
+	 * 
+	 * @param email
+	 *            String, token String
+	 * 
+	 * @throws MessagingException
+	 */
+	
 	@Override
 	public void sendVerificationEmail(String email, String token) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Plus: Verify Your Email Address", token, emailBody);
 	}
 	
+	/**
+	 * Sends the Password Reset mail to the user.
+	 * 
+	 * @param email
+	 *            String, token String
+	 * 
+	 * @throws MessagingException
+	 */
+	
 	private void sendResetEmail(String email, String token) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Plus: Reset Your Password", token, resetEmailBody);
 	}
+	
+	/**
+	 * Sends the Password Reset confirmation mail to the user.
+	 * 
+	 * @param email
+	 *            String
+	 * 
+	 * @throws MessagingException
+	 */
 
 	private void sendResetConfirmationEmail(String email) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Plus: Password Reset", null, resetConfirmEmailBody);
