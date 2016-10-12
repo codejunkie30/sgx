@@ -13,40 +13,32 @@ import com.wmsi.sgx.repository.Currencies;
 import com.wmsi.sgx.service.currency.CurrencyService;
 
 /**
- * This class retrieves the existing currencies from the database and the new
- * currencies will adding to the currency entity.
+ * The CurrencyService handles operations related to currency
  * 
- *
  */
-
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
 	@Autowired
 	private Currencies currencyRepository;
-	
+
 	/**
-	 * Updates the currency values.
+	 * Updates the currency
 	 * 
 	 * @param dto
 	 *            CurrencyModel
-	 * 
 	 */
-	
 	@Override
 	public void updateCurrency(CurrencyModel dto) {
 		currencyRepository.updateComplete(dto.isCompleted(), dto.getCurrencyName());
 	}
-	
+
 	/**
-	 * Adds the new currencies into currencies list.
+	 * Adds currency model
 	 * 
 	 * @param currencyModelList
-	 *            List
-	 * 
-	 * @return boolean
+	 * @return
 	 */
-
 	@Override
 	public boolean addCurrencies(List<CurrencyModel> currencyModelList) {
 		List<Currency> currencyDomainList = new ArrayList<Currency>();
@@ -58,69 +50,63 @@ public class CurrencyServiceImpl implements CurrencyService {
 		Iterable<Currency> it = currencyRepository.save(currencyDomainList);
 		return it.iterator().hasNext();
 	}
-	
+
 	/**
-	 * Retrieves the all the currencies.
+	 * Retrieves list of all currencies.
 	 * 
 	 * @return currencyModelList
 	 */
-
 	@Override
 	public List<CurrencyModel> getAllCurrencies() {
 		List<CurrencyModel> currencyModelList = new ArrayList<CurrencyModel>();
 		List<Currency> currencyDomainList = currencyRepository.findAll();
-		for(Currency c: currencyDomainList){
+		for (Currency c : currencyDomainList) {
 			CurrencyModel m = new CurrencyModel();
 			BeanUtils.copyProperties(c, m);
 			currencyModelList.add(m);
 		}
 		return currencyModelList;
 	}
-	
+
 	/**
 	 * Adds the new currency into currency entity .
 	 * 
 	 * @param model
 	 *            CurrencyModel
-	 * 
 	 * @return CurrencyModel
 	 */
-
 	@Override
 	public CurrencyModel addCurrency(CurrencyModel model) {
 		Currency currencyEntityObject = new Currency();
 		BeanUtils.copyProperties(model, currencyEntityObject);
-		currencyEntityObject=currencyRepository.save(currencyEntityObject);
-		BeanUtils.copyProperties(currencyEntityObject,model);
+		currencyEntityObject = currencyRepository.save(currencyEntityObject);
+		BeanUtils.copyProperties(currencyEntityObject, model);
 		return model;
 	}
-	
+
 	/**
-	 * Deletse all the currencies.
+	 * Deletes all the currencies.
 	 * 
 	 */
-	
-	public void deleteAll(){
+	public void deleteAll() {
 		currencyRepository.deleteAll();
 	}
-	
+
 	/**
 	 * Retrieves the count of incomplete currencies.
 	 * 
 	 * @return int
 	 */
-
 	@Override
 	public int getCountOfInCompleteCurrenciesCount() {
 		return currencyRepository.getCountOfInCompletedCurrencies();
 	}
-	
+
 	/**
-	 * Retrieves the non complete currency.
+	 * Retrieves non complete currency information
 	 * 
 	 * @return CurrencyModel
 	 */
-
 	@Override
 	public CurrencyModel getNonCompleteCurrency() {
 		Currency domain = currencyRepository.getNonCompleteCurrency();
@@ -128,7 +114,5 @@ public class CurrencyServiceImpl implements CurrencyService {
 		BeanUtils.copyProperties(domain, currencyModel);
 		return currencyModel;
 	}
-
-
 
 }

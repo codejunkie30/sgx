@@ -8,24 +8,19 @@ import com.wmsi.sgx.model.account.UserModel;
 import com.wmsi.sgx.service.account.impl.CreateUserReponse;
 
 /**
- * Create/register the user. Verify the expiration date and convert the premium
- * account and send notification mail to the users.
+ * The RegistrationService handles operations like user registration,
+ * sending the verification email, verifying the user and password change.
  *
  */
-
-
 public interface RegistrationService{
 
 	/**
 	 * Registers the user.
 	 * 
-	 * @param dto
-	 *            UserModel
-	 * 
-	 * @return Response
-	 * 
-	 * @throws UserExistsException,
-	 *             MessagingException
+	 * @param dto UserModel
+	 * @return CreateUserReponse
+	 * @throws UserExistsException
+	 * @throws MessagingException
 	 */
 	CreateUserReponse registerUser(UserModel dto) throws UserExistsException, MessagingException;
 
@@ -33,10 +28,7 @@ public interface RegistrationService{
 	 * Resends the verification mail.
 	 * 
 	 * @param username
-	 *            String
-	 * 
 	 * @return ApiResponse
-	 * 
 	 * @throws MessagingException
 	 */
 	ApiResponse resendVerificationEmail(String username) throws MessagingException;
@@ -45,23 +37,18 @@ public interface RegistrationService{
 	 * Verifies the user.
 	 * 
 	 * @param token
-	 *            String
-	 * 
-	 * @return Boolean
-	 * 
-	 * @throws UserVerificationException,
-	 *             AccountCreationException, VerifiedUserException
+	 * @return true if the user verification is succeeded otherwise false
+	 * @throws UserVerificationException
+	 * @throws AccountCreationException
+	 * @throws VerifiedUserException
 	 */
 	Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException;
 
 	/**
-	 * Converts to the Premium Account.
+	 * Converts the user to Premium user Account.
 	 * 
 	 * @param dto
-	 *            UserModel
-	 * 
-	 * @return Boolean
-	 * 
+	 * @return
 	 */
 	Boolean convertToPremiumAccount(UserModel dto);
 	
@@ -69,24 +56,19 @@ public interface RegistrationService{
 	 * Expires the account.
 	 * 
 	 * @param email
-	 *            String
-	 * 
-	 * @return Boolean
-	 * 
+	 * @return Returns true if the expire account conversion is succeeded
+	 *         otherwise false
 	 * @throws UserNotFoundException
 	 */
 	Boolean convertToExpiredAccount(String email) throws UserNotFoundException;
 
 	/**
-	 * Sends email to for reset the password.
+	 * Sends email to reset the password.
 	 * 
 	 * @param email
-	 *            String
-	 * 
-	 * @return created
-	 * 
-	 * @throws UserNotFoundException,
-	 *             MessagingException
+	 * @return 
+	 * @throws UserNotFoundException
+	 * @throws MessagingException
 	 */
 	Boolean sendPasswordReset(String email) throws UserNotFoundException, MessagingException;
 
@@ -94,12 +76,10 @@ public interface RegistrationService{
 	 * Resets the password.
 	 * 
 	 * @param user
-	 *            ChangePasswordModel, resetToken String
-	 * 
-	 * @return success
-	 * 
-	 * @throws InvalidTokenException,
-	 *             MessagingException
+	 * @param resetToken
+	 * @return true if the password is reset otherwise false
+	 * @throws InvalidTokenException
+	 * @throws MessagingException
 	 */
 	Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException, MessagingException;
 
@@ -107,12 +87,9 @@ public interface RegistrationService{
 	 * Changes the password.
 	 * 
 	 * @param user
-	 *            UserModel
-	 * 
-	 * @return success
-	 * 
-	 * @throws UserNotFoundException,
-	 *             MessagingException
+	 * @return true if the user password is changed otherwise false
+	 * @throws UserNotFoundException
+	 * @throws MessagingException
 	 */
 	Boolean changePassword(UserModel user) throws UserNotFoundException, MessagingException;
 	
@@ -120,8 +97,7 @@ public interface RegistrationService{
 	 * Sends the verification mail to the user.
 	 * 
 	 * @param email
-	 *            String, token String
-	 * 
+	 * @param token
 	 * @throws MessagingException
 	 */
 	void sendVerificationEmail(String email, String token) throws MessagingException;

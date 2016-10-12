@@ -2,9 +2,8 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used when exception occurs during verification of the Premium
- * user.
- *
+ * Thrown to indicate that Premium verification failed
+ * 
  */
 public class PremiumVerificationException extends Exception{
 

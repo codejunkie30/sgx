@@ -16,10 +16,10 @@ import com.wmsi.sgx.service.account.UserVerificationService;
 import com.wmsi.sgx.service.account.VerifiedUserException;
 
 /**
- * This class create/verify the user verification token.
+ * This UserVerificationServiceImpl class handles operations like creates, verification of
+ * the token
  *
  */
-
 @Service
 public class UserVerificationServiceImpl implements UserVerificationService{
 
@@ -33,12 +33,8 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 	 * Creates the verification token.
 	 * 
 	 * @param user
-	 *            User
-	 *
-	 * @return String
-	 *
+	 * @return Verification token
 	 */
-
 	@Override
 	@Transactional
 	public String createVerificationToken(User user){
@@ -54,17 +50,13 @@ public class UserVerificationServiceImpl implements UserVerificationService{
 	}
 	
 	/**
-	 * Verifies token found or not and Verification token redeemed or not.
+	 * Verifies the token is found or not and the token is redeemed or not.
 	 * 
 	 * @param token
-	 *            String
-	 *
-	 * @return User
-	 *
-	 * @throws UserVerificationException,
-	 *             VerifiedUserException
+	 * @return
+	 * @throws UserVerificationException
+	 * @throws VerifiedUserException
 	 */
-	
 	@Override
 	@Transactional
 	public User verifyToken(String token) throws UserVerificationException, VerifiedUserException{

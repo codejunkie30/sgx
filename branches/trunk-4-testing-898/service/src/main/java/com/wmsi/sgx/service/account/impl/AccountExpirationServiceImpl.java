@@ -71,12 +71,11 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	//@Scheduled(cron="0 20 14 ? * *")
 	
 	/**
-	 * Checks account expiration and account should be active and set the
-	 * currency with SGD.
+	 * This method checks account expiration and sends en email if the account
+	 * is expired.
 	 * 
 	 * @throws MessagingException
 	 */
-	
 	public void checkAccountExpiration() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -115,11 +114,11 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	}
 	
 	/**
-	 * Checks account expiration for trial users.
+	 * This method checks half way account expiration for trial users and sends
+	 * an email if the account expiration reached the half way days
 	 * 
 	 * @throws MessagingException
 	 */
-	
 	//@Scheduled(cron="0 20 15 ? * *")
 	public void sendAccountExpirationHalfWayEmail() throws MessagingException{
 		List<Account> accounts = accountRepository.findAll();
@@ -141,21 +140,21 @@ public class AccountExpirationServiceImpl implements AcccountExiprationService{
 	}
 	
 	/**
-	 * Sends the trial user expired emails.
+	 * Sends half way trial email.
 	 * 
+	 * @param email
 	 * @throws MessagingException
 	 */
-	
 	private void sendHalfWayTrialEmail(String email) throws MessagingException{
 		emailService.send(email, halfWaySubject, null, halfWayTrialEmailBody);
 	}
 	
 	/**
-	 * Sends the trial user expired emails.
+	 * Sends Trail expired email
 	 * 
+	 * @param email
 	 * @throws MessagingException
 	 */
-	
 	private void sendTrialExpiredEmail(String email) throws MessagingException{
 		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
 	}

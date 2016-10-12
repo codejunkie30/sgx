@@ -106,7 +106,7 @@ public class PriceController {
 	 * 
 	 * @param companies
 	 *            WatchlistAddCompany
-	 * @return Map Map<String, List<CompanyPrice>>
+	 * @return Map
 	 * @throws QuanthouseServiceException
 	 * @throws CompanyServiceException
 	 * @throws SearchServiceException
@@ -126,7 +126,7 @@ public class PriceController {
 	 * Fetches the price on Intra day.
 	 * 
 	 * @param query
-	 * @return list List<Price>
+	 * @return list of Price
 	 */
 	@RequestMapping(value="/price/intraday")
 	public List<Price> getIntradayPrices(@RequestBody IdSearch query) {
@@ -148,7 +148,7 @@ public class PriceController {
 	 * 
 	 * @param request
 	 * @param priceCall
-	 * @return Map Map<String, List<Price>>
+	 * @return Map
 	 * @throws QuanthouseServiceException
 	 * @throws CompanyServiceException
 	 */

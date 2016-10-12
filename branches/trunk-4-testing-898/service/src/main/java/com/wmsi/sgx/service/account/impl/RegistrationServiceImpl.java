@@ -30,11 +30,10 @@ import com.wmsi.sgx.service.account.UserVerificationService;
 import com.wmsi.sgx.service.account.VerifiedUserException;
 
 /**
- * This class create/register the user. Verify the expiration date and convert
- * the premium account and send notification mail to the users.
+ * The RegistrationServiceImpl class handles operations like user registration,
+ * sending the verification email, verifying the user and password change.
  *
  */
-
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
 
@@ -56,15 +55,11 @@ public class RegistrationServiceImpl implements RegistrationService{
 	/**
 	 * Registers the user.
 	 * 
-	 * @param dto
-	 *            UserModel
-	 * 
-	 * @return Response
-	 * 
-	 * @throws UserExistsException,
-	 *             MessagingException
+	 * @param dto UserModel
+	 * @return CreateUserReponse
+	 * @throws UserExistsException
+	 * @throws MessagingException
 	 */
-	
 	@Override
 	@Transactional
 	public CreateUserReponse registerUser(UserModel dto) throws UserExistsException, MessagingException{
@@ -86,13 +81,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Resends the verification mail.
 	 * 
 	 * @param username
-	 *            String
-	 * 
 	 * @return ApiResponse
-	 * 
 	 * @throws MessagingException
 	 */
-	
 	@Override
 	@Transactional
 	public ApiResponse resendVerificationEmail(String username) throws MessagingException{
@@ -124,14 +115,11 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Verifies the user.
 	 * 
 	 * @param token
-	 *            String
-	 * 
-	 * @return Boolean
-	 * 
-	 * @throws UserVerificationException,
-	 *             AccountCreationException, VerifiedUserException
+	 * @return true if the user verification is succeeded otherwise false
+	 * @throws UserVerificationException
+	 * @throws AccountCreationException
+	 * @throws VerifiedUserException
 	 */
-	
 	@Override
 	@Transactional
 	public Boolean verifyUser(String token) throws UserVerificationException, AccountCreationException, VerifiedUserException{
@@ -152,15 +140,11 @@ public class RegistrationServiceImpl implements RegistrationService{
 	}
 	
 	/**
-	 * Converts to the Premium Account.
+	 * Converts the user to Premium user Account.
 	 * 
 	 * @param dto
-	 *            UserModel
-	 * 
-	 * @return Boolean
-	 * 
+	 * @return
 	 */
-	
 	@Override
 	@Transactional
 	public Boolean convertToPremiumAccount(UserModel dto){
@@ -188,13 +172,10 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Expires the account.
 	 * 
 	 * @param email
-	 *            String
-	 * 
-	 * @return Boolean
-	 * 
+	 * @return Returns true if the expire account conversion is succeeded
+	 *         otherwise false
 	 * @throws UserNotFoundException
 	 */
-	
 	@Override
 	@Transactional
 	public Boolean convertToExpiredAccount(String email) throws UserNotFoundException{
@@ -208,17 +189,13 @@ public class RegistrationServiceImpl implements RegistrationService{
 	}
 	
 	/**
-	 * Sends email to for reset the password.
+	 * Sends email to reset the password.
 	 * 
 	 * @param email
-	 *            String
-	 * 
-	 * @return created
-	 * 
-	 * @throws UserNotFoundException,
-	 *             MessagingException
+	 * @return 
+	 * @throws UserNotFoundException
+	 * @throws MessagingException
 	 */
-	
 	@Override
 	@Transactional
 	public Boolean sendPasswordReset(String email) throws UserNotFoundException, MessagingException{
@@ -237,14 +214,11 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Resets the password.
 	 * 
 	 * @param user
-	 *            ChangePasswordModel, resetToken String
-	 * 
-	 * @return success
-	 * 
-	 * @throws InvalidTokenException,
-	 *             MessagingException
+	 * @param resetToken
+	 * @return true if the password is reset otherwise false
+	 * @throws InvalidTokenException
+	 * @throws MessagingException
 	 */
-
 	@Override
 	@Transactional
 	public Boolean resetPassword(ChangePasswordModel user, String resetToken) throws InvalidTokenException, MessagingException{
@@ -261,14 +235,10 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Changes the password.
 	 * 
 	 * @param user
-	 *            UserModel
-	 * 
-	 * @return success
-	 * 
-	 * @throws UserNotFoundException,
-	 *             MessagingException
+	 * @return true if the user password is changed otherwise false
+	 * @throws UserNotFoundException
+	 * @throws MessagingException
 	 */
-
 	@Override
 	@Transactional
 	//@PreAuthorize("hasRole('ROLE_USER') and authentication.name == #user.email")
@@ -300,11 +270,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Sends the verification mail to the user.
 	 * 
 	 * @param email
-	 *            String, token String
-	 * 
+	 * @param token
 	 * @throws MessagingException
 	 */
-	
 	@Override
 	public void sendVerificationEmail(String email, String token) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Plus: Verify Your Email Address", token, emailBody);
@@ -314,11 +282,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 	 * Sends the Password Reset mail to the user.
 	 * 
 	 * @param email
-	 *            String, token String
-	 * 
+	 * @param token
 	 * @throws MessagingException
 	 */
-	
 	private void sendResetEmail(String email, String token) throws MessagingException{
 		emailService.send(email, "SGX StockFacts Plus: Reset Your Password", token, resetEmailBody);
 	}

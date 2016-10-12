@@ -2,6 +2,9 @@ package com.wmsi.sgx.service.account.impl;
 
 import com.google.common.base.Objects;
 
+/**
+ * This domain class holds the token and user name information
+ */
 public class CreateUserReponse {
 	
 	private String token;
