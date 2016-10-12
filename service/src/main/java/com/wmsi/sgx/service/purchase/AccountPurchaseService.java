@@ -1,9 +1,9 @@
 package com.wmsi.sgx.service.purchase;
 
 /**
- * Form a message with required details for the message.
+ * The AccountPurchaseService handles the information for the Account purchase
+ * operation
  */
-
 public interface AccountPurchaseService {
 		
 	String success();
@@ -11,12 +11,11 @@ public interface AccountPurchaseService {
 	String cancel();
 	
 	/**
-   * Form a message with required details 
-   * 
-   * @param token String
-   *            
-   * @return String 
-   */
+	 * Returns the message with the required details to make a purchase
+	 * 
+	 * @param token
+	 * @return
+	 */
 	String formMessage(String token);
 
 }

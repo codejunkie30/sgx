@@ -26,11 +26,10 @@ import com.wmsi.sgx.service.search.elasticsearch.ElasticSearchService;
 import com.wmsi.sgx.util.DateUtil;
 
 /**
- * This class create trial/premium account and verifies the trail/premium period
- * after expire of the accounts for the users. Update accounts with the currency.
+ * 
+ * This class handles operations related to Account 
  *
  */
-
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -55,13 +54,11 @@ public class AccountServiceImpl implements AccountService {
 	 */
 	
 	/**
-     * Retrieves the account details for the user name and set the currency and days remaining.
-     * 
-     * @param username String
-     *           
-     * @return AccountModel 
-     */
-
+	 * Retrieves the account details for the user name
+	 * 
+	 * @param username
+	 * @return
+	 */
 	@Override
 	// @Secured("ROLE_USER")
 	public AccountModel getAccountForUsername(String username) {
@@ -115,24 +112,33 @@ public class AccountServiceImpl implements AccountService {
 		return ret;
 	}
 
+	/**
+	 * Retrieves the user based on the transaction id
+	 * 
+	 * @param transId
+	 * @return User
+	 */
 	@Override
 	public User findUserForTransactionId(String transId) {
 		return enetsRepository.findByTransactionId(transId);
 	}
 
+	/**
+	 * Sets the currency index
+	 */
 	public Boolean setCurrencyIndex(String esIndexName) {
 		esSearchService.setIndexName(esIndexName);
 		return false;
 	}
 	
 	/**
-     * Updates the account with the Currency and ContactOptIn.
-     * 
-     * @param updatedBy long, dto UpdateAccountModel
-     *           
-     * @return AccountModel 
-     */
-
+	 * Updates account with the Currency and ContactOptIn.
+	 * 
+	 * @param dto
+	 *            UpdateAccountModel
+	 * @param updatedBy
+	 * @return AccountModel
+	 */
 	@Override
 	// @Secured("ROLE_USER")
 	public AccountModel updateAccount(UpdateAccountModel dto, long updatedBy) {
@@ -150,14 +156,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	/**
-     * Creating PremiumAccount.
-     * 
-     * @param user
-     *            User
-     * @return AccountModel 
-     * @throws Account
-     */
-
+	 * Creates Trial Account for the given user information
+	 * 
+	 * @param user
+	 * @return Account
+	 * @throws AccountCreationException
+	 */
 	@Override
 	public Account createTrialAccount(User user) throws AccountCreationException {
 
@@ -172,12 +176,11 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	/**
-     * Creating PremiumAccount.
-     * 
-     * @param user User
-     * @return true or false 
-     */
-
+	 * Creates Premium account for the given user information
+	 * 
+	 * @param user User
+	 * @return Account
+	 */
 	@Override
 	public Account createPremiumAccount(User user) {
 
@@ -198,12 +201,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	/**
-     * Checking the is PremiumUser or not.
-     * 
-     * @param u User
-     * @return account
-     */
-	
+	 * Checks if the user is a Premium user
+	 * 
+	 * @param u
+	 *            User
+	 * @return Returns true if the user is premium
+	 */
 	@Override
 	public Boolean isPremiumUser(User u) {
 		if (u != null) {
@@ -216,12 +219,13 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	/**
-     * Deactivates the trial accounts or PREMIUM accounts.
-     * 
-     * @param user User
-     * @return success 
-     */
-	
+	 * Converts the trial Premium accounts to expired accounts based on the user
+	 * information provided.
+	 * 
+	 * @param user
+	 *            User
+	 * @return true or false
+	 */
 	@Override
 	public Boolean convertToExpiry(User user) {
 		Boolean success = false;
@@ -243,13 +247,14 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	/**
-     * Retrieves the account information based on the X-AUTH-TOKEN sent in the
-     * request header
-     * 
-     * @param expirationDays int,type  AccountType, user User
-     * @return account 
-     */
-
+	 * Creates the account for the user information, account type and expiration
+	 * days provided
+	 * 
+	 * @param user
+	 * @param type
+	 * @param expirationDays
+	 * @return
+	 */
 	private Account createAccount(User user, AccountType type, int expirationDays) {
 
 		Account acc = new Account();

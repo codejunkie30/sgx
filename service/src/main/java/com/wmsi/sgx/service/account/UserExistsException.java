@@ -2,9 +2,7 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used when exception occurs during verification of the existence
- * of the user.
- *
+ * Thrown to indicate that the user doesn't exists
  */
 public class UserExistsException extends Exception{
 

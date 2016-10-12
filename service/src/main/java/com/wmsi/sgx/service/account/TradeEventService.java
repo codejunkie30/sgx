@@ -6,11 +6,9 @@ import java.util.List;
 import com.wmsi.sgx.domain.TradeEvent;
 
 /**
- * Retrieves the events for the date or arket, Tickercode between LastTradeTime
- * values.
+ * The TradeEventService handles trade events operations.
  *
  */
-
 public interface TradeEventService{
 
 	/**
@@ -24,28 +22,31 @@ public interface TradeEventService{
 	 */
 	TradeEvent getLatestEvent(String market, String id);
 
+	/**
+	 * Saves the trade event information
+	 * 
+	 * @param p TradeEvent
+	 */
 	void saveEvent(TradeEvent p);
 
 	/**
-	 * Retrieves events for the date
+	 * Retrieves trade events for the market, ticker code and date provided
 	 * 
 	 * @param market
-	 *            String, ticker String, date Date
-	 * 
-	 * @return list
-	 * 
+	 * @param id ticker code
+	 * @param d trade event date
+	 * @return List of trade events
 	 */
-	
 	List<TradeEvent> getEventsForDate(String market, String id, Date d);
 	
 	/**
-	 * Retrieves Market, Tickercode between LastTradeTime
+	 * Retrieves trade events for the market, ticker code and the date period
 	 * 
 	 * @param market
-	 *            String, ticker String, from Date, to Date
-	 * 
-	 * @return list
-	 * 
+	 * @param id
+	 * @param from
+	 * @param to
+	 * @return List of trade events
 	 */
 	List<TradeEvent> getEventsForDatesBetween(String market, String id, Date from, Date to);
 }

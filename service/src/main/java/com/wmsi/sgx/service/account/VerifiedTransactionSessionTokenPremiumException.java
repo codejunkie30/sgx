@@ -1,11 +1,9 @@
 package com.wmsi.sgx.service.account;
 
 /**
- * Creates/validates transaction session token and verifies the token is active or
- * not.
+ * Thrown to indicate that transaction session token premium verification is falied
  *
  */
-
 public class VerifiedTransactionSessionTokenPremiumException extends Exception
 {
   private static final long serialVersionUID = 1L;

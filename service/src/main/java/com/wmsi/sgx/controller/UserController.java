@@ -64,9 +64,11 @@ public class UserController{
 	 * @param result
 	 *            BindingResult
 	 * @return Boolean
-	 * @throws UserExistsException,
-	 *             MessagingException, RSAKeyException,
-	 *             MethodArgumentNotValidException
+	 * @return
+	 * @throws UserExistsException
+	 * @throws MessagingException
+	 * @throws RSAKeyException
+	 * @throws MethodArgumentNotValidException
 	 */
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public @ResponseBody Boolean register(@RequestBody UserModel user, BindingResult result) throws UserExistsException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
@@ -93,8 +95,10 @@ public class UserController{
 	 * @param user
 	 *            VerifyUser
 	 * @return Boolean
-	 * @throws UserVerificationException,
-	 *             AccountCreationException, VerifiedUserException
+	 * 
+	 * @throws UserVerificationException
+	 * @throws AccountCreationException
+	 * @throws VerifiedUserException
 	 */
 	@RequestMapping(value = "verify", method = RequestMethod.POST)
 	public @ResponseBody Boolean verify(@RequestBody VerifyUser user) throws UserVerificationException, AccountCreationException, VerifiedUserException{
@@ -108,8 +112,10 @@ public class UserController{
 	 * @param user
 	 *            ResetUser
 	 * @return ApiResponse
-	 * @throws UserNotFoundException,
-	 *             MessagingException, RSAKeyException
+	 * 
+	 * @throws UserNotFoundException
+	 * @throws MessagingException
+	 * @throws RSAKeyException
 	 */
 	@RequestMapping(value = "resetToken", method = RequestMethod.POST)
 	public @ResponseBody ApiResponse resetToken(@RequestBody ResetUser user) throws UserNotFoundException, MessagingException, RSAKeyException{
@@ -123,8 +129,9 @@ public class UserController{
 	 * @param user
 	 *            ResetUser
 	 * @return Boolean
-	 * @throws UserNotFoundException,
-	 *             RSAKeyException
+	 * 
+	 * @throws UserNotFoundException
+	 * @throws RSAKeyException
 	 */
 	@RequestMapping(value = "reset", method = RequestMethod.POST)
 	public @ResponseBody Boolean reset(@RequestBody ResetUser user) throws UserNotFoundException, RSAKeyException{
@@ -151,8 +158,9 @@ public class UserController{
 	 * @param user
 	 *            ResetUser
 	 * @return Boolean
-	 * @throws UserNotFoundException,
-	 *             RSAKeyException
+	 * 
+	 * @throws UserNotFoundException
+	 * @throws RSAKeyException
 	 */
 	//Strictly used for internal testing, 
 	//you can make a user expired by calling this api endpoint  
@@ -177,15 +185,13 @@ public class UserController{
 	 * Changes the password of the user.
 	 * 
 	 * @param token
-	 *            String
 	 * @param user
-	 *            ChangePasswordModel
 	 * @param result
-	 *            BindingResult
-	 * @return Boolean
-	 * @throws InvalidTokenException,
-	 *             MessagingException, RSAKeyException,
-	 *             MethodArgumentNotValidExceptio
+	 * @return
+	 * @throws InvalidTokenException
+	 * @throws MessagingException
+	 * @throws RSAKeyException
+	 * @throws MethodArgumentNotValidException
 	 */
 	@RequestMapping(value = "password", method = RequestMethod.POST)
 	public @ResponseBody Boolean changePassword(@RequestParam("ref") String token, @RequestBody ChangePasswordModel user, BindingResult result) throws InvalidTokenException, MessagingException, RSAKeyException, MethodArgumentNotValidException{
