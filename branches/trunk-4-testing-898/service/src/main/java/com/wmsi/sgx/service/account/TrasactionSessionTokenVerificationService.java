@@ -14,8 +14,10 @@ public interface TrasactionSessionTokenVerificationService {
 	 * Creates the transaction session token.
 	 * 
 	 * @param user
+	 *            User
 	 * @param token
-	 * @return Transaction token
+	 *            Token
+	 * @return String Transaction token
 	 */
 	public String createTransactionSessionToken(User user, String token);
 
@@ -23,7 +25,9 @@ public interface TrasactionSessionTokenVerificationService {
 	 * Validates the transaction session token.
 	 * 
 	 * @param user
+	 *            User
 	 * @param token
+	 *            String
 	 * @return Returns true if the transaction token is valid otherwise false
 	 * @throws TransactionSessionTokenVerificationException
 	 * @throws VerifiedTransactionSessionTokenPremiumException
@@ -35,6 +39,7 @@ public interface TrasactionSessionTokenVerificationService {
 	 * Deletes the transaction tokens based on user.
 	 * 
 	 * @param user
+	 *            User
 	 * @return no of tokens deleted
 	 */
 	public int deleteTransactionSessionTokens(User user);
@@ -43,14 +48,15 @@ public interface TrasactionSessionTokenVerificationService {
 	 * Disables the transaction token entries of the user.
 	 * 
 	 * @param user
-	 * @return
+	 *            User
+	 * @return Returns true if the transaction token is diabled otherwise false
 	 */
 	public boolean disableTransactionSessionToken(User user);
 
 	/**
 	 * Returns the token expiration time.
 	 * 
-	 * @return
+	 * @return Timestamp Token expiration time
 	 */
 	public Timestamp getTokenExpirationTime();
 
@@ -58,8 +64,10 @@ public interface TrasactionSessionTokenVerificationService {
 	 * Verifies whether the token is expired or not.
 	 * 
 	 * @param user
+	 *            User
 	 * @param transSessionToken
-	 * @return
+	 *            String
+	 * @return Returns true if the token is expired otherwise false
 	 */
 	public boolean isTokenExpiring(User user, String transSessionToken);
 
