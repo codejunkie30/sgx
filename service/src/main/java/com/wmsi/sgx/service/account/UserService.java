@@ -11,11 +11,9 @@ import com.wmsi.sgx.model.ChangePasswordModel;
 import com.wmsi.sgx.model.account.UserModel;
 
 /**
- * Creates the user and save the user details in database. Verify the account is
- * locked or not and change/reset the passwords.
+ * The UserService handles operations related to User
  *
  */
-
 public interface UserService{
   
 	/**
@@ -41,9 +39,10 @@ public interface UserService{
 	 * Changes the password.
 	 * 
 	 * @param user
-	 *            ChangePasswordModel, token String
-	 * @return Boolean
-	 * 
+	 *            ChangePasswordModel
+	 * @param token
+	 *            String
+	 * @return Returns true if the password change succeeded otherwise false
 	 * @throws InvalidTokenException
 	 */
 	Boolean changePassword(ChangePasswordModel user, String token) throws InvalidTokenException;
@@ -67,32 +66,28 @@ public interface UserService{
 	Boolean isAccountLocked(String username);
 
 	/**
-	 * Saves the user , password and ContactOptIn.
+	 * Saves the user, password and ContactOptIn.
 	 * 
-	 * @param user
-	 *            User, dto UserModel
-	 * 
+	 * @param user User
 	 * @return User
-	 * 
 	 */
 	User saveUser(User user);
 
 	/**
-	 * Saves the change password.
+	 * Creates the password reset token
 	 * 
-	 * @param user
-	 *            User, dto ChangePasswordModel
-	 * 
-	 * @return User
-	 * 
+	 * @param username
+	 *            String
+	 * @return String Password reset token
+	 * @throws UserNotFoundException
 	 */
 	String createPasswordResetToken(String username) throws UserNotFoundException;
 
 	/**
-	 * Returns the Autorities based on user.
+	 * Returns the Authorities based on user.
 	 * 
-	 * @param user
-	 *            User
+	 * @param user User
+	 * @return Authority information
 	 */
 	Set<Authority> getAuthorities(User user);
 
