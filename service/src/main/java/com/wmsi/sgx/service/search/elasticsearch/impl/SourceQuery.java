@@ -28,7 +28,7 @@ public class SourceQuery extends AbstractQuery{
 	public EndPoint getEndPoint(){return EndPoint.SOURCE;}
 	
 	/**
-	 * Retrieves the end point uri for elastic search.
+	 * Retrieves the uri for elastic search.
 	 * 
 	 * @return URI
 	 * @throws ElasticSearchException

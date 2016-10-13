@@ -12,8 +12,20 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public interface Query{
 
+	/**
+	 * Retrieves the uri for elastic search.
+	 * 
+	 * @return URI
+	 * @throws ElasticSearchException
+	 */
 	URI getURI() throws ElasticSearchException;
 
+	/**
+	 * Returns JSON object.
+	 * 
+	 * @return JsonNode
+	 * @throws ElasticSearchException
+	 */
 	JsonNode toJson() throws ElasticSearchException;
 
 }
