@@ -49,7 +49,7 @@ public abstract class AbstractQuery implements Query{
 	public abstract EndPoint getEndPoint();
 	
 	/**
-	 * Retrieves the end point URI.
+	 * Retrieves the URI.
 	 * 
 	 * @return URI
 	 */
