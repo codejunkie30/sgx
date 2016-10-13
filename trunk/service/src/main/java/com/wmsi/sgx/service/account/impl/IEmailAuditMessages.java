@@ -2,7 +2,7 @@ package com.wmsi.sgx.service.account.impl;
 
 /**
  * 
- * This interface defines the constants.
+ * This interface defines the constants for the email audit messages.
  *
  */
 public class IEmailAuditMessages {

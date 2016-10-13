@@ -6,25 +6,24 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * Verifies the account expiration and send the 
- * trail users expired email with subject and email body.
+ * The AcccountExiprationService handles accounts expiration. 
  *
  */
-
 public interface AcccountExiprationService {
 
-  /**
-   * This method checks account expiration and account should be active and set the currency with SGD.
-   * 
-   * @throws MessagingException
-   */
-  
+	/**
+	 * This method checks account expiration and sends en email if the account
+	 * is expired.
+	 * 
+	 * @throws MessagingException
+	 */
 	void checkAccountExpiration() throws MessagingException;
 	
 	/**
-   * This method checks account expiration for trial users.
-   * 
-   * @throws MessagingException
-   */
+	 * This method checks half way account expiration for trial users and sends
+	 * an email if the account expiration reached the half way days
+	 * 
+	 * @throws MessagingException
+	 */
 	void sendAccountExpirationHalfWayEmail() throws MessagingException;
 }

@@ -27,12 +27,10 @@ import com.wmsi.sgx.service.search.SearchService;
 import com.wmsi.sgx.service.search.SearchServiceException;
 
 /**
- * This class get intraday price data for the given id within the given market
- * and retrieve the pricing history/price for watchlist companies.Set the fall
- * back price also.
+ * The QuanthouseServiceImpl class provides pricing information based on the different
+ * input parameters
  *
  */
-
 @Service
 public class QuanthouseServiceImpl implements QuanthouseService{
 
@@ -59,9 +57,9 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * Gets intraday price data for the given id within the given market
 	 * 
 	 * @param market
-	 *            - Market ID belongs too
+	 *            Market ID belongs too
 	 * @param id
-	 *            - Local Market identifier
+	 *            Local Market identifier
 	 * @return The last price
 	 * @throws QuanthouseServiceException
 	 * @throws CompanyServiceException
@@ -82,12 +80,12 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * Retrieves the pricing.
 	 * 
 	 * @param market
-	 *            String, id String, date Date.
-	 * 
-	 * @return list
-	 * @throws QuanthouseServiceException,
-	 *             CompanyServiceException, SearchServiceException
-	 * 
+	 * @param id
+	 * @param date
+	 * @return Price
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
 	 */
 	@Override
 	public Price getPriceAt(String market, String id, Date date) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
@@ -106,13 +104,13 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 
 	/**
-	 * Gets intraday prices for all trade events by day.
+	 * Gets intra day prices for all trade events by day.
 	 * 
 	 * @param market
 	 *            - Market ID belongs too
 	 * @param id
 	 *            - Local Market identifier
-	 * @return The prices for
+	 * @return The prices for given market and ticker code
 	 * @throws QuanthouseServiceException
 	 */
 	@Override
@@ -132,13 +130,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * Retrieves the pricing history.
 	 * 
 	 * @param market
-	 *            String, id String, date Date.
-	 * 
-	 * @return list
+	 * @param id
+	 * @param date
+	 * @return
 	 * @throws QuanthouseServiceException
-	 * 
 	 */
-	
 	@Override
 	public List<Price> getPricingHistory(String market, String id, Date date) throws QuanthouseServiceException {
 
@@ -160,13 +156,12 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	 * Retrieves the pricing history between the two companies .
 	 * 
 	 * @param market
-	 *            String, id String, from Date, to Date.
-	 * 
-	 * @return list
+	 * @param id
+	 * @param from
+	 * @param to
+	 * @return
 	 * @throws QuanthouseServiceException
-	 * 
 	 */
-	
 	@Override
 	public List<Price> getPricingHistoryBetweenDates(String market, String id, Date from, Date to) throws QuanthouseServiceException {
 
@@ -185,18 +180,14 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	/**
-	 * Retrieves the company price .
+	 * Retrieves the company price.
 	 * 
 	 * @param companies
-	 *            List
-	 * 
-	 * @return list
-	 * @throws CompanyServiceException,
-	 *             QuanthouseServiceException, SearchServiceException,
-	 *             NumberFormatException
-	 * 
+	 * @return List of company price information
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
 	 */
-	
 	@Override
 	public List<CompanyPrice> getCompanyPrice(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();
@@ -234,18 +225,14 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	/**
-	 * Retrieve the price for watchlist companies.
+	 * Retrieves the price change information for the companies
 	 * 
 	 * @param companies
-	 *            List
-	 * 
-	 * @return list
-	 * @throws CompanyServiceException,
-	 *             QuanthouseServiceException, SearchServiceException,
-	 *             NumberFormatException
-	 * 
+	 * @return
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
 	 */
-	
 	@Override
 	public List<CompanyPrice> getPriceChangeForWatchlistCompanies(List<String> companies) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, NumberFormatException{
 		List<CompanyPrice> list = new ArrayList<CompanyPrice>();

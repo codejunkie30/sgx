@@ -2,8 +2,7 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used to generate the QuanthouseServiceException during Quant
- * House Service execution.
+ * Thrown to indicate that the Quant house service execution failed
  *
  */
 public class QuanthouseServiceException extends Exception {

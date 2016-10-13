@@ -93,7 +93,7 @@ public class CompanyController{
 	 * 
 	 * @param search IdSearch
 	 * @param request HttpServletRequest
-	 * @return Map<String, Object>
+	 * @return Map
 	 * @throws CompanyServiceException
 	 * @throws SearchServiceException
 	 */
@@ -139,7 +139,7 @@ public class CompanyController{
 	 *            IdSearch
 	 * @param request
 	 *            HttpServletRequest
-	 * @return Map<String, Object>
+	 * @return Map
 	 * @throws CompanyServiceException
 	 * @throws SearchServiceException
 	 */
@@ -160,7 +160,7 @@ public class CompanyController{
 	 *            IdSearch
 	 * @param request
 	 *            HttpServletRequest
-	 * @return Map<String, Company>
+	 * @return Map
 	 * @throws CompanyServiceException
 	 */
 	@RequestMapping(value="company/info")

@@ -14,11 +14,9 @@ import com.wmsi.sgx.repository.TradeEventRepository;
 import com.wmsi.sgx.service.account.TradeEventService;
 
 /**
- * This class retrieves the events for the date or arket, Tickercode between
- * LastTradeTime values.
+ * The TradeEventServiceImpl class handles trade events operations.
  *
  */
-
 @Service
 public class TradeEventServiceImpl implements TradeEventService{
 	
@@ -26,10 +24,9 @@ public class TradeEventServiceImpl implements TradeEventService{
 	private TradeEventRepository tradeEventRepository;
 	
 	/**
-	 * Saves the venet information to the repository.
+	 * Saves the trade event information
 	 * 
-	 * @param p
-	 *            TradeEvent
+	 * @param p TradeEvent
 	 */
 	@Override
 	@Transactional
@@ -52,15 +49,13 @@ public class TradeEventServiceImpl implements TradeEventService{
 	}
 	
 	/**
-	 * Retrieves events for the date
+	 * Retrieves trade events for the market, ticker code and date provided
 	 * 
 	 * @param market
-	 *            String, ticker String, date Date
-	 * 
-	 * @return list
-	 * 
+	 * @param id ticker code
+	 * @param d trade event date
+	 * @return List of trade events
 	 */
-
 	@Override	
 	public List<TradeEvent> getEventsForDate(String market, String ticker, Date date) {
 		Date d = new DateTime(date).toDate();
@@ -75,15 +70,14 @@ public class TradeEventServiceImpl implements TradeEventService{
 	}
 	
 	/**
-	 * Retrieves Market, Tickercode between LastTradeTime
+	 * Retrieves trade events for the market, ticker code and the date period
 	 * 
 	 * @param market
-	 *            String, ticker String, from Date, to Date
-	 * 
-	 * @return list
-	 * 
+	 * @param id
+	 * @param from
+	 * @param to
+	 * @return List of trade events
 	 */
-	
 	@Override	
 	public List<TradeEvent> getEventsForDatesBetween(String market, String ticker, Date from, Date to) {
 		Date d = new DateTime(from).toDate();

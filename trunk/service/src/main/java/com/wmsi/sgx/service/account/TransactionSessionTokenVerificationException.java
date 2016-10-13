@@ -2,8 +2,7 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used when exception occurs during Transaction Token
- * verification.
+ * Thrown to indicate that the Transaction Token verification is failed
  *
  */
 public class TransactionSessionTokenVerificationException extends Exception

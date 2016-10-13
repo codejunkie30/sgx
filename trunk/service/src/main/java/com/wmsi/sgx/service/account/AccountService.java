@@ -6,74 +6,81 @@ import com.wmsi.sgx.model.UpdateAccountModel;
 import com.wmsi.sgx.model.account.AccountModel;
 
 /**
- * Create trial/premium account and verifies the trail/premium period after
- * expiry the accounts for the users. Update accounts with the currency.
+ * 
+ * The AccountService handles operations related to Account 
  *
  */
-
 public interface AccountService{
 
 	/**
-	 * Retrieves the account details for the user name and set the currency and
-	 * days remaining.
+	 * Retrieves the account details for the user name
 	 * 
 	 * @param username
-	 *            String
-	 * 
-	 * @return AccountModel
+	 * @return
 	 */
-  
 	AccountModel getAccountForUsername(String username);
 
 	/**
-	 * Creates PremiumAccount.
+	 * Creates Trial Account for the given user information
 	 * 
 	 * @param user
-	 *            User
-	 * @return AccountModel
-	 * @throws Account
+	 * @return Account
+	 * @throws AccountCreationException
 	 */
 	Account createTrialAccount(User user) throws AccountCreationException;
 
 	/**
-	 * Creates PremiumAccount.
+	 * Creates Premium account for the given user information
 	 * 
-	 * @param user
-	 *            User
-	 * @return true or false
+	 * @param user User
+	 * @return Account
 	 */
 	Account createPremiumAccount(User user);
 	
 	/**
-	 * Deactivates the trial accounts or PREMIUM accounts.
+	 * Converts the trial Premium accounts to expired accounts based on the user
+	 * information provided.
 	 * 
 	 * @param user
 	 *            User
-	 * @return success
+	 * @return true or false
 	 */
 	Boolean convertToExpiry(User user);
 	
 	/**
 	 * Updates account with the Currency and ContactOptIn.
 	 * 
+	 * @param dto
+	 *            UpdateAccountModel
 	 * @param updatedBy
-	 *            long, dto UpdateAccountModel
-	 * 
 	 * @return AccountModel
 	 */
 	AccountModel updateAccount(UpdateAccountModel dto, long updatedBy);
 	
 	/**
-	 * Checks the is PremiumUser or not.
+	 * Checks if the user is a Premium user
 	 * 
 	 * @param u
 	 *            User
-	 * @return account
+	 * @return Returns true if the user is premium
 	 */
 	Boolean isPremiumUser(User u);
 	
+	/**
+	 * Retrieves the user based on the transaction id
+	 * 
+	 * @param transId
+	 * @return User
+	 */
 	User findUserForTransactionId(String transId);
 	
+	/**
+	 * Sets the currency index
+	 * 
+	 * @param curr
+	 *            Currency index
+	 * @return true or false
+	 */
 	Boolean setCurrencyIndex(String curr);
 
 }

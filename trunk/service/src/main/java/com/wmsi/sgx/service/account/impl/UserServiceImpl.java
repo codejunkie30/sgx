@@ -34,11 +34,9 @@ import com.wmsi.sgx.service.account.UserNotFoundException;
 import com.wmsi.sgx.service.account.UserService;
 
 /**
- * This class create the user and save the user details in database. Verify the
- * account is locked or not and change/reset the passwords.
+ * The UserService handles operations related to User
  *
  */
-
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -69,7 +67,6 @@ public class UserServiceImpl implements UserService{
 	 * @throws UserExistsException
 	 *             if user account doesn't exists
 	 */
-
 	@Override
 	@Transactional
 	public User createUser(UserModel dto) throws UserExistsException{
@@ -84,10 +81,10 @@ public class UserServiceImpl implements UserService{
 	}
 
 	/**
-	 * Returns the Autorities based on user.
+	 * Returns the Authorities based on user.
 	 * 
-	 * @param user
-	 *            User
+	 * @param user User
+	 * @return Authority information
 	 */
 	@Override
 	public Set<Authority> getAuthorities(User user){
@@ -105,6 +102,12 @@ public class UserServiceImpl implements UserService{
 		return userReposistory.findByUsername(username);
 	}
 	
+	/**
+	 * Saves the user, password and ContactOptIn.
+	 * 
+	 * @param user User
+	 * @return User
+	 */
 	@Override
 	@Transactional
 	public User saveUser(User user){		
@@ -152,16 +155,13 @@ public class UserServiceImpl implements UserService{
 	private PasswordResetRepository passwordResetRepository;
 	
 	/**
-	 * Creates the password reset token.
+	 * Creates the password reset token
 	 * 
 	 * @param username
 	 *            String
-	 * 
-	 * @return String
-	 * 
+	 * @return String Password reset token
 	 * @throws UserNotFoundException
 	 */
-	
 	@Override
 	@Transactional
 	public String createPasswordResetToken(String username) throws UserNotFoundException{
@@ -186,12 +186,12 @@ public class UserServiceImpl implements UserService{
 	 * Changes the password.
 	 * 
 	 * @param user
-	 *            ChangePasswordModel, token String
-	 * @return Boolean
-	 * 
+	 *            ChangePasswordModel
+	 * @param token
+	 *            String
+	 * @return Returns true if the password change succeeded otherwise false
 	 * @throws InvalidTokenException
 	 */
-	
 	@Override
 	@Transactional
 	public Boolean changePassword(ChangePasswordModel user, String token) throws InvalidTokenException {
@@ -232,7 +232,6 @@ public class UserServiceImpl implements UserService{
 	 * 
 	 * @throws UserNotFoundException
 	 */
-
 	@Override
 	@Transactional
 	//@PreAuthorize("hasRole('ROLE_USER')")
@@ -273,7 +272,6 @@ public class UserServiceImpl implements UserService{
 	 *            String
 	 * @return Boolean
 	 */
-	
 	@Override
 	public Boolean isAccountLocked(String username){
 

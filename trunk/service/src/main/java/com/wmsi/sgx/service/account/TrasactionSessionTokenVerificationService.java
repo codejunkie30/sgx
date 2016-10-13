@@ -5,70 +5,70 @@ import java.sql.Timestamp;
 import com.wmsi.sgx.domain.User;
 
 /**
- * Creates/validates transaction session token and verifies the token is active or
- * not.
+ * The TrasactionSessionTokenVerificationService handles operations like create,
+ * validates, verify, delete and disable transaction session token
  *
  */
-
-public interface TrasactionSessionTokenVerificationService
-{
+public interface TrasactionSessionTokenVerificationService {
 	/**
 	 * Creates the transaction session token.
 	 * 
 	 * @param user
-	 *            User, transSessionToken String
-	 * 
-	 * @return String
-	 * 
+	 *            User
+	 * @param token
+	 *            Token
+	 * @return String Transaction token
 	 */
-  public String createTransactionSessionToken(User user,String token);
+	public String createTransactionSessionToken(User user, String token);
 
 	/**
 	 * Validates the transaction session token.
 	 * 
 	 * @param user
-	 *            User, transSessionToken String
-	 * 
-	 * @return String
-	 * 
-	 * @throws TransactionSessionTokenVerificationException,
-	 *             VerifiedTransactionSessionTokenPremiumException
+	 *            User
+	 * @param token
+	 *            String
+	 * @return Returns true if the transaction token is valid otherwise false
+	 * @throws TransactionSessionTokenVerificationException
+	 * @throws VerifiedTransactionSessionTokenPremiumException
 	 */
-  public boolean validateTransactionSessionToken(User user,String token) throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException;
-  
-  /**
-   * Deletes the transaction tokens based on user.
-   * @param user User
-   * @return int
-   */
-  public int deleteTransactionSessionTokens(User user);
-  
+	public boolean validateTransactionSessionToken(User user, String token)
+			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException;
+
 	/**
-	 * Disables the transaction entries of the user.
+	 * Deletes the transaction tokens based on user.
 	 * 
 	 * @param user
 	 *            User
-	 * @return boolean
+	 * @return no of tokens deleted
 	 */
-  public boolean disableTransactionSessionToken(User user);
-  
+	public int deleteTransactionSessionTokens(User user);
+
 	/**
-	 * Returns the token expiring time.
-	 * 
-	 * @return Timestamp
-	 * 
-	 */
-  public Timestamp getTokenExpirationTime();
-  
-	/**
-	 * Verifies the token is expiring or not.
+	 * Disables the transaction token entries of the user.
 	 * 
 	 * @param user
-	 *            User, transSessionToken String
-	 * 
-	 * @return boolean
-	 * 
+	 *            User
+	 * @return Returns true if the transaction token is diabled otherwise false
 	 */
-  public boolean isTokenExpiring(User user, String transSessionToken);
-  
+	public boolean disableTransactionSessionToken(User user);
+
+	/**
+	 * Returns the token expiration time.
+	 * 
+	 * @return Timestamp Token expiration time
+	 */
+	public Timestamp getTokenExpirationTime();
+
+	/**
+	 * Verifies whether the token is expired or not.
+	 * 
+	 * @param user
+	 *            User
+	 * @param transSessionToken
+	 *            String
+	 * @return Returns true if the token is expired otherwise false
+	 */
+	public boolean isTokenExpiring(User user, String transSessionToken);
+
 }

@@ -10,7 +10,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 /**
  * 
- * This company is used to build query based on Company Name and Ticker Code.
+ * This class is used to build query based on Company Name and Ticker Code.
  *
  */
 public class CompanyNameAndTickerQueryBuilder extends AbstractQueryBuilder{
@@ -18,7 +18,7 @@ public class CompanyNameAndTickerQueryBuilder extends AbstractQueryBuilder{
 	
 	
 	/**
-	 * Builds a constant query based on the company name and ticker code.
+	 * Builds a query based on the company name and ticker code.
 	 * 
 	 * @return String
 	 */

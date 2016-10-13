@@ -44,7 +44,7 @@ public class KeyDevsController{
 	 * Fetches key devs to the list of ticker code.
 	 * 
 	 * @param search
-	 * @return list List<KeyDevs>
+	 * @return List of KeyDevs
 	 * @throws ServiceException
 	 */
 	@RequestMapping("search/stockListKeydevsTemp")

@@ -2,8 +2,7 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used when exception occurs when there is invalid token deom the
- * UI.
+ * Thrown to indicate that the token is invalid
  *
  */
 public class InvalidTokenException extends Exception{

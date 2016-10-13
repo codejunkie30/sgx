@@ -43,12 +43,10 @@ import com.wmsi.sgx.util.DateUtil;
 import au.com.bytecode.opencsv.CSVWriter;
 
 /**
- * This class create/deactivate the account and extend the trail/premium
- * accounts. Search with date by using the user name or create date.Retrive the
- * list of accounts and logins and expiration dates.
+ * The AdminServiceImpl handles operations like creating the account, deactivate the
+ * account, extend the trail/premium accounts and other admin operations
  *
  */
-
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -79,11 +77,10 @@ public class AdminServiceImpl implements AdminService {
 	private EnetsRepository enetsRepository;
 
 	/**
-     * Retrieves trail days.
-     * 
-     * @return response
-     */
-	
+	 * Retrieves the trail days
+	 * 
+	 * @return AdminResponse
+	 */
 	@Override
 	public AdminResponse getTrialDays() {
 		AdminResponse ret = new AdminResponse();
@@ -127,14 +124,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Finds the users.
+	 * Retrieves the user based on the user name
 	 * 
 	 * @param user
-	 *            String.
-	 * 
-	 * @return response
+	 * @return AdminResponse
 	 */
-
 	@Override
 	public AdminResponse findByUser(String user) {
 		AdminResponse ret = new AdminResponse();
@@ -167,14 +161,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Converts from AccountModel to AdminAccount .
+	 * Converts the AccountModel to AdminAccountModel .
 	 * 
-	 * @param accModel
-	 *            AccountModel.
-	 * 
-	 * @return model
+	 * @param accModel AccountModel
+	 * @return AdminAccountModel
 	 */
-	
 	@Override
 	public AdminAccountModel convertAccountModelToAdminAccountModel(AccountModel accModel){
 		AdminAccountModel model = new AdminAccountModel();
@@ -190,14 +181,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Searches with date by using the username or create date .
+	 * Retrieves accounts filtered on the start date provided
 	 * 
-	 * @param period
-	 *            Date.
-	 * 
-	 * @return response
+	 * @param period from the date period
+	 * @return AdminResponse
 	 */
-
 	@Override
 	public AdminResponse searchByDate(Date period) {
 		AdminResponse ret = new AdminResponse();
@@ -304,11 +292,9 @@ public class AdminServiceImpl implements AdminService {
 	 * Deactivates the account.
 	 * 
 	 * @param username
-	 *            String, updatedBy long.
-	 * 
-	 * @return response
+	 * @param updatedBy
+	 * @return AdminResponse
 	 */
-
 	@Override
 	public AdminResponse deactivate(String username, long updatedBy) {
 		List<Account> accounts = accountRepository.findByUsername(username);
@@ -347,14 +333,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Sets the expiration date extention.
+	 * Extends the expiration date for the user with the date provided
 	 * 
 	 * @param username
-	 *            String, updatedBy long, period Date
-	 * 
-	 * @return response
+	 * @param period
+	 * @param updatedBy
+	 * @return AdminResponse
 	 */
-
 	@Override
 	public AdminResponse extension(String username, Date period, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
@@ -392,14 +377,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Activates and Adds the account.
+	 * Converts the user as admin for the user name provided
 	 * 
 	 * @param username
-	 *            String, updatedBy long
-	 * 
-	 * @return response
+	 * @param updatedBy
+	 * @return AdminResponse
 	 */
-
 	@Override
 	public AdminResponse setAdmin(String username, long updatedBy) {
 		AdminResponse ret = new AdminResponse();
@@ -485,16 +468,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	/**
-	 * Writes the into csv file.
+	 * Returns a csv file with the list of user account information
 	 * 
-	 * @param name
-	 *            String, header String
-	 * 
-	 * @response response HttpServletResponse
-	 * 
+	 * @param response HttpServletResponse
+	 * @param header
+	 * @param name file name
 	 * @throws IOException
 	 */
-
 	@Override
 	public void writeCsv(HttpServletResponse response, String[] header, String name) throws IOException {
 

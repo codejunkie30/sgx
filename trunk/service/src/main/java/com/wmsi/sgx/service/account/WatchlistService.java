@@ -11,56 +11,58 @@ import com.wmsi.sgx.model.WatchlistModel;
 import com.wmsi.sgx.model.WatchlistTransactionModel;
 
 /**
- * Retrieves the watchlist names and also edit/delete/rename watchlist names and
- * add the companies to the watchlist.
+ * The WatchlistService handles operations on User WatchList like edit, delete, rename WatchList names
+ * 
  */
-
 public interface WatchlistService {
 	
 	/**
-	 * Creates the Watchlist name and update with the current date.
+	 * Creates the Watch list name and update with the current date.
 	 * 
 	 * @param user
-	 *            User, watchlistName String, watchlistName String
-	 * 
-	 * @return list
+	 *            User
+	 * @param watchlistName
+	 *            String
+	 * @return List of WatchlistModel
 	 */
 	List<WatchlistModel> createWatchlist(User user, String watchlistName);
 	
 	/**
-	 * Deletes the watchlist along with the companies and related transactions.
+	 * Deletes the watch list along with the companies and related transactions.
 	 * 
-	 * @param user
-	 *            User, id String
-	 * 
+	 * @param user User
+	 * @param id String
 	 */
 	void deleteWatchlist(User user, String id);
 	
 	/**
-	 * Retrieves the watchlists.
+	 * Retrieves the watch lists.
 	 * 
 	 * @param user
-	 *            User.
-	 * 
-	 * @return list
+	 *            User
+	 * @return List of WatchlistModel
 	 */
 	List<WatchlistModel> getWatchlist(User user);
 	
 	/**
-	 * Edits the Watchlsit name.
+	 * Edits the Watch list name.
 	 * 
 	 * @param user
-	 *            User, model WatchlistModel.
-	 * 
+	 *            User
+	 * @param model
+	 *            WatchlistModel
 	 */
 	void editWatchlist(User user, WatchlistModel model);
 	
 	/**
-	 * Renames the Watchlist name and update with the current date.
+	 * Renames the Watch list name and update with the current date.
 	 * 
 	 * @param user
-	 *            User, watchlistName String, id String
-	 * 
+	 *            User
+	 * @param watchlistName
+	 *            String
+	 * @param id
+	 *            String
 	 */
 	void renameWatchlist(User user, String watchlistName, String id);
 	
@@ -68,9 +70,12 @@ public interface WatchlistService {
 	 * Adds the companies in watchlist.
 	 * 
 	 * @param user
-	 *            User, addId String,companies List.
-	 * 
-	 * @return response
+	 *            User
+	 * @param addId
+	 *            String
+	 * @param companies
+	 *            List of companies
+	 * @return Response
 	 */
 	Response addCompanies(User user, String addId, List<String> companies);
 	
@@ -80,56 +85,53 @@ public interface WatchlistService {
 	 * @param user
 	 *            User
 	 * 
-	 * @return
+	 * @return List
 	 */
 	List<String> cleanWatchlist(User user);
 	
 	/**
 	 * Adds the watch list transactions.
 	 * 
-	 * @param user
-	 *            User, addId String,transactions List.
-	 * 
-	 * @return response
+	 * @param user User
+	 * @param addId String
+	 * @param transactions List of WatchlistTransactionModel
+	 * @return Response
 	 */
 	Response addTransactions(User user, String addId, List<WatchlistTransactionModel> transactions);
 	
 	/**
-	 * Retrieves the watchlists.
+	 * Deletes the transaction for the user's watch list.
 	 * 
-	 * @param id
-	 *            Long, ret List.
-	 * 
+	 * @param user User
+	 * @param id String
+	 * @param transactionId String
+	 * @return Response
 	 */
 	Response deleteTransactions(User user,String id, String transactionId);
 	
 	/**
 	 * Retrieves the transactions.
 	 * 
-	 * @param user
-	 *            User, id String
-	 * 
+	 * @param user User
+	 * @param id String
 	 * @return Map
 	 */
 	Map<String, List<WatchlistTransactionModel>> getTransactions(User user, String id);
 	
 	/**
-	 * Retrives the watchlists.
+	 * Retrieves the transactions for the watch list.
 	 * 
-	 * @param user
-	 *            User.
-	 * 
-	 * @return list
+	 * @param user User
+	 * @param id String
+	 * @return CompanyWatchlistTransactionHistoryModel
 	 */
 	CompanyWatchlistTransactionHistoryModel getWatchListTransactions(User user,String id);
 	
 	/**
-	 * Retrieves the stocklist companies.
+	 * Retrieves the Stock list/Watch list companies.
 	 * 
-	 * @param id
-	 *            String
-	 * 
-	 * @return AccountModel
+	 * @param id String
+	 * @return List Watch/Stock list companies
 	 */
 	List<WatchlistCompany> getStockListCompanies(String id);
 	
