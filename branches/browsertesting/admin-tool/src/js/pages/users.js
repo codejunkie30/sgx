@@ -138,8 +138,10 @@ function ScreenerPage() {
 			API.hideLoading();
 			if( response.data.length == 0) {
 				toastr.info('No results found for that time period.');
+				$("#searchResultsDiv").css("display","none");
 			}
 			else {
+				$("#searchResultsDiv").css("display","block");
 				var transformedData = _transformData(response.data);
 				this.searchResults(transformedData);
 			}
