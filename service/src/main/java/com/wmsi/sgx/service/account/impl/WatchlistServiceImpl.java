@@ -33,10 +33,9 @@ import com.wmsi.sgx.service.account.WatchlistService;
 import com.wmsi.sgx.util.DateUtil;
 
 /**
- * This class retrieves the watchlist names and also edit/delete/rename
- * watchlist names. Add the companies to the watchlist.
+ * The WatchlistService handles operations on User WatchList like edit, delete, rename WatchList names
+ * 
  */
-
 @Service
 public class WatchlistServiceImpl implements WatchlistService {
 
@@ -59,13 +58,15 @@ public class WatchlistServiceImpl implements WatchlistService {
 	public String defaultCurrency="sgd";
 	
 	/**
-	 * Renames the Watchlist name and update with the current date.
+	 * Renames the Watch list name and update with the current date.
 	 * 
 	 * @param user
-	 *            User, watchlistName String, id String
-	 * 
+	 *            User
+	 * @param watchlistName
+	 *            String
+	 * @param id
+	 *            String
 	 */
-	
 	@Override
 	public void renameWatchlist(User user, String watchlistName, String id){
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
@@ -80,14 +81,14 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Creates the Watchlist name and update with the current date.
+	 * Creates the Watch list name and update with the current date.
 	 * 
 	 * @param user
-	 *            User, watchlistName String, watchlistName String
-	 * 
-	 * @return list
+	 *            User
+	 * @param watchlistName
+	 *            String
+	 * @return List of WatchlistModel
 	 */
-	
 	@Override
 	public List<WatchlistModel> createWatchlist(User user, String watchlistName) {
 		
@@ -108,13 +109,11 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Deletes the watchlist along with the companies and related transactions.
+	 * Deletes the watch list along with the companies and related transactions.
 	 * 
-	 * @param user
-	 *            User, id String
-	 * 
+	 * @param user User
+	 * @param id String
 	 */
-
 	@Override
 	public void deleteWatchlist(User user, String id) {
 		Long longId = Long.parseLong(id);
@@ -138,10 +137,8 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * 
 	 * @param user
 	 *            User
-	 * 
-	 * @return
+	 * @return List
 	 */
-	
 	@Override
 	@Transactional
 	public List<String> cleanWatchlist(User user){
@@ -190,14 +187,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Retrieves the watchlists.
+	 * Retrieves the watch lists.
 	 * 
 	 * @param user
-	 *            User.
-	 * 
-	 * @return list
+	 *            User
+	 * @return List of WatchlistModel
 	 */
-
 	@Override
 	public List<WatchlistModel> getWatchlist(User user){
 		Watchlist[] watchlist = watchlistRepository.findByUser(user);
@@ -235,13 +230,13 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Edits the Watchlsit name.
+	 * Edits the Watch list name.
 	 * 
 	 * @param user
-	 *            User, model WatchlistModel.
-	 * 
+	 *            User
+	 * @param model
+	 *            WatchlistModel
 	 */
-	
 	@Override
 	@Transactional
 	public void editWatchlist(User user, WatchlistModel model){
@@ -280,11 +275,13 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * Adds the companies in watchlist.
 	 * 
 	 * @param user
-	 *            User, addId String,companies List.
-	 * 
-	 * @return response
+	 *            User
+	 * @param addId
+	 *            String
+	 * @param companies
+	 *            List of companies
+	 * @return Response
 	 */
-	
 	@Override
 	@Transactional
 	public Response addCompanies(User user, String addId, List<String> companies){
@@ -312,12 +309,11 @@ public class WatchlistServiceImpl implements WatchlistService {
 	/**
 	 * Adds the watch list transactions.
 	 * 
-	 * @param user
-	 *            User, addId String,transactions List.
-	 * 
-	 * @return response
+	 * @param user User
+	 * @param addId String
+	 * @param transactions List of WatchlistTransactionModel
+	 * @return Response
 	 */
-	
 	@Override
 	@Transactional
 	public Response addTransactions(User user, String addId, List<WatchlistTransactionModel> transactions) {
@@ -338,14 +334,13 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Deletes the watch list transactions.
+	 * Deletes the transaction for the user's watch list.
 	 * 
-	 * @param user
-	 *            User, id String,transactionId String.
-	 * 
-	 * @return response
+	 * @param user User
+	 * @param id String
+	 * @param transactionId String
+	 * @return Response
 	 */
-	
 	@Override
 	@Transactional
 	public Response deleteTransactions(User user,String id, String transactionId) {
@@ -371,12 +366,10 @@ public class WatchlistServiceImpl implements WatchlistService {
 	/**
 	 * Retrieves the transactions.
 	 * 
-	 * @param user
-	 *            User, id String
-	 * 
+	 * @param user User
+	 * @param id String
 	 * @return Map
 	 */
-	
 	@Override
 	public Map<String, List<WatchlistTransactionModel>> getTransactions(User user, String id) {
 		Long watchlistId = Long.parseLong(id);
@@ -409,14 +402,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Retrieves the stocklist companies.
+	 * Retrieves the transactions for the watch list.
 	 * 
-	 * @param id
-	 *            String, user User
-	 * 
-	 * @return companyWatchlistTransactionHistoryModel
+	 * @param user User
+	 * @param id String
+	 * @return CompanyWatchlistTransactionHistoryModel
 	 */
-	
 	@Override
 	public CompanyWatchlistTransactionHistoryModel getWatchListTransactions(User user, String id) {
 		Long watchlistId = Long.parseLong(id);
@@ -569,14 +560,11 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Retrieves the stocklist companies.
+	 * Retrieves the Stock list/Watch list companies.
 	 * 
-	 * @param id
-	 *            String
-	 * 
-	 * @return AccountModel
+	 * @param id String
+	 * @return List Watch/Stock list companies
 	 */
-
 	@Override
 	public List<WatchlistCompany> getStockListCompanies(String id) {
 		WatchlistCompany[] companies = companyRepository.findById(Long.parseLong(id));

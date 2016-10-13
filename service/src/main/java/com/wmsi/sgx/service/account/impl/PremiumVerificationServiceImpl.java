@@ -16,11 +16,10 @@ import com.wmsi.sgx.service.account.PremiumVerificationService;
 import com.wmsi.sgx.service.account.VerifiedPremiumException;
 
 /**
- * This class verify the PremiumToken and Checks Verification token Redeemed or
+ * The PremiumVerificationServiceImpl class verify the PremiumToken and Checks Verification token Redeemed or
  * not and token available or not .
  *
  */
-
 @Service
 public class PremiumVerificationServiceImpl implements PremiumVerificationService{
 
@@ -31,15 +30,10 @@ public class PremiumVerificationServiceImpl implements PremiumVerificationServic
 	private SecureTokenGenerator tokenGenerator;
 	
 	/**
-	 * Creates the Premium token with user and date
-	 * 
+	 * Created the premium token for the User information provided 
 	 * @param user
-	 *            User
-	 * 
-	 * @return String
-	 * 
+	 * @return Returns the premium token
 	 */
-
 	@Override
 	@Transactional
 	public String createPremiumToken(User user){
@@ -55,18 +49,14 @@ public class PremiumVerificationServiceImpl implements PremiumVerificationServic
 	}
 	
 	/**
-	 * Verifies the PremiumToken and Checks Verification token Redeemed or not and
-	 * token available or not .
+	 * Verifies the premium token
 	 * 
 	 * @param token
-	 *            String
+	 * @return User User information
 	 * 
-	 * @return User
-	 * 
-	 * @throws PremiumVerificationException,
-	 *             VerifiedPremiumException
+	 * @throws PremiumVerificationException
+	 * @throws VerifiedPremiumException
 	 */
-	
 	@Override
 	@Transactional
 	public User verifyPremiumToken(String token) throws PremiumVerificationException, VerifiedPremiumException{

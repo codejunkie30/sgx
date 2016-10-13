@@ -9,11 +9,59 @@ import com.wmsi.sgx.service.search.SearchResult;
  */
 public interface ElasticSearchService{
 
+	/**
+	 * Searches based on index, id and type.
+	 * 
+	 * @param index
+	 *            String
+	 * @param type
+	 *            String
+	 * @param query
+	 *            String
+	 * @param clz
+	 *            Class<T>
+	 * @return SearchResult<T>
+	 * @throws ElasticSearchException
+	 */
 	<T> SearchResult<T> search(String index, String type, String query, Class<T> clz) throws ElasticSearchException;
 
+	/**
+	 * Fetches the query for execution.
+	 * 
+	 * @param index
+	 *            String
+	 * @param type
+	 *            String
+	 * @param query
+	 *            String
+	 * @param clz
+	 *            Class<T>
+	 * @return <T>
+	 * @throws ElasticSearchException
+	 */
 	<T> T get(String index, String type, String id, Class<T> clz) throws ElasticSearchException;
 	
+	/**
+	 * Fetches the query for execution based on index.
+	 * 
+	 * @param index
+	 *            String
+	 * @param type
+	 *            String
+	 * @param id
+	 *            String
+	 * @param clz
+	 *            Class<T>
+	 * @return <T>
+	 * @throws ElasticSearchException
+	 */
 	<T> T getUsingIndex(String index, String type, String id, Class<T> clz) throws ElasticSearchException;
 	
+	/**
+	 * Sets the index name
+	 * 
+	 * @param indexName
+	 *            String
+	 */
 	void setIndexName(String indexName);
 }

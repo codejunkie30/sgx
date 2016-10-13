@@ -61,6 +61,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	 *            String
 	 * @param query
 	 *            String
+	 * @param clz
+	 *            Class<T>
 	 * @return SearchResult<T>
 	 * @throws ElasticSearchException
 	 */

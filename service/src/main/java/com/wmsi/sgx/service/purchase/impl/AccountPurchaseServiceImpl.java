@@ -10,9 +10,9 @@ import com.wmsi.sgx.security.SecureTokenGenerator;
 import com.wmsi.sgx.service.purchase.AccountPurchaseService;
 
 /**
- * This class form a message with required details for the message.
+ * The AccountPurchaseServiceImpl class handles the information for the Account purchase
+ * operation
  */
-
 public class AccountPurchaseServiceImpl implements AccountPurchaseService{
 
 	@Override
@@ -34,13 +34,11 @@ public class AccountPurchaseServiceImpl implements AccountPurchaseService{
 	}
 	
 	/**
-     * Form a message with required details 
-     * 
-     * @param token String
-     *            
-     * @return String 
-     */
-
+	 * Returns the message with the required details to make a purchase
+	 * 
+	 * @param token
+	 * @return String message as a string
+	 */
 	@Override
 	public String formMessage(String token) {
 		TxnReq req = new TxnReq();

@@ -12,6 +12,11 @@ public abstract class AbstractQueryBuilder implements QueryBuilder{
 
 	protected static final int MAX_RESULTS = 2000;
 	
+	/**
+	 * Builds the query.
+	 * 
+	 * @return String
+	 */
 	@Override
 	public abstract String build();
 	

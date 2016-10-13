@@ -5,7 +5,8 @@ import javax.transaction.Transactional;
 import com.wmsi.sgx.domain.User;
 
 /**
- * This interface creates/verifies the user verification token.
+ * This UserVerificationService handles operations like creates, verification of
+ * the token
  *
  */
 public interface UserVerificationService{
@@ -14,24 +15,17 @@ public interface UserVerificationService{
 	 * Creates the verification token.
 	 * 
 	 * @param user
-	 *            User
-	 *
-	 * @return String
-	 *
+	 * @return Verification token
 	 */
-  
 	String createVerificationToken(User user);
 
 	/**
-	 * Verifies token found or not and Verification token redeemed or not.
+	 * Verifies the token is found or not and the token is redeemed or not.
 	 * 
 	 * @param token
-	 *            String
-	 *
-	 * @return User
-	 *
-	 * @throws UserVerificationException,
-	 *             VerifiedUserException
+	 * @return
+	 * @throws UserVerificationException
+	 * @throws VerifiedUserException
 	 */
 	User verifyToken(String token) throws UserVerificationException, VerifiedUserException;
 

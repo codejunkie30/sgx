@@ -5,40 +5,33 @@ import java.util.List;
 import com.wmsi.sgx.model.CurrencyModel;
 
 /**
- * Retrieves the existing currencies from the database and the new currencies
- * will adding to the currency entity.
+ * The CurrencyService handles operations related to currency
  * 
- *
  */
-
 public interface CurrencyService {
 
 	/**
-	 * Updates the currency values.
+	 * Updates the currency
 	 * 
-	 * @param dto
-	 *            CurrencyModel
-	 * 
+	 * @param dto CurrencyModel
 	 */
-  void updateCurrency(CurrencyModel dto);
-	
+	void updateCurrency(CurrencyModel dto);
+
 	/**
-	 * Adds the new currencies into currencies list.
+	 * Adds currency model
 	 * 
 	 * @param currencyModelList
-	 *            List
-	 * 
-	 * @return boolean
+	 * @return
 	 */
 	boolean addCurrencies(List<CurrencyModel> currencyModelList);
-	
+
 	/**
-	 * Retrieves the all the currencies.
+	 * Retrieves list of all currencies.
 	 * 
 	 * @return currencyModelList
 	 */
 	List<CurrencyModel> getAllCurrencies();
-	
+
 	/**
 	 * Retrieves the count of incomplete currencies.
 	 * 
@@ -47,20 +40,24 @@ public interface CurrencyService {
 	int getCountOfInCompleteCurrenciesCount();
 
 	/**
-	 * Adds the new currency into currency entity .
+	 * Adds the currency into currency entity .
 	 * 
 	 * @param model
 	 *            CurrencyModel
-	 * 
 	 * @return CurrencyModel
 	 */
 	CurrencyModel addCurrency(CurrencyModel model);
-	
+
 	/**
 	 * Deletes all the currencies.
 	 * 
 	 */
 	void deleteAll();
-	
+
+	/**
+	 * Retrieves non complete currency information
+	 * 
+	 * @return CurrencyModel
+	 */
 	CurrencyModel getNonCompleteCurrency();
 }

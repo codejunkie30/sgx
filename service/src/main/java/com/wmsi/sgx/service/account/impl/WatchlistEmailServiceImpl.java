@@ -74,16 +74,16 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	private static final Logger log = LoggerFactory.getLogger(WatchlistEmailServiceImpl.class);
 	
 	/**
-	 * Retrieves the emails for the user
+	 * Retrieves the account information for the user and sends email if the
+	 * Alert options are matched
 	 * 
 	 * @param usr
 	 *            User
-	 * 
-	 * @throws QuanthouseServiceException,
-	 *             CompanyServiceException, SearchServiceException,
-	 *             MessagingException
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 * @throws MessagingException
 	 */
-	
 	@Override
 	public void getEmailsForUser(User usr) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{
 		List<Account> accounts = accountRepository.findAll();			
@@ -106,19 +106,19 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	/**
-	 * Pasrses the watchlist items and verifies the
+	 * Parses the watchlist items and verifies the
 	 * priceOptions,volumeOptions,weekOptions,targetPriceOptions and
 	 * consensusRecOptions
 	 * 
 	 * @param watchlist
-	 *            WatchlistModel, acct Account
-	 * 
-	 * @return list
-	 * 
-	 * @throws QuanthouseServiceException,
-	 *             CompanyServiceException, SearchServiceException
+	 *            WatchlistModel
+	 * @param acct
+	 *            Account
+	 * @return AlertOption information
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
 	 */
-
 	@Override
 	public MutablePair<List<AlertOption>, List<String>> parseWatchlist(WatchlistModel watchlist, Account acct) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException{
 		boolean noUpdatesFlag = false;
@@ -337,11 +337,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	/**
      * This method will alert the companies and description 
      * 
-     * @param alertList
-     *            List, keyDevOptions Map
-     *            
-     */
-
+	 * @param alertList List of AlertOption
+	 * @param keyDevOptions Map
+	 */
 	private void addKeyDevOptions(List<AlertOption> alertList, Map<String, Map<String, String>> keyDevOptions) {
 		for(Map.Entry<String, Map<String, String>> entry : keyDevOptions.entrySet()){
 			if(entry.getValue().size() > 0){
@@ -356,12 +354,9 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	/**
 	 * Retrieves the estimates with in period
 	 * 
-	 * @param estimate
-	 *            List
-	 * 
+	 * @param estimate List of Estimate
 	 * @return Estimate
 	 */
-	
 	public Estimate getEstimate(List<Estimate> estimate){
 		Estimate ret = null;
 		if(estimate != null)
@@ -374,16 +369,13 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	/**
-	 * Retrieves the key devs
+	 * Retrieves the key developments
 	 * 
-	 * @param company
-	 *            String, date Date
-	 * 
-	 * @return List
-	 * 
+	 * @param company String
+	 * @param date Date
+	 * @return List of KeyDev
 	 * @throws CompanyServiceException
 	 */
-	
 	public List<KeyDev> getKeyDevs(String company, Date date) throws CompanyServiceException{
 		List<KeyDev> ret = new ArrayList<KeyDev>();
 		List<KeyDev> kd = companyService.loadKeyDevs(company, "sgd_premium").getKeyDevs();
@@ -395,20 +387,23 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 		
 	}
 	
+	/**
+	 * Retrieves the Company name
+	 * 
+	 * @param company
+	 * @return
+	 * @throws CompanyServiceException
+	 */
 	public String getCompanyName(String company) throws CompanyServiceException{
 		return companyService.getCompanyByIdAndIndex(company,"sgd_premium").getCompanyName();
 	}
 	
 	/**
-	 * Retrieves the start of the day.
+	 * Retrieves the date which is start of the day for given date
 	 * 
-	 * @param date
-	 *            Date
-	 * 
+	 * @param date Date
 	 * @return Date
-	 * 
 	 */
-	
 	public Date getStartOfDay(Date date) {
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTime(date);
@@ -420,15 +415,12 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	}
 	
 	/**
-	 * Retrives the last months volume.
+	 * Retrieves the last months volume.
 	 * 
-	 * @param lastYear
-	 *            list, startDate String
-	 * 
+	 * @param lastYear List of HistoricalValue
+	 * @param startDate String
 	 * @return Double
-	 * 
 	 */
-	
 	private Double getLastMonthsVolume(List<HistoricalValue> lastYear, String startDate) {
 		String oneMonthsAgo = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -30);
 		
@@ -448,13 +440,11 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	/**
 	 * Averages value of numbers.
 	 * 
-	 * @param sum
-	 *            Double, total Integer, scale int
-	 * 
+	 * @param sum Double
+	 * @param total Integer
+	 * @param scale int
 	 * @return Double
-	 * 
 	 */
-	
 	private Double avg(Double sum, Integer total, int scale) {
 		BigDecimal s = new BigDecimal(sum);
 		BigDecimal t = new BigDecimal(total);
@@ -466,12 +456,8 @@ public class WatchlistEmailServiceImpl implements WatchlistEmailService{
 	 * Verifies the String as number.
 	 * 
 	 * @param value
-	 *            String
-	 * 
-	 * @return String
-	 * 
+	 * @return
 	 */
-
 	private String verifyStringAsNumber(String value) {
 		try {
 			int val = Integer.parseInt(value);

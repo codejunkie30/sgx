@@ -66,9 +66,11 @@ public class WatchlistController {
 	 *            HttpServletRequest
 	 * @param response
 	 *            Response
-	 * @throws QuanthouseServiceException,
-	 *             CompanyServiceException, SearchServiceException,
-	 *             MessagingException
+	 * 
+	 * @throws QuanthouseServiceException
+	 * @throws CompanyServiceException
+	 * @throws SearchServiceException
+	 * @throws MessagingException
 	 */
 	@RequestMapping(value="watchlist/sendEmail")
 	public void sendEmail(HttpServletRequest request, @RequestBody Response response) throws QuanthouseServiceException, CompanyServiceException, SearchServiceException, MessagingException{

@@ -2,7 +2,7 @@ package com.wmsi.sgx.service.account;
 
 /**
  * 
- * This class is used when exception occurs during verification of the user.
+ * Thrown to indicate that the user verification failed.
  *
  */
 public class VerifiedUserException extends Exception{
