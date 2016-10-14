@@ -17,12 +17,26 @@ public class HoldersService extends AbstractDataService {
 	
 	@Value("${loader.ownership.dir}")
 	private String ownershipDir;
-
+	
+	/**
+	 * Load Ownership data based on company ticker 
+	 * @param company ticker
+	 * @return Holders
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public Holders load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
 		return getHolderDetails(id);
 	}
 	
+	/**
+	 * Load Ownership data based on company ticker 
+	 * @param company ticker
+	 * @return Holders
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	public Holders getHolderDetails(String id) throws ResponseParserException, CapIQRequestException {
 		Holders hol = new Holders();
 		hol.setTickerCode(id);

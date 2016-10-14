@@ -12,6 +12,7 @@ import com.wmsi.sgx.model.KeyDevs;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResponse;
 import com.wmsi.sgx.model.sandp.capiq.CapIQResult;
 import com.wmsi.sgx.service.sandp.capiq.AbstractResponseParser;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
 import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 @SuppressWarnings("unchecked")
@@ -21,7 +22,13 @@ public class KeyDevResponseParser extends AbstractResponseParser{
 	public Class<KeyDev> getType() {
 		return KeyDev.class;
 	}
-
+	
+	/**
+	 * Convert CapIQResponse to KeyDevs data 
+	 * @param CapIQResponse
+	 * @return KeyDevs
+	 * @throws ResponseParserException
+	 */
 	@Override
 	public KeyDevs convert(CapIQResponse response) throws ResponseParserException {
 

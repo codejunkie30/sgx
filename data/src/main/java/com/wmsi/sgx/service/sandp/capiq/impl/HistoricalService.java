@@ -10,6 +10,13 @@ import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 @SuppressWarnings("unchecked")
 public class HistoricalService extends AbstractDataService {
 	
+	/**
+	 * Load PriceHistory based on company ticker 
+	 * @param company ticker
+	 * @return PriceHistory
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public PriceHistory load(String id, String... parms) throws CapIQRequestException, ResponseParserException {
 		Assert.notEmpty(parms);		

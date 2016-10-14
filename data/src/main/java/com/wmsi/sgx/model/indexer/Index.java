@@ -2,7 +2,10 @@ package com.wmsi.sgx.model.indexer;
 
 import java.util.List;
 import com.google.common.base.Objects;
-
+/**
+ * Elastic Search Index Model
+ * 
+ */
 public class Index{
 
 	String name;

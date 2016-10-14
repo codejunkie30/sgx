@@ -1,7 +1,10 @@
 package com.wmsi.sgx.model.integration;
 
 import com.google.common.base.Objects;
-
+/**
+ * CompanyInputRecord Model
+ * 
+ */
 public class CompanyInputRecord{
 
 	private String id;

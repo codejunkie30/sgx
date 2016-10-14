@@ -21,6 +21,12 @@ public class CSVHelperUtil {
 	
 	static Map<String,Iterable<CSVRecord>> CACHE = new HashMap<String,Iterable<CSVRecord>>();
 	
+	/**
+	 * Utility method to get records from data file
+	 * @param data file 
+	 * @return CSVRecord
+	 *
+	 */
 	public Iterable<CSVRecord> getRecords(String file) {
 		ArrayList<CSVRecord> ret = new ArrayList<CSVRecord>();
 		Reader in = null;
@@ -42,25 +48,4 @@ public class CSVHelperUtil {
 		return null;
 	}
 
-	/*public Map<String, List<CSVRecord> > getMap(String ticker, Iterable<CSVRecord> records){
-		Map<String, List<CSVRecord>> map = new HashMap<String, List<CSVRecord>>();
-		for (CSVRecord record : records) {
-			if(record.get(0).equalsIgnoreCase(ticker) &&  (record.get(4) != null) && !record.get(4).isEmpty()){
- 				String key = record.get(4);
-				List<CSVRecord> r = null;
-				
-				if(map.containsKey(key)){
-					r = map.get(key);					
-				}else{
-					r = new ArrayList<CSVRecord>();
-					map.put(key, r);
-				}
-				
-				r.add(record);
-			}
-		}
-		
-		return map;		
-	}*/
-	
 }

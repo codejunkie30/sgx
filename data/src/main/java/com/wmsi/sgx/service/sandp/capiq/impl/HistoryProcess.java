@@ -5,9 +5,16 @@ import java.util.List;
 
 import com.wmsi.sgx.model.HistoricalValue;
 import com.wmsi.sgx.model.PriceHistory;
+import com.wmsi.sgx.service.sandp.capiq.CapIQRequestException;
+import com.wmsi.sgx.service.sandp.capiq.ResponseParserException;
 
 public class HistoryProcess {
 	
+	/**
+	 * Process PriceHistory with additional values
+	 * @param PriceHistory
+	 * @return Updated PriceHistory
+	 */
 	public PriceHistory processHistory(PriceHistory history){
 		List<HistoricalValue> price = history.getPrice();
 		List<HistoricalValue> volume = history.getVolume();

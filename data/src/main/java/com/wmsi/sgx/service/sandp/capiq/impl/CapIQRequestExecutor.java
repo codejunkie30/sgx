@@ -53,6 +53,13 @@ public class CapIQRequestExecutor implements RequestExecutor{
 	private static final String PARAM_INPUTS = "inputRequests";
 	private static final String PARAM_USERID = "userId";
 	
+	/**
+	 * Execute CapIQRequest to get the CapIQResponse from CapIQ Rest services
+	 * @param CapIQRequestImpl
+	 * @param context
+	 * @return CapIQResponse 
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public CapIQResponse execute(CapIQRequestImpl req, Map<String, Object> ctx) throws CapIQRequestException {
 
@@ -125,6 +132,11 @@ public class CapIQRequestExecutor implements RequestExecutor{
 		return new HttpEntity<MultiValueMap<String, String>>(body, buildHeaders());
 	}
 	
+	/**
+	 * Load files
+	 * @param path
+	 * @return List of file names
+	 */
 	public List<String> loadFiles(String beginsWith, String path) {
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
@@ -138,6 +150,11 @@ public class CapIQRequestExecutor implements RequestExecutor{
 		return matches;
 	}
 	
+	/**
+	 * Read CapIQResponse
+	 * @param path
+	 * @return CapIQResponse
+	 */
 	public CapIQResponse readFile(String path){
 		try {
 			return mapper.readValue(new File(path), CapIQResponse.class);
@@ -152,6 +169,12 @@ public class CapIQRequestExecutor implements RequestExecutor{
 		return null;
 	}
 	
+	/**
+	 * Write CapIQResponse into files
+	 * @param CapIQResponse
+	 * @param path
+	 * @return
+	 */
 	public void writeFile(String path2, CapIQResponse response){
 		try {
 			mapper.writeValue(new File(path2), response);

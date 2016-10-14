@@ -31,11 +31,23 @@ public class EstimatesService extends AbstractDataService{
 	@Value("${loader.consensus-estimates.dir}")
 	private String consensusEstimatesDir;
 	
+	/**
+	 * Load Estimates based on company ticker 
+	 * @param company ticker
+	 * @return Estimates
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public Estimates load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		return getEstimates(id);
 	}
 	
+	/**
+	 * Get Estimates based on company ticker 
+	 * @param company ticker
+	 * @return Estimates
+	 */
 	private Estimates getEstimates(String id){
 		String tickerNoEx = id.split(":")[0];
 		Estimates estimates = new Estimates();
@@ -113,6 +125,13 @@ public class EstimatesService extends AbstractDataService{
 		return map;		
 	}
 	
+	/**
+	 * Check if period is valid for valid Estimates
+	 * based on requirements
+	 * Estimates needs to be calculated only for present, previous and next year only  
+	 * @param period to be verified 
+	 * @return Boolean
+	 */
 	public Boolean isValidPeriod(String period){
 		
 		if (period == ""){

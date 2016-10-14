@@ -66,6 +66,14 @@ public class IndexerServiceImpl implements IndexerService{
 		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 	}
 	
+	/**
+	 * Skeleton for running any ES Query against an endpoint
+	 * 
+	 * @param endpoint
+	 * @return QueryResponse
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	public IndexQueryResponse query(String endpoint) throws IndexerServiceException {
 		
@@ -81,6 +89,13 @@ public class IndexerServiceImpl implements IndexerService{
 
 	}
 	
+	/**
+	 * Flushes the ES index
+	 *
+	 * @return boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional
 	public synchronized Boolean flush() throws IndexerServiceException {
@@ -101,6 +116,15 @@ public class IndexerServiceImpl implements IndexerService{
 		
 	}
 	
+	/**
+	 * Creates index name from Spring's Header variable indexName
+	 * 
+	 * @param indexName
+	 * @return Boolean
+	 * 
+	 * @throws IOException
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional
 	public synchronized Boolean createIndex(@Header String indexName) throws IOException, IndexerServiceException{
@@ -133,6 +157,15 @@ public class IndexerServiceImpl implements IndexerService{
 	}
 	private static final String PREVIOUS_DAY_INDEX = "previousDay"; 
 	private static final String CURRENT_DAY_INDEX = "currentDay";
+	
+	/**
+	 * Creates IndexAlias from Spring's Header variable indexName
+	 * 
+	 * @param indexName
+	 * @return Boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional		
 	public synchronized Boolean createIndexAlias(@Header String indexName) throws IndexerServiceException {
@@ -160,7 +193,15 @@ public class IndexerServiceImpl implements IndexerService{
 		}		
 	    return true;
 	}
-			
+	
+	/**
+	 * Creates Previous IndexAlias from Spring's Header variable indexName
+	 * 
+	 * @param indexName
+	 * @return Boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	public synchronized Boolean createPreviousIndexAlias(String indexName) throws IndexerServiceException {
 		URI indexUri = buildUri("/_aliases");
 		String aliasType= PREVIOUS_DAY_INDEX;
@@ -181,13 +222,31 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		return true;
 	}
-
+	
+	/**
+	 * Retrieves list of all available indices 
+	 * 
+	 * @param indexName
+	 * @return list of all available indices 
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	public Indexes getIndexes() throws IndexerServiceException {
 		URI indexUri = buildUri("/_aliases");		
 		return restTemplate.getForObject(indexUri, Indexes.class);
 	}
 	
+	/**
+	 * Saves data into ES
+	 * 
+	 * @param indexName
+	 * @param type of data bucket
+	 * @param id 
+	 * @return Boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional
 	public Boolean save(String type, String id, Object obj, String indexName) throws IndexerServiceException {
@@ -204,7 +263,17 @@ public class IndexerServiceImpl implements IndexerService{
 
         return true;
 	}
-
+	
+	
+	/**
+	 * bulk saves data into ES
+	 * 
+	 * @param indexName
+	 * @param type of data bucket to save data in
+	 * @return Boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional
 	public Boolean bulkSave(String type, String body, String indexName) throws IndexerServiceException {
@@ -222,6 +291,14 @@ public class IndexerServiceImpl implements IndexerService{
         return true;
 	}
 	
+	/**
+	 * Deletes ES Index
+	 * 
+	 * @param indexName
+	 * @return Boolean
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	@Transactional
 	public Boolean deleteIndex(String indexName) throws IndexerServiceException {
@@ -238,6 +315,7 @@ public class IndexerServiceImpl implements IndexerService{
         return true;
 	}
 	
+	//Retrieves current index name
 	public String getIndexName(){
 		return this.indexName;
 	}
@@ -251,6 +329,14 @@ public class IndexerServiceImpl implements IndexerService{
 		}
 	}
 	
+	/**
+	 * Utility method to builds JsonNode based on aliasType and indexName
+	 * 
+	 * @param indexName
+	 * @param aliasType
+	 * @return JsonNode
+	 *
+	 */
 	private JsonNode buildAliasJson(String indexName, String aliasType){
 		ObjectMapper mapper = new ObjectMapper();
 		String aliasName = null;
@@ -283,6 +369,13 @@ public class IndexerServiceImpl implements IndexerService{
 		return alias;
 	}
 	
+	/**
+	 * Creating PreviousIndex generation for the first time based on indexName 
+	 * 
+	 * @param indexName
+	 * @return JsonNode
+	 *
+	 */
 	private JsonNode firstTimePreviousIndexGeneration(String indexName){
 		ObjectMapper mapper = new ObjectMapper();
 		String aliasName = indexName.substring(0,11).concat("_previous");
@@ -302,7 +395,10 @@ public class IndexerServiceImpl implements IndexerService{
 		
 		return alias;
 	}
-	
+	/**
+	 * Builds entity text
+	 * 
+	 */
 	private <T> HttpEntity<String> buildEntityText(String txt){
 		HttpHeaders headers = new HttpHeaders();
 		Charset utf8 = Charset.forName("UTF-8");

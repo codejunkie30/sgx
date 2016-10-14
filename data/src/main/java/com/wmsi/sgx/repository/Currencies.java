@@ -9,7 +9,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wmsi.sgx.domain.Currency;
-
+/**
+ * CRUD Operation repository for Currencies
+ * 
+ */
 public interface Currencies extends CustomRepository<Currency, Serializable> {
 
 	List<Currency> findAll();

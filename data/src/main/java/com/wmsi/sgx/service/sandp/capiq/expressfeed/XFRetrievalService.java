@@ -55,6 +55,10 @@ public class XFRetrievalService {
 	@Value ("${email.dataload.complete}")
 	public String toSite;
 	
+	/**
+	 * getSFTPSessionFactory
+	 * @return DefaultSftpSessionFactory
+	 */
 	public DefaultSftpSessionFactory getSFTPSessionFactory(){
 		DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
 		factory.setHost(ftpLocation);
@@ -64,6 +68,14 @@ public class XFRetrievalService {
 		return factory;
 	}
 	
+	/**
+	 * Init method for grabbing latest files from FTP 
+	 * and deleting old files
+	 *  
+	 * 
+	 * @return boolean 
+	 * @throws Exception
+	 */
 	public Boolean init() throws Exception {
 		emailService.send(toSite," Starting dataload........","");
 		String[] base = baseFiles.split(",");
@@ -87,6 +99,13 @@ public class XFRetrievalService {
 		return true;
 	}
 	
+	/**
+	 * remove old files from mnt directory
+	 * @param List of file names to be removed
+	 * @param Local directory location
+	 * @return 
+	 * @throws Exception
+	 */
 	public void removeFiles(String[] names, String dir) throws Exception {
 		
 		if (names == null) return;
@@ -102,7 +121,14 @@ public class XFRetrievalService {
 		}
 		
 	}
-	
+	/**
+	 * Grab files from FTP
+	 * @param FTP Session entry
+	 * @param List of file names to be grabbed
+	 * @param Local directory location
+	 * @return 
+	 * @throws Exception
+	 */
 	public void grabFiles(Session<LsEntry> session, String[] names, String localDir) throws Exception {
 		
 		for (String name : names) {

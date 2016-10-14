@@ -24,7 +24,13 @@ public class CapIQRequestImpl implements CapIQRequest{
 	public void setTemplate(Resource template) {
 		this.template = template;
 	}
-
+	
+	/**
+	 * Build CapIQQuery 
+	 * @param context
+	 * @return query
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public String buildQuery(Map<String, Object> ctx) throws CapIQRequestException{
 		Assert.notNull(template);

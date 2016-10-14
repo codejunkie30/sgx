@@ -52,7 +52,12 @@ public class VwapServiceImpl implements VwapService {
 
 	@Value("${loader.companies.dir}")
 	private String companiesDir = "/mnt/data/companies/";
-
+	
+	/**
+	 * Get VolWeightedAvgPrices data based on company ticker 
+	 * @param company ticker
+	 * @return VolWeightedAvgPrices
+	 */
 	@Override
 	public VolWeightedAvgPrices getForTicker(String ticker) {
 
@@ -68,7 +73,12 @@ public class VwapServiceImpl implements VwapService {
 
 		return ret;
 	}
-
+	/**
+	 * Init method for parsing VWAP data
+	 * @param 
+	 * @return Boolean
+	 * @throws VWAPServiceException
+	 */
 	public Boolean init() throws VWAPServiceException {
 		log.info("Reading data from VWAP file...");
 
@@ -122,7 +132,11 @@ public class VwapServiceImpl implements VwapService {
 		return true;
 
 	}
-
+	/**
+	 * Load list of VwapAdjustmentFactor data based on company ticker 
+	 * @param company ticker
+	 * @return list of VwapAdjustmentFactor
+	 */
 	private List<VwapAdjustmentFactor> loadAdjustmentFactor(String stockSymbol, String extension) {
 		List<VwapAdjustmentFactor> vwapAdjustmentFactors = new ArrayList<>();
 		File f = new File(companiesDir + adjustmentFactorDir+"/" + stockSymbol + extension);
@@ -150,7 +164,12 @@ public class VwapServiceImpl implements VwapService {
 		}
 		return vwapAdjustmentFactors;
 	}
-
+	
+	/**
+	 * Load VolWeightedAvgPrice data based on list of InputRecords
+	 * @param list of InputRecords
+	 * @return VolWeightedAvgPrice
+	 */
 	private VolWeightedAvgPrice getRec(String[] record) {
 		try {
 			VolWeightedAvgPrice r = new VolWeightedAvgPrice();

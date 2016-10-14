@@ -14,8 +14,23 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 
+/**
+ * Elastic Search Index Deserializer
+ * 
+ */
 public class IndexesDeserializer extends JsonDeserializer<Object>{
 
+	/**
+	 * Deserializes the object
+	 * 
+	 *@param DeserializationContext 
+	 *@param JsonParser
+	 * @return Deserialized Object
+	 * @throws IOException
+	 * @throws JsonProcessingException
+	 *             
+	 */
+	
 	@Override
 	public Object deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		ObjectCodec oc = jp.getCodec();

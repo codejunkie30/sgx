@@ -23,6 +23,13 @@ public class DividendService extends AbstractDataService{
 	@Value("${loader.dividend-history.dir}")
 	private String dividendHistoryDir;
 	
+	/**
+	 * Load Dividend History based on company ticker 
+	 * @param company ticker
+	 * @return DividendHistory
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@SuppressWarnings("unchecked")
 	public DividendHistory load(String id, String... parms)
 			throws ResponseParserException, CapIQRequestException {
@@ -37,7 +44,14 @@ public class DividendService extends AbstractDataService{
 		}
 		
 	}
-	
+	/**
+	 * Get Dividend data based on company ticker 
+	 * @param company ticker
+	 * @return DividendHistory
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 * @throws IndexerServiceException
+	 */
 	public DividendHistory getDividendData(String id) throws ResponseParserException, CapIQRequestException, IndexerServiceException {		
 		DividendHistory dH = new DividendHistory();
 		dH.setTickerCode(id);		

@@ -34,7 +34,15 @@ public class EmailServiceImpl implements EmailService{
 	@Value ("${email.site.base}")
 	public String emailSite;
 	
-	
+	/**
+	 * Send Notification Email 
+	 * @param sender
+	 * @param reciever
+	 * @param subject
+	 * @param file
+	 * @return 
+	 * @throws MessagingException
+	 */
 	@Override
 	public void send(String to, String subject, String token, String file) throws MessagingException{
 		
@@ -56,7 +64,14 @@ public class EmailServiceImpl implements EmailService{
 		
         mailSender.send(mimeMessage);
 	}
-
+	/**
+	 * Send Notification Email 
+	 * @param sender
+	 * @param subject
+	 * @param body
+	 * @return 
+	 * @throws MessagingException
+	 */
 	@Override
 	public void send(String to, String subject, String body) throws MessagingException {
 		final MimeMessage mimeMessage = mailSender.createMimeMessage();

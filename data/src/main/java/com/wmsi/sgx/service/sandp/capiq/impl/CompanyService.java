@@ -44,7 +44,14 @@ public class CompanyService extends AbstractDataService {
 	
 	@Value("${loader.consensus-estimates.dir}")
 	private String consensusEstimatesDir;
-
+	
+	/**
+	 * Load Company data from company ticker
+	 * @param ticker code 
+	 * @return Company object
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override
 	public Company load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 
@@ -257,7 +264,14 @@ public class CompanyService extends AbstractDataService {
 
 		return ph;
 	}
-
+	/**
+	 * load historical data for a company 
+	 * @param start date 
+	 * @param company
+	 * @return Company Object
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	private Company loadHistorical(final String startDate, Company comp)
 			throws ResponseParserException, CapIQRequestException {
 
@@ -271,7 +285,15 @@ public class CompanyService extends AbstractDataService {
 
 		return comp;
 	}
-
+	
+	/**
+	 * Get Average traded Value 
+	 * @param lastYearVol
+	 * @param lastYearPrice
+	 * @param startDate 
+	 * @return List<HistoricalValue>
+	 *
+	 */
 	private Double getAvgTradedValueM3(List<HistoricalValue> lastYearVol, List<HistoricalValue> lastYearPrice,
 			String startDate) {
 		List<HistoricalValue> volume = getLastThreeMonths(lastYearVol, startDate);
@@ -311,7 +333,13 @@ public class CompanyService extends AbstractDataService {
 		return avg(sum, volume.size(), 4);
 
 	}
-
+	
+	/**
+	 * Get Three Month average historical data 
+	 * @param start date 
+	 * @return average value
+	 * @throws ResponseParserException
+	 */
 	private Double getThreeMonthAvg(List<HistoricalValue> lastYear, String startDate) throws ResponseParserException {
 
 		List<HistoricalValue> volume = getLastThreeMonths(lastYear, startDate);
@@ -329,7 +357,12 @@ public class CompanyService extends AbstractDataService {
 
 		return avg(sum, volume.size(), 4);
 	}
-
+	/**
+	 * Get Last Three Months historical data 
+	 * @param start date 
+	 * @return List<HistoricalValue>
+	 *
+	 */
 	private List<HistoricalValue> getLastThreeMonths(List<HistoricalValue> lastYear, String startDate) {
 
 		String threeMonthsAgo = DateUtil.adjustDate(startDate, Calendar.DAY_OF_MONTH, -91);

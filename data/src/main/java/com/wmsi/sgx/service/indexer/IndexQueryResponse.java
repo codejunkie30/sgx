@@ -35,6 +35,14 @@ public class IndexQueryResponse {
 	private ObjectMapper objectMapper  = new ObjectMapper();
 	public void setObjectMapper(ObjectMapper m){objectMapper = m;}
 	
+	/**
+	 * Generalized utility method to get response from ES based on a class type
+	 * 
+	 * @param  class type 
+	 * @return generalized type List 
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	public <T> List<T> getHits(Class<T> clz) throws IndexerServiceException {
 		
 		if(response == null) throw new IndexerServiceException("Response is null or empty");

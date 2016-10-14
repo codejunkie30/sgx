@@ -32,13 +32,24 @@ public abstract class AbstractResponseParser implements ResponseParser{
 	
 	public abstract <T> T convert(CapIQResponse response) throws ResponseParserException;
 	
+	/**
+	 * get Annotated Fields 
+	 * @param 
+	 * @return annotedFields
+	 * 
+	 */
 	protected Map<String, Field> getAnnotedFields() {
 		if(annotedFields == null)
 			annotedFields = getFields(getType());
 
 		return annotedFields;
 	}
-
+	/**
+	 * Utility method to get field values 
+	 * @param class type
+	 * @return Map<String, Field>
+	 * 
+	 */
 	protected Map<String, Field> getFields(Class<?> clz) {
 		Field[] fields = clz.getDeclaredFields();
 
@@ -53,7 +64,14 @@ public abstract class AbstractResponseParser implements ResponseParser{
 
 		return annoted;
 	}
-
+	
+	/**
+	 * Parse results coming form CapIQResult 
+	 * @param CapIQResult
+	 * @param destination object
+	 * @return 
+	 * @throws ResponseParserException
+	 */
 	protected void parseResult(CapIQResult result, Object dest) throws ResponseParserException {
 		Map<String, Field> fields = getAnnotedFields();
 
@@ -78,7 +96,13 @@ public abstract class AbstractResponseParser implements ResponseParser{
 			throw new ResponseParserException("Couldn't parse results", e);
 		}
 	}
-
+	
+	/**
+	 * Utility method to get CapIQResult values 
+	 * @param CapIQResult
+	 * @return result value
+	 * @throws ResponseParserException
+	 */
 	protected String getResultValue(CapIQResult res) throws ResponseParserException{
 		List<String> values = getResultValues(res);
 		
@@ -95,6 +119,12 @@ public abstract class AbstractResponseParser implements ResponseParser{
 		return value;
 	}
 	
+	/**
+	 * Utility method to get list of CapIQResult values 
+	 * @param CapIQResult
+	 * @return list of result value
+	 * @throws ResponseParserException
+	 */
 	protected List<String> getResultValues(CapIQResult res) throws ResponseParserException{
 		String err = res.getErrorMsg();
 
@@ -123,6 +153,13 @@ public abstract class AbstractResponseParser implements ResponseParser{
 		return values;
 	}
 	
+	/**
+	 * Utility method to convert a result values based on field 
+	 * @param value to be converted
+	 * @param value to be converted based on field
+	 * @return converted result value
+	 * @throws ParseException
+	 */
 	protected Object convertValue(String value, Field f) throws ParseException {
 	
 		if(value != null && value.equalsIgnoreCase("nan"))
