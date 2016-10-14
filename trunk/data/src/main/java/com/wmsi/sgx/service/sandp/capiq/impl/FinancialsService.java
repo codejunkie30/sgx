@@ -37,6 +37,13 @@ public class FinancialsService extends AbstractDataService {
 	@Value("${loader.company-data.dir}")
 	private String companyDataDir;
 	
+	/**
+	 * Load Financials data based on company ticker 
+	 * @param company ticker
+	 * @return Financials
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override	
 	public Financials load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		Assert.notEmpty(parms);
@@ -44,6 +51,13 @@ public class FinancialsService extends AbstractDataService {
 		return financial;
 	}
 	
+	/**
+	 * Load Financials data based on company ticker 
+	 * @param company ticker
+	 * @return Financials
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	public Financials getCompanyFinancials(String id, String currency) throws ResponseParserException, CapIQRequestException {		
 		String tickerNoEx = id.split(":")[0];
 		Financials financials = new Financials();

@@ -124,7 +124,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	
 	@Value("${loader.workdir}")
 	private String tmpDir;
-
+	
+	/**
+	 * Saves List of available currencies from CSV files 
+	 *            
+	 * @return boolean
+	 */
 	public boolean saveCurrencyList()throws IndexerServiceException{
 		String[] record = null;
 		CSVReader csvReader = null;
@@ -158,6 +163,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		
 	}
 	
+	/**
+	 * Checks for new currencies 
+	 * 
+	 * @param List of currencyModels
+	 * @return boolean
+	 */
 	private boolean checkForCurrencyChanges(List<CurrencyModel> currencyModelList) {
 		boolean flag=true;
 		//check if new currency added or deleted
@@ -190,11 +201,18 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		return flag;
 	}
 
-
+	
 	public void setCapIQService(CapIQService capIQService) {
 		this.capIQService = capIQService;
 	}
-
+	
+	/**
+	 * Reads all the tickets and created List of CompanyInputRecords from it 
+	 * 
+	 * @param Elastic Search indexName
+	 * @param date of the index
+	 * @return List of CompanyInputRecords
+	 */
 	@Override
 	public List<CompanyInputRecord> readTickers(@Header String indexName, @Header Date jobDate)
 			throws IndexerServiceException {
@@ -242,7 +260,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			IOUtils.closeQuietly(reader);
 		}
 	}
-
+	
+	/**
+	 * Index individual CompanyInputRecord into ES Index 
+	 * 
+	 * @param Elastic Search indexName
+	 * @param CompanyInputRecord
+	 * @return CompanyInputRecord
+	 */
 	@Override
 	public CompanyInputRecord index(@Header String indexName, @Payload CompanyInputRecord input)
 			throws IndexerServiceException, CapIQRequestException, ResponseParserException {
@@ -269,7 +294,15 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		return input;
 	}
-
+	
+	/**
+	 * Create AlphaFactos from AlphaFactor file provided by S&P 
+	 * 
+	 * @param Elastic Search indexName
+	 * @return Boolean
+	 * @throws IndexerServiceException
+	 * @throws AlphaFactorServiceException
+	 */
 	@Override
 	public Boolean buildAlphaFactors(@Header String indexName)
 			throws AlphaFactorServiceException, IndexerServiceException{
@@ -294,6 +327,9 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 	 * Determine if the index job succeeded by checking the number of records
 	 * that failed to index against a pre-determined threshold.
 	 * 
+	 * @param List of CompanyInputRecords
+	 * @param indexName
+	 * @return int
 	 * @throws IndexerServiceException
 	 */
 	@Override
@@ -349,7 +385,13 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 			}
 		}
 	}
-
+	
+	/**
+	 * Updates CurrencyCompletedFlag
+	 * 
+	 * @param Elastic Search indexName 
+	 * @param CompanyInputRecord
+	 */
 	private void updateCurrencyCompletedFlag(String indexName) {
 		CurrencyModel model = new CurrencyModel();
 		model.setCompleted(true);
@@ -357,12 +399,23 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		currencyService.updateCurrency(model);
 	}
 	
+	/**
+	 * Flag to check if Currency data load is complete
+	 * 
+	 * @return boolean
+	 */
 	private boolean hasCurrenciesCompleted(){
 		return currencyService.getCountOfCurrenciesToComplete()<=0;
 	}
 
 	private static final int INDEX_REMOVAL_THRESHOLD = 5;
-
+	
+	
+	/**
+	 * Delete old stored indices from ES based on a threshold INDEX_REMOVAL_THRESHOLD
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	public void deleteOldIndexes() throws IndexerServiceException {
 
@@ -407,7 +460,16 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 
 		log.info("Index cleanup complete. Removed {} old indexes", removed);
 	}
-
+	
+	/**
+	 * Generates previous day Index name based on the current day's index date
+	 * 
+	 * @param Elastic Search indexName 
+	 * 
+	 * @return previous day index name
+	 * 
+	 * @throws IndexerServiceException
+	 */
 	public String getPreviousDayIndexName(String idxName) throws IndexerServiceException {
 
 		Indexes indexes = indexerService.getIndexes();
@@ -444,7 +506,17 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		log.debug("previoud say index found: " + previousDayIndex);
 		return previousDayIndex;
 	}
-
+	
+	/**
+	 * This method combines all the data collected from different data services and load it into Elastic Search for an individual record
+	 * to complete data load for that record.
+	 * 
+	 * @param Elastic Search indexName
+	 * @param CompanyInputRecord
+	 * @throws IndexerServiceException
+	 * @throws CapIQRequestException
+	 * @throws ResponseParserException
+	 */
 	private void indexRecord(String index, CompanyInputRecord input)
 			throws IndexerServiceException, CapIQRequestException, ResponseParserException {
 
@@ -465,7 +537,7 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		loadCompanyGTI(company);
 		loadCompanyVWAP(company);
 
-		// HACK - reset exchange on save (SGX doesn't believe in correct data)
+		// HACK - reset exchange on save (SGX requested)
 		String curExchange = company.getExchange();
 		company.setExchange(curExchange.toUpperCase().equals("CATALIST") ? "SGX" : curExchange);
 		indexerService.save("company", tickerNoExchange, company, index);
@@ -533,7 +605,15 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		}
 
 	}
-
+	/**
+	 * Saves Historical Data for each ticker
+	 * 
+	 * @param Elastic Search indexName
+	 * @param List<HistoricalValue> 
+	 * @param ticker
+	 * 
+	 * @return
+	 */
 	private void saveHistorical(String type, List<HistoricalValue> values, String ticker, String index)
 			throws IndexerServiceException {
 		StringBuilder buffer = new StringBuilder();
@@ -548,6 +628,12 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		buffer.setLength(0);
 	}
 
+	/**
+	 * Loads VWAP data for each company ticker 
+	 * 
+	 * @param Company Object
+	 * @return
+	 */
 	private void loadCompanyVWAP(Company company) {
 
 		BigDecimal value = BigDecimal.ZERO;
@@ -588,7 +674,13 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		company.setVwapCurrency(currency);
 
 	}
-
+	
+	/**
+	 * Loads GTI data for each company ticker 
+	 * 
+	 * @param Company Object
+	 * @return
+	 */
 	private void loadCompanyGTI(Company company) {
 		GovTransparencyIndex gti = gtiService.getLatest(company.getTickerCode());
 
@@ -598,7 +690,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		company.setGtiScore(gti.getTotalScore());
 		company.setGtiRankChange(gti.getRankChange());
 	}
-
+	
+	/**
+	 * Creates FX index from the currencies conversion CSV file 
+	 * This index has all the conversion data for all required currencies  
+	 * 
+	 * @param Elastic Search indexName and batchSize for bulk saving in ES
+	 * @return Boolean
+	 */
 	@Override
 	public Boolean createFXIndex(@Header String indexName, @Header int fxBatchSize) throws IndexerServiceException {
 
@@ -639,6 +738,14 @@ public class IndexBuilderServiceImpl implements IndexBuilderService {
 		return true;
 	}
 	
+	/**
+	 * Creates the indexName based on the currency
+	 * 
+	 * @param Elastic Search indexName 
+	 * @param indexing jobId
+	 * @return indexName
+	 * @throws IndexerServiceException
+	 */
 	@Override
 	public String computeIndexName(@Header String jobId, @Header String indexName) throws IndexerServiceException {
 		CurrencyModel currencyModel = currencyService.getNextCurrency();

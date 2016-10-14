@@ -45,7 +45,14 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 	
 	@Value("${capiq.ftp.dir}")
 	private String remoteDir;
-
+	
+	/**
+	 * Retrieve latest AlphaFactor file
+	 *
+	 * @return File
+	 * 
+	 * @throws AlphaFactorServiceException
+	 */
 	@Override
 	public File getLatestFile() throws AlphaFactorServiceException {
 		
@@ -90,11 +97,26 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 		}
 	}
 	
+	/**
+	 * Check if an id is valid Alpha Company
+	 * 
+	 * @param alphaId
+	 * @return Boolean
+	 *
+	 */
 	@Override
 	public boolean isAlphaCompany(String id) {
 		return EXISTING_IDS.contains(id);
 	}
-
+	
+	/**
+	 * Loads AlphaFactors from Latest AlphaFactor file
+	 * 
+	 * @param AlphaFactor file provided by S&P
+	 * @return List of AlphaFactors 
+	 * 
+	 * @throws AlphaFactorServiceException
+	 */
 	@Override
 	public List<AlphaFactor> loadAlphaFactors(File f) throws AlphaFactorServiceException {
 
@@ -143,6 +165,13 @@ public class AlphaFactorIndexerServiceImpl implements AlphaFactorIndexerService{
 		return NumberUtils.toInt(str);
 	}
 	
+	/**
+	 * Utility method to get latest downloaded file from local Directory 
+	 *
+	 * @return AlphaFactor locally downloaded file
+	 * 
+	 * @throws IOException
+	 */
 	public File getLatestDownloadedFileFromLocalDirectory() throws IOException{
 		File dir = new File(tmpDir);
 		List<String> names = new ArrayList<String>();

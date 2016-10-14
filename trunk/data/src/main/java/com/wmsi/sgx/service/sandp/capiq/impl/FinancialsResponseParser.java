@@ -21,7 +21,13 @@ public class FinancialsResponseParser extends AbstractResponseParser{
 	public Class<Financial> getType() {
 		return Financial.class;
 	}
-
+	
+	/**
+	 * Parse CapIQResponse to Financials
+	 * @param CapIQResponse
+	 * @return Financials
+	 * @throws ResponseParserException
+	 */
 	@Override
 	public Financials convert(CapIQResponse response) throws ResponseParserException {
 
@@ -48,6 +54,12 @@ public class FinancialsResponseParser extends AbstractResponseParser{
 
 	}
 	
+	/**
+	 * Get Financial from CapIQResult List
+	 * @param CapIQResult List
+	 * @return Financial
+	 * @throws ResponseParserException
+	 */
 	private Financial getFinancial(List<CapIQResult> results) throws ResponseParserException {
 	
 		Financial fin = new Financial();

@@ -18,11 +18,22 @@ public class CurrencyServiceImpl implements CurrencyService {
 	@Autowired
 	private Currencies currencyRepository;
 	
+	/**
+	 * Updates the currency in repository
+	 * 
+	 */
 	@Override
 	public void updateCurrency(CurrencyModel dto) {
 		currencyRepository.updateComplete(dto.isCompleted(), dto.getCurrencyName());
 	}
-
+	
+	/**
+	 * Adds the currency in repository
+	 * 
+	 * @param List<CurrencyModel> 
+	 * 
+	 * @return boolean
+	 */
 	@Override
 	public boolean addCurrencies(List<CurrencyModel> currencyModelList) {
 		List<Currency> currencyDomainList = new ArrayList<Currency>();
@@ -34,7 +45,14 @@ public class CurrencyServiceImpl implements CurrencyService {
 		Iterable<Currency> it = currencyRepository.save(currencyDomainList);
 		return it.iterator().hasNext();
 	}
-
+	
+	/**
+	 * retrieve currency from currency repository/DB
+	 * 
+	 * @param
+	 * @return boolean
+	 */
+	
 	@Override
 	public List<CurrencyModel> getAllCurrencies() {
 		List<CurrencyModel> currencyModelList = new ArrayList<CurrencyModel>();
@@ -46,7 +64,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 		}
 		return currencyModelList;
 	}
-
+	/**
+	 * Updates the currency model by saving the new currency
+	 * 
+	 * @param CurrencyModel
+	 *            
+	 * @return CurrencyModel
+	 */
 	@Override
 	public CurrencyModel addCurrency(CurrencyModel model) {
 		Currency currencyEntityObject = new Currency();
@@ -56,15 +80,31 @@ public class CurrencyServiceImpl implements CurrencyService {
 		return model;
 	}
 	
+	/**
+	 * delete all currencies
+	 *
+	 */
+	
 	public void deleteAll(){
 		currencyRepository.deleteAll();
 	}
-
+	
+	/**
+	 * get count of all the currencies which completed the data load in ES
+	 *@param
+	 * @return int
+	 */
 	@Override
 	public int getCountOfCurrenciesToComplete() {
 		return currencyRepository.getCountOfCurrenciesToComplete();
 	}
-
+	
+	/**
+	 * retrieves next currency
+	 *
+	 * @return CurrencyModel
+	 */
+	
 	@Override
 	public CurrencyModel getNextCurrency() {
 		Currency domain = currencyRepository.getNextCurrency();
@@ -75,6 +115,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 			return null;
 		return currencyModel;
 	}
+	
+	/**
+	 * deletes currency list
+	 * 
+	 * @param List<CurrencyModel>
+	 *           
+	 */
 	
 	public void deleteCurrenciesList(List<CurrencyModel> currencyModelList ){
 		//currencyModelList:- File from currencies.csv
@@ -90,6 +137,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 		currencyRepository.delete(removeCurrencyDomainList);
 	}
 	
+	// resets currency completed download flag
 	public void resetCompletedFlag(){
 		currencyRepository.resetCompletedFlag();
 	}

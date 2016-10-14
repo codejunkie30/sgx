@@ -61,6 +61,13 @@ public class KeyDevsService extends AbstractDataService {
 	
 	public static final boolean[] COLUMNS_TO_QUOTE_MODE = new boolean[]{true,true,false,false,true,true,true,true};
 	
+	/**
+	 * Load KeyDevs data based on company ticker 
+	 * @param company ticker
+	 * @return KeyDevs
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	@Override	
 	public KeyDevs load(String id, String... parms) throws ResponseParserException, CapIQRequestException {
 		String tickerNoEx = id.split(":")[0];
@@ -70,7 +77,12 @@ public class KeyDevsService extends AbstractDataService {
 		return devs;
 	}
 
-	
+	/**
+	 * Create Json Query to keydevs for list of ids 
+	 * @param list of ids 
+	 * @return Json Query
+	 * @throws ResponseParserException
+	 */
 	private String getQuery(List<String> ids) throws CapIQRequestException{
 
 		ObjectMapper m;
@@ -105,6 +117,13 @@ public class KeyDevsService extends AbstractDataService {
 		return json;
 	}
 	
+	/**
+	 * Load KeyDevs data based on company ticker 
+	 * @param company ticker
+	 * @return KeyDevs
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	public KeyDevs getKeyDevelopments(String id)	throws ResponseParserException, CapIQRequestException {
 		String tickerNoEx = id.split(":")[0];
 		KeyDevs kD = new KeyDevs();
@@ -214,6 +233,12 @@ public class KeyDevsService extends AbstractDataService {
 		return true;
 	}
 	
+	/**
+	 * Load Source content for KeyDevs retrieved S&P service to keyDevObject 
+	 * @param keyDevSource
+	 * @return 
+	 * @throws IOException
+	 */
 	private void loadSourceContent(Map<String, String> keyDevSource) throws IOException{
 		String originalFilePath = new StringBuilder(rawDir).append(keyDevDir).append(".csv").toString();
 		String backupFilePath = new StringBuilder(rawDir).append(keyDevDir).append("-bck.csv").toString();

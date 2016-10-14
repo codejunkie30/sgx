@@ -23,7 +23,12 @@ public class HoldersResponseParser extends AbstractResponseParser{
 	public Class<Holders> getType() {
 		return Holders.class;
 	}
-
+	/**
+	 * Convert CapIQResponse into Holders data  
+	 * @param CapIQResponse
+	 * @return Holders
+	 * @throws ResponseParserException
+	 */
 	@Override
 	public Holders convert(CapIQResponse response) throws ResponseParserException {
 

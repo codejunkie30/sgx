@@ -65,7 +65,15 @@ public abstract class AbstractDataService implements DataService{
 		Iterable<CSVRecord> records = csvHelperUtil.getRecords(path);
 		return records;
 	}
-	
+
+	/**
+	 * Parse CompanyInputRecord based on stock ticker and object type
+	 * 
+	 * @param  ticker
+	 * @param Object type 
+	 * @return List of CompanyCSVRecord
+	 *
+	 */
 	public List<CompanyCSVRecord> getParsedCompanyRecords(String ticker, String type) {
 		
 		Iterable<CSVRecord> records = getCompanyData(ticker, type); 
@@ -86,7 +94,14 @@ public abstract class AbstractDataService implements DataService{
 		return ret;
 	}
 	
-	//used for Financial and Estimates only
+	/**
+	 * Parse CompanyInputRecord for Financial Object based on stock ticker and object type
+	 * 
+	 * @param  ticker
+	 * @param Object type 
+	 * @return List of CompanyCSVRecord
+	 *
+	 */
 	public List<CompanyCSVRecord> getParsedFinacnialRecords(String ticker, String type) {
 		
 		Iterable<CSVRecord> records = getCompanyData(ticker, type); 
@@ -108,7 +123,17 @@ public abstract class AbstractDataService implements DataService{
 		return ret;
 	}
 	
-	// Function to avoid setting industry values for ASEAN companies as per the ASEAN companies requirements
+	
+	/**
+	 * Utility method to avoid setting industry values for ASEAN companies 
+	 * as per the ASEAN companies requirements.
+	 * ASEAN companies industry value should be null
+	 * 
+	 * @param  ticker 
+	 * @param Object type 
+	 * @return List of CompanyCSVRecord
+	 *
+	 */
 	public List<CompanyCSVRecord> getParsedCompanyRecords_NoIndustryValues(String ticker, String type) {
 		
 		Iterable<CSVRecord> records = getCompanyData(ticker, type); 
@@ -175,6 +200,14 @@ public abstract class AbstractDataService implements DataService{
 		return value;
 	}
 	
+	/**
+	 * get the date value for a particular field
+	 * @param name
+	 * @param record
+	 * @return
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 */
 	public Date getFieldDate(Field field, List<CompanyCSVRecord> records) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		if (!field.getType().isAssignableFrom(Date.class)) return null;
 
@@ -192,7 +225,13 @@ public abstract class AbstractDataService implements DataService{
 		return actual == null || StringUtils.stripToNull(actual.getValue()) != null ? null : actual.getPeriodDate();
 	}
 
-	
+	/**
+	 * process MillionRange Values  
+	 * @param Object to be converted
+	 * @return 
+	 *
+	 * 
+	 */
 	public void processMillionRangeValues(Object obj) {
 		Field[] fields = obj.getClass().getDeclaredFields();
 
@@ -208,7 +247,20 @@ public abstract class AbstractDataService implements DataService{
 			}
 		}
 	}
-
+	
+	/**
+	 * Divides value by 1,000,000.0 if Object has MillionFormatterAnnotation present
+	 * 
+	 * @param value to be converted
+	 * @param Field on which annotation is present
+	 * 
+	 * @return converted value
+	 * 
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 * @throws IndexerServiceException
+	 * 
+	 */
 	public Double processMillionFormatterAnnotation(Field field, Object value) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		Double ret = null;
 		// nothing to do
@@ -219,6 +271,15 @@ public abstract class AbstractDataService implements DataService{
 		return ret;
 	}
 	
+	/**
+	 * Divides value by 1,000,000.0 
+	 * @param value to be converted
+	 * @return converted value
+	 * @throws ResponseParserException
+	 * @throws CapIQRequestException
+	 * @throws IndexerServiceException
+	 * 
+	 */
 	public Double processMillionFormatter(Object value) throws ResponseParserException, CapIQRequestException, IndexerServiceException {
 		if (value == null) return null;
 		return ((Double)value)/1000000.0;

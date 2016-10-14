@@ -32,6 +32,11 @@ public class XFSplitter {
 	@Autowired
 	private ErrorBeanHelper errorBeanHelper;
 	
+	/**
+	 * Init method for splitting raw data files based on companies  
+	 * 
+	 * @return boolean 
+	 */
 	public Boolean init() {
 		
 		try {

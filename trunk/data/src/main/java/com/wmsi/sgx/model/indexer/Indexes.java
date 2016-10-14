@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Objects;
-
+/**
+ * Elastic Search Index List
+ * 
+ */
 @JsonDeserialize(using=IndexesDeserializer.class)
 public class Indexes{
 

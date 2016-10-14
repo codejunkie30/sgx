@@ -10,6 +10,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+/**
+ * Currencies entity
+ * 
+ * @author dt211300
+ */
+
 @Entity(name = "Currencies")
 @Table(name = "currencies")
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Currency.class)
