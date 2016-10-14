@@ -137,7 +137,7 @@ public abstract class AbstractDataService implements DataService{
 	
 	/**
 	 * get the value for a particular field
-	 * @param name
+	 * @param field
 	 * @param records
 	 * @return
 	 * @throws ResponseParserException
@@ -157,8 +157,8 @@ public abstract class AbstractDataService implements DataService{
 	
 	/**
 	 * get the value for a particular field
-	 * @param name
-	 * @param record
+	 * @param field
+	 * @param actual
 	 * @return
 	 * @throws ResponseParserException
 	 * @throws CapIQRequestException

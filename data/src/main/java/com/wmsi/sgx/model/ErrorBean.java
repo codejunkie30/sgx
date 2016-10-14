@@ -17,9 +17,6 @@ package com.wmsi.sgx.model;
 /**
  * Bean class containing high-level information about an error.
  * 
- * @see FieldErrorBean
- * 
- * @dstModelAlias BaseErrorBean
  */
 public class ErrorBean
 {
