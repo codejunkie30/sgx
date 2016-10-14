@@ -16,6 +16,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.wmsi.sgx.service.quanthouse.feedos.FeedOSConfig;
+/**
+ * Application configuration file
+ */
 
 @Configuration
 @ComponentScan(basePackages = { "com.wmsi.sgx.service" })

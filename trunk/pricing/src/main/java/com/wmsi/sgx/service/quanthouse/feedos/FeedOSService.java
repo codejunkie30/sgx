@@ -32,6 +32,14 @@ public class FeedOSService {
 	
 	private Integer subscriptionNumber;	
 	
+	/**
+	 * Subscrie to QuanthouseService
+	 * @param market code
+	 * @param List of stock tickers
+	 * @param FeedOSSubscriptionObserver
+	 * @return 
+	 * @throws QuanthouseServiceException
+	 */
 	public synchronized void subscribe(String market, List<String> ids, FeedOSSubscriptionObserver observer) throws QuanthouseServiceException{
 	
 		Session ses = session.getSession();

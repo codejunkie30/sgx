@@ -26,6 +26,12 @@ public class FeedOSSession{
 	private FeedOSConfig feedOSConfig;
 	public void setFeedOSconfig(FeedOSConfig c){feedOSConfig = c;}
 	
+	/**
+	 * get session for QuanthouseService
+	 * @param 
+	 * @return Session
+	 * @throws QuanthouseServiceException
+	 */
 	public synchronized Session getSession() throws QuanthouseServiceException{
 		if(session == null || !session.isOpened())
 			session = open();
@@ -33,6 +39,12 @@ public class FeedOSSession{
 		return session;
 	}
 	
+	/**
+	 * Open session for QuanthouseService
+	 * @param 
+	 * @return Session
+	 * @throws QuanthouseServiceException
+	 */
 	public synchronized Session open() throws QuanthouseServiceException{
 
 		// Get connection settings from config

@@ -24,12 +24,24 @@ public class TradeEventServiceImpl implements TradeEventService{
 	public void saveEvent(TradeEvent p){
 		tradeEventRepository.save(p);
 	}
-	
+	/**
+	 * Get Latest Trade event from DB
+	 * @param market code
+	 * @param stock ticker
+	 * @return TradeEvent
+	 */
 	@Override
 	public TradeEvent getLatestEvent(String market, String ticker) {
 		return tradeEventRepository.findTopByMarketAndTickerOrderByLastTradeTimeDesc(market,ticker);		
 	}
-
+	
+	/**
+	 * Get list of all Trade event data for a specific date, market and ticker from DB
+	 * @param market code
+	 * @param ticker
+	 * @param date
+	 * @return List of tradeEvents
+	 */
 	@Override	
 	public List<TradeEvent> getEventsForDate(String market, String ticker, Date date) {
 		Date d = new DateTime(date).withTimeAtStartOfDay().toDate();

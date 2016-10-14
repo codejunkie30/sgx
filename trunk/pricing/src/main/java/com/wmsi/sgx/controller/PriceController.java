@@ -29,6 +29,11 @@ public class PriceController {
 	
 	private String market = "XSES";
 	
+	/**
+	 * Get real time Price map based on company ticker and market code 
+	 * @param company ticker
+	 * @return real time price
+	 */
 	@RequestMapping(value="/price")
 	public Map<String, Price> getPrice(@RequestBody IdSearch query) {
 		Price p = new Price();
@@ -44,7 +49,12 @@ public class PriceController {
 		ret.put("price", p);
 		return ret;
 	}
-
+	
+	/**
+	 * Get intraday Price map based on company ticker and market code 
+	 * @param company ticker
+	 * @return intraday real time price
+	 */
 	@RequestMapping(value="/price/intraday")
 	public List<Price> getIntradayPrices(@RequestBody IdSearch query) {
 		List<Price> prices = null;
