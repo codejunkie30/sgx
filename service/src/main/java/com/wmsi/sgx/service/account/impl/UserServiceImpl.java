@@ -254,7 +254,7 @@ public class UserServiceImpl implements UserService{
 	 * 
 	 * @param login
 	 *            UserLogin
-	 * @throws UserLogin
+	 * @return UserLogin
 	 */
 	@Override
 	@Transactional

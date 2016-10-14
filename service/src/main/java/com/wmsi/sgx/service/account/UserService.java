@@ -52,7 +52,7 @@ public interface UserService{
 	 * 
 	 * @param login
 	 *            UserLogin
-	 * @throws UserLogin
+	 * @return UserLogin
 	 */
 	UserLogin recordLogin(UserLogin login);
 
@@ -94,7 +94,7 @@ public interface UserService{
 	/**
 	 * Changes the password.
 	 * 
-	 * @param dto
+	 * @param user
 	 *            UserModel
 	 * @return Boolean
 	 * 

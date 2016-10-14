@@ -44,7 +44,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * @param ret
+	 * @param expirationDate Expiration date
+	 * @return milliseconds
 	 */
 	public static long getDaysRemaining(Date expirationDate) {
 		long diff = resetTimeStamp(expirationDate).getTime() - resetTimeStamp(new Date()).getTime();

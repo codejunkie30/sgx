@@ -43,8 +43,8 @@ public class RSAKeyUtility {
 	 * 
 	 * @param toBeDecrypted
 	 * @param privateKeyPath
-	 * @return
-	 * @throws Exception
+	 * @return String decrypted string
+	 * @throws RSAKeyException
 	 */
 	public static String decrypt(String toBeDecrypted, String privateKeyPath) throws RSAKeyException {
 		byte[] dectyptedText;
@@ -106,8 +106,8 @@ public class RSAKeyUtility {
 	 * Retrieves the public key
 	 * 
 	 * @param fileName
-	 * @return
-	 * @throws Exception
+	 * @return PublicKey public key
+	 * @throws RSAKeyException
 	 */
 	public static PublicKey getPublicKey(String fileName) throws RSAKeyException {
 		FileInputStream fis = null;

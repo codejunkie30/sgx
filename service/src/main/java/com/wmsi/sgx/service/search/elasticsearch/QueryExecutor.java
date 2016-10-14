@@ -23,8 +23,8 @@ public interface QueryExecutor{
 	 * @param q
 	 *            Query
 	 * @param clz
-	 *            Class<T>
-	 * @return <T>
+	 *            Class
+	 * @return Returns the object out of json document
 	 * @throws ElasticSearchException
 	 */
 	<T> T executeGet(Query q, Class<T> clz) throws ElasticSearchException;

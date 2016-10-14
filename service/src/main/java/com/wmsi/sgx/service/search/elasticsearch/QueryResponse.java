@@ -17,8 +17,8 @@ public interface QueryResponse{
 	 * Returns the Hits.
 	 * 
 	 * @param clz
-	 *            Class<T>
-	 * @return List<T>
+	 *            Class
+	 * @return Returns List of objects out of json document
 	 * @throws ElasticSearchException
 	 */
 	<T> List<T> getHits(Class<T> clz) throws ElasticSearchException;
@@ -42,7 +42,7 @@ public interface QueryResponse{
 	/**
 	 * Sets the ObjectMapper
 	 * 
-	 * @param m
+	 * @param mapper
 	 *            ObjectMapper
 	 */
 	void setObjectMapper(ObjectMapper mapper);
