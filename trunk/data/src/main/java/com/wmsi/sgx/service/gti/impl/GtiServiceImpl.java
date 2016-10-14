@@ -40,7 +40,7 @@ public class GtiServiceImpl implements GtiService{
 	
 	/**
 	 * Get GTI data for latest year for the given ticker.
-	 * @param The ticker to load GTIs for.
+	 * @param ticker The ticker to load GTIs for.
 	 */
 	@Override
 	public GovTransparencyIndex getLatest(String ticker){
@@ -58,7 +58,7 @@ public class GtiServiceImpl implements GtiService{
 	
 	/**
 	 * Get all GTIs for the given ticker
-	 * @param The ticker to load GTIs for.
+	 * @param ticker The ticker to load GTIs for.
 	 */
 	@Override
 	public GovTransparencyIndexes getForTicker(String ticker){
