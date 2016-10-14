@@ -30,6 +30,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+/**
+ * Web Application configuration file
+ */
+
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.wmsi.sgx.controller"})

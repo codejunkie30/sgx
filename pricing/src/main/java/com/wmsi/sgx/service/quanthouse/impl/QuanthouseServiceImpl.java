@@ -82,7 +82,12 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private String toMarketId(String id){
 		return id.concat(MARKET_EXTENTION);
 	}
-
+	
+	/**
+	 * Create Price Object from TradeEvent Object 
+	 * @param TradeEvent data
+	 * @return Price Object
+	 */
 	private Price bindPriceData(TradeEvent data) {
 		Price p = new Price();
 		p.setLastPrice(data.getLastPrice());
@@ -101,7 +106,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 
 		return p;
 	}
-
+	
+	/**
+	 * Subscribe to Quanthouse service for real time update feed
+	 * @throws QuanthouseServiceException
+	 */
 	@Scheduled(fixedDelayString= "${quanthouse.subscription.time}")
 	private void subscribe() throws QuanthouseServiceException {
 
@@ -134,7 +143,13 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			}
 		});
 	}
-
+	
+	/**
+	 * Get all valid tickers
+	 * @param 
+	 * @return List of tickers
+	 * @throws QuanthouseServiceException
+	 */
 	private List<String> getTickers() throws QuanthouseServiceException {
 
 		try{
@@ -149,7 +164,12 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			throw new QuanthouseServiceException("Failed to load ticker list.");
 		}
 	}
-
+	
+	/**
+	 * Save FeedOSData received from Quanthouse rest service
+	 * @param FeedOSData
+	 * @return 
+	 */
 	private void saveEvent(FeedOSData data) {
 
 		TradeEvent event = new TradeEvent();
@@ -173,7 +193,11 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 		event.setMarket(data.getMarket());
 		tradeEventService.saveEvent(event);
 	}
-
+	/**
+	 * Get Last Trade Timestamp from FeedOSData received from Quanthouse rest service
+	 * @param FeedOSData data
+	 * @return Date
+	 */
 	private Date getLastTradeTimestamp(FeedOSData data) {
 		Date lastTrade = data.getLastTradeTimestamp();
 		Date lastOffBookTrade = data.getLastOffBookTradeTimestamp();

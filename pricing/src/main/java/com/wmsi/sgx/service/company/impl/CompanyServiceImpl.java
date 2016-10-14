@@ -53,6 +53,12 @@ public class CompanyServiceImpl implements CompanyService{
 						ES_TYPE);
 	}
 	
+	/**
+	 * Get all valid ticker
+	 * @param 
+	 * @return List of valid tickers
+	 * @throws CompanyServiceException
+	 */
 	@Override
 	public List<String> getAllTickers() throws CompanyServiceException{
 
