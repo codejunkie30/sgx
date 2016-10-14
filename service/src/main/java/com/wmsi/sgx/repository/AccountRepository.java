@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.User;
 
 public interface AccountRepository extends CustomRepository<Account, Serializable>{
@@ -35,9 +36,9 @@ public interface AccountRepository extends CustomRepository<Account, Serializabl
 	void updateAccountDeactivate(@Param("active") boolean active, @Param("expiration_dt") Date expiration_dt, @Param("user_id")long user_id,@Param("currency") String currency, @Param("updated_by") long updated_by, @Param("updated_dt") Date updated_dt);
 	
 	@Modifying
-	@Query("update Accounts set expiration_dt = :expiration_dt, updated_dt=:updated_dt, updated_by=:updated_by where user_id = :user_id")	
+	@Query("update Accounts set Active = :active, expiration_dt = :expiration_dt , currency=:currency, updated_dt=:updated_dt, updated_by=:updated_by where user_id = :user_id and type =:type")	
 	@Transactional
-	void updateAccountExtension(@Param("expiration_dt") Date expiration_dt, @Param("user_id")long user_id, @Param("updated_by") long updated_by, @Param("updated_dt") Date updated_dt);
+	void updateAccountExtension(@Param("active") boolean active, @Param("expiration_dt") Date expiration_dt, @Param("user_id")long user_id,@Param("currency") String currency, @Param("updated_by") long updated_by, @Param("updated_dt") Date updated_dt, @Param("type") AccountType type);
 	
 	@Modifying
 	@Query("update Accounts set contact_opt_in = :contact_opt_in, currency = :currency, updated_dt=:updated_dt, updated_by=:updated_by where user_id = :user_id")	

@@ -364,7 +364,7 @@ public class AdminServiceImpl implements AdminService {
 		model.setStatus(edit.getType().toString());
 		model.setUsername(username);
 
-		accountRepository.updateAccountDeactivate(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency(), updatedBy, new Date());
+		accountRepository.updateAccountExtension(edit.getActive(), edit.getExpirationDate(), edit.getUser().getId(),edit.getCurrency(), updatedBy, new Date(), edit.getType());
 		
 		//Auditing
 		AccountAudit accountAudit = new AccountAudit();
