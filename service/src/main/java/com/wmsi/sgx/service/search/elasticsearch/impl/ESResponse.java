@@ -45,8 +45,8 @@ public class ESResponse implements QueryResponse{
 	 * Returns the Hits.
 	 * 
 	 * @param clz
-	 *            Class<T>
-	 * @return List<T>
+	 *            Class
+	 * @return Returns the List of objects out of json document
 	 * @throws ElasticSearchException
 	 */
 	@Override

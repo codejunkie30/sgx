@@ -52,8 +52,8 @@ public class TradeEventServiceImpl implements TradeEventService{
 	 * Retrieves trade events for the market, ticker code and date provided
 	 * 
 	 * @param market
-	 * @param id ticker code
-	 * @param d trade event date
+	 * @param ticker ticker code
+	 * @param date trade event date
 	 * @return List of trade events
 	 */
 	@Override	
@@ -73,7 +73,7 @@ public class TradeEventServiceImpl implements TradeEventService{
 	 * Retrieves trade events for the market, ticker code and the date period
 	 * 
 	 * @param market
-	 * @param id
+	 * @param ticker
 	 * @param from
 	 * @param to
 	 * @return List of trade events
