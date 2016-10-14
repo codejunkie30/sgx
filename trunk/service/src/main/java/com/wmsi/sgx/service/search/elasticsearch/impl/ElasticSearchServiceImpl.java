@@ -62,8 +62,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	 * @param query
 	 *            String
 	 * @param clz
-	 *            Class<T>
-	 * @return SearchResult<T>
+	 *            Class
+	 * @return Returns the object out of json document
 	 * @throws ElasticSearchException
 	 */
 	@Override
@@ -87,11 +87,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	 *            String
 	 * @param type
 	 *            String
-	 * @param query
+	 * @param id
 	 *            String
 	 * @param clz
-	 *            Class<T>
-	 * @return <T>
+	 *            Class
+	 * @return Returns the object out of json document
 	 * @throws ElasticSearchException
 	 */
 	@Override
@@ -112,8 +112,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	 * @param id
 	 *            String
 	 * @param clz
-	 *            Class<T>
-	 * @return <T>
+	 *            Class
+	 * @return Returns the object out of json document
 	 * @throws ElasticSearchException
 	 */
 	@Override

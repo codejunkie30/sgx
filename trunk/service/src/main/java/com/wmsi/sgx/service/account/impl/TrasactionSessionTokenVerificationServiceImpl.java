@@ -33,7 +33,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 	 * 
 	 * @param user
 	 *            User
-	 * @param token
+	 * @param transSessionToken
 	 *            Token
 	 * @return String Transaction token
 	 */
@@ -72,7 +72,7 @@ public class TrasactionSessionTokenVerificationServiceImpl implements Trasaction
 	 * 
 	 * @param user
 	 *            User
-	 * @param token
+	 * @param transSessionToken
 	 *            String
 	 * @return Returns true if the transaction token is valid otherwise false
 	 * @throws TransactionSessionTokenVerificationException

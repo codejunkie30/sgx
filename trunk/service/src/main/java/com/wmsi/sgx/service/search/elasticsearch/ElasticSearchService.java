@@ -19,8 +19,8 @@ public interface ElasticSearchService{
 	 * @param query
 	 *            String
 	 * @param clz
-	 *            Class<T>
-	 * @return SearchResult<T>
+	 *            Class
+	 * @return SearchResult
 	 * @throws ElasticSearchException
 	 */
 	<T> SearchResult<T> search(String index, String type, String query, Class<T> clz) throws ElasticSearchException;
@@ -32,11 +32,11 @@ public interface ElasticSearchService{
 	 *            String
 	 * @param type
 	 *            String
-	 * @param query
-	 *            String
+	 * @param id
+	 *            id
 	 * @param clz
-	 *            Class<T>
-	 * @return <T>
+	 *            Class
+	 * @return Returns the object out of json document
 	 * @throws ElasticSearchException
 	 */
 	<T> T get(String index, String type, String id, Class<T> clz) throws ElasticSearchException;
@@ -51,8 +51,8 @@ public interface ElasticSearchService{
 	 * @param id
 	 *            String
 	 * @param clz
-	 *            Class<T>
-	 * @return <T>
+	 *            Class
+	 * @return Returns the object out of json document 
 	 * @throws ElasticSearchException
 	 */
 	<T> T getUsingIndex(String index, String type, String id, Class<T> clz) throws ElasticSearchException;

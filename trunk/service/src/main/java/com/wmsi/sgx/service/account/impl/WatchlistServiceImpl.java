@@ -486,14 +486,11 @@ public class WatchlistServiceImpl implements WatchlistService {
 	}
 	
 	/**
-	 * Sets the options in watchlist.
+	 * Sets the options in watch list.
 	 * 
 	 * @param map
-	 *            Map, id Long.
-	 * 
-	 * @return Map
+	 * @param id
 	 */
-	
 	public void setOptions(Map<String, Object> map, Long id){
 		for(Map.Entry<String, Object> entry : map.entrySet()){
 			WatchlistOption newOptions = new WatchlistOption();

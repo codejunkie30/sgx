@@ -16,7 +16,7 @@ public interface TradeEventService{
 	 * 
 	 * @param market
 	 *            String
-	 * @param ticker
+	 * @param id
 	 *            String
 	 * @return TradeEvent
 	 */

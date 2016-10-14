@@ -93,8 +93,8 @@ public class TokenAuthenticationService {
 	 * @param response
 	 * @param user
 	 * @return
-	 * @throws TransactionSessionTokenVerificationException,
-	 *             VerifiedTransactionSessionTokenPremiumException
+	 * @throws Exception
+	 * 
 	 * @deprecated Use
 	 *             {@link #renewTransactionAuthToken(HttpServletRequest,HttpServletResponse,User)}
 	 *             instead
@@ -108,13 +108,12 @@ public class TokenAuthenticationService {
 	 * to Renew Tokens
 	 * 
 	 * @param request
-	 *            TODO
 	 * @param response
 	 * @param user
 	 * 
-	 * @return
-	 * @throws TransactionSessionTokenVerificationException,
-	 *             VerifiedTransactionSessionTokenPremiumException
+	 * @return Returns true if the token is renewed
+	 * @throws TransactionSessionTokenVerificationException
+	 * @throws VerifiedTransactionSessionTokenPremiumException
 	 */
 	public boolean renewTransactionAuthToken(HttpServletRequest request, HttpServletResponse response, User user)
 			throws TransactionSessionTokenVerificationException, VerifiedTransactionSessionTokenPremiumException {
