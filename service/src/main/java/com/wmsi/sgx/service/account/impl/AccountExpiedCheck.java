@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.CustomAuditorAware;
+import com.wmsi.sgx.domain.User;
 import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
@@ -47,6 +49,9 @@ public class AccountExpiedCheck implements Job {
 
 	@Value("${email.trialExpired.notice}")
 	private String trialExpiredEmailBody;
+
+	@Autowired
+	private CustomAuditorAware<User> auditorProvider;
 
 	@Autowired
 	private TrialProperty getTrial;
@@ -78,6 +83,16 @@ public class AccountExpiedCheck implements Job {
 		SecurityContextHolder.getContext().setAuthentication(authRequest);
 
 		for (Account acc : accounts) {
+			
+			if (acc.getAlwaysActive() && acc.getActive() && acc.getType() == AccountType.ADMIN) {
+				acc.setAlwaysActive(false);
+				acc.setType(AccountType.PREMIUM);
+				User user = new User();
+				user.setId(1L);
+				auditorProvider.setUser(user);
+				acc = accountRepository.save(acc);
+			}
+
 			if (acc.getAlwaysActive() == false && acc.getActive() == true) {
 				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate()
 						: DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()),
