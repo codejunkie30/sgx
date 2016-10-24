@@ -54,11 +54,11 @@
 										</div>
 									</th>
 									<th width="29%" class="asc" id="perCompanyName" data-bind="click: perSortByCompanyName">Company Name</th>
-									<th width="15%" id="perTradeDate" data-bind="click: perSortbyTradeDate"><div class="tradeDate floatLeft w80P blueCl">First Trade <br> Date</div><div class="floatRight w20P"><img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
-									<th width="14%" id="perNumOfShares" data-bind="click: perSortbyNumShares"><div class="numShares floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
-									<th width="16%" id="perLastClosePrice" data-bind="click: perSortLastClsPrice"><div class="lastClosePr floatLeft w80P blueCl">Last Close<br> Price</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
-									<th width="12%" id="perCurPrice" data-bind="click: perSortCurrentValue"><div class="currentVal floatLeft w80P blueCl">Current   <br> Value</div><div class="floatRight w20P"> <img src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
-									<th width="4%" style="cursor: default;"><div class="floatLeft w80P blackCl">Delete </div><img class="tooltip-left" style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
+									<th width="15%" id="perTradeDate" data-bind="click: perSortbyTradeDate"><div class="tradeDate floatLeft w80P blueCl">First Trade <br> Date</div><div class="floatRight w20P"><img class="transactionTooltip" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'firstTradeDate'"  /></div></th>
+									<th width="14%" id="perNumOfShares" data-bind="click: perSortbyNumShares"><div class="numShares floatLeft w80P blueCl">Number of Shares</div><div class="floatRight w20P"> <img class="transactionTooltip" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'numberOfShares'"  /></div></th>
+									<th width="16%" id="perLastClosePrice" data-bind="click: perSortLastClsPrice"><div class="lastClosePr floatLeft w80P blueCl">Last Close<br> Price</div><div class="floatRight w20P"> <img class="transactionTooltip" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'lastClosePrice'"  /></div></th>
+									<th width="12%" id="perCurPrice" data-bind="click: perSortCurrentValue"><div class="currentVal floatLeft w80P blueCl">Current   <br> Value</div><div class="floatRight w20P"> <img class="transactionTooltip" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'currentValue'"  /></div></th>
+									<th width="4%" style="cursor: default;"><div class="floatLeft w80P blackCl">Delete </div><img class="transactionTooltip tooltip-left" style="padding-left: 13px;" src="img/ico-info_blue.png" alt="" data-bind="tooltip: 'Delete'"  /></th>
 								</tr>
 							</thead>
 							<tbody data-bind="foreach: displayTransactions">
@@ -158,10 +158,10 @@
 						<tr>
 							<th width="36%" class="asc" id="transCompanyNameColumn" data-bind="click: transSortByCompanyName">Company Name</th>
 							<th width="8%" id="transType" data-bind="click: transSortbyType"><div class="floatLeft w80P blackCl">Type</div></th>
-							<th width="10%" id="transTradeDate" data-bind="click: transSortbyTradeDate"><div class="floatLeft w80P blueCl">Trade Date</div><div class="floatRight w20P"><img data-bind="tooltip: 'tranTradeDate' " alt="" src="img/ico-info_blue.png"></div></th>
-							<th width="17%" id="transNumShare" data-bind="click: transSortbyNumberShare"><div class="floatLeft w80P blueCl">Number<br> of Shares</div><div class="floatRight w20P"><img data-bind="tooltip: 'transNoOfShares'" alt="" src="img/ico-info_blue.png"></div></th>
-							<th width="10%" id="transPrice" data-bind="click: transSortbyPrice"><div class="floatLeft w80P blueCl">Price</div><div class="floatRight w20P"><img data-bind="tooltip: 'transPrice'" alt="" src="img/ico-info_blue.png"></div></th>
-							<th width="14%" id="transLastPrice" data-bind="click: transSortbyLastPrice"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"><img data-bind="tooltip: 'transLastClosePrice'" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="10%" id="transTradeDate" data-bind="click: transSortbyTradeDate"><div class="floatLeft w80P blueCl">Trade Date</div><div class="floatRight w20P"><img class="transactionTooltip" data-bind="tooltip: 'tranTradeDate'; click: event.stopPropagation();" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="17%" id="transNumShare" data-bind="click: transSortbyNumberShare"><div class="floatLeft w80P blueCl">Number<br> of Shares</div><div class="floatRight w20P"><img class="transactionTooltip" data-bind="tooltip: 'transNoOfShares'" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="10%" id="transPrice" data-bind="click: transSortbyPrice"><div class="floatLeft w80P blueCl">Price</div><div class="floatRight w20P"><img class="transactionTooltip" data-bind="tooltip: 'transPrice'" alt="" src="img/ico-info_blue.png"></div></th>
+							<th width="14%" id="transLastPrice" data-bind="click: transSortbyLastPrice"><div class="floatLeft w80P blueCl">Last Close Price</div><div class="floatRight w20P"><img class="transactionTooltip" data-bind="tooltip: 'transLastClosePrice'" alt="" src="img/ico-info_blue.png"></div></th>
 							<th width="5%" style="cursor: default;"><div class="floatLeft w80P blackCl">Action</div></th>
 						</tr>
 					</thead>

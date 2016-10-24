@@ -237,8 +237,7 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 				function(data, textStatus, jqXHR){
 					SAVECHANGES.userEmail(data.email);
 					SAVECHANGES.contactOptIn(data.contactOptIn);
-					SAVECHANGES.selectedCurrency(data.currency);
-					
+					setTimeout(function(){ SAVECHANGES.selectedCurrency(data.currency); }, 400);
 					if (data.type == '' || data.type == undefined || data.type == 'UNAUTHORIZED'){
 						var home = PAGE.getPage(PAGE.pageData.getPage('index'));
 						top.location.href = home;
