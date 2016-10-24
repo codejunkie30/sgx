@@ -618,6 +618,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 						}
 						PAGE.hideLoading();
 						setTimeout(function(){ PAGE.resizeIframeSimple(100) }, 500);
+						$("th div img.transactionTooltip").on("click", function(e) {
+							e.stopPropagation();
+						});
 					}, 
 					PAGE.customSGXError);
 		},
@@ -820,6 +823,9 @@ define([ "wmsi/utils", "knockout", "knockout-validate", "text!client/data/messag
 		    	$('#perCurPrice').removeClass('currrentpasc');
 		    	$('#perCurPrice').removeClass('currrentpdesc');
 		    	me.trackPage("SGX - StockList Valuation Transactions");
+		    	$("th div img.transactionTooltip").on("click", function(e) {
+					e.stopPropagation();
+				});
 			}
 			me.activeTab(tabName);
 	    },
