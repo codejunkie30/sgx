@@ -21,9 +21,9 @@ import org.springframework.stereotype.Service;
 
 import com.wmsi.sgx.config.AppConfig.TrialProperty;
 import com.wmsi.sgx.domain.Account;
+import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.domain.CustomAuditorAware;
 import com.wmsi.sgx.domain.User;
-import com.wmsi.sgx.domain.Account.AccountType;
 import com.wmsi.sgx.repository.AccountRepository;
 import com.wmsi.sgx.service.EmailService;
 import com.wmsi.sgx.util.DateUtil;
@@ -59,15 +59,15 @@ public class AccountExpiedCheck implements Job {
 	private static final int PREMIUM_EXPIRATION_DAYS = 365;
 
 	private static final Logger log = LoggerFactory.getLogger(AccountExpiedCheck.class);
-	
-	
+
 	/**
-     * Executes account expiration check and verify the Username Password exist in system.
-     * 
-     * @param context
-     *            JobExecutionContext
-     * @throws JobExecutionException
-     */
+	 * Executes account expiration check and verify the Username Password exist
+	 * in system.
+	 * 
+	 * @param context
+	 *            JobExecutionContext
+	 * @throws JobExecutionException
+	 */
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -83,8 +83,9 @@ public class AccountExpiedCheck implements Job {
 		SecurityContextHolder.getContext().setAuthentication(authRequest);
 
 		for (Account acc : accounts) {
-			
-			if (acc.getAlwaysActive() && acc.getActive() && acc.getType() == AccountType.ADMIN) {
+
+			if (acc.getAlwaysActive() && acc.getActive() && acc.getType() == AccountType.ADMIN
+					&& getDaysRemaining(acc) <= -1) {
 				acc.setAlwaysActive(false);
 				acc.setType(AccountType.PREMIUM);
 				User user = new User();
@@ -94,12 +95,8 @@ public class AccountExpiedCheck implements Job {
 			}
 
 			if (acc.getAlwaysActive() == false && acc.getActive() == true) {
-				Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate()
-						: DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()),
-								Calendar.DAY_OF_MONTH, acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays()
-										: PREMIUM_EXPIRATION_DAYS));
 
-				if (DateUtil.getDaysRemaining(expiration) <= -1) {
+				if (getDaysRemaining(acc) <= -1) {
 					acc.setActive(false);
 					acc.setExpirationDate(new Date());
 					accountRepository.updateAccountDeactivate(acc.getActive(), acc.getExpirationDate(),
@@ -117,15 +114,26 @@ public class AccountExpiedCheck implements Job {
 	}
 
 	/**
-     * Sends the trail users expired email with subject and email body.
-     * 
-     * @param email
-     *            String
-     * @throws MessagingException
-     */
-	
+	 * @param acc
+	 * @return
+	 */
+	private long getDaysRemaining(Account acc) {
+		Date expiration = acc.getExpirationDate() != null ? acc.getExpirationDate()
+				: DateUtil.toDate(DateUtil.adjustDate(DateUtil.fromDate(acc.getStartDate()), Calendar.DAY_OF_MONTH,
+						acc.getType() == AccountType.TRIAL ? getTrial.getTrialDays() : PREMIUM_EXPIRATION_DAYS));
+		return DateUtil.getDaysRemaining(expiration);
+	}
+
+	/**
+	 * Sends the trail users expired email with subject and email body.
+	 * 
+	 * @param email
+	 *            String
+	 * @throws MessagingException
+	 */
+
 	private void sendTrialExpiredEmail(String email) throws MessagingException {
-		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
+	//	emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
 	}
 
 }
