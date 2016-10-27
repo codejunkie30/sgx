@@ -133,7 +133,7 @@ public class AccountExpiedCheck implements Job {
 	 */
 
 	private void sendTrialExpiredEmail(String email) throws MessagingException {
-	//	emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
+		emailService.send(email, trialExpiredSubject, null, trialExpiredEmailBody);
 	}
 
 }
