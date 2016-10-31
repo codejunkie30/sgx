@@ -487,6 +487,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 		
 		init: function(child) {
 			UTIL.retrieveRefreshNavigation("");
+			UTIL.saveCurrencyFlag(false);
 			if ( location.pathname.split("/")[1] == "print.html" && UTIL.getParameterByName("currency")!= undefined){
 				this.currentFormats = PAGE["numberFormats-"+UTIL.getParameterByName("currency")];
 			}
@@ -510,8 +511,14 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 	        });
 			
 			$(window).on('beforeunload', function(e){
-				if(!PAGE.validNavigation() && UTILS.retrieveAuthToken()!=false) {
+				if((!PAGE.validNavigation()) && UTILS.retrieveAuthToken()!=false) {
+				    if(UTIL.retrieveCurrencyFlag())
+					{
+					UTIL.saveCurrencyFlag(false);
+					}
+				    else {
 						PAGE.validNavigation(true);
+						UTIL.saveCurrencyFlag(false);
 						var endpoint = PAGE.fqdn + "/sgx/logout";
 						
 						var params = {};
@@ -527,6 +534,7 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 						UTIL.deleteCurrency();
 						UTIL.deleteState();
 						UTIL.saveRefreshNavigation("refresh");
+				    }
 				}
 			}); 
 			
@@ -906,7 +914,8 @@ define(["jquery", "wmsi/page", "wmsi/utils", "knockout",  "text!client/data/glos
 								              PAGE.selectedCurrency(UTILS.retrieveCurrency().toLowerCase());
 
 								              PAGE.selectedCurrency.subscribe(function(newValue) {
-								                if (newValue != UTILS.retrieveCurrency()){                
+								        	  UTIL.saveCurrencyFlag(true); 
+								                if (newValue != UTILS.retrieveCurrency()){   
 								                  UTILS.saveCurrency(newValue.toLowerCase());
 								                  setTimeout(function(){
 								                    location.reload();
