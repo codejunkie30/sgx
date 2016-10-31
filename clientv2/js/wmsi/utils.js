@@ -90,6 +90,19 @@ define(["jquery", "moment"], function($, moment) {
 
 
         },
+        
+        
+        saveCurrencyFlag: function(flag) {
+           store.set('currenyFlag', flag);
+        },
+
+
+        retrieveCurrencyFlag: function() {
+            var flag = store.get('currenyFlag');
+            return flag;
+
+
+        },
 
         deleteAuthToken: function() {
             store.remove('token')  
