@@ -35,6 +35,9 @@ public class DataController {
 	@Autowired
 	private CurrencyService currencySvc;
 	
+	@Value ("${spring.profiles.active:dummy}")
+	private String envType;
+
 	@RequestMapping("currencyList")
 	public String getCurrencyList() {
 		//Map<Object, Object> map = utilService.convertCurrencyCSVtoMap(fileLocation);
@@ -73,5 +76,17 @@ public class DataController {
 		return currencyResponseList;
 	}
 	
+	@RequestMapping("environmentType")
+	public String getEnvironment() {
+		switch (envType) {
+		case ("prod-sing"):
+			return "PROD";
+		case ("prod-us"):
+			return "QA";
+		default:
+			return "DEV";
+		}
+
+	}
 
 }
