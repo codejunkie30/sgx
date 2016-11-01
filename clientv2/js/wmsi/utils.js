@@ -103,6 +103,14 @@ define(["jquery", "moment"], function($, moment) {
 
 
         },
+        
+        saveEnvType:function(envType){
+            store.set('envType',envType);
+        },
+        
+        getEnvType:function(){
+          return store.get('envType');  
+        },
 
         deleteAuthToken: function() {
             store.remove('token')  
