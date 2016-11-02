@@ -256,6 +256,25 @@ define(["jquery", "moment"], function($, moment) {
             }
         	$.ajax(config);        	
         },
+        handleSynchronousRequest: function(endpoint, postType, data, successFN, errorFN) {        	
+    	var config = {
+            url: endpoint,
+            async: false,
+            type: postType,
+            dataType: 'json',
+            success: typeof successFN !== "undefined" ? successFN : this.genericAjaxSuccess,
+            error: typeof errorFN !== "undefined" ? errorFN : this.genericAjaxError
+    	};
+    	var token = UTILS.retrieveAuthToken();
+        config.beforeSend=function(request) {
+        	if (token !== false) {
+            	request.setRequestHeader('x-auth-token', token);
+				}
+				
+        }
+    	$.ajax(config);        	
+    },
+
 		
 		
 		
@@ -275,7 +294,7 @@ define(["jquery", "moment"], function($, moment) {
          */
         genericAjaxError: function(data, status, er) {
         	
-            	if(data.responseText.indexOf('Invalid Token')>=0) {
+            	if(data.responseText.indexOf('Invalid Token')>=0||jqXHR.status=="401") {
         		UTILS.saveAuthToken("");
         		top.location.href = PAGE.getPage(PAGE.pageData.getPage('logout'));
         	}

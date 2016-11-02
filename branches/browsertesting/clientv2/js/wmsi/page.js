@@ -40,7 +40,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
         		PAGE.trackEnvironment();
         		var newTitle = this.getPageTitle(title);
                 	window.document.title = newTitle;
-                	setTimeout(function(){this.trackView("pageview", newTitle); }, 100),
+                	PAGE.trackView("pageview", newTitle);
 		},
 		
 		trackEnvironment :function(){
@@ -149,7 +149,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
 		if(!UTIL.isEmpty(UTIL.getEnvType())){
 		    return UTIL.getEnvType();
 		}
-		UTIL.handleAjaxRequestJSON(
+		UTIL.handleSynchronousRequest(
 			endpoint,
 			postType,
 			params,
