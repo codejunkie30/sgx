@@ -78,13 +78,14 @@ public class DataController {
 	
 	@RequestMapping("environmentType")
 	public String getEnvironment() {
+		Gson gson = new Gson(); 
 		switch (envType) {
 		case ("prod-sing"):
-			return "PROD";
+			return gson.toJson("PROD");
 		case ("prod-us"):
-			return "QA";
+			return gson.toJson("QA");
 		default:
-			return "DEV";
+			return gson.toJson("DEV");
 		}
 
 	}
