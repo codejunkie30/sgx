@@ -140,7 +140,7 @@ public class TransactionSessionFilter extends Filter {
 	 */
 	private void writeErrorToResponseStream(HttpServletResponse response)
 			throws IOException, JsonGenerationException, JsonMappingException {
-		response.setStatus(HttpServletResponse.SC_OK);
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		AuthenticationFailure authFailure = new AuthenticationFailure(ERROR_MSG);
 		objectMapper.writeValue(response.getOutputStream(), authFailure);
 	}
