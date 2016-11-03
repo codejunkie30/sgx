@@ -37,9 +37,16 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
 		 * @param title the page title logged in analytics
 		 */
 		trackPage: function(title) {
-			var newTitle = this.getPageTitle(title);
-        	window.document.title = newTitle;
-        	this.trackView("pageview", newTitle);
+        		PAGE.trackEnvironment();
+        		var newTitle = this.getPageTitle(title);
+                	window.document.title = newTitle;
+                	PAGE.trackView("pageview", newTitle);
+		},
+		
+		trackEnvironment :function(){
+		    _gaTracker('set', {
+			  'dimension1': PAGE.getEnvironmentType()
+			});
 		},
 		
 		/**
@@ -130,6 +137,30 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
                 return this.getPropertyValue(obj[e] = Object.prototype.toString.call(obj[e]) === "[object Object]" ? obj[e] : {}, prop);
             } 
             return obj[prop[0]]	;
+        },
+        
+        /**
+         * Ajax call to get EnvironmentType for GoogleAnalytics
+         */
+        getEnvironmentType:function(){
+		var endpoint = PAGE.fqdn + "/sgx/environmentType";
+		var postType = 'POST';
+		var params = {};
+		if(!UTIL.isEmpty(UTIL.getEnvType())){
+		    return UTIL.getEnvType();
+		}
+		UTIL.handleSynchronousRequest(
+			endpoint,
+			postType,
+			params,
+			function(data, textStatus, jqXHR){
+				if(!UTIL.isEmpty(data)){
+				    UTIL.saveEnvType(data);
+				}
+				return UTIL.getEnvType();
+				    
+			}, 
+			PAGE.customSGXError);  
         },
 
         /**
