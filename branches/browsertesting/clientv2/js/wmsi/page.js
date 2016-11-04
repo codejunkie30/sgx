@@ -37,7 +37,6 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
 		 * @param title the page title logged in analytics
 		 */
 		trackPage: function(title) {
-        		PAGE.trackEnvironment();
         		var newTitle = this.getPageTitle(title);
                 	window.document.title = newTitle;
                 	PAGE.trackView("pageview", newTitle);
@@ -140,7 +139,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
         },
         
         /**
-         * Ajax call to get EnvironmentType for GoogleAnalytics
+         * Synchronous call to get EnvironmentType for GoogleAnalytics
          */
         getEnvironmentType:function(){
 		var endpoint = PAGE.fqdn + "/sgx/environmentType";
