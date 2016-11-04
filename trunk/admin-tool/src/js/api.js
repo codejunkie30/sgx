@@ -132,7 +132,7 @@ var API = {
 
   logout: function() {
     API.showLoading();
-    fetch( API.paths.logout, {method:'POST'} )
+    fetch( API.paths.logout, this.postOptions({dummy:'param'}) )
       .then(function(response) {
         if(response.status !== 200) {
           throw new Error('Error in logout');
@@ -202,6 +202,8 @@ function CustomException(errorCode, message) {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
+  }else if(response.status == 401){
+      API.logout();
   } else {
     var error = new CustomException(response.status, response.statusText)
     throw error;
