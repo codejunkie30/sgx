@@ -37,6 +37,7 @@ define(["jquery", "wmsi/utils", "wmsi/XD", ], function($, UTIL) {
 		 * @param title the page title logged in analytics
 		 */
 		trackPage: function(title) {
+		    	PAGE.trackEnvironment();
         		var newTitle = this.getPageTitle(title);
                 	window.document.title = newTitle;
                 	PAGE.trackView("pageview", newTitle);
