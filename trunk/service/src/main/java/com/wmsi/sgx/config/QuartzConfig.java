@@ -23,6 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.wmsi.sgx.service.account.impl.AccountExpiedCheck;
 import com.wmsi.sgx.service.account.impl.HalfWayTrialEmailService;
 import com.wmsi.sgx.service.account.impl.WatchlistEmailServiceHelper;
+import com.wmsi.sgx.util.CleanTradeEventTable;
 
 @Configuration
 public class QuartzConfig {
@@ -63,6 +64,14 @@ public class QuartzConfig {
         jobDetailFactory2.setDurability(true);
         return jobDetailFactory2;
     }
+	
+	@Bean
+    public JobDetailFactoryBean processCleanTradeEventTable() {
+        JobDetailFactoryBean jobDetailFactory3 = new JobDetailFactoryBean();
+        jobDetailFactory3.setJobClass(CleanTradeEventTable.class);
+        jobDetailFactory3.setDurability(true);
+        return jobDetailFactory3;
+    }
 	@Value ("${quartz.expired.email}")
 	public String expiredTimer;
 	
@@ -89,12 +98,23 @@ public class QuartzConfig {
 	public String watchlistTimer;
 	
 	@Bean
-    // Configure cron to fire trigger every 1 minute
     public CronTriggerFactoryBean processWatchListEmailTrigger() {
         CronTriggerFactoryBean cronTriggerFactoryBean2 = new CronTriggerFactoryBean();
         cronTriggerFactoryBean2.setJobDetail(processWatchListEmailService().getObject());
         cronTriggerFactoryBean2.setCronExpression(watchlistTimer);
         return cronTriggerFactoryBean2;
+    }
+	
+
+	@Value ("${quartz.clean.tradeEventTable}")
+	public String cleanTradeEventTimer;
+	
+	@Bean
+    public CronTriggerFactoryBean processCleanTradeEventTableTrigger() {
+        CronTriggerFactoryBean cronTriggerFactoryBean3 = new CronTriggerFactoryBean();
+        cronTriggerFactoryBean3.setJobDetail(processCleanTradeEventTable().getObject());
+        cronTriggerFactoryBean3.setCronExpression(cleanTradeEventTimer);
+        return cronTriggerFactoryBean3;
     }
 	
 	 @Bean
@@ -114,7 +134,8 @@ public class QuartzConfig {
         Trigger[] triggers = {
         		processAccountExpiredEmailTrigger().getObject(),
         		processHalfWayTrialEmailTrigger().getObject(),
-        		processWatchListEmailTrigger().getObject()
+        		processWatchListEmailTrigger().getObject(),
+        		processCleanTradeEventTableTrigger().getObject()
         };
  
         quartzScheduler.setTriggers(triggers);
