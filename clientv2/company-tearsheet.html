@@ -291,6 +291,55 @@
 					<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 				</div>
 			</div>
+			<div id="social-alpha-analytics" class="section-break" data-bind="visible: isSocialSentimentVisibleForCompany()">
+				<div class="title">
+					<h3>Social Alpha Analytics <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalytics'" alt="" src="img/info.png" /></h3>
+				</div>
+				<div class="gray padded" style="background-color: #e0e0e0;">
+				<div style="margin-top: 10px;margin-left: -5px;">
+					<div data-bind=" visible: isSocialFeedSentimentVisible() ">
+						<h3 class="social-sentiment">Sentiment <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsSentiment'" alt="" src="img/info.png" /></h3>
+					</div>
+					<div class="sentimentDetail" data-bind=" visible: isSocialFeedSentimentVisible() ">
+					
+					<div style="float: left; width: 20%;">BEARISH</div>
+						<div style="float: left; width: 62%;">
+							<img data-bind="attr:{src: sentimentImagePath }" />							
+						</div>
+						<div style="float: left; width: 18%;">BULLISH</div>
+					</div>
+					</div>
+					<div style="margin-top: 10px;margin-left: -5px;clear: both;display: inline-block;">
+					<div data-bind=" visible: isBuzzIndicatorVisible() ">
+						<h3 class="social-sentiment">Buzz <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsBuzz'" alt="" src="img/info.png" /></h3>
+					</div>
+					<div class="buzzDetail" data-bind=" visible: isBuzzIndicatorVisible() ">
+						<div style="float: left; width: 18%;">LOW</div>
+						<div style="float: left; width: 65%;">
+							<img data-bind="attr:{src: buzzImagePath }" />							
+						</div>
+						<div style="float: left; width: 17%;">HIGH</div>
+						
+						<div style="clear:both"></div>
+					</div>
+					</div>
+					<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div>
+				</div>
+			</div>
+			<div id="social-alpha-twitter-feed" class="section-break" data-bind="visible: isSocialSentimentVisibleForCompany()">
+				<div class="title">
+					<h3><img class="tooltip-left"  alt="" src="img/social/ico-twitter.png" />Social Alpha Twitter Feed <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
+				</div>
+				<div class="gray-border padded">
+					<ul class="socialfeeds" data-bind="foreach: twitterFeeds(), visible: twitterFeeds().length > 0">
+						<li>
+							<div class="name">@<span data-bind="text: displayName"></span>.<span data-bind="text: $root.displayTime(sourceTimestamp)"></span></div>
+							<div class="tweet" data-bind="text: text"></div>
+						</li>
+					</ul>
+					<div class="no-devs" data-bind="visible: twitterFeeds().length == 0">There is no data to show .</div>
+				</div>
+			</div>
 			
 			<div class="section-break">
 				<div class="title">
@@ -365,6 +414,10 @@
 	</div>	
 	
 <!-- goes at bottom for faster page load -->
+<script type="text/javascript" src="js/vendor/encryption/hmac-sha1.js"></script>
+<script type="text/javascript" src="js/vendor/encryption/md5.js"></script>
+<script type="text/javascript" src="js/vendor/encryption/enc-base64-min.js"></script>
+<script type="text/javascript" src="js/vendor/encryption/sha1.js"></script>
 <script type="text/javascript" src="js/vendor/store.js"></script>
 <script type="text/javascript" src="js/vendor/require.js" data-main="js/config.js"></script>
 <script type="text/javascript">

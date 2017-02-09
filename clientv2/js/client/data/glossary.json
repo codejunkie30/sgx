@@ -330,6 +330,22 @@
 		{
 			"id":"portfolioPercentChange",
 			"definition":"Percent change is based on total invested vs current value."
+		},
+		{
+			"id":"socialAlphaAnalytics",
+			"definition":"Measures of social sentiment and engagement around a stock derived from posts on Twitter."
+		},
+		{
+			"id":"socialAlphaTwitterFeed",
+			"definition":"Recent relevant Twitter posts about the stock."
+		},
+		{
+			"id":"socialAlphaAnalyticsSentiment",
+			"definition":"The Social Alpha Sentiment Indicator represents the market sentiment for the selected stock, aggregated from posts on Twitter. It indicates how bearish or bullish social media posts are on a particular publicly traded company. Social Alpha detects the sentiment expressed in individual posts relevant to a publicly traded company. The indicator represents the moving average of sentiment expressed in all relevant posts in the last 30 days. This indicator provides a view of market mood based on social media, and is not a recommendation to buy or sell any particular stock."
+		},
+		{
+			"id":"socialAlphaAnalyticsBuzz",
+			"definition":"The Social Alpha Buzz Indicator represents the level of social interest in a stock, based on the level of engagement on Twitter. Social Alpha detects relevant social posts discussing the selected publicly traded company. The buzz level is a measure of how the current volume of posts compares to the normal volume for a given company. This indicator is not a recommendation to buy or sell any particular stock."
 		}
 		
 	]
