@@ -354,8 +354,8 @@ define(["jquery", "moment"], function($, moment) {
     	
     	isEmpty: function(val){
     	    return (val === undefined || val == null || val.length <= 0) ? true : false;
-    	}
-		
+    	},
+    	
 	}
 
 	UTILS.init();
