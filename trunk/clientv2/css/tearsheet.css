@@ -445,7 +445,7 @@ ul.socialfeeds {
 	margin: 0;
 	padding: 0;
 	overflow-y: scroll;
-	height: auto;
+	height: 500px;
 }
 ul.socialfeeds li {
 	list-style-type: none;

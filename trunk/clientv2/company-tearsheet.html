@@ -291,7 +291,7 @@
 					<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 				</div>
 			</div>
-			<div id="social-alpha-analytics" class="section-break" data-bind="visible: isSocialSentimentVisibleForCompany()">
+			<div id="social-alpha-analytics" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany()">
 				<div class="title">
 					<h3>Social Alpha Analytics <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalytics'" alt="" src="img/info.png" /></h3>
 				</div>
@@ -326,7 +326,7 @@
 					<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div>
 				</div>
 			</div>
-			<div id="social-alpha-twitter-feed" class="section-break" data-bind="visible: isSocialSentimentVisibleForCompany()">
+			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany()">
 				<div class="title">
 					<h3><img class="tooltip-left"  alt="" src="img/social/ico-twitter.png" />Social Alpha Twitter Feed <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
 				</div>
