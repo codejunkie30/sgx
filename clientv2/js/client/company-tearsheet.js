@@ -105,7 +105,7 @@ define(
 
 			    }, PAGE.customSGXErrors);
 		    
-		    var endpoint ="/indicators/volatility/SGX:"+tickerCodes;
+		    var endpoint ="/indicators/volatility/SGX:"+tickerId;
 		    this.getDataFromSocialAlpha(endpoint, postType, params,
 			    function(data) {
 			    	  console.log(data);

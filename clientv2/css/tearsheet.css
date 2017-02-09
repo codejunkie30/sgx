@@ -436,9 +436,9 @@ div.news {
 	margin-left: 10px;
 }
 .buzzDetail{
+	width: 110%;
 	font-size: 9pt;
-	margin-left: 10px;
-	
+	margin-left: 10px;	
 }
 ul.socialfeeds {
 	display: inline-block;
