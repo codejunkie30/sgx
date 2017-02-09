@@ -71,16 +71,9 @@ define(
 		fetchSocialAlphaAnalytics : function() {
 		    var me = this;
 		    var tickerId = PAGE.companyInfo.tickerCode;
-		    var params = {
-		    };
+		    var params = {};
 		    var postType = 'GET';
-		    var endpoint ="/indicators/sentiment/range";
-		    this.getDataFromSocialAlpha(endpoint, postType, params,
-			    function(data) {
-				console.log(data);
-			    }, PAGE.customSGXErrors);
-		   var tickerCodes = ["NS8U"];
-		    for(ticker in tickerCodes){
+		    //var tickerCodes = ["NS8U"];
 		    var endpoint ="/indicators/sentiment/SGX:"+tickerId ;
 		    params = {};
 		    
@@ -108,9 +101,10 @@ define(
 			    }else if (val >= 1) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_7.png');
 			    }
+			    PAGE.resizeIframeSimple();
 
 			    }, PAGE.customSGXErrors);
-		    }
+		    
 		    var endpoint ="/indicators/volatility/SGX:"+tickerCodes;
 		    this.getDataFromSocialAlpha(endpoint, postType, params,
 			    function(data) {
@@ -131,6 +125,7 @@ define(
 				    } else if (val >= 3.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_4.png');
 				    }
+				    PAGE.resizeIframeSimple();
 
 			    }, PAGE.customSGXErrors);
 		},
@@ -139,30 +134,24 @@ define(
 		    var me = this;
 		    var tickerId = PAGE.companyInfo.tickerCode;
 		    var fromDate = new Date();
-		    var days=7; // Days you want to subtract
+		    var days=7; //  Max-7 Days of tweet 
 		    var date = new Date();
 		    fromDate = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
 		    var params = {
 			from: fromDate.toISOString(),
 			to: new Date().toISOString()
 		    };
-		    //var tickerCodes = ["C61U","U14","Z74","E5H","T39","BN4","BS6","U11","MC0","U96","C31","NS8U","C09","CC3","S68","C52","S59","C07","S58","C38U","G13","A17U","F34","D05","S63","J36","Y92","H78","C6L","O39"]
 		    //var tickerCodes = ["NS8U"];
 		    var postType = 'GET';
-//		    for(ticker in tickerCodes){
 			    var endpoint = "/tweets/by-ticker/SGX:" +tickerId;
 			    this.getDataFromSocialAlpha(endpoint, postType, params,
 				    function(data) {
-				// display in panel
-				console.log(data);
+//				console.log(data);
 				PAGE.twitterFeeds(data.tweets.sort(function(a,b){
 				    return b.sourceTimestamp.localeCompare(a.sourceTimestamp);
 				}));
-				//TODO Display on UI
+				PAGE.resizeIframeSimple();
 				    }, PAGE.customSGXErrors);
-			
-//		    }
-
 		},
 		// check if SocialSentiment be visible
 		isSocialSentimentVisibleForCompany : function() {
@@ -190,7 +179,7 @@ define(
 			    + acceptType + ":" + date
 			    + ":" + endPoint + ":" + nonce ;
 		    var crypto=CryptoJS.HmacSHA1(message,secretKey).toString(CryptoJS.enc.Base64);
-		    //as this third party service provider invocation ,we need not use UTILS.handleAjaxRequestJSON and also token mechanisim to maintain the communication
+		    //as this third party service provider invocation ,we can buck UTILS.handleAjaxRequestJSON as  token based mechanisim is not needed
 		    $.ajax({
 			url : "https://api.social-alpha.com"+endPoint,
 			type : type,
