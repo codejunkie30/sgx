@@ -44,9 +44,11 @@ define(
 
 		    this.init(function() {
 			self.finish(self, function() {
-			    PAGE.ajaxInAction.remove('initPage')
-			    CP.fetchSocialAlphaTwitterFeed();
-			    CP.fetchSocialAlphaAnalytics();
+			    PAGE.ajaxInAction.remove('initPage');
+			    if((PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM')){
+				    CP.fetchSocialAlphaTwitterFeed();
+				    CP.fetchSocialAlphaAnalytics();
+			    }
 
 			});
 		    }); // call for social alpha Analytics
@@ -103,16 +105,18 @@ define(
 			    }
 			    PAGE.resizeIframeSimple();
 
-			    }, PAGE.customSGXErrors);
+			    },  function(data, status, er){
+					CP.sentimentIndicators(false);
+			    });
 		    
-		    var endpoint ="/indicators/volatility/SGX:"+tickerId;
-		    this.getDataFromSocialAlpha(endpoint, postType, params,
+			var endpoint ="/indicators/volatility/SGX:"+tickerId;
+			this.getDataFromSocialAlpha(endpoint, postType, params,
 			    function(data) {
 			    	  console.log(data);
 			    	  var val = data.indicators.value;
 			    	  if(val==null||null===undefined){
 			    	      CP.buzzIndicators(false);
-			    	  return;
+			    	      //return;
 			    	  }
 				    if (val < 1.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_1.png');
@@ -127,7 +131,9 @@ define(
 				    }
 				    PAGE.resizeIframeSimple();
 
-			    }, PAGE.customSGXErrors);
+			    }, function(data, status, er){
+					CP.buzzIndicators(false);
+			    });
 		},
 		// call for social alpha twitter feed
 		fetchSocialAlphaTwitterFeed : function() {
@@ -151,7 +157,9 @@ define(
 				    return b.sourceTimestamp.localeCompare(a.sourceTimestamp);
 				}));
 				PAGE.resizeIframeSimple();
-				    }, PAGE.customSGXErrors);
+				    },  function(data, status, er){
+					PAGE.twitterFeeds({});
+				    });
 		},
 		// check if SocialSentiment be visible
 		isSocialSentimentVisibleForCompany : function() {
@@ -170,30 +178,48 @@ define(
 		    var type = postType;
 		    var acceptType = "application/json, text/plain, */*";
 		    //TODO read from FILE
-		    var APIKEY = "JBMMSWSTFBXPVMMIFFXB"
-		    var secretKey = "2uAMASOLmIlcYbkIvR3WaPlWEPB4Xs3l3EjWp8o5";
-		    
-		     var nonce = Math.floor((Math.random() * 1000) + 1);
-		   
-		    var message = type + ":"
-			    + acceptType + ":" + date
-			    + ":" + endPoint + ":" + nonce ;
-		    var crypto=CryptoJS.HmacSHA1(message,secretKey).toString(CryptoJS.enc.Base64);
-		    //as this third party service provider invocation ,we can buck UTILS.handleAjaxRequestJSON as  token based mechanisim is not needed
-		    $.ajax({
-			url : "https://api.social-alpha.com"+endPoint,
-			type : type,
-			data : data,
-			beforeSend : function(xhr) {
-			    xhr.setRequestHeader('Accept',
-				    acceptType);
-			    xhr.setRequestHeader('Authorization',
-				    'SA-HMAC-SHA1 Credential='+APIKEY+' Nonce='+nonce+' Signature='
-					    + crypto);
-			    xhr.setRequestHeader('X-SA-Date', date);
-			},
-	                success: typeof successFN !== "undefined" ? successFN : UTIL.genericAjaxSuccess,
-	                error: typeof errorFN !== "undefined" ? errorFN : UTIL.genericAjaxError});
+		    var endpoint = PAGE.fqdn + "/sgx/company/socialAlphaKeys";
+			var postType = 'GET';
+			var params = {};
+			var jsonp = 'jsonp';
+			UTIL.handleAjaxRequest(
+				endpoint,
+				postType,
+				params, 
+				undefined, 
+				function(apiData, textStatus, jqXHR){
+				    var nonce = Math.floor((Math.random() * 1000) + 1);
+				    var socialAlphaSecretKeys = apiData["socialAlphaSecretKeys"];
+				    var socialAlphaApiKeys = apiData["socialAlphaApiKeys"];
+					   if(apiData==null|| socialAlphaSecretKeys==null||(typeof socialAlphaSecretKeys=='undefined')||
+						   socialAlphaApiKeys==null|| (typeof socialAlphaApiKeys=='undefined')){
+					       PAGE.twitterFeeds({});
+					       CP.buzzIndicators(false);
+					       CP.buzzIndicators(false);
+					       return;
+					   }
+					    var message = type + ":"
+						    + acceptType + ":" + date
+						    + ":" + endPoint + ":" + nonce ;
+					    var crypto=CryptoJS.HmacSHA1(message,socialAlphaSecretKeys).toString(CryptoJS.enc.Base64);
+					    //as this third party service provider invocation ,we can buck UTILS.handleAjaxRequestJSON as  token based mechanisim is not needed
+					    $.ajax({
+						url : "https://api.social-alpha.com"+endPoint,
+						type : type,
+						data : data,
+						beforeSend : function(xhr) {
+						    xhr.setRequestHeader('Accept',
+							    acceptType);
+						    xhr.setRequestHeader('Authorization',
+							    'SA-HMAC-SHA1 Credential='+socialAlphaApiKeys+' Nonce='+nonce+' Signature='
+								    + crypto);
+						    xhr.setRequestHeader('X-SA-Date', date);
+						},
+				                success: typeof successFN !== "undefined" ? successFN : UTIL.genericAjaxSuccess,
+				                error: typeof errorFN !== "undefined" ? errorFN : UTIL.genericAjaxError});
+
+				}, 
+				PAGE.customSGXError);
 		},
 		displayTime:function(sourceTimestamp){
 		    var srcDate = new Date(sourceTimestamp).getTime();
