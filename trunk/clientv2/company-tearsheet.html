@@ -323,10 +323,10 @@
 						<div style="clear:both"></div>
 					</div>
 					</div>
-					<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div>
+				<!-- 	<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div> -->
 				</div>
 			</div>
-			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && twitterFeeds().length != 0">
+			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && twitterFeeds().length > 0">
 				<div class="title" style="padding: 5px;">
 					<h3><img class="tooltip-left" style="float: left;"  alt="" src="img/social/ico-twitter.png" /><span>Social Alpha Twitter Feed</span> <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
 				</div>
