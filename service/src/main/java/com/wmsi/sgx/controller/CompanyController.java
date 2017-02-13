@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,6 +86,12 @@ public class CompanyController{
 	
 	@Autowired
 	private WatchlistService watchlistService;
+	
+	@Value("${socialalpha.apikeys}")
+	private String apiKeys;
+	
+	@Value("${socialalpha.secretkeys}")
+	private String secretKeys;
 	
 	private String defaultIndexName = "sgd_premium";
 	
@@ -644,5 +651,22 @@ public class CompanyController{
 			return request.getHeader("currency");
 		else
 			return "sgd";
+	}
+	
+	@RequestMapping(value = "company/socialAlphaKeys")
+	public Map<String, String> getSocialAlphaKeys(HttpServletRequest request) {
+		HashMap<String, String> keySet = new HashMap<String, String>();
+		User u = null;
+		String token = request.getHeader("X-AUTH-TOKEN");
+		TokenHandler tokenHandler = tokenAuthenticationService.getTokenHandler();
+		if (token != null)
+			u = tokenHandler.parseUserFromToken(token);
+		if (u != null) {
+			keySet.put("socialAlphaApiKeys", apiKeys);
+			keySet.put("socialAlphaSecretKeys", secretKeys);
+			return keySet;
+		}
+		return null;
+
 	}
 }
