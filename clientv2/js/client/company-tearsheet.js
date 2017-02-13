@@ -45,15 +45,11 @@ define(
 		    this.init(function() {
 			self.finish(self, function() {
 			    PAGE.ajaxInAction.remove('initPage');
-			    if((PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM')){
-				    CP.fetchSocialAlphaTwitterFeed();
-				    CP.fetchSocialAlphaAnalytics();
-			    }
-
+			    // call for social alpha twitter feed
+			    CP.fetchSocialAlphaTwitterFeed();
+			    CP.fetchSocialAlphaAnalytics();
 			});
 		    }); // call for social alpha Analytics
-
-		    // call for social alpha twitter feed
 
 		    PAGE.checkStatus();
 
@@ -112,11 +108,10 @@ define(
 			var endpoint ="/indicators/volatility/SGX:"+tickerId;
 			this.getDataFromSocialAlpha(endpoint, postType, params,
 			    function(data) {
-			    	  console.log(data);
 			    	  var val = data.indicators.value;
 			    	  if(val==null||null===undefined){
 			    	      CP.buzzIndicators(false);
-			    	      //return;
+			    	      return;
 			    	  }
 				    if (val < 1.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_1.png');
@@ -165,19 +160,20 @@ define(
 		isSocialSentimentVisibleForCompany : function() {
 		    var me = this;
 		    var tickerId = PAGE.companyInfo.tickerCode;
-		    return $
+			    return $
 			    .grep(
 				    this.socialSentimentCompanies.socialSentimentCompanies,
 				    function(e, i) {
 					return e.id === tickerId;
-				    }).length > 0 && (PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM');
+				    }).length > 0 &&(PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM');
+
 		},
 		getDataFromSocialAlpha : function(endPoint,postType,data, successFN, errorFN) {
 		    var date = new Date();
 		    date = date.toISOString();
 		    var type = postType;
 		    var acceptType = "application/json, text/plain, */*";
-		    //TODO read from FILE
+		    // reading from server
 		    var endpoint = PAGE.fqdn + "/sgx/company/socialAlphaKeys";
 			var postType = 'GET';
 			var params = {};
