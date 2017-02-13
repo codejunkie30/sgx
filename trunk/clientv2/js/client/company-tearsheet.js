@@ -46,8 +46,12 @@ define(
 			self.finish(self, function() {
 			    PAGE.ajaxInAction.remove('initPage');
 			    // call for social alpha twitter feed
+			    if(CP.isSocialSentimentVisibleForCompany()){
 			    CP.fetchSocialAlphaTwitterFeed();
 			    CP.fetchSocialAlphaAnalytics();
+			    }else{
+				  PAGE.resizeIframeSimple();
+			    }
 			});
 		    }); // call for social alpha Analytics
 
@@ -165,8 +169,11 @@ define(
 				    this.socialSentimentCompanies.socialSentimentCompanies,
 				    function(e, i) {
 					return e.id === tickerId;
-				    }).length > 0 &&(PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM');
+				    }).length > 0 ;
 
+		},
+		checkUserStatus:function(){
+		    return PAGE.userStatus()== 'TRIAL'||PAGE.userStatus()== 'PREMIUM';
 		},
 		getDataFromSocialAlpha : function(endPoint,postType,data, successFN, errorFN) {
 		    var date = new Date();
