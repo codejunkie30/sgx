@@ -291,11 +291,11 @@
 					<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 				</div>
 			</div>
-			<div id="social-alpha-analytics" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany()">
-				<div class="title">
+			<div id="social-alpha-analytics" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
+				<div class="title" data-bind="visible: isSocialSentimentVisibleForCompany() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
 					<h3>Social Alpha Analytics <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalytics'" alt="" src="img/info.png" /></h3>
 				</div>
-				<div class="gray padded" style="background-color: #e0e0e0;">
+				<div class="gray padded" style="background-color: #e0e0e0;" data-bind="visible: isSocialSentimentVisibleForCompany() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
 				<div style="margin-top: 10px;margin-left: -5px;">
 					<div data-bind=" visible: isSocialFeedSentimentVisible() ">
 						<h3 class="social-sentiment">Sentiment <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsSentiment'" alt="" src="img/info.png" /></h3>
