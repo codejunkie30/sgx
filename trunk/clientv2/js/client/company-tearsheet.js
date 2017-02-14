@@ -228,7 +228,7 @@ define(
 		    var srcDate = new Date(sourceTimestamp).getTime();
 		    var currDate = new Date(new Date().toISOString()).getTime();
 		    var diff = Math.abs((currDate-srcDate)/(1000*60*60));
-		    return diff<=24?Math.round(diff)+" h":Highcharts.dateFormat("%b %e", new Date(sourceTimestamp).getTime());
+		    return diff<=24?Math.round(diff)+"h":Highcharts.dateFormat("%b %e", new Date(sourceTimestamp).getTime());
 		},
 		isSocialFeedSentimentVisible:function(){
 		    return CP.sentimentIndicators();
