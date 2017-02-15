@@ -333,7 +333,7 @@
 				<div class="gray-border padded">
 					<ul class="socialfeeds" data-bind="foreach: twitterFeeds(), visible: twitterFeeds().length > 0">
 						<li>
-							<div class="name">@<span data-bind="text: displayName"></span>.<span data-bind="text: $root.displayTime(sourceTimestamp)"></span></div>
+							<div class="name">@<span data-bind="text: displayName"></span><span>-</span><span data-bind="text: $root.displayTime(sourceTimestamp)"></span></div>
 							<div class="tweet" data-bind="text: text"></div>
 						</li>
 					</ul>
