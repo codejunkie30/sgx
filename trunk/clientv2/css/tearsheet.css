@@ -428,12 +428,17 @@ div.news {
     padding: 0 10px 20px;
     font-size: 15px;
 }
-.sentimentDetail {
-	margin-left: 10px;
+.sentimentBuzzDetail {
+	margin: 0 auto; font-size: 0; width: 100%;
 }
-.buzzDetail{
-	margin-left: 10px;	
-}
+.sentimentBuzzDetail .sbdLeft { display: inline-block; text-align: right; width: 18%; font-size: 12px !important; position: relative; top: -10px; }
+.sentimentBuzzDetail .sbdCenter { display: inline-block; width: 63%; text-align: center; }
+.sentimentBuzzDetail .sbdRight { display: inline-block; text-align: left; width: 19%; font-size: 12px !important; position: relative; top: -10px; }
+.sentimentBuzzDetail .sbdLeft.buzz,
+.sentimentBuzzDetail .sbdRight.buzz { top: -1px !important; }
+.sentimentBuzzDetail .sbdCenter.buzz img { margin-left: 3px; }
+.sentimentBuzzDetail .sbdRight.buzz { text-indent: 5px; }
+
 ul.socialfeeds {
 	display: inline-block;
 	margin: 0;
