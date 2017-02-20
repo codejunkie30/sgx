@@ -302,25 +302,24 @@
 					</div>
 					<div class="sentimentDetail" data-bind=" visible: isSocialFeedSentimentVisible() ">
 					
-					<div style="float: left; width: 20%;">BEARISH</div>
-						<div style="float: left; width: 62%;">
+					<div style="float: left; width: 18%;font-size: 12px;">BEARISH</div>
+						<div style="float: left; width: 63%;">
 							<img data-bind="attr:{src: sentimentImagePath }" />							
 						</div>
-						<div style="float: left; width: 18%;">BULLISH</div>
+						<div style="float: right; width: 19%;font-size: 12px;">BULLISH</div>
 					</div>
 					</div>
-					<div style="margin-top: 10px;margin-left: -5px;clear: both;display: inline-block;">
+					<div style="margin-top: 10px;margin-left: -5px;clear: both;display: inline-block;width:100%">
 					<div data-bind=" visible: isBuzzIndicatorVisible() ">
 						<h3 class="social-sentiment">Buzz <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsBuzz'" alt="" src="img/info.png" /></h3>
 					</div>
 					<div class="buzzDetail" data-bind=" visible: isBuzzIndicatorVisible() ">
-						<div style="float: left; width: 18%;">LOW</div>
+						<div style="float: left; width: 18%;font-size: 12px">LOW</div>
 						<div style="float: left; width: 65%;">
 							<img data-bind="attr:{src: buzzImagePath }" />							
 						</div>
-						<div style="float: left; width: 17%;">HIGH</div>
+						<div style="float: right; width: 17%;font-size: 12px;">HIGH</div>
 						
-						<div style="clear:both"></div>
 					</div>
 					</div>
 				<!-- 	<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div> -->
@@ -328,7 +327,7 @@
 			</div>
 			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus() && twitterFeeds().length > 0">
 				<div class="title" style="padding: 5px;">
-					<h3><img class="tooltip-left" style="float: left;"  alt="" src="img/social/ico-twitter.png" /><span>Social Alpha Twitter Feed</span> <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
+					<h3><img class="tooltip-left" style="float: left;"  alt="" src="img/social/ico-twitter.png" />&nbsp;<span>Social Alpha Twitter Feed</span> <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
 				</div>
 				<div class="gray-border padded">
 					<ul class="socialfeeds" data-bind="foreach: twitterFeeds(), visible: twitterFeeds().length > 0">
