@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" href="css/style.css?v=1.4" />
-    <link rel="stylesheet" href="css/tearsheet.css?v=1.2" />    
+    <link rel="stylesheet" href="css/tearsheet.css?v=1.6" />    
 	<!--[if lt IE 9]>
     	<script type="text/javascript" src="js/vendor/json2.js"></script>
     	<script type="text/javascript" src="js/wmsi/html5.js"></script>
@@ -300,28 +300,26 @@
 					<div data-bind=" visible: isSocialFeedSentimentVisible() ">
 						<h3 class="social-sentiment">Sentiment <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsSentiment'" alt="" src="img/info.png" /></h3>
 					</div>
-					<div class="sentimentDetail" data-bind=" visible: isSocialFeedSentimentVisible() ">
-					
-					<div style="float: left; width: 18%;font-size: 12px;">BEARISH</div>
-						<div style="float: left; width: 63%;">
+					<div class="sentimentBuzzDetail" data-bind=" visible: isSocialFeedSentimentVisible() ">					
+						<div class="sbdLeft">BEARISH</div>
+						<div class="sbdCenter">
 							<img data-bind="attr:{src: sentimentImagePath }" />							
 						</div>
-						<div style="float: right; width: 19%;font-size: 12px;">BULLISH</div>
+						<div class="sbdRight">BULLISH</div>
 					</div>
-					</div>
-					<div style="margin-top: 10px;margin-left: -5px;clear: both;display: inline-block;width:100%">
+				</div>
+				<div style="margin-top: 10px;margin-left: -5px;clear: both;display: inline-block;width:100%">
 					<div data-bind=" visible: isBuzzIndicatorVisible() ">
 						<h3 class="social-sentiment">Buzz <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalyticsBuzz'" alt="" src="img/info.png" /></h3>
 					</div>
-					<div class="buzzDetail" data-bind=" visible: isBuzzIndicatorVisible() ">
-						<div style="float: left; width: 18%;font-size: 12px;text-align:center;">LOW</div>
-						<div style="float: left; width: 63%;">
+					<div class="sentimentBuzzDetail" data-bind=" visible: isBuzzIndicatorVisible() ">
+						<div class="sbdLeft buzz">LOW</div>
+						<div class="sbdCenter buzz">
 							<img data-bind="attr:{src: buzzImagePath }" />							
 						</div>
-						<div style="float: right; width: 19%;font-size: 12px;">HIGH</div>
-						
+						<div class="sbdRight buzz">HIGH</div>						
 					</div>
-					</div>
+				</div>
 				<!-- 	<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div> -->
 				</div>
 			</div>
