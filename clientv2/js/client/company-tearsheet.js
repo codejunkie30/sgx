@@ -89,16 +89,16 @@ define(
 			    if (val <= -1) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_1.png');
 			    } else if (val >= -1.0
-				    || val <= 0.75) {
+				    && val <= 0.75) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_2.png');
 			    } else if (val >= -0.75
-				    || val <= -0.5) {
+				    && val <= -0.5) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_3.png');
-			    } else if (val >= -0.5 || val <= 0.5) {
+			    } else if (val >= -0.5 && val <= 0.5) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_4.png');
-			    }else if (val >= 0.5 || val <= 0.75) {
+			    }else if (val >= 0.5 && val <= 0.75) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_5.png');
-			    }else if (val >= 0.75 || val <= 1) {
+			    }else if (val >= 0.75 && val <= 1) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_6.png');
 			    }else if (val >= 1) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_7.png');
@@ -120,10 +120,10 @@ define(
 				    if (val < 1.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_1.png');
 				    } else if (val >= 1.0
-					    || val <= 2.0) {
+					    && val <= 2.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_2.png');
 				    } else if (val >= 2.0
-					    || val <= 3.0) {
+					    && val <= 3.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_3.png');
 				    } else if (val >= 3.0) {
 					CP.buzzImagePath('/img/social/buzz_bar_4.png');
