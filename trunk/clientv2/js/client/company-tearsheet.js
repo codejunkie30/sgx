@@ -89,7 +89,7 @@ define(
 			    if (val <= -1) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_1.png');
 			    } else if (val >= -1.0
-				    && val <= 0.75) {
+				    && val <= -0.75) {
 				CP.sentimentImagePath('/img/social/sentiment_gauge_2.png');
 			    } else if (val >= -0.75
 				    && val <= -0.5) {
