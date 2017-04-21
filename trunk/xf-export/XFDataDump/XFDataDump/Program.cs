@@ -225,7 +225,13 @@ namespace XFDataDump
                 string outPath = tmpDir + Path.GetFileName(file).Replace(".sql", ".csv");
                 using (SqlCommand command = new SqlCommand(query, conn))
                 {
-                    command.CommandTimeout = 3600;
+                    int commandLineTimeout = 0;
+                    if (!int.TryParse(ConfigurationManager.AppSettings["commandLineTimeout"], out commandLineTimeout))
+                    {
+                        //default to 2 hours
+                        commandLineTimeout = 7200;
+                    }
+                    command.CommandTimeout = commandLineTimeout;
                     IDataReader reader = command.ExecuteReader();
                     LOG.Debug("Finished executing script " + file);
                     writeToFile(reader, outPath);
