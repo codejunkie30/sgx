@@ -60,7 +60,7 @@ select
 	pop.tickerSymbol,
 	pop.exchangeSymbol,
 	case
-		when ed.dataItemId=100173 then 'normalizedEPS'
+		when ed.dataItemId=100173 then 'normalizedEps'
 		when ed.dataItemId=100278 then 'eps'
 	end as WMSIApi,
 	convert(varchar(max),ed.dataItemValue),
