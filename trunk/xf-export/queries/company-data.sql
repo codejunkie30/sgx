@@ -66,51 +66,6 @@ where pe.pricingdate > dateadd(m,-3,getdate())
 group by pop.tickerSymbol, pop.exchangeSymbol, cISO.ISOCode
 union
 
---1-Year Price Volatility Calculation
-select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(52)*100) as dataItemValue, null, null, null
-from ##sgxpop pop
-	join (
-		select sdate.tradingItemId, log(edate.priceClose/sdate.priceClose) as weeklyreturn
-		from (
-			select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) as mathalignment
-			from ciqPriceEquity pe
-			join (
-				select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
-				from ciqPriceEquity pe
-					join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
-					join (
-						select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
-						from master..spt_values
-						WHERE type = 'P'
-						AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
-						and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
-						) eow on pe.pricingDate <= eow.eow
-				where pe.pricingDate > getdate()-400
-				group by pe.tradingItemId, eow.eow
-				) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
-			) sdate
-		join (
-			select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) -1 as mathalignment
-			from ciqPriceEquity pe
-			join (
-				select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
-				from ciqPriceEquity pe
-					join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
-					join (
-						select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
-						from master..spt_values
-						WHERE type = 'P'
-						AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
-						and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
-						) eow on pe.pricingdate <= eow.eow
-				where pe.pricingDate > getdate()-400
-				group by pe.tradingItemId, eow.eow
-				) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
-			) edate on sdate.tradingItemId=edate.tradingItemId and sdate.mathalignment=edate.mathalignment
-		) sprice on pop.tradingItemId=sprice.tradingItemId
-group by pop.tickerSymbol, pop.exchangeSymbol
-union
-
 --Shares Out
 select DISTINCT pop.tickerSymbol, pop.exchangeSymbol, 'sharesOutstanding', convert(varchar(max),opf.sharesOutstanding), null, null, null
 from ciqOwnPublicFloatCompanyHst opf
@@ -511,51 +466,6 @@ join ##sgxpop pop on sec.companyId=pop.companyId -- Declare Pop
 
 union
 
-select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(52)) as dataItemValue, null, null, null
-from ##sgxpop pop
-join (
-select sdate.tradingItemId, log(edate.priceClose/sdate.priceClose) as weeklyreturn
-from (
-select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) as mathalignment
-from ciqPriceEquity pe
-join (
-select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
-from ciqPriceEquity pe
-join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
-join (
-select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
-from master..spt_values
-WHERE type = 'P'
-AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
-and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
-) eow on pe.pricingDate <= eow.eow
-where pe.pricingDate > getdate()-400
-group by pe.tradingItemId, eow.eow
-) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
-) sdate
-join (
-select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) -1 as mathalignment
-from ciqPriceEquity pe
-join (
-select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.eow
-from ciqPriceEquity pe
-join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
-join (
-select dateadd(day,number+1,dateadd(week, -53, getdate())) eow
-from master..spt_values
-WHERE type = 'P'
-AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
-and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
-) eow on pe.pricingdate <= eow.eow
-where pe.pricingDate > getdate()-400
-group by pe.tradingItemId, eow.eow
-) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
-) edate on sdate.tradingItemId=edate.tradingItemId and sdate.mathalignment=edate.mathalignment
-) sprice on pop.tradingItemId=sprice.tradingItemId
-group by pop.tickerSymbol, pop.exchangeSymbol
-
-union
-
 --target price num of analysts
 select 
 	pop.tickerSymbol, 
@@ -596,12 +506,13 @@ where ec.tradingItemId in (
 		)
 		
 union		
-		
-select 
+
+-- evebitda
+select
 	pop.tickerSymbol, 
 	pop.exchangeSymbol,
 	'evEbitData',
-	convert(varchar(max),mkc.tev/fd.dataitemvalue),
+	convert(varchar(max),mkc.tev/(fd.dataitemvalue/exfrom.currencyRateClose*exto.currencyRateClose)),
 	null,
 	null,
 	null
@@ -613,10 +524,14 @@ group by companyid
 ) mxdt on mxdt.companyid=mkc.companyid and mxdt.maxdate=mkc.pricingdate
 join ciqLatestInstanceFinPeriod fp on fp.companyid=mkc.companyid
 join ciqFinancialData fd on fd.financialPeriodId=fp.financialPeriodId
-join ##sgxpop pop on mkc.companyid = pop.companyid 
+join ciqSecurity sec on mkc.companyid=sec.companyid and sec.primaryflag=1
+join ciqTradingItem ti on sec.securityid=ti.securityid and ti.primaryflag=1
+join ciqExchangeRate exfrom on fp.currencyid=exfrom.currencyid and exfrom.latestflag=1
+join ciqExchangeRate exto on ti.currencyid=exto.currencyid and exto.latestflag=1
+join ##sgxpop pop on mkc.companyid = pop.companyid
 where fp.latestperiodflag=1 --Latest Period
 and fp.periodtypeid=4 --LTM
-and fd.dataitemid=4051 --EBITDA
+and fd.dataitemid=21677 --EBITDA incl other income
 
 union
 
@@ -650,4 +565,95 @@ where ti.primaryFlag=1
 and sec.primaryFlag=1
 and sec.companyId in (select companyid from ##sgxpop)
 )
+
+union
+
+select
+	pop.tickerSymbol, 
+	pop.exchangeSymbol,
+	'peRatio',
+	convert(varchar(max),prc.priceclose/(fd.dataitemvalue/exfrom.currencyRateClose*exto.currencyRateClose)),
+	null,
+	null,
+	null
+from ciqPriceEquity prc
+join (
+select tradingitemid, max(pricingdate) as maxdate
+from ciqPriceEquity a
+group by tradingitemid
+) mxdt on mxdt.tradingitemid=prc.tradingitemid and mxdt.maxdate=prc.pricingdate
+join ciqTradingItem ti on prc.tradingitemid=ti.tradingitemid and ti.primaryflag=1
+join ciqSecurity sec on sec.securityid=ti.securityid and sec.primaryflag=1
+join ciqLatestInstanceFinPeriod fp on fp.companyid=sec.companyid
+join ciqFinancialData fd on fd.financialPeriodId=fp.financialPeriodId
+join ciqExchangeRate exfrom on fp.currencyid=exfrom.currencyid and exfrom.latestflag=1
+join ciqExchangeRate exto on ti.currencyid=exto.currencyid and exto.latestflag=1
+join ##sgxpop pop on prc.tradingitemid=pop.tradingitemid
+where fp.latestperiodflag=1 --Latest Period
+and fp.periodtypeid=4 --LTM
+and fd.dataitemid=142 --Diluted EPS Excl
+
+union
+
+--1-Year Price Volatility Calculation
+select pop.tickerSymbol, pop.exchangeSymbol, 'priceVolHistYr', convert(varchar(max),stdev(weeklyreturn)*sqrt(rcnt)*100) as dataItemValue, null, null, null
+from ##sgxpop pop
+	join (
+		select sdate.tradingItemId, log(edate.priceClose/sdate.priceClose) as weeklyreturn
+		from (
+			select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) as mathalignment
+			from ciqPriceEquity pe
+			join (
+				select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.saturday
+				from ciqPriceEquity pe
+					join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
+					join ( --find week ranges
+						select dateadd(day,number-5,dateadd(week, -53, getdate())) sunday, dateadd(day,number+1,dateadd(week, -53, getdate())) saturday
+						from master..spt_values
+						WHERE type = 'P'
+						AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
+						and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
+						) eow on pe.pricingDate between eow.sunday and eow.saturday
+				where pe.pricingDate > getdate()-400
+				group by pe.tradingItemId, eow.saturday
+				) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
+			) sdate
+		join (
+			select pe.tradingItemId, pe.pricingDate, pe.priceClose, rank() over (partition by pe.tradingItemId order by pe.pricingDate) -1 as mathalignment
+			from ciqPriceEquity pe
+			join (
+				select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.saturday
+				from ciqPriceEquity pe
+					join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
+					join ( --find week ranges
+						select dateadd(day,number-5,dateadd(week, -53, getdate())) sunday, dateadd(day,number+1,dateadd(week, -53, getdate())) saturday
+						from master..spt_values
+						WHERE type = 'P'
+						AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
+						and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
+						) eow on pe.pricingDate between eow.sunday and eow.saturday
+				where pe.pricingDate > getdate()-400
+				group by pe.tradingItemId, eow.saturday
+				) wkly on pe.tradingItemId=wkly.tradingItemId and wkly.pricingDate=pe.pricingDate
+			) edate on sdate.tradingItemId=edate.tradingItemId and sdate.mathalignment=edate.mathalignment
+		) sprice on pop.tradingItemId=sprice.tradingItemId
+	join (
+		select cnt.tradingitemid, count(pricingdate) as rcnt
+		from ( 
+			select pe.tradingItemId, max(pe.pricingDate) as pricingDate, eow.saturday
+			from ciqPriceEquity pe
+				join ##SGXPop pop on pe.tradingItemId=pop.tradingItemId
+				join ( --find week ranges
+					select dateadd(day,number-5,dateadd(week, -53, getdate())) sunday, dateadd(day,number+1,dateadd(week, -53, getdate())) saturday
+					from master..spt_values
+					WHERE type = 'P'
+					AND DATEADD(DAY,number+1,dateadd(week, -53, getdate())) < getdate()
+					and DATEPART(dw,DATEADD(DAY,number+1,dateadd(week, -53, getdate()))) = 7
+					) eow on pe.pricingDate between eow.sunday and eow.saturday
+			where pe.pricingDate > getdate()-400
+			group by pe.tradingItemId, eow.saturday 
+			) cnt
+			group by cnt.tradingitemid
+		) rcnt on pop.tradingitemid=rcnt.tradingitemid
+group by pop.tickerSymbol, pop.exchangeSymbol, rcnt.rcnt
 
