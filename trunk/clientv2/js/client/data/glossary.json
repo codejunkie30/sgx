@@ -341,7 +341,7 @@
 		},
 		{
 			"id":"socialAlphaAnalyticsSentiment",
-			"definition":"The Social Alpha Sentiment Indicator represents the market sentiment for the selected stock, aggregated from posts on Twitter. It indicates how bearish or bullish social media posts are on a particular publicly traded company. Social Alpha detects the sentiment expressed in individual posts relevant to a publicly traded company. The indicator represents the moving average of sentiment expressed in all relevant posts in the last 30 days. This indicator provides a view of market mood based on social media, and is not a recommendation to buy or sell any particular stock."
+			"definition":"The Social Alpha Sentiment Indicator represents the market sentiment for the selected stock, aggregated from posts on Twitter. It indicates how bearish or bullish social media posts are on a particular publicly traded company. Social Alpha detects the sentiment expressed in individual posts relevant to a publicly traded company. The indicator represents the moving average of sentiment expressed in all relevant posts in the last 5 days. This indicator provides a view of market mood based on social media, and is not a recommendation to buy or sell any particular stock."
 		},
 		{
 			"id":"socialAlphaAnalyticsBuzz",

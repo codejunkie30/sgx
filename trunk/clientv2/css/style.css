@@ -367,7 +367,7 @@ header.header { margin: 10px 0 0 0; }
 #premium .premium-wrapper .view-price .price { position: absolute; right: 20px; top: 30px; width: 110px; }
 #premium .premium-wrapper .view-price .content { position: absolute; right: 19px; top: 110px; width: 155px; }
 #premium .premium-wrapper .view-price .sub-month { font-size: 14px; color: #666; position: relative; top: -8px; }
-#premium .premium-wrapper .view-price .sub-month-note { font-size: 12px; color: #666; position: relative; top: -25px; margin-top: 22px; }
+#premium .premium-wrapper .view-price .sub-month-note { font-size: 12px; color: #666; position: absolute; right: 15px; top: 65px; width: 110px; }
 #premium .premium-wrapper .view-price .sub-content { font-size: 13px; color: #666; position: relative; top: -8px; text-align: center; }
 #premium .premium-wrapper .view-price .price .total { font-size: 39px; color: #666; }
 #premium .premium-wrapper .view-price .price .sign { font-size: 27px; color: #666; }

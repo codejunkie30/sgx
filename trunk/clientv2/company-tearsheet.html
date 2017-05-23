@@ -291,7 +291,7 @@
 					<div class="no-devs" data-bind="visible: keyDevs().length == 0">There is no data to show for the selected period.</div>
 				</div>
 			</div>
-			<div id="social-alpha-analytics" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
+			<!-- <div id="social-alpha-analytics" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
 				<div class="title" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus() && (isBuzzIndicatorVisible() ||  isSocialFeedSentimentVisible())">
 					<h3>Social Alpha Analytics <img class="tooltip-left" data-bind="tooltip: 'socialAlphaAnalytics'" alt="" src="img/info.png" /></h3>
 				</div>
@@ -320,21 +320,25 @@
 						<div class="sbdRight buzz">HIGH</div>						
 					</div>
 				</div>
-				<!-- 	<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div> -->
+					<div class="no-devs" data-bind="visible: !isBuzzIndicatorVisible() &&  !isSocialFeedSentimentVisible() ">There is no data to show .</div>
 				</div>
-			</div>
-			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus() && twitterFeeds().length > 0">
+			</div> -->
+			<div id="social-alpha-twitter-feed" class="section-break" style="display:none" data-bind="visible: isSocialSentimentVisibleForCompany() && checkUserStatus()">
 				<div class="title" style="padding: 5px;">
 					<h3><img class="tooltip-left" style="float: left;"  alt="" src="img/social/ico-twitter.png" />&nbsp;<span>Social Alpha Twitter Feed</span> <img class="tooltip-left" data-bind="tooltip: 'socialAlphaTwitterFeed'" alt="" src="img/info.png" /></h3>
 				</div>
 				<div class="gray-border padded">
-					<ul class="socialfeeds" data-bind="foreach: twitterFeeds(), visible: twitterFeeds().length > 0">
+					<ul class="socialfeeds" style="display:none" data-bind="foreach: twitterFeeds(), visible: twitterFeeds().length > 0">
 						<li>
 							<div class="name">@<span data-bind="text: username"></span><span> - </span><span data-bind="text: $root.displayTime(sourceTimestamp)"></span></div>
 							<div class="tweet" data-bind="text: text"></div>
 						</li>
 					</ul>
-					<!-- <div class="no-devs" data-bind="visible: twitterFeeds().length == 0">There is no data to show .</div> -->
+					<ul class="socialfeeds" style="display:none" data-bind="visible: twitterFeeds().length == 0">
+						<li>
+							<div class="tweet">No Recent Twitter Feed</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 			
