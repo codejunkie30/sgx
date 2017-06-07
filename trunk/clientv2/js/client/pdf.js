@@ -1,4 +1,4 @@
-define(["wmsi/utils", "knockout", "client/company-financials", "client/company-tearsheet", "client/modules/price-chart", "text!client/data/factors.json", "text!client/data/financials.json", "client/modules/tearsheet" ], function(UTIL, ko, coFIN, coTS, PRICE_CHART, FACTORS, FINANCIALS, TS) {	
+define(["wmsi/utils", "knockout", "client/company-financials", "client/company-tearsheet-v1", "client/modules/price-chart", "text!client/data/factors.json", "text!client/data/financials.json", "client/modules/tearsheet" ], function(UTIL, ko, coFIN, coTS, PRICE_CHART, FACTORS, FINANCIALS, TS) {	
 	ko.bindingHandlers.createFactor = {};
 	var PDF = {
 		letters: "ABCDEFGHIJSKLMNOPQRSTUVWXYZ",
