@@ -47,7 +47,7 @@ define(
 			    PAGE.ajaxInAction.remove('initPage');
 			    // call for social alpha twitter feed
 			    if(CP.isSocialSentimentVisibleForCompany()){
-			    CP.fetchSocialAlphaTwitterFeed();
+			    //CP.fetchSocialAlphaTwitterFeed();
 			    //CP.fetchSocialAlphaAnalytics();
 			    }else{
 				  PAGE.resizeIframeSimple();
