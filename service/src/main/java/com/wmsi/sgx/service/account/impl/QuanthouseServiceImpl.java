@@ -270,7 +270,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 
 	private String toMarketId(String id){
-		return id.concat(MARKET_EXTENTION);
+		/*return id.concat(MARKET_EXTENTION);*/
+		return id;
 	}
 	
 	/**
