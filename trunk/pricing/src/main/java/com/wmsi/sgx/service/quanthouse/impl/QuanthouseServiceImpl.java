@@ -80,7 +80,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	}
 	
 	private String toMarketId(String id){
-		return id.concat(MARKET_EXTENTION);
+		//return id.concat(MARKET_EXTENTION);\
+		return id;
 	}
 	
 	/**
@@ -156,7 +157,8 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 			List<String> tickers = new ArrayList<String>();
 
 			for(String ticker : companyService.getAllTickers()){
-				tickers.add(ticker + MARKET_EXTENTION);
+				//tickers.add(ticker + MARKET_EXTENTION);
+				tickers.add(ticker);
 			}
 			return tickers;
 		}
