@@ -27,7 +27,7 @@ public class QuanthouseServiceImpl implements QuanthouseService{
 	private static final Logger log = LoggerFactory.getLogger(QuanthouseServiceImpl.class);
 
 	private static final String MARKET_CODE = "XSES";
-	private static final String MARKET_EXTENTION = "_RY";
+	private static final String MARKET_EXTENTION = "";
 
 	@Autowired
 	private FeedOSService feedOSService;
